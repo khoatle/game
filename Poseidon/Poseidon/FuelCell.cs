@@ -5,13 +5,14 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Poseidon
 {
     class FuelCell : GameObject
     {
         public bool Retrieved { get; set; }
-
+        SoundEffect RetrievedSound;
         public FuelCell()
             : base()
         {
@@ -30,6 +31,7 @@ namespace Poseidon
             scaledSphere.Radius *= GameConstants.FuelCellBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -55,10 +57,20 @@ namespace Poseidon
             }
         }
 
-        internal void Update(BoundingSphere vehicleBoundingSphere)
+        internal void Update(KeyboardState keyboardState, BoundingSphere vehicleBoundingSphere, BoundingSphere vehicleTrashFruitBoundingSphere)
         {
-            if (vehicleBoundingSphere.Intersects(this.BoundingSphere))
-                this.Retrieved = true;
+            //if (vehicleBoundingSphere.Intersects(this.BoundingSphere))
+            //    this.Retrieved = true;
+            if (keyboardState.IsKeyDown(Keys.Z))
+            {
+                if (vehicleTrashFruitBoundingSphere.Intersects(this.BoundingSphere))
+                {
+                    RetrievedSound.Play();
+                    this.Retrieved = true;
+                }
+                
+            }
+            
         }
     }
 

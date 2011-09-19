@@ -73,6 +73,9 @@ namespace Poseidon
         public int MaxRange { get; set; }
         #endregion
 
+        //Sphere for interacting with trashs and fruits
+        public BoundingSphere Trash_Fruit_BoundingSphere;
+        
         #region Properties
 
 
@@ -173,9 +176,13 @@ namespace Poseidon
                 GameConstants.TankBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+
+            Trash_Fruit_BoundingSphere =
+                new BoundingSphere(scaledSphere.Center, 10);
+
         }
 
-        public void Update(KeyboardState keyboardState, Barrier[] barriers)
+        public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -219,8 +226,26 @@ namespace Poseidon
                 updatedSphere.Center.Z = Position.Z;
                 BoundingSphere = new BoundingSphere(updatedSphere.Center,
                     updatedSphere.Radius);
+                Trash_Fruit_BoundingSphere = new BoundingSphere(updatedSphere.Center,
+                    20);
             }
+
+            //Interacting with trashs and fruits
+            //if (keyboardState.IsKeyDown(Keys.Z))
+            //{
+            //    Interact_with_trash_and_fruit(fuelCells);
+            //}
         }
+        //private void Interact_with_trash_and_fruit(FuelCell[] fuelCells)
+        //{
+        //    for (int curCell = 0; curCell < fuelCells.Length; curCell++)
+        //    {
+        //        if (Trash_Fruit_BoundingSphere.Intersects(
+        //            fuelCells[curCell].BoundingSphere))
+        //            fuelCells[curCell].Retrieved = true;
+        //    }
+        //    return;
+        //}
         private bool ValidateMovement(Vector3 futurePosition,
             Barrier[] barriers)
         {
@@ -295,6 +320,25 @@ namespace Poseidon
                     effect.EnableDefaultLighting();
                 }
 
+                mesh.Draw();
+            }
+        }
+        internal void DrawTrashFruitSphere(Matrix view, Matrix projection,
+            GameObject boundingSphereModel)
+        {
+            Matrix scaleMatrix = Matrix.CreateScale(20);
+            Matrix translateMatrix =
+                Matrix.CreateTranslation(Trash_Fruit_BoundingSphere.Center);
+            Matrix worldMatrix = scaleMatrix * translateMatrix;
+
+            foreach (ModelMesh mesh in boundingSphereModel.Model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.World = worldMatrix;
+                    effect.View = view;
+                    effect.Projection = projection;
+                }
                 mesh.Draw();
             }
         }

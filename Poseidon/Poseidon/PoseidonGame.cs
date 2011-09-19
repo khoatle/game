@@ -241,7 +241,7 @@ namespace Poseidon
             {
                 //fuelCarrier.Update(currentGamePadState, 
                 //    currentKeyboardState, barriers);
-                tank.Update(currentKeyboardState, barriers);
+                tank.Update(currentKeyboardState, barriers, fuelCells);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
                 for (int barrier_index = 0; barrier_index < GameConstants.NumBarriers; barrier_index++)
@@ -252,7 +252,7 @@ namespace Poseidon
                 retrievedFuelCells = 0;
                 foreach (FuelCell fuelCell in fuelCells)
                 {
-                    fuelCell.Update(tank.BoundingSphere);
+                    fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
                     if (fuelCell.Retrieved)
                     {
                         retrievedFuelCells++;
@@ -491,6 +491,15 @@ namespace Poseidon
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
             tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            RasterizerState rs = new RasterizerState();
+            rs.FillMode = FillMode.WireFrame;
+            GraphicsDevice.RasterizerState = rs;
+            //tank.DrawTrashFruitSphere(gameCamera.ViewMatrix,
+            //    gameCamera.ProjectionMatrix, boundingSphere);
+
+            rs = new RasterizerState();
+            rs.FillMode = FillMode.Solid;
+            GraphicsDevice.RasterizerState = rs;
             DrawStats();
         }
 

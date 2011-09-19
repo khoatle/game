@@ -168,6 +168,7 @@ namespace Poseidon
 
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
+            scaledSphere.Center.Y = GameConstants.FloatHeight;
             scaledSphere.Radius *=
                 GameConstants.TankBoundingSphereFactor;
             BoundingSphere =

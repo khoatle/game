@@ -141,7 +141,7 @@ namespace Poseidon
                 cell.Position = GenerateRandomPosition(min, max);
                 tempCenter = cell.BoundingSphere.Center;
                 tempCenter.X = cell.Position.X;
-                tempCenter.Y = 0;
+                tempCenter.Y = GameConstants.FloatHeight;
                 tempCenter.Z = cell.Position.Z;
                 cell.BoundingSphere =
                     new BoundingSphere(tempCenter, cell.BoundingSphere.Radius);
@@ -154,7 +154,7 @@ namespace Poseidon
                 barrier.Position = GenerateRandomPosition(min, max);
                 tempCenter = barrier.BoundingSphere.Center;
                 tempCenter.X = barrier.Position.X;
-                tempCenter.Y = 0;
+                tempCenter.Y = GameConstants.FloatHeight;
                 tempCenter.Z = barrier.Position.Z;
                 barrier.BoundingSphere = new BoundingSphere(tempCenter,
                     barrier.BoundingSphere.Radius);

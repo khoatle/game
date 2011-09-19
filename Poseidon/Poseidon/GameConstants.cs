@@ -40,6 +40,7 @@ namespace Poseidon
             "Retrieve all Fuel Cells before time runs out.";
         public const string StrInstructions2 =
             "Control ship using keyboard (A, D, W, S) or the left thumbstick.";
+        public const int FloatHeight = 100;
 
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;

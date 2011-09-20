@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using Microsoft.Xna.Framework.Audio;
 #endregion
 
 namespace Poseidon
@@ -75,7 +76,7 @@ namespace Poseidon
 
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
-        
+        SoundEffect RetrievedSound;
         #region Properties
 
 
@@ -177,9 +178,9 @@ namespace Poseidon
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
-            Trash_Fruit_BoundingSphere =
-                new BoundingSphere(scaledSphere.Center, 10);
-
+            //Trash_Fruit_BoundingSphere =
+            //    new BoundingSphere(scaledSphere.Center, 10);
+            RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
         }
 
         public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells)
@@ -226,26 +227,31 @@ namespace Poseidon
                 updatedSphere.Center.Z = Position.Z;
                 BoundingSphere = new BoundingSphere(updatedSphere.Center,
                     updatedSphere.Radius);
-                Trash_Fruit_BoundingSphere = new BoundingSphere(updatedSphere.Center,
-                    20);
+                //Trash_Fruit_BoundingSphere = new BoundingSphere(updatedSphere.Center,
+                //    20);
             }
 
             //Interacting with trashs and fruits
-            //if (keyboardState.IsKeyDown(Keys.Z))
-            //{
-            //    Interact_with_trash_and_fruit(fuelCells);
-            //}
+            if (keyboardState.IsKeyDown(Keys.Z))
+            {
+                Interact_with_trash_and_fruit(fuelCells);
+            }
         }
-        //private void Interact_with_trash_and_fruit(FuelCell[] fuelCells)
-        //{
-        //    for (int curCell = 0; curCell < fuelCells.Length; curCell++)
-        //    {
-        //        if (Trash_Fruit_BoundingSphere.Intersects(
-        //            fuelCells[curCell].BoundingSphere))
-        //            fuelCells[curCell].Retrieved = true;
-        //    }
-        //    return;
-        //}
+        private void Interact_with_trash_and_fruit(FuelCell[] fuelCells)
+        {
+            Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
+                    20);
+            for (int curCell = 0; curCell < fuelCells.Length; curCell++)
+            {
+                if (Trash_Fruit_BoundingSphere.Intersects(
+                    fuelCells[curCell].BoundingSphere))
+                {
+                    fuelCells[curCell].Retrieved = true;
+                    RetrievedSound.Play();
+                }
+            }
+            return;
+        }
         private bool ValidateMovement(Vector3 futurePosition,
             Barrier[] barriers)
         {

@@ -77,6 +77,12 @@ namespace Poseidon
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
         SoundEffect RetrievedSound;
+        //temporary power-up for the cyborg
+        //int tempPower;
+        int speedUp;
+        int strengthUp;
+        double strengthUpStartTime;
+        double speedUpStartTime;
         #region Properties
 
 
@@ -181,13 +187,31 @@ namespace Poseidon
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
+            speedUp = 1;
+            strengthUp = 1;
         }
 
-        public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells)
+        public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells, GameTime gameTime)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
             //if (wheelRotationValue != 0) wheelRotationValue = 0;
+
+            //worn out effect of power-ups
+            if (speedUp != 1)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds - speedUpStartTime >= 5)
+                {
+                    speedUp = 1;
+                }
+            }
+            if (strengthUp != 1)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds - strengthUpStartTime >= 5)
+                {
+                    strengthUp = 1;
+                }
+            }
             float turnAmount = 0;
             if (keyboardState.IsKeyDown(Keys.A))
             {
@@ -198,7 +222,7 @@ namespace Poseidon
                 turnAmount = -1;
             }
             else steerRotationValue = 0;
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed;
+            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp;
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
             Vector3 movement = Vector3.Zero;
@@ -212,7 +236,7 @@ namespace Poseidon
             }
             else wheelRotationValue = 0;
             Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.Velocity;
+            speed *= GameConstants.Velocity * speedUp;
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;
@@ -234,19 +258,29 @@ namespace Poseidon
             //Interacting with trashs and fruits
             if (keyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fuelCells);
+                Interact_with_trash_and_fruit(fuelCells, gameTime);
             }
         }
-        private void Interact_with_trash_and_fruit(FuelCell[] fuelCells)
+        private void Interact_with_trash_and_fruit(FuelCell[] fuelCells, GameTime gameTime)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);
             for (int curCell = 0; curCell < fuelCells.Length; curCell++)
             {
-                if (Trash_Fruit_BoundingSphere.Intersects(
+                if (fuelCells[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
                     fuelCells[curCell].BoundingSphere))
                 {
                     fuelCells[curCell].Retrieved = true;
+                    if (fuelCells[curCell].powerType == 1)
+                    {
+                        speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                        speedUp = 2;
+                    }
+                    else if (fuelCells[curCell].powerType == 2)
+                    {
+                        strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                        strengthUp = 2;
+                    }
                     RetrievedSound.Play();
                 }
             }

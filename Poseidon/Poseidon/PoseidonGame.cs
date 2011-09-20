@@ -88,10 +88,12 @@ namespace Poseidon
 
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
+            int powerType = random.Next(2) + 1;
             for (int index = 0; index < fuelCells.Length; index++)
             {
-                fuelCells[index] = new FuelCell();
+                fuelCells[index] = new FuelCell(powerType);     
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
+                powerType = random.Next(2) + 1;
             }
 
             //Initialize barriers
@@ -241,7 +243,7 @@ namespace Poseidon
             {
                 //fuelCarrier.Update(currentGamePadState, 
                 //    currentKeyboardState, barriers);
-                tank.Update(currentKeyboardState, barriers, fuelCells);
+                tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
                 for (int barrier_index = 0; barrier_index < GameConstants.NumBarriers; barrier_index++)

@@ -13,10 +13,16 @@ namespace Poseidon
     {
         public bool Retrieved { get; set; }
         //SoundEffect RetrievedSound;
-        public FuelCell()
+        //Temporary power-up types
+        //1: speed
+        //2: power
+        public int powerType;
+
+        public FuelCell(int powerType)
             : base()
         {
             Retrieved = false;
+            this.powerType = powerType;
         }
 
         public void LoadContent(ContentManager content, string modelName)
@@ -32,6 +38,7 @@ namespace Poseidon
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             //RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
+            
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -52,6 +59,14 @@ namespace Poseidon
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
+                    if (powerType == 1)
+                    {
+                        effect.DiffuseColor = Color.Gold.ToVector3();
+                    }
+                    else if (powerType == 2)
+                    {
+                        effect.DiffuseColor = Color.Crimson.ToVector3();
+                    }
                 }
                 mesh.Draw();
             }

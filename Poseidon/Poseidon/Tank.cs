@@ -189,6 +189,7 @@ namespace Poseidon
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
             speedUp = 1;
             strengthUp = 1;
+            Position.Y = GameConstants.FloatHeight;
         }
 
         public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells, GameTime gameTime)

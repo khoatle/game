@@ -109,6 +109,7 @@ namespace Poseidon
                 {
                     case 0:
                         barrierName = "Models/cube10uR";
+                        //barrierName = "Models/sphere1uR";
                         break;
                     case 1:
                         barrierName = "Models/cylinder10uR";
@@ -141,6 +142,7 @@ namespace Poseidon
             foreach (FuelCell cell in fuelCells)
             {
                 cell.Position = GenerateRandomPosition(min, max);
+                cell.Position.Y = GameConstants.FloatHeight;
                 tempCenter = cell.BoundingSphere.Center;
                 tempCenter.X = cell.Position.X;
                 tempCenter.Y = GameConstants.FloatHeight;
@@ -154,6 +156,7 @@ namespace Poseidon
             foreach (Barrier barrier in barriers)
             {
                 barrier.Position = GenerateRandomPosition(min, max);
+                barrier.Position.Y = GameConstants.FloatHeight;
                 tempCenter = barrier.BoundingSphere.Center;
                 tempCenter.X = barrier.Position.X;
                 tempCenter.Y = GameConstants.FloatHeight;
@@ -311,6 +314,7 @@ namespace Poseidon
                 {
                     case 0:
                         barrierName = "Models/cube10uR";
+                        //barrierName = "Models/sphere1uR";
                         break;
                     case 1:
                         barrierName = "Models/cylinder10uR";
@@ -482,26 +486,44 @@ namespace Poseidon
                 {
                     fuelCell.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicsDevice.RasterizerState = rs;
+                    fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
+
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicsDevice.RasterizerState = rs;
                 }
             }
             foreach (Barrier barrier in barriers)
             {
                 barrier.Draw(gameCamera.ViewMatrix,
                     gameCamera.ProjectionMatrix);
+                RasterizerState rs = new RasterizerState();
+                rs.FillMode = FillMode.WireFrame;
+                GraphicsDevice.RasterizerState = rs;
+                barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    gameCamera.ProjectionMatrix, boundingSphere);
+
+                rs = new RasterizerState();
+                rs.FillMode = FillMode.Solid;
+                GraphicsDevice.RasterizerState = rs;
             }
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
             tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            RasterizerState rs = new RasterizerState();
-            rs.FillMode = FillMode.WireFrame;
-            GraphicsDevice.RasterizerState = rs;
-            //tank.DrawTrashFruitSphere(gameCamera.ViewMatrix,
+            //RasterizerState rs = new RasterizerState();
+            //rs.FillMode = FillMode.WireFrame;
+            //GraphicsDevice.RasterizerState = rs;
+            //tank.DrawBoundingSphere(gameCamera.ViewMatrix,
             //    gameCamera.ProjectionMatrix, boundingSphere);
 
-            rs = new RasterizerState();
-            rs.FillMode = FillMode.Solid;
-            GraphicsDevice.RasterizerState = rs;
+            //rs = new RasterizerState();
+            //rs.FillMode = FillMode.Solid;
+            //GraphicsDevice.RasterizerState = rs;
             DrawStats();
         }
 

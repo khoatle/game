@@ -18,7 +18,7 @@ namespace Poseidon
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PoseidonGame : Microsoft.Xna.Framework.Game
+    public partial class PoseidonGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
 
@@ -32,6 +32,7 @@ namespace Poseidon
 
         // Textures for help scene
         protected Texture2D helpBackgroundTexture, helpForegroundTexture;
+
         HelpScene helpScene;
         protected GameScene activeScene;
         // For the Start scene
@@ -41,6 +42,7 @@ namespace Poseidon
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -80,6 +82,7 @@ namespace Poseidon
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
             helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
+
             helpScene = new HelpScene(this, helpBackgroundTexture,
             helpForegroundTexture);
             Components.Add(helpScene);
@@ -101,10 +104,6 @@ namespace Poseidon
             activeScene = startScene;
 
         }
-
-
-
-
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -130,6 +129,7 @@ namespace Poseidon
 
             return result;
         }
+
         /// <summary>
         /// Handle input of all game scenes
         /// </summary>
@@ -154,11 +154,13 @@ namespace Poseidon
                 HandleActionInput();
             }
         }
+
         /// <summary>
         /// Handle update for the main game
         /// </summary>
         private void HandleActionInput()
         {
+
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
             lastGamePadState = currentGamePadState;
@@ -167,7 +169,10 @@ namespace Poseidon
             if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 this.Exit();
+
         }
+
+
         /// <summary>
         /// Handle buttons and keyboard in StartScene
         /// </summary>
@@ -205,6 +210,7 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
             HandleScenesInput(gameTime);
 
             base.Update(gameTime);

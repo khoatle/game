@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    class FuelCell : GameObject
+    public class FuelCell : GameObject
     {
         public bool Retrieved { get; set; }
         //SoundEffect RetrievedSound;

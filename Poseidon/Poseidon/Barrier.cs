@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    class Barrier : GameObject
+    public class Barrier : GameObject
     {
         public string BarrierType { get; set; }
         public float ForwardDirection { get; set; }
@@ -73,11 +73,9 @@ namespace Poseidon
 
             Vector3 movement = Vector3.Zero;
 
-            if (ChangeDirection >= 95)
-            {
+            if (ChangeDirection >= 95) {
                 barrier_move = random.Next(4);
-                switch (barrier_move)
-                {
+                switch (barrier_move) {
                     case 0:
                         movement.X = -1;
                         break;
@@ -92,17 +90,15 @@ namespace Poseidon
                         break;
                 }
             }
-            else
-            {
+            else {
                 movement = PreviousMovement;
-
             }
 
             Vector3 speed = Vector3.Transform(movement, orientationMatrix);
             speed *= GameConstants.BarrierVelocity;
             futurePosition = Position + speed;
 
-            if (ValidateMovement(futurePosition, barriers, tank))
+            if (Collision.isBarrierValidMove(this, futurePosition, barriers, tank))
             {
                 Position = futurePosition;
 
@@ -116,50 +112,5 @@ namespace Poseidon
             }
             return movement;
         }
-
-        private bool ValidateMovement(Vector3 futurePosition,
-            Barrier[] barriers, Tank tank)
-        {
-            BoundingSphere futureBoundingSphere = BoundingSphere;
-            futureBoundingSphere.Center.X = futurePosition.X;
-            futureBoundingSphere.Center.Z = futurePosition.Z;
-
-            //Don't allow off-terrain driving
-            if ((Math.Abs(futurePosition.X) > MaxRange) ||
-                (Math.Abs(futurePosition.Z) > MaxRange))
-                return false;
-            //Don't allow driving through a barrier
-            if (CheckForBarrierCollision(futureBoundingSphere, barriers))
-                return false;
-            //Don't allow driving through fuel carrier
-            if (CheckForFuelCarrierCollision(futureBoundingSphere, tank))
-                return false;
-
-            return true;
-        }
-
-        private bool CheckForBarrierCollision(
-            BoundingSphere vehicleBoundingSphere, Barrier[] barriers)
-        {
-            for (int curBarrier = 0; curBarrier < barriers.Length; curBarrier++)
-            {
-                if (this.Equals(barriers[curBarrier]))
-                    continue;
-                if (vehicleBoundingSphere.Intersects(
-                    barriers[curBarrier].BoundingSphere))
-                    return true;
-            }
-            return false;
-        }
-
-        private bool CheckForFuelCarrierCollision(
-            BoundingSphere vehicleBoundingSphere, Tank tank)
-        {
-            if (vehicleBoundingSphere.Intersects(tank.BoundingSphere))
-                return true;
-            return false;
-        }
     }
-
-
 }

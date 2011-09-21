@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    class GameObject
+    public class GameObject
     {
         public Model Model { get; set; }
         public Vector3 Position;

@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
-using Poseidon.Core;
+//using Poseidon.Core;
 namespace Poseidon
 {
     public enum GameState { Loading, Running, Won, Lost }
@@ -18,7 +18,7 @@ namespace Poseidon
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class PoseidonGame : Microsoft.Xna.Framework.Game
+    public partial class PoseidonGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
 
@@ -51,8 +51,8 @@ namespace Poseidon
         private TimeSpan prevFireTime;
         // Textures
         protected Texture2D helpBackgroundTexture, helpForegroundTexture;
-        HelpScene helpScene;
-        protected GameScene activeScene;
+        //HelpScene helpScene;
+        //protected GameScene activeScene;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -98,9 +98,9 @@ namespace Poseidon
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
             helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
-            helpScene = new HelpScene(this, helpBackgroundTexture,
-            helpForegroundTexture);
-            Components.Add(helpScene);
+            //helpScene = new HelpScene(this, helpBackgroundTexture,
+            //helpForegroundTexture);
+            //Components.Add(helpScene);
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
             int powerType = random.Next(3) + 1;
@@ -149,99 +149,6 @@ namespace Poseidon
             tank.Load(Content);
         }
 
-        private void PlaceFuelCellsAndBarriers()
-        {
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
-            Vector3 tempCenter;
-
-            //place fuel cells
-            foreach (FuelCell cell in fuelCells)
-            {
-                cell.Position = GenerateRandomPosition(min, max);
-                cell.Position.Y = GameConstants.FloatHeight;
-                tempCenter = cell.BoundingSphere.Center;
-                tempCenter.X = cell.Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = cell.Position.Z;
-                cell.BoundingSphere =
-                    new BoundingSphere(tempCenter, cell.BoundingSphere.Radius);
-                cell.Retrieved = false;
-            }
-
-            //place barriers
-            foreach (Barrier barrier in barriers)
-            {
-                barrier.Position = GenerateRandomPosition(min, max);
-                barrier.Position.Y = GameConstants.FloatHeight;
-                tempCenter = barrier.BoundingSphere.Center;
-                tempCenter.X = barrier.Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = barrier.Position.Z;
-                barrier.BoundingSphere = new BoundingSphere(tempCenter,
-                    barrier.BoundingSphere.Radius);
-            }
-        }
-
-        private void placeBullet()
-        {
-            Projectiles p = new Projectiles();
-            p.initialize(GraphicsDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
-            p.loadContent(Content, "Models/sphere1uR");
-            projectiles.Add(p);
-        }
-
-        private void updateBullets() {
-            for (int i = 0; i < projectiles.Count; ) {
-                if (projectiles[i].getStatus()) {
-                    projectiles[i].update(barriers);
-                    i++;
-                }
-                else {
-                    projectiles.RemoveAt(i);
-                }
-            } 
-        }
-
-        private Vector3 GenerateRandomPosition(int min, int max)
-        {
-            int xValue, zValue;
-            do
-            {
-                xValue = random.Next(min, max);
-                zValue = random.Next(min, max);
-                if (random.Next(100) % 2 == 0)
-                    xValue *= -1;
-                if (random.Next(100) % 2 == 0)
-                    zValue *= -1;
-
-            } while (IsOccupied(xValue, zValue));
-
-            return new Vector3(xValue, 0, zValue);
-        }
-
-        private bool IsOccupied(int xValue, int zValue)
-        {
-            foreach (GameObject currentObj in fuelCells)
-            {
-                if (((int)(MathHelper.Distance(
-                    xValue, currentObj.Position.X)) < 15) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, currentObj.Position.Z)) < 15))
-                    return true;
-            }
-
-            foreach (GameObject currentObj in barriers)
-            {
-                if (((int)(MathHelper.Distance(
-                    xValue, currentObj.Position.X)) < 15) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, currentObj.Position.Z)) < 15))
-                    return true;
-            }
-            return false;
-        }
-
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
@@ -266,20 +173,21 @@ namespace Poseidon
 
             return result;
         }
-        private void HandleScenesInput()
-        {
 
-            // Handle Help Scene input
-            if (activeScene == helpScene)
-            {
-                if (CheckEnterA())
-                {
-                    helpScene.Hide();
-                    currentGameState = GameState.Running;
-                }
-            }
+        //private void HandleScenesInput()
+        //{
+
+        //    // Handle Help Scene input
+        //    if (activeScene == helpScene)
+        //    {
+        //        if (CheckEnterA())
+        //        {
+        //            helpScene.Hide();
+        //            currentGameState = GameState.Running;
+        //        }
+        //    }
             
-        }
+        //}
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -287,7 +195,7 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            HandleScenesInput();
+            //HandleScenesInput();
             float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -340,12 +248,20 @@ namespace Poseidon
                     }
                 }
 
-                updateBullets();
-
-                if (retrievedFuelCells == GameConstants.NumFuelCells)
-                {
-                    currentGameState = GameState.Won;
+                // BUG BUG BUG
+                for (int i = 0; i < projectiles.Count; i++) {
+                    projectiles[i].update(barriers);
                 }
+                Collision.updateBulletOutOfBound(projectiles, GraphicsDevice.Viewport);
+                Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+
+
+                    //Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+
+                    if (retrievedFuelCells == GameConstants.NumFuelCells)
+                    {
+                        currentGameState = GameState.Won;
+                    }
                 roundTimer -= gameTime.ElapsedGameTime;
                 if ((roundTimer < TimeSpan.Zero) &&
                     (retrievedFuelCells != GameConstants.NumFuelCells))
@@ -420,9 +336,9 @@ namespace Poseidon
             switch (currentGameState)
             {
                 case GameState.Loading:
-                    helpScene.Show();
-                    activeScene = helpScene;
-                    //DrawSplashScreen();
+                    //helpScene.Show();
+                    //activeScene = helpScene;
+                    DrawSplashScreen();
                     break;
                 case GameState.Running:
                     DrawGameplayScreen();

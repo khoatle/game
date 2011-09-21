@@ -13,7 +13,7 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Poseidon
 {
-    class Projectiles : GameObject {
+    public class Projectiles : GameObject {
         private Vector3 unitDirection;
         private float projectionSpeed;
         private float forwardDirection;
@@ -49,10 +49,12 @@ namespace Poseidon
         public void update(Barrier[] barriers) {
             Vector3 tmp = calculateFuturePosition();
 
-            if (!isActiveProjective(tmp, barriers)) {
+            if (Collision.isOutOfMap(tmp)) {
                 isActive = false;
+                return;
             }
             Position = tmp;
+            BoundingSphere = new BoundingSphere(tmp, BoundingSphere.Radius);
         }
 
         public void loadContent(ContentManager content, string modelName) {
@@ -61,20 +63,6 @@ namespace Poseidon
         }
 
         public bool getStatus() { return isActive; }
-
-        // TODO: implement logic to disable the projection
-        private bool isActiveProjective(Vector3 position, Barrier[] barriers) {
-            if (Math.Abs(position.X) > GameConstants.MaxRange || Math.Abs(position.Z) > GameConstants.MaxRange)
-            {
-                return false;
-            }
-            foreach (Barrier b in barriers) {
-                if (b.BoundingSphere.Intersects(this.BoundingSphere)) {
-                    return false;
-                }
-            }
-            return true;
-        }
 
         public void draw(Matrix view, Matrix projection) {
             Matrix[] transforms = new Matrix[Model.Bones.Count];

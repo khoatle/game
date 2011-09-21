@@ -21,7 +21,7 @@ namespace Poseidon
     /// <summary>
     /// Helper class for drawing a tank model with animated wheels and turret.
     /// </summary>
-    class Tank: GameObject
+    public class Tank: GameObject
     {
         #region Fields
 
@@ -251,7 +251,7 @@ namespace Poseidon
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;
-            if (ValidateMovement(futurePosition, barriers))
+            if (Collision.isTankValidMove(this, futurePosition, barriers))
             {
                 Position = futurePosition;
 
@@ -302,34 +302,7 @@ namespace Poseidon
             }
             return;
         }
-        private bool ValidateMovement(Vector3 futurePosition,
-            Barrier[] barriers)
-        {
-            BoundingSphere futureBoundingSphere = BoundingSphere;
-            futureBoundingSphere.Center.X = futurePosition.X;
-            futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            //Don't allow off-terrain driving
-            if ((Math.Abs(futurePosition.X) > MaxRange) ||
-                (Math.Abs(futurePosition.Z) > MaxRange))
-                return false;
-            //Don't allow driving through a barrier
-            if (CheckForBarrierCollision(futureBoundingSphere, barriers))
-                return false;
-
-            return true;
-        }
-        private bool CheckForBarrierCollision(
-           BoundingSphere vehicleBoundingSphere, Barrier[] barriers)
-        {
-            for (int curBarrier = 0; curBarrier < barriers.Length; curBarrier++)
-            {
-                if (vehicleBoundingSphere.Intersects(
-                    barriers[curBarrier].BoundingSphere))
-                    return true;
-            }
-            return false;
-        }
         /// <summary>
         /// Draws the tank model, using the current animation settings.
         /// </summary>

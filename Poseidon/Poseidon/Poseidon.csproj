@@ -107,9 +107,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioLibrary.cs" />
+    <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="HelpScene.cs" />
     <Compile Include="Core\ImageComponent.cs" />
     <Compile Include="Core\GameScene.cs" />
+    <Compile Include="PlayGameScene.cs" />
     <Compile Include="Projectiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Barrier.cs" />
@@ -120,6 +123,7 @@
     <Compile Include="GameConstants.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StartScene.cs" />
     <Compile Include="Tank.cs" />
   </ItemGroup>
   <ItemGroup>

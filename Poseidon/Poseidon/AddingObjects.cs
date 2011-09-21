@@ -12,7 +12,6 @@ using Microsoft.Xna.Framework.Storage;
 namespace Poseidon
 {
     public partial class PoseidonGame {
-
         private void loadContentEnemies() {
             for (int i = 0; i < GameConstants.NumberEnemies; i++) {
                 enemies[i] = new Enemy();

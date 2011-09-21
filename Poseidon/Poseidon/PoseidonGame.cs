@@ -83,6 +83,9 @@ namespace Poseidon
 
             fireTime = TimeSpan.FromSeconds(0.3f);
 
+            enemies = new Enemy[GameConstants.NumberEnemies];
+            fish = new Fish[GameConstants.NumberFish];
+
             base.Initialize();
         }
 

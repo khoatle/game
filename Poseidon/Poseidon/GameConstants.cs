@@ -26,7 +26,16 @@ namespace Poseidon
         // bullet consts
         public const float BulletSpeed = 1.0f;
 
+        // HP const
+        public const int EnemyHP = 100;
+        public const int FishHP = 50;
+
+        // Bullet const
+        public const int DefaultBulletDamage = 10;
+
         //general
+        public const int NumberEnemies = 20;
+        public const int NumberFish = 20;
         public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;
         public const int NumFuelCells = 12;

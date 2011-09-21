@@ -23,6 +23,9 @@ namespace Poseidon
         public const float TurnSpeed = 0.025f;
         public const int MaxRange = 98;
 
+        // bullet consts
+        public const float BulletSpeed = 10f;
+
         //general
         public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;

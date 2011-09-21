@@ -42,9 +42,11 @@ namespace Poseidon
         FuelCell[] fuelCells;
         Barrier[] barriers;
         Vector3[] barrier_previous_movement;
+        List<Projectiles> projectiles;
 
         //A tank
         Tank tank;
+
 
         public PoseidonGame()
         {
@@ -129,6 +131,8 @@ namespace Poseidon
             fuelCarrier = new FuelCarrier();
             fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
 
+            projectiles = new List<Projectiles>();
+
             tank.Load(Content);
         }
 
@@ -164,6 +168,14 @@ namespace Poseidon
                 barrier.BoundingSphere = new BoundingSphere(tempCenter,
                     barrier.BoundingSphere.Radius);
             }
+        }
+
+        private void placeBullet()
+        {
+            Projectiles p = new Projectiles();
+            p.initialize(GraphicsDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
+            p.loadContent(Content, "Models/sphere1uR");
+            projectiles.Add(p);
         }
 
         private Vector3 GenerateRandomPosition(int min, int max)
@@ -246,6 +258,12 @@ namespace Poseidon
             {
                 //fuelCarrier.Update(currentGamePadState, 
                 //    currentKeyboardState, barriers);
+
+                // Are we shooting?
+                if (currentKeyboardState.IsKeyDown(Keys.L)) {
+                    placeBullet();
+                }
+
                 tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
@@ -263,6 +281,17 @@ namespace Poseidon
                         retrievedFuelCells++;
                     }
                 }
+
+                for (int i = 0; i < projectiles.Count; ) {
+                    if (projectiles[i].getStatus()) {
+                        projectiles[i].update(barriers);
+                        i++;
+                    }
+                    else {
+                        projectiles.RemoveAt(i);
+                    }
+                } 
+
                 if (retrievedFuelCells == GameConstants.NumFuelCells)
                 {
                     currentGameState = GameState.Won;
@@ -510,6 +539,13 @@ namespace Poseidon
                 rs = new RasterizerState();
                 rs.FillMode = FillMode.Solid;
                 GraphicsDevice.RasterizerState = rs;
+            }
+
+            // Update bullets
+            foreach (Projectiles p in projectiles) {
+                if (p.getStatus()) {
+                    p.draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
             }
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 

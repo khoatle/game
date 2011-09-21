@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{EC0537F8-B5FE-4F94-810A-CDE4DB4AB319}</ProjectGuid>
@@ -107,6 +107,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioLibrary.cs" />
+    <Compile Include="Core\TextMenuComponent.cs" />
+    <Compile Include="HelpScene.cs" />
+    <Compile Include="Core\ImageComponent.cs" />
+    <Compile Include="Core\GameScene.cs" />
+    <Compile Include="PlayGameScene.cs" />
     <Compile Include="AddingObjects.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="DamageBullet.cs" />
@@ -122,6 +128,7 @@
     <Compile Include="GameConstants.cs" />
     <Compile Include="GameObject.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="StartScene.cs" />
     <Compile Include="Tank.cs" />
   </ItemGroup>
   <ItemGroup>

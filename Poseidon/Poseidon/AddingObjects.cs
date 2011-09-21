@@ -8,10 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using Poseidon.Core;
 
 namespace Poseidon
 {
-    public partial class PoseidonGame {
+    public partial class PlayGameScene {
         private void loadContentEnemies() {
             for (int i = 0; i < GameConstants.NumberEnemies; i++) {
                 enemies[i] = new Enemy();
@@ -74,7 +75,7 @@ namespace Poseidon
         private void placeBullet()
         {
             Projectiles p = new Projectiles();
-            p.initialize(GraphicsDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
+            p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
             p.loadContent(Content, "Models/sphere1uR");
             projectiles.Add(p);
         }

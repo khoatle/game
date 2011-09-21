@@ -1,27 +1,22 @@
-﻿// Copyright (C) Microsoft Corporation. All rights reserved.
-
-using System;
-using System.Collections.Generic;
+﻿using System;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Content;
-using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
+using Poseidon.Core;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Net;
-using Microsoft.Xna.Framework.Storage;
-//using Poseidon.Core;
+using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
+
 namespace Poseidon
 {
-    public enum GameState { Loading, Running, Won, Lost }
-
     /// <summary>
-    /// This is the main type for your game
+    /// This is a game component that implements the Action Scene.
     /// </summary>
-    public partial class PoseidonGame : Microsoft.Xna.Framework.Game
+    public partial class PlayGameScene : GameScene
     {
         GraphicsDeviceManager graphics;
-
+        GraphicsDevice GraphicDevice;
+        ContentManager Content;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
@@ -31,11 +26,9 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
-        GameState currentGameState = GameState.Loading;
-
         GameObject ground;
         Camera gameCamera;
-
+        GameState currentGameState = GameState.Running;
         GameObject boundingSphere;
 
         FuelCarrier fuelCarrier;
@@ -44,7 +37,6 @@ namespace Poseidon
         Enemy[] enemies;
         Fish[] fish;
         Vector3[] barrier_previous_movement;
-
         List<Projectiles> projectiles;
 
         //A tank
@@ -52,67 +44,38 @@ namespace Poseidon
 
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
-        // Textures
-        protected Texture2D helpBackgroundTexture, helpForegroundTexture;
-        //HelpScene helpScene;
-        //protected GameScene activeScene;
-        public PoseidonGame()
+
+        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch):base(game)
         {
-            graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 853;
-            graphics.PreferredBackBufferHeight = 700;
-
-            Content.RootDirectory = "Content";
-
+            this.graphics = graphics;
+            this.Content = Content;
+            this.GraphicDevice = GraphicsDevice;
+            this.spriteBatch = spriteBatch;
             roundTime = GameConstants.RoundTime;
             random = new Random();
-        }
-
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
             ground = new GameObject();
             gameCamera = new Camera();
             boundingSphere = new GameObject();
             tank = new Tank();
-
             fireTime = TimeSpan.FromSeconds(0.3f);
-
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
 
-            base.Initialize();
+            this.Load();
+
         }
 
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
+        public void Load()
         {
+            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             ground.Model = Content.Load<Model>("Models/ground");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
-
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            Services.AddService(typeof(SpriteBatch), spriteBatch);
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            //For the Help scene
-            helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
-            helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
-            //helpScene = new HelpScene(this, helpBackgroundTexture,
-            //helpForegroundTexture);
-            //Components.Add(helpScene);
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
             int powerType = random.Next(3) + 1;
             for (int index = 0; index < fuelCells.Length; index++)
             {
-                fuelCells[index] = new FuelCell(powerType);     
+                fuelCells[index] = new FuelCell(powerType);
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
                 powerType = random.Next(3) + 1;
             }
@@ -144,7 +107,7 @@ namespace Poseidon
                 randomBarrier = random.Next(3);
                 barrier_previous_movement[index] = Vector3.Zero;
             }
-            PlaceFuelCellsAndBarriers();
+            //PlaceFuelCellsAndBarriers();
 
             //Initialize fuel carrier
             fuelCarrier = new FuelCarrier();
@@ -153,55 +116,73 @@ namespace Poseidon
             projectiles = new List<Projectiles>();
 
             tank.Load(Content);
+            roundTimer = roundTime;
         }
 
         /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
+        /// Show the action scene
         /// </summary>
-        protected override void UnloadContent()
+        public override void Show()
         {
-            // TODO: Unload any non ContentManager content here
+            PlaceFuelCellsAndBarriers();
+            base.Show();
         }
-        private bool CheckEnterA()
+        private void ResetGame(GameTime gameTime, float aspectRatio)
         {
-            // Get the Keyboard and GamePad state
-            GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
-            KeyboardState keyboardState = Keyboard.GetState();
+            fuelCarrier.Reset();
+            gameCamera.Update(tank.ForwardDirection,
+                tank.Position, aspectRatio);
+            InitializeGameField(Content);
 
-            bool result = (lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                (keyboardState.IsKeyUp(Keys.Enter)));
-            result |= (lastGamePadState.Buttons.A == ButtonState.Pressed) &&
-                      (gamepadState.Buttons.A == ButtonState.Released);
-
-            lastKeyboardState = keyboardState;
-            lastGamePadState = gamepadState;
-
-            return result;
+            retrievedFuelCells = 0;
+            startTime = gameTime.TotalGameTime;
+            roundTimer = roundTime;
+            //currentGameState = GameState.Running;
         }
 
-        //private void HandleScenesInput()
-        //{
+        private void InitializeGameField(ContentManager Content)
+        {
+            //Initialize barriers
+            barriers = new Barrier[GameConstants.NumBarriers];
+            int randomBarrier = random.Next(3);
+            string barrierName = null;
 
-        //    // Handle Help Scene input
-        //    if (activeScene == helpScene)
-        //    {
-        //        if (CheckEnterA())
-        //        {
-        //            helpScene.Hide();
-        //            currentGameState = GameState.Running;
-        //        }
-        //    }
-            
-        //}
+            for (int index = 0; index < GameConstants.NumBarriers; index++)
+            {
+                switch (randomBarrier)
+                {
+                    case 0:
+                        barrierName = "Models/cube10uR";
+                        //barrierName = "Models/sphere1uR";
+                        break;
+                    case 1:
+                        barrierName = "Models/cylinder10uR";
+                        break;
+                    case 2:
+                        barrierName = "Models/pyramid10uR";
+                        break;
+                }
+                barriers[index] = new Barrier();
+                barriers[index].LoadContent(Content, barrierName);
+                randomBarrier = random.Next(3);
+            }
+            PlaceFuelCellsAndBarriers();
+        }
         /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
+        /// Hide the scene
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
+        public override void Hide()
         {
-            //HandleScenesInput();
+            // Stop the background music
+            MediaPlayer.Stop();
+            // Stop the rumble
+            //rumblePad.Stop(PlayerIndex.One);
+            //rumblePad.Stop(PlayerIndex.Two);
+
+            base.Hide();
+        }
+        public override void Update(GameTime gameTime)
+        {
             float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -209,19 +190,11 @@ namespace Poseidon
             currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
             // Allows the game to exit
-            if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
-                (currentGamePadState.Buttons.Back == ButtonState.Pressed))
-                this.Exit();
-            if (currentGameState == GameState.Loading)
-            {
-                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
-                {
-                    roundTimer = roundTime;
-                    currentGameState = GameState.Running;
-                }
-            }
+            //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
+            //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
+            //    //this.Exit();
+
+            
 
             if ((currentGameState == GameState.Running))
             {
@@ -254,11 +227,13 @@ namespace Poseidon
                     }
                 }
 
-                for (int i = 0; i < projectiles.Count; i++) {
+                for (int i = 0; i < projectiles.Count; i++)
+                {
                     projectiles[i].update(barriers);
                 }
-                Collision.updateBulletOutOfBound(projectiles, GraphicsDevice.Viewport);
+                Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
                 Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+
 
                 if (retrievedFuelCells == GameConstants.NumFuelCells)
                 {
@@ -281,81 +256,14 @@ namespace Poseidon
                     currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     ResetGame(gameTime, aspectRatio);
             }
-
             base.Update(gameTime);
         }
 
-        private void ResetGame(GameTime gameTime, float aspectRatio)
+        public override void Draw(GameTime gameTime)
         {
-            fuelCarrier.Reset();
-            gameCamera.Update(fuelCarrier.ForwardDirection,
-                fuelCarrier.Position, aspectRatio);
-            InitializeGameField();
-
-            retrievedFuelCells = 0;
-            startTime = gameTime.TotalGameTime;
-            roundTimer = roundTime;
-            currentGameState = GameState.Running;
-        }
-
-        private void InitializeGameField()
-        {
-            //Initialize barriers
-            barriers = new Barrier[GameConstants.NumBarriers];
-            int randomBarrier = random.Next(3);
-            string barrierName = null;
-
-            for (int index = 0; index < GameConstants.NumBarriers; index++)
-            {
-                switch (randomBarrier)
-                {
-                    case 0:
-                        barrierName = "Models/cube10uR";
-                        //barrierName = "Models/sphere1uR";
-                        break;
-                    case 1:
-                        barrierName = "Models/cylinder10uR";
-                        break;
-                    case 2:
-                        barrierName = "Models/pyramid10uR";
-                        break;
-                }
-                barriers[index] = new Barrier();
-                barriers[index].LoadContent(Content, barrierName);
-                randomBarrier = random.Next(3);
-            }
-            PlaceFuelCellsAndBarriers();
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            graphics.GraphicsDevice.Clear(Color.Black);
-
-            switch (currentGameState)
-            {
-                case GameState.Loading:
-                    //helpScene.Show();
-                    //activeScene = helpScene;
-                    DrawSplashScreen();
-                    break;
-                case GameState.Running:
-                    DrawGameplayScreen();
-                    break;
-                case GameState.Won:
-                    DrawWinOrLossScreen(GameConstants.StrGameWon);
-                    break;
-                case GameState.Lost:
-                    DrawWinOrLossScreen(GameConstants.StrGameLost);
-                    break;
-            };
-
+            DrawGameplayScreen();
             base.Draw(gameTime);
         }
-
         /// <summary>
         /// Draws the game terrain, a simple blue grid.
         /// </summary>
@@ -381,8 +289,8 @@ namespace Poseidon
         private void DrawSplashScreen()
         {
             float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicsDevice.Viewport.Width,
-                GraphicsDevice.Viewport.Height);
+            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
+                GraphicDevice.Viewport.Height);
             Vector2 strCenter;
 
             graphics.GraphicsDevice.Clear(Color.SteelBlue);
@@ -420,7 +328,7 @@ namespace Poseidon
             //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
             DepthStencilState dss = new DepthStencilState();
             dss.DepthBufferEnable = true;
-            GraphicsDevice.DepthStencilState = dss;
+            GraphicDevice.DepthStencilState = dss;
 
             //GraphicsDevice.RenderState.AlphaBlendEnable = false;
             //GraphicsDevice.RenderState.AlphaTestEnable = false;
@@ -432,8 +340,8 @@ namespace Poseidon
         private void DrawWinOrLossScreen(string gameResult)
         {
             float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicsDevice.Viewport.Width,
-                GraphicsDevice.Viewport.Height);
+            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
+                GraphicDevice.Viewport.Height);
             Vector2 strCenter;
 
             xOffsetText = yOffsetText = 0;
@@ -467,7 +375,7 @@ namespace Poseidon
             //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
             DepthStencilState dss = new DepthStencilState();
             dss.DepthBufferEnable = true;
-            GraphicsDevice.DepthStencilState = dss;
+            GraphicDevice.DepthStencilState = dss;
 
             //GraphicsDevice.RenderState.AlphaBlendEnable = false;
             //GraphicsDevice.RenderState.AlphaTestEnable = false;
@@ -487,33 +395,35 @@ namespace Poseidon
                         gameCamera.ProjectionMatrix);
                     RasterizerState rs = new RasterizerState();
                     rs.FillMode = FillMode.WireFrame;
-                    GraphicsDevice.RasterizerState = rs;
+                    GraphicDevice.RasterizerState = rs;
                     fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix, boundingSphere);
 
                     rs = new RasterizerState();
                     rs.FillMode = FillMode.Solid;
-                    GraphicsDevice.RasterizerState = rs;
+                    GraphicDevice.RasterizerState = rs;
                 }
             }
             foreach (Barrier barrier in barriers)
             {
                 barrier.Draw(gameCamera.ViewMatrix,
                     gameCamera.ProjectionMatrix);
-                RasterizerState rs = new RasterizerState();
-                rs.FillMode = FillMode.WireFrame;
-                GraphicsDevice.RasterizerState = rs;
-                barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix, boundingSphere);
+                //RasterizerState rs = new RasterizerState();
+                //rs.FillMode = FillMode.WireFrame;
+                //GraphicsDevice.RasterizerState = rs;
+                //barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
+                //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                rs = new RasterizerState();
-                rs.FillMode = FillMode.Solid;
-                GraphicsDevice.RasterizerState = rs;
+                //rs = new RasterizerState();
+                //rs.FillMode = FillMode.Solid;
+                //GraphicsDevice.RasterizerState = rs;
             }
 
             // Update bullets
-            foreach (Projectiles p in projectiles) {
-                if (p.getStatus()) {
+            foreach (Projectiles p in projectiles)
+            {
+                if (p.getStatus())
+                {
                     p.draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
@@ -545,7 +455,7 @@ namespace Poseidon
             str1 += (roundTimer.Seconds).ToString();
 
             //Calculate str1 position
-            rectSafeArea = GraphicsDevice.Viewport.TitleSafeArea;
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
             xOffsetText = rectSafeArea.X;
             yOffsetText = rectSafeArea.Y;
@@ -554,18 +464,18 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
-            spriteBatch.End();
+            //spriteBatch.End();
 
             //re-enable depth buffer after sprite batch disablement
 
             //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
             DepthStencilState dss = new DepthStencilState();
             dss.DepthBufferEnable = true;
-            GraphicsDevice.DepthStencilState = dss;
+            GraphicDevice.DepthStencilState = dss;
 
             //GraphicsDevice.RenderState.AlphaBlendEnable = false;
             //GraphicsDevice.RenderState.AlphaTestEnable = false;

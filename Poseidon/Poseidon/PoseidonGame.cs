@@ -47,6 +47,8 @@ namespace Poseidon
         //A tank
         Tank tank;
 
+        private TimeSpan fireTime;
+        private TimeSpan prevFireTime;
 
         public PoseidonGame()
         {
@@ -72,6 +74,8 @@ namespace Poseidon
             gameCamera = new Camera();
             boundingSphere = new GameObject();
             tank = new Tank();
+
+            fireTime = TimeSpan.FromSeconds(0.3f);
 
             base.Initialize();
         }
@@ -178,6 +182,18 @@ namespace Poseidon
             projectiles.Add(p);
         }
 
+        private void updateBullets() {
+            for (int i = 0; i < projectiles.Count; ) {
+                if (projectiles[i].getStatus()) {
+                    projectiles[i].update(barriers);
+                    i++;
+                }
+                else {
+                    projectiles.RemoveAt(i);
+                }
+            } 
+        }
+
         private Vector3 GenerateRandomPosition(int min, int max)
         {
             int xValue, zValue;
@@ -260,7 +276,9 @@ namespace Poseidon
                 //    currentKeyboardState, barriers);
 
                 // Are we shooting?
-                if (currentKeyboardState.IsKeyDown(Keys.L)) {
+                if (currentKeyboardState.IsKeyDown(Keys.L) 
+                    && gameTime.TotalGameTime - prevFireTime > fireTime) {
+                    prevFireTime = gameTime.TotalGameTime;
                     placeBullet();
                 }
 
@@ -282,15 +300,7 @@ namespace Poseidon
                     }
                 }
 
-                for (int i = 0; i < projectiles.Count; ) {
-                    if (projectiles[i].getStatus()) {
-                        projectiles[i].update(barriers);
-                        i++;
-                    }
-                    else {
-                        projectiles.RemoveAt(i);
-                    }
-                } 
+                updateBullets();
 
                 if (retrievedFuelCells == GameConstants.NumFuelCells)
                 {

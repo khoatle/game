@@ -41,7 +41,10 @@ namespace Poseidon
         FuelCarrier fuelCarrier;
         FuelCell[] fuelCells;
         Barrier[] barriers;
+        Enemy[] enemies;
+        Fish[] fish;
         Vector3[] barrier_previous_movement;
+
         List<Projectiles> projectiles;
 
         //A tank

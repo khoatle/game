@@ -107,9 +107,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HelpScene.cs" />
-    <Compile Include="Core\ImageComponent.cs" />
-    <Compile Include="Core\GameScene.cs" />
+    <Compile Include="AddingObjects.cs" />
+    <Compile Include="Collision.cs" />
+    <Compile Include="DamageBullet.cs" />
+    <Compile Include="Enemy.cs" />
+    <Compile Include="Fish.cs" />
     <Compile Include="Projectiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Barrier.cs" />

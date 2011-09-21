@@ -17,7 +17,7 @@ namespace Poseidon
 
         public Camera()
         {
-            AvatarHeadOffset = new Vector3(0, 80, 0);//(0, 7, -15);
+            AvatarHeadOffset = new Vector3(0, 70, -15);
             TargetOffset = new Vector3(0, 0, 0);
             ViewMatrix = Matrix.Identity;
             ProjectionMatrix = Matrix.Identity;
@@ -38,7 +38,7 @@ namespace Poseidon
             //Calculate the camera's view and projection
             // matrices based on current values.
             ViewMatrix =
-                Matrix.CreateLookAt(cameraPosition, cameraTarget, camRot);
+                Matrix.CreateLookAt(cameraPosition, cameraTarget, Vector3.UnitY);
             ProjectionMatrix =
                 Matrix.CreatePerspectiveFieldOfView(
                     MathHelper.ToRadians(GameConstants.ViewAngle), aspectRatio,

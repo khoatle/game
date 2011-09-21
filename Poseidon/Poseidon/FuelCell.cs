@@ -16,6 +16,7 @@ namespace Poseidon
         //Temporary power-up types
         //1: speed
         //2: power
+        //3: fire rate
         public int powerType;
 
         public FuelCell(int powerType)
@@ -65,7 +66,11 @@ namespace Poseidon
                     }
                     else if (powerType == 2)
                     {
-                        effect.DiffuseColor = Color.Crimson.ToVector3();
+                        effect.DiffuseColor = Color.Red.ToVector3();
+                    }
+                    else if (powerType == 3)
+                    {
+                        effect.DiffuseColor = Color.Blue.ToVector3();
                     }
                 }
                 mesh.Draw();

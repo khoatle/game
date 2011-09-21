@@ -37,13 +37,13 @@ namespace Poseidon
         private void calculateUnitDirection() {
             Matrix orientationMatrix = Matrix.CreateRotationY(forwardDirection);
             Vector3 movement = Vector3.Zero;
-            movement.Z = GameConstants.BulletSpeed;
+            movement.Z = 1;// GameConstants.BulletSpeed;
             unitDirection = Vector3.Transform(movement, orientationMatrix);
             unitDirection.Normalize();
         }
 
         private Vector3 calculateFuturePosition() {
-            return Position + unitDirection * GameConstants.Velocity;
+            return Position + unitDirection * GameConstants.BulletSpeed;
         }
         
         public void update(Barrier[] barriers) {

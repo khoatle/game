@@ -79,10 +79,12 @@ namespace Poseidon
         SoundEffect RetrievedSound;
         //temporary power-up for the cyborg
         //int tempPower;
-        int speedUp;
-        int strengthUp;
+        float speedUp;
+        float strengthUp;
+        public float fireRateUp;
         double strengthUpStartTime;
         double speedUpStartTime;
+        double fireRateUpStartTime;
         #region Properties
 
 
@@ -187,8 +189,9 @@ namespace Poseidon
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
-            speedUp = 1;
-            strengthUp = 1;
+            speedUp = 1.0f;
+            strengthUp = 1.0f;
+            fireRateUp = 1.0f;
             Position.Y = GameConstants.FloatHeight;
         }
 
@@ -199,18 +202,25 @@ namespace Poseidon
             //if (wheelRotationValue != 0) wheelRotationValue = 0;
 
             //worn out effect of power-ups
-            if (speedUp != 1)
+            if (speedUp != 1.0f)
             {
                 if (gameTime.TotalGameTime.TotalSeconds - speedUpStartTime >= 5)
                 {
-                    speedUp = 1;
+                    speedUp = 1.0f;
                 }
             }
-            if (strengthUp != 1)
+            if (strengthUp != 1.0f)
             {
                 if (gameTime.TotalGameTime.TotalSeconds - strengthUpStartTime >= 5)
                 {
-                    strengthUp = 1;
+                    strengthUp = 1.0f;
+                }
+            }
+            if (fireRateUp != 1.0f)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds - fireRateUpStartTime >= 5)
+                {
+                    fireRateUp = 1.0f;
                 }
             }
             float turnAmount = 0;
@@ -275,12 +285,17 @@ namespace Poseidon
                     if (fuelCells[curCell].powerType == 1)
                     {
                         speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
-                        speedUp = 2;
+                        speedUp = 2.0f;
                     }
                     else if (fuelCells[curCell].powerType == 2)
                     {
                         strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
-                        strengthUp = 2;
+                        strengthUp = 2.0f;
+                    }
+                    else if (fuelCells[curCell].powerType == 3)
+                    {
+                        fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                        fireRateUp = 2.0f;
                     }
                     RetrievedSound.Play();
                 }

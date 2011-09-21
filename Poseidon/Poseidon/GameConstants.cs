@@ -24,7 +24,7 @@ namespace Poseidon
         public const int MaxRange = 98;
 
         // bullet consts
-        public const float BulletSpeed = 10f;
+        public const float BulletSpeed = 10.0f;
 
         //general
         public const int MaxRangeTerrain = 98;

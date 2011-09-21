@@ -94,12 +94,12 @@ namespace Poseidon
 
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
-            int powerType = random.Next(2) + 1;
+            int powerType = random.Next(3) + 1;
             for (int index = 0; index < fuelCells.Length; index++)
             {
                 fuelCells[index] = new FuelCell(powerType);     
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
-                powerType = random.Next(2) + 1;
+                powerType = random.Next(3) + 1;
             }
 
             //Initialize barriers
@@ -276,8 +276,9 @@ namespace Poseidon
                 //    currentKeyboardState, barriers);
 
                 // Are we shooting?
-                if (currentKeyboardState.IsKeyDown(Keys.L) 
-                    && gameTime.TotalGameTime - prevFireTime > fireTime) {
+                if (currentKeyboardState.IsKeyDown(Keys.L)
+                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / tank.fireRateUp)
+                {
                     prevFireTime = gameTime.TotalGameTime;
                     placeBullet();
                 }

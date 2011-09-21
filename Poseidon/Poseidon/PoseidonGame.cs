@@ -254,20 +254,16 @@ namespace Poseidon
                     }
                 }
 
-                // BUG BUG BUG
                 for (int i = 0; i < projectiles.Count; i++) {
                     projectiles[i].update(barriers);
                 }
                 Collision.updateBulletOutOfBound(projectiles, GraphicsDevice.Viewport);
                 Collision.updateBulletVsBarriersCollision(projectiles, barriers);
 
-
-                    //Collision.updateBulletVsBarriersCollision(projectiles, barriers);
-
-                    if (retrievedFuelCells == GameConstants.NumFuelCells)
-                    {
-                        currentGameState = GameState.Won;
-                    }
+                if (retrievedFuelCells == GameConstants.NumFuelCells)
+                {
+                    currentGameState = GameState.Won;
+                }
                 roundTimer -= gameTime.ElapsedGameTime;
                 if ((roundTimer < TimeSpan.Zero) &&
                     (retrievedFuelCells != GameConstants.NumFuelCells))

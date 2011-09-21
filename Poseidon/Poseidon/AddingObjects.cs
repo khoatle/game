@@ -28,6 +28,7 @@ namespace Poseidon
         }
 
         private void placeEnemies() {
+            
         }
 
         private void placeFish() {

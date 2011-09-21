@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
-
+using Poseidon.Core;
 namespace Poseidon
 {
     public enum GameState { Loading, Running, Won, Lost }
@@ -49,7 +49,10 @@ namespace Poseidon
 
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
-
+        // Textures
+        protected Texture2D helpBackgroundTexture, helpForegroundTexture;
+        HelpScene helpScene;
+        protected GameScene activeScene;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -90,8 +93,14 @@ namespace Poseidon
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Services.AddService(typeof(SpriteBatch), spriteBatch);
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-
+            //For the Help scene
+            helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
+            helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
+            helpScene = new HelpScene(this, helpBackgroundTexture,
+            helpForegroundTexture);
+            Components.Add(helpScene);
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
             int powerType = random.Next(3) + 1;
@@ -241,7 +250,36 @@ namespace Poseidon
         {
             // TODO: Unload any non ContentManager content here
         }
+        private bool CheckEnterA()
+        {
+            // Get the Keyboard and GamePad state
+            GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
+            KeyboardState keyboardState = Keyboard.GetState();
 
+            bool result = (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                (keyboardState.IsKeyUp(Keys.Enter)));
+            result |= (lastGamePadState.Buttons.A == ButtonState.Pressed) &&
+                      (gamepadState.Buttons.A == ButtonState.Released);
+
+            lastKeyboardState = keyboardState;
+            lastGamePadState = gamepadState;
+
+            return result;
+        }
+        private void HandleScenesInput()
+        {
+
+            // Handle Help Scene input
+            if (activeScene == helpScene)
+            {
+                if (CheckEnterA())
+                {
+                    helpScene.Hide();
+                    currentGameState = GameState.Running;
+                }
+            }
+            
+        }
         /// <summary>
         /// Allows the game to run logic such as updating the world,
         /// checking for collisions, gathering input, and playing audio.
@@ -249,6 +287,7 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            HandleScenesInput();
             float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -381,7 +420,9 @@ namespace Poseidon
             switch (currentGameState)
             {
                 case GameState.Loading:
-                    DrawSplashScreen();
+                    helpScene.Show();
+                    activeScene = helpScene;
+                    //DrawSplashScreen();
                     break;
                 case GameState.Running:
                     DrawGameplayScreen();

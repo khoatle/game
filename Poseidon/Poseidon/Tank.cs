@@ -74,13 +74,19 @@ namespace Poseidon
         public int MaxRange { get; set; }
         #endregion
 
+        //Attributes of our main character
+        public float strength;
+        public float speed;
+        public float shootingRate;
+        public int hitPoint;
+
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
         SoundEffect RetrievedSound;
         //temporary power-up for the cyborg
         //int tempPower;
-        float speedUp;
-        float strengthUp;
+        public float speedUp;
+        public float strengthUp;
         public float fireRateUp;
         double strengthUpStartTime;
         double speedUpStartTime;
@@ -140,7 +146,20 @@ namespace Poseidon
 
         #endregion
 
+        public Tank()
+        {
+            // Original attribute
+            strength = 1.0f;
+            speed = 1.0f;
+            shootingRate = 1.0f;
+            hitPoint = 100;
 
+            // No buff up at the beginning
+            speedUp = 1.0f;
+            strengthUp = 1.0f;
+            fireRateUp = 1.0f;
+            Position.Y = GameConstants.FloatHeight;
+        }
         /// <summary>
         /// Loads the tank model.
         /// </summary>
@@ -189,10 +208,7 @@ namespace Poseidon
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
-            speedUp = 1.0f;
-            strengthUp = 1.0f;
-            fireRateUp = 1.0f;
-            Position.Y = GameConstants.FloatHeight;
+            
         }
         internal void Reset()
         {
@@ -237,7 +253,8 @@ namespace Poseidon
                 turnAmount = -1;
             }
             else steerRotationValue = 0;
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp;
+            // Player has speed buff from both temporary powerups and his speed attritubte
+            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * this.speed;
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
             Vector3 movement = Vector3.Zero;
@@ -251,7 +268,7 @@ namespace Poseidon
             }
             else wheelRotationValue = 0;
             Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.Velocity * speedUp;
+            speed *= GameConstants.Velocity * speedUp * this.speed;
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;

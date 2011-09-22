@@ -24,9 +24,9 @@ namespace Poseidon
         GraphicsDeviceManager graphics;
 
         KeyboardState lastKeyboardState = new KeyboardState();
-        KeyboardState currentKeyboardState = new KeyboardState();
+        //KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
-        GamePadState currentGamePadState = new GamePadState();
+        //GamePadState currentGamePadState = new GamePadState();
 
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
@@ -39,6 +39,8 @@ namespace Poseidon
         private SpriteFont smallFont, largeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
+        // For the Skill board
+        SkillScene skillScene;
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
@@ -51,7 +53,8 @@ namespace Poseidon
         // The user pressed Enter or P?
         bool enterPressed;
         bool pPressed;
-
+        bool backPressed;
+        bool skillPressed;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -117,6 +120,12 @@ namespace Poseidon
             // Create the main game play scene
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture);
             Components.Add(playGameScene);
+
+            // Create the Skill board
+            skillScene = new SkillScene(this, smallFont, largeFont,
+                startBackgroundTexture, startElementsTexture);
+            Components.Add(skillScene);
+
             // Start the game in the start Scene :)
             startScene.Show();
             activeScene = startScene;
@@ -149,6 +158,10 @@ namespace Poseidon
             pPressed = (lastKeyboardState.IsKeyDown(Keys.P) &&
                 (keyboardState.IsKeyUp(Keys.P)));
 
+            backPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
+                (keyboardState.IsKeyUp(Keys.Escape)));
+            skillPressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
+                (keyboardState.IsKeyUp(Keys.I)));
             lastKeyboardState = keyboardState;
             lastGamePadState = gamepadState;
 
@@ -176,6 +189,11 @@ namespace Poseidon
             {
                 HandleActionInput();
             }
+            // Handle Skill scene input
+            else if (activeScene == skillScene)
+            {
+                HandleSkillSceneInput();
+            }
         }
         /// <summary>
         /// Handle update for the main game
@@ -183,20 +201,19 @@ namespace Poseidon
         private void HandleActionInput()
         {
 
-            //lastKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-            //lastGamePadState = currentGamePadState;
-            //currentGamePadState = GamePad.GetState(PlayerIndex.One);
-
-            // Allows the game to exit
-            if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
-                (currentGamePadState.Buttons.Back == ButtonState.Pressed))
-                this.Exit();
             // User pauses the game
             if (pPressed)
             {
                 audio.MenuBack.Play();
                 playGameScene.Paused = !playGameScene.Paused;
+            }
+            if (backPressed)
+            {
+                ShowScene(startScene);
+            }
+            if (skillPressed)
+            {
+                ShowScene(skillScene);
             }
         }
         /// <summary>
@@ -219,6 +236,34 @@ namespace Poseidon
                         break;
                     case 2:
                         Exit();
+                        break;
+                }
+            }
+        }
+        /// <summary>
+        /// Handle buttons and keyboard in SkillScene
+        /// </summary>
+        private void HandleSkillSceneInput()
+        {
+            if (enterPressed)
+            {
+                audio.MenuSelect.Play();
+                switch (skillScene.SelectedMenuIndex)
+                {
+                    case 0:
+                        playGameScene.tank.strength += 0.25f;
+                        break;
+                    case 1:
+                        playGameScene.tank.speed += 0.25f;
+                        break;
+                    case 2:
+                        playGameScene.tank.shootingRate += 0.25f;
+                        break;
+                    case 3:
+                        playGameScene.tank.hitPoint += 30;
+                        break;
+                    case 4:
+                        ShowScene(playGameScene);
                         break;
                 }
             }

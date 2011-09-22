@@ -41,7 +41,7 @@ namespace Poseidon
         List<Projectiles> projectiles;
 
         //A tank
-        Tank tank;
+        public Tank tank;
 
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
@@ -52,6 +52,7 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
 
+        Game game;
         public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture):base(game)
         {
             this.graphics = graphics;
@@ -61,6 +62,7 @@ namespace Poseidon
             this.pausePosition = pausePosition;
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
+            this.game = game;
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
@@ -70,7 +72,7 @@ namespace Poseidon
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
-
+            
             this.Load();
 
         }
@@ -242,7 +244,7 @@ namespace Poseidon
 
                     // Are we shooting?
                     if (currentKeyboardState.IsKeyDown(Keys.L)
-                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / tank.fireRateUp)
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                     {
                         prevFireTime = gameTime.TotalGameTime;
                         audio.Shooting.Play();

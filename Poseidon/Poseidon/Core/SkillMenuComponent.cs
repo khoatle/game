@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 #endregion
 
@@ -25,6 +26,8 @@ namespace Poseidon.Core
         // Items
         protected int selectedIndex = 0;
         private readonly List<string> menuItems;
+        private readonly List<Texture2D> textures;
+        protected readonly Texture2D texture2D;
         // Used for handle input
         protected KeyboardState oldKeyboardState;
         protected GamePadState oldGamePadState;
@@ -46,7 +49,7 @@ namespace Poseidon.Core
             regularFont = normalFont;
             this.selectedFont = selectedFont;
             menuItems = new List<string>();
-
+            textures = new List<Texture2D>();
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)
                 Game.Services.GetService(typeof(SpriteBatch));
@@ -64,10 +67,11 @@ namespace Poseidon.Core
         /// Set the Menu Options
         /// </summary>
         /// <param name="items"></param>
-        public void SetMenuItems(string[] items)
+        public void SetMenuItems(string[] items, Texture2D[] textures)
         {
             menuItems.Clear();
             menuItems.AddRange(items);
+            this.textures.AddRange(textures);
             CalculateBounds();
         }
 
@@ -211,7 +215,8 @@ namespace Poseidon.Core
                     font = regularFont;
                     theColor = regularColor;
                 }
-
+                if (i < textures.Count)
+                    spriteBatch.Draw(textures[i], new Vector2(position.X - 50, y), Color.White);
                 // Draw the text shadow
                 spriteBatch.DrawString(font, menuItems[i],
                     new Vector2(position.X + 1, y + 1), Color.Black);

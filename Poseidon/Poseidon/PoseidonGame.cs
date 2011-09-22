@@ -123,7 +123,7 @@ namespace Poseidon
 
             // Create the Skill board
             skillScene = new SkillScene(this, smallFont, largeFont,
-                startBackgroundTexture, startElementsTexture);
+                startBackgroundTexture, startElementsTexture, Content);
             Components.Add(skillScene);
 
             // Start the game in the start Scene :)

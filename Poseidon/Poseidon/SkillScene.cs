@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
+using Microsoft.Xna.Framework.Content;
 
 #endregion
 
@@ -32,7 +33,7 @@ namespace Poseidon
         protected Vector2 enhancedPosition;
         protected bool showEnhanced;
         protected TimeSpan elapsedTime = TimeSpan.Zero;
-
+        ContentManager Content;
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -42,9 +43,10 @@ namespace Poseidon
         /// <param name="background">Texture for background image</param>
         /// <param name="elements">Texture with the foreground elements</param>
         public SkillScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                            Texture2D background, Texture2D elements)
+                            Texture2D background, Texture2D elements, ContentManager Content)
             : base(game)
         {
+            this.Content = Content;
             this.elements = elements;
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Center));
@@ -52,7 +54,13 @@ namespace Poseidon
             // Create the Menu
             string[] items = { "Increase Strength", "Increase Speed", "Increasee Shooting Rate", "Increase Hit Point", "Confirm"};
             menu = new SkillMenuComponent(game, smallFont, largeFont);
-            menu.SetMenuItems(items);
+            Texture2D[] textures = new Texture2D[4];
+            textures[0] = Content.Load<Texture2D>("Image/Sea Monster");
+            textures[1] = Content.Load<Texture2D>("Image/Sea Monster");
+            textures[2] = Content.Load<Texture2D>("Image/Sea Monster");
+            textures[3] = Content.Load<Texture2D>("Image/Sea Monster");
+            
+            menu.SetMenuItems(items, textures);
             Components.Add(menu);
 
             // Get the current spritebatch

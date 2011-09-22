@@ -125,7 +125,7 @@ namespace Poseidon
                 randomBarrier = random.Next(3);
                 barrier_previous_movement[index] = Vector3.Zero;
             }
-            //PlaceFuelCellsAndBarriers();
+            PlaceFuelCellsAndBarriers();
 
             //Initialize fuel carrier
             fuelCarrier = new FuelCarrier();
@@ -144,7 +144,7 @@ namespace Poseidon
         {
             paused = false;
             MediaPlayer.Play(audio.BackMusic);
-            PlaceFuelCellsAndBarriers();
+            //PlaceFuelCellsAndBarriers();
             base.Show();
         }
         private void ResetGame(GameTime gameTime, float aspectRatio)

@@ -42,6 +42,7 @@ namespace Poseidon
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
+
         // Game is paused?
         protected bool paused;
         protected Vector2 pausePosition;
@@ -81,6 +82,7 @@ namespace Poseidon
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+
             //For pausing the game
             paused = false;
             pausePosition.X = (this.Window.ClientBounds.Width -
@@ -113,7 +115,7 @@ namespace Poseidon
             Components.Add(startScene);
 
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture);
             Components.Add(playGameScene);
             // Start the game in the start Scene :)
             startScene.Show();
@@ -122,25 +124,7 @@ namespace Poseidon
         }
 
 
-        /// <summary>
-        /// Paused mode
-        /// </summary>
-        public bool Paused
-        {
-            get { return paused; }
-            set
-            {
-                paused = value;
-                if (paused)
-                {
-                    MediaPlayer.Pause();
-                }
-                else
-                {
-                    MediaPlayer.Resume();
-                }
-            }
-        }
+        
 
 
         /// <summary>
@@ -199,15 +183,21 @@ namespace Poseidon
         private void HandleActionInput()
         {
 
-            lastKeyboardState = currentKeyboardState;
+            //lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            lastGamePadState = currentGamePadState;
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
+            //lastGamePadState = currentGamePadState;
+            //currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
             // Allows the game to exit
             if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 this.Exit();
+            // User pauses the game
+            if (pPressed)
+            {
+                audio.MenuBack.Play();
+                playGameScene.Paused = !playGameScene.Paused;
+            }
         }
         /// <summary>
         /// Handle buttons and keyboard in StartScene
@@ -247,17 +237,10 @@ namespace Poseidon
         protected override void Update(GameTime gameTime)
         {
             // Get the Keyboard and GamePad state
-            CheckKeyEntered();
-
-            // User pauses the game
-            if (pPressed){
-                paused =! paused;
-            }
-            if (!paused)
-            {
-                HandleScenesInput(gameTime);
-                base.Update(gameTime);
-            }
+            CheckKeyEntered();   
+            HandleScenesInput(gameTime);
+            base.Update(gameTime);
+            
         }
 
         /// <summary>
@@ -266,15 +249,17 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.Black);
+            
+            //graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            if (paused)
-            {
+            base.Draw(gameTime);
+            //if (paused)
+            //{
                 // Draw the "pause" text
-                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
-                    Color.White);
-            }
-            else base.Draw(gameTime);
+            //    spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
+            //        Color.White);
+            //}
+            //else base.Draw(gameTime);
             spriteBatch.End();
         }
 

@@ -21,6 +21,7 @@ namespace Poseidon
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
+        private AudioLibrary audio;
         int retrievedFuelCells;
         TimeSpan startTime, roundTimer, roundTime;
         Random random;
@@ -45,12 +46,21 @@ namespace Poseidon
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch):base(game)
+        // Game is paused?
+        protected bool paused;
+        protected Vector2 pausePosition;
+        protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
+        protected Texture2D actionTexture;
+
+        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture):base(game)
         {
             this.graphics = graphics;
             this.Content = Content;
             this.GraphicDevice = GraphicsDevice;
             this.spriteBatch = spriteBatch;
+            this.pausePosition = pausePosition;
+            this.pauseRect = pauseRect;
+            this.actionTexture = actionTexture;
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
@@ -68,8 +78,14 @@ namespace Poseidon
         public void Load()
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            // Get the audio library
+            audio = (AudioLibrary)
+                Game.Services.GetService(typeof(AudioLibrary));
+
             ground.Model = Content.Load<Model>("Models/ground");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+
+            
             //Initialize fuel cells
             fuelCells = new FuelCell[GameConstants.NumFuelCells];
             int powerType = random.Next(3) + 1;
@@ -124,6 +140,8 @@ namespace Poseidon
         /// </summary>
         public override void Show()
         {
+            paused = false;
+            MediaPlayer.Play(audio.BackMusic);
             PlaceFuelCellsAndBarriers();
             base.Show();
         }
@@ -181,89 +199,123 @@ namespace Poseidon
 
             base.Hide();
         }
+        /// <summary>
+        /// Paused mode
+        /// </summary>
+        public bool Paused
+        {
+            get { return paused; }
+            set
+            {
+                paused = value;
+                if (paused)
+                {
+                    MediaPlayer.Pause();
+                }
+                else
+                {
+                    MediaPlayer.Resume();
+                }
+            }
+        }
         public override void Update(GameTime gameTime)
         {
-            float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-            lastKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-            lastGamePadState = currentGamePadState;
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
-
-            // Allows the game to exit
-            //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
-            //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
-            //    //this.Exit();
-
-            
-
-            if ((currentGameState == GameState.Running))
+            if (!paused)
             {
-                //fuelCarrier.Update(currentGamePadState, 
-                //    currentKeyboardState, barriers);
+                float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
+                lastKeyboardState = currentKeyboardState;
+                currentKeyboardState = Keyboard.GetState();
+                lastGamePadState = currentGamePadState;
+                currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
-                // Are we shooting?
-                if (currentKeyboardState.IsKeyDown(Keys.L)
-                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / tank.fireRateUp)
-                {
-                    prevFireTime = gameTime.TotalGameTime;
-                    placeBullet();
-                }
+                // Allows the game to exit
+                //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
+                //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
+                //    //this.Exit();
 
-                tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
-                gameCamera.Update(tank.ForwardDirection,
-                    tank.Position, aspectRatio);
-                for (int barrier_index = 0; barrier_index < GameConstants.NumBarriers; barrier_index++)
+
+
+                if ((currentGameState == GameState.Running))
                 {
-                    barrier_previous_movement[barrier_index] =
-                        barriers[barrier_index].Update(barriers, random.Next(100), barrier_previous_movement[barrier_index], tank);
-                }
-                retrievedFuelCells = 0;
-                foreach (FuelCell fuelCell in fuelCells)
-                {
-                    fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                    if (fuelCell.Retrieved)
+                    //fuelCarrier.Update(currentGamePadState, 
+                    //    currentKeyboardState, barriers);
+
+                    // Are we shooting?
+                    if (currentKeyboardState.IsKeyDown(Keys.L)
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / tank.fireRateUp)
                     {
-                        retrievedFuelCells++;
+                        prevFireTime = gameTime.TotalGameTime;
+                        audio.Shooting.Play();
+                        placeBullet();
+                    }
+
+                    tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
+                    gameCamera.Update(tank.ForwardDirection,
+                        tank.Position, aspectRatio);
+                    for (int barrier_index = 0; barrier_index < GameConstants.NumBarriers; barrier_index++)
+                    {
+                        barrier_previous_movement[barrier_index] =
+                            barriers[barrier_index].Update(barriers, random.Next(100), barrier_previous_movement[barrier_index], tank);
+                    }
+                    retrievedFuelCells = 0;
+                    foreach (FuelCell fuelCell in fuelCells)
+                    {
+                        fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
+                        if (fuelCell.Retrieved)
+                        {
+                            retrievedFuelCells++;
+                        }
+                    }
+
+                    for (int i = 0; i < projectiles.Count; i++)
+                    {
+                        projectiles[i].update(barriers);
+                    }
+                    Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
+                    Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+
+
+                    if (retrievedFuelCells == GameConstants.NumFuelCells)
+                    {
+                        currentGameState = GameState.Won;
+                    }
+                    roundTimer -= gameTime.ElapsedGameTime;
+                    if ((roundTimer < TimeSpan.Zero) &&
+                        (retrievedFuelCells != GameConstants.NumFuelCells))
+                    {
+                        currentGameState = GameState.Lost;
                     }
                 }
 
-                for (int i = 0; i < projectiles.Count; i++)
+                if ((currentGameState == GameState.Won) ||
+                    (currentGameState == GameState.Lost))
                 {
-                    projectiles[i].update(barriers);
-                }
-                Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+                    // Reset the world for a new game
+                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                    {
+                        ResetGame(gameTime, aspectRatio);
 
-
-                if (retrievedFuelCells == GameConstants.NumFuelCells)
-                {
-                    currentGameState = GameState.Won;
+                    }
                 }
-                roundTimer -= gameTime.ElapsedGameTime;
-                if ((roundTimer < TimeSpan.Zero) &&
-                    (retrievedFuelCells != GameConstants.NumFuelCells))
-                {
-                    currentGameState = GameState.Lost;
-                }
+                base.Update(gameTime);
             }
-
-            if ((currentGameState == GameState.Won) ||
-                (currentGameState == GameState.Lost))
-            {
-                // Reset the world for a new game
-                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
-                {
-                    ResetGame(gameTime, aspectRatio);
-                    
-                }
-            }
-            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
+            GraphicDevice.BlendState = BlendState.Opaque;
+            GraphicDevice.DepthStencilState = DepthStencilState.Default;
+            //GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+ 
+            base.Draw(gameTime);
+            if (paused)
+            {
+                // Draw the "pause" text
+                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
+                    Color.White);
+            }
             switch (currentGameState)
             {
 
@@ -277,7 +329,7 @@ namespace Poseidon
                     DrawWinOrLossScreen(GameConstants.StrGameLost);
                     break;
             };
-            base.Draw(gameTime);
+            
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.

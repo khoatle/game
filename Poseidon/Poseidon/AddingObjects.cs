@@ -75,7 +75,7 @@ namespace Poseidon
         private void placeBullet()
         {
             Projectiles p = new Projectiles();
-            p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
+            p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
             p.loadContent(Content, "Models/sphere1uR");
             projectiles.Add(p);
         }

@@ -209,7 +209,7 @@ namespace Poseidon
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
-            
+
         }
 
         internal void Reset()

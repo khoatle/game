@@ -17,6 +17,7 @@ namespace Poseidon
         GraphicsDeviceManager graphics;
         GraphicsDevice GraphicDevice;
         ContentManager Content;
+        Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
@@ -29,7 +30,7 @@ namespace Poseidon
         SpriteFont statsFont;
         GameObject ground;
         Camera gameCamera;
-        GameState currentGameState = GameState.Running;
+        public GameState currentGameState = GameState.PlayingCutScene;
         GameObject boundingSphere;
 
         FuelCarrier fuelCarrier;
@@ -53,8 +54,15 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
 
-        Game game;
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture):base(game)
+        // Current game level
+        public int currentLevel = 0;
+
+        // Cutscene
+        CutSceneDialog cutSceneDialog;
+        // Which sentence in the dialog is being printed
+        int currentSentence = 0;
+        
+        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog):base(game)
         {
             this.graphics = graphics;
             this.Content = Content;
@@ -64,6 +72,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
+            this.cutSceneDialog = cutSceneDialog;
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
@@ -155,7 +164,8 @@ namespace Poseidon
             retrievedFuelCells = 0;
             startTime = gameTime.TotalGameTime;
             roundTimer = roundTime;
-            currentGameState = GameState.Running;
+            currentSentence = 0;
+            currentGameState = GameState.PlayingCutScene;
         }
 
         private void InitializeGameField(ContentManager Content)
@@ -234,7 +244,19 @@ namespace Poseidon
                 //    //this.Exit();
 
 
-
+                if (currentGameState == GameState.PlayingCutScene)
+                {
+                    // Next sentence when the user press Enter
+                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                    {
+                        currentSentence++;
+                        // End of cutscene for this level
+                        if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count)
+                            currentGameState = GameState.Running;
+                    }
+                }
                 if ((currentGameState == GameState.Running))
                 {
                     //fuelCarrier.Update(currentGamePadState, 
@@ -288,8 +310,7 @@ namespace Poseidon
                     }
                 }
 
-                if ((currentGameState == GameState.Won) ||
-                    (currentGameState == GameState.Lost))
+                if (currentGameState == GameState.Lost)
                 {
                     // Reset the world for a new game
                     if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
@@ -298,6 +319,16 @@ namespace Poseidon
                     {
                         ResetGame(gameTime, aspectRatio);
 
+                    }
+                }
+                if (currentGameState == GameState.Won)
+                {
+                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                    {
+                        currentLevel++;
+                        ResetGame(gameTime, aspectRatio);
                     }
                 }
                 base.Update(gameTime);
@@ -319,7 +350,9 @@ namespace Poseidon
             }
             switch (currentGameState)
             {
-
+                case GameState.PlayingCutScene:
+                    DrawCutScene();
+                    break;
                 case GameState.Running:
                     DrawGameplayScreen();
                     break;
@@ -500,6 +533,22 @@ namespace Poseidon
 
             //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
             //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
+        }
+        private void DrawCutScene()
+        {
+            float xOffsetText, yOffsetText;
+            string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
+            Rectangle rectSafeArea;
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+
+            Vector2 strSize = statsFont.MeasureString(str1);
+            Vector2 strPosition =
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
+            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
     }
 }

@@ -110,6 +110,7 @@
     <Compile Include="AudioLibrary.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
+    <Compile Include="CutSceneDialog.cs" />
     <Compile Include="HelpScene.cs" />
     <Compile Include="Core\ImageComponent.cs" />
     <Compile Include="Core\GameScene.cs" />

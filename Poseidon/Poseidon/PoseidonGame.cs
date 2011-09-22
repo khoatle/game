@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
 namespace Poseidon
 {
-    public enum GameState { Loading, Running, Won, Lost }
+    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost }
 
     /// <summary>
     /// This is the main type for your game
@@ -30,7 +30,7 @@ namespace Poseidon
 
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
-
+        CutSceneDialog cutSceneDialog;
         // Textures for help scene
         protected Texture2D helpBackgroundTexture, helpForegroundTexture;
         HelpScene helpScene;
@@ -117,14 +117,19 @@ namespace Poseidon
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
 
+            // Loading the cutscenes
+            cutSceneDialog = new CutSceneDialog();
+
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
             Components.Add(playGameScene);
 
             // Create the Skill board
             skillScene = new SkillScene(this, smallFont, largeFont,
                 startBackgroundTexture, startElementsTexture, Content);
             Components.Add(skillScene);
+
+            
 
             // Start the game in the start Scene :)
             startScene.Show();
@@ -215,6 +220,11 @@ namespace Poseidon
             {
                 ShowScene(skillScene);
             }
+            //if (playGameScene.currentGameState == GameState.Won && enterPressed)
+            //{
+            //    playGameScene.currentLevel++;
+
+            //}
         }
         /// <summary>
         /// Handle buttons and keyboard in StartScene

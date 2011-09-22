@@ -210,23 +210,15 @@ namespace Poseidon
             //    new BoundingSphere(scaledSphere.Center, 10);
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
             
-<<<<<<< HEAD
         }
+
         internal void Reset()
         {
             Position = Vector3.Zero;
             ForwardDirection = 0f;
         }
+
         public void Update(KeyboardState keyboardState, List<Barrier> barriers, List<FuelCell> fuelCells, GameTime gameTime)
-=======
-        }
-        internal void Reset()
-        {
-            Position = Vector3.Zero;
-            ForwardDirection = 0f;
-        }
-        public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells, GameTime gameTime)
->>>>>>> c3422d0c4c4a9526fb20ee89b61d04f5372c4cdb
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -304,6 +296,7 @@ namespace Poseidon
                 Interact_with_trash_and_fruit(fuelCells, gameTime);
             }
         }
+
         private void Interact_with_trash_and_fruit(List<FuelCell> fuelCells, GameTime gameTime)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,

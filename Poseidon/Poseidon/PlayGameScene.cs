@@ -252,18 +252,13 @@ namespace Poseidon
                     tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
                     gameCamera.Update(tank.ForwardDirection,
                         tank.Position, aspectRatio);
-<<<<<<< HEAD
+
                     
                     // Update barrier (enemies)
                     for (int i = 0; i < barriers.Count; i++) {
                         barriers[i].Update(barriers, random.Next(100), tank);
                     }
-=======
-                    for (int barrier_index = 0; barrier_index < GameConstants.NumBarriers; barrier_index++)
-                    {
-                        barrier_previous_movement[barrier_index] =
-                            barriers[barrier_index].Update(barriers, random.Next(100), barrier_previous_movement[barrier_index], tank);
-                    }
+
                     retrievedFuelCells = 0;
                     foreach (FuelCell fuelCell in fuelCells)
                     {
@@ -280,29 +275,7 @@ namespace Poseidon
                     }
                     Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
                     Collision.updateBulletVsBarriersCollision(projectiles, barriers);
->>>>>>> c3422d0c4c4a9526fb20ee89b61d04f5372c4cdb
 
-                    retrievedFuelCells = 0;
-                    foreach (FuelCell fuelCell in fuelCells)
-                    {
-                        fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                        if (fuelCell.Retrieved)
-                        {
-                            retrievedFuelCells++;
-                        }
-                    }
-
-<<<<<<< HEAD
-                    for (int i = 0; i < projectiles.Count; i++)
-                    {
-                        projectiles[i].update(barriers);
-                    }
-                    Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                    Collision.updateBulletVsBarriersCollision(projectiles, barriers);
-
-
-=======
->>>>>>> c3422d0c4c4a9526fb20ee89b61d04f5372c4cdb
                     if (retrievedFuelCells == GameConstants.NumFuelCells)
                     {
                         currentGameState = GameState.Won;
@@ -493,7 +466,8 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = "" + barriers.Count;
+            string str2 = GameConstants.StrCellsFound + retrievedFuelCells.ToString() +
+                " of " + GameConstants.NumFuelCells.ToString();
             Rectangle rectSafeArea;
 
             str1 += (roundTimer.Seconds).ToString();

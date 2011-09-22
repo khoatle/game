@@ -194,7 +194,11 @@ namespace Poseidon
             fireRateUp = 1.0f;
             Position.Y = GameConstants.FloatHeight;
         }
-
+        internal void Reset()
+        {
+            Position = Vector3.Zero;
+            ForwardDirection = 0f;
+        }
         public void Update(KeyboardState keyboardState, Barrier[] barriers, FuelCell[] fuelCells, GameTime gameTime)
         {
             Vector3 futurePosition = Position;

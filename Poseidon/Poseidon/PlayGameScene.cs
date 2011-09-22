@@ -129,7 +129,7 @@ namespace Poseidon
         }
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
-            fuelCarrier.Reset();
+            tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
             InitializeGameField(Content);
@@ -137,7 +137,7 @@ namespace Poseidon
             retrievedFuelCells = 0;
             startTime = gameTime.TotalGameTime;
             roundTimer = roundTime;
-            //currentGameState = GameState.Running;
+            currentGameState = GameState.Running;
         }
 
         private void InitializeGameField(ContentManager Content)
@@ -254,14 +254,29 @@ namespace Poseidon
                 if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
                     (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                     currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                {
                     ResetGame(gameTime, aspectRatio);
+                    
+                }
             }
             base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            DrawGameplayScreen();
+            switch (currentGameState)
+            {
+
+                case GameState.Running:
+                    DrawGameplayScreen();
+                    break;
+                case GameState.Won:
+                    DrawWinOrLossScreen(GameConstants.StrGameWon);
+                    break;
+                case GameState.Lost:
+                    DrawWinOrLossScreen(GameConstants.StrGameLost);
+                    break;
+            };
             base.Draw(gameTime);
         }
         /// <summary>
@@ -286,56 +301,7 @@ namespace Poseidon
             }
         }
 
-        private void DrawSplashScreen()
-        {
-            float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
-                GraphicDevice.Viewport.Height);
-            Vector2 strCenter;
-
-            graphics.GraphicsDevice.Clear(Color.SteelBlue);
-
-            xOffsetText = yOffsetText = 0;
-            Vector2 strInstructionsSize =
-                statsFont.MeasureString(GameConstants.StrInstructions1);
-            Vector2 strPosition;
-            strCenter = new Vector2(strInstructionsSize.X / 2,
-                strInstructionsSize.Y / 2);
-
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y);
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, GameConstants.StrInstructions1,
-                strPosition, Color.White);
-
-            strInstructionsSize =
-                statsFont.MeasureString(GameConstants.StrInstructions2);
-            strCenter = new Vector2(strInstructionsSize.X / 2,
-                strInstructionsSize.Y / 2);
-            yOffsetText =
-                (viewportSize.Y / 2 - strCenter.Y) + statsFont.LineSpacing;
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.DrawString(statsFont, GameConstants.StrInstructions2,
-                strPosition, Color.LightGray);
-            spriteBatch.End();
-
-            //re-enable depth buffer after sprite batch disablement
-
-            //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            GraphicDevice.DepthStencilState = dss;
-
-            //GraphicsDevice.RenderState.AlphaBlendEnable = false;
-            //GraphicsDevice.RenderState.AlphaTestEnable = false;
-
-            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
-        }
+       
 
         private void DrawWinOrLossScreen(string gameResult)
         {
@@ -355,7 +321,7 @@ namespace Poseidon
             xOffsetText = (viewportSize.X / 2 - strCenter.X);
             strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, gameResult,
                 strPosition, Color.Red);
 
@@ -368,7 +334,7 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
                 strPosition, Color.AntiqueWhite);
 
-            spriteBatch.End();
+            //spriteBatch.End();
 
             //re-enable depth buffer after sprite batch disablement
 
@@ -393,15 +359,15 @@ namespace Poseidon
                 {
                     fuelCell.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
             foreach (Barrier barrier in barriers)

@@ -337,6 +337,7 @@ namespace Poseidon
 
         public override void Draw(GameTime gameTime)
         {
+            // Change back the config changed by spriteBatch
             GraphicDevice.BlendState = BlendState.Opaque;
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
             GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;

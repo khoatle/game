@@ -21,6 +21,7 @@ namespace Poseidon
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
+        private AudioLibrary audio;
         int retrievedFuelCells;
         TimeSpan startTime, roundTimer, roundTime;
         Random random;
@@ -32,25 +33,37 @@ namespace Poseidon
         GameObject boundingSphere;
 
         FuelCarrier fuelCarrier;
-        FuelCell[] fuelCells;
-        Barrier[] barriers;
-        Enemy[] enemies;
-        Fish[] fish;
-        Vector3[] barrier_previous_movement;
+        List<FuelCell> fuelCells;
+        List<Barrier> barriers;
         List<Projectiles> projectiles;
 
+        Enemy[] enemies;
+        Fish[] fish;
+        
+
         //A tank
-        Tank tank;
+        public Tank tank;
 
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch):base(game)
+        // Game is paused?
+        protected bool paused;
+        protected Vector2 pausePosition;
+        protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
+        protected Texture2D actionTexture;
+
+        Game game;
+        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture):base(game)
         {
             this.graphics = graphics;
             this.Content = Content;
             this.GraphicDevice = GraphicsDevice;
             this.spriteBatch = spriteBatch;
+            this.pausePosition = pausePosition;
+            this.pauseRect = pauseRect;
+            this.actionTexture = actionTexture;
+            this.game = game;
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
@@ -60,7 +73,7 @@ namespace Poseidon
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
-
+            
             this.Load();
 
         }
@@ -68,12 +81,18 @@ namespace Poseidon
         public void Load()
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            // Get the audio library
+            audio = (AudioLibrary)
+                Game.Services.GetService(typeof(AudioLibrary));
+
             ground.Model = Content.Load<Model>("Models/ground");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+
+            
             //Initialize fuel cells
-            fuelCells = new FuelCell[GameConstants.NumFuelCells];
+            fuelCells = new List<FuelCell> (GameConstants.NumFuelCells);
             int powerType = random.Next(3) + 1;
-            for (int index = 0; index < fuelCells.Length; index++)
+            for (int index = 0; index < fuelCells.Count; index++)
             {
                 fuelCells[index] = new FuelCell(powerType);
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
@@ -81,69 +100,7 @@ namespace Poseidon
             }
 
             //Initialize barriers
-            barriers = new Barrier[GameConstants.NumBarriers];
-            barrier_previous_movement = new Vector3[GameConstants.NumBarriers];
-            int randomBarrier = random.Next(3);
-            string barrierName = null;
-
-            for (int index = 0; index < barriers.Length; index++)
-            {
-
-                switch (randomBarrier)
-                {
-                    case 0:
-                        barrierName = "Models/cube10uR";
-                        //barrierName = "Models/sphere1uR";
-                        break;
-                    case 1:
-                        barrierName = "Models/cylinder10uR";
-                        break;
-                    case 2:
-                        barrierName = "Models/pyramid10uR";
-                        break;
-                }
-                barriers[index] = new Barrier();
-                barriers[index].LoadContent(Content, barrierName);
-                randomBarrier = random.Next(3);
-                barrier_previous_movement[index] = Vector3.Zero;
-            }
-            //PlaceFuelCellsAndBarriers();
-
-            //Initialize fuel carrier
-            fuelCarrier = new FuelCarrier();
-            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
-
-            projectiles = new List<Projectiles>();
-
-            tank.Load(Content);
-            roundTimer = roundTime;
-        }
-
-        /// <summary>
-        /// Show the action scene
-        /// </summary>
-        public override void Show()
-        {
-            PlaceFuelCellsAndBarriers();
-            base.Show();
-        }
-        private void ResetGame(GameTime gameTime, float aspectRatio)
-        {
-            fuelCarrier.Reset();
-            gameCamera.Update(tank.ForwardDirection,
-                tank.Position, aspectRatio);
-            InitializeGameField(Content);
-
-            retrievedFuelCells = 0;
-            startTime = gameTime.TotalGameTime;
-            roundTimer = roundTime;
-            //currentGameState = GameState.Running;
-        }
-
-        private void InitializeGameField(ContentManager Content)
-        {
-            //Initialize barriers
-            barriers = new Barrier[GameConstants.NumBarriers];
+            barriers = new List<Barrier> (GameConstants.NumBarriers);
             int randomBarrier = random.Next(3);
             string barrierName = null;
 
@@ -162,7 +119,68 @@ namespace Poseidon
                         barrierName = "Models/pyramid10uR";
                         break;
                 }
-                barriers[index] = new Barrier();
+                barriers.Add(new Barrier());
+                barriers[index].LoadContent(Content, barrierName);
+                randomBarrier = random.Next(3);
+            }
+            PlaceFuelCellsAndBarriers();
+
+            //Initialize fuel carrier
+            fuelCarrier = new FuelCarrier();
+            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+
+            projectiles = new List<Projectiles>();
+
+            tank.Load(Content);
+            roundTimer = roundTime;
+        }
+
+        /// <summary>
+        /// Show the action scene
+        /// </summary>
+        public override void Show()
+        {
+            paused = false;
+            MediaPlayer.Play(audio.BackMusic);
+            //PlaceFuelCellsAndBarriers();
+            base.Show();
+        }
+        private void ResetGame(GameTime gameTime, float aspectRatio)
+        {
+            tank.Reset();
+            gameCamera.Update(tank.ForwardDirection,
+                tank.Position, aspectRatio);
+            InitializeGameField(Content);
+
+            retrievedFuelCells = 0;
+            startTime = gameTime.TotalGameTime;
+            roundTimer = roundTime;
+            currentGameState = GameState.Running;
+        }
+
+        private void InitializeGameField(ContentManager Content)
+        {
+            //Initialize barriers
+            barriers = new List<Barrier> (GameConstants.NumBarriers);
+            int randomBarrier = random.Next(3);
+            string barrierName = null;
+
+            for (int index = 0; index < GameConstants.NumBarriers; index++)
+            {
+                switch (randomBarrier)
+                {
+                    case 0:
+                        barrierName = "Models/cube10uR";
+                        //barrierName = "Models/sphere1uR";
+                        break;
+                    case 1:
+                        barrierName = "Models/cylinder10uR";
+                        break;
+                    case 2:
+                        barrierName = "Models/pyramid10uR";
+                        break;
+                }
+                barriers.Add(new Barrier());
                 barriers[index].LoadContent(Content, barrierName);
                 randomBarrier = random.Next(3);
             }
@@ -181,88 +199,138 @@ namespace Poseidon
 
             base.Hide();
         }
+        /// <summary>
+        /// Paused mode
+        /// </summary>
+        public bool Paused
+        {
+            get { return paused; }
+            set
+            {
+                paused = value;
+                if (paused)
+                {
+                    MediaPlayer.Pause();
+                }
+                else
+                {
+                    MediaPlayer.Resume();
+                }
+            }
+        }
         public override void Update(GameTime gameTime)
         {
-            float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-            lastKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-            lastGamePadState = currentGamePadState;
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
-
-            // Allows the game to exit
-            //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
-            //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
-            //    //this.Exit();
-
-            
-
-            if ((currentGameState == GameState.Running))
+            if (!paused)
             {
-                //fuelCarrier.Update(currentGamePadState, 
-                //    currentKeyboardState, barriers);
+                float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
+                lastKeyboardState = currentKeyboardState;
+                currentKeyboardState = Keyboard.GetState();
+                lastGamePadState = currentGamePadState;
+                currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
-                // Are we shooting?
-                if (currentKeyboardState.IsKeyDown(Keys.L)
-                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / tank.fireRateUp)
-                {
-                    prevFireTime = gameTime.TotalGameTime;
-                    placeBullet();
-                }
+                // Allows the game to exit
+                //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
+                //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
+                //    //this.Exit();
 
-                tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
-                gameCamera.Update(tank.ForwardDirection,
-                    tank.Position, aspectRatio);
-                for (int barrier_index = 0; barrier_index < GameConstants.NumBarriers; barrier_index++)
+
+
+                if ((currentGameState == GameState.Running))
                 {
-                    barrier_previous_movement[barrier_index] =
-                        barriers[barrier_index].Update(barriers, random.Next(100), barrier_previous_movement[barrier_index], tank);
-                }
-                retrievedFuelCells = 0;
-                foreach (FuelCell fuelCell in fuelCells)
-                {
-                    fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                    if (fuelCell.Retrieved)
+                    //fuelCarrier.Update(currentGamePadState, 
+                    //    currentKeyboardState, barriers);
+
+                    // Are we shooting?
+                    if (currentKeyboardState.IsKeyDown(Keys.L)
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                     {
-                        retrievedFuelCells++;
+                        prevFireTime = gameTime.TotalGameTime;
+                        audio.Shooting.Play();
+                        placeBullet();
+                    }
+
+                    tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
+                    gameCamera.Update(tank.ForwardDirection,
+                        tank.Position, aspectRatio);
+                    
+                    // Update barrier (enemies)
+                    for (int i = 0; i < barriers.Count; i++) {
+                        barriers[i].Update(barriers, random.Next(100), tank);
+                    }
+
+                    retrievedFuelCells = 0;
+                    foreach (FuelCell fuelCell in fuelCells)
+                    {
+                        fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
+                        if (fuelCell.Retrieved)
+                        {
+                            retrievedFuelCells++;
+                        }
+                    }
+
+                    for (int i = 0; i < projectiles.Count; i++)
+                    {
+                        projectiles[i].update(barriers);
+                    }
+                    Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
+                    Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+
+
+                    if (retrievedFuelCells == GameConstants.NumFuelCells)
+                    {
+                        currentGameState = GameState.Won;
+                    }
+                    roundTimer -= gameTime.ElapsedGameTime;
+                    if ((roundTimer < TimeSpan.Zero) &&
+                        (retrievedFuelCells != GameConstants.NumFuelCells))
+                    {
+                        currentGameState = GameState.Lost;
                     }
                 }
 
-                for (int i = 0; i < projectiles.Count; i++)
+                if ((currentGameState == GameState.Won) ||
+                    (currentGameState == GameState.Lost))
                 {
-                    projectiles[i].update(barriers);
-                }
-                Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+                    // Reset the world for a new game
+                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                    {
+                        ResetGame(gameTime, aspectRatio);
 
-
-                if (retrievedFuelCells == GameConstants.NumFuelCells)
-                {
-                    currentGameState = GameState.Won;
+                    }
                 }
-                roundTimer -= gameTime.ElapsedGameTime;
-                if ((roundTimer < TimeSpan.Zero) &&
-                    (retrievedFuelCells != GameConstants.NumFuelCells))
-                {
-                    currentGameState = GameState.Lost;
-                }
+                base.Update(gameTime);
             }
-
-            if ((currentGameState == GameState.Won) ||
-                (currentGameState == GameState.Lost))
-            {
-                // Reset the world for a new game
-                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
-                    ResetGame(gameTime, aspectRatio);
-            }
-            base.Update(gameTime);
         }
 
         public override void Draw(GameTime gameTime)
         {
-            DrawGameplayScreen();
+            GraphicDevice.BlendState = BlendState.Opaque;
+            GraphicDevice.DepthStencilState = DepthStencilState.Default;
+            //GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+ 
             base.Draw(gameTime);
+            if (paused)
+            {
+                // Draw the "pause" text
+                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
+                    Color.White);
+            }
+            switch (currentGameState)
+            {
+
+                case GameState.Running:
+                    DrawGameplayScreen();
+                    break;
+                case GameState.Won:
+                    DrawWinOrLossScreen(GameConstants.StrGameWon);
+                    break;
+                case GameState.Lost:
+                    DrawWinOrLossScreen(GameConstants.StrGameLost);
+                    break;
+            };
+            
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.
@@ -286,56 +354,7 @@ namespace Poseidon
             }
         }
 
-        private void DrawSplashScreen()
-        {
-            float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
-                GraphicDevice.Viewport.Height);
-            Vector2 strCenter;
-
-            graphics.GraphicsDevice.Clear(Color.SteelBlue);
-
-            xOffsetText = yOffsetText = 0;
-            Vector2 strInstructionsSize =
-                statsFont.MeasureString(GameConstants.StrInstructions1);
-            Vector2 strPosition;
-            strCenter = new Vector2(strInstructionsSize.X / 2,
-                strInstructionsSize.Y / 2);
-
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y);
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, GameConstants.StrInstructions1,
-                strPosition, Color.White);
-
-            strInstructionsSize =
-                statsFont.MeasureString(GameConstants.StrInstructions2);
-            strCenter = new Vector2(strInstructionsSize.X / 2,
-                strInstructionsSize.Y / 2);
-            yOffsetText =
-                (viewportSize.Y / 2 - strCenter.Y) + statsFont.LineSpacing;
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.DrawString(statsFont, GameConstants.StrInstructions2,
-                strPosition, Color.LightGray);
-            spriteBatch.End();
-
-            //re-enable depth buffer after sprite batch disablement
-
-            //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            GraphicDevice.DepthStencilState = dss;
-
-            //GraphicsDevice.RenderState.AlphaBlendEnable = false;
-            //GraphicsDevice.RenderState.AlphaTestEnable = false;
-
-            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
-        }
+       
 
         private void DrawWinOrLossScreen(string gameResult)
         {
@@ -355,7 +374,7 @@ namespace Poseidon
             xOffsetText = (viewportSize.X / 2 - strCenter.X);
             strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, gameResult,
                 strPosition, Color.Red);
 
@@ -368,7 +387,7 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
                 strPosition, Color.AntiqueWhite);
 
-            spriteBatch.End();
+            //spriteBatch.End();
 
             //re-enable depth buffer after sprite batch disablement
 
@@ -393,15 +412,15 @@ namespace Poseidon
                 {
                     fuelCell.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
             foreach (Barrier barrier in barriers)
@@ -447,9 +466,7 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 =
-                GameConstants.StrCellsFound + retrievedFuelCells.ToString() +
-                " of " + GameConstants.NumFuelCells.ToString();
+            string str2 = "" + barriers.Count;
             Rectangle rectSafeArea;
 
             str1 += (roundTimer.Seconds).ToString();

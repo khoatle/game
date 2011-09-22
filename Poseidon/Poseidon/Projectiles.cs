@@ -17,6 +17,8 @@ namespace Poseidon
         private Vector3 unitDirection;
         private float projectionSpeed;
         private float forwardDirection;
+        public int bulletDamage = GameConstants.DefaultBulletDamage;
+        private Viewport view;
 
         private bool isActive;
 
@@ -27,6 +29,7 @@ namespace Poseidon
         public void initialize(Viewport viewport, Vector3 position,float speed, float forwardDirection) {
             this.forwardDirection = forwardDirection;
             this.Position = position;
+            this.view = viewport;
 
             projectionSpeed = speed;
             calculateUnitDirection();
@@ -46,10 +49,10 @@ namespace Poseidon
             return Position + unitDirection * GameConstants.BulletSpeed;
         }
         
-        public void update(Barrier[] barriers) {
+        public void update(List<Barrier> barriers) {
             Vector3 tmp = calculateFuturePosition();
 
-            if (Collision.isOutOfMap(tmp)) {
+            if (isActive && Collision.isOutOfMap(tmp) && Collision.isOutOfView(tmp, view)) {
                 isActive = false;
                 return;
             }

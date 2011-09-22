@@ -5,6 +5,5 @@ using System.Text;
 
 namespace Poseidon {
     public class Enemy : Barrier {
-        public int health = GameConstants.EnemyHP;
     }
 }

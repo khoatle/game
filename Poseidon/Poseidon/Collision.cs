@@ -27,7 +27,7 @@ namespace Poseidon
         /// <summary>
         /// BARRIERS FUNCTIONS
         /// </summary>
-        public static bool isBarrierValidMove(Barrier barrier, Vector3 futurePosition, Barrier[] barriers, Tank tank) {
+        public static bool isBarrierValidMove(Barrier barrier, Vector3 futurePosition, List<Barrier> barriers, Tank tank) {
             BoundingSphere futureBoundingSphere = barrier.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
@@ -45,9 +45,9 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isBarrierVsBarrierCollision(Barrier barrier, BoundingSphere vehicleBoundingSphere, Barrier[] barriers)
+        private static bool isBarrierVsBarrierCollision(Barrier barrier, BoundingSphere vehicleBoundingSphere, List<Barrier> barriers)
         {
-            for (int curBarrier = 0; curBarrier < barriers.Length; curBarrier++)
+            for (int curBarrier = 0; curBarrier < barriers.Count; curBarrier++)
             {
                 if (barrier.Equals(barriers[curBarrier]))
                     continue;
@@ -70,7 +70,7 @@ namespace Poseidon
         /// <summary>
         /// TANK COLLISION
         /// </summary>
-        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, Barrier[] barriers) {
+        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, List<Barrier> barriers) {
             BoundingSphere futureBoundingSphere = tank.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
@@ -88,8 +88,8 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isTankVsBarrierCollision(BoundingSphere boundingSphere, Barrier[] barrier) {
-            for (int i = 0; i < GameConstants.NumBarriers; i++) {
+        private static bool isTankVsBarrierCollision(BoundingSphere boundingSphere, List<Barrier> barrier) {
+            for (int i = 0; i < barrier.Count; i++) {
                 if (boundingSphere.Intersects(barrier[i].BoundingSphere)) {
                     return true;
                 }
@@ -101,10 +101,15 @@ namespace Poseidon
         /// <summary>
         /// PROJECTILES FUNCTION
         /// </summary>
-        public static void updateBulletVsBarriersCollision(List<Projectiles> projectiles, Barrier[] barriers) {
+        public static void updateBulletVsBarriersCollision(List<Projectiles> projectiles, List<Barrier> barriers) {
             for (int i = 0; i < projectiles.Count; i++) { 
-                for (int j = 0; j < GameConstants.NumBarriers; j++) {
+                for (int j = 0; j < barriers.Count; j++) {
                     if (projectiles[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                        barriers[j].health -= projectiles[i].bulletDamage;
+                        if (barriers[j].health <= 0) {
+                            barriers.RemoveAt(j);
+                        }
+
                         projectiles.RemoveAt(i--);
                         break;
                     }
@@ -123,56 +128,56 @@ namespace Poseidon
             }
         }
 
-        public static void updateBulletHitMortals(List<DamageBullet> projectiles, Enemy[] enemies, Fish[] fish) {
-            for (int i = 0; i < projectiles.Count; ) {
-                int index = isBulletHitEnemy(projectiles[i], enemies);
+        //public static void updateBulletHitMortals(List<DamageBullet> projectiles, Enemy[] enemies, Fish[] fish) {
+        //    for (int i = 0; i < projectiles.Count; ) {
+        //        int index = isBulletHitEnemy(projectiles[i], enemies);
 
-                if (index == -1) {
-                    index = isBulletHitFish(projectiles[i], fish);
-                    if (index != -1) {
-                        fish[index].health -= projectiles[i].damage;
-                    }
-                }
-                else {
-                    enemies[index].health -= projectiles[i].damage;
-                }
-            }
-        }
+        //        if (index == -1) {
+        //            index = isBulletHitFish(projectiles[i], fish);
+        //            if (index != -1) {
+        //                fish[index].health -= projectiles[i].damage;
+        //            }
+        //        }
+        //        else {
+        //            enemies[index].health -= projectiles[i].damage;
+        //        }
+        //    }
+        //}
 
-        public static void updateMortals(Enemy[] enemies, Fish[] fish) {
-            for (int i = 0; i < GameConstants.NumberFish; i++) {
-                if (fish[i].health <= 0) {
-                    fish[i] = null;
-                }
-            }
+        //public static void updateMortals(Enemy[] enemies, Fish[] fish) {
+        //    for (int i = 0; i < GameConstants.NumberFish; i++) {
+        //        if (fish[i].health <= 0) {
+        //            fish[i] = null;
+        //        }
+        //    }
 
-            for (int i = 0; i < GameConstants.NumberEnemies; i++) {
-                if (enemies[i].health <= 0) {
-                    enemies[i] = null;
-                }
-            }
-        }
+        //    for (int i = 0; i < GameConstants.NumberEnemies; i++) {
+        //        if (enemies[i].health <= 0) {
+        //            enemies[i] = null;
+        //        }
+        //    }
+        //}
 
-        // Helper
-        private static int isBulletHitEnemy(Projectiles projectile, Enemy[] enemies) {
-            for (int i = 0; i < GameConstants.NumberEnemies; i++) {
-                if (projectile.BoundingSphere.Intersects(enemies[i].BoundingSphere)) {
-                    return i;
-                }
-            }
-            return -1;
-        }
+        //// Helper
+        //private static int isBulletHitEnemy(Projectiles projectile, Enemy[] enemies) {
+        //    for (int i = 0; i < GameConstants.NumberEnemies; i++) {
+        //        if (projectile.BoundingSphere.Intersects(enemies[i].BoundingSphere)) {
+        //            return i;
+        //        }
+        //    }
+        //    return -1;
+        //}
 
-        // Helper
-        private static int isBulletHitFish(Projectiles projectile, Fish[] fish)
-        {
-            for (int i = 0; i < GameConstants.NumberFish; i++) {
-                if (projectile.BoundingSphere.Intersects(fish[i].BoundingSphere)) {
-                    return i;
-                }
-            }
-            return -1;
-        }
+        //// Helper
+        //private static int isBulletHitFish(Projectiles projectile, Fish[] fish)
+        //{
+        //    for (int i = 0; i < GameConstants.NumberFish; i++) {
+        //        if (projectile.BoundingSphere.Intersects(fish[i].BoundingSphere)) {
+        //            return i;
+        //        }
+        //    }
+        //    return -1;
+        //}
         // End---------------------------------------------------------------
     }
 }

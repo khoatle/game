@@ -15,6 +15,8 @@ namespace Poseidon
         public string BarrierType { get; set; }
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
+        public Vector3 previousDirection;
+        public int health = GameConstants.EnemyHP;
 
         public Barrier()
             : base()
@@ -22,6 +24,7 @@ namespace Poseidon
             BarrierType = null;
             ForwardDirection = 0.0f;
             MaxRange = GameConstants.MaxRange;
+            previousDirection = Vector3.Zero;
         }
 
         public void LoadContent(ContentManager content, string modelName)
@@ -61,7 +64,7 @@ namespace Poseidon
             }
         }
 
-        public Vector3 Update(Barrier[] barriers, int ChangeDirection, Vector3 PreviousMovement, Tank tank)
+        public void Update(List<Barrier> barriers, int ChangeDirection, Tank tank)
         {
             Vector3 futurePosition = Position;
             Random random = new Random();
@@ -91,7 +94,7 @@ namespace Poseidon
                 }
             }
             else {
-                movement = PreviousMovement;
+                movement = previousDirection;
             }
 
             Vector3 speed = Vector3.Transform(movement, orientationMatrix);
@@ -110,7 +113,7 @@ namespace Poseidon
                 BoundingSphere = new BoundingSphere(updatedSphere.Center,
                     updatedSphere.Radius);
             }
-            return movement;
+            previousDirection = movement;
         }
     }
 }

@@ -27,7 +27,7 @@ namespace Poseidon
         public const float BulletSpeed = 1.0f;
 
         // HP const
-        public const int EnemyHP = 100;
+        public const int EnemyHP = 20;
         public const int FishHP = 50;
 
         // Bullet const

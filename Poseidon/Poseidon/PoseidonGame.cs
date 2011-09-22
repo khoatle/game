@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
+using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
 namespace Poseidon
 {
@@ -23,9 +24,9 @@ namespace Poseidon
         GraphicsDeviceManager graphics;
 
         KeyboardState lastKeyboardState = new KeyboardState();
-        KeyboardState currentKeyboardState = new KeyboardState();
+        //KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
-        GamePadState currentGamePadState = new GamePadState();
+        //GamePadState currentGamePadState = new GamePadState();
 
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
@@ -38,9 +39,22 @@ namespace Poseidon
         private SpriteFont smallFont, largeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
+        // For the Skill board
+        SkillScene skillScene;
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
+
+        // Game is paused?
+        protected bool paused;
+        protected Vector2 pausePosition;
+        protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
+        protected Texture2D actionTexture;
+        // The user pressed Enter or P?
+        bool enterPressed;
+        bool pPressed;
+        bool backPressed;
+        bool skillPressed;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -72,10 +86,20 @@ namespace Poseidon
             Services.AddService(typeof(SpriteBatch), spriteBatch);
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
 
+            //For pausing the game
+            paused = false;
+            pausePosition.X = (this.Window.ClientBounds.Width -
+                pauseRect.Width) / 2;
+            pausePosition.Y = (this.Window.ClientBounds.Height -
+                pauseRect.Height) / 2;
+
             // Load Audio Elements
             audio = new AudioLibrary();
             audio.LoadContent(Content);
             Services.AddService(typeof(AudioLibrary), audio);
+
+            //For general game control
+            actionTexture = Content.Load<Texture2D>("Image/rockrainenhanced");
 
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
@@ -94,8 +118,14 @@ namespace Poseidon
             Components.Add(startScene);
 
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture);
             Components.Add(playGameScene);
+
+            // Create the Skill board
+            skillScene = new SkillScene(this, smallFont, largeFont,
+                startBackgroundTexture, startElementsTexture, Content);
+            Components.Add(skillScene);
+
             // Start the game in the start Scene :)
             startScene.Show();
             activeScene = startScene;
@@ -103,7 +133,7 @@ namespace Poseidon
         }
 
 
-
+        
 
 
         /// <summary>
@@ -114,21 +144,27 @@ namespace Poseidon
         {
             // TODO: Unload any non ContentManager content here
         }
-        private bool CheckEnterA()
+
+        private void CheckKeyEntered()
         {
             // Get the Keyboard and GamePad state
             GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
             KeyboardState keyboardState = Keyboard.GetState();
 
-            bool result = (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+            enterPressed = (lastKeyboardState.IsKeyDown(Keys.Enter) &&
                 (keyboardState.IsKeyUp(Keys.Enter)));
-            result |= (lastGamePadState.Buttons.A == ButtonState.Pressed) &&
+            enterPressed |= (lastGamePadState.Buttons.A == ButtonState.Pressed) &&
                       (gamepadState.Buttons.A == ButtonState.Released);
+            pPressed = (lastKeyboardState.IsKeyDown(Keys.P) &&
+                (keyboardState.IsKeyUp(Keys.P)));
 
+            backPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
+                (keyboardState.IsKeyUp(Keys.Escape)));
+            skillPressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
+                (keyboardState.IsKeyUp(Keys.I)));
             lastKeyboardState = keyboardState;
             lastGamePadState = gamepadState;
 
-            return result;
         }
         /// <summary>
         /// Handle input of all game scenes
@@ -143,7 +179,7 @@ namespace Poseidon
             // Handle Help Scene input
             else if (activeScene == helpScene)
             {
-                if (CheckEnterA())
+                if (enterPressed)
                 {
                     ShowScene(startScene);
                 }
@@ -153,27 +189,39 @@ namespace Poseidon
             {
                 HandleActionInput();
             }
+            // Handle Skill scene input
+            else if (activeScene == skillScene)
+            {
+                HandleSkillSceneInput();
+            }
         }
         /// <summary>
         /// Handle update for the main game
         /// </summary>
         private void HandleActionInput()
         {
-            lastKeyboardState = currentKeyboardState;
-            currentKeyboardState = Keyboard.GetState();
-            lastGamePadState = currentGamePadState;
-            currentGamePadState = GamePad.GetState(PlayerIndex.One);
-            // Allows the game to exit
-            if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
-                (currentGamePadState.Buttons.Back == ButtonState.Pressed))
-                this.Exit();
+
+            // User pauses the game
+            if (pPressed)
+            {
+                audio.MenuBack.Play();
+                playGameScene.Paused = !playGameScene.Paused;
+            }
+            if (backPressed)
+            {
+                ShowScene(startScene);
+            }
+            if (skillPressed)
+            {
+                ShowScene(skillScene);
+            }
         }
         /// <summary>
         /// Handle buttons and keyboard in StartScene
         /// </summary>
         private void HandleStartSceneInput()
         {
-            if (CheckEnterA())
+            if (enterPressed)
             {
                 audio.MenuSelect.Play();
                 switch (startScene.SelectedMenuIndex)
@@ -192,6 +240,34 @@ namespace Poseidon
                 }
             }
         }
+        /// <summary>
+        /// Handle buttons and keyboard in SkillScene
+        /// </summary>
+        private void HandleSkillSceneInput()
+        {
+            if (enterPressed)
+            {
+                audio.MenuSelect.Play();
+                switch (skillScene.SelectedMenuIndex)
+                {
+                    case 0:
+                        playGameScene.tank.strength += 0.25f;
+                        break;
+                    case 1:
+                        playGameScene.tank.speed += 0.25f;
+                        break;
+                    case 2:
+                        playGameScene.tank.shootingRate += 0.25f;
+                        break;
+                    case 3:
+                        playGameScene.tank.hitPoint += 30;
+                        break;
+                    case 4:
+                        ShowScene(playGameScene);
+                        break;
+                }
+            }
+        }
         protected void ShowScene(GameScene scene)
         {
             activeScene.Hide();
@@ -205,9 +281,11 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            // Get the Keyboard and GamePad state
+            CheckKeyEntered();   
             HandleScenesInput(gameTime);
-
             base.Update(gameTime);
+            
         }
 
         /// <summary>
@@ -216,9 +294,17 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.Black);
+            
+            //graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             base.Draw(gameTime);
+            //if (paused)
+            //{
+                // Draw the "pause" text
+            //    spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
+            //        Color.White);
+            //}
+            //else base.Draw(gameTime);
             spriteBatch.End();
         }
 

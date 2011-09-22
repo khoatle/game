@@ -17,7 +17,7 @@ namespace Poseidon
         private Vector3 unitDirection;
         private float projectionSpeed;
         private float forwardDirection;
-        public int bulletDamage = GameConstants.DefaultBulletDamage;
+        public int bulletDamage;
         private Viewport view;
 
         private bool isActive;
@@ -26,10 +26,11 @@ namespace Poseidon
             isActive = true;
         }
 
-        public void initialize(Viewport viewport, Vector3 position,float speed, float forwardDirection) {
+        public void initialize(Viewport viewport, Vector3 position,float speed, float forwardDirection, float damageUp) {
             this.forwardDirection = forwardDirection;
             this.Position = position;
             this.view = viewport;
+            bulletDamage = (int)(damageUp * GameConstants.DefaultBulletDamage);
 
             projectionSpeed = speed;
             calculateUnitDirection();

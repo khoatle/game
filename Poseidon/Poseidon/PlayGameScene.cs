@@ -92,9 +92,9 @@ namespace Poseidon
             //Initialize fuel cells
             fuelCells = new List<FuelCell> (GameConstants.NumFuelCells);
             int powerType = random.Next(3) + 1;
-            for (int index = 0; index < fuelCells.Count; index++)
+            for (int index = 0; index < GameConstants.NumFuelCells; index++)
             {
-                fuelCells[index] = new FuelCell(powerType);
+                fuelCells.Add(new FuelCell(powerType));
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
                 powerType = random.Next(3) + 1;
             }
@@ -467,7 +467,7 @@ namespace Poseidon
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = GameConstants.StrCellsFound + retrievedFuelCells.ToString() +
-                " of " + GameConstants.NumFuelCells.ToString();
+                " of " + fuelCells.Count;
             Rectangle rectSafeArea;
 
             str1 += (roundTimer.Seconds).ToString();

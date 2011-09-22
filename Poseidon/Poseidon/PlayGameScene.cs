@@ -308,7 +308,7 @@ namespace Poseidon
         {
             GraphicDevice.BlendState = BlendState.Opaque;
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
-            //GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
  
             base.Draw(gameTime);
             if (paused)

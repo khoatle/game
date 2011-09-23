@@ -89,9 +89,9 @@ namespace Poseidon
         public float speedUp;
         public float strengthUp;
         public float fireRateUp;
-        double strengthUpStartTime;
-        double speedUpStartTime;
-        double fireRateUpStartTime;
+        public double strengthUpStartTime;
+        public double speedUpStartTime;
+        public double fireRateUpStartTime;
         #region Properties
 
 
@@ -211,7 +211,20 @@ namespace Poseidon
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
 
         }
-
+        // Copy every attributes but the position and direction
+        public void CopyAttribute(Tank tank)
+        {
+            strength = tank.strength;
+            speed = tank.speed;
+            shootingRate = tank.shootingRate ;
+            hitPoint = tank.hitPoint;
+            speedUp = tank.speedUp;
+            strengthUp = tank.strengthUp;
+            fireRateUp = tank.fireRateUp;
+            strengthUpStartTime = tank.strengthUpStartTime;
+            speedUpStartTime = tank.speedUpStartTime;
+            fireRateUpStartTime = tank.fireRateUpStartTime;
+        }
         internal void Reset()
         {
             Position = Vector3.Zero;
@@ -228,21 +241,21 @@ namespace Poseidon
             //worn out effect of power-ups
             if (speedUp != 1.0f)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - speedUpStartTime >= 5)
+                if (gameTime.TotalGameTime.TotalSeconds - speedUpStartTime >= GameConstants.EffectExpired)
                 {
                     speedUp = 1.0f;
                 }
             }
             if (strengthUp != 1.0f)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - strengthUpStartTime >= 5)
+                if (gameTime.TotalGameTime.TotalSeconds - strengthUpStartTime >= GameConstants.EffectExpired)
                 {
                     strengthUp = 1.0f;
                 }
             }
             if (fireRateUp != 1.0f)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - fireRateUpStartTime >= 5)
+                if (gameTime.TotalGameTime.TotalSeconds - fireRateUpStartTime >= GameConstants.EffectExpired)
                 {
                     fireRateUp = 1.0f;
                 }
@@ -291,7 +304,7 @@ namespace Poseidon
                 //    20);
             }
 
-            //Interacting with trashs and fruits
+            //Interacting with trashs and fruits and also ship wrecks
             if (keyboardState.IsKeyDown(Keys.Z))
             {
                 Interact_with_trash_and_fruit(fuelCells, gameTime);

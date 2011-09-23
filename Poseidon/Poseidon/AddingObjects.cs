@@ -69,6 +69,20 @@ namespace Poseidon
                 barrier.BoundingSphere = new BoundingSphere(tempCenter,
                     barrier.BoundingSphere.Radius);
             }
+
+            //place ship wrecks
+            foreach (ShipWreck shipWreck in shipWrecks)
+            {
+                shipWreck.Position = GenerateRandomPosition(min, max);
+                //ship wreck should not be floating
+                shipWreck.Position.Y = 0;
+                tempCenter = shipWreck.BoundingSphere.Center;
+                tempCenter.X = shipWreck.Position.X;
+                tempCenter.Y = GameConstants.FloatHeight;
+                tempCenter.Z = shipWreck.Position.Z;
+                shipWreck.BoundingSphere = new BoundingSphere(tempCenter,
+                    shipWreck.BoundingSphere.Radius);
+            }
         }
 
         // Helper

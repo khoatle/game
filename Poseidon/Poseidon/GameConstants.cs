@@ -22,6 +22,8 @@ namespace Poseidon
         public const float BarrierVelocity = 0.4f;
         public const float TurnSpeed = 0.025f;
         public const int MaxRange = 98;
+        // 5 seconds for power-ups' effects
+        public const int EffectExpired = 10;
 
         // bullet consts
         public const float BulletSpeed = 1.0f;
@@ -41,7 +43,7 @@ namespace Poseidon
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(10.25);
+        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(50.25);
         public const string StrTimeRemaining = "Time Remaining: ";
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
@@ -59,5 +61,6 @@ namespace Poseidon
         public const float FuelCellBoundingSphereFactor = .5f;
         public const float BarrierBoundingSphereFactor = .7f;
         public const float TankBoundingSphereFactor = .9f;
+        public const float ShipWreckBoundingSphereFactor = 0.8f;
     }
 }

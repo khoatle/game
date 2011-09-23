@@ -35,6 +35,7 @@ namespace Poseidon
         protected Texture2D helpBackgroundTexture, helpForegroundTexture;
         HelpScene helpScene;
         protected GameScene activeScene;
+        protected GameScene prevScene;
         // For the Start scene
         private SpriteFont smallFont, largeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture;
@@ -44,7 +45,7 @@ namespace Poseidon
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
-
+        ShipWreckScene shipWreckScene;
         // Game is paused?
         protected bool paused;
         protected Vector2 pausePosition;
@@ -54,6 +55,7 @@ namespace Poseidon
         bool enterPressed;
         bool pPressed;
         bool backPressed;
+        bool zPressed;
         bool skillPressed;
         public PoseidonGame()
         {
@@ -124,6 +126,10 @@ namespace Poseidon
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
             Components.Add(playGameScene);
 
+            // Create the main game play scene
+            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
+            Components.Add(shipWreckScene);
+
             // Create the Skill board
             skillScene = new SkillScene(this, smallFont, largeFont,
                 startBackgroundTexture, startElementsTexture, Content);
@@ -136,10 +142,6 @@ namespace Poseidon
             activeScene = startScene;
 
         }
-
-
-        
-
 
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -162,7 +164,8 @@ namespace Poseidon
                       (gamepadState.Buttons.A == ButtonState.Released);
             pPressed = (lastKeyboardState.IsKeyDown(Keys.P) &&
                 (keyboardState.IsKeyUp(Keys.P)));
-
+            zPressed = (lastKeyboardState.IsKeyDown(Keys.Z) &&
+                (keyboardState.IsKeyUp(Keys.Z)));
             backPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
                 (keyboardState.IsKeyUp(Keys.Escape)));
             skillPressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
@@ -199,6 +202,34 @@ namespace Poseidon
             {
                 HandleSkillSceneInput();
             }
+            // Handle ship wreck scene input
+            else if (activeScene == shipWreckScene)
+            {
+                HandleShipWreckSceneInput();
+            }
+        }
+
+        /// <summary>
+        /// Handle update for the ship wreck scene
+        /// </summary>
+        public void HandleShipWreckSceneInput()
+        {
+            // User pauses the game
+            if (pPressed)
+            {
+                audio.MenuBack.Play();
+                playGameScene.Paused = !playGameScene.Paused;
+            }
+            if (backPressed)
+            {
+                playGameScene.tank.CopyAttribute(shipWreckScene.tank); 
+                ShowScene(playGameScene);
+            }
+            if (skillPressed)
+            {
+                prevScene = shipWreckScene;
+                ShowScene(skillScene);
+            }
         }
         /// <summary>
         /// Handle update for the main game
@@ -218,14 +249,33 @@ namespace Poseidon
             }
             if (skillPressed)
             {
+                prevScene = playGameScene;
                 ShowScene(skillScene);
             }
-            //if (playGameScene.currentGameState == GameState.Won && enterPressed)
-            //{
-            //    playGameScene.currentLevel++;
-
-            //}
+            if (zPressed && GetInShipWreck())
+            {
+                shipWreckScene.tank.CopyAttribute(playGameScene.tank);
+                ShowScene(shipWreckScene);
+            }
         }
+        public bool GetInShipWreck()
+        {
+          
+            BoundingSphere shipWreckBoundingSphere = new BoundingSphere(playGameScene.tank.BoundingSphere.Center,
+                    10);
+            for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
+            {
+                if (!playGameScene.shipWrecks[curWreck].accessed && shipWreckBoundingSphere.Intersects(
+                    playGameScene.shipWrecks[curWreck].BoundingSphere))
+                {
+                    // no re-explore a ship wreck
+                    playGameScene.shipWrecks[curWreck].accessed = true;
+                    return true;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Handle buttons and keyboard in StartScene
         /// </summary>
@@ -237,8 +287,6 @@ namespace Poseidon
                 switch (startScene.SelectedMenuIndex)
                 {
                     case 0:
-                        //activeScene.Hide();
-                        //activeScene = null;
                         ShowScene(playGameScene);
                         break;
                     case 1:
@@ -261,19 +309,27 @@ namespace Poseidon
                 switch (skillScene.SelectedMenuIndex)
                 {
                     case 0:
-                        playGameScene.tank.strength += 0.25f;
+                        if (prevScene == playGameScene)
+                            playGameScene.tank.strength += 0.25f;
+                        else shipWreckScene.tank.strength += 0.25f;
                         break;
                     case 1:
-                        playGameScene.tank.speed += 0.25f;
+                        if (prevScene == playGameScene)
+                            playGameScene.tank.speed += 0.25f;
+                        else shipWreckScene.tank.speed += 0.25f;
                         break;
                     case 2:
-                        playGameScene.tank.shootingRate += 0.25f;
+                        if (prevScene == playGameScene)
+                            playGameScene.tank.shootingRate += 0.25f;
+                        else shipWreckScene.tank.shootingRate += 0.25f;
                         break;
                     case 3:
-                        playGameScene.tank.hitPoint += 30;
+                        if (prevScene == playGameScene)
+                            playGameScene.tank.hitPoint += 30;
+                        else shipWreckScene.tank.hitPoint += 30;
                         break;
                     case 4:
-                        ShowScene(playGameScene);
+                        ShowScene(prevScene);
                         break;
                 }
             }

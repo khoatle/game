@@ -12,7 +12,7 @@ namespace Poseidon
     /// <summary>
     /// This is a game component that implements the Action Scene.
     /// </summary>
-    public partial class PlayGameScene : GameScene
+    public partial class ShipWreckScene : GameScene
     {
         GraphicsDeviceManager graphics;
         GraphicsDevice GraphicDevice;
@@ -23,25 +23,25 @@ namespace Poseidon
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
         private AudioLibrary audio;
-        int retrievedFuelCells;
-        TimeSpan startTime, roundTimer, roundTime;
+      
+        
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
         GameObject ground;
         Camera gameCamera;
-        public GameState currentGameState = GameState.PlayingCutScene;
+        
         GameObject boundingSphere;
 
-        FuelCarrier fuelCarrier;
+        
         List<FuelCell> fuelCells;
         List<Barrier> barriers;
-        public List<ShipWreck> shipWrecks;
+        
         List<Projectiles> projectiles;
 
         Enemy[] enemies;
         Fish[] fish;
-        
+
 
         //A tank
         public Tank tank;
@@ -55,15 +55,8 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
 
-        // Current game level
-        public int currentLevel = 0;
-
-        // Cutscene
-        CutSceneDialog cutSceneDialog;
-        // Which sentence in the dialog is being printed
-        int currentSentence = 0;
-        
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog):base(game)
+        public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
+            : base(game)
         {
             this.graphics = graphics;
             this.Content = Content;
@@ -73,8 +66,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
-            this.cutSceneDialog = cutSceneDialog;
-            roundTime = GameConstants.RoundTime;
+
             random = new Random();
             ground = new GameObject();
             gameCamera = new Camera();
@@ -83,7 +75,7 @@ namespace Poseidon
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
-            
+
             this.Load();
 
         }
@@ -98,9 +90,9 @@ namespace Poseidon
             ground.Model = Content.Load<Model>("Models/ground");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
-            
+
             //Initialize fuel cells
-            fuelCells = new List<FuelCell> (GameConstants.NumFuelCells);
+            fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
             int powerType = random.Next(3) + 1;
             for (int index = 0; index < GameConstants.NumFuelCells; index++)
             {
@@ -108,28 +100,27 @@ namespace Poseidon
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
                 powerType = random.Next(3) + 1;
             }
-            
+
             //Initialize the game field
             InitializeGameField(Content);
 
-            //Initialize fuel carrier
-            fuelCarrier = new FuelCarrier();
-            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+
 
             projectiles = new List<Projectiles>();
 
             tank.Load(Content);
-            roundTimer = roundTime;
+
         }
 
         /// <summary>
         /// Show the action scene
         /// </summary>
+        
         public override void Show()
         {
             paused = false;
+            tank.Reset();
             MediaPlayer.Play(audio.BackMusic);
-            //PlaceFuelCellsAndBarriers();
             base.Show();
         }
         private void ResetGame(GameTime gameTime, float aspectRatio)
@@ -139,26 +130,13 @@ namespace Poseidon
                 tank.Position, aspectRatio);
             InitializeGameField(Content);
 
-            retrievedFuelCells = 0;
-            startTime = gameTime.TotalGameTime;
-            roundTimer = roundTime;
-            currentSentence = 0;
-            currentGameState = GameState.PlayingCutScene;
         }
 
         private void InitializeGameField(ContentManager Content)
         {
-            //Initialize the ship wrecks
-            shipWrecks = new List<ShipWreck>(10);
-            int randomType = random.Next(3);
-            for (int index = 0; index < 10; index++)
-            {
-                shipWrecks.Add(new ShipWreck());
-                shipWrecks[index].LoadContent(Content, randomType);
-                randomType = random.Next(3);
-            }
+
             //Initialize barriers
-            barriers = new List<Barrier> (GameConstants.NumBarriers);
+            barriers = new List<Barrier>(GameConstants.NumBarriers);
             int randomBarrier = random.Next(3);
             string barrierName = null;
 
@@ -182,6 +160,90 @@ namespace Poseidon
                 randomBarrier = random.Next(3);
             }
             PlaceFuelCellsAndBarriers();
+        }
+        // Helper
+        private void PlaceFuelCellsAndBarriers()
+        {
+            int min = GameConstants.MinDistance;
+            int max = GameConstants.MaxDistance;
+            Vector3 tempCenter;
+
+            //place fuel cells
+            foreach (FuelCell cell in fuelCells)
+            {
+                cell.Position = GenerateRandomPosition(min, max);
+                cell.Position.Y = GameConstants.FloatHeight;
+                tempCenter = cell.BoundingSphere.Center;
+                tempCenter.X = cell.Position.X;
+                tempCenter.Y = GameConstants.FloatHeight;
+                tempCenter.Z = cell.Position.Z;
+                cell.BoundingSphere =
+                    new BoundingSphere(tempCenter, cell.BoundingSphere.Radius);
+                cell.Retrieved = false;
+            }
+
+            //place barriers
+            foreach (Barrier barrier in barriers)
+            {
+                barrier.Position = GenerateRandomPosition(min, max);
+                barrier.Position.Y = GameConstants.FloatHeight;
+                tempCenter = barrier.BoundingSphere.Center;
+                tempCenter.X = barrier.Position.X;
+                tempCenter.Y = GameConstants.FloatHeight;
+                tempCenter.Z = barrier.Position.Z;
+                barrier.BoundingSphere = new BoundingSphere(tempCenter,
+                    barrier.BoundingSphere.Radius);
+            }
+
+        }
+
+        // Helper
+        private void placeBullet()
+        {
+            Projectiles p = new Projectiles();
+            p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
+            p.loadContent(Content, "Models/sphere1uR");
+            projectiles.Add(p);
+        }
+        // Helper
+        private Vector3 GenerateRandomPosition(int min, int max)
+        {
+            int xValue, zValue;
+            do
+            {
+                xValue = random.Next(min, max);
+                zValue = random.Next(min, max);
+                if (random.Next(100) % 2 == 0)
+                    xValue *= -1;
+                if (random.Next(100) % 2 == 0)
+                    zValue *= -1;
+
+            } while (IsOccupied(xValue, zValue));
+
+            return new Vector3(xValue, 0, zValue);
+        }
+
+        // Helper
+        private bool IsOccupied(int xValue, int zValue)
+        {
+            foreach (GameObject currentObj in fuelCells)
+            {
+                if (((int)(MathHelper.Distance(
+                    xValue, currentObj.Position.X)) < 15) &&
+                    ((int)(MathHelper.Distance(
+                    zValue, currentObj.Position.Z)) < 15))
+                    return true;
+            }
+
+            foreach (GameObject currentObj in barriers)
+            {
+                if (((int)(MathHelper.Distance(
+                    xValue, currentObj.Position.X)) < 15) &&
+                    ((int)(MathHelper.Distance(
+                    zValue, currentObj.Position.Z)) < 15))
+                    return true;
+            }
+            return false;
         }
         /// <summary>
         /// Hide the scene
@@ -225,99 +287,35 @@ namespace Poseidon
                 lastGamePadState = currentGamePadState;
                 currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
-                // Allows the game to exit
-                //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
-                //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
-                //    //this.Exit();
 
-
-                if (currentGameState == GameState.PlayingCutScene)
+                // Are we shooting?
+                if (currentKeyboardState.IsKeyDown(Keys.L)
+                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                 {
-                    // Next sentence when the user press Enter
-                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
-                    {
-                        currentSentence++;
-                        // End of cutscene for this level
-                        if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count)
-                            currentGameState = GameState.Running;
-                    }
-                }
-                if ((currentGameState == GameState.Running))
-                {
-                    //fuelCarrier.Update(currentGamePadState, 
-                    //    currentKeyboardState, barriers);
-
-                    // Are we shooting?
-                    if (currentKeyboardState.IsKeyDown(Keys.L)
-                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
-                    {
-                        prevFireTime = gameTime.TotalGameTime;
-                        audio.Shooting.Play();
-                        placeBullet();
-                    }
-
-                    tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
-                    gameCamera.Update(tank.ForwardDirection,
-                        tank.Position, aspectRatio);
-
-                    
-                    // Update barrier (enemies)
-                    for (int i = 0; i < barriers.Count; i++) {
-                        barriers[i].Update(barriers, random.Next(100), tank);
-                    }
-
-                    retrievedFuelCells = 0;
-                    foreach (FuelCell fuelCell in fuelCells)
-                    {
-                        fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                        if (fuelCell.Retrieved)
-                        {
-                            retrievedFuelCells++;
-                        }
-                    }
-
-                    for (int i = 0; i < projectiles.Count; i++)
-                    {
-                        projectiles[i].update(barriers);
-                    }
-                    Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                    Collision.updateBulletVsBarriersCollision(projectiles, barriers);
-
-                    if (retrievedFuelCells == GameConstants.NumFuelCells)
-                    {
-                        currentGameState = GameState.Won;
-                    }
-                    roundTimer -= gameTime.ElapsedGameTime;
-                    if ((roundTimer < TimeSpan.Zero) &&
-                        (retrievedFuelCells != GameConstants.NumFuelCells))
-                    {
-                        currentGameState = GameState.Lost;
-                    }
+                    prevFireTime = gameTime.TotalGameTime;
+                    audio.Shooting.Play();
+                    placeBullet();
                 }
 
-                if (currentGameState == GameState.Lost)
-                {
-                    // Reset the world for a new game
-                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
-                    {
-                        ResetGame(gameTime, aspectRatio);
+                tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
+                gameCamera.Update(tank.ForwardDirection,
+                    tank.Position, aspectRatio);
 
-                    }
-                }
-                if (currentGameState == GameState.Won)
+
+                // Update barrier (enemies)
+                for (int i = 0; i < barriers.Count; i++)
                 {
-                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
-                    {
-                        currentLevel++;
-                        ResetGame(gameTime, aspectRatio);
-                    }
+                    barriers[i].Update(barriers, random.Next(100), tank);
                 }
+
+
+                for (int i = 0; i < projectiles.Count; i++)
+                {
+                    projectiles[i].update(barriers);
+                }
+                Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
+                Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+
                 base.Update(gameTime);
             }
         }
@@ -328,7 +326,7 @@ namespace Poseidon
             GraphicDevice.BlendState = BlendState.Opaque;
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
             GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
- 
+
             base.Draw(gameTime);
             if (paused)
             {
@@ -336,22 +334,10 @@ namespace Poseidon
                 spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
                     Color.White);
             }
-            switch (currentGameState)
-            {
-                case GameState.PlayingCutScene:
-                    DrawCutScene();
-                    break;
-                case GameState.Running:
-                    DrawGameplayScreen();
-                    break;
-                case GameState.Won:
-                    DrawWinOrLossScreen(GameConstants.StrGameWon);
-                    break;
-                case GameState.Lost:
-                    DrawWinOrLossScreen(GameConstants.StrGameLost);
-                    break;
-            };
-            
+ 
+              
+            DrawGameplayScreen();
+
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.
@@ -373,55 +359,6 @@ namespace Poseidon
                 }
                 mesh.Draw();
             }
-        }
-
-       
-
-        private void DrawWinOrLossScreen(string gameResult)
-        {
-            float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
-                GraphicDevice.Viewport.Height);
-            Vector2 strCenter;
-
-            xOffsetText = yOffsetText = 0;
-            Vector2 strResult = statsFont.MeasureString(gameResult);
-            Vector2 strPlayAgainSize =
-                statsFont.MeasureString(GameConstants.StrPlayAgain);
-            Vector2 strPosition;
-            strCenter = new Vector2(strResult.X / 2, strResult.Y / 2);
-
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y);
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            //spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, gameResult,
-                strPosition, Color.Red);
-
-            strCenter =
-                new Vector2(strPlayAgainSize.X / 2, strPlayAgainSize.Y / 2);
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y) +
-                (float)statsFont.LineSpacing;
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
-                strPosition, Color.AntiqueWhite);
-
-            //spriteBatch.End();
-
-            //re-enable depth buffer after sprite batch disablement
-
-            //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            GraphicDevice.DepthStencilState = dss;
-
-            //GraphicsDevice.RenderState.AlphaBlendEnable = false;
-            //GraphicsDevice.RenderState.AlphaTestEnable = false;
-
-            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
         }
 
         private void DrawGameplayScreen()
@@ -458,22 +395,6 @@ namespace Poseidon
                 //rs.FillMode = FillMode.Solid;
                 //GraphicsDevice.RasterizerState = rs;
             }
-            // Drawing ship wrecks
-            foreach (ShipWreck shipWreck in shipWrecks)
-            {
-                shipWreck.Draw(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix);
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicsDevice.RasterizerState = rs;
-                //barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
-
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-                //GraphicsDevice.RasterizerState = rs;
-            }
-
             // Update bullets
             foreach (Projectiles p in projectiles)
             {
@@ -502,11 +423,10 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = GameConstants.StrCellsFound + retrievedFuelCells.ToString() +
+            string str2 = GameConstants.StrCellsFound +
                 " of " + fuelCells.Count;
             Rectangle rectSafeArea;
 
-            str1 += (roundTimer.Seconds).ToString();
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -519,7 +439,7 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
             //spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            spriteBatch.DrawString(statsFont, "This is the ship wreck scene " + str1, strPosition, Color.White);
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
             //spriteBatch.End();
@@ -537,21 +457,6 @@ namespace Poseidon
             //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
             //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
         }
-        private void DrawCutScene()
-        {
-            float xOffsetText, yOffsetText;
-            string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
-            Rectangle rectSafeArea;
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
-
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
-        }
     }
 }

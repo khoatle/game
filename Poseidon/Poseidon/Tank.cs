@@ -215,6 +215,7 @@ namespace Poseidon
         internal void Reset()
         {
             Position = Vector3.Zero;
+            Position.Y = GameConstants.FloatHeight;
             ForwardDirection = 0f;
         }
 

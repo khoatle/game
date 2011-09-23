@@ -38,6 +38,7 @@ namespace Poseidon
         //general
         public const int NumberEnemies = 20;
         public const int NumberFish = 20;
+        public const int NumberShipWrecks = 10;
         public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;
         public const int NumFuelCells = 12;

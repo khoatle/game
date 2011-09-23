@@ -31,6 +31,10 @@ namespace Poseidon
         GameObject ground;
         Camera gameCamera;
         public GameState currentGameState = GameState.PlayingCutScene;
+        // In order to know we are resetting the level winning or losing
+        // winning: keep the current tank
+        // losing: reset our tank to the tank at the beginning of the level
+        GameState prevGameState;
         GameObject boundingSphere;
 
         FuelCarrier fuelCarrier;
@@ -43,9 +47,11 @@ namespace Poseidon
         Fish[] fish;
         
 
-        //A tank
+        // The main character for this level
         public Tank tank;
-
+        // The main character at the beginning of this level
+        // Used for restarting the level
+        Tank prevTank;
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
@@ -80,6 +86,7 @@ namespace Poseidon
             gameCamera = new Camera();
             boundingSphere = new GameObject();
             tank = new Tank();
+            prevTank = new Tank();
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
@@ -119,7 +126,10 @@ namespace Poseidon
             projectiles = new List<Projectiles>();
 
             tank.Load(Content);
+            
+            prevTank.Load(Content);
             roundTimer = roundTime;
+
         }
 
         /// <summary>
@@ -134,6 +144,11 @@ namespace Poseidon
         }
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            // If we are resetting the level losing the game
+            // Reset our tank to the one at the beginning of the lost level
+            if (prevGameState == GameState.Lost) tank.CopyAttribute(prevTank);
+            else prevTank.CopyAttribute(tank);
+
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
@@ -149,12 +164,15 @@ namespace Poseidon
         private void InitializeGameField(ContentManager Content)
         {
             //Initialize the ship wrecks
-            shipWrecks = new List<ShipWreck>(10);
+            shipWrecks = new List<ShipWreck>(GameConstants.NumberShipWrecks);
             int randomType = random.Next(3);
-            for (int index = 0; index < 10; index++)
+            // example of how to put skill into a ship wreck at a certain level
+            // just put the skill into the 1st ship wrect in the list
+            for (int index = 0; index < GameConstants.NumberShipWrecks; index++)
             {
                 shipWrecks.Add(new ShipWreck());
-                shipWrecks[index].LoadContent(Content, randomType);
+                if (index == 0) shipWrecks[index].LoadContent(Content, randomType, 1);
+                else shipWrecks[index].LoadContent(Content, randomType, 0);
                 randomType = random.Next(3);
             }
             //Initialize barriers
@@ -297,6 +315,7 @@ namespace Poseidon
                     }
                 }
 
+                prevGameState = currentGameState;
                 if (currentGameState == GameState.Lost)
                 {
                     // Reset the world for a new game
@@ -304,6 +323,7 @@ namespace Poseidon
                         (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
+                        
                         ResetGame(gameTime, aspectRatio);
 
                     }

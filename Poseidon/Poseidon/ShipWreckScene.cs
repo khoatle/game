@@ -55,6 +55,11 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
 
+        // He died inside the ship wreck?
+        public bool dead;
+        // has artifact?
+        public int skillID = 0;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
             : base(game)
         {
@@ -102,7 +107,7 @@ namespace Poseidon
             }
 
             //Initialize the game field
-            InitializeGameField(Content);
+            InitializeShipField(Content);
 
 
 
@@ -121,6 +126,7 @@ namespace Poseidon
             paused = false;
             tank.Reset();
             MediaPlayer.Play(audio.BackMusic);
+            InitializeShipField(Content);
             base.Show();
         }
         private void ResetGame(GameTime gameTime, float aspectRatio)
@@ -128,12 +134,15 @@ namespace Poseidon
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
-            InitializeGameField(Content);
+            InitializeShipField(Content);
 
         }
 
-        private void InitializeGameField(ContentManager Content)
+        private void InitializeShipField(ContentManager Content)
         {
+            dead = false;
+            // Initialize the chests here
+            // Put the skill in one of it if this.skillID != 0
 
             //Initialize barriers
             barriers = new List<Barrier>(GameConstants.NumBarriers);
@@ -279,7 +288,7 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            if (!paused)
+            if (!paused && !dead)
             {
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
@@ -316,12 +325,19 @@ namespace Poseidon
                 Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
                 Collision.updateBulletVsBarriersCollision(projectiles, barriers);
 
+                // Just for death simulation
+                if (lastKeyboardState.IsKeyDown(Keys.O) &&
+                        currentKeyboardState.IsKeyUp(Keys.O))
+                {
+                    dead = true;
+                }
                 base.Update(gameTime);
             }
         }
 
         public override void Draw(GameTime gameTime)
         {
+            if (dead) return;
             // Change back the config changed by spriteBatch
             GraphicDevice.BlendState = BlendState.Opaque;
             GraphicDevice.DepthStencilState = DepthStencilState.Default;

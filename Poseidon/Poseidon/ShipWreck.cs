@@ -15,8 +15,9 @@ namespace Poseidon
         int type;
         // no re-access
         public bool accessed;
-
-        public void LoadContent(ContentManager content, int type)
+        // special skill's ID that this ship wreck will have in one of its chests
+        public int skillID = 0;
+        public void LoadContent(ContentManager content, int type, int skillID)
         {
             
             this.type = type;
@@ -30,6 +31,7 @@ namespace Poseidon
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             accessed = false;
+            this.skillID = skillID;
         }
 
         public void Draw(Matrix view, Matrix projection)

@@ -214,6 +214,13 @@ namespace Poseidon
         /// </summary>
         public void HandleShipWreckSceneInput()
         {
+            // Dead inside the ship wreck
+            if (shipWreckScene.dead)
+            {
+                playGameScene.currentGameState = GameState.Lost;
+                ShowScene(playGameScene);
+            }
+
             // User pauses the game
             if (pPressed)
             {
@@ -270,6 +277,8 @@ namespace Poseidon
                 {
                     // no re-explore a ship wreck
                     playGameScene.shipWrecks[curWreck].accessed = true;
+                    // put the skill into one of the chest if skillID != 0
+                    shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
                     return true;
                 }
             }
@@ -364,13 +373,6 @@ namespace Poseidon
             //graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             base.Draw(gameTime);
-            //if (paused)
-            //{
-                // Draw the "pause" text
-            //    spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
-            //        Color.White);
-            //}
-            //else base.Draw(gameTime);
             spriteBatch.End();
         }
 

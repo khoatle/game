@@ -110,7 +110,7 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            ground.Model = Content.Load<Model>("Models/ground");
+            ground.Model = Content.Load<Model>("Image/terrain");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
             // Loading main character skill icon textures

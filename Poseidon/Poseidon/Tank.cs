@@ -22,7 +22,7 @@ namespace Poseidon
     /// <summary>
     /// Helper class for drawing a tank model with animated wheels and turret.
     /// </summary>
-    public class Tank: GameObject
+    public class Tank : GameObject
     {
         #region Fields
 
@@ -241,7 +241,7 @@ namespace Poseidon
         {
             strength = tank.strength;
             speed = tank.speed;
-            shootingRate = tank.shootingRate ;
+            shootingRate = tank.shootingRate;
             hitPoint = tank.hitPoint;
             speedUp = tank.speedUp;
             strengthUp = tank.strengthUp;
@@ -259,7 +259,7 @@ namespace Poseidon
             ForwardDirection = 0f;
         }
 
-        public void Update(KeyboardState keyboardState, List<Barrier> barriers, List<FuelCell> fuelCells, GameTime gameTime)
+        public void Update(KeyboardState keyboardState, Barrier[] barriers, int size, List<FuelCell> fuelCells, GameTime gameTime)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -316,7 +316,7 @@ namespace Poseidon
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;
-            if (Collision.isTankValidMove(this, futurePosition, barriers))
+            if (Collision.isTankValidMove(this, futurePosition, barriers, size))
             {
                 Position = futurePosition;
 

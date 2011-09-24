@@ -39,14 +39,16 @@ namespace Poseidon
 
         FuelCarrier fuelCarrier;
         List<FuelCell> fuelCells;
-        List<Barrier> barriers;
         public List<ShipWreck> shipWrecks;
         List<Projectiles> projectiles;
         List<Plant> plants;
 
         Enemy[] enemies;
         Fish[] fish;
-        
+
+        int enemiesAmount = 0;
+        int fishAmount = 0;
+
 
         // The main character for this level
         public Tank tank;
@@ -67,7 +69,7 @@ namespace Poseidon
         public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon" };
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
-        public string[] bulletNames = { "Image/skill0Icon", "Image/skill1Icon"};
+        public string[] bulletNames = { "Image/skill0Icon", "Image/skill1Icon" };
 
         // Current game level
         public int currentLevel = 0;
@@ -76,8 +78,9 @@ namespace Poseidon
         CutSceneDialog cutSceneDialog;
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
-        
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog):base(game)
+
+        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
+            : base(game)
         {
             this.graphics = graphics;
             this.Content = Content;
@@ -96,12 +99,13 @@ namespace Poseidon
             tank = new Tank();
             prevTank = new Tank();
             fireTime = TimeSpan.FromSeconds(0.3f);
+
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
+
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
             this.Load();
-
         }
 
         public void Load()
@@ -125,9 +129,9 @@ namespace Poseidon
             {
                 bulletTypeTextures[index] = Content.Load<Texture2D>(bulletNames[index]);
             }
-            
+
             //Initialize fuel cells
-            fuelCells = new List<FuelCell> (GameConstants.NumFuelCells);
+            fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
             int powerType = random.Next(3) + 1;
             for (int index = 0; index < GameConstants.NumFuelCells; index++)
             {
@@ -135,7 +139,7 @@ namespace Poseidon
                 fuelCells[index].LoadContent(Content, "Models/fuelcell");
                 powerType = random.Next(3) + 1;
             }
-            
+
             //Initialize the game field
             InitializeGameField(Content);
 
@@ -148,7 +152,7 @@ namespace Poseidon
             plants = new List<Plant>();
 
             tank.Load(Content);
-            
+
             prevTank.Load(Content);
             roundTimer = roundTime;
 
@@ -174,6 +178,9 @@ namespace Poseidon
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
+
+            enemiesAmount = GameConstants.NumberEnemies;
+            fishAmount = GameConstants.NumberFish;
             InitializeGameField(Content);
 
             //Cleann all trees
@@ -200,32 +207,12 @@ namespace Poseidon
                 else shipWrecks[index].LoadContent(Content, randomType, 0);
                 randomType = random.Next(3);
             }
-            //Initialize barriers
-            barriers = new List<Barrier> (GameConstants.NumBarriers);
-            int randomBarrier = random.Next(3);
-            string barrierName = null;
-
-            for (int index = 0; index < GameConstants.NumBarriers; index++)
-            {
-                switch (randomBarrier)
-                {
-                    case 0:
-                        barrierName = "Models/cube10uR";
-                        //barrierName = "Models/sphere1uR";
-                        break;
-                    case 1:
-                        barrierName = "Models/cylinder10uR";
-                        break;
-                    case 2:
-                        barrierName = "Models/pyramid10uR";
-                        break;
-                }
-                barriers.Add(new Barrier());
-                barriers[index].LoadContent(Content, barrierName);
-                randomBarrier = random.Next(3);
-            }
-            PlaceFuelCellsAndBarriers();
+            placeEnemies();
+            placeFish();
+            placeFuelCells();
+            placeShipWreck();
         }
+
         /// <summary>
         /// Hide the scene
         /// </summary>
@@ -293,7 +280,7 @@ namespace Poseidon
                     //    currentKeyboardState, barriers);
 
                     // changing active skill
-                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) ||  lastKeyboardState.IsKeyDown(Keys.RightShift))&& lastKeyboardState.IsKeyDown(Keys.K)
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.K)
                             && currentKeyboardState.IsKeyUp(Keys.K))
                     {
                         if (tank.activeSkillID != -1)
@@ -308,11 +295,11 @@ namespace Poseidon
                         }
                     }
                     // changing bullet type
-                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) ||  lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.L)
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.L)
                             && currentKeyboardState.IsKeyUp(Keys.L))
                     {
-                            tank.bulletType++;
-                            if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
+                        tank.bulletType++;
+                        if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
 
                     }
                     // Are we shooting?
@@ -331,15 +318,10 @@ namespace Poseidon
                         placePlant();
                     }
 
-                    tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
+                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fuelCells, gameTime);
+
                     gameCamera.Update(tank.ForwardDirection,
                         tank.Position, aspectRatio);
-
-                    
-                    // Update barrier (enemies)
-                    for (int i = 0; i < barriers.Count; i++) {
-                        barriers[i].Update(barriers, random.Next(100), tank);
-                    }
 
                     retrievedFuelCells = 0;
                     foreach (FuelCell fuelCell in fuelCells)
@@ -353,10 +335,20 @@ namespace Poseidon
 
                     for (int i = 0; i < projectiles.Count; i++)
                     {
-                        projectiles[i].update(barriers);
+                        projectiles[i].update();
                     }
                     Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                    Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+                    Collision.updateBulletVsBarriersCollision(projectiles, enemies, ref enemiesAmount);
+
+                    for (int i = 0; i < enemiesAmount; i++)
+                    {
+                        enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                    }
+
+                    for (int i = 0; i < fishAmount; i++)
+                    {
+                        fish[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                    }
 
                     if (retrievedFuelCells == GameConstants.NumFuelCells)
                     {
@@ -368,9 +360,9 @@ namespace Poseidon
                     {
                         currentGameState = GameState.Lost;
                     }
-                    
+
                 }
-                
+
                 prevGameState = currentGameState;
                 if (currentGameState == GameState.Lost)
                 {
@@ -379,7 +371,7 @@ namespace Poseidon
                         (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
-                        
+
                         ResetGame(gameTime, aspectRatio);
 
                     }
@@ -392,7 +384,7 @@ namespace Poseidon
                     {
                         currentLevel++;
                         ResetGame(gameTime, aspectRatio);
-                        
+
                     }
                 }
                 base.Update(gameTime);
@@ -405,7 +397,7 @@ namespace Poseidon
             GraphicDevice.BlendState = BlendState.Opaque;
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
             GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
- 
+
             base.Draw(gameTime);
             if (paused)
             {
@@ -428,7 +420,7 @@ namespace Poseidon
                     DrawWinOrLossScreen(GameConstants.StrGameLost);
                     break;
             };
-            
+
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.
@@ -452,7 +444,7 @@ namespace Poseidon
             }
         }
 
-       
+
 
         private void DrawWinOrLossScreen(string gameResult)
         {
@@ -521,19 +513,14 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            foreach (Barrier barrier in barriers)
+            for (int i = 0; i < enemiesAmount; i++)
             {
-                barrier.Draw(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix);
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicsDevice.RasterizerState = rs;
-                //barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
+                enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
 
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-                //GraphicsDevice.RasterizerState = rs;
+            for (int i = 0; i < fishAmount; i++)
+            {
+                fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
             // Drawing ship wrecks
             foreach (ShipWreck shipWreck in shipWrecks)
@@ -659,7 +646,7 @@ namespace Poseidon
 
             xOffsetText = rectSafeArea.X;
             yOffsetText = rectSafeArea.Y;
-         
+
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText + 50, (int)yOffsetText + 50);
 

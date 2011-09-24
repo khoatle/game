@@ -8,17 +8,20 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    public class Collision {
+    public class Collision
+    {
 
         /// <summary>
         /// GENERAL FUNCTIONS
         /// </summary>
-        public static bool isOutOfView(Vector3 futurePosition, Viewport view) {
-            return Math.Abs(futurePosition.X) > view.Width/2 ||
-                Math.Abs(futurePosition.Z) > view.Height/2;        
+        public static bool isOutOfView(Vector3 futurePosition, Viewport view)
+        {
+            return Math.Abs(futurePosition.X) > view.Width / 2 ||
+                Math.Abs(futurePosition.Z) > view.Height / 2;
         }
-        
-        public static bool isOutOfMap(Vector3 futurePosition) {
+
+        public static bool isOutOfMap(Vector3 futurePosition)
+        {
             return Math.Abs(futurePosition.X) > GameConstants.MaxRange ||
                 Math.Abs(futurePosition.Z) > GameConstants.MaxRange;
         }
@@ -42,7 +45,7 @@ namespace Poseidon
         // Helper
         private static bool isPlantvsPlantCollision(BoundingSphere plantBoundingSphere, List<Plant> plants)
         {
-            for (int i = 0; i< plants.Count; i++)
+            for (int i = 0; i < plants.Count; i++)
             {
                 if (plantBoundingSphere.Intersects(
                     plants[i].BoundingSphere))
@@ -66,27 +69,31 @@ namespace Poseidon
         /// <summary>
         /// BARRIERS FUNCTIONS
         /// </summary>
-        public static bool isBarrierValidMove(Barrier barrier, Vector3 futurePosition, List<Barrier> barriers, Tank tank) {
+        public static bool isBarrierValidMove(Barrier barrier, Vector3 futurePosition, Barrier[] barriers, int size, Tank tank)
+        {
             BoundingSphere futureBoundingSphere = barrier.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            if (isOutOfMap(futurePosition)) {
+            if (isOutOfMap(futurePosition))
+            {
                 return false;
             }
-            if (isBarrierVsBarrierCollision(barrier, futureBoundingSphere, barriers)) {
+            if (isBarrierVsBarrierCollision(barrier, futureBoundingSphere, barriers, size))
+            {
                 return false;
             }
-            if (isBarrierVsTankCollision(futureBoundingSphere, tank)) {
+            if (isBarrierVsTankCollision(futureBoundingSphere, tank))
+            {
                 return false;
             }
-            return true; 
+            return true;
         }
 
         // Helper
-        private static bool isBarrierVsBarrierCollision(Barrier barrier, BoundingSphere vehicleBoundingSphere, List<Barrier> barriers)
+        private static bool isBarrierVsBarrierCollision(Barrier barrier, BoundingSphere vehicleBoundingSphere, Barrier[] barriers, int size)
         {
-            for (int curBarrier = 0; curBarrier < barriers.Count; curBarrier++)
+            for (int curBarrier = 0; curBarrier < size; curBarrier++)
             {
                 if (barrier.Equals(barriers[curBarrier]))
                     continue;
@@ -109,17 +116,20 @@ namespace Poseidon
         /// <summary>
         /// TANK COLLISION
         /// </summary>
-        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, List<Barrier> barriers) {
+        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, Barrier[] barriers, int size)
+        {
             BoundingSphere futureBoundingSphere = tank.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
             //Don't allow off-terrain driving
-            if (isOutOfMap(futurePosition)) {
+            if (isOutOfMap(futurePosition))
+            {
                 return false;
             }
             //Don't allow driving through a barrier
-            if (isTankVsBarrierCollision(futureBoundingSphere, barriers)) {
+            if (isTankVsBarrierCollision(futureBoundingSphere, barriers, size))
+            {
                 return false;
             }
 
@@ -127,9 +137,12 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isTankVsBarrierCollision(BoundingSphere boundingSphere, List<Barrier> barrier) {
-            for (int i = 0; i < barrier.Count; i++) {
-                if (boundingSphere.Intersects(barrier[i].BoundingSphere)) {
+        private static bool isTankVsBarrierCollision(BoundingSphere boundingSphere, Barrier[] barrier, int size)
+        {
+            for (int i = 0; i < size; i++)
+            {
+                if (boundingSphere.Intersects(barrier[i].BoundingSphere))
+                {
                     return true;
                 }
             }
@@ -141,13 +154,23 @@ namespace Poseidon
         /// <summary>
         /// PROJECTILES FUNCTION
         /// </summary>
-        public static void updateBulletVsBarriersCollision(List<Projectiles> projectiles, List<Barrier> barriers) {
-            for (int i = 0; i < projectiles.Count; i++) { 
-                for (int j = 0; j < barriers.Count; j++) {
-                    if (projectiles[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+        public static void updateBulletVsBarriersCollision(List<Projectiles> projectiles, Barrier[] barriers, ref int size)
+        {
+            for (int i = 0; i < projectiles.Count; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    if (projectiles[i].BoundingSphere.Intersects(barriers[j].BoundingSphere))
+                    {
                         barriers[j].health -= projectiles[i].bulletDamage;
-                        if (barriers[j].health <= 0) {
-                            barriers.RemoveAt(j);
+                        if (barriers[j].health <= 0)
+                        {
+                            barriers[j] = null;
+                            for (int k = j + 1; k < size; k++)
+                            {
+                                barriers[k - 1] = barriers[k];
+                            }
+                            size--;
                         }
 
                         projectiles.RemoveAt(i--);
@@ -157,13 +180,17 @@ namespace Poseidon
             }
         }
 
-        public static void updateBulletOutOfBound(List<Projectiles> projectiles, Viewport view) {
-            for (int i = 0; i < projectiles.Count; ) {
-                if (isOutOfMap(projectiles[i].Position) || isOutOfView(projectiles[i].Position, view)) {
+        public static void updateBulletOutOfBound(List<Projectiles> projectiles, Viewport view)
+        {
+            for (int i = 0; i < projectiles.Count; )
+            {
+                if (isOutOfMap(projectiles[i].Position) || isOutOfView(projectiles[i].Position, view))
+                {
                     projectiles.RemoveAt(i);
                 }
-                else { 
-                    i++; 
+                else
+                {
+                    i++;
                 }
             }
         }

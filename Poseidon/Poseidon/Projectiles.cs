@@ -13,7 +13,8 @@ using Microsoft.Xna.Framework.Storage;
 
 namespace Poseidon
 {
-    public class Projectiles : GameObject {
+    public class Projectiles : GameObject
+    {
         private Vector3 unitDirection;
         private float projectionSpeed;
         private float forwardDirection;
@@ -22,11 +23,14 @@ namespace Poseidon
 
         private bool isActive;
 
-        public Projectiles() : base() {
+        public Projectiles()
+            : base()
+        {
             isActive = true;
         }
 
-        public void initialize(Viewport viewport, Vector3 position,float speed, float forwardDirection, float damageUp) {
+        public void initialize(Viewport viewport, Vector3 position, float speed, float forwardDirection, float damageUp)
+        {
             this.forwardDirection = forwardDirection;
             this.Position = position;
             this.view = viewport;
@@ -38,7 +42,8 @@ namespace Poseidon
             isActive = true;
         }
 
-        private void calculateUnitDirection() {
+        private void calculateUnitDirection()
+        {
             Matrix orientationMatrix = Matrix.CreateRotationY(forwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;// GameConstants.BulletSpeed;
@@ -46,14 +51,17 @@ namespace Poseidon
             unitDirection.Normalize();
         }
 
-        private Vector3 calculateFuturePosition() {
+        private Vector3 calculateFuturePosition()
+        {
             return Position + unitDirection * GameConstants.BulletSpeed;
         }
-        
-        public void update(List<Barrier> barriers) {
+
+        public void update()
+        {
             Vector3 tmp = calculateFuturePosition();
 
-            if (isActive && Collision.isOutOfMap(tmp) && Collision.isOutOfView(tmp, view)) {
+            if (isActive && Collision.isOutOfMap(tmp) && Collision.isOutOfView(tmp, view))
+            {
                 isActive = false;
                 return;
             }
@@ -61,21 +69,25 @@ namespace Poseidon
             BoundingSphere = new BoundingSphere(tmp, BoundingSphere.Radius);
         }
 
-        public void loadContent(ContentManager content, string modelName) {
+        public void loadContent(ContentManager content, string modelName)
+        {
             this.Model = content.Load<Model>(modelName);
             BoundingSphere = CalculateBoundingSphere();
         }
 
         public bool getStatus() { return isActive; }
 
-        public void draw(Matrix view, Matrix projection) {
+        public void draw(Matrix view, Matrix projection)
+        {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translationMatrix = Matrix.CreateTranslation(Position);
             Matrix worldMatrix = translationMatrix;
 
-            foreach (ModelMesh mesh in Model.Meshes) {
-                foreach (BasicEffect effect in mesh.Effects) {
+            foreach (ModelMesh mesh in Model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
                     effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = view;
                     effect.Projection = projection;

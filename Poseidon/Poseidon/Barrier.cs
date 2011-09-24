@@ -64,7 +64,7 @@ namespace Poseidon
             }
         }
 
-        public void Update(List<Barrier> barriers, int ChangeDirection, Tank tank)
+        public void Update(Barrier[] barriers, int size, int ChangeDirection, Tank tank)
         {
             Vector3 futurePosition = Position;
             Random random = new Random();
@@ -76,9 +76,11 @@ namespace Poseidon
 
             Vector3 movement = Vector3.Zero;
 
-            if (ChangeDirection >= 95) {
+            if (ChangeDirection >= 95)
+            {
                 barrier_move = random.Next(4);
-                switch (barrier_move) {
+                switch (barrier_move)
+                {
                     case 0:
                         movement.X = -1;
                         break;
@@ -93,7 +95,8 @@ namespace Poseidon
                         break;
                 }
             }
-            else {
+            else
+            {
                 movement = previousDirection;
             }
 
@@ -101,7 +104,7 @@ namespace Poseidon
             speed *= GameConstants.BarrierVelocity;
             futurePosition = Position + speed;
 
-            if (Collision.isBarrierValidMove(this, futurePosition, barriers, tank))
+            if (Collision.isBarrierValidMove(this, futurePosition, barriers, size, tank))
             {
                 Position = futurePosition;
 

@@ -23,25 +23,26 @@ namespace Poseidon
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
         private AudioLibrary audio;
-      
-        
+
+
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
         GameObject ground;
         Camera gameCamera;
-        
+
         GameObject boundingSphere;
 
-        
+
         List<FuelCell> fuelCells;
-        List<Barrier> barriers;
-        
+
         List<Projectiles> projectiles;
 
         Enemy[] enemies;
         Fish[] fish;
 
+        int enemiesAmount = 0;
+        int fishAmount = 0;
 
         //A tank
         public Tank tank;
@@ -126,8 +127,6 @@ namespace Poseidon
             //Initialize the game field
             InitializeShipField(Content);
 
-
-
             projectiles = new List<Projectiles>();
 
             tank.Load(Content);
@@ -137,7 +136,7 @@ namespace Poseidon
         /// <summary>
         /// Show the action scene
         /// </summary>
-        
+
         public override void Show()
         {
             paused = false;
@@ -160,67 +159,71 @@ namespace Poseidon
             dead = false;
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != 0
+            placeEnemy();
+            placeFish();
 
-            //Initialize barriers
-            barriers = new List<Barrier>(GameConstants.NumBarriers);
-            int randomBarrier = random.Next(3);
-            string barrierName = null;
-
-            for (int index = 0; index < GameConstants.NumBarriers; index++)
-            {
-                switch (randomBarrier)
-                {
-                    case 0:
-                        barrierName = "Models/cube10uR";
-                        //barrierName = "Models/sphere1uR";
-                        break;
-                    case 1:
-                        barrierName = "Models/cylinder10uR";
-                        break;
-                    case 2:
-                        barrierName = "Models/pyramid10uR";
-                        break;
-                }
-                barriers.Add(new Barrier());
-                barriers[index].LoadContent(Content, barrierName);
-                randomBarrier = random.Next(3);
-            }
-            PlaceFuelCellsAndBarriers();
         }
-        // Helper
-        private void PlaceFuelCellsAndBarriers()
+
+        private void loadContentEnemies()
         {
+            for (int i = 0; i < GameConstants.NumberEnemies; i++)
+            {
+                enemies[i] = new Enemy();
+                enemies[i].LoadContent(Content, "Models/pyramid10uR");
+            }
+        }
+
+        private void loadContentFish()
+        {
+            for (int i = 0; i < GameConstants.NumberFish; i++)
+            {
+                fish[i] = new Fish();
+                fish[i].LoadContent(Content, "Models/cube10uR");
+            }
+        }
+
+        private void placeEnemy()
+        {
+            loadContentEnemies();
+
             int min = GameConstants.MinDistance;
             int max = GameConstants.MaxDistance;
             Vector3 tempCenter;
 
-            //place fuel cells
-            foreach (FuelCell cell in fuelCells)
+            //place enemies
+            for (int i = 0; i < enemiesAmount; i++)
             {
-                cell.Position = GenerateRandomPosition(min, max);
-                cell.Position.Y = GameConstants.FloatHeight;
-                tempCenter = cell.BoundingSphere.Center;
-                tempCenter.X = cell.Position.X;
+                enemies[i].Position = GenerateRandomPosition(min, max);
+                enemies[i].Position.Y = GameConstants.FloatHeight;
+                tempCenter = enemies[i].BoundingSphere.Center;
+                tempCenter.X = enemies[i].Position.X;
                 tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = cell.Position.Z;
-                cell.BoundingSphere =
-                    new BoundingSphere(tempCenter, cell.BoundingSphere.Radius);
-                cell.Retrieved = false;
+                tempCenter.Z = enemies[i].Position.Z;
+                enemies[i].BoundingSphere =
+                    new BoundingSphere(tempCenter, enemies[i].BoundingSphere.Radius);
             }
+        }
 
-            //place barriers
-            foreach (Barrier barrier in barriers)
+        private void placeFish()
+        {
+            loadContentFish();
+
+            int min = GameConstants.MinDistance;
+            int max = GameConstants.MaxDistance;
+            Vector3 tempCenter;
+
+            //place fish
+            for (int i = 0; i < fishAmount; i++)
             {
-                barrier.Position = GenerateRandomPosition(min, max);
-                barrier.Position.Y = GameConstants.FloatHeight;
-                tempCenter = barrier.BoundingSphere.Center;
-                tempCenter.X = barrier.Position.X;
+                fish[i].Position = GenerateRandomPosition(min, max);
+                fish[i].Position.Y = GameConstants.FloatHeight;
+                tempCenter = fish[i].BoundingSphere.Center;
+                tempCenter.X = fish[i].Position.X;
                 tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = barrier.Position.Z;
-                barrier.BoundingSphere = new BoundingSphere(tempCenter,
-                    barrier.BoundingSphere.Radius);
+                tempCenter.Z = fish[i].Position.Z;
+                fish[i].BoundingSphere =
+                    new BoundingSphere(tempCenter, fish[i].BoundingSphere.Radius);
             }
-
         }
 
         // Helper
@@ -261,12 +264,21 @@ namespace Poseidon
                     return true;
             }
 
-            foreach (GameObject currentObj in barriers)
+            for (int i = 0; i < enemiesAmount; i++)
             {
                 if (((int)(MathHelper.Distance(
-                    xValue, currentObj.Position.X)) < 15) &&
+                    xValue, enemies[i].Position.X)) < 15) &&
                     ((int)(MathHelper.Distance(
-                    zValue, currentObj.Position.Z)) < 15))
+                    zValue, enemies[i].Position.Z)) < 15))
+                    return true;
+            }
+
+            for (int i = 0; i < fishAmount; i++)
+            {
+                if (((int)(MathHelper.Distance(
+                    xValue, fish[i].Position.X)) < 15) &&
+                    ((int)(MathHelper.Distance(
+                    zValue, fish[i].Position.Z)) < 15))
                     return true;
             }
             return false;
@@ -347,24 +359,26 @@ namespace Poseidon
                 }
 
 
-                tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fuelCells, gameTime);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
 
-
-                // Update barrier (enemies)
-                for (int i = 0; i < barriers.Count; i++)
-                {
-                    barriers[i].Update(barriers, random.Next(100), tank);
-                }
-
-
                 for (int i = 0; i < projectiles.Count; i++)
                 {
-                    projectiles[i].update(barriers);
+                    projectiles[i].update();
                 }
                 Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                Collision.updateBulletVsBarriersCollision(projectiles, barriers);
+                Collision.updateBulletVsBarriersCollision(projectiles, enemies, ref enemiesAmount);
+
+                for (int i = 0; i < enemiesAmount; i++)
+                {
+                    enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                }
+
+                for (int i = 0; i < fishAmount; i++)
+                {
+                    fish[i].Update(enemies, fishAmount, random.Next(100), tank);
+                }
 
                 // Just for death simulation
                 // should be removed
@@ -373,7 +387,7 @@ namespace Poseidon
                 {
                     dead = true;
                 }
-                
+
                 base.Update(gameTime);
             }
         }
@@ -393,8 +407,8 @@ namespace Poseidon
                 spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
                     Color.White);
             }
- 
-              
+
+
             DrawGameplayScreen();
 
         }
@@ -440,20 +454,7 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            foreach (Barrier barrier in barriers)
-            {
-                barrier.Draw(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix);
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicsDevice.RasterizerState = rs;
-                //barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-                //GraphicsDevice.RasterizerState = rs;
-            }
             // Update bullets
             foreach (Projectiles p in projectiles)
             {

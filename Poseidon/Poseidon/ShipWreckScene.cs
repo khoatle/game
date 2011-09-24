@@ -52,7 +52,9 @@ namespace Poseidon
         // For drawing the currently selected skill
         protected Texture2D[] skillTextures;
         public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon" };
-
+        // For drawing the currently selected bullet type
+        protected Texture2D[] bulletTypeTextures;
+        public string[] bulletNames = { "Image/skill0Icon", "Image/skill1Icon" };
         // Game is paused?
         protected bool paused;
         protected Vector2 pausePosition;
@@ -85,6 +87,7 @@ namespace Poseidon
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
+            bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
             this.Load();
 
         }
@@ -104,7 +107,11 @@ namespace Poseidon
             {
                 skillTextures[index] = Content.Load<Texture2D>(iconNames[index]);
             }
-
+            // Loading main character bullet icon textures
+            for (int index = 0; index < GameConstants.numBulletTypes; index++)
+            {
+                bulletTypeTextures[index] = Content.Load<Texture2D>(bulletNames[index]);
+            }
 
             //Initialize fuel cells
             fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
@@ -307,8 +314,31 @@ namespace Poseidon
                 currentGamePadState = GamePad.GetState(PlayerIndex.One);
 
 
+                // changing active skill
+                if (lastKeyboardState.IsKeyDown(Keys.LeftShift) && lastKeyboardState.IsKeyDown(Keys.K)
+                        && currentKeyboardState.IsKeyUp(Keys.K))
+                {
+                    if (tank.activeSkillID != -1)
+                    {
+                        tank.activeSkillID++;
+                        if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                        while (tank.skills[tank.activeSkillID] == false)
+                        {
+                            tank.activeSkillID++;
+                            if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                        }
+                    }
+                }
+                // changing bullet type
+                if (lastKeyboardState.IsKeyDown(Keys.LeftShift) && lastKeyboardState.IsKeyDown(Keys.L)
+                        && currentKeyboardState.IsKeyUp(Keys.L))
+                {
+                    tank.bulletType++;
+                    if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
+
+                }
                 // Are we shooting?
-                if (currentKeyboardState.IsKeyDown(Keys.L)
+                if (!lastKeyboardState.IsKeyDown(Keys.LeftShift) && currentKeyboardState.IsKeyDown(Keys.L)
                     && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                 {
                     prevFireTime = gameTime.TotalGameTime;
@@ -342,21 +372,7 @@ namespace Poseidon
                 {
                     dead = true;
                 }
-                // changing active skill
-                if (lastKeyboardState.IsKeyDown(Keys.LeftShift) && lastKeyboardState.IsKeyDown(Keys.K)
-                        && currentKeyboardState.IsKeyUp(Keys.K))
-                {
-                    if (tank.activeSkillID != -1)
-                    {
-                        tank.activeSkillID++;
-                        if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
-                        while (tank.skills[tank.activeSkillID] == false)
-                        {
-                            tank.activeSkillID++;
-                            if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
-                        }
-                    }
-                }
+                
                 base.Update(gameTime);
             }
         }
@@ -459,9 +475,26 @@ namespace Poseidon
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
+            DrawBulletType();
             if (tank.activeSkillID != -1) DrawActiveSkill();
         }
+        // Draw the currently selected bullet type
+        private void DrawBulletType()
+        {
+            float xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
 
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+
+            Vector2 bulletIconPosition =
+                new Vector2((int)xOffsetText + 50, (int)yOffsetText + 100);
+
+            spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
+        }
         private void DrawActiveSkill()
         {
             float xOffsetText, yOffsetText;

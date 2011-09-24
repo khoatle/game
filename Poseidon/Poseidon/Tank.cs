@@ -80,6 +80,10 @@ namespace Poseidon
         public float speed;
         public float shootingRate;
         public int hitPoint;
+        // 2 types of bullet
+        // 0: killing
+        // 1: healing
+        public int bulletType = 0;
 
         //Skills/Spells of our main character
         //true = enabled/found

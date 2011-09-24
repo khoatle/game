@@ -66,6 +66,6 @@ namespace Poseidon
 
         //skills
         public const int numberOfSkills = 3;
-       
+        public const int numBulletTypes = 2;
     }
 }

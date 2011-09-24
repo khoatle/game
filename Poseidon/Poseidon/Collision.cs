@@ -24,6 +24,51 @@ namespace Poseidon
         }
         // End-----------------------------------------------------
 
+        ///PLANT FUNCTIONS
+
+        public static bool isPlantValidMove(Plant plant, Vector3 futurePosition, List<Plant> plants, List<ShipWreck> shipwrecks)
+        {
+            BoundingSphere futureBoundingSphere = plant.BoundingSphere;
+            futureBoundingSphere.Center.X = futurePosition.X;
+            futureBoundingSphere.Center.Z = futurePosition.Z;
+
+            if (isPlantvsPlantCollision(plant, futureBoundingSphere, plants))
+            {
+                return false;
+            }
+            if (isPlantvsShipwreckCollision(plant, futureBoundingSphere, shipwrecks))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        // Helper
+        private static bool isPlantvsPlantCollision(Plant plant, BoundingSphere plantBoundingSphere, List<Plant> plants)
+        {
+            for (int i = 0; i< plants.Count; i++)
+            {
+                if (plant.Equals(plants[i]))
+                    continue;
+                if (plantBoundingSphere.Intersects(
+                    plants[i].BoundingSphere))
+                    return true;
+            }
+            return false;
+        }
+
+        //helper
+        private static bool isPlantvsShipwreckCollision(Plant plant, BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
+        {
+            for (int i = 0; i < shipwrecks.Count; i++)
+            {
+                if (plantBoundingSphere.Intersects(
+                    shipwrecks[i].BoundingSphere))
+                    return true;
+            }
+            return false;
+        }
+
         /// <summary>
         /// BARRIERS FUNCTIONS
         /// </summary>
@@ -96,6 +141,7 @@ namespace Poseidon
             }
             return false;
         }
+
         // End----------------------------------------------------------
 
         /// <summary>

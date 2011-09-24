@@ -42,6 +42,7 @@ namespace Poseidon
         List<Barrier> barriers;
         public List<ShipWreck> shipWrecks;
         List<Projectiles> projectiles;
+        List<Plant> plants;
 
         Enemy[] enemies;
         Fish[] fish;
@@ -144,6 +145,8 @@ namespace Poseidon
 
             projectiles = new List<Projectiles>();
 
+            plants = new List<Plant>();
+
             tank.Load(Content);
             
             prevTank.Load(Content);
@@ -172,6 +175,9 @@ namespace Poseidon
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
             InitializeGameField(Content);
+
+            //Cleann all trees
+            plants.Clear();
 
             retrievedFuelCells = 0;
             startTime = gameTime.TotalGameTime;
@@ -316,6 +322,13 @@ namespace Poseidon
                         prevFireTime = gameTime.TotalGameTime;
                         audio.Shooting.Play();
                         placeBullet();
+                    }
+
+                    //Are we planting trees?
+                    if ((lastKeyboardState.IsKeyDown(Keys.O) && (currentKeyboardState.IsKeyUp(Keys.O))))
+                    {
+                        audio.Shooting.Play();
+                        placePlant();
                     }
 
                     tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
@@ -545,6 +558,12 @@ namespace Poseidon
                 {
                     p.draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
+            }
+
+            // Draw each plant
+            foreach (Plant p in plants)
+            {
+                p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 

@@ -95,6 +95,17 @@ namespace Poseidon
         }
 
         // Helper
+        private void placePlant()
+        {
+            Plant p = new Plant();
+            p.LoadContent(Content, tank.Position);
+            if (Collision.isPlantValidMove(p, tank.Position, plants, shipWrecks))
+            {
+                plants.Add(p);
+            }
+        }
+
+        // Helper
         private Vector3 GenerateRandomPosition(int min, int max)
         {
             int xValue, zValue;

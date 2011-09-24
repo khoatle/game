@@ -315,7 +315,7 @@ namespace Poseidon
 
 
                 // changing active skill
-                if (lastKeyboardState.IsKeyDown(Keys.LeftShift) && lastKeyboardState.IsKeyDown(Keys.K)
+                if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.K)
                         && currentKeyboardState.IsKeyUp(Keys.K))
                 {
                     if (tank.activeSkillID != -1)
@@ -330,7 +330,7 @@ namespace Poseidon
                     }
                 }
                 // changing bullet type
-                if (lastKeyboardState.IsKeyDown(Keys.LeftShift) && lastKeyboardState.IsKeyDown(Keys.L)
+                if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.L)
                         && currentKeyboardState.IsKeyUp(Keys.L))
                 {
                     tank.bulletType++;
@@ -338,13 +338,14 @@ namespace Poseidon
 
                 }
                 // Are we shooting?
-                if (!lastKeyboardState.IsKeyDown(Keys.LeftShift) && currentKeyboardState.IsKeyDown(Keys.L)
+                if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && currentKeyboardState.IsKeyDown(Keys.L)
                     && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                 {
                     prevFireTime = gameTime.TotalGameTime;
                     audio.Shooting.Play();
                     placeBullet();
                 }
+
 
                 tank.Update(currentKeyboardState, barriers, fuelCells, gameTime);
                 gameCamera.Update(tank.ForwardDirection,

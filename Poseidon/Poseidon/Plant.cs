@@ -23,13 +23,14 @@ namespace Poseidon
         public void LoadContent(ContentManager content, Vector3 cyborgPosition)
         {
             Model = content.Load<Model>("Models/plant");
-            BoundingSphere = CalculateBoundingSphere();
             Position = cyborgPosition;
             Position.Y = 0;
+            BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
+            scaledSphere.Center = Position;
             scaledSphere.Radius *=
-                GameConstants.FuelCarrierBoundingSphereFactor;
+                GameConstants.PlantBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }

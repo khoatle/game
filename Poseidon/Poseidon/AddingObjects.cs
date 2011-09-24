@@ -78,7 +78,7 @@ namespace Poseidon
                 shipWreck.Position.Y = 0;
                 tempCenter = shipWreck.BoundingSphere.Center;
                 tempCenter.X = shipWreck.Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
+                tempCenter.Y = 0;
                 tempCenter.Z = shipWreck.Position.Z;
                 shipWreck.BoundingSphere = new BoundingSphere(tempCenter,
                     shipWreck.BoundingSphere.Radius);
@@ -99,7 +99,7 @@ namespace Poseidon
         {
             Plant p = new Plant();
             p.LoadContent(Content, tank.Position);
-            if (Collision.isPlantValidMove(p, tank.Position, plants, shipWrecks))
+            if (Collision.isPlantPositionValid(p, plants, shipWrecks))
             {
                 plants.Add(p);
             }

@@ -26,17 +26,13 @@ namespace Poseidon
 
         ///PLANT FUNCTIONS
 
-        public static bool isPlantValidMove(Plant plant, Vector3 futurePosition, List<Plant> plants, List<ShipWreck> shipwrecks)
+        public static bool isPlantPositionValid(Plant plant, List<Plant> plants, List<ShipWreck> shipwrecks)
         {
-            BoundingSphere futureBoundingSphere = plant.BoundingSphere;
-            futureBoundingSphere.Center.X = futurePosition.X;
-            futureBoundingSphere.Center.Z = futurePosition.Z;
-
-            if (isPlantvsPlantCollision(plant, futureBoundingSphere, plants))
+            if (isPlantvsPlantCollision(plant.BoundingSphere, plants))
             {
                 return false;
             }
-            if (isPlantvsShipwreckCollision(plant, futureBoundingSphere, shipwrecks))
+            if (isPlantvsShipwreckCollision(plant.BoundingSphere, shipwrecks))
             {
                 return false;
             }
@@ -44,12 +40,10 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isPlantvsPlantCollision(Plant plant, BoundingSphere plantBoundingSphere, List<Plant> plants)
+        private static bool isPlantvsPlantCollision(BoundingSphere plantBoundingSphere, List<Plant> plants)
         {
             for (int i = 0; i< plants.Count; i++)
             {
-                if (plant.Equals(plants[i]))
-                    continue;
                 if (plantBoundingSphere.Intersects(
                     plants[i].BoundingSphere))
                     return true;
@@ -58,7 +52,7 @@ namespace Poseidon
         }
 
         //helper
-        private static bool isPlantvsShipwreckCollision(Plant plant, BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
+        private static bool isPlantvsShipwreckCollision(BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
         {
             for (int i = 0; i < shipwrecks.Count; i++)
             {

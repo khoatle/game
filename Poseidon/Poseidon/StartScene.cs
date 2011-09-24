@@ -50,7 +50,7 @@ namespace Poseidon
                                             ImageComponent.DrawMode.Center));
 
             // Create the Menu
-            string[] items = { "Start the fucking game!", "Help", "Quit" };
+            string[] items = { "Start the game!", "Help", "Quit" };
             menu = new TextMenuComponent(game, smallFont, largeFont);
             menu.SetMenuItems(items);
             Components.Add(menu);

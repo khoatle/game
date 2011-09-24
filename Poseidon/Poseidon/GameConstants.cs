@@ -63,5 +63,9 @@ namespace Poseidon
         public const float BarrierBoundingSphereFactor = .7f;
         public const float TankBoundingSphereFactor = .9f;
         public const float ShipWreckBoundingSphereFactor = 0.8f;
+
+        //skills
+        public const int numberOfSkills = 3;
+       
     }
 }

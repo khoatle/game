@@ -61,6 +61,9 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
 
+        // For drawing the currently selected skill
+        protected Texture2D[] skillTextures;
+        public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon" };
         // Current game level
         public int currentLevel = 0;
 
@@ -90,7 +93,7 @@ namespace Poseidon
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
-            
+            skillTextures = new Texture2D[GameConstants.numberOfSkills];
             this.Load();
 
         }
@@ -105,6 +108,12 @@ namespace Poseidon
             ground.Model = Content.Load<Model>("Models/ground");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
+            // Loading main character skill icon textures
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                skillTextures[index] = Content.Load<Texture2D>(iconNames[index]);
+            }
+            
             
             //Initialize fuel cells
             fuelCells = new List<FuelCell> (GameConstants.NumFuelCells);
@@ -313,8 +322,23 @@ namespace Poseidon
                     {
                         currentGameState = GameState.Lost;
                     }
+                    // changing active skill
+                    if (lastKeyboardState.IsKeyDown(Keys.LeftShift) && lastKeyboardState.IsKeyDown(Keys.K)
+                            && currentKeyboardState.IsKeyUp(Keys.K))
+                    {
+                        if (tank.activeSkillID != -1)
+                        {
+                            tank.activeSkillID++;
+                            if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                            while (tank.skills[tank.activeSkillID] == false)
+                            {
+                                tank.activeSkillID++;
+                                if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                            }
+                        }
+                    }
                 }
-
+                
                 prevGameState = currentGameState;
                 if (currentGameState == GameState.Lost)
                 {
@@ -336,6 +360,7 @@ namespace Poseidon
                     {
                         currentLevel++;
                         ResetGame(gameTime, aspectRatio);
+                        
                     }
                 }
                 base.Update(gameTime);
@@ -516,6 +541,7 @@ namespace Poseidon
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
+            if (tank.activeSkillID != -1) DrawActiveSkill();
         }
 
         private void DrawStats()
@@ -556,6 +582,23 @@ namespace Poseidon
 
             //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
             //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
+        }
+        // Draw the currently selected skill/spell
+        private void DrawActiveSkill()
+        {
+            float xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+         
+            Vector2 skillIconPosition =
+                new Vector2((int)xOffsetText + 50, (int)yOffsetText + 50);
+
+            spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
         }
         private void DrawCutScene()
         {

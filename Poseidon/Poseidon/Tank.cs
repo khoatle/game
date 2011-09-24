@@ -81,6 +81,12 @@ namespace Poseidon
         public float shootingRate;
         public int hitPoint;
 
+        //Skills/Spells of our main character
+        //true = enabled/found
+        public bool[] skills;
+        //which skill is being selected
+        public int activeSkillID;
+
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
         SoundEffect RetrievedSound;
@@ -159,6 +165,8 @@ namespace Poseidon
             speedUp = 1.0f;
             strengthUp = 1.0f;
             fireRateUp = 1.0f;
+
+            skills = new bool[GameConstants.numberOfSkills];
             Position.Y = GameConstants.FloatHeight;
         }
         /// <summary>
@@ -210,6 +218,19 @@ namespace Poseidon
             //    new BoundingSphere(scaledSphere.Center, 10);
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
 
+            //no skill yet activated
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                skills[index] = false;
+            }
+            activeSkillID = -1;
+
+            //just for testing
+            //should be removed
+            activeSkillID = 2;
+            skills[0] = true;
+            skills[1] = false;
+            skills[2] = true;
         }
         // Copy every attributes but the position and direction
         public void CopyAttribute(Tank tank)
@@ -224,6 +245,8 @@ namespace Poseidon
             strengthUpStartTime = tank.strengthUpStartTime;
             speedUpStartTime = tank.speedUpStartTime;
             fireRateUpStartTime = tank.fireRateUpStartTime;
+            skills = tank.skills;
+            activeSkillID = tank.activeSkillID;
         }
         internal void Reset()
         {

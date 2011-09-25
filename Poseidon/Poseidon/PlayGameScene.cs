@@ -79,6 +79,8 @@ namespace Poseidon
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
+        HeightMapInfo heightMapInfo;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
             : base(game)
         {
@@ -118,6 +120,15 @@ namespace Poseidon
             ground.Model = Content.Load<Model>("Image/terrain");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
+            heightMapInfo = ground.Model.Tag as HeightMapInfo;
+            if (heightMapInfo == null)
+            {
+                string message = "The terrain model did not have a HeightMapInfo " +
+                    "object attached. Are you sure you are using the " +
+                    "TerrainProcessor?";
+                throw new InvalidOperationException(message);
+            }
+
             // Loading main character skill icon textures
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
@@ -155,6 +166,8 @@ namespace Poseidon
 
             prevTank.Load(Content);
             roundTimer = roundTime;
+
+          
 
         }
 
@@ -527,15 +540,15 @@ namespace Poseidon
             {
                 shipWreck.Draw(gameCamera.ViewMatrix,
                     gameCamera.ProjectionMatrix);
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicsDevice.RasterizerState = rs;
-                //barrier.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
+                RasterizerState rs = new RasterizerState();
+                rs.FillMode = FillMode.WireFrame;
+                GraphicDevice.RasterizerState = rs;
+                shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    gameCamera.ProjectionMatrix, boundingSphere);
 
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-                //GraphicsDevice.RasterizerState = rs;
+                rs = new RasterizerState();
+                rs.FillMode = FillMode.Solid;
+                GraphicDevice.RasterizerState = rs;
             }
 
             // Update bullets
@@ -551,15 +564,15 @@ namespace Poseidon
             foreach (Plant p in plants)
             {
                 p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicDevice.RasterizerState = rs;
-                //p.DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
+                RasterizerState rs = new RasterizerState();
+                rs.FillMode = FillMode.WireFrame;
+                GraphicDevice.RasterizerState = rs;
+                p.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    gameCamera.ProjectionMatrix, boundingSphere);
 
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-                //GraphicDevice.RasterizerState = rs;
+                rs = new RasterizerState();
+                rs.FillMode = FillMode.Solid;
+                GraphicDevice.RasterizerState = rs;
             }
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
@@ -576,9 +589,30 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
             DrawBulletType();
+            DrawHeight();
             if (tank.activeSkillID != -1) DrawActiveSkill();
         }
 
+        private void DrawHeight()
+        {
+            float xOffsetText, yOffsetText;
+            string str1 = "Height: " + heightMapInfo.GetHeight(tank.Position);
+            Rectangle rectSafeArea;
+
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+
+            Vector2 strSize = statsFont.MeasureString(str1);
+            Vector2 strPosition =
+                new Vector2((int)xOffsetText + 200, (int)yOffsetText);
+
+            //spriteBatch.Begin();
+            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+        }
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;

@@ -24,7 +24,6 @@ namespace Poseidon
         {
             Model = content.Load<Model>("Models/plant");
             Position = cyborgPosition;
-            Position.Y = 0;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;

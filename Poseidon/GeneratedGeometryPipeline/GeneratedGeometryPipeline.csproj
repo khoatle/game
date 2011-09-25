@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HeightMapInfoContent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TerrainProcessor.cs" />
   </ItemGroup>

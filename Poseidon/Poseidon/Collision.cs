@@ -57,10 +57,13 @@ namespace Poseidon
         //helper
         private static bool isPlantvsShipwreckCollision(BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
         {
+            BoundingSphere shipSphere;
             for (int i = 0; i < shipwrecks.Count; i++)
             {
+                shipSphere = shipwrecks[i].BoundingSphere;
+                shipSphere.Center = shipwrecks[i].Position;
                 if (plantBoundingSphere.Intersects(
-                    shipwrecks[i].BoundingSphere))
+                    shipSphere))
                     return true;
             }
             return false;

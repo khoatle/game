@@ -110,7 +110,7 @@ namespace Poseidon
             {
                 shipWreck.Position = GenerateRandomPosition(min, max);
                 //ship wreck should not be floating
-                shipWreck.Position.Y = 0;
+                shipWreck.Position.Y = heightMapInfo.GetHeight(tank.Position);
                 tempCenter = shipWreck.BoundingSphere.Center;
                 tempCenter.X = shipWreck.Position.X;
                 tempCenter.Y = 0;
@@ -133,7 +133,9 @@ namespace Poseidon
         private void placePlant()
         {
             Plant p = new Plant();
-            p.LoadContent(Content, tank.Position);
+            Vector3 possiblePosition = tank.Position;
+            possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
+            p.LoadContent(Content, possiblePosition);
             if (Collision.isPlantPositionValid(p, plants, shipWrecks))
             {
                 plants.Add(p);

@@ -135,7 +135,7 @@ namespace Poseidon
             Plant p = new Plant();
             Vector3 possiblePosition = tank.Position;
             possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
-            p.LoadContent(Content, possiblePosition);
+            p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
             if (Collision.isPlantPositionValid(p, plants, shipWrecks))
             {
                 plants.Add(p);

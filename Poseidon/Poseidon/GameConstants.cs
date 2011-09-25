@@ -21,7 +21,7 @@ namespace Poseidon
         public const float Velocity = 0.75f;
         public const float BarrierVelocity = 0.4f;
         public const float TurnSpeed = 0.025f;
-        public const int MaxRange = 98;
+        public const int MaxRange = 500;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
 
@@ -63,7 +63,7 @@ namespace Poseidon
         public const float BarrierBoundingSphereFactor = .7f;
         public const float TankBoundingSphereFactor = .9f;
         public const float ShipWreckBoundingSphereFactor = 0.8f;
-        public const float PlantBoundingSphereFactor = 1f;
+        public const float PlantBoundingSphereFactor = 0.6f;
 
         //skills
         public const int numberOfSkills = 3;

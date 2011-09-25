@@ -17,7 +17,7 @@ namespace Poseidon
 
         public Camera()
         {
-            AvatarHeadOffset = new Vector3(0, 70, -30);
+            AvatarHeadOffset = new Vector3(0, 150, -10);
             TargetOffset = new Vector3(0, 0, 0);
             ViewMatrix = Matrix.Identity;
             ProjectionMatrix = Matrix.Identity;

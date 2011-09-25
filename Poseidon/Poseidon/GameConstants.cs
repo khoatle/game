@@ -44,7 +44,7 @@ namespace Poseidon
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(50.25);
+        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(150.25);
         public const string StrTimeRemaining = "Time Remaining: ";
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
@@ -64,6 +64,8 @@ namespace Poseidon
         public const float TankBoundingSphereFactor = .9f;
         public const float ShipWreckBoundingSphereFactor = 0.8f;
         public const float PlantBoundingSphereFactor = 0.6f;
+        public const float FruitBoundingSphereFactor = 0.9f;
+        public const float FruitGrowth = 2.5f;
 
         //skills
         public const int numberOfSkills = 3;

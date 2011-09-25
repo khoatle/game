@@ -78,26 +78,6 @@ namespace Poseidon
             }
         }
 
-        private void placeFuelCells()
-        {
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
-            Vector3 tempCenter;
-
-            //place fuel cells
-            foreach (FuelCell cell in fuelCells)
-            {
-                cell.Position = GenerateRandomPosition(min, max);
-                cell.Position.Y = GameConstants.FloatHeight;
-                tempCenter = cell.BoundingSphere.Center;
-                tempCenter.X = cell.Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = cell.Position.Z;
-                cell.BoundingSphere =
-                    new BoundingSphere(tempCenter, cell.BoundingSphere.Radius);
-                cell.Retrieved = false;
-            }
-        }
 
         private void placeShipWreck()
         {
@@ -163,14 +143,14 @@ namespace Poseidon
         // Helper
         private bool IsOccupied(int xValue, int zValue)
         {
-            foreach (GameObject currentObj in fuelCells)
-            {
-                if (((int)(MathHelper.Distance(
-                    xValue, currentObj.Position.X)) < 15) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, currentObj.Position.Z)) < 15))
-                    return true;
-            }
+            //foreach (GameObject currentObj in fruits)
+            //{
+            //    if (((int)(MathHelper.Distance(
+            //        xValue, currentObj.Position.X)) < 15) &&
+            //        ((int)(MathHelper.Distance(
+            //        zValue, currentObj.Position.Z)) < 15))
+            //        return true;
+            //}
 
             for (int i = 0; i < enemiesAmount; i++)
             {

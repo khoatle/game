@@ -111,6 +111,7 @@
     <Compile Include="Core\SkillMenuComponent.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CutSceneDialog.cs" />
+    <Compile Include="Fruit.cs" />
     <Compile Include="HeightMapInfo.cs" />
     <Compile Include="HelpScene.cs" />
     <Compile Include="Core\ImageComponent.cs" />

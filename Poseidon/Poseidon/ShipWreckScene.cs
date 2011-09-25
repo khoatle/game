@@ -34,7 +34,8 @@ namespace Poseidon
         GameObject boundingSphere;
 
 
-        List<FuelCell> fuelCells;
+        //List<FuelCell> fuelCells;
+        List<Fruit> fruits;
 
         List<Projectiles> projectiles;
 
@@ -115,14 +116,14 @@ namespace Poseidon
             }
 
             //Initialize fuel cells
-            fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
-            int powerType = random.Next(3) + 1;
-            for (int index = 0; index < GameConstants.NumFuelCells; index++)
-            {
-                fuelCells.Add(new FuelCell(powerType));
-                fuelCells[index].LoadContent(Content, "Models/fuelcell");
-                powerType = random.Next(3) + 1;
-            }
+            //fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
+            //int powerType = random.Next(3) + 1;
+            //for (int index = 0; index < GameConstants.NumFuelCells; index++)
+            //{
+            //    fuelCells.Add(new FuelCell(powerType));
+            //    fuelCells[index].LoadContent(Content, "Models/fuelcell");
+            //    powerType = random.Next(3) + 1;
+            //}
 
             //Initialize the game field
             InitializeShipField(Content);
@@ -255,14 +256,14 @@ namespace Poseidon
         // Helper
         private bool IsOccupied(int xValue, int zValue)
         {
-            foreach (GameObject currentObj in fuelCells)
-            {
-                if (((int)(MathHelper.Distance(
-                    xValue, currentObj.Position.X)) < 15) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, currentObj.Position.Z)) < 15))
-                    return true;
-            }
+            //foreach (GameObject currentObj in fuelCells)
+            //{
+            //    if (((int)(MathHelper.Distance(
+            //        xValue, currentObj.Position.X)) < 15) &&
+            //        ((int)(MathHelper.Distance(
+            //        zValue, currentObj.Position.Z)) < 15))
+            //        return true;
+            //}
 
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -359,7 +360,7 @@ namespace Poseidon
                 }
 
 
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fuelCells, gameTime);
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
 
@@ -437,23 +438,14 @@ namespace Poseidon
         private void DrawGameplayScreen()
         {
             DrawTerrain(ground.Model);
-            foreach (FuelCell fuelCell in fuelCells)
-            {
-                if (!fuelCell.Retrieved)
-                {
-                    fuelCell.Draw(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
-
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
-            }
+            //foreach (FuelCell fuelCell in fuelCells)
+            //{
+            //    if (!fuelCell.Retrieved)
+            //    {
+            //        fuelCell.Draw(gameCamera.ViewMatrix,
+            //            gameCamera.ProjectionMatrix);
+            //    }
+            //}
 
             // Update bullets
             foreach (Projectiles p in projectiles)
@@ -518,7 +510,7 @@ namespace Poseidon
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = GameConstants.StrCellsFound +
-                " of " + fuelCells.Count;
+                " of " + fruits.Count;
             Rectangle rectSafeArea;
 
 

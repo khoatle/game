@@ -23,7 +23,7 @@ namespace Poseidon
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
         private AudioLibrary audio;
-        int retrievedFuelCells;
+        int retrievedFruits;
         TimeSpan startTime, roundTimer, roundTime;
         Random random;
         SpriteBatch spriteBatch;
@@ -38,10 +38,10 @@ namespace Poseidon
         GameObject boundingSphere;
 
         FuelCarrier fuelCarrier;
-        List<FuelCell> fuelCells;
         public List<ShipWreck> shipWrecks;
         List<Projectiles> projectiles;
         List<Plant> plants;
+        List<Fruit> fruits;
 
         Enemy[] enemies;
         Fish[] fish;
@@ -141,16 +141,6 @@ namespace Poseidon
                 bulletTypeTextures[index] = Content.Load<Texture2D>(bulletNames[index]);
             }
 
-            //Initialize fuel cells
-            fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
-            int powerType = random.Next(3) + 1;
-            for (int index = 0; index < GameConstants.NumFuelCells; index++)
-            {
-                fuelCells.Add(new FuelCell(powerType));
-                fuelCells[index].LoadContent(Content, "Models/fuelcell");
-                powerType = random.Next(3) + 1;
-            }
-
             //Initialize the game field
             InitializeGameField(Content);
 
@@ -161,6 +151,7 @@ namespace Poseidon
             projectiles = new List<Projectiles>();
 
             plants = new List<Plant>();
+            fruits = new List<Fruit>();
 
             tank.Load(Content);
 
@@ -196,10 +187,13 @@ namespace Poseidon
             fishAmount = GameConstants.NumberFish;
             InitializeGameField(Content);
 
-            //Cleann all trees
+            //Clean all trees
             plants.Clear();
 
-            retrievedFuelCells = 0;
+            //Clean all fruits
+            fruits.Clear();
+
+            retrievedFruits = 0;
             startTime = gameTime.TotalGameTime;
             roundTimer = roundTime;
             currentSentence = 0;
@@ -222,7 +216,7 @@ namespace Poseidon
             }
             placeEnemies();
             placeFish();
-            placeFuelCells();
+            //placeFuelCells();
             placeShipWreck();
         }
 
@@ -331,18 +325,31 @@ namespace Poseidon
                         placePlant();
                     }
 
-                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fuelCells, gameTime);
+                    //Are the trees ready for fruit?
+                    foreach (Plant plant in plants)
+                    {
+                        if (plant.timeForFruit == true && plant.fruitCreated == false)
+                        {
+                            int powerType = random.Next(3) + 1;
+                            Fruit fruit = new Fruit(powerType);
+                            fruits.Add(fruit);
+                            fruit.LoadContent(Content, "Models/fuelcell", plant.Position);
+                            plant.fruitCreated = true;
+                        }
+                    }
+
+                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime);
 
                     gameCamera.Update(tank.ForwardDirection,
                         tank.Position, aspectRatio);
 
-                    retrievedFuelCells = 0;
-                    foreach (FuelCell fuelCell in fuelCells)
+                    retrievedFruits = 0;
+                    foreach (Fruit fruit in fruits)
                     {
-                        fuelCell.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                        if (fuelCell.Retrieved)
+                        fruit.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
+                        if (fruit.Retrieved)
                         {
-                            retrievedFuelCells++;
+                            retrievedFruits++;
                         }
                     }
 
@@ -363,13 +370,13 @@ namespace Poseidon
                         fish[i].Update(enemies, enemiesAmount, random.Next(100), tank);
                     }
 
-                    if (retrievedFuelCells == GameConstants.NumFuelCells)
+                    if (retrievedFruits == GameConstants.NumFuelCells)
                     {
                         currentGameState = GameState.Won;
                     }
                     roundTimer -= gameTime.ElapsedGameTime;
                     if ((roundTimer < TimeSpan.Zero) &&
-                        (retrievedFuelCells != GameConstants.NumFuelCells))
+                        (retrievedFruits != GameConstants.NumFuelCells))
                     {
                         currentGameState = GameState.Lost;
                     }
@@ -509,23 +516,24 @@ namespace Poseidon
         private void DrawGameplayScreen()
         {
             DrawTerrain(ground.Model);
-            foreach (FuelCell fuelCell in fuelCells)
-            {
-                if (!fuelCell.Retrieved)
-                {
-                    fuelCell.Draw(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //fuelCell.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
+            foreach (Fruit f in fruits)
+            {
+                if (!f.Retrieved)
+                {
+                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    f.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
+
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
                 }
             }
+
             for (int i = 0; i < enemiesAmount; i++)
             {
                 enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
@@ -617,8 +625,8 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = GameConstants.StrCellsFound + retrievedFuelCells.ToString() +
-                " of " + fuelCells.Count;
+            string str2 = GameConstants.StrCellsFound + retrievedFruits.ToString() +
+                " of " + fruits.Count;
             Rectangle rectSafeArea;
 
             str1 += (roundTimer.Seconds).ToString();

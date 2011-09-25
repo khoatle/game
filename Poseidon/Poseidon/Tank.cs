@@ -259,7 +259,7 @@ namespace Poseidon
             ForwardDirection = 0f;
         }
 
-        public void Update(KeyboardState keyboardState, Barrier[] barriers, int size, List<FuelCell> fuelCells, GameTime gameTime)
+        public void Update(KeyboardState keyboardState, Barrier[] barriers, int size, List<Fruit> fruits, GameTime gameTime)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -334,31 +334,31 @@ namespace Poseidon
             //Interacting with trashs and fruits and also ship wrecks
             if (keyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fuelCells, gameTime);
+                Interact_with_trash_and_fruit(fruits, gameTime);
             }
         }
 
-        private void Interact_with_trash_and_fruit(List<FuelCell> fuelCells, GameTime gameTime)
+        private void Interact_with_trash_and_fruit(List<Fruit> fruits, GameTime gameTime)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);
-            for (int curCell = 0; curCell < fuelCells.Count; curCell++)
+            for (int curCell = 0; curCell < fruits.Count; curCell++)
             {
-                if (fuelCells[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
-                    fuelCells[curCell].BoundingSphere))
+                if (fruits[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
+                    fruits[curCell].BoundingSphere))
                 {
-                    fuelCells[curCell].Retrieved = true;
-                    if (fuelCells[curCell].powerType == 1)
+                    fruits[curCell].Retrieved = true;
+                    if (fruits[curCell].powerType == 1)
                     {
                         speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                         speedUp = 2.0f;
                     }
-                    else if (fuelCells[curCell].powerType == 2)
+                    else if (fruits[curCell].powerType == 2)
                     {
                         strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                         strengthUp = 2.0f;
                     }
-                    else if (fuelCells[curCell].powerType == 3)
+                    else if (fruits[curCell].powerType == 3)
                     {
                         fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                         fireRateUp = 2.0f;

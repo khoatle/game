@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioLibrary.cs" />
+    <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CutSceneDialog.cs" />

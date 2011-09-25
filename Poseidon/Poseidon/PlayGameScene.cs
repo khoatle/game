@@ -81,6 +81,8 @@ namespace Poseidon
 
         HeightMapInfo heightMapInfo;
 
+        Cursor cursor;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
             : base(game)
         {
@@ -107,6 +109,11 @@ namespace Poseidon
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
+
+            // for the mouse or touch
+            cursor = new Cursor(game, spriteBatch);
+            Components.Add(cursor);
+
             this.Load();
         }
 
@@ -606,7 +613,15 @@ namespace Poseidon
             float xOffsetText, yOffsetText;
             string str1 = "Height: " + heightMapInfo.GetHeight(tank.Position);
             Rectangle rectSafeArea;
-
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            BoundingSphere boundingSphere;
+            foreach (ShipWreck shipWreck in shipWrecks)
+            {
+                boundingSphere = shipWreck.BoundingSphere;
+                boundingSphere.Center = shipWreck.Position;
+                if (RayIntersectsBoudingSphere(cursorRay, boundingSphere))
+                    str1 += " Pointing to ship wreck";
+            }
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -709,6 +724,16 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+        }
+        private static bool RayIntersectsBoudingSphere(Ray ray, BoundingSphere boundingSphere)
+        {
+
+            if (boundingSphere.Intersects(ray) != null)
+            {
+                return true;
+            }
+ 
+            return false;
         }
     }
 }

@@ -47,7 +47,7 @@ namespace Poseidon
                     index++;
                 } while (index < Model.Meshes.Count);
             }
-            mergedSphere.Center.Y = 0;
+            //mergedSphere.Center.Y = 0;
             return mergedSphere;
         }
 

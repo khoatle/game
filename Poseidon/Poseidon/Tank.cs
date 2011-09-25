@@ -377,7 +377,7 @@ namespace Poseidon
             Matrix worldMatrix = Matrix.Identity;
             Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-
+            
             worldMatrix = rotationYMatrix * translateMatrix;
             // Set the world matrix as the root transform of the model.
             tankModel.Root.Transform = worldMatrix;

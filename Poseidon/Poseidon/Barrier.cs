@@ -100,21 +100,43 @@ namespace Poseidon
                 movement = previousDirection;
             }
 
-            Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.BarrierVelocity;
-            futurePosition = Position + speed;
-
-            if (Collision.isBarrierValidMove(this, futurePosition, barriers, size, tank))
+            // try upto 10 times to change direction is there is collision
+            for (int i=0; i<10; i++)
             {
-                Position = futurePosition;
+                Vector3 speed = Vector3.Transform(movement, orientationMatrix);
+                speed *= GameConstants.BarrierVelocity;
+                futurePosition = Position + speed;
 
-                BoundingSphere updatedSphere;
-                updatedSphere = BoundingSphere;
+                if (Collision.isBarrierValidMove(this, futurePosition, barriers, size, tank))
+                {
+                    Position = futurePosition;
 
-                updatedSphere.Center.X = Position.X;
-                updatedSphere.Center.Z = Position.Z;
-                BoundingSphere = new BoundingSphere(updatedSphere.Center,
-                    updatedSphere.Radius);
+                    BoundingSphere updatedSphere;
+                    updatedSphere = BoundingSphere;
+
+                    updatedSphere.Center.X = Position.X;
+                    updatedSphere.Center.Z = Position.Z;
+                    BoundingSphere = new BoundingSphere(updatedSphere.Center,
+                        updatedSphere.Radius);
+                    break;
+                }
+                barrier_move = random.Next(4);
+                switch (barrier_move)
+                {
+                    case 0:
+                        movement.X = -1;
+                        break;
+                    case 1:
+                        movement.X = 1;
+                        break;
+                    case 2:
+                        movement.Z = -1;
+                        break;
+                    case 3:
+                        movement.Z = 1;
+                        break;
+                }
+
             }
             previousDirection = movement;
         }

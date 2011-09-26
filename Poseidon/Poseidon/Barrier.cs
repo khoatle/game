@@ -15,16 +15,16 @@ namespace Poseidon
         public string BarrierType { get; set; }
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
-        public Vector3 previousDirection;
         public int health = GameConstants.EnemyHP;
-
+        //is the object stucked and needs to change direction?
+        public bool stucked = false;
         public Barrier()
             : base()
         {
             BarrierType = null;
             ForwardDirection = 0.0f;
             MaxRange = GameConstants.MaxRange;
-            previousDirection = Vector3.Zero;
+
         }
 
         public void LoadContent(ContentManager content, string modelName)
@@ -70,11 +70,13 @@ namespace Poseidon
 
         public void Update(Barrier[] barriers, int size, int ChangeDirection, Tank tank)
         {
+            
             Vector3 futurePosition = Position;
             Random random = new Random();
             //int barrier_move;
             float turnAmount = 0;
-            if (ChangeDirection >= 95)
+            //also try to change direction if we are stuck
+            if (ChangeDirection >= 95 || stucked == true)
             {
                 int rightLeft = random.Next(2);
                 if (rightLeft == 0)
@@ -109,11 +111,14 @@ namespace Poseidon
                     updatedSphere.Center.Z = Position.Z;
                     BoundingSphere = new BoundingSphere(updatedSphere.Center,
                         updatedSphere.Radius);
+                    stucked = false;
                     break;
                 }
+                else stucked = true;
                 //ForwardDirection = prevForwardDir;
                 //turnAmount = -turnAmount;
             }
+            
         }
     }
 }

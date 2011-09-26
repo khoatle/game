@@ -318,16 +318,19 @@ namespace Poseidon
                 switch (skillScene.SelectedMenuIndex)
                 {
                     case 0:
+                        if (playGameScene.tank.strength == 2) break;
                         if (prevScene == playGameScene)
                             playGameScene.tank.strength += 0.25f;
                         else shipWreckScene.tank.strength += 0.25f;
                         break;
                     case 1:
+                        if (playGameScene.tank.speed == 4) break;
                         if (prevScene == playGameScene)
                             playGameScene.tank.speed += 0.25f;
                         else shipWreckScene.tank.speed += 0.25f;
                         break;
                     case 2:
+                        if (playGameScene.tank.shootingRate == 2) break;
                         if (prevScene == playGameScene)
                             playGameScene.tank.shootingRate += 0.25f;
                         else shipWreckScene.tank.shootingRate += 0.25f;

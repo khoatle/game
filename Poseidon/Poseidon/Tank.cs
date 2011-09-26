@@ -102,6 +102,10 @@ namespace Poseidon
         public double strengthUpStartTime;
         public double speedUpStartTime;
         public double fireRateUpStartTime;
+
+        public float desiredAngle;
+        public Vector3 pointToMoveTo;
+        public bool reachDestination = true;
         #region Properties
 
 
@@ -164,6 +168,8 @@ namespace Poseidon
             speed = 1.0f;
             shootingRate = 1.0f;
             hitPoint = 100;
+
+            pointToMoveTo = Vector3.Zero;
 
             // No buff up at the beginning
             speedUp = 1.0f;
@@ -259,7 +265,7 @@ namespace Poseidon
             ForwardDirection = 0f;
         }
 
-        public void Update(KeyboardState keyboardState, Barrier[] barriers, int size, List<Fruit> fruits, GameTime gameTime)
+        public void Update(KeyboardState keyboardState, Barrier[] barriers, int size, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -298,10 +304,62 @@ namespace Poseidon
             }
             else steerRotationValue = 0;
             // Player has speed buff from both temporary powerups and his speed attritubte
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * this.speed;
+            
+            //ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * this.speed;
+            //ForwardDirection = WrapAngle(ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+
+            if (pointMoveTo != Vector3.Zero)
+            {
+                //desiredAngle = angle;
+                this.pointToMoveTo = pointMoveTo;
+                desiredAngle = CalculateAngle(this.pointToMoveTo, Position);
+                reachDestination = false;
+            }
+            //if (desiredAngle != 0)
+            if (reachDestination == false)
+            {
+                
+                //float difference = WrapAngle(desiredAngle - ForwardDirection);
+                Vector3 posDif = this.pointToMoveTo - Position;
+                float distanceToDest = posDif.Length();
+                //// clamp that between -turnSpeed and turnSpeed.
+                
+                //if (distanceToDest <= 10f * speedUp * this.speed && ForwardDirection != desiredAngle)
+                //{
+                //    difference = MathHelper.Clamp(difference, -GameConstants.TurnSpeed , GameConstants.TurnSpeed);
+                //}
+                //else difference = MathHelper.Clamp(difference, -GameConstants.TurnSpeed * speedUp * this.speed / 2, GameConstants.TurnSpeed * speedUp * this.speed / 2);
+                //if (Math.Abs(difference) >= 0.0025f)
+                // so, the closest we can get to our target is currentAngle + difference.
+                // return that, using WrapAngle again.
+                //ForwardDirection = WrapAngle(ForwardDirection + difference);
+                //if (ForwardDirection == desiredAngle) desiredAngle = 0;
+                
+                //if (Position == this.pointToMoveTo) reachDestination = true;
+
+
+                //if (ForwardDirection == desiredAngle) movement.Z = 1 * speedUp * this.speed;
+                //else movement.Z = 0.3f;
+                ForwardDirection = desiredAngle;
+                movement.Z = 1;
+                if (distanceToDest <= 2f)
+                {
+                    movement.Z = 0;
+                    reachDestination = true;
+                }
+                //if (distanceToDest <= 10f && ForwardDirection != desiredAngle)
+                //{
+                //    movement.Z = 0;
+                //}
+                
+            }
+            //ForwardDirection = WrapAngle(angle);
+            //ForwardDirection = WrapAngle(ForwardDirection);
+            
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
-            Vector3 movement = Vector3.Zero;
+            
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 movement.Z = 1;
@@ -311,8 +369,9 @@ namespace Poseidon
                 movement.Z = -1;
             }
             else wheelRotationValue = 0;
+            //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.Velocity * speedUp * this.speed;
+            speed *= GameConstants.Velocity *speedUp * this.speed;
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;
@@ -336,6 +395,7 @@ namespace Poseidon
             {
                 Interact_with_trash_and_fruit(fruits, gameTime);
             }
+            //Position = Vector3.Zero;
         }
 
         private void Interact_with_trash_and_fruit(List<Fruit> fruits, GameTime gameTime)
@@ -374,6 +434,7 @@ namespace Poseidon
         /// </summary>
         public void Draw(Matrix view, Matrix projection)
         {
+            
             Matrix worldMatrix = Matrix.Identity;
             Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
@@ -436,6 +497,11 @@ namespace Poseidon
                 }
                 mesh.Draw();
             }
+        }
+
+        public float CalculateAngle(Vector3 point2, Vector3 point1)
+        {
+            return (float)Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
         }
     }
 }

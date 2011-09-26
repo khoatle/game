@@ -361,7 +361,7 @@ namespace Poseidon
                 }
 
 
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime);
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, Vector3.Zero);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
 

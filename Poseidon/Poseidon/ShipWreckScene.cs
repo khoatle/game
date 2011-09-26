@@ -30,7 +30,7 @@ namespace Poseidon
         SpriteFont statsFont;
         GameObject ground;
         Camera gameCamera;
-
+        
         GameObject boundingSphere;
 
 
@@ -225,6 +225,7 @@ namespace Poseidon
                 fish[i].BoundingSphere =
                     new BoundingSphere(tempCenter, fish[i].BoundingSphere.Radius);
             }
+            
         }
 
         // Helper

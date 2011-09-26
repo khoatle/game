@@ -45,8 +45,12 @@ namespace Poseidon
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
+            //Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            //Matrix worldMatrix = translateMatrix;
+            Matrix worldMatrix = Matrix.Identity;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -68,42 +72,29 @@ namespace Poseidon
         {
             Vector3 futurePosition = Position;
             Random random = new Random();
-            int barrier_move;
-            float turnAmount = 1;
-
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed;
-            Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
-
-            Vector3 movement = Vector3.Zero;
-
+            //int barrier_move;
+            float turnAmount = 0;
             if (ChangeDirection >= 95)
             {
-                barrier_move = random.Next(4);
-                switch (barrier_move)
-                {
-                    case 0:
-                        movement.X = -1;
-                        break;
-                    case 1:
-                        movement.X = 1;
-                        break;
-                    case 2:
-                        movement.Z = -1;
-                        break;
-                    case 3:
-                        movement.Z = 1;
-                        break;
-                }
-            }
-            else
-            {
-                movement = previousDirection;
+                int rightLeft = random.Next(2);
+                if (rightLeft == 0)
+                    turnAmount = 20;
+                else turnAmount = -20;
             }
 
+            
+            Matrix orientationMatrix;
+            Vector3 speed;
+            Vector3 movement = Vector3.Zero;
+
+            movement.Z = 1;
+            float prevForwardDir = ForwardDirection;
             // try upto 10 times to change direction is there is collision
-            for (int i=0; i<10; i++)
+            for (int i=0; i<4; i++)
             {
-                Vector3 speed = Vector3.Transform(movement, orientationMatrix);
+                ForwardDirection += turnAmount * GameConstants.TurnSpeed;
+                orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
+                speed = Vector3.Transform(movement, orientationMatrix);
                 speed *= GameConstants.BarrierVelocity;
                 futurePosition = Position + speed;
 
@@ -120,25 +111,9 @@ namespace Poseidon
                         updatedSphere.Radius);
                     break;
                 }
-                barrier_move = random.Next(4);
-                switch (barrier_move)
-                {
-                    case 0:
-                        movement.X = -1;
-                        break;
-                    case 1:
-                        movement.X = 1;
-                        break;
-                    case 2:
-                        movement.Z = -1;
-                        break;
-                    case 3:
-                        movement.Z = 1;
-                        break;
-                }
-
+                //ForwardDirection = prevForwardDir;
+                //turnAmount = -turnAmount;
             }
-            previousDirection = movement;
         }
     }
 }

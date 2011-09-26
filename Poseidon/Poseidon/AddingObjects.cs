@@ -30,7 +30,7 @@ namespace Poseidon
             for (int i = 0; i < fishAmount; i++)
             {
                 fish[i] = new Fish();
-                fish[i].LoadContent(Content, "Models/fish_fbxascii");
+                fish[i].LoadContent(Content, "Models/cube10uR");
             }
         }
 

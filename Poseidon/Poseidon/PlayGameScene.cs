@@ -80,12 +80,13 @@ namespace Poseidon
         CutSceneDialog cutSceneDialog;
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
-
+        
         HeightMapInfo heightMapInfo;
 
-        Cursor cursor;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
+        Radar radar;
+
+        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
             this.graphics = graphics;
@@ -97,6 +98,7 @@ namespace Poseidon
             this.actionTexture = actionTexture;
             this.game = game;
             this.cutSceneDialog = cutSceneDialog;
+            this.radar = radar;
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
@@ -432,10 +434,7 @@ namespace Poseidon
 
         public override void Draw(GameTime gameTime)
         {
-            // Change back the config changed by spriteBatch
-            GraphicDevice.BlendState = BlendState.Opaque;
-            GraphicDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            
 
             base.Draw(gameTime);
             if (paused)
@@ -450,6 +449,10 @@ namespace Poseidon
                     DrawCutScene();
                     break;
                 case GameState.Running:
+                    // Change back the config changed by spriteBatch
+                    GraphicDevice.BlendState = BlendState.Opaque;
+                    GraphicDevice.DepthStencilState = DepthStencilState.Default;
+                    GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
                     DrawGameplayScreen();
                     break;
                 case GameState.Won:
@@ -503,7 +506,6 @@ namespace Poseidon
             xOffsetText = (viewportSize.X / 2 - strCenter.X);
             strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, gameResult,
                 strPosition, Color.Red);
 
@@ -515,21 +517,6 @@ namespace Poseidon
             strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
             spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
                 strPosition, Color.AntiqueWhite);
-
-            //spriteBatch.End();
-
-            //re-enable depth buffer after sprite batch disablement
-
-            //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            GraphicDevice.DepthStencilState = dss;
-
-            //GraphicsDevice.RenderState.AlphaBlendEnable = false;
-            //GraphicsDevice.RenderState.AlphaTestEnable = false;
-
-            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
         }
 
         private void DrawGameplayScreen()
@@ -615,9 +602,15 @@ namespace Poseidon
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
-            //DrawBulletType();
+            DrawBulletType();
             DrawHeight();
-            //if (tank.activeSkillID != -1) DrawActiveSkill();
+            DrawRadar();
+            if (tank.activeSkillID != -1) DrawActiveSkill();
+        }
+
+        private void DrawRadar()
+        {
+            radar.Draw(spriteBatch, tank.Position, enemies);
         }
 
         private void DrawHeight()
@@ -665,11 +658,11 @@ namespace Poseidon
             str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
             str2 += "\nXc= " + tank.Position.X + " Yc= " + tank.Position.Y + " Zc= " + tank.Position.Z;
             float angle = CalculateAngle(pointIntersect, tank.Position);
-            str2 += "\n Angle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
+            str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
             Vector3 posDif = tank.pointToMoveTo - tank.Position;
             float distanceToDest = posDif.Length();
-            str2 += "\n Distance= " + distanceToDest;
-
+            str2 += "\nDistance= " + distanceToDest;
+            
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
@@ -680,24 +673,10 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
-            //spriteBatch.End();
 
-            //re-enable depth buffer after sprite batch disablement
-
-            //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            GraphicDevice.DepthStencilState = dss;
-
-            //GraphicsDevice.RenderState.AlphaBlendEnable = false;
-            //GraphicsDevice.RenderState.AlphaTestEnable = false;
-
-            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
         }
         // Draw the currently selected bullet type
         private void DrawBulletType()
@@ -708,11 +687,11 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+            xOffsetText = rectSafeArea.Right - 50;
+            yOffsetText = rectSafeArea.Top;
 
             Vector2 bulletIconPosition =
-                new Vector2((int)xOffsetText + 50, (int)yOffsetText + 100);
+                new Vector2((int)xOffsetText, (int)yOffsetText);
 
             spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
         }
@@ -725,11 +704,11 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+            xOffsetText = rectSafeArea.Right - 100;
+            yOffsetText = rectSafeArea.Top + 50;
 
             Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText + 50, (int)yOffsetText + 50);
+                new Vector2((int)xOffsetText, (int)yOffsetText);
 
             spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
         }

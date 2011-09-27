@@ -16,7 +16,7 @@ namespace Poseidon.Core
         /// List of child GameComponents
         /// </summary>
         private readonly List<GameComponent> components;
-
+        public Cursor cursor;
         public GameScene(Game game)
             : base(game)
         {

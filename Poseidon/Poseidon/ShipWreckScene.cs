@@ -22,6 +22,8 @@ namespace Poseidon
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
+        MouseState currentMouseState = new MouseState();
+        MouseState lastMouseState = new MouseState();
         private AudioLibrary audio;
 
 
@@ -90,6 +92,9 @@ namespace Poseidon
             fish = new Fish[GameConstants.NumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
+            // for the mouse or touch
+            cursor = new Cursor(game, spriteBatch);
+            Components.Add(cursor);
             this.Load();
 
         }
@@ -323,9 +328,11 @@ namespace Poseidon
             {
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
+                lastMouseState = currentMouseState;
                 currentKeyboardState = Keyboard.GetState();
                 lastGamePadState = currentGamePadState;
                 currentGamePadState = GamePad.GetState(PlayerIndex.One);
+                currentMouseState = Mouse.GetState();
 
 
                 // changing active skill
@@ -361,7 +368,16 @@ namespace Poseidon
                 }
 
 
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, Vector3.Zero);
+                Vector3 pointIntersect;
+                //float angle;
+                //if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                if (currentMouseState.LeftButton == ButtonState.Pressed)
+                {
+                    pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                    //angle = CalculateAngle(pointIntersect, tank.Position);
+                }
+                else pointIntersect = Vector3.Zero;
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
 
@@ -397,10 +413,7 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
             if (dead) return;
-            // Change back the config changed by spriteBatch
-            GraphicDevice.BlendState = BlendState.Opaque;
-            GraphicDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+
 
             base.Draw(gameTime);
             if (paused)
@@ -410,6 +423,10 @@ namespace Poseidon
                     Color.White);
             }
 
+            // Change back the config changed by spriteBatch
+            GraphicDevice.BlendState = BlendState.Opaque;
+            GraphicDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
             DrawGameplayScreen();
 
@@ -482,14 +499,15 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+            xOffsetText = rectSafeArea.Right - 50;
+            yOffsetText = rectSafeArea.Top;
 
             Vector2 bulletIconPosition =
-                new Vector2((int)xOffsetText + 50, (int)yOffsetText + 100);
+                new Vector2((int)xOffsetText, (int)yOffsetText);
 
             spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
         }
+        // Draw the currently selected skill/spell
         private void DrawActiveSkill()
         {
             float xOffsetText, yOffsetText;
@@ -498,11 +516,11 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+            xOffsetText = rectSafeArea.Right - 100;
+            yOffsetText = rectSafeArea.Top + 50;
 
             Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText + 50, (int)yOffsetText + 50);
+                new Vector2((int)xOffsetText, (int)yOffsetText);
 
             spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
         }
@@ -510,8 +528,7 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = GameConstants.StrCellsFound +
-                " of " + fruits.Count;
+
             Rectangle rectSafeArea;
 
 
@@ -525,25 +542,16 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, "This is the ship wreck scene " + str1, strPosition, Color.White);
-            strPosition.Y += strSize.Y;
-            spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
-            //spriteBatch.End();
 
-            //re-enable depth buffer after sprite batch disablement
-
-            //GraphicsDevice.DepthStencilState.DepthBufferEnable = true;
-            DepthStencilState dss = new DepthStencilState();
-            dss.DepthBufferEnable = true;
-            GraphicDevice.DepthStencilState = dss;
-
-            //GraphicsDevice.RenderState.AlphaBlendEnable = false;
-            //GraphicsDevice.RenderState.AlphaTestEnable = false;
-
-            //GraphicsDevice.SamplerStates[0].AddressU = TextureAddressMode.Wrap;
-            //GraphicsDevice.SamplerStates[0].AddressV = TextureAddressMode.Wrap;
         }
-
+        public Vector3 IntersectPointWithPlane(float planeHeight)
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            float t = (planeHeight - cursorRay.Position.Y) / cursorRay.Direction.Y;
+            float x = cursorRay.Position.X + cursorRay.Direction.X * t;
+            float z = cursorRay.Position.Z + cursorRay.Direction.Z * t;
+            return new Vector3(x, planeHeight, z);
+        }
     }
 }

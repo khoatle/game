@@ -10,7 +10,6 @@ namespace Poseidon
 {
     public class Collision
     {
-
         /// <summary>
         /// GENERAL FUNCTIONS
         /// </summary>
@@ -192,8 +191,7 @@ namespace Poseidon
 
         public static void updateBulletOutOfBound(List<HealthBullet> heals, List<DamageBullet> dams, Viewport view)
         {
-            for (int i = 0; i < heals.Count; )
-            {
+            for (int i = 0; i < heals.Count; ) {
                 if (isOutOfMap(heals[i].Position) || isOutOfView(heals[i].Position, view)) {
                     heals.RemoveAt(i);
                 }
@@ -202,14 +200,11 @@ namespace Poseidon
                 }
             }
 
-            for (int i = 0; i < dams.Count; )
-            {
-                if (isOutOfMap(dams[i].Position) || isOutOfView(dams[i].Position, view))
-                {
+            for (int i = 0; i < dams.Count; ) {
+                if (isOutOfMap(dams[i].Position) || isOutOfView(dams[i].Position, view)) {
                     dams.RemoveAt(i);
                 }
-                else
-                {
+                else {
                     i++;
                 }
             }

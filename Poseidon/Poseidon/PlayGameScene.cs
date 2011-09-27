@@ -87,7 +87,6 @@ namespace Poseidon
         
         HeightMapInfo heightMapInfo;
 
-
         Radar radar;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
@@ -186,6 +185,7 @@ namespace Poseidon
             //PlaceFuelCellsAndBarriers();
             base.Show();
         }
+
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
             // If we are resetting the level losing the game
@@ -398,12 +398,12 @@ namespace Poseidon
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
-                        //enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                        enemies[i].Update(enemies, enemiesAmount, tank);
                     }
 
                     for (int i = 0; i < fishAmount; i++)
                     {
-                        fish[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                        fish[i].Update(enemies, enemiesAmount, tank);
                     }
 
                     if (retrievedFruits == GameConstants.NumFuelCells)

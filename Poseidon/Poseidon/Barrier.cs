@@ -16,15 +16,17 @@ namespace Poseidon
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
         public int health = GameConstants.EnemyHP;
-        //is the object stucked and needs to change direction?
+        // Is the object stucked and needs to change direction?
         public bool stucked = false;
+
+        public BoundingSphere perceptingSphere;
+
         public Barrier()
             : base()
         {
             BarrierType = null;
             ForwardDirection = 0.0f;
             MaxRange = GameConstants.MaxRange;
-
         }
 
         public void LoadContent(ContentManager content, string modelName)
@@ -39,10 +41,10 @@ namespace Poseidon
             scaledSphere.Radius *= GameConstants.BarrierBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            perceptingSphere = new BoundingSphere(BoundingSphere.Center, BoundingSphere.Radius * 3);
         }
 
-        public void Draw(Matrix view, Matrix projection)
-        {
+        public void Draw(Matrix view, Matrix projection) {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             //Matrix translateMatrix = Matrix.CreateTranslation(Position);
@@ -68,14 +70,13 @@ namespace Poseidon
             }
         }
 
-        public void Update(Barrier[] barriers, int size, int ChangeDirection, Tank tank)
-        {
+        public virtual void Update(Barrier[] barriers, int size, Tank tank) {
             Vector3 futurePosition = Position;
-            Random random = new Random();
             //int barrier_move;
+            Random random = new Random();
             float turnAmount = 0;
             //also try to change direction if we are stuck
-            if (ChangeDirection >= 95 || stucked == true)
+            if (random.Next(100) >= 95 || stucked == true)
             {
                 int rightLeft = random.Next(2);
                 if (rightLeft == 0)
@@ -90,8 +91,7 @@ namespace Poseidon
             movement.Z = 1;
             float prevForwardDir = ForwardDirection;
             // try upto 10 times to change direction is there is collision
-            for (int i=0; i<4; i++)
-            {
+            for (int i=0; i<4; i++) {
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 speed = Vector3.Transform(movement, orientationMatrix);
@@ -109,6 +109,9 @@ namespace Poseidon
                     updatedSphere.Center.Z = Position.Z;
                     BoundingSphere = new BoundingSphere(updatedSphere.Center,
                         updatedSphere.Radius);
+
+                    perceptingSphere = new BoundingSphere(BoundingSphere.Center, BoundingSphere.Radius * 3);
+                    
                     stucked = false;
                     break;
                 }
@@ -116,7 +119,6 @@ namespace Poseidon
                 //ForwardDirection = prevForwardDir;
                 //turnAmount = -turnAmount;
             }
-            
         }
     }
 }

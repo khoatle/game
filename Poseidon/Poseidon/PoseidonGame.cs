@@ -57,6 +57,8 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool skillPressed;
+        // Radar for the game
+        Radar radar;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -103,6 +105,10 @@ namespace Poseidon
             //For general game control
             actionTexture = Content.Load<Texture2D>("Image/rockrainenhanced");
 
+            // Loading the radar
+            Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
+            radar = new Radar(Content, "Image/redDotSmall", "Image/yellowDotSmall", "Image/blackDotLarge", radarCenter);
+
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
             helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
@@ -123,7 +129,7 @@ namespace Poseidon
             cutSceneDialog = new CutSceneDialog();
 
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
 
             // Create the main game play scene

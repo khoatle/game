@@ -71,5 +71,9 @@ namespace Poseidon
         //skills
         public const int numberOfSkills = 3;
         public const int numBulletTypes = 2;
+
+        //radar
+        public const float RadarScreenRadius = 75.0f;
+        public const float RadarRange = 500.0f;
     }
 }

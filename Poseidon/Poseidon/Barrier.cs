@@ -70,7 +70,6 @@ namespace Poseidon
 
         public void Update(Barrier[] barriers, int size, int ChangeDirection, Tank tank)
         {
-            
             Vector3 futurePosition = Position;
             Random random = new Random();
             //int barrier_move;
@@ -83,7 +82,6 @@ namespace Poseidon
                     turnAmount = 20;
                 else turnAmount = -20;
             }
-
             
             Matrix orientationMatrix;
             Vector3 speed;

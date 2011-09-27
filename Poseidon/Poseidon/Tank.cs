@@ -306,7 +306,7 @@ namespace Poseidon
             else steerRotationValue = 0;
             // Player has speed buff from both temporary powerups and his speed attritubte
             
-            //ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * this.speed;
+            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * this.speed;
             //ForwardDirection = WrapAngle(ForwardDirection);
             Vector3 movement = Vector3.Zero;
 
@@ -344,7 +344,7 @@ namespace Poseidon
                 //else movement.Z = 0.3f;
                 ForwardDirection = desiredAngle;
                 movement.Z = 1;
-                if (distanceToDest <= 2f)
+                if (distanceToDest <= 1f)
                 {
                     movement.Z = 0;
                     reachDestination = true;

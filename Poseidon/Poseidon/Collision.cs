@@ -183,6 +183,8 @@ namespace Poseidon
                         if (barriers[j].health < GameConstants.EnemyHP) {
                             barriers[j].health += GameConstants.HealingAmount;
                         }
+                        bullets.RemoveAt(i--);
+                        break;
                     }
                 }
             }

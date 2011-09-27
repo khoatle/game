@@ -260,12 +260,10 @@ namespace Poseidon
             set
             {
                 paused = value;
-                if (paused)
-                {
+                if (paused) {
                     MediaPlayer.Pause();
                 }
-                else
-                {
+                else {
                     MediaPlayer.Resume();
                 }
             }
@@ -285,7 +283,6 @@ namespace Poseidon
                 //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 //    //this.Exit();
-
 
                 if (currentGameState == GameState.PlayingCutScene)
                 {
@@ -396,13 +393,11 @@ namespace Poseidon
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
-                    for (int i = 0; i < enemiesAmount; i++)
-                    {
+                    for (int i = 0; i < enemiesAmount; i++) {
                         enemies[i].Update(enemies, enemiesAmount, tank);
                     }
 
-                    for (int i = 0; i < fishAmount; i++)
-                    {
+                    for (int i = 0; i < fishAmount; i++) {
                         fish[i].Update(enemies, enemiesAmount, tank);
                     }
 
@@ -671,7 +666,7 @@ namespace Poseidon
             Vector3 posDif = tank.pointToMoveTo - tank.Position;
             float distanceToDest = posDif.Length();
             str2 += "\nDistance= " + distanceToDest;
-            str2 += "\n Type: " + tank.bulletType + "\n Bullet Cnt: " + myBullet.Count;
+            str2 += "\n Type: " + tank.bulletType + "\n Strength up " + tank.strength;
             if (healthBullet.Count > 0 && enemiesAmount > 0)
             {
                 str2 += "\n 1st Bullet Pos " + healthBullet[0].Position

@@ -109,20 +109,18 @@ namespace Poseidon
 
         private void placeDamageBullet() {
             DamageBullet d = new DamageBullet();
-            d.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
+            d.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strength, tank.strengthUp);
             d.loadContent(Content, "Models/fuelcell");
             myBullet.Add(d);
         }
 
         // Helper
-        private void placePlant()
-        {
+        private void placePlant() {
             Plant p = new Plant();
             Vector3 possiblePosition = tank.Position;
             possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
             p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
-            if (Collision.isPlantPositionValid(p, plants, shipWrecks))
-            {
+            if (Collision.isPlantPositionValid(p, plants, shipWrecks)) {
                 plants.Add(p);
             }
         }

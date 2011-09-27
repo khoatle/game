@@ -389,12 +389,12 @@ namespace Poseidon
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
-                    enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                    enemies[i].Update(enemies, enemiesAmount, tank);
                 }
 
                 for (int i = 0; i < fishAmount; i++)
                 {
-                    fish[i].Update(enemies, fishAmount, random.Next(100), tank);
+                    fish[i].Update(enemies, fishAmount, tank);
                 }
 
                 // Just for death simulation

@@ -151,45 +151,60 @@ namespace Poseidon
             }
             return false;
         }
-
         // End----------------------------------------------------------
 
         /// <summary>
         /// PROJECTILES FUNCTION
         /// </summary>
-        public static void updateBulletVsBarriersCollision(List<Projectiles> projectiles, Barrier[] barriers, ref int size)
-        {
-            for (int i = 0; i < projectiles.Count; i++)
-            {
-                for (int j = 0; j < size; j++)
-                {
-                    if (projectiles[i].BoundingSphere.Intersects(barriers[j].BoundingSphere))
-                    {
-                        barriers[j].health -= projectiles[i].bulletDamage;
-                        if (barriers[j].health <= 0)
-                        {
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, Barrier[] barriers, ref int size) {
+            for (int i = 0; i < bullets.Count; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                        barriers[j].health -= bullets[i].damage;
+                        if (barriers[j].health <= 0) {
                             barriers[j] = null;
-                            for (int k = j + 1; k < size; k++)
-                            {
+                            for (int k = j + 1; k < size; k++) {
                                 barriers[k - 1] = barriers[k];
                             }
                             size--;
                         }
-
-                        projectiles.RemoveAt(i--);
+                        bullets.RemoveAt(i--);
                         break;
                     }
                 }
             }
         }
 
-        public static void updateBulletOutOfBound(List<Projectiles> projectiles, Viewport view)
+        // It has "BUG" at "EnemyHP", I know it.
+        public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, Barrier[] barriers, int size) {
+            for (int i = 0; i < bullets.Count; i++) {
+                for (int j = 0; j < size; j++) {
+                    if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                        if (barriers[j].health < GameConstants.EnemyHP) {
+                            barriers[j].health += GameConstants.HealingAmount;
+                        }
+                    }
+                }
+            }
+        }
+
+        public static void updateBulletOutOfBound(List<HealthBullet> heals, List<DamageBullet> dams, Viewport view)
         {
-            for (int i = 0; i < projectiles.Count; )
+            for (int i = 0; i < heals.Count; )
             {
-                if (isOutOfMap(projectiles[i].Position) || isOutOfView(projectiles[i].Position, view))
+                if (isOutOfMap(heals[i].Position) || isOutOfView(heals[i].Position, view)) {
+                    heals.RemoveAt(i);
+                }
+                else {
+                    i++;
+                }
+            }
+
+            for (int i = 0; i < dams.Count; )
+            {
+                if (isOutOfMap(dams[i].Position) || isOutOfView(dams[i].Position, view))
                 {
-                    projectiles.RemoveAt(i);
+                    dams.RemoveAt(i);
                 }
                 else
                 {
@@ -197,57 +212,6 @@ namespace Poseidon
                 }
             }
         }
-
-        //public static void updateBulletHitMortals(List<DamageBullet> projectiles, Enemy[] enemies, Fish[] fish) {
-        //    for (int i = 0; i < projectiles.Count; ) {
-        //        int index = isBulletHitEnemy(projectiles[i], enemies);
-
-        //        if (index == -1) {
-        //            index = isBulletHitFish(projectiles[i], fish);
-        //            if (index != -1) {
-        //                fish[index].health -= projectiles[i].damage;
-        //            }
-        //        }
-        //        else {
-        //            enemies[index].health -= projectiles[i].damage;
-        //        }
-        //    }
-        //}
-
-        //public static void updateMortals(Enemy[] enemies, Fish[] fish) {
-        //    for (int i = 0; i < GameConstants.NumberFish; i++) {
-        //        if (fish[i].health <= 0) {
-        //            fish[i] = null;
-        //        }
-        //    }
-
-        //    for (int i = 0; i < GameConstants.NumberEnemies; i++) {
-        //        if (enemies[i].health <= 0) {
-        //            enemies[i] = null;
-        //        }
-        //    }
-        //}
-
-        //// Helper
-        //private static int isBulletHitEnemy(Projectiles projectile, Enemy[] enemies) {
-        //    for (int i = 0; i < GameConstants.NumberEnemies; i++) {
-        //        if (projectile.BoundingSphere.Intersects(enemies[i].BoundingSphere)) {
-        //            return i;
-        //        }
-        //    }
-        //    return -1;
-        //}
-
-        //// Helper
-        //private static int isBulletHitFish(Projectiles projectile, Fish[] fish)
-        //{
-        //    for (int i = 0; i < GameConstants.NumberFish; i++) {
-        //        if (projectile.BoundingSphere.Intersects(fish[i].BoundingSphere)) {
-        //            return i;
-        //        }
-        //    }
-        //    return -1;
-        //}
         // End---------------------------------------------------------------
     }
 }

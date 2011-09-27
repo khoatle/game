@@ -33,7 +33,7 @@ namespace Poseidon.Core
             Visible = true;
             Enabled = true;
         }
-
+        
         /// <summary>
         /// Hide the scene
         /// </summary>

@@ -39,7 +39,11 @@ namespace Poseidon
 
         FuelCarrier fuelCarrier;
         public List<ShipWreck> shipWrecks;
-        List<Projectiles> projectiles;
+        
+        public List<DamageBullet> myBullet;
+        public List<DamageBullet> enemyBullet;
+        public List<HealthBullet> healthBullet;
+
         List<Plant> plants;
         List<Fruit> fruits;
 
@@ -114,6 +118,10 @@ namespace Poseidon
             cursor = new Cursor(game, spriteBatch);
             Components.Add(cursor);
 
+            myBullet = new List<DamageBullet>();
+            healthBullet = new List<HealthBullet>();
+            enemyBullet = new List<DamageBullet>();
+
             this.Load();
         }
 
@@ -155,8 +163,6 @@ namespace Poseidon
             fuelCarrier = new FuelCarrier();
             fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
 
-            projectiles = new List<Projectiles>();
-
             plants = new List<Plant>();
             fruits = new List<Fruit>();
 
@@ -164,9 +170,6 @@ namespace Poseidon
 
             prevTank.Load(Content);
             roundTimer = roundTime;
-
-          
-
         }
 
         /// <summary>
@@ -209,6 +212,10 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
+            enemyBullet = new List<DamageBullet>();
+            healthBullet = new List<HealthBullet>();
+            myBullet = new List<DamageBullet>();
+
             //Initialize the ship wrecks
             shipWrecks = new List<ShipWreck>(GameConstants.NumberShipWrecks);
             int randomType = random.Next(3);
@@ -308,6 +315,18 @@ namespace Poseidon
                             }
                         }
                     }
+
+                    // Are we shooting?
+                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && currentKeyboardState.IsKeyDown(Keys.L)
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                    {
+                        prevFireTime = gameTime.TotalGameTime;
+                        audio.Shooting.Play();
+                        if (tank.bulletType == 0) { placeDamageBullet(); }
+                        else if (tank.bulletType == 1) { placeHealingBullet(); }
+                    }
+
+
                     // changing bullet type
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.L)
                             && currentKeyboardState.IsKeyUp(Keys.L))
@@ -315,14 +334,6 @@ namespace Poseidon
                         tank.bulletType++;
                         if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
 
-                    }
-                    // Are we shooting?
-                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && currentKeyboardState.IsKeyDown(Keys.L)
-                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
-                    {
-                        prevFireTime = gameTime.TotalGameTime;
-                        audio.Shooting.Play();
-                        placeBullet();
                     }
 
                     //Are we planting trees?
@@ -360,12 +371,16 @@ namespace Poseidon
                         }
                     }
 
-                    for (int i = 0; i < projectiles.Count; i++)
-                    {
-                        projectiles[i].update();
+                    for (int i = 0; i < myBullet.Count; i++) {
+                        myBullet[i].update();
                     }
-                    Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                    Collision.updateBulletVsBarriersCollision(projectiles, enemies, ref enemiesAmount);
+
+                    for (int i = 0; i < healthBullet.Count; i++) {
+                        healthBullet[i].update();
+                    }
+                    Collision.updateBulletOutOfBound(healthBullet, myBullet, GraphicDevice.Viewport);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
+                    Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -376,6 +391,8 @@ namespace Poseidon
                     {
                         fish[i].Update(enemies, enemiesAmount, random.Next(100), tank);
                     }
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
+                    Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
                     if (retrievedFruits == GameConstants.NumFuelCells)
                     {
@@ -550,30 +567,31 @@ namespace Poseidon
             {
                 fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
-            // Drawing ship wrecks
-            foreach (ShipWreck shipWreck in shipWrecks)
-            {
-                shipWreck.Draw(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix);
-                RasterizerState rs = new RasterizerState();
-                rs.FillMode = FillMode.WireFrame;
-                GraphicDevice.RasterizerState = rs;
-                shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix, boundingSphere);
 
-                rs = new RasterizerState();
-                rs.FillMode = FillMode.Solid;
-                GraphicDevice.RasterizerState = rs;
+            for (int i = 0; i < enemyBullet.Count; i++) {
+                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-            // Update bullets
-            foreach (Projectiles p in projectiles)
-            {
-                if (p.getStatus())
+            for (int i = 0; i < healthBullet.Count; i++) {
+                healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
+                // Drawing ship wrecks
+                foreach (ShipWreck shipWreck in shipWrecks)
                 {
-                    p.draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    shipWreck.Draw(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
+
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
                 }
-            }
+
 
             // Draw each plant
             foreach (Plant p in plants)
@@ -727,12 +745,10 @@ namespace Poseidon
         }
         private static bool RayIntersectsBoudingSphere(Ray ray, BoundingSphere boundingSphere)
         {
-
             if (boundingSphere.Intersects(ray) != null)
             {
                 return true;
             }
- 
             return false;
         }
     }

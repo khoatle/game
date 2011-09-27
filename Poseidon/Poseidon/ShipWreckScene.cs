@@ -12,8 +12,7 @@ namespace Poseidon
     /// <summary>
     /// This is a game component that implements the Action Scene.
     /// </summary>
-    public partial class ShipWreckScene : GameScene
-    {
+    public partial class ShipWreckScene : GameScene {
         GraphicsDeviceManager graphics;
         GraphicsDevice GraphicDevice;
         ContentManager Content;
@@ -37,13 +36,15 @@ namespace Poseidon
         //List<FuelCell> fuelCells;
         List<Fruit> fruits;
 
-        List<Projectiles> projectiles;
-
         Enemy[] enemies;
         Fish[] fish;
 
         int enemiesAmount = 0;
         int fishAmount = 0;
+
+        List<DamageBullet> myBullet;
+        List<DamageBullet> enemyBullet;
+        List<HealthBullet> healthBullet;
 
         //A tank
         public Tank tank;
@@ -90,6 +91,10 @@ namespace Poseidon
             fish = new Fish[GameConstants.NumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
+
+            enemies = new Enemy[GameConstants.NumberEnemies];
+            fish = new Fish[GameConstants.NumberFish];
+            
             this.Load();
 
         }
@@ -128,10 +133,7 @@ namespace Poseidon
             //Initialize the game field
             InitializeShipField(Content);
 
-            projectiles = new List<Projectiles>();
-
             tank.Load(Content);
-
         }
 
         /// <summary>
@@ -146,13 +148,13 @@ namespace Poseidon
             InitializeShipField(Content);
             base.Show();
         }
+
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
             InitializeShipField(Content);
-
         }
 
         private void InitializeShipField(ContentManager Content)
@@ -224,18 +226,9 @@ namespace Poseidon
                 tempCenter.Z = fish[i].Position.Z;
                 fish[i].BoundingSphere =
                     new BoundingSphere(tempCenter, fish[i].BoundingSphere.Radius);
-            }
-            
+            }   
         }
 
-        // Helper
-        private void placeBullet()
-        {
-            Projectiles p = new Projectiles();
-            p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
-            p.loadContent(Content, "Models/sphere1uR");
-            projectiles.Add(p);
-        }
         // Helper
         private Vector3 GenerateRandomPosition(int min, int max)
         {
@@ -349,15 +342,18 @@ namespace Poseidon
                 {
                     tank.bulletType++;
                     if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
-
                 }
+
                 // Are we shooting?
                 if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && currentKeyboardState.IsKeyDown(Keys.L)
                     && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                 {
                     prevFireTime = gameTime.TotalGameTime;
                     audio.Shooting.Play();
-                    placeBullet();
+                    if (tank.bulletType == 0) {  }
+                    else if (tank.bulletType == 1) { 
+                        
+                    }
                 }
 
 
@@ -365,12 +361,16 @@ namespace Poseidon
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
 
-                for (int i = 0; i < projectiles.Count; i++)
-                {
-                    projectiles[i].update();
+                for (int i = 0; i < myBullet.Count; i++) {
+                    myBullet[i].update();
                 }
-                Collision.updateBulletOutOfBound(projectiles, GraphicDevice.Viewport);
-                Collision.updateBulletVsBarriersCollision(projectiles, enemies, ref enemiesAmount);
+
+                for (int i = 0; i < myBullet.Count; i++) {
+                    healthBullet[i].update();
+                }
+                Collision.updateBulletOutOfBound(healthBullet, myBullet, GraphicDevice.Viewport);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
+                Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
@@ -394,8 +394,7 @@ namespace Poseidon
             }
         }
 
-        public override void Draw(GameTime gameTime)
-        {
+        public override void Draw(GameTime gameTime) {
             if (dead) return;
             // Change back the config changed by spriteBatch
             GraphicDevice.BlendState = BlendState.Opaque;
@@ -449,13 +448,6 @@ namespace Poseidon
             //}
 
             // Update bullets
-            foreach (Projectiles p in projectiles)
-            {
-                if (p.getStatus())
-                {
-                    p.draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                }
-            }
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);

@@ -27,6 +27,7 @@ namespace Poseidon
 
         // bullet consts
         public const float BulletSpeed = 1.0f;
+        public const int HealingAmount = 5;
 
         // HP const
         public const int EnemyHP = 20;

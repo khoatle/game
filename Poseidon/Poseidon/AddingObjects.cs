@@ -100,14 +100,28 @@ namespace Poseidon
             }
         }
 
-        // Helper
-        private void placeBullet()
-        {
-            Projectiles p = new Projectiles();
-            p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
-            p.loadContent(Content, "Models/sphere1uR");
-            projectiles.Add(p);
+        private void placeHealingBullet() {
+            HealthBullet h = new HealthBullet();
+            h.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
+            h.loadContent(Content, "Models/sphere1uR");
+            healthBullet.Add(h);
         }
+
+        private void placeDamageBullet() {
+            DamageBullet d = new DamageBullet();
+            d.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
+            d.loadContent(Content, "Models/fuelcell");
+            myBullet.Add(d);
+        }
+
+        // Helper
+        //private void placeBullet()
+        //{
+        //    Projectiles p = new Projectiles();
+        //    p.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strengthUp);
+        //    p.loadContent(Content, "Models/sphere1uR");
+        //    projectiles.Add(p);
+        //}
 
         // Helper
         private void placePlant()

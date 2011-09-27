@@ -236,6 +236,7 @@ namespace Poseidon
             skills[1] = false;
             skills[2] = true;
         }
+
         // Copy every attributes but the position and direction
         public void CopyAttribute(Tank tank)
         {

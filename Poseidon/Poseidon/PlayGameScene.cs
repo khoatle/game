@@ -394,11 +394,11 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
                     for (int i = 0; i < enemiesAmount; i++) {
-                        enemies[i].Update(enemies, enemiesAmount, tank);
+                        enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
                     }
 
                     for (int i = 0; i < fishAmount; i++) {
-                        fish[i].Update(enemies, enemiesAmount, tank);
+                        fish[i].Update(enemies, fishAmount, random.Next(100), tank);
                     }
 
                     if (retrievedFruits == GameConstants.NumFuelCells)

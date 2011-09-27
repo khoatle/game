@@ -362,7 +362,6 @@ namespace Poseidon
                     }
                 }
 
-
                 Vector3 pointIntersect;
                 //float angle;
                 //if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
@@ -389,19 +388,18 @@ namespace Poseidon
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
-                    enemies[i].Update(enemies, enemiesAmount, tank);
+                    enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
                 }
 
                 for (int i = 0; i < fishAmount; i++)
                 {
-                    fish[i].Update(enemies, fishAmount, tank);
+                    fish[i].Update(enemies, fishAmount, random.Next(100) ,tank);
                 }
 
                 // Just for death simulation
                 // should be removed
                 if (lastKeyboardState.IsKeyDown(Keys.O) &&
-                        currentKeyboardState.IsKeyUp(Keys.O))
-                {
+                        currentKeyboardState.IsKeyUp(Keys.O)) {
                     dead = true;
                 }
 

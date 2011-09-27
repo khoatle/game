@@ -15,8 +15,7 @@ namespace Poseidon
         /// </summary>
         public static bool isOutOfView(Vector3 futurePosition, Viewport view)
         {
-            return Math.Abs(futurePosition.X) > view.Width / 2 ||
-                Math.Abs(futurePosition.Z) > view.Height / 2;
+            return false;
         }
 
         public static bool isOutOfMap(Vector3 futurePosition)

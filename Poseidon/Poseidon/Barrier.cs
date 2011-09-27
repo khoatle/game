@@ -70,13 +70,14 @@ namespace Poseidon
             }
         }
 
-        public virtual void Update(Barrier[] barriers, int size, Tank tank) {
+        public void Update(Barrier[] barriers, int size, int changeDirection, Tank tank)
+        {
             Vector3 futurePosition = Position;
-            //int barrier_move;
+            //int barrier_move
             Random random = new Random();
             float turnAmount = 0;
             //also try to change direction if we are stuck
-            if (random.Next(100) >= 95 || stucked == true)
+            if (changeDirection >= 95 || stucked == true)
             {
                 int rightLeft = random.Next(2);
                 if (rightLeft == 0)

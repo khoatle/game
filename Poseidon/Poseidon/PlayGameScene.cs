@@ -22,6 +22,8 @@ namespace Poseidon
         KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
         GamePadState currentGamePadState = new GamePadState();
+        MouseState currentMouseState = new MouseState();
+        MouseState lastMouseState = new MouseState();
         private AudioLibrary audio;
         int retrievedFruits;
         TimeSpan startTime, roundTimer, roundTime;
@@ -272,10 +274,11 @@ namespace Poseidon
             {
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
+                lastMouseState = currentMouseState;
                 currentKeyboardState = Keyboard.GetState();
                 lastGamePadState = currentGamePadState;
                 currentGamePadState = GamePad.GetState(PlayerIndex.One);
-
+                currentMouseState = Mouse.GetState();
                 // Allows the game to exit
                 //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
@@ -356,7 +359,16 @@ namespace Poseidon
                         }
                     }
 
-                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime);
+                    Vector3 pointIntersect;
+                    //float angle;
+                    //if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                    if (currentMouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                        //angle = CalculateAngle(pointIntersect, tank.Position);
+                    }
+                    else pointIntersect = Vector3.Zero;
+                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
 
                     gameCamera.Update(tank.ForwardDirection,
                         tank.Position, aspectRatio);
@@ -621,15 +633,15 @@ namespace Poseidon
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
-            DrawBulletType();
+            //DrawBulletType();
             DrawHeight();
-            if (tank.activeSkillID != -1) DrawActiveSkill();
+            //if (tank.activeSkillID != -1) DrawActiveSkill();
         }
 
         private void DrawHeight()
         {
             float xOffsetText, yOffsetText;
-            string str1 = "Height: " + heightMapInfo.GetHeight(tank.Position);
+            string str1 = "Height: " +heightMapInfo.GetHeight(tank.Position);
             Rectangle rectSafeArea;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             BoundingSphere boundingSphere;
@@ -638,9 +650,9 @@ namespace Poseidon
                 boundingSphere = shipWreck.BoundingSphere;
                 boundingSphere.Center = shipWreck.Position;
                 if (RayIntersectsBoudingSphere(cursorRay, boundingSphere))
-                    str1 += " Pointing to ship wreck";
+                    str1 += " Pointing to ship wreck ";
             }
-
+           
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
@@ -658,11 +670,23 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = GameConstants.StrCellsFound + retrievedFruits.ToString() +
-                " of " + fruits.Count;
+            string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
+                //" of " + fruits.Count;
             Rectangle rectSafeArea;
 
             str1 += (roundTimer.Seconds).ToString();
+
+            Vector3 pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+            Vector3 mouseDif = pointIntersect - tank.Position;
+            float distanceFomTank = mouseDif.Length();
+            str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
+            str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
+            str2 += "\nXc= " + tank.Position.X + " Yc= " + tank.Position.Y + " Zc= " + tank.Position.Z;
+            float angle = CalculateAngle(pointIntersect, tank.Position);
+            str2 += "\n Angle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
+            Vector3 posDif = tank.pointToMoveTo - tank.Position;
+            float distanceToDest = posDif.Length();
+            str2 += "\n Distance= " + distanceToDest;
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -750,6 +774,18 @@ namespace Poseidon
                 return true;
             }
             return false;
+        }
+        public Vector3 IntersectPointWithPlane(float planeHeight)
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            float t = (planeHeight - cursorRay.Position.Y) / cursorRay.Direction.Y;
+            float x = cursorRay.Position.X + cursorRay.Direction.X * t;
+            float z = cursorRay.Position.Z + cursorRay.Direction.Z * t;
+            return new Vector3(x, planeHeight, z);
+        }
+        public float CalculateAngle(Vector3 point2, Vector3 point1)
+        {
+            return (float) Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
         }
     }
 }

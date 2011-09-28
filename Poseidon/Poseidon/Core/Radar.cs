@@ -35,7 +35,7 @@ namespace Poseidon.Core
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, Enemy[] enemies, int enemyAmount)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, Enemy[] enemies, List<DamageBullet> myBullets, List<HealthBullet> healBullets, int enemyAmount)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 0.0f, RadarImageCenter, RadarScreenRadius / (RadarImage.Height * 0.5f), SpriteEffects.None, 0.0f);
@@ -65,6 +65,33 @@ namespace Poseidon.Core
 
                     // Draw enemy dot on radar
                     spriteBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
+                }
+            }
+            // If my bullet is in range
+            foreach (HealthBullet myBullet in healBullets)
+            {
+                Vector2 diffVect = new Vector2(myBullet.Position.X - playerPos.X, myBullet.Position.Z - playerPos.Z);
+                float distance = diffVect.LengthSquared();
+
+                // Check if enemy is within RadarRange
+                if (distance < RadarRangeSquared)
+                {
+                    // Scale the distance from world coords to radar coords
+                    diffVect *= RadarScreenRadius / RadarRange;
+
+                    // We rotate each point on the radar so that the player is always facing UP on the radar
+                    //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                    // Offset coords from radar's center
+                    diffVect = -diffVect;
+                    diffVect += RadarCenterPos;
+
+                    // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                    // at lower elevations have smaller dots.
+                    float scaleHeight = 1.0f + ((myBullet.Position.Y - playerPos.Y) / 200.0f);
+
+                    // Draw enemy dot on radar
+                    spriteBatch.Draw(PlayerDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
                 }
             }
 

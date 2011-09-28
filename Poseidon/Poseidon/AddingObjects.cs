@@ -102,7 +102,7 @@ namespace Poseidon
 
         private void placeHealingBullet() {
             HealthBullet h = new HealthBullet();
-            h.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection);
+            h.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strength, tank.strengthUp);
             h.loadContent(Content, "Models/sphere1uR");
             healthBullet.Add(h);
         }

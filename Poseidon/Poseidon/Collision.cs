@@ -13,9 +13,11 @@ namespace Poseidon
         /// <summary>
         /// GENERAL FUNCTIONS
         /// </summary>
-        public static bool isOutOfView(Vector3 futurePosition, Viewport view)
+        public static bool isOutOfView(BoundingSphere boundingSphere, BoundingFrustum frustum)
         {
-            return false;
+            if (boundingSphere.Intersects(frustum))
+                return false;
+            return true;
         }
 
         public static bool isOutOfMap(Vector3 futurePosition)
@@ -188,10 +190,10 @@ namespace Poseidon
             }
         }
 
-        public static void updateBulletOutOfBound(List<HealthBullet> heals, List<DamageBullet> dams, Viewport view)
+        public static void updateBulletOutOfBound(List<HealthBullet> heals, List<DamageBullet> dams, BoundingFrustum frustum)
         {
             for (int i = 0; i < heals.Count; ) {
-                if (isOutOfMap(heals[i].Position) || isOutOfView(heals[i].Position, view)) {
+                if (isOutOfMap(heals[i].Position) || isOutOfView(heals[i].BoundingSphere, frustum)) {
                     heals.RemoveAt(i);
                 }
                 else {
@@ -200,7 +202,8 @@ namespace Poseidon
             }
 
             for (int i = 0; i < dams.Count; ) {
-                if (isOutOfMap(dams[i].Position) || isOutOfView(dams[i].Position, view)) {
+                if (isOutOfMap(dams[i].Position) || isOutOfView(dams[i].BoundingSphere, frustum))
+                {
                     dams.RemoveAt(i);
                 }
                 else {

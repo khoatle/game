@@ -71,6 +71,9 @@ namespace Poseidon
         // has artifact?
         public int skillID = 0;
 
+        // Frustum of the camera
+        BoundingFrustum frustum;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
             : base(game)
         {
@@ -100,6 +103,11 @@ namespace Poseidon
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
             Components.Add(cursor);
+
+            myBullet = new List<DamageBullet>();
+            healthBullet = new List<HealthBullet>();
+            enemyBullet = new List<DamageBullet>();
+
             this.Load();
         }
 
@@ -158,6 +166,8 @@ namespace Poseidon
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
+            enemiesAmount = GameConstants.NumberEnemies;
+            fishAmount = GameConstants.NumberFish;
             InitializeShipField(Content);
         }
 
@@ -166,14 +176,15 @@ namespace Poseidon
             dead = false;
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != 0
-            placeEnemy();
+            placeEnemies();
             placeFish();
 
         }
 
         private void loadContentEnemies()
         {
-            for (int i = 0; i < GameConstants.NumberEnemies; i++)
+            enemiesAmount = GameConstants.NumberEnemies;
+            for (int i = 0; i < enemiesAmount; i++)
             {
                 enemies[i] = new Enemy();
                 enemies[i].LoadContent(Content, "Models/pyramid10uR");
@@ -182,14 +193,15 @@ namespace Poseidon
 
         private void loadContentFish()
         {
-            for (int i = 0; i < GameConstants.NumberFish; i++)
+            fishAmount = GameConstants.NumberFish;
+            for (int i = 0; i < fishAmount; i++)
             {
                 fish[i] = new Fish();
                 fish[i].LoadContent(Content, "Models/cube10uR");
             }
         }
 
-        private void placeEnemy()
+        private void placeEnemies()
         {
             loadContentEnemies();
 
@@ -230,7 +242,7 @@ namespace Poseidon
                 tempCenter.Z = fish[i].Position.Z;
                 fish[i].BoundingSphere =
                     new BoundingSphere(tempCenter, fish[i].BoundingSphere.Radius);
-            }   
+            }
         }
 
         // Helper
@@ -254,7 +266,7 @@ namespace Poseidon
         // Helper
         private bool IsOccupied(int xValue, int zValue)
         {
-            //foreach (GameObject currentObj in fuelCells)
+            //foreach (GameObject currentObj in fruits)
             //{
             //    if (((int)(MathHelper.Distance(
             //        xValue, currentObj.Position.X)) < 15) &&
@@ -282,6 +294,8 @@ namespace Poseidon
             }
             return false;
         }
+
+        
         /// <summary>
         /// Hide the scene
         /// </summary>
@@ -356,10 +370,8 @@ namespace Poseidon
                 {
                     prevFireTime = gameTime.TotalGameTime;
                     audio.Shooting.Play();
-                    if (tank.bulletType == 0) {  }
-                    else if (tank.bulletType == 1) { 
-                        
-                    }
+                    if (tank.bulletType == 0) { placeDamageBullet(); }
+                    else if (tank.bulletType == 1) { placeHealingBullet(); }
                 }
 
                 Vector3 pointIntersect;
@@ -374,15 +386,17 @@ namespace Poseidon
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
+                // Updating camera's frustum
+                frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
                 for (int i = 0; i < myBullet.Count; i++) {
                     myBullet[i].update();
                 }
 
-                for (int i = 0; i < myBullet.Count; i++) {
+                for (int i = 0; i < healthBullet.Count; i++) {
                     healthBullet[i].update();
                 }
-                Collision.updateBulletOutOfBound(healthBullet, myBullet, GraphicDevice.Viewport);
+                Collision.updateBulletOutOfBound(healthBullet, myBullet, frustum);
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
@@ -452,16 +466,32 @@ namespace Poseidon
         private void DrawGameplayScreen()
         {
             DrawTerrain(ground.Model);
-            //foreach (FuelCell fuelCell in fuelCells)
-            //{
-            //    if (!fuelCell.Retrieved)
-            //    {
-            //        fuelCell.Draw(gameCamera.ViewMatrix,
-            //            gameCamera.ProjectionMatrix);
-            //    }
-            //}
+            // Updating camera's frustum
+            frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
+            
 
-            // Update bullets
+            for (int i = 0; i < enemiesAmount; i++)
+            {
+                if (enemies[i].BoundingSphere.Intersects(frustum))
+                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
+            for (int i = 0; i < fishAmount; i++)
+            {
+                if (fish[i].BoundingSphere.Intersects(frustum))
+                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
+            for (int i = 0; i < myBullet.Count; i++)
+            {
+                myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
+            for (int i = 0; i < healthBullet.Count; i++)
+            {
+                healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
@@ -516,7 +546,8 @@ namespace Poseidon
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
-            string str1 = GameConstants.StrTimeRemaining;
+            string str1 = "" + fish[0].Position.X + " " + fish[0].Position.Y + " " + fish[0].Position.Z;
+            str1 += "\n" + fish[1].Position.X + " " + fish[1].Position.Y + " " + fish[1].Position.Z;
 
             Rectangle rectSafeArea;
 
@@ -541,6 +572,21 @@ namespace Poseidon
             float x = cursorRay.Position.X + cursorRay.Direction.X * t;
             float z = cursorRay.Position.Z + cursorRay.Direction.Z * t;
             return new Vector3(x, planeHeight, z);
+        }
+        private void placeHealingBullet()
+        {
+            HealthBullet h = new HealthBullet();
+            h.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strength, tank.strengthUp);
+            h.loadContent(Content, "Models/sphere1uR");
+            healthBullet.Add(h);
+        }
+
+        private void placeDamageBullet()
+        {
+            DamageBullet d = new DamageBullet();
+            d.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strength, tank.strengthUp);
+            d.loadContent(Content, "Models/fuelcell");
+            myBullet.Add(d);
         }
     }
 }

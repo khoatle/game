@@ -57,11 +57,11 @@ namespace Poseidon
         {
             Vector3 tmp = calculateFuturePosition();
 
-            if (isActive && Collision.isOutOfMap(tmp) && Collision.isOutOfView(tmp, view))
-            {
-                isActive = false;
-                return;
-            }
+            //if (isActive && Collision.isOutOfMap(tmp) && Collision.isOutOfView(tmp, view))
+            //{
+            //    isActive = false;
+            //    return;
+            //}
             Position = tmp;
             BoundingSphere = new BoundingSphere(tmp, BoundingSphere.Radius);
         }

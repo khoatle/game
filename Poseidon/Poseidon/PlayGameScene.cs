@@ -89,6 +89,9 @@ namespace Poseidon
 
         Radar radar;
 
+        // Frustum of the camera
+        BoundingFrustum frustum;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
@@ -207,6 +210,7 @@ namespace Poseidon
             //Clean all fruits
             fruits.Clear();
 
+
             retrievedFruits = 0;
             startTime = gameTime.TotalGameTime;
             roundTimer = roundTime;
@@ -283,6 +287,7 @@ namespace Poseidon
                 //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 //    //this.Exit();
+                
 
                 if (currentGameState == GameState.PlayingCutScene)
                 {
@@ -299,8 +304,6 @@ namespace Poseidon
                 }
                 if ((currentGameState == GameState.Running))
                 {
-                    //fuelCarrier.Update(currentGamePadState, 
-                    //    currentKeyboardState, barriers);
 
                     // changing active skill
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.K)
@@ -371,6 +374,8 @@ namespace Poseidon
 
                     gameCamera.Update(tank.ForwardDirection,
                         tank.Position, aspectRatio);
+                    // Updating camera's frustum
+                    frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
                     retrievedFruits = 0;
                     foreach (Fruit fruit in fruits)
@@ -389,7 +394,7 @@ namespace Poseidon
                     for (int i = 0; i < healthBullet.Count; i++) {
                         healthBullet[i].update();
                     }
-                    Collision.updateBulletOutOfBound(healthBullet, myBullet, GraphicDevice.Viewport);
+                    Collision.updateBulletOutOfBound(healthBullet, myBullet, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
 
@@ -442,6 +447,7 @@ namespace Poseidon
 
         public override void Draw(GameTime gameTime)
         {
+            
             base.Draw(gameTime);
             if (paused)
             {
@@ -526,10 +532,11 @@ namespace Poseidon
         private void DrawGameplayScreen()
         {
             DrawTerrain(ground.Model);
-
+            // Updating camera's frustum
+            frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
             foreach (Fruit f in fruits)
             {
-                if (!f.Retrieved)
+                if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
                 {
                     f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                     RasterizerState rs = new RasterizerState();
@@ -546,11 +553,13 @@ namespace Poseidon
 
             for (int i = 0; i < enemiesAmount; i++)
             {
-                enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                if (enemies[i].BoundingSphere.Intersects(frustum))
+                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
             for (int i = 0; i < fishAmount; i++) {
-                fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                if (fish[i].BoundingSphere.Intersects(frustum))
+                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
             for (int i = 0; i < myBullet.Count; i++) {
@@ -561,8 +570,10 @@ namespace Poseidon
                 healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-                // Drawing ship wrecks
-                foreach (ShipWreck shipWreck in shipWrecks)
+            // Drawing ship wrecks
+            foreach (ShipWreck shipWreck in shipWrecks)
+            {
+                if (shipWreck.BoundingSphere.Intersects(frustum))
                 {
                     shipWreck.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
@@ -576,21 +587,25 @@ namespace Poseidon
                     rs.FillMode = FillMode.Solid;
                     GraphicDevice.RasterizerState = rs;
                 }
+            }
 
 
             // Draw each plant
             foreach (Plant p in plants)
             {
-                p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((p.creationTime-roundTimer.TotalSeconds)/10.0));
-                RasterizerState rs = new RasterizerState();
-                rs.FillMode = FillMode.WireFrame;
-                GraphicDevice.RasterizerState = rs;
-                p.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    gameCamera.ProjectionMatrix, boundingSphere);
+                if (p.BoundingSphere.Intersects(frustum))
+                {
+                    p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((p.creationTime - roundTimer.TotalSeconds) / 10.0));
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    p.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
 
-                rs = new RasterizerState();
-                rs.FillMode = FillMode.Solid;
-                GraphicDevice.RasterizerState = rs;
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
+                }
             }
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
@@ -614,7 +629,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount);
+            radar.Draw(spriteBatch, tank.Position, enemies, myBullet, healthBullet, enemiesAmount);
         }
 
         private void DrawHeight()

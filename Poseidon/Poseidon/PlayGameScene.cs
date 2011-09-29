@@ -322,7 +322,8 @@ namespace Poseidon
                     }
 
                     // Are we shooting?
-                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && currentKeyboardState.IsKeyDown(Keys.L)
+                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) 
+                        && currentKeyboardState.IsKeyDown(Keys.L)
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                     {
                         prevFireTime = gameTime.TotalGameTime;
@@ -632,6 +633,24 @@ namespace Poseidon
             radar.Draw(spriteBatch, tank.Position, enemies, myBullet, healthBullet, enemiesAmount);
         }
 
+        public bool clickOnShipWreck(BoundingSphere boundingSphere, Vector3 center)
+        {
+            if (lastMouseState.LeftButton==ButtonState.Pressed 
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+                boundingSphere.Center = center;
+                if (RayIntersectsBoundingSphere(cursorRay, boundingSphere))
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void DrawHeight()
         {
             float xOffsetText, yOffsetText;
@@ -643,8 +662,9 @@ namespace Poseidon
             {
                 boundingSphere = shipWreck.BoundingSphere;
                 boundingSphere.Center = shipWreck.Position;
-                if (RayIntersectsBoudingSphere(cursorRay, boundingSphere))
-                    str1 += " Pointing to ship wreck ";
+                if (RayIntersectsBoundingSphere(cursorRay, boundingSphere))
+                      str1 += " Pointing to ship wreck ";
+
             }
            
             //Calculate str1 position
@@ -753,7 +773,7 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
-        private static bool RayIntersectsBoudingSphere(Ray ray, BoundingSphere boundingSphere)
+        public static bool RayIntersectsBoundingSphere(Ray ray, BoundingSphere boundingSphere)
         {
             if (boundingSphere.Intersects(ray) != null)
             {

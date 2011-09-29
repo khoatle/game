@@ -265,7 +265,7 @@ namespace Poseidon
                 prevScene = playGameScene;
                 ShowScene(skillScene);
             }
-            if (zPressed && GetInShipWreck())
+            if (GetInShipWreck())
             {
                 shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 ShowScene(shipWreckScene);
@@ -273,13 +273,12 @@ namespace Poseidon
         }
         public bool GetInShipWreck()
         {
-          
-            BoundingSphere shipWreckBoundingSphere = new BoundingSphere(playGameScene.tank.BoundingSphere.Center,
-                    10);
+
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
-                if (!playGameScene.shipWrecks[curWreck].accessed && shipWreckBoundingSphere.Intersects(
-                    playGameScene.shipWrecks[curWreck].BoundingSphere))
+                if (!playGameScene.shipWrecks[curWreck].accessed
+                    && playGameScene.clickOnShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position)
+                    )
                 {
                     // no re-explore a ship wreck
                     playGameScene.shipWrecks[curWreck].accessed = true;

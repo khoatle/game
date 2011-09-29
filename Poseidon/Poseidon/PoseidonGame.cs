@@ -61,7 +61,6 @@ namespace Poseidon
         bool skillPressed;
         bool doubleClicked = false;
         bool clicked=false;
-        const double clickTimerDelay = 250;
         double clickTimer = 0;
 
 
@@ -176,7 +175,7 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
                     
-                    if (clicked && (clickTimer<clickTimerDelay))
+                    if (clicked && (clickTimer < GameConstants.clickTimerDelay))
                     {
                         doubleClicked = true;
                         clicked = false;
@@ -312,7 +311,8 @@ namespace Poseidon
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
                 if (!playGameScene.shipWrecks[curWreck].accessed
-                    && playGameScene.mouseOnShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position)
+                    && playGameScene.MouseOnShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position)
+                    && playGameScene.TankNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
                     // no re-explore a ship wreck

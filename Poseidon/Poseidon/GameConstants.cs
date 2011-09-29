@@ -63,7 +63,7 @@ namespace Poseidon
         public const float FuelCellBoundingSphereFactor = .5f;
         public const float BarrierBoundingSphereFactor = .7f;
         public const float TankBoundingSphereFactor = .9f;
-        public const float ShipWreckBoundingSphereFactor = 0.8f;
+        public const float ShipWreckBoundingSphereFactor = 5.0f;
         public const float PlantBoundingSphereFactor = 0.6f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 2.5f;
@@ -75,5 +75,8 @@ namespace Poseidon
         //radar
         public const float RadarScreenRadius = 75.0f;
         public const float RadarRange = 500.0f;
+
+        //milisecond delay for double click
+        public const double clickTimerDelay = 250;
     }
 }

@@ -391,7 +391,7 @@ namespace Poseidon
                 //    20);
             }
 
-            //Interacting with trashs and fruits and also ship wrecks
+            //Interacting with trashs and fruits
             if (keyboardState.IsKeyDown(Keys.Z))
             {
                 Interact_with_trash_and_fruit(fruits, gameTime);

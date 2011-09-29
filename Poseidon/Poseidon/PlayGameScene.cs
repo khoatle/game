@@ -635,7 +635,15 @@ namespace Poseidon
             radar.Draw(spriteBatch, tank.Position, enemies, myBullet, healthBullet, enemiesAmount);
         }
 
-        public bool mouseOnShipWreck(BoundingSphere boundingSphere, Vector3 center)
+        public bool TankNearShipWreck(BoundingSphere shipSphere)
+        {
+            if (tank.BoundingSphere.Intersects(shipSphere))
+                return true;
+            else
+                return false;
+        }
+
+        public bool MouseOnShipWreck(BoundingSphere boundingSphere, Vector3 center)
         {
                 Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
                 boundingSphere.Center = center;

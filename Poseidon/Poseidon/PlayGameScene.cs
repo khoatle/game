@@ -570,11 +570,13 @@ namespace Poseidon
             for (int i = 0; i < healthBullet.Count; i++) {
                 healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
-
+            BoundingSphere shipSphere;
             // Drawing ship wrecks
             foreach (ShipWreck shipWreck in shipWrecks)
             {
-                if (shipWreck.BoundingSphere.Intersects(frustum))
+                shipSphere = shipWreck.BoundingSphere;
+                shipSphere.Center = shipWreck.Position;
+                if (shipSphere.Intersects(frustum))
                 {
                     shipWreck.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);

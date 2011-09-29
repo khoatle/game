@@ -352,13 +352,14 @@ namespace Poseidon
                     //Are the trees ready for fruit?
                     foreach (Plant plant in plants)
                     {
-                        if (plant.timeForFruit == true && plant.fruitCreated == false)
+                        if (plant.timeForFruit == true )
                         {
                             int powerType = random.Next(3) + 1;
                             Fruit fruit = new Fruit(powerType);
                             fruits.Add(fruit);
                             fruit.LoadContent(Content, "Models/fuelcell", plant.Position);
-                            plant.fruitCreated = true;
+                            plant.timeForFruit = false;
+                            plant.fruitCreated++;
                         }
                     }
 

@@ -16,14 +16,14 @@ namespace Poseidon
 
         public double creationTime;
         public bool timeForFruit;
-        public bool fruitCreated;
+        public int fruitCreated;
         
         public Plant()
             : base()
         {
             MaxRange = GameConstants.MaxRange;
             timeForFruit = false;
-            fruitCreated = false;
+            fruitCreated = 0;
         }
 
         public void LoadContent(ContentManager content, Vector3 cyborgPosition, double loadTime)
@@ -45,8 +45,9 @@ namespace Poseidon
         {
             if (growth > GameConstants.FruitGrowth) // stop plant growth
             {
+                if (growth > (GameConstants.FruitGrowth * (fruitCreated + 1)))
+                    timeForFruit = true;
                 growth = GameConstants.FruitGrowth;
-                timeForFruit = true;
             }
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);

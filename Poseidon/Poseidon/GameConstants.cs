@@ -19,7 +19,7 @@ namespace Poseidon
 
         //ship constants
         public const float Velocity = 0.75f;
-        public const float BarrierVelocity = 0.4f;
+        public const float BarrierVelocity = 0.1f;
         public const float TurnSpeed = 0.025f;
         public const int MaxRange = 500;
         // 5 seconds for power-ups' effects
@@ -30,7 +30,7 @@ namespace Poseidon
         public const int HealingAmount = 5;
 
         // HP const
-        public const int EnemyHP = 20;
+        public const int EnemyHP = 100;
         public const int FishHP = 50;
 
         // Bullet const
@@ -61,7 +61,7 @@ namespace Poseidon
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;
         public const float FuelCellBoundingSphereFactor = .5f;
-        public const float BarrierBoundingSphereFactor = .7f;
+        public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = .9f;
         public const float ShipWreckBoundingSphereFactor = 5.0f;
         public const float PlantBoundingSphereFactor = 0.6f;
@@ -80,6 +80,6 @@ namespace Poseidon
         public const double clickTimerDelay = 250;
 
         //shooting range
-        public const float shootingRange = 35.0f;
+        public const float shootingRange = 70.0f;
     }
 }

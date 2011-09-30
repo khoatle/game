@@ -34,6 +34,8 @@ namespace Poseidon
         // this is the sprite that is drawn at the current cursor position.
         // textureCenter is used to center the sprite when drawing.
         Texture2D cursorTexture;
+        Texture2D normalCursorTexture;
+        Texture2D shootingCursorTexture;
         Vector2 textureCenter;
         Game game;
         // Position is the cursor position, and is in screen space. 
@@ -59,7 +61,9 @@ namespace Poseidon
         // also, we need to create a SpriteBatch.
         protected override void LoadContent()
         {
-            cursorTexture = Game.Content.Load<Texture2D>("Image/cursor");
+            normalCursorTexture = Game.Content.Load<Texture2D>("Image/cursor");
+            shootingCursorTexture = Game.Content.Load<Texture2D>("Image/shootcursor");
+            cursorTexture = normalCursorTexture;
             textureCenter = new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2);
 
             //spriteBatch = new SpriteBatch(GraphicsDevice);
@@ -89,6 +93,16 @@ namespace Poseidon
 #elif WINDOWS_PHONE
             UpdateWindowsPhoneInput();
 #endif
+        }
+
+        public void SetShootingMouseImage()
+        {
+            cursorTexture = shootingCursorTexture;
+        }
+
+        public void SetNormalMouseImage()
+        {
+            cursorTexture = normalCursorTexture;
         }
 
         /// <summary>

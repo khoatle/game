@@ -370,7 +370,7 @@ namespace Poseidon
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp)
                         )
                         ||
-                        (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && InShootingRange() && (MouseOnEnemy()||MouseOnFish()))
+                        ( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && InShootingRange())
                         )
                 {
                     prevFireTime = gameTime.TotalGameTime;
@@ -622,8 +622,12 @@ namespace Poseidon
                 BoundingSphere enemySphere;
                 enemySphere = enemy.BoundingSphere;
                 if (RayIntersectsBoundingSphere(cursorRay, enemySphere))
+                {
+                    cursor.SetShootingMouseImage();
                     return true;
+                }
             }
+            cursor.SetNormalMouseImage();
             return false;
         }
 
@@ -633,8 +637,12 @@ namespace Poseidon
             for (int i = 0; i < fishAmount; i++)
             {
                 if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                {
+                    cursor.SetShootingMouseImage();
                     return true;
+                }
             }
+            cursor.SetNormalMouseImage();
             return false;
         }
 

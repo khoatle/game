@@ -92,6 +92,11 @@ namespace Poseidon
         // Frustum of the camera
         BoundingFrustum frustum;
 
+        // For mouse inputs
+        bool doubleClicked = false;
+        bool clicked = false;
+        double clickTimer = 0;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
@@ -278,16 +283,16 @@ namespace Poseidon
             {
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
-                lastMouseState = currentMouseState;
+                //lastMouseState = currentMouseState;
                 currentKeyboardState = Keyboard.GetState();
                 lastGamePadState = currentGamePadState;
                 currentGamePadState = GamePad.GetState(PlayerIndex.One);
-                currentMouseState = Mouse.GetState();
+                //currentMouseState = Mouse.GetState();
                 // Allows the game to exit
                 //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 //    //this.Exit();
-                
+                CheckClick(gameTime);
 
                 if (currentGameState == GameState.PlayingCutScene)
                 {
@@ -306,8 +311,12 @@ namespace Poseidon
                 {
                     //if the user clicks or holds mouse's left button
                     Vector3 pointIntersect = Vector3.Zero;
-                    //if (currentMouseState.LeftButton == ButtonState.Pressed)
-                    if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                    bool mouseOnLivingObject = MouseOnEnemy() || MouseOnFish();
+                    if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
+                    {
+                        pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                    }
+                    else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released )
                     {
                         pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
                         //if it is out of shooting range then just move there
@@ -318,7 +327,7 @@ namespace Poseidon
                         else
                         {
                             //if the enemy is in the shooting range then shoot it w/o moving to it
-                            if (MouseOnEnemy() && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                            if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                             {
                                 tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
                                 prevFireTime = gameTime.TotalGameTime;
@@ -328,8 +337,10 @@ namespace Poseidon
                                 //so the tank will not move
                                 pointIntersect = Vector3.Zero;
                             }
+                            if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
                     }
+         
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
                     // changing active skill
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.K)
@@ -353,7 +364,7 @@ namespace Poseidon
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp)
                         )
                         //||
-                        //(lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange() && MouseOnEnemy())
+                        //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
                         )
                     {
                         prevFireTime = gameTime.TotalGameTime;
@@ -699,15 +710,36 @@ namespace Poseidon
         public bool MouseOnEnemy()
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            foreach (Enemy enemy in enemies)
+            
+            for (int i = 0; i < enemiesAmount; i++)
             {
-                BoundingSphere enemySphere;
-                enemySphere = enemy.BoundingSphere;
-                if (RayIntersectsBoundingSphere(cursorRay, enemySphere))
+                //BoundingSphere enemyBound = enemies[i].BoundingSphere;
+                //enemyBound.Radius *= 2.5f;
+                if (RayIntersectsBoundingSphere(cursorRay, enemies[i].BoundingSphere))
+                {
+                    cursor.SetShootingMouseImage();
                     return true;
+                }
             }
+            cursor.SetNormalMouseImage();
             return false;
         }
+
+        public bool MouseOnFish()
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            for (int i = 0; i < fishAmount; i++)
+            {
+                if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                {
+                    cursor.SetShootingMouseImage();
+                    return true;
+                }
+            }
+            cursor.SetNormalMouseImage();
+            return false;
+        }
+
 
         private void DrawHeight()
         {
@@ -851,5 +883,28 @@ namespace Poseidon
         {
             return (float) Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
         }
+        public void CheckClick(GameTime gameTime)
+        {
+            lastMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+            clickTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+
+                if (clicked && (clickTimer < GameConstants.clickTimerDelay))
+                {
+                    doubleClicked = true;
+                    clicked = false;
+                }
+                else
+                {
+                    doubleClicked = false;
+                    clicked = true;
+                }
+                clickTimer = 0;
+            }
+        }
+
     }
 }

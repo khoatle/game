@@ -74,6 +74,11 @@ namespace Poseidon
         // Frustum of the camera
         BoundingFrustum frustum;
 
+        // For mouse inputs
+        bool doubleClicked = false;
+        bool clicked = false;
+        double clickTimer = 0;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
             : base(game)
         {
@@ -334,12 +339,45 @@ namespace Poseidon
             {
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
-                lastMouseState = currentMouseState;
+                //lastMouseState = currentMouseState;
                 currentKeyboardState = Keyboard.GetState();
                 lastGamePadState = currentGamePadState;
                 currentGamePadState = GamePad.GetState(PlayerIndex.One);
-                currentMouseState = Mouse.GetState();
+                //currentMouseState = Mouse.GetState();
+                CheckClick(gameTime);
+                //if the user clicks or holds mouse's left button
+                Vector3 pointIntersect = Vector3.Zero;
+                bool mouseOnLivingObject = MouseOnEnemy() || MouseOnFish();
+                if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
+                {
+                    pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                }
+                else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                {
+                    pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                    //if it is out of shooting range then just move there
+                    if (!InShootingRange())
+                    {
 
+                    }
+                    else
+                    {
+                        //if the enemy is in the shooting range then shoot it w/o moving to it
+                        if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                        {
+                            tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
+                            prevFireTime = gameTime.TotalGameTime;
+                            audio.Shooting.Play();
+                            if (tank.bulletType == 0) { placeDamageBullet(); }
+                            else if (tank.bulletType == 1) { placeHealingBullet(); }
+                            //so the tank will not move
+                            pointIntersect = Vector3.Zero;
+                        }
+                        if (doubleClicked == true) pointIntersect = Vector3.Zero;
+                    }
+                }
+
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
 
                 // changing active skill
                 if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.K)
@@ -369,8 +407,8 @@ namespace Poseidon
                         && currentKeyboardState.IsKeyDown(Keys.L)
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp)
                         )
-                        ||
-                        (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && InShootingRange() && MouseOnEnemy())
+                        //||
+                        //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && InShootingRange())
                         )
                 {
                     prevFireTime = gameTime.TotalGameTime;
@@ -379,16 +417,6 @@ namespace Poseidon
                     else if (tank.bulletType == 1) { placeHealingBullet(); }
                 }
 
-                Vector3 pointIntersect;
-                //float angle;
-                //if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
-                if (currentMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
-                    //angle = CalculateAngle(pointIntersect, tank.Position);
-                }
-                else pointIntersect = Vector3.Zero;
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);
                 // Updating camera's frustum
@@ -412,7 +440,7 @@ namespace Poseidon
 
                 for (int i = 0; i < fishAmount; i++)
                 {
-                    fish[i].Update(enemies, fishAmount, random.Next(100) ,tank);
+                    fish[i].Update(fish, fishAmount, random.Next(100) ,tank);
                 }
 
                 // Just for death simulation
@@ -622,10 +650,54 @@ namespace Poseidon
                 BoundingSphere enemySphere;
                 enemySphere = enemy.BoundingSphere;
                 if (RayIntersectsBoundingSphere(cursorRay, enemySphere))
+                {
+                    cursor.SetShootingMouseImage();
                     return true;
+                }
             }
+            cursor.SetNormalMouseImage();
             return false;
         }
 
+        public bool MouseOnFish()
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            for (int i = 0; i < fishAmount; i++)
+            {
+                if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                {
+                    cursor.SetShootingMouseImage();
+                    return true;
+                }
+            }
+            cursor.SetNormalMouseImage();
+            return false;
+        }
+        public void CheckClick(GameTime gameTime)
+        {
+            lastMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+            clickTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+
+                if (clicked && (clickTimer < GameConstants.clickTimerDelay))
+                {
+                    doubleClicked = true;
+                    clicked = false;
+                }
+                else
+                {
+                    doubleClicked = false;
+                    clicked = true;
+                }
+                clickTimer = 0;
+            }
+        }
+        public float CalculateAngle(Vector3 point2, Vector3 point1)
+        {
+            return (float)Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
+        }
     }
 }

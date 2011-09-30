@@ -327,7 +327,7 @@ namespace Poseidon
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp)
                         )
                         ||
-                        (lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange() && MouseOnEnemy())
+                        (lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange() && (MouseOnEnemy() || MouseOnFish()))
                         )
                     {
                         prevFireTime = gameTime.TotalGameTime;
@@ -409,7 +409,7 @@ namespace Poseidon
                     }
 
                     for (int i = 0; i < fishAmount; i++) {
-                        fish[i].Update(enemies, fishAmount, random.Next(100), tank);
+                        fish[i].Update(fish, fishAmount, random.Next(100), tank);
                     }
 
                     if (retrievedFruits == GameConstants.NumFuelCells)
@@ -673,15 +673,25 @@ namespace Poseidon
         public bool MouseOnEnemy()
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            foreach (Enemy enemy in enemies)
+            for (int i = 0; i < enemiesAmount; i++)
             {
-                BoundingSphere enemySphere;
-                enemySphere = enemy.BoundingSphere;
-                if (RayIntersectsBoundingSphere(cursorRay, enemySphere))
+                if (RayIntersectsBoundingSphere(cursorRay, enemies[i].BoundingSphere))
                     return true;
             }
             return false;
         }
+
+        public bool MouseOnFish()
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            for (int i = 0; i < fishAmount; i++)
+            {
+                if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                    return true;
+            }
+            return false;
+        }
+
 
         private void DrawHeight()
         {

@@ -365,8 +365,13 @@ namespace Poseidon
                 }
 
                 // Are we shooting?
-                if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && currentKeyboardState.IsKeyDown(Keys.L)
-                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
+                        && currentKeyboardState.IsKeyDown(Keys.L)
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp)
+                        )
+                        ||
+                        (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && InShootingRange() && MouseOnEnemy())
+                        )
                 {
                     prevFireTime = gameTime.TotalGameTime;
                     audio.Shooting.Play();
@@ -588,5 +593,39 @@ namespace Poseidon
             d.loadContent(Content, "Models/fuelcell");
             myBullet.Add(d);
         }
+
+        public bool InShootingRange()
+        {
+            Vector3 pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+            Vector3 mouseDif = pointIntersect - tank.Position;
+            float distanceFromTank = mouseDif.Length();
+            if (distanceFromTank < GameConstants.shootingRange)
+                return true;
+            else
+                return false;
+        }
+
+        public static bool RayIntersectsBoundingSphere(Ray ray, BoundingSphere boundingSphere)
+        {
+            if (boundingSphere.Intersects(ray) != null)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool MouseOnEnemy()
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (Enemy enemy in enemies)
+            {
+                BoundingSphere enemySphere;
+                enemySphere = enemy.BoundingSphere;
+                if (RayIntersectsBoundingSphere(cursorRay, enemySphere))
+                    return true;
+            }
+            return false;
+        }
+
     }
 }

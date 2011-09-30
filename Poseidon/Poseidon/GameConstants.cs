@@ -78,5 +78,8 @@ namespace Poseidon
 
         //milisecond delay for double click
         public const double clickTimerDelay = 250;
+
+        //shooting range
+        public const float shootingRange = 35.0f;
     }
 }

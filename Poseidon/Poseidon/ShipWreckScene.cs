@@ -348,7 +348,55 @@ namespace Poseidon
                 //if the user clicks or holds mouse's left button
                 Vector3 pointIntersect = Vector3.Zero;
                 bool mouseOnLivingObject = MouseOnEnemy() || MouseOnFish();
-                if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
+                //if the user holds down Ctrl button
+                //just shoot at wherever the mouse is pointing w/o moving
+                if (currentKeyboardState.IsKeyDown(Keys.RightControl) || currentKeyboardState.IsKeyDown(Keys.LeftControl))
+                {
+                    if (currentMouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                        tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
+                        if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                        {
+                            prevFireTime = gameTime.TotalGameTime;
+                            audio.Shooting.Play();
+                            if (tank.bulletType == 0) { placeDamageBullet(); }
+                            else if (tank.bulletType == 1) { placeHealingBullet(); }
+                        }
+                    }
+                    pointIntersect = Vector3.Zero;
+                }
+                //if the user holds down Shift button
+                //let him change current bullet or skill type w/o moving
+                else if (currentKeyboardState.IsKeyDown(Keys.RightShift) || currentKeyboardState.IsKeyDown(Keys.LeftShift))
+                {
+                    // changing bullet type
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
+                            && currentKeyboardState.IsKeyUp(Keys.L)) || (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)))
+                    {
+                        tank.bulletType++;
+                        if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
+
+                    }
+                    // changing active skill
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
+                            && currentKeyboardState.IsKeyUp(Keys.K)) || (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)))
+                    {
+                        if (tank.activeSkillID != -1)
+                        {
+                            tank.activeSkillID++;
+                            if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                            while (tank.skills[tank.activeSkillID] == false)
+                            {
+                                tank.activeSkillID++;
+                                if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                            }
+                        }
+                    }
+                    pointIntersect = Vector3.Zero;
+                }
+                //if the user clicks or holds mouse's left button
+                else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                 {
                     pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
                 }
@@ -378,29 +426,6 @@ namespace Poseidon
                 }
 
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
-
-                // changing active skill
-                if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.K)
-                        && currentKeyboardState.IsKeyUp(Keys.K))
-                {
-                    if (tank.activeSkillID != -1)
-                    {
-                        tank.activeSkillID++;
-                        if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
-                        while (tank.skills[tank.activeSkillID] == false)
-                        {
-                            tank.activeSkillID++;
-                            if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
-                        }
-                    }
-                }
-                // changing bullet type
-                if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.L)
-                        && currentKeyboardState.IsKeyUp(Keys.L))
-                {
-                    tank.bulletType++;
-                    if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
-                }
 
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))

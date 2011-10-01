@@ -59,9 +59,9 @@ namespace GeneratedGeometryPipeline
             set { texCoordScale = value; }
         }
 
-        private string terrainTextureFilename = "rocks.bmp";
+        private string terrainTextureFilename = "rockmoss.jpg";
         [DisplayName("Terrain Texture")]
-        [DefaultValue("rocks.bmp")]
+        [DefaultValue("rockmoss.jpg")]
         [Description("The name of the terrain texture.")]
         public string TerrainTextureFilename
         {

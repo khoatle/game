@@ -14,9 +14,9 @@ namespace Poseidon
     public class HealthBullet : Projectiles {
         public int healthAmount;
 
-        public void initialize(Microsoft.Xna.Framework.Graphics.Viewport viewport, Microsoft.Xna.Framework.Vector3 position, float speed, float forwardDirection, float strength, float strengthUp)
+        public void initialize(Vector3 position, Vector3 headingDirection, float speed, float strength, float strengthUp)
         {
-            base.initialize(viewport, position, speed, forwardDirection);
+            base.initialize(position, headingDirection, speed);
             healthAmount = (int)(GameConstants.HealingAmount * strength * strengthUp);
         }
     }

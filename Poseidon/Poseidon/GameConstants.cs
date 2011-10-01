@@ -35,9 +35,12 @@ namespace Poseidon
 
         // Bullet const
         public const int DefaultBulletDamage = 10;
+        public const int DefaultEnemyDamage = 5;
+
+        public const float EnemySpeed = 0.5f;
 
         //general
-        public const int NumberEnemies = 20;
+        public const int NumberEnemies = 10;
         public const int NumberFish = 20;
         public const int NumberShipWrecks = 10;
         public const int MaxRangeTerrain = 98;

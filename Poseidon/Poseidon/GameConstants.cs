@@ -19,7 +19,7 @@ namespace Poseidon
 
         //ship constants
         public const float Velocity = 0.75f;
-        public const float BarrierVelocity = 0.4f;
+        public const float BarrierVelocity = 0.1f;
         public const float TurnSpeed = 0.025f;
         public const int MaxRange = 500;
         // 5 seconds for power-ups' effects
@@ -64,9 +64,9 @@ namespace Poseidon
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;
         public const float FuelCellBoundingSphereFactor = .5f;
-        public const float BarrierBoundingSphereFactor = .7f;
+        public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = .9f;
-        public const float ShipWreckBoundingSphereFactor = 0.8f;
+        public const float ShipWreckBoundingSphereFactor = 5.0f;
         public const float PlantBoundingSphereFactor = 0.6f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 2.5f;
@@ -78,5 +78,11 @@ namespace Poseidon
         //radar
         public const float RadarScreenRadius = 75.0f;
         public const float RadarRange = 500.0f;
+
+        //milisecond delay for double click
+        public const double clickTimerDelay = 250;
+
+        //shooting range
+        public const float shootingRange = 70.0f;
     }
 }

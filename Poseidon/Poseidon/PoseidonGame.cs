@@ -27,6 +27,8 @@ namespace Poseidon
         //KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();
         //GamePadState currentGamePadState = new GamePadState();
+        MouseState currentMouseState = new MouseState();
+        MouseState lastMouseState = new MouseState();
 
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
@@ -57,6 +59,11 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool skillPressed;
+        bool doubleClicked = false;
+        bool clicked=false;
+        double clickTimer = 0;
+
+
         // Radar for the game
         Radar radar;
         public PoseidonGame()
@@ -157,6 +164,31 @@ namespace Poseidon
         {
             // TODO: Unload any non ContentManager content here
         }
+
+
+        public void CheckClick(GameTime gameTime)
+        {
+            lastMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
+            clickTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
+            if(lastMouseState.LeftButton==ButtonState.Pressed 
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                    
+                    if (clicked && (clickTimer < GameConstants.clickTimerDelay))
+                    {
+                        doubleClicked = true;
+                        clicked = false;
+                    }
+                    else
+                    {
+                        doubleClicked = false;
+                        clicked = true;
+                    }
+                    clickTimer = 0;
+             }
+        }
+
 
         private void CheckKeyEntered()
         {
@@ -265,11 +297,13 @@ namespace Poseidon
                 prevScene = playGameScene;
                 ShowScene(skillScene);
             }
-            if (GetInShipWreck())
+            if (doubleClicked && GetInShipWreck())
             {
                 shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 ShowScene(shipWreckScene);
+                doubleClicked = false;
             }
+            else doubleClicked = false;
         }
         public bool GetInShipWreck()
         {
@@ -277,9 +311,10 @@ namespace Poseidon
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
                 if (!playGameScene.shipWrecks[curWreck].accessed
-                    && playGameScene.clickOnShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position)
+                    && playGameScene.MouseOnShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position)
+                    && playGameScene.TankNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
-                {
+                {            
                     // no re-explore a ship wreck
                     playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
@@ -365,7 +400,8 @@ namespace Poseidon
         protected override void Update(GameTime gameTime)
         {
             // Get the Keyboard and GamePad state
-            CheckKeyEntered();   
+            CheckKeyEntered();
+            CheckClick(gameTime);
             HandleScenesInput(gameTime);
             base.Update(gameTime);
             

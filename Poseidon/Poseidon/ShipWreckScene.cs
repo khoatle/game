@@ -426,7 +426,6 @@ namespace Poseidon
                 }
 
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
-
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
@@ -442,16 +441,7 @@ namespace Poseidon
                     else if (tank.bulletType == 1) { placeHealingBullet(); }
                 }
 
-                //Vector3 pointIntersect;
-                //float angle;
-                //if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
-                if (currentMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
-                    //angle = CalculateAngle(pointIntersect, tank.Position);
-                }
-                else pointIntersect = Vector3.Zero;
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
+     
 
                 gameCamera.Update(tank.ForwardDirection,
                     tank.Position, aspectRatio);

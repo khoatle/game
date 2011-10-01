@@ -728,8 +728,7 @@ namespace Poseidon
             
             for (int i = 0; i < enemiesAmount; i++)
             {
-                //BoundingSphere enemyBound = enemies[i].BoundingSphere;
-                //enemyBound.Radius *= 2.5f;
+
                 if (RayIntersectsBoundingSphere(cursorRay, enemies[i].BoundingSphere))
                 {
                     cursor.SetShootingMouseImage();

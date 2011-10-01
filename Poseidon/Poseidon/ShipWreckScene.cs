@@ -670,11 +670,11 @@ namespace Poseidon
         public bool MouseOnEnemy()
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            foreach (Enemy enemy in enemies)
+
+            for (int i = 0; i < enemiesAmount; i++)
             {
-                BoundingSphere enemySphere;
-                enemySphere = enemy.BoundingSphere;
-                if (RayIntersectsBoundingSphere(cursorRay, enemySphere))
+
+                if (RayIntersectsBoundingSphere(cursorRay, enemies[i].BoundingSphere))
                 {
                     cursor.SetShootingMouseImage();
                     return true;
@@ -683,6 +683,7 @@ namespace Poseidon
             cursor.SetNormalMouseImage();
             return false;
         }
+
 
         public bool MouseOnFish()
         {

@@ -150,7 +150,7 @@ namespace Poseidon
 
             
 
-            // Start the game in the start Scene :)
+            // Start the game in the start Scene
             startScene.Show();
             activeScene = startScene;
 
@@ -364,7 +364,7 @@ namespace Poseidon
                         else shipWreckScene.tank.strength += 0.25f;
                         break;
                     case 1:
-                        if (playGameScene.tank.speed == 4) break;
+                        if (playGameScene.tank.speed == 2) break;
                         if (prevScene == playGameScene)
                             playGameScene.tank.speed += 0.25f;
                         else shipWreckScene.tank.speed += 0.25f;

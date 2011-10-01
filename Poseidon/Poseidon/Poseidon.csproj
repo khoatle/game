@@ -108,6 +108,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioLibrary.cs" />
+    <Compile Include="CastSkill.cs" />
     <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />

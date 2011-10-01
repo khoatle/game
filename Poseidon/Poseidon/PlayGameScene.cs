@@ -314,27 +314,9 @@ namespace Poseidon
                 {
                     Vector3 pointIntersect = Vector3.Zero;
                     bool mouseOnLivingObject = MouseOnEnemy() || MouseOnFish();
-                    //if the user holds down Ctrl button
-                    //just shoot at wherever the mouse is pointing w/o moving
-                    if (currentKeyboardState.IsKeyDown(Keys.RightControl) || currentKeyboardState.IsKeyDown(Keys.LeftControl))
-                    {
-                        if (currentMouseState.LeftButton == ButtonState.Pressed)
-                        {
-                            pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
-                            tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
-                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
-                            {
-                                prevFireTime = gameTime.TotalGameTime;
-                                audio.Shooting.Play();
-                                if (tank.bulletType == 0) { placeDamageBullet(); }
-                                else if (tank.bulletType == 1) { placeHealingBullet(); }
-                            }
-                        }
-                        pointIntersect = Vector3.Zero;
-                    }
-                    //if the user holds down Shift button
+                     //if the user holds down Shift button
                     //let him change current bullet or skill type w/o moving
-                    else if (currentKeyboardState.IsKeyDown(Keys.RightShift) || currentKeyboardState.IsKeyDown(Keys.LeftShift))
+                    if (currentKeyboardState.IsKeyDown(Keys.RightShift) || currentKeyboardState.IsKeyDown(Keys.LeftShift))
                     {
                         // changing bullet type
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
@@ -361,6 +343,60 @@ namespace Poseidon
                         }
                         pointIntersect = Vector3.Zero;
                     }
+                    //if the user click on right mouse button
+                    //cast the current selected skill
+                    //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
+                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    {
+
+                        // Hercules' Bow!!!
+                        if (tank.activeSkillID == 0 && mouseOnLivingObject)
+                        {
+                            pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                            tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
+                            //if the skill has cooled down
+                            //or this is the 1st time the user uses it
+                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[0] > GameConstants.coolDownForSkill1) || tank.firstUse[0] == true)
+                            {
+                                tank.firstUse[0] = false;
+                                tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
+                                audio.Explosion.Play();
+                                useHerculesBow();
+                            }
+                            
+                        }
+                        // Achilles' Armor!!!
+                        if (tank.activeSkillID == 2)
+                        {
+                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[2] > GameConstants.coolDownForSkill2) || tank.firstUse[2] == true)
+                            {
+                                tank.firstUse[2] = false;
+                                tank.invincibleMode = true;
+                                audio.NewMeteor.Play();
+                                tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                            }
+                        }
+                        pointIntersect = Vector3.Zero;
+                    }
+                    //if the user holds down Ctrl button
+                    //just shoot at wherever the mouse is pointing w/o moving
+                    else if (currentKeyboardState.IsKeyDown(Keys.RightControl) || currentKeyboardState.IsKeyDown(Keys.LeftControl))
+                    {
+                        if (currentMouseState.LeftButton == ButtonState.Pressed)
+                        {
+                            pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                            tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
+                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                            {
+                                prevFireTime = gameTime.TotalGameTime;
+                                audio.Shooting.Play();
+                                if (tank.bulletType == 0) { placeDamageBullet(); }
+                                else if (tank.bulletType == 1) { placeHealingBullet(); }
+                            }
+                        }
+                        pointIntersect = Vector3.Zero;
+                    }
+                   
                     //if the user clicks or holds mouse's left button
                     else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                     {
@@ -714,17 +750,12 @@ namespace Poseidon
 
         public bool MouseOnShipWreck(BoundingSphere boundingSphere, Vector3 center)
         {
-//            if (lastMouseState.LeftButton == ButtonState.Pressed
-//                && currentMouseState.LeftButton == ButtonState.Released)
-//            {
-//=======
-//>>>>>>> 016181493019a5aa0593e37076e93d41a8c84458
-                Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-                boundingSphere.Center = center;
-                if (RayIntersectsBoundingSphere(cursorRay, boundingSphere))
-                    return true;
-                else
-                    return false;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            boundingSphere.Center = center;
+            if (RayIntersectsBoundingSphere(cursorRay, boundingSphere))
+                return true;
+            else
+                return false;
         }
 
         public bool InShootingRange()
@@ -816,18 +847,18 @@ namespace Poseidon
             float distanceFomTank = mouseDif.Length();
             str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
             str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
-            str2 += "\nXc= " + tank.Position.X + " Yc= " + tank.Position.Y + " Zc= " + tank.Position.Z;
             float angle = CalculateAngle(pointIntersect, tank.Position);
             str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
             Vector3 posDif = tank.pointToMoveTo - tank.Position;
             float distanceToDest = posDif.Length();
-            str2 += "\nDistance= " + distanceToDest;
-            str2 += "\nTank Position " + tank.Position;
-            str2 += "\nEnemy Position " + enemies[0].Position;
-            str2 += "\nTank Forward Direction " + tank.ForwardDirection;
-            str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
-            str2 += "\nPrevFIre " + enemies[0].prevFire;
+            //str2 += "\nDistance= " + distanceToDest;
+            //str2 += "\nTank Position " + tank.Position;
+            //str2 += "\nEnemy Position " + enemies[0].Position;
+            //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
+            //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
+            //str2 += "\nPrevFIre " + enemies[0].prevFire;
             str2 += "\n Tank Health " + tank.hitPoint;
+            str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

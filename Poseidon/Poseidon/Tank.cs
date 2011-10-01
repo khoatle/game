@@ -90,6 +90,14 @@ namespace Poseidon
         public bool[] skills;
         //which skill is being selected
         public int activeSkillID;
+        //time that skills were previously casted
+        //for managing skills' cool down time
+        public double[] skillPrevUsed;
+        //invincible mode when Achilles' Armor is used
+        public bool invincibleMode;
+        //if it is the 1st time the user use it
+        //let him use it
+        public bool[] firstUse;
 
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
@@ -177,6 +185,9 @@ namespace Poseidon
             fireRateUp = 1.0f;
 
             skills = new bool[GameConstants.numberOfSkills];
+            skillPrevUsed = new double[GameConstants.numberOfSkills];
+            firstUse = new bool[GameConstants.numberOfSkills]; 
+
             Position.Y = GameConstants.FloatHeight;
         }
         /// <summary>
@@ -231,12 +242,15 @@ namespace Poseidon
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++) {
                 skills[index] = false;
+                firstUse[index] = true;
+                skillPrevUsed[index] = 0;
             }
             activeSkillID = -1;
+            invincibleMode = false;
 
             //just for testing
             //should be removed
-            activeSkillID = 2;
+            activeSkillID = 0;
             skills[0] = true;
             skills[1] = false;
             skills[2] = true;
@@ -256,13 +270,25 @@ namespace Poseidon
             speedUpStartTime = tank.speedUpStartTime;
             fireRateUpStartTime = tank.fireRateUpStartTime;
             skills = tank.skills;
+            skillPrevUsed = tank.skillPrevUsed;
             activeSkillID = tank.activeSkillID;
+            invincibleMode = tank.invincibleMode;
+            firstUse = tank.firstUse;
         }
         internal void Reset()
         {
             Position = Vector3.Zero;
             Position.Y = GameConstants.FloatHeight;
             ForwardDirection = 0f;
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                firstUse[index] = true;
+                skillPrevUsed[index] = 0;
+            }
+            invincibleMode = false;
+            strengthUpStartTime = 0;
+            speedUpStartTime = 0;
+            fireRateUpStartTime = 0;
         }
 
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
@@ -291,6 +317,14 @@ namespace Poseidon
                 if (gameTime.TotalGameTime.TotalSeconds - fireRateUpStartTime >= GameConstants.EffectExpired)
                 {
                     fireRateUp = 1.0f;
+                }
+            }
+            //worn out effect of certain skills
+            if (invincibleMode == true)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeSkill2Last)
+                {
+                    invincibleMode = false;
                 }
             }
             float turnAmount = 0;
@@ -475,6 +509,11 @@ namespace Poseidon
                     effect.Projection = projection;
 
                     effect.EnableDefaultLighting();
+                    if (invincibleMode == true)
+                    {
+                        effect.DiffuseColor = Color.Gold.ToVector3();
+                    }
+                    else effect.DiffuseColor = Vector3.One;
                 }
 
                 mesh.Draw();

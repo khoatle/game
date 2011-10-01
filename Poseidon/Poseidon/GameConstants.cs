@@ -84,5 +84,10 @@ namespace Poseidon
 
         //shooting range
         public const float shootingRange = 70.0f;
+
+        //cool down time for each skill
+        public const double coolDownForSkill1 = 5;
+        public const double coolDownForSkill2 = 5;
+        public const double timeSkill2Last = 5;
     }
 }

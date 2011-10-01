@@ -229,8 +229,7 @@ namespace Poseidon
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
 
             //no skill yet activated
-            for (int index = 0; index < GameConstants.numberOfSkills; index++)
-            {
+            for (int index = 0; index < GameConstants.numberOfSkills; index++) {
                 skills[index] = false;
             }
             activeSkillID = -1;
@@ -266,7 +265,7 @@ namespace Poseidon
             ForwardDirection = 0f;
         }
 
-        public void Update(KeyboardState keyboardState, Barrier[] barriers, int size, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -376,7 +375,7 @@ namespace Poseidon
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;
-            if (Collision.isTankValidMove(this, futurePosition, barriers, size))
+            if (Collision.isTankValidMove(this, futurePosition, enemies, enemyAmount, fishes, fishAmount))
             {
                 Position = futurePosition;
 
@@ -390,6 +389,7 @@ namespace Poseidon
                 //Trash_Fruit_BoundingSphere = new BoundingSphere(updatedSphere.Center,
                 //    20);
             }
+
 
             //Interacting with trashs and fruits
             if (keyboardState.IsKeyDown(Keys.Z))
@@ -500,7 +500,7 @@ namespace Poseidon
             }
         }
 
-        public float CalculateAngle(Vector3 point2, Vector3 point1)
+        public static float CalculateAngle(Vector3 point2, Vector3 point1)
         {
             return (float)Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
         }

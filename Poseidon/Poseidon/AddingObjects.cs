@@ -14,21 +14,17 @@ namespace Poseidon
 {
     public partial class PlayGameScene
     {
-        private void loadContentEnemies()
-        {
+        private void loadContentEnemies() {
             enemiesAmount = GameConstants.NumberEnemies;
-            for (int i = 0; i < enemiesAmount; i++)
-            {
+            for (int i = 0; i < enemiesAmount; i++) {
                 enemies[i] = new Enemy();
-                enemies[i].LoadContent(Content, "Models/pyramid10uR");
+                enemies[i].LoadContent(Content, "Models/fuelcarrier");
             }
         }
 
-        private void loadContentFish()
-        {
+        private void loadContentFish() {
             fishAmount = GameConstants.NumberFish;
-            for (int i = 0; i < fishAmount; i++)
-            {
+            for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
                 fish[i].LoadContent(Content, "Models/cube10uR");
             }
@@ -102,16 +98,35 @@ namespace Poseidon
 
         private void placeHealingBullet() {
             HealthBullet h = new HealthBullet();
-            h.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strength, tank.strengthUp);
+            Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+ 
+            h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength, tank.strengthUp);
             h.loadContent(Content, "Models/sphere1uR");
             healthBullet.Add(h);
         }
 
         private void placeDamageBullet() {
             DamageBullet d = new DamageBullet();
-            d.initialize(GraphicDevice.Viewport, tank.Position, GameConstants.BulletSpeed, tank.ForwardDirection, tank.strength, tank.strengthUp);
+
+            Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+            
+            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength, tank.strengthUp);
             d.loadContent(Content, "Models/fuelcell");
             myBullet.Add(d);
+        }
+
+        public static void placeEnemyBullet(Vector3 bulletPosition, Vector3 shootingDirection, int damage, List<DamageBullet> bullets) {
+            DamageBullet newBullet = new DamageBullet();
+
+            newBullet.initialize(bulletPosition, shootingDirection, GameConstants.BulletSpeed, damage);
+            newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
+            bullets.Add(newBullet);
         }
 
         // Helper
@@ -146,15 +161,6 @@ namespace Poseidon
         // Helper
         private bool IsOccupied(int xValue, int zValue)
         {
-            //foreach (GameObject currentObj in fruits)
-            //{
-            //    if (((int)(MathHelper.Distance(
-            //        xValue, currentObj.Position.X)) < 15) &&
-            //        ((int)(MathHelper.Distance(
-            //        zValue, currentObj.Position.Z)) < 15))
-            //        return true;
-            //}
-
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (((int)(MathHelper.Distance(

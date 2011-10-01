@@ -17,39 +17,33 @@ namespace Poseidon
     {
         private Vector3 unitDirection;
         private float projectionSpeed;
-        private float forwardDirection;
-        private Viewport view;
 
         private bool isActive;
 
         public Projectiles()
-            : base()
-        {
+            : base() {
             isActive = true;
         }
 
-        public virtual void initialize(Viewport viewport, Vector3 position, float speed, float forwardDirection) {
-            this.forwardDirection = forwardDirection;
+        public virtual void initialize(Vector3 position, Vector3 headingDirection, float speed) {
             this.Position = position;
-            this.view = viewport;
 
             projectionSpeed = speed;
-            calculateUnitDirection();
+            unitDirection = headingDirection;
             unitDirection.Normalize();
             isActive = true;
         }
 
-        private void calculateUnitDirection()
-        {
-            Matrix orientationMatrix = Matrix.CreateRotationY(forwardDirection);
-            Vector3 movement = Vector3.Zero;
-            movement.Z = 1;// GameConstants.BulletSpeed;
-            unitDirection = Vector3.Transform(movement, orientationMatrix);
-            unitDirection.Normalize();
-        }
+        //private void calculateUnitDirection()
+        //{
+        //    Matrix orientationMatrix = Matrix.CreateRotationY(forwardDirection);
+        //    Vector3 movement = Vector3.Zero;
+        //    movement.Z = 1;// GameConstants.BulletSpeed;
+        //    unitDirection = Vector3.Transform(movement, orientationMatrix);
+        //    unitDirection.Normalize();
+        //}
 
-        private Vector3 calculateFuturePosition()
-        {
+        private Vector3 calculateFuturePosition() {
             return Position + unitDirection * GameConstants.BulletSpeed;
         }
 
@@ -57,11 +51,6 @@ namespace Poseidon
         {
             Vector3 tmp = calculateFuturePosition();
 
-            //if (isActive && Collision.isOutOfMap(tmp) && Collision.isOutOfView(tmp, view))
-            //{
-            //    isActive = false;
-            //    return;
-            //}
             Position = tmp;
             BoundingSphere = new BoundingSphere(tmp, BoundingSphere.Radius);
         }

@@ -68,7 +68,7 @@ namespace Poseidon
         }
 
         public void Update(GamePadState gamepadState,
-            KeyboardState keyboardState, Barrier[] barriers)
+            KeyboardState keyboardState, SwimmingObject[] barriers)
         {
             Vector3 futurePosition = Position;
             float turnAmount = 0;
@@ -121,7 +121,7 @@ namespace Poseidon
         }
 
         private bool ValidateMovement(Vector3 futurePosition,
-            Barrier[] barriers)
+            SwimmingObject[] barriers)
         {
             BoundingSphere futureBoundingSphere = BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
@@ -139,7 +139,7 @@ namespace Poseidon
         }
 
         private bool CheckForBarrierCollision(
-            BoundingSphere vehicleBoundingSphere, Barrier[] barriers)
+            BoundingSphere vehicleBoundingSphere, SwimmingObject[] barriers)
         {
             for (int curBarrier = 0; curBarrier < barriers.Length; curBarrier++)
             {

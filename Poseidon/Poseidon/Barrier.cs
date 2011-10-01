@@ -10,7 +10,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    public class Barrier : GameObject
+    public class SwimmingObject : GameObject
     {
         public string BarrierType { get; set; }
         public float ForwardDirection { get; set; }
@@ -19,9 +19,7 @@ namespace Poseidon
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
 
-        public BoundingSphere perceptingSphere;
-
-        public Barrier()
+        public SwimmingObject()
             : base()
         {
             BarrierType = null;
@@ -41,7 +39,6 @@ namespace Poseidon
             scaledSphere.Radius *= GameConstants.BarrierBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
-            perceptingSphere = new BoundingSphere(BoundingSphere.Center, BoundingSphere.Radius * 3);
         }
 
         public void Draw(Matrix view, Matrix projection) {
@@ -70,56 +67,53 @@ namespace Poseidon
             }
         }
 
-        public void Update(Barrier[] barriers, int size, int changeDirection, Tank tank)
+        public virtual void Update(SwimmingObject[] swimmingObjects, int size, int changeDirection, Tank tank)
         {
-            Vector3 futurePosition = Position;
-            //int barrier_move
-            Random random = new Random();
-            float turnAmount = 0;
-            //also try to change direction if we are stuck
-            if (changeDirection >= 95 || stucked == true)
-            {
-                int rightLeft = random.Next(2);
-                if (rightLeft == 0)
-                    turnAmount = 20;
-                else turnAmount = -20;
-            }
+            //Vector3 futurePosition = Position;
+            ////int barrier_move
+            //Random random = new Random();
+            //float turnAmount = 0;
+            ////also try to change direction if we are stuck
+            //if (changeDirection >= 95 || stucked == true)
+            //{
+            //    int rightLeft = random.Next(2);
+            //    if (rightLeft == 0)
+            //        turnAmount = 20;
+            //    else turnAmount = -20;
+            //}
             
-            Matrix orientationMatrix;
-            Vector3 speed;
-            Vector3 movement = Vector3.Zero;
+            //Matrix orientationMatrix;
+            //Vector3 speed;
+            //Vector3 movement = Vector3.Zero;
 
-            movement.Z = 1;
-            float prevForwardDir = ForwardDirection;
-            // try upto 10 times to change direction is there is collision
-            for (int i=0; i<4; i++) {
-                ForwardDirection += turnAmount * GameConstants.TurnSpeed;
-                orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
-                speed = Vector3.Transform(movement, orientationMatrix);
-                speed *= GameConstants.BarrierVelocity;
-                futurePosition = Position + speed;
+            //movement.Z = 1;
+            //float prevForwardDir = ForwardDirection;
+            //// try upto 10 times to change direction is there is collision
+            //for (int i=0; i<4; i++) {
+            //    ForwardDirection += turnAmount * GameConstants.TurnSpeed;
+            //    orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
+            //    speed = Vector3.Transform(movement, orientationMatrix);
+            //    speed *= GameConstants.BarrierVelocity;
+            //    futurePosition = Position + speed;
 
-                if (Collision.isBarrierValidMove(this, futurePosition, barriers, size, tank))
-                {
-                    Position = futurePosition;
+            //    if (Collision.isEnemyValidMove(this, futurePosition, swimmingObjects, size, tank)) {
+            //        Position = futurePosition;
 
-                    BoundingSphere updatedSphere;
-                    updatedSphere = BoundingSphere;
+            //        BoundingSphere updatedSphere;
+            //        updatedSphere = BoundingSphere;
 
-                    updatedSphere.Center.X = Position.X;
-                    updatedSphere.Center.Z = Position.Z;
-                    BoundingSphere = new BoundingSphere(updatedSphere.Center,
-                        updatedSphere.Radius);
-
-                    perceptingSphere = new BoundingSphere(BoundingSphere.Center, BoundingSphere.Radius * 3);
-                    
-                    stucked = false;
-                    break;
-                }
-                else stucked = true;
-                //ForwardDirection = prevForwardDir;
-                //turnAmount = -turnAmount;
-            }
+            //        updatedSphere.Center.X = Position.X;
+            //        updatedSphere.Center.Z = Position.Z;
+            //        BoundingSphere = new BoundingSphere(updatedSphere.Center,
+            //            updatedSphere.Radius);
+                   
+            //        stucked = false;
+            //        break;
+            //    }
+            //    else stucked = true;
+            //    //ForwardDirection = prevForwardDir;
+            //    //turnAmount = -turnAmount;
+            //}
         }
     }
 }

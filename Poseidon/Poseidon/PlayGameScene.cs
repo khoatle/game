@@ -14,9 +14,11 @@ namespace Poseidon
     /// </summary>
     public partial class PlayGameScene : GameScene
     {
-        GraphicsDeviceManager graphics;
-        GraphicsDevice GraphicDevice;
-        ContentManager Content;
+        public static GraphicsDeviceManager graphics;
+        public static GraphicsDevice GraphicDevice;
+        public static ContentManager Content;
+        public static GameTime timming;
+
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
@@ -24,6 +26,7 @@ namespace Poseidon
         GamePadState currentGamePadState = new GamePadState();
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
+
         private AudioLibrary audio;
         int retrievedFruits;
         TimeSpan startTime, roundTimer, roundTime;
@@ -41,7 +44,7 @@ namespace Poseidon
 
         FuelCarrier fuelCarrier;
         public List<ShipWreck> shipWrecks;
-        
+
         public List<DamageBullet> myBullet;
         public List<DamageBullet> enemyBullet;
         public List<HealthBullet> healthBullet;
@@ -54,7 +57,6 @@ namespace Poseidon
 
         int enemiesAmount = 0;
         int fishAmount = 0;
-
 
         // The main character for this level
         public Tank tank;
@@ -84,7 +86,7 @@ namespace Poseidon
         CutSceneDialog cutSceneDialog;
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
-        
+
         HeightMapInfo heightMapInfo;
 
         Radar radar;
@@ -92,12 +94,12 @@ namespace Poseidon
         // Frustum of the camera
         BoundingFrustum frustum;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
-            this.graphics = graphics;
-            this.Content = Content;
-            this.GraphicDevice = GraphicsDevice;
+            graphics = graphic;
+            Content = content;
+            GraphicDevice = GraphicsDevice;
             this.spriteBatch = spriteBatch;
             this.pausePosition = pausePosition;
             this.pauseRect = pauseRect;
@@ -200,8 +202,6 @@ namespace Poseidon
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
 
-            enemiesAmount = GameConstants.NumberEnemies;
-            fishAmount = GameConstants.NumberFish;
             InitializeGameField(Content);
 
             //Clean all trees
@@ -264,10 +264,12 @@ namespace Poseidon
             set
             {
                 paused = value;
-                if (paused) {
+                if (paused)
+                {
                     MediaPlayer.Pause();
                 }
-                else {
+                else
+                {
                     MediaPlayer.Resume();
                 }
             }
@@ -276,6 +278,7 @@ namespace Poseidon
         {
             if (!paused)
             {
+                timming = gameTime;
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
                 lastMouseState = currentMouseState;
@@ -287,7 +290,6 @@ namespace Poseidon
                 //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 //    //this.Exit();
-                
 
                 if (currentGameState == GameState.PlayingCutScene)
                 {
@@ -322,7 +324,7 @@ namespace Poseidon
                     }
 
                     // Are we shooting?
-                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) 
+                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                     {
@@ -332,14 +334,11 @@ namespace Poseidon
                         else if (tank.bulletType == 1) { placeHealingBullet(); }
                     }
 
-
                     // changing bullet type
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && lastKeyboardState.IsKeyDown(Keys.L)
-                            && currentKeyboardState.IsKeyUp(Keys.L))
-                    {
+                            && currentKeyboardState.IsKeyUp(Keys.L)) {
                         tank.bulletType++;
                         if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
-
                     }
 
                     //Are we planting trees?
@@ -371,7 +370,7 @@ namespace Poseidon
                         //angle = CalculateAngle(pointIntersect, tank.Position);
                     }
                     else pointIntersect = Vector3.Zero;
-                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fruits, gameTime, pointIntersect);
+                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
 
                     gameCamera.Update(tank.ForwardDirection,
                         tank.Position, aspectRatio);
@@ -382,30 +381,39 @@ namespace Poseidon
                     foreach (Fruit fruit in fruits)
                     {
                         fruit.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                        if (fruit.Retrieved)
-                        {
+                        if (fruit.Retrieved) {
                             retrievedFruits++;
                         }
                     }
 
-                    for (int i = 0; i < myBullet.Count; i++) {
+                    for (int i = 0; i < myBullet.Count; i++)
+                    {
                         myBullet[i].update();
                     }
 
-                    for (int i = 0; i < healthBullet.Count; i++) {
+                    for (int i = 0; i < healthBullet.Count; i++)
+                    {
                         healthBullet[i].update();
+                    }
+
+                    for (int i = 0; i < enemyBullet.Count; i++) {
+                        enemyBullet[i].update();
                     }
                     Collision.updateBulletOutOfBound(healthBullet, myBullet, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
-                    Collision.updateHealingBulletVsBarrierCollision(healthBullet, enemies, enemiesAmount);
+                    Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
+                    Collision.updateProjectileHitTank(tank, enemyBullet);
 
                     for (int i = 0; i < enemiesAmount; i++) {
-                        enemies[i].Update(enemies, enemiesAmount, random.Next(100), tank);
+                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
 
                     for (int i = 0; i < fishAmount; i++) {
-                        fish[i].Update(enemies, fishAmount, random.Next(100), tank);
+                        fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
+
+                    if (tank.hitPoint <= 0) { currentGameState = GameState.Lost; }
 
                     if (retrievedFruits == GameConstants.NumFuelCells)
                     {
@@ -439,7 +447,6 @@ namespace Poseidon
                     {
                         currentLevel++;
                         ResetGame(gameTime, aspectRatio);
-
                     }
                 }
                 base.Update(gameTime);
@@ -448,7 +455,7 @@ namespace Poseidon
 
         public override void Draw(GameTime gameTime)
         {
-            
+
             base.Draw(gameTime);
             if (paused)
             {
@@ -558,17 +565,24 @@ namespace Poseidon
                     enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-            for (int i = 0; i < fishAmount; i++) {
+            for (int i = 0; i < fishAmount; i++)
+            {
                 if (fish[i].BoundingSphere.Intersects(frustum))
                     fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-            for (int i = 0; i < myBullet.Count; i++) {
+            for (int i = 0; i < myBullet.Count; i++)
+            {
                 myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-            for (int i = 0; i < healthBullet.Count; i++) {
+            for (int i = 0; i < healthBullet.Count; i++)
+            {
                 healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
+            for (int i = 0; i < enemyBullet.Count; i++) {
+                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
             // Drawing ship wrecks
@@ -590,10 +604,8 @@ namespace Poseidon
                 }
             }
 
-
             // Draw each plant
-            foreach (Plant p in plants)
-            {
+            foreach (Plant p in plants) {
                 if (p.BoundingSphere.Intersects(frustum))
                 {
                     p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((p.creationTime - roundTimer.TotalSeconds) / 10.0));
@@ -635,7 +647,7 @@ namespace Poseidon
 
         public bool clickOnShipWreck(BoundingSphere boundingSphere, Vector3 center)
         {
-            if (lastMouseState.LeftButton==ButtonState.Pressed 
+            if (lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
                 Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
@@ -654,7 +666,7 @@ namespace Poseidon
         private void DrawHeight()
         {
             float xOffsetText, yOffsetText;
-            string str1 = "Height: " +heightMapInfo.GetHeight(tank.Position);
+            string str1 = "Height: " + heightMapInfo.GetHeight(tank.Position);
             Rectangle rectSafeArea;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             BoundingSphere boundingSphere;
@@ -663,10 +675,10 @@ namespace Poseidon
                 boundingSphere = shipWreck.BoundingSphere;
                 boundingSphere.Center = shipWreck.Position;
                 if (RayIntersectsBoundingSphere(cursorRay, boundingSphere))
-                      str1 += " Pointing to ship wreck ";
+                    str1 += " Pointing to ship wreck ";
 
             }
-           
+
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
@@ -680,12 +692,13 @@ namespace Poseidon
             //spriteBatch.Begin();
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
+
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
-                //" of " + fruits.Count;
+            //" of " + fruits.Count;
             Rectangle rectSafeArea;
 
             str1 += (roundTimer.Seconds).ToString();
@@ -701,12 +714,13 @@ namespace Poseidon
             Vector3 posDif = tank.pointToMoveTo - tank.Position;
             float distanceToDest = posDif.Length();
             str2 += "\nDistance= " + distanceToDest;
-            str2 += "\n Type: " + tank.bulletType + "\n Strength up " + tank.strength;
-            if (healthBullet.Count > 0 && enemiesAmount > 0)
-            {
-                str2 += "\n 1st Bullet Pos " + healthBullet[0].Position
-                    + "\n Barrier pos " + enemies[0].Position;
-            }
+            str2 += "\nTank Position " + tank.Position;
+            str2 += "\nEnemy Position " + enemies[0].Position;
+            str2 += "\nTank Forward Direction " + tank.ForwardDirection;
+            str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
+            str2 += "\nPrevFIre " + enemies[0].prevFire;
+            str2 += "\n Tank Health " + tank.hitPoint;
+
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
@@ -757,6 +771,7 @@ namespace Poseidon
 
             spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
         }
+
         private void DrawCutScene()
         {
             float xOffsetText, yOffsetText;
@@ -773,14 +788,15 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
+
         public static bool RayIntersectsBoundingSphere(Ray ray, BoundingSphere boundingSphere)
         {
-            if (boundingSphere.Intersects(ray) != null)
-            {
+            if (boundingSphere.Intersects(ray) != null) {
                 return true;
             }
             return false;
         }
+
         public Vector3 IntersectPointWithPlane(float planeHeight)
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
@@ -789,9 +805,10 @@ namespace Poseidon
             float z = cursorRay.Position.Z + cursorRay.Direction.Z * t;
             return new Vector3(x, planeHeight, z);
         }
+
         public float CalculateAngle(Vector3 point2, Vector3 point1)
         {
-            return (float) Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
+            return (float)Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
         }
     }
 }

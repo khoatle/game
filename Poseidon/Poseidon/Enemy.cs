@@ -30,7 +30,7 @@ namespace Poseidon {
             : base()
         {
             giveUpTime = new TimeSpan(0, 0, 3);
-            perceptionRadius = 20f;
+            perceptionRadius = 30f;
             timeBetweenFire = 0.75f;
             prevFire = new TimeSpan();
             hasPrevTarget = false;

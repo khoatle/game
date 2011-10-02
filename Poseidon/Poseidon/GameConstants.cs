@@ -66,7 +66,7 @@ namespace Poseidon
         public const float FuelCellBoundingSphereFactor = .5f;
         public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = .9f;
-        public const float ShipWreckBoundingSphereFactor = 5.0f;
+        public const float ShipWreckBoundingSphereFactor = 2.5f;
         public const float PlantBoundingSphereFactor = 0.6f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 2.5f;
@@ -86,8 +86,13 @@ namespace Poseidon
         public const float shootingRange = 70.0f;
 
         //cool down time for each skill
-        public const double coolDownForSkill1 = 5;
-        public const double coolDownForSkill2 = 5;
-        public const double timeSkill2Last = 5;
+        public const float coolDownForHerculesBow = 5;
+        public const float coolDownForArchillesArmor = 5;
+        public const float coolDownForThorHammer = 5;
+        public const float timeArmorLast = 5;
+        public const float timeStunLast = 5;
+        public const float ThorDamage = 20;
+        public const float ThorRange = 50;
+        public const float ThorPushFactor = 10;
     }
 }

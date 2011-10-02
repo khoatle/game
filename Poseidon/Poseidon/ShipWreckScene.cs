@@ -65,7 +65,7 @@ namespace Poseidon
         protected Vector2 pausePosition;
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
-
+        protected Texture2D stunnedTexture;
         // He died inside the ship wreck?
         public bool dead;
         // has artifact?
@@ -79,7 +79,7 @@ namespace Poseidon
         bool clicked = false;
         double clickTimer = 0;
 
-        public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
+        public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
             this.graphics = graphics;
@@ -90,7 +90,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
-
+            this.stunnedTexture = stunnedTexture;
             random = new Random();
             ground = new GameObject();
             gameCamera = new Camera();
@@ -393,7 +393,7 @@ namespace Poseidon
                         tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
                         //if the skill has cooled down
                         //or this is the 1st time the user uses it
-                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[0] > GameConstants.coolDownForSkill1) || tank.firstUse[0] == true)
+                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[0] > GameConstants.coolDownForArchillesArmor) || tank.firstUse[0] == true)
                         {
                             tank.firstUse[0] = false;
                             tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
@@ -405,7 +405,7 @@ namespace Poseidon
                     // Achilles' Armor!!!
                     if (tank.activeSkillID == 2)
                     {
-                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[2] > GameConstants.coolDownForSkill2) || tank.firstUse[2] == true)
+                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || tank.firstUse[2] == true)
                         {
                             tank.firstUse[2] = false;
                             tank.invincibleMode = true;

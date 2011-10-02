@@ -14,7 +14,7 @@ namespace Poseidon
     {
         public Model Model { get; set; }
         public Vector3 Position;
-        public BoundingSphere BoundingSphere { get; set; }
+        public BoundingSphere BoundingSphere;
 
         public GameObject()
         {

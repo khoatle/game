@@ -63,6 +63,8 @@ namespace Poseidon
         bool clicked=false;
         double clickTimer = 0;
 
+        // Texture to show that enemy is stunned
+        protected Texture2D stunnedTexture;
 
         // Radar for the game
         Radar radar;
@@ -111,6 +113,7 @@ namespace Poseidon
 
             //For general game control
             actionTexture = Content.Load<Texture2D>("Image/rockrainenhanced");
+            stunnedTexture = Content.Load<Texture2D>("Image/stunned");
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
@@ -136,11 +139,11 @@ namespace Poseidon
             cutSceneDialog = new CutSceneDialog();
 
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(playGameScene);
 
             // Create the main game play scene
-            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
+            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
             Components.Add(shipWreckScene);
 
             // Create the Skill board

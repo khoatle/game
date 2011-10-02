@@ -15,7 +15,7 @@ namespace Poseidon
 {
     public partial class PlayGameScene
     {
-        public void useHerculesBow()
+        public void UseHerculesBow()
         {
             DamageBullet d = new DamageBullet();
 
@@ -27,6 +27,40 @@ namespace Poseidon
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength * 10, tank.strengthUp);
             d.loadContent(Content, "Models/fuelcarrier");
             myBullet.Add(d);
+        }
+        public void UseThorHammer()
+        {
+            for (int i = 0; i < enemiesAmount; i++)
+            {
+                if (InThorRange(enemies[i].Position)){
+                    enemies[i].stunned = true;
+                    enemies[i].health -= (int) GameConstants.ThorDamage;
+                    PushEnemy(enemies[i]);
+                    if (enemies[i].health <= 0)
+                    {
+                        for (int k = i + 1; k < enemiesAmount; k++) {
+                            enemies[k - 1] = enemies[k];
+                        }
+                        enemies[--enemiesAmount] = null;
+                    }
+                }
+                
+            }
+        }
+        // enemy is inside the stun area of Thor's Hammer
+        public bool InThorRange(Vector3 enemyPosition)
+        {
+            float distance = (enemyPosition - tank.Position).Length();
+            if (distance < GameConstants.ThorRange) return true;
+            else return false;
+        }
+        // push enemy away
+        public void PushEnemy(Enemy enemy)
+        {
+            Vector3 pushVector = enemy.Position - tank.Position;
+            pushVector.Normalize();
+            enemy.Position += (pushVector * GameConstants.ThorPushFactor);
+            enemy.BoundingSphere.Center = enemy.Position;
         }
     }
 }

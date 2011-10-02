@@ -314,7 +314,7 @@ namespace Poseidon
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
                 if (!playGameScene.shipWrecks[curWreck].accessed
-                    && playGameScene.MouseOnShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position)
+                    && CursorManager.MouseOnShipWreck(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, playGameScene.gameCamera)
                     && playGameScene.TankNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            

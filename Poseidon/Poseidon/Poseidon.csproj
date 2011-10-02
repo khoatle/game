@@ -113,6 +113,7 @@
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
+    <Compile Include="CursorManager.cs" />
     <Compile Include="CutSceneDialog.cs" />
     <Compile Include="Fruit.cs" />
     <Compile Include="HealthBullet.cs" />

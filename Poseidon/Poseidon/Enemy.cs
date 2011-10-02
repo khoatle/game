@@ -19,7 +19,7 @@ namespace Poseidon {
 
         //stunned and cannot move
         public bool stunned;
-        public float stunnedStartTime;
+        public double stunnedStartTime;
 
         // Time stampt since the robot starts chasing
         private TimeSpan startChasingTime;

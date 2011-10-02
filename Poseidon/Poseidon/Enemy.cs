@@ -61,7 +61,7 @@ namespace Poseidon {
             }
         }
 
-        public void Update(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int changeDirection, Tank tank, List<DamageBullet> enemyBullet, AudioLibrary audio) {
+        public void Update(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int changeDirection, Tank tank, List<DamageBullet> enemyBullet) {
             if (hasPrevTarget) {
                 if (Vector3.Distance(tank.Position, Position) < perceptionRadius) {
                     lockAtributes(tank);
@@ -72,7 +72,7 @@ namespace Poseidon {
                 if (Vector3.Distance(Position, lastTarget.Position) < perceptionRadius) {
                     lockAtributes(lastTarget);
                     shoot(enemyBullet);
-                    audio.Shooting.Play();
+
                     if (lastTarget.GetType().Name.Equals("Tank")) {
                         if (((Tank)lastTarget).hitPoint <= 0) {
                             hasPrevTarget = false;

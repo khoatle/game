@@ -28,13 +28,13 @@ namespace Poseidon
             d.loadContent(Content, "Models/fuelcarrier");
             myBullet.Add(d);
         }
-        public void UseThorHammer()
+        public void UseThorHammer(GameTime gameTime)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (InThorRange(enemies[i].Position)){
                     enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = PlayGameScene.timming.TotalGameTime.Seconds;
+                    enemies[i].stunnedStartTime = gameTime.TotalGameTime.Seconds;
                     enemies[i].health -= (int) GameConstants.ThorDamage;
                     PushEnemy(enemies[i]);
                     if (enemies[i].health <= 0)
@@ -64,7 +64,7 @@ namespace Poseidon
             enemy.BoundingSphere.Center = enemy.Position;
         }
         //Knock out any enemy that you crash into
-        public void KnockOutEnemies()
+        public void KnockOutEnemies(GameTime gameTime)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -73,7 +73,7 @@ namespace Poseidon
                     Vector3 pushVector = enemies[i].Position - tank.Position;
                     pushVector.Normalize();
                     enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = PlayGameScene.timming.TotalGameTime.Seconds;
+                    enemies[i].stunnedStartTime = gameTime.TotalGameTime.Seconds;
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
                     enemies[i].BoundingSphere.Center = enemies[i].Position;
                     enemies[i].health -= (int)GameConstants.HermesDamage;

@@ -506,7 +506,7 @@ namespace Poseidon
                 Collision.updateProjectileHitTank(tank, enemyBullet);
 
                 for (int i = 0; i < enemiesAmount; i++) {
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, audio);
+                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                 }
 
                 for (int i = 0; i < fishAmount; i++) {

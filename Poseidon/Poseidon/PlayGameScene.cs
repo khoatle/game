@@ -27,7 +27,7 @@ namespace Poseidon
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
 
-        private AudioLibrary audio;
+        private static AudioLibrary audio;
         int retrievedFruits;
         TimeSpan startTime, roundTimer, roundTime;
         Random random;
@@ -385,8 +385,8 @@ namespace Poseidon
                                 tank.firstUse[1] = false;
                                 tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explosion.Play();
-                                UseThorHammer();
-                                timePrevStun = gameTime.TotalGameTime.TotalSeconds;
+                                UseThorHammer(gameTime);
+                                //timePrevStun = gameTime.TotalGameTime.TotalSeconds;
                             }
                         }
                         // Achilles' Armor!!!
@@ -410,7 +410,7 @@ namespace Poseidon
                                 audio.NewMeteor.Play();
                                 tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 tank.supersonicMode = true;
-                                timePrevStun = gameTime.TotalGameTime.TotalSeconds;
+                                //timePrevStun = gameTime.TotalGameTime.TotalSeconds;
                             }
                         }
                         pointIntersect = Vector3.Zero;
@@ -466,7 +466,7 @@ namespace Poseidon
                     if (tank.supersonicMode == true)
                     {
                         pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
-                        KnockOutEnemies();
+                        KnockOutEnemies(gameTime);
                     }
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
                     

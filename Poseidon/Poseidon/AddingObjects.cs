@@ -126,6 +126,7 @@ namespace Poseidon
 
             newBullet.initialize(bulletPosition, shootingDirection, GameConstants.BulletSpeed, damage);
             newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
+            audio.Shooting.Play();
             bullets.Add(newBullet);
         }
 

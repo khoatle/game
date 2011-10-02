@@ -32,6 +32,7 @@ namespace Poseidon
         // HP const
         public const int EnemyHP = 100;
         public const int FishHP = 50;
+        public const int PlayerHP = 1000;
 
         // Bullet const
         public const int DefaultBulletDamage = 10;

@@ -19,7 +19,7 @@ namespace Poseidon {
 
         //stunned and cannot move
         public bool stunned;
-        public float stunnedStartTime;
+        public double stunnedStartTime;
 
         // Time stampt since the robot starts chasing
         private TimeSpan startChasingTime;
@@ -56,12 +56,12 @@ namespace Poseidon {
 
         private void shoot(List<DamageBullet> enemyBullet) {
             if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
-                PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+                AddingObjects.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet, PlayGameScene.audio);
                 prevFire = PlayGameScene.timming.TotalGameTime;
             }
         }
 
-        public void Update(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int changeDirection, Tank tank, List<DamageBullet> enemyBullet, AudioLibrary audio) {
+        public void Update(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int changeDirection, Tank tank, List<DamageBullet> enemyBullet) {
             if (hasPrevTarget) {
                 if (Vector3.Distance(tank.Position, Position) < perceptionRadius) {
                     lockAtributes(tank);
@@ -72,7 +72,7 @@ namespace Poseidon {
                 if (Vector3.Distance(Position, lastTarget.Position) < perceptionRadius) {
                     lockAtributes(lastTarget);
                     shoot(enemyBullet);
-                    audio.Shooting.Play();
+
                     if (lastTarget.GetType().Name.Equals("Tank")) {
                         if (((Tank)lastTarget).hitPoint <= 0) {
                             hasPrevTarget = false;

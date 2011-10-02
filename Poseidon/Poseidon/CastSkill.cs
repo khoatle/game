@@ -13,9 +13,9 @@ using Poseidon.Core;
 
 namespace Poseidon
 {
-    public partial class PlayGameScene
+    public class CastSkill
     {
-        public void UseHerculesBow()
+        public static void UseHerculesBow(Tank tank, ContentManager Content, List<DamageBullet> myBullets)
         {
             DamageBullet d = new DamageBullet();
 
@@ -26,17 +26,17 @@ namespace Poseidon
 
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength * 10, tank.strengthUp);
             d.loadContent(Content, "Models/fuelcarrier");
-            myBullet.Add(d);
+            myBullets.Add(d);
         }
-        public void UseThorHammer()
+        public static void UseThorHammer(GameTime gameTime, Tank tank, Enemy[] enemies, ref int enemiesAmount)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
-                if (InThorRange(enemies[i].Position)){
+                if (InThorRange(tank, enemies[i].Position)){
                     enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = PlayGameScene.timming.TotalGameTime.Seconds;
+                    enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
                     enemies[i].health -= (int) GameConstants.ThorDamage;
-                    PushEnemy(enemies[i]);
+                    PushEnemy(tank, enemies[i]);
                     if (enemies[i].health <= 0)
                     {
                         for (int k = i + 1; k < enemiesAmount; k++) {
@@ -50,14 +50,14 @@ namespace Poseidon
             }
         }
         // enemy is inside the stun area of Thor's Hammer
-        public bool InThorRange(Vector3 enemyPosition)
+        public static bool InThorRange(Tank tank, Vector3 enemyPosition)
         {
             float distance = (enemyPosition - tank.Position).Length();
             if (distance < GameConstants.ThorRange) return true;
             else return false;
         }
         // push enemy away
-        public void PushEnemy(Enemy enemy)
+        public static void PushEnemy(Tank tank, Enemy enemy)
         {
             Vector3 pushVector = enemy.Position - tank.Position;
             pushVector.Normalize();
@@ -65,7 +65,7 @@ namespace Poseidon
             enemy.BoundingSphere.Center = enemy.Position;
         }
         //Knock out any enemy that you crash into
-        public void KnockOutEnemies()
+        public static void KnockOutEnemies(GameTime gameTime, Tank tank, Enemy[] enemies, ref int enemiesAmount, AudioLibrary audio)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -74,7 +74,7 @@ namespace Poseidon
                     Vector3 pushVector = enemies[i].Position - tank.Position;
                     pushVector.Normalize();
                     enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = PlayGameScene.timming.TotalGameTime.Seconds;
+                    enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
                     enemies[i].BoundingSphere.Center = enemies[i].Position;
                     enemies[i].health -= (int)GameConstants.HermesDamage;
@@ -86,6 +86,7 @@ namespace Poseidon
                             enemies[k - 1] = enemies[k];
                         }
                         enemies[--enemiesAmount] = null;
+                        i--;
                     }
                 }
             }

@@ -72,7 +72,7 @@ namespace Poseidon
         float hatchRotationValue;
 
         public float ForwardDirection { get; set; }
-        public int MaxRange { get; set; }
+        //public int MaxRange { get; set; }
         #endregion
 
         //Attributes of our main character
@@ -116,6 +116,10 @@ namespace Poseidon
         public float desiredAngle;
         public Vector3 pointToMoveTo;
         public bool reachDestination = true;
+
+        // Tank moving bound
+        public int MaxRangeX;
+        public int MaxRangeZ;
         #region Properties
 
 
@@ -171,7 +175,7 @@ namespace Poseidon
 
         #endregion
 
-        public Tank()
+        public Tank(int MaxRangeX, int MaxRangeZ)
         {
             // Original attribute
             strength = 1.0f;
@@ -191,6 +195,9 @@ namespace Poseidon
             firstUse = new bool[GameConstants.numberOfSkills]; 
 
             Position.Y = GameConstants.FloatHeight;
+
+            this.MaxRangeX = MaxRangeX;
+            this.MaxRangeZ = MaxRangeZ;
         }
         /// <summary>
         /// Loads the tank model.
@@ -226,7 +233,7 @@ namespace Poseidon
             boneTransforms = new Matrix[tankModel.Bones.Count];
 
             ForwardDirection = 0.0f;
-            MaxRange = GameConstants.MaxRange;
+            //MaxRange = GameConstants.MaxRange;
             BoundingSphere = CalculateBoundingSphere();
 
             BoundingSphere scaledSphere;

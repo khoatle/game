@@ -76,6 +76,8 @@ namespace Poseidon
         bool clicked = false;
         double clickTimer = 0;
 
+        HeightMapInfo heightMapInfo;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
@@ -92,7 +94,7 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera();
             boundingSphere = new GameObject();
-            tank = new Tank();
+            tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ);
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
@@ -120,9 +122,16 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            ground.Model = Content.Load<Model>("Models/ground");
+            ground.Model = Content.Load<Model>("Image/terrain");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
-
+            heightMapInfo = ground.Model.Tag as HeightMapInfo;
+            if (heightMapInfo == null)
+            {
+                string message = "The terrain model did not have a HeightMapInfo " +
+                    "object attached. Are you sure you are using the " +
+                    "TerrainProcessor?";
+                throw new InvalidOperationException(message);
+            }
             // Loading main character skill icon textures
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
@@ -378,6 +387,7 @@ namespace Poseidon
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
                     CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                 }
+                if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, gameTime, pointIntersect);
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
@@ -412,7 +422,7 @@ namespace Poseidon
                 for (int i = 0; i < enemyBullet.Count; i++) {
                     enemyBullet[i].update();    
                 }
-                Collision.updateBulletOutOfBound(healthBullet, myBullet, frustum);
+                Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, frustum);
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
@@ -588,20 +598,23 @@ namespace Poseidon
             Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
             Vector3 mouseDif = pointIntersect - tank.Position;
             float distanceFomTank = mouseDif.Length();
-            str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
-            str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
+            //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
+            //str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
             float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
             str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
             Vector3 posDif = tank.pointToMoveTo - tank.Position;
             float distanceToDest = posDif.Length();
             //str2 += "\nDistance= " + distanceToDest;
-            //str2 += "\nTank Position " + tank.Position;
-            //str2 += "\nEnemy Position " + enemies[0].Position;
+            str2 += "\nTank Position " + tank.Position;
+            str2 += "\nEnemy Position " + enemies[0].Position;
+            str2 += "\nEnemy amount " + enemies.Length;
+            str2 += "\nFish Position " + fish[0].Position;
+            str2 += "\nFish amount " + fish.Length;
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             str2 += "\n Tank Health " + tank.hitPoint;
-            str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
+            //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

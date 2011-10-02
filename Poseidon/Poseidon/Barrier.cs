@@ -24,7 +24,7 @@ namespace Poseidon
         {
             BarrierType = null;
             ForwardDirection = 0.0f;
-            MaxRange = GameConstants.MaxRange;
+            //MaxRange = GameConstants.MaxRange;
         }
 
         public void LoadContent(ContentManager content, string modelName)

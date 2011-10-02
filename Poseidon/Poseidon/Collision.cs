@@ -20,10 +20,10 @@ namespace Poseidon
             return true;
         }
 
-        public static bool isOutOfMap(Vector3 futurePosition)
+        public static bool isOutOfMap(Vector3 futurePosition, int MaxRangeX, int MaxRangeZ)
         {
-            return Math.Abs(futurePosition.X) > GameConstants.MaxRange ||
-                Math.Abs(futurePosition.Z) > GameConstants.MaxRange;
+            return Math.Abs(futurePosition.X) > MaxRangeX ||
+                Math.Abs(futurePosition.Z) > MaxRangeZ;
         }
         // End-----------------------------------------------------
 
@@ -76,7 +76,7 @@ namespace Poseidon
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            if (isOutOfMap(futurePosition)) {
+            if (isOutOfMap(futurePosition, tank.MaxRangeX, tank.MaxRangeZ)) {
                 return false;
             }
 
@@ -123,7 +123,7 @@ namespace Poseidon
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
             //Don't allow off-terrain driving
-            if (isOutOfMap(futurePosition))
+            if (isOutOfMap(futurePosition, tank.MaxRangeX, tank.MaxRangeZ))
             {
                 return false;
             }
@@ -203,10 +203,10 @@ namespace Poseidon
             }
         }
 
-        public static void updateBulletOutOfBound(List<HealthBullet> heals, List<DamageBullet> dams, BoundingFrustum frustum)
+        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> heals, List<DamageBullet> dams, BoundingFrustum frustum)
         {
             for (int i = 0; i < heals.Count; ) {
-                if (isOutOfMap(heals[i].Position) || isOutOfView(heals[i].BoundingSphere, frustum)) {
+                if (isOutOfMap(heals[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(heals[i].BoundingSphere, frustum)) {
                     heals.RemoveAt(i);
                 }
                 else {
@@ -215,7 +215,7 @@ namespace Poseidon
             }
 
             for (int i = 0; i < dams.Count; ) {
-                if (isOutOfMap(dams[i].Position) || isOutOfView(dams[i].BoundingSphere, frustum))
+                if (isOutOfMap(dams[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(dams[i].BoundingSphere, frustum))
                 {
                     dams.RemoveAt(i);
                 }

@@ -540,7 +540,7 @@ namespace Poseidon
 
                     for (int i = 0; i < enemiesAmount; i++) {
                         if (!enemies[i].stunned)
-                            enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                            enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, audio);
                         //disable stun if stun effect times out
                         else
                         {
@@ -551,7 +551,6 @@ namespace Poseidon
 
                     for (int i = 0; i < fishAmount; i++) {
                         fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
-                        fish[i].Update(fish, fishAmount, random.Next(100), tank);
                     }
 
                     if (tank.hitPoint <= 0) { currentGameState = GameState.Lost; }

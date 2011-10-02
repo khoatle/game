@@ -67,8 +67,8 @@ namespace Poseidon
             }
         }
 
-        public virtual void Update(SwimmingObject[] swimmingObjects, int size, int changeDirection, Tank tank)
-        {
+        //public virtual void Update(SwimmingObject[] swimmingObjects, int size, int changeDirection, Tank tank)
+        //{
             //Vector3 futurePosition = Position;
             ////int barrier_move
             //Random random = new Random();
@@ -114,6 +114,6 @@ namespace Poseidon
             //    //ForwardDirection = prevForwardDir;
             //    //turnAmount = -turnAmount;
             //}
-        }
+        //}
     }
 }

@@ -450,28 +450,31 @@ namespace Poseidon
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);
-            for (int curCell = 0; curCell < fruits.Count; curCell++)
+            if (fruits != null)
             {
-                if (fruits[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
-                    fruits[curCell].BoundingSphere))
+                for (int curCell = 0; curCell < fruits.Count; curCell++)
                 {
-                    fruits[curCell].Retrieved = true;
-                    if (fruits[curCell].powerType == 1)
+                    if (fruits[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
+                        fruits[curCell].BoundingSphere))
                     {
-                        speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
-                        speedUp = 2.0f;
+                        fruits[curCell].Retrieved = true;
+                        if (fruits[curCell].powerType == 1)
+                        {
+                            speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                            speedUp = 2.0f;
+                        }
+                        else if (fruits[curCell].powerType == 2)
+                        {
+                            strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                            strengthUp = 2.0f;
+                        }
+                        else if (fruits[curCell].powerType == 3)
+                        {
+                            fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                            fireRateUp = 2.0f;
+                        }
+                        RetrievedSound.Play();
                     }
-                    else if (fruits[curCell].powerType == 2)
-                    {
-                        strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
-                        strengthUp = 2.0f;
-                    }
-                    else if (fruits[curCell].powerType == 3)
-                    {
-                        fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
-                        fireRateUp = 2.0f;
-                    }
-                    RetrievedSound.Play();
                 }
             }
             return;

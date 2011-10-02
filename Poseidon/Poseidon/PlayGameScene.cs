@@ -27,7 +27,7 @@ namespace Poseidon
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
 
-        private static AudioLibrary audio;
+        public static AudioLibrary audio;
         int retrievedFruits;
         TimeSpan startTime, roundTimer, roundTime;
         Random random;
@@ -243,10 +243,10 @@ namespace Poseidon
                 else shipWrecks[index].LoadContent(Content, randomType, 0);
                 randomType = random.Next(3);
             }
-            placeEnemies();
-            placeFish();
+            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks);
+            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks);
             //placeFuelCells();
-            placeShipWreck();
+            AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo);
         }
 
         /// <summary>
@@ -420,8 +420,8 @@ namespace Poseidon
                             {
                                 prevFireTime = gameTime.TotalGameTime;
                                 audio.Shooting.Play();
-                                if (tank.bulletType == 0) { placeDamageBullet(); }
-                                else if (tank.bulletType == 1) { placeHealingBullet(); }
+                                if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                                else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             }
                         }
                         pointIntersect = Vector3.Zero;
@@ -448,8 +448,8 @@ namespace Poseidon
                                 tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                                 prevFireTime = gameTime.TotalGameTime;
                                 audio.Shooting.Play();
-                                if (tank.bulletType == 0) { placeDamageBullet(); }
-                                else if (tank.bulletType == 1) { placeHealingBullet(); }
+                                if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                                else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                                 //so the tank will not move
                                 pointIntersect = Vector3.Zero;
                             }
@@ -473,8 +473,8 @@ namespace Poseidon
                     {
                         prevFireTime = gameTime.TotalGameTime;
                         audio.Shooting.Play();
-                        if (tank.bulletType == 0) { placeDamageBullet(); }
-                        else if (tank.bulletType == 1) { placeHealingBullet(); }
+                        if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                        else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                     }
 
                     
@@ -482,7 +482,7 @@ namespace Poseidon
                     if ((lastKeyboardState.IsKeyDown(Keys.O) && (currentKeyboardState.IsKeyUp(Keys.O))))
                     {
                         audio.Shooting.Play();
-                        placePlant();
+                        AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks);
                     }
 
                     //Are the trees ready for fruit?

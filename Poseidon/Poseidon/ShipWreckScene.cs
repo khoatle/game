@@ -35,9 +35,6 @@ namespace Poseidon
         GameObject boundingSphere;
 
 
-        //List<FuelCell> fuelCells;
-        List<Fruit> fruits;
-
         Enemy[] enemies;
         Fish[] fish;
 
@@ -184,126 +181,11 @@ namespace Poseidon
             dead = false;
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != 0
-            placeEnemies();
-            placeFish();
+            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null);
+            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null);
 
         }
 
-        private void loadContentEnemies()
-        {
-            enemiesAmount = GameConstants.NumberEnemies;
-            for (int i = 0; i < enemiesAmount; i++)
-            {
-                enemies[i] = new Enemy();
-                enemies[i].LoadContent(Content, "Models/pyramid10uR");
-            }
-        }
-
-        private void loadContentFish()
-        {
-            fishAmount = GameConstants.NumberFish;
-            for (int i = 0; i < fishAmount; i++)
-            {
-                fish[i] = new Fish();
-                fish[i].LoadContent(Content, "Models/cube10uR");
-            }
-        }
-
-        private void placeEnemies()
-        {
-            loadContentEnemies();
-
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
-            Vector3 tempCenter;
-
-            //place enemies
-            for (int i = 0; i < enemiesAmount; i++)
-            {
-                enemies[i].Position = GenerateRandomPosition(min, max);
-                enemies[i].Position.Y = GameConstants.FloatHeight;
-                tempCenter = enemies[i].BoundingSphere.Center;
-                tempCenter.X = enemies[i].Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = enemies[i].Position.Z;
-                enemies[i].BoundingSphere =
-                    new BoundingSphere(tempCenter, enemies[i].BoundingSphere.Radius);
-            }
-        }
-
-        private void placeFish()
-        {
-            loadContentFish();
-
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
-            Vector3 tempCenter;
-
-            //place fish
-            for (int i = 0; i < fishAmount; i++)
-            {
-                fish[i].Position = GenerateRandomPosition(min, max);
-                fish[i].Position.Y = GameConstants.FloatHeight;
-                tempCenter = fish[i].BoundingSphere.Center;
-                tempCenter.X = fish[i].Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
-                tempCenter.Z = fish[i].Position.Z;
-                fish[i].BoundingSphere =
-                    new BoundingSphere(tempCenter, fish[i].BoundingSphere.Radius);
-            }
-        }
-
-        // Helper
-        private Vector3 GenerateRandomPosition(int min, int max)
-        {
-            int xValue, zValue;
-            do
-            {
-                xValue = random.Next(min, max);
-                zValue = random.Next(min, max);
-                if (random.Next(100) % 2 == 0)
-                    xValue *= -1;
-                if (random.Next(100) % 2 == 0)
-                    zValue *= -1;
-
-            } while (IsOccupied(xValue, zValue));
-
-            return new Vector3(xValue, 0, zValue);
-        }
-
-        // Helper
-        private bool IsOccupied(int xValue, int zValue)
-        {
-            //foreach (GameObject currentObj in fruits)
-            //{
-            //    if (((int)(MathHelper.Distance(
-            //        xValue, currentObj.Position.X)) < 15) &&
-            //        ((int)(MathHelper.Distance(
-            //        zValue, currentObj.Position.Z)) < 15))
-            //        return true;
-            //}
-
-            for (int i = 0; i < enemiesAmount; i++)
-            {
-                if (((int)(MathHelper.Distance(
-                    xValue, enemies[i].Position.X)) < 15) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, enemies[i].Position.Z)) < 15))
-                    return true;
-            }
-
-            for (int i = 0; i < fishAmount; i++)
-            {
-                if (((int)(MathHelper.Distance(
-                    xValue, fish[i].Position.X)) < 15) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, fish[i].Position.Z)) < 15))
-                    return true;
-            }
-            return false;
-        }
-
-        
         /// <summary>
         /// Hide the scene
         /// </summary>
@@ -455,8 +337,8 @@ namespace Poseidon
                         {
                             prevFireTime = gameTime.TotalGameTime;
                             audio.Shooting.Play();
-                            if (tank.bulletType == 0) { placeDamageBullet(); }
-                            else if (tank.bulletType == 1) { placeHealingBullet(); }
+                            if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                            else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                         }
                     }
                     pointIntersect = Vector3.Zero;
@@ -483,8 +365,8 @@ namespace Poseidon
                             tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                             prevFireTime = gameTime.TotalGameTime;
                             audio.Shooting.Play();
-                            if (tank.bulletType == 0) { placeDamageBullet(); }
-                            else if (tank.bulletType == 1) { placeHealingBullet(); }
+                            if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                            else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             //so the tank will not move
                             pointIntersect = Vector3.Zero;
                         }
@@ -496,7 +378,7 @@ namespace Poseidon
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
                     CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                 }
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, gameTime, pointIntersect);
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
@@ -508,8 +390,8 @@ namespace Poseidon
                 {
                     prevFireTime = gameTime.TotalGameTime;
                     audio.Shooting.Play();
-                    if (tank.bulletType == 0) { placeDamageBullet(); }
-                    else if (tank.bulletType == 1) { placeHealingBullet(); }
+                    if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                    else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                 }
 
      
@@ -735,34 +617,6 @@ namespace Poseidon
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 
-        }
-
-        private void placeHealingBullet()
-        {
-            HealthBullet h = new HealthBullet();
-            Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
-            Vector3 movement = Vector3.Zero;
-            movement.Z = 1;
-            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
- 
-            h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength, tank.strengthUp);
-            h.loadContent(Content, "Models/sphere1uR");
-            healthBullet.Add(h);
-        }
-
-        private void placeDamageBullet()
-        {
-            DamageBullet d = new DamageBullet();
-            Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
-            Vector3 movement = Vector3.Zero;
-            movement.Z = 1;
-            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength, tank.strengthUp);
-            d.loadContent(Content, "Models/fuelcell");
-            myBullet.Add(d);
-        }
-
-       
+        }    
     }
 }

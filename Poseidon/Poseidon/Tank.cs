@@ -177,7 +177,7 @@ namespace Poseidon
             strength = 1.0f;
             speed = 1.0f;
             shootingRate = 1.0f;
-            hitPoint = 100;
+            hitPoint = 1000;
 
             pointToMoveTo = Vector3.Zero;
 

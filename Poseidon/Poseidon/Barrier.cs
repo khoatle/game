@@ -18,8 +18,7 @@ namespace Poseidon
         public int health = GameConstants.EnemyHP;
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
-        //stunned and cannot move
-        public bool stunned = false;
+
         public SwimmingObject()
             : base()
         {

@@ -34,6 +34,7 @@ namespace Poseidon
             {
                 if (InThorRange(enemies[i].Position)){
                     enemies[i].stunned = true;
+                    enemies[i].stunnedStartTime = PlayGameScene.timming.TotalGameTime.Seconds;
                     enemies[i].health -= (int) GameConstants.ThorDamage;
                     PushEnemy(enemies[i]);
                     if (enemies[i].health <= 0)
@@ -72,6 +73,7 @@ namespace Poseidon
                     Vector3 pushVector = enemies[i].Position - tank.Position;
                     pushVector.Normalize();
                     enemies[i].stunned = true;
+                    enemies[i].stunnedStartTime = PlayGameScene.timming.TotalGameTime.Seconds;
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
                     enemies[i].BoundingSphere.Center = enemies[i].Position;
                     enemies[i].health -= (int)GameConstants.HermesDamage;

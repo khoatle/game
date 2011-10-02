@@ -544,7 +544,7 @@ namespace Poseidon
                         //disable stun if stun effect times out
                         else
                         {
-                            if (gameTime.TotalGameTime.TotalSeconds - timePrevStun > GameConstants.timeStunLast)
+                            if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
                     }
@@ -913,9 +913,8 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Tank Health " + tank.hitPoint;
-            str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
-
+            str2 += "\n Type " + tank.GetType().Name.ToString();
+            
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 

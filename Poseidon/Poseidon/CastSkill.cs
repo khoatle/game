@@ -43,6 +43,7 @@ namespace Poseidon
                             enemies[k - 1] = enemies[k];
                         }
                         enemies[--enemiesAmount] = null;
+                        i--;
                     }
                 }
                 

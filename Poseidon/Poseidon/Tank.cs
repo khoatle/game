@@ -252,7 +252,7 @@ namespace Poseidon
             //should be removed
             activeSkillID = 0;
             skills[0] = true;
-            skills[1] = false;
+            skills[1] = true;
             skills[2] = true;
         }
 
@@ -322,7 +322,7 @@ namespace Poseidon
             //worn out effect of certain skills
             if (invincibleMode == true)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeSkill2Last)
+                if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast)
                 {
                     invincibleMode = false;
                 }

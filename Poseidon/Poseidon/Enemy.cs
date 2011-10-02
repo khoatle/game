@@ -15,6 +15,9 @@ namespace Poseidon {
         private bool hasPrevTarget;
         private GameObject lastTarget;
 
+        private bool chasing;
+        //stunned and cannot move
+        public bool stunned;
 
         // Time stampt since the robot starts chasing
         private TimeSpan startChasingTime;
@@ -29,9 +32,13 @@ namespace Poseidon {
         public Enemy()
             : base()
         {
-            giveUpTime = new TimeSpan(0, 0, 3);
+            giveUpTime = new TimeSpan(0, 0, 5);
             perceptionRadius = 30f;
-            timeBetweenFire = 0.75f;
+            timeBetweenFire = 0.5f;
+
+            chasing = false;
+            stunned = false;
+
             prevFire = new TimeSpan();
             hasPrevTarget = false;
         }
@@ -65,6 +72,19 @@ namespace Poseidon {
                 if (Vector3.Distance(Position, lastTarget.Position) < perceptionRadius) {
                     lockAtributes(lastTarget);
                     shoot(enemyBullet);
+
+                    if (lastTarget.GetType().Name.Equals("Tank")) {
+                        if (((Tank)lastTarget).hitPoint <= 0) {
+                            hasPrevTarget = false;
+                            lastTarget = null;
+                        }
+                    } else if (lastTarget.GetType().Name.Equals("Fish")) {
+                        if (((Fish)lastTarget).health <= 0) {
+                            hasPrevTarget = false;
+                            lastTarget = null;
+                        }
+                    }
+
                     return;
                 }
                     

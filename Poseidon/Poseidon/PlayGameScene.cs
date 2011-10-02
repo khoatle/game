@@ -99,7 +99,11 @@ namespace Poseidon
         bool clicked = false;
         double clickTimer = 0;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
+        // time that enemies were previously stunned
+        private double timePrevStun = 0;
+        private Texture2D stunnedTexture;
+
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
             graphics = graphic;
@@ -112,6 +116,7 @@ namespace Poseidon
             this.game = game;
             this.cutSceneDialog = cutSceneDialog;
             this.radar = radar;
+            this.stunnedTexture = stunnedTexture;
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
@@ -356,19 +361,31 @@ namespace Poseidon
                             tank.ForwardDirection = CalculateAngle(pointIntersect, tank.Position);
                             //if the skill has cooled down
                             //or this is the 1st time the user uses it
-                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[0] > GameConstants.coolDownForSkill1) || tank.firstUse[0] == true)
+                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || tank.firstUse[0] == true)
                             {
                                 tank.firstUse[0] = false;
                                 tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explosion.Play();
-                                useHerculesBow();
+                                UseHerculesBow();
                             }
                             
+                        }
+                        //Thor's Hammer!!!
+                        if (tank.activeSkillID == 1)
+                        {
+                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || tank.firstUse[1] == true)
+                            {
+                                tank.firstUse[1] = false;
+                                tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
+                                audio.Explosion.Play();
+                                UseThorHammer();
+                                timePrevStun = gameTime.TotalGameTime.TotalSeconds;
+                            }
                         }
                         // Achilles' Armor!!!
                         if (tank.activeSkillID == 2)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[2] > GameConstants.coolDownForSkill2) || tank.firstUse[2] == true)
+                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || tank.firstUse[2] == true)
                             {
                                 tank.firstUse[2] = false;
                                 tank.invincibleMode = true;
@@ -498,7 +515,14 @@ namespace Poseidon
                     Collision.updateProjectileHitTank(tank, enemyBullet);
 
                     for (int i = 0; i < enemiesAmount; i++) {
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                        if (!enemies[i].stunned)
+                            enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                        //disable stun if stun effect times out
+                        else
+                        {
+                            if (gameTime.TotalGameTime.TotalSeconds - timePrevStun > GameConstants.timeStunLast)
+                                enemies[i].stunned = false;
+                        }
                     }
 
                     for (int i = 0; i < fishAmount; i++) {
@@ -654,7 +678,15 @@ namespace Poseidon
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (enemies[i].BoundingSphere.Intersects(frustum))
+                {
                     enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    if (enemies[i].stunned == true)
+                    {
+                        Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
+                    }
+                }
             }
 
             for (int i = 0; i < fishAmount; i++)
@@ -857,9 +889,8 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Tank Health " + tank.hitPoint;
-            str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
-
+            str2 += "\n Type " + tank.GetType().Name.ToString();
+            
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 

@@ -12,9 +12,9 @@ namespace Poseidon {
         public Vector3 headingDirection;
         public Vector3 futurePosition; 
 
-        private Vector3 tankLastPosition;
+        private bool hasPrevTarget;
+        private GameObject lastTarget;
 
-        private bool chasing;
 
         // Time stampt since the robot starts chasing
         private TimeSpan startChasingTime;
@@ -29,34 +29,166 @@ namespace Poseidon {
         public Enemy()
             : base()
         {
-            chasing = false;
-            giveUpTime = new TimeSpan(0, 0, 5);
-            perceptionRadius = 40f;
-            timeBetweenFire = 0.3f;
+            giveUpTime = new TimeSpan(0, 0, 3);
+            perceptionRadius = 20f;
+            timeBetweenFire = 0.75f;
             prevFire = new TimeSpan();
+            hasPrevTarget = false;
         }
 
-        public void Update(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int changeDirection, Tank tank, List<DamageBullet> enemyBullet) {           
-            if (updateHuntingObject(tank.Position)) {
-                if (!chasing) {
-                    randomWalk(changeDirection, enemies, enemiesAmount, tank);
-                } else {
-                    updatePosition();
-                }
-            } else {
-                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
-                    PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
-                    prevFire = PlayGameScene.timming.TotalGameTime;
-                }
+        private void lockAtributes(GameObject obj) {
+            hasPrevTarget = true;
+            lastTarget = obj;
+            shootingDirection = obj.Position - Position;
+            shootingDirection.Normalize();
+            startChasingTime = PlayGameScene.timming.TotalGameTime;
+            headingDirection = shootingDirection;
+            headingDirection.Normalize();
+            ForwardDirection = Tank.CalculateAngle(obj.Position, Position);
+        }
+
+        private void shoot(List<DamageBullet> enemyBullet) {
+            if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
+                PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+                prevFire = PlayGameScene.timming.TotalGameTime;
             }
         }
 
-        private void updatePosition() {
-            Position += headingDirection * GameConstants.EnemySpeed;
-            BoundingSphere = new BoundingSphere(Position, BoundingSphere.Radius);
+        public void Update(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int changeDirection, Tank tank, List<DamageBullet> enemyBullet) {
+            if (hasPrevTarget) {
+                if (Vector3.Distance(tank.Position, Position) < perceptionRadius) {
+                    lockAtributes(tank);
+                    shoot(enemyBullet);
+                    return;
+                }
+                    
+                if (Vector3.Distance(Position, lastTarget.Position) < perceptionRadius) {
+                    lockAtributes(lastTarget);
+                    shoot(enemyBullet);
+                    return;
+                }
+                    
+                for (int i = 0; i < fishAmount; i++) {
+                    if (Vector3.Distance(fishes[i].Position, Position) < perceptionRadius) { 
+                        lockAtributes(fishes[i]);
+                        shoot(enemyBullet);
+                        return;
+                    }
+                }
+                // Hunting phase
+                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - startChasingTime.TotalSeconds < giveUpTime.TotalSeconds) {
+                    // Tank just get out of bound, chase towards its last direction
+                    go(enemies, enemiesAmount, fishes, fishAmount, tank, changeDirection);
+                    return;
+                } else {
+                    hasPrevTarget = false;
+                    return;
+                }
+            }
+
+            if (Vector3.Distance(tank.Position, Position) < perceptionRadius) {
+                lockAtributes(tank);
+                shoot(enemyBullet);
+                return;
+            }
+
+            for (int i = 0; i < fishAmount; i++) {
+                if (Vector3.Distance(fishes[i].Position, Position) < perceptionRadius)
+                {
+                    lockAtributes(fishes[i]);
+                    shoot(enemyBullet);
+                    return;
+                }
+            }
+            randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
+            
+            //if (Vector3.Distance(tank.Position, Position) < perceptionRadius)
+            //{
+            //    shootingDirection = tank.Position - Position;
+            //    shootingDirection.Normalize();
+            //    startChasingTime = PlayGameScene.timming.TotalGameTime;
+            //    headingDirection = shootingDirection;
+            //    headingDirection.Normalize();
+            //    ForwardDirection = Tank.CalculateAngle(tank.Position, Position);
+            //    lastTarget = tank;
+
+            //    if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+            //    {
+            //        PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+            //        prevFire = PlayGameScene.timming.TotalGameTime;
+            //    }
+            //    return;
+            //} else {
+            //    for (int i = 0; i < enemiesAmount; i++) {
+            //        if (Vector3.Distance(Position, fishes[i].Position) < perceptionRadius) {
+            //            shootingDirection = tank.Position - Position;
+            //            shootingDirection.Normalize();
+            //            startChasingTime = PlayGameScene.timming.TotalGameTime;
+            //            headingDirection = shootingDirection;
+            //            headingDirection.Normalize();
+            //            ForwardDirection = Tank.CalculateAngle(tank.Position, Position);
+
+            //            if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+            //            {
+            //                PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+            //                prevFire = PlayGameScene.timming.TotalGameTime;
+            //            }
+            //            return;
+            //        }
+            //    }
+            //}
+
+
+
+
+            
+            
+            
+            // if (huntingTankStatus(tank.Position) && chasing) {
+            //    if (!chasing) {
+            //        randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
+            //    } else {
+            //        go(enemies, enemiesAmount, fishes, fishAmount, tank, changeDirection);
+            //    }
+            //} else if (huntingFishStatus(fishes, fishAmount)) {
+            //    if (!chasing) {
+            //        randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
+            //    } else {
+            //    }
+            //}
+            //else {
+            //    if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
+            //        PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+            //        prevFire = PlayGameScene.timming.TotalGameTime;
+            //    }
+            //}
+
+            //if (huntTank(tank.Position)) {
+            //    if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
+            //        PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+            //        prevFire = PlayGameScene.timming.TotalGameTime;
+            //    }
+            //}
+            //else if (huntFish(fishes, fishAmount)) {
+            //    if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+            //    {
+            //        PlayGameScene.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+            //        prevFire = PlayGameScene.timming.TotalGameTime;
+            //    }            
+            //}
         }
 
-        private void randomWalk(int changeDirection, SwimmingObject[] objects, int size, Tank tank) {
+        private void go(SwimmingObject[] enemy, int enemiesAmount, SwimmingObject[] fish, int fishAmount, Tank tank, int changeDirection) {
+            Vector3 futurePosition = Position + headingDirection * GameConstants.EnemySpeed;
+
+            if (Collision.isBarriersValidMove(this, futurePosition, enemy, enemiesAmount, tank)
+                && Collision.isBarriersValidMove(this, futurePosition, fish, fishAmount, tank)) {
+                Position = futurePosition;
+                BoundingSphere = new BoundingSphere(futurePosition, BoundingSphere.Radius);
+            }
+        }
+
+        private void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank) {
             futurePosition = Position;
             //int barrier_move
             Random random = new Random();
@@ -84,7 +216,8 @@ namespace Poseidon {
                 headingDirection *= GameConstants.BarrierVelocity;
                 futurePosition = Position + headingDirection;
 
-                if (Collision.isBarriersValidMove(this, futurePosition, objects, size, tank)) {
+                if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
+                    && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank)) {
                     Position = futurePosition;
 
                     BoundingSphere updatedSphere;
@@ -103,32 +236,42 @@ namespace Poseidon {
         }
 
         // true: Running, false: Standby
-        private bool updateHuntingObject(Vector3 obj) {
-            if (Vector3.Distance(obj, Position) < perceptionRadius) {
-                shootingDirection = obj - Position;
-                shootingDirection.Normalize();
-                startChasingTime = PlayGameScene.timming.TotalGameTime;
-                headingDirection = shootingDirection;
-                headingDirection.Normalize();
-                tankLastPosition = obj;
-                chasing = true;
+        //private bool huntingTankStatus(Vector3 obj) {
+        //    if (Vector3.Distance(obj, Position) < perceptionRadius) {
+        //        shootingDirection = obj - Position;
+        //        shootingDirection.Normalize();
+        //        startChasingTime = PlayGameScene.timming.TotalGameTime;
+        //        headingDirection = shootingDirection;
+        //        headingDirection.Normalize();
+        //        tankLastPosition = obj;
+        //        chasing = true;
 
-                ForwardDirection = Tank.CalculateAngle(obj, Position);
+        //        ForwardDirection = Tank.CalculateAngle(obj, Position);
 
-                // Standby and shoot
-                return false;
-            }
+        //        // Standby and shoot
+        //        return false;
+        //    }
 
-            if (chasing) {
-                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - startChasingTime.TotalSeconds < giveUpTime.TotalSeconds) {
-                    // Tank just get out of bound, chase towards its last direction
-                    return true;
-                } else {
-                    // Stop chasing, move like normal
-                    chasing = false;
-                }
-            }
-            return true;
-        }
+        //    if (chasing) {
+        //        if (PlayGameScene.timming.TotalGameTime.TotalSeconds - startChasingTime.TotalSeconds < giveUpTime.TotalSeconds) {
+        //            // Tank just get out of bound, chase towards its last direction
+        //            return true;
+        //        } else {
+        //            // Stop chasing, move like normal
+        //            chasing = false;
+        //        }
+        //    }
+        //    return true;
+        //}
+
+        //private bool huntingFishStatus(SwimmingObject[] fishes, int fishAmount) {
+        //    for (int i = 0; i < fishAmount; i++) {
+        //        if (fishes[i].BoundingSphere.Intersects(this.BoundingSphere)) {
+        //            fishLastPosition = fishes[i].Position;
+        //            return true;
+        //        }                        
+        //    }
+        //    return false;
+        //}
     }
 }

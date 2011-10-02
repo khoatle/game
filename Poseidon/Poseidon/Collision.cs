@@ -91,7 +91,7 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isBarrierVsBarrierCollision(SwimmingObject enemy, BoundingSphere vehicleBoundingSphere, SwimmingObject[] objs, int size)
+        public static bool isBarrierVsBarrierCollision(SwimmingObject enemy, BoundingSphere vehicleBoundingSphere, SwimmingObject[] objs, int size)
         {
             for (int curBarrier = 0; curBarrier < size; curBarrier++)
             {

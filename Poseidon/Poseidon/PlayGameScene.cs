@@ -54,7 +54,7 @@ namespace Poseidon
 
         Enemy[] enemies;
         Fish[] fish;
-
+        Enemy[] testList;
         int enemiesAmount = 0;
         int fishAmount = 0;
 
@@ -74,7 +74,7 @@ namespace Poseidon
 
         // For drawing the currently selected skill
         protected Texture2D[] skillTextures;
-        public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon" };
+        public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon", "Image/skill3Icon" };
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
         public string[] bulletNames = { "Image/skill0Icon", "Image/skill1Icon" };
@@ -102,7 +102,8 @@ namespace Poseidon
         // time that enemies were previously stunned
         private double timePrevStun = 0;
         private Texture2D stunnedTexture;
-
+        private void test(SwimmingObject[] objs)
+        { }
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -128,7 +129,8 @@ namespace Poseidon
 
             enemies = new Enemy[GameConstants.NumberEnemies];
             fish = new Fish[GameConstants.NumberFish];
-
+            testList = new Enemy[GameConstants.NumberEnemies];
+            test(testList);
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
 
@@ -346,12 +348,17 @@ namespace Poseidon
                                 }
                             }
                         }
-                        pointIntersect = Vector3.Zero;
+                        //if the user wants to move when changing skill or bullet, let him
+                        //because this is better for fast action game
+                        if (currentMouseState.LeftButton == ButtonState.Pressed)
+                        {
+                            pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                        }
                     }
                     //if the user click on right mouse button
                     //cast the current selected skill
                     //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
-                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    else if (currentMouseState.RightButton == ButtonState.Pressed)
                     {
 
                         // Hercules' Bow!!!
@@ -391,6 +398,19 @@ namespace Poseidon
                                 tank.invincibleMode = true;
                                 audio.NewMeteor.Play();
                                 tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                            }
+                        }
+                        
+                        //Hermes' Winged Sandal!!!
+                        if (tank.activeSkillID == 3)
+                        {
+                            if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || tank.firstUse[3] == true)
+                            {
+                                tank.firstUse[3] = false;
+                                audio.NewMeteor.Play();
+                                tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
+                                tank.supersonicMode = true;
+                                timePrevStun = gameTime.TotalGameTime.TotalSeconds;
                             }
                         }
                         pointIntersect = Vector3.Zero;
@@ -443,7 +463,11 @@ namespace Poseidon
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
                     }
-         
+                    if (tank.supersonicMode == true)
+                    {
+                        pointIntersect = IntersectPointWithPlane(GameConstants.FloatHeight);
+                        KnockOutEnemies();
+                    }
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
                     
 

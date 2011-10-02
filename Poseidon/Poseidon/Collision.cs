@@ -116,7 +116,7 @@ namespace Poseidon
         /// <summary>
         /// TANK COLLISION
         /// </summary>
-        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fish, int fishAmount)
+        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount)
         {
             BoundingSphere futureBoundingSphere = tank.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
@@ -127,7 +127,12 @@ namespace Poseidon
             {
                 return false;
             }
-            //Don't allow driving through a barrier
+            //in supersonice mode, you knock and you stun the enemies
+            if (tank.supersonicMode == true)
+            {
+                return true;
+            }
+            //else don't allow driving through an enemy
             if (isTankVsBarrierCollision(futureBoundingSphere, enemies, enemiesAmount))
             {
                 return false;

@@ -95,6 +95,8 @@ namespace Poseidon
         public double[] skillPrevUsed;
         //invincible mode when Achilles' Armor is used
         public bool invincibleMode;
+        //supersonic mode when using Hermes' winged sandal
+        public bool supersonicMode;
         //if it is the 1st time the user use it
         //let him use it
         public bool[] firstUse;
@@ -247,13 +249,14 @@ namespace Poseidon
             }
             activeSkillID = -1;
             invincibleMode = false;
-
+            supersonicMode = false;
             //just for testing
             //should be removed
             activeSkillID = 0;
             skills[0] = true;
             skills[1] = true;
             skills[2] = true;
+            skills[3] = true;
         }
 
         // Copy every attributes but the position and direction
@@ -273,6 +276,7 @@ namespace Poseidon
             skillPrevUsed = tank.skillPrevUsed;
             activeSkillID = tank.activeSkillID;
             invincibleMode = tank.invincibleMode;
+            supersonicMode = tank.supersonicMode;
             firstUse = tank.firstUse;
         }
         internal void Reset()
@@ -291,7 +295,7 @@ namespace Poseidon
             fireRateUpStartTime = 0;
         }
 
-        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -325,6 +329,14 @@ namespace Poseidon
                 if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast)
                 {
                     invincibleMode = false;
+                }
+            }
+            //worn out effect of supersonic
+            if (supersonicMode == true)
+            {
+                if (gameTime.TotalGameTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
+                {
+                    supersonicMode = false;
                 }
             }
             float turnAmount = 0;
@@ -405,7 +417,8 @@ namespace Poseidon
             else wheelRotationValue = 0;
             //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.Velocity *speedUp * this.speed;
+            speed *= GameConstants.Velocity * speedUp * this.speed;
+            if (supersonicMode == true) speed *= 5;
             futurePosition = Position + speed;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;

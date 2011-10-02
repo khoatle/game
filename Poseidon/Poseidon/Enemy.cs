@@ -15,8 +15,7 @@ namespace Poseidon {
         private Vector3 tankLastPosition;
 
         private bool chasing;
-        //stunned and cannot move
-        public bool stunned;
+        
         // Time stampt since the robot starts chasing
         private TimeSpan startChasingTime;
         public TimeSpan prevFire;
@@ -31,7 +30,6 @@ namespace Poseidon {
             : base()
         {
             chasing = false;
-            stunned = false;
             giveUpTime = new TimeSpan(0, 0, 5);
             perceptionRadius = 40f;
             timeBetweenFire = 0.3f;

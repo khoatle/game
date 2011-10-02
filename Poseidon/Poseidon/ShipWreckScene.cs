@@ -56,7 +56,7 @@ namespace Poseidon
 
         // For drawing the currently selected skill
         protected Texture2D[] skillTextures;
-        public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon" };
+        public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon", "Image/skill3Icon" };
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
         public string[] bulletNames = { "Image/skill0Icon", "Image/skill1Icon" };

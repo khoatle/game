@@ -72,7 +72,7 @@ namespace Poseidon
         public const float FruitGrowth = 2.5f;
 
         //skills
-        public const int numberOfSkills = 3;
+        public const int numberOfSkills = 4;
         public const int numBulletTypes = 2;
 
         //radar
@@ -89,10 +89,14 @@ namespace Poseidon
         public const float coolDownForHerculesBow = 5;
         public const float coolDownForArchillesArmor = 5;
         public const float coolDownForThorHammer = 5;
+        public const float coolDownForHermesSandle = 5;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
         public const float ThorDamage = 20;
-        public const float ThorRange = 50;
+        public const float ThorRange = 40;
         public const float ThorPushFactor = 10;
+        public const float HermesDamage = 30;
+        public const float timeSuperSonicLast = 500;
+        
     }
 }

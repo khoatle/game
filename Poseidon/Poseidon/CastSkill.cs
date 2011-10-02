@@ -62,5 +62,30 @@ namespace Poseidon
             enemy.Position += (pushVector * GameConstants.ThorPushFactor);
             enemy.BoundingSphere.Center = enemy.Position;
         }
+        //Knock out any enemy that you crash into
+        public void KnockOutEnemies()
+        {
+            for (int i = 0; i < enemiesAmount; i++)
+            {
+                if (tank.BoundingSphere.Intersects(enemies[i].BoundingSphere))
+                {
+                    Vector3 pushVector = enemies[i].Position - tank.Position;
+                    pushVector.Normalize();
+                    enemies[i].stunned = true;
+                    enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
+                    enemies[i].BoundingSphere.Center = enemies[i].Position;
+                    enemies[i].health -= (int)GameConstants.HermesDamage;
+                    audio.Shooting.Play();
+                    if (enemies[i].health <= 0)
+                    {
+                        for (int k = i + 1; k < enemiesAmount; k++)
+                        {
+                            enemies[k - 1] = enemies[k];
+                        }
+                        enemies[--enemiesAmount] = null;
+                    }
+                }
+            }
+        }
     }
 }

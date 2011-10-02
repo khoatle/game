@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Content.Pipeline.Processors;
+using System;
 #endregion
 
 namespace GeneratedGeometryPipeline
@@ -59,7 +60,57 @@ namespace GeneratedGeometryPipeline
             set { texCoordScale = value; }
         }
 
-        private string terrainTextureFilename = "rockmoss.jpg";
+        private static string SetTerrainTextureFilename()
+        {
+            Random random = new Random();
+            int random_terrain = random.Next(20);
+            switch (random_terrain)
+            {
+                case 0:
+                    return "rockmoss.jpg";
+                case 1:
+                    return "Sand_Dirty.png";
+                case 2:
+                    return "granite_or_fruit.jpg";
+                case 3:
+                    return "Hail_on_Sand.jpg";
+                case 4:
+                    return "dark_brown.jpg";
+                case 5:
+                    return "burnt_soil.jpg";
+                case 6:
+                    return "cave_floor.jpg";
+                case 7:
+                    return "mars-rock.jpg";
+                case 8:
+                    return "sand-cool.jpg";
+                case 9:
+                    return "Pueblo_Wall.jpg";
+                case 10:
+                    return "stone_texture.png";
+                case 11:
+                    return "Emerald.jpg";
+                case 12:
+                    return "grass.jpg";
+                case 13:
+                    return "gravel.jpg";
+                case 14:
+                    return "blue.jpg";
+                case 15:
+                    return "Seabed.bmp";
+                case 16:
+                    return "WhiteSand.jpg";
+                case 17:
+                    return "blue-parchment-paper-texture.bmp";
+                case 18:
+                    return "Greensand.jpg";
+                case 19:
+                    return "rocks.bmp";
+            }
+            return "gravel.jpg";
+        }
+
+        private string terrainTextureFilename = SetTerrainTextureFilename();
         [DisplayName("Terrain Texture")]
         [DefaultValue("rockmoss.jpg")]
         [Description("The name of the terrain texture.")]

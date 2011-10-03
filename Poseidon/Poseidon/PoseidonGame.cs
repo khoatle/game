@@ -305,6 +305,7 @@ namespace Poseidon
             {
                 shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
+                //shipWreckScene.Load();
                 ShowScene(shipWreckScene);
                 doubleClicked = false;
             }

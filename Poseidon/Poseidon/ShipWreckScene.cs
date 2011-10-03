@@ -123,7 +123,13 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            ground.Model = Content.Load<Model>("Image/terrain");
+            Random random = new Random();
+            int random_terrain = random.Next(5);
+            string wood_terrain_name = "Image/wood-terrain" + random_terrain;
+            System.Diagnostics.Debug.WriteLine(wood_terrain_name);
+
+            ground.Model = Content.Load<Model>(wood_terrain_name);
+
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
             heightMapInfo = ground.Model.Tag as HeightMapInfo;
             if (heightMapInfo == null)
@@ -167,6 +173,13 @@ namespace Poseidon
         public override void Show()
         {
             paused = false;
+            //initialize random shipwreck terrain
+            Random random = new Random();
+            int random_terrain = random.Next(5);
+            string wood_terrain_name = "Image/wood-terrain" + random_terrain;
+            System.Diagnostics.Debug.WriteLine(wood_terrain_name);
+
+            ground.Model = Content.Load<Model>(wood_terrain_name);
             //reset position for the tank
             tank.Position = Vector3.Zero;
             tank.Position.Y = GameConstants.FloatHeight;
@@ -178,6 +191,7 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
@@ -618,10 +632,10 @@ namespace Poseidon
             float distanceToDest = posDif.Length();
             //str2 += "\nDistance= " + distanceToDest;
             str2 += "\nTank Position " + tank.Position;
-            str2 += "\nEnemy Position " + enemies[0].Position;
-            str2 += "\nEnemy amount " + enemies.Length;
-            str2 += "\nFish Position " + fish[0].Position;
-            str2 += "\nFish amount " + fish.Length;
+            //str2 += "\nEnemy Position " + enemies[0].Position;
+            //str2 += "\nEnemy amount " + enemies.Length;
+            //str2 += "\nFish Position " + fish[0].Position;
+            //str2 += "\nFish amount " + fish.Length;
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;

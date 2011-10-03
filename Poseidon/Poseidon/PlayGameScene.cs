@@ -147,7 +147,17 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            ground.Model = Content.Load<Model>("Image/terrain");
+            //Uncomment below line to use LEVELS
+            //string terrain_name = "Image/terrain" + currentLevel;
+            
+            //temporary code for testing
+            Random random = new Random();
+            int random_level = random.Next(20);
+            string terrain_name = "Image/terrain" + random_level;
+            System.Diagnostics.Debug.WriteLine(terrain_name);
+            //end temporary testing code
+
+            ground.Model = Content.Load<Model>(terrain_name);
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
             heightMapInfo = ground.Model.Tag as HeightMapInfo;
@@ -200,6 +210,18 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            //Uncomment below line to use LEVELS
+            //string terrain_name = "Image/terrain" + currentLevel;
+
+            //temporary code for testing
+            Random random = new Random();
+            int random_level = random.Next(20);
+            string terrain_name = "Image/terrain" + random_level;
+            System.Diagnostics.Debug.WriteLine(terrain_name);
+            //end temporary testing code
+
+            ground.Model = Content.Load<Model>(terrain_name);
+
             // If we are resetting the level losing the game
             // Reset our tank to the one at the beginning of the lost level
             if (prevGameState == GameState.Lost) tank.CopyAttribute(prevTank);

@@ -32,18 +32,18 @@ namespace Poseidon
             }
         }
 
-        public static void placeEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks)
+        public static void placeEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ)
         {
             loadContentEnemies(ref enemiesAmount, enemies, Content);
 
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
+            //int min = GameConstants.MinDistance;
+            //int max = GameConstants.MaxDistance;
             Vector3 tempCenter;
 
             //place enemies
             for (int i = 0; i < enemiesAmount; i++)
             {
-                enemies[i].Position = GenerateRandomPosition(min, max, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                enemies[i].Position = GenerateRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 enemies[i].Position.Y = GameConstants.FloatHeight;
                 tempCenter = enemies[i].BoundingSphere.Center;
                 tempCenter.X = enemies[i].Position.X;
@@ -54,18 +54,18 @@ namespace Poseidon
             }
         }
 
-        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, Enemy[] enemies, List<ShipWreck> shipWrecks)
+        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, Enemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ)
         {
             loadContentFish(ref fishAmount, fish, Content);
 
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
+            //int min = GameConstants.MinDistance;
+            //int max = GameConstants.MaxDistance;
             Vector3 tempCenter;
 
             //place fish
             for (int i = 0; i < fishAmount; i++)
             {
-                fish[i].Position = GenerateRandomPosition(min, max, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                fish[i].Position = GenerateRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = GameConstants.FloatHeight;
                 tempCenter = fish[i].BoundingSphere.Center;
                 tempCenter.X = fish[i].Position.X;
@@ -77,21 +77,21 @@ namespace Poseidon
         }
 
 
-        public static void placeShipWreck(List<ShipWreck> shipWrecks, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, HeightMapInfo heightMapInfo)
+        public static void placeShipWreck(List<ShipWreck> shipWrecks, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
-            int min = GameConstants.MinDistance;
-            int max = GameConstants.MaxDistance;
+            //int min = GameConstants.MinDistance;
+            //int max = GameConstants.MaxDistance;
             Vector3 tempCenter;
 
             //place ship wrecks
             foreach (ShipWreck shipWreck in shipWrecks)
             {
-                shipWreck.Position = GenerateRandomPosition(min, max, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                shipWreck.Position = GenerateRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 //ship wreck should not be floating
                 shipWreck.Position.Y = heightMapInfo.GetHeight(shipWreck.Position);
                 tempCenter = shipWreck.BoundingSphere.Center;
                 tempCenter.X = shipWreck.Position.X;
-                tempCenter.Y = 0;
+                tempCenter.Y = GameConstants.FloatHeight;
                 tempCenter.Z = shipWreck.Position.Z;
                 shipWreck.BoundingSphere = new BoundingSphere(tempCenter,
                     shipWreck.BoundingSphere.Radius);
@@ -145,13 +145,13 @@ namespace Poseidon
         }
 
         // Helper
-        public static Vector3 GenerateRandomPosition(int min, int max, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
+        public static Vector3 GenerateRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
         {
             int xValue, zValue;
             do
             {
-                xValue = random.Next(min, max);
-                zValue = random.Next(min, max);
+                xValue = random.Next(minX, maxX);
+                zValue = random.Next(minZ, maxZ);
                 if (random.Next(100) % 2 == 0)
                     xValue *= -1;
                 if (random.Next(100) % 2 == 0)

@@ -102,12 +102,14 @@ namespace Poseidon
         }
         public static bool MouseOnShipWreck(Cursor cursor, BoundingSphere boundingSphere, Vector3 center, Camera gameCamera)
         {
+
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            boundingSphere.Center = center;
-            if (RayIntersectsBoundingSphere(cursorRay, boundingSphere))
+            BoundingSphere boundingSphiro;
+            boundingSphiro = boundingSphere;
+            boundingSphiro.Center = center;
+            if (CursorManager.RayIntersectsBoundingSphere(cursorRay, boundingSphiro))
                 return true;
-            else
-                return false;
+            return false;
         }
 
     }

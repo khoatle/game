@@ -205,8 +205,10 @@ namespace Poseidon
             dead = false;
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != 0
-            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null);
-            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null);
+            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
+                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
+            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
+                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
 
         }
 

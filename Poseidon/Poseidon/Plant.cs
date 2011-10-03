@@ -12,7 +12,7 @@ namespace Poseidon
 
     public class Plant : GameObject
     {
-        public int MaxRange { get; set; }
+        //public int MaxRange { get; set; }
 
         public double creationTime;
         public bool timeForFruit;
@@ -21,7 +21,7 @@ namespace Poseidon
         public Plant()
             : base()
         {
-            MaxRange = GameConstants.MaxRange;
+            //MaxRange = GameConstants.MaxRange;
             timeForFruit = false;
             fruitCreated = 0;
         }

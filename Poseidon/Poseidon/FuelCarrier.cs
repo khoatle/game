@@ -19,7 +19,7 @@ namespace Poseidon
             : base()
         {
             ForwardDirection = 0.0f;
-            MaxRange = GameConstants.MaxRange;
+            //MaxRange = GameConstants.MaxRange;
         }
 
         public void LoadContent(ContentManager content, string modelName)

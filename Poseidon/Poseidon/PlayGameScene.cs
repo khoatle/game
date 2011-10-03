@@ -119,8 +119,8 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera();
             boundingSphere = new GameObject();
-            tank = new Tank();
-            prevTank = new Tank();
+            tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ);
+            prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new Enemy[GameConstants.NumberEnemies];
@@ -472,6 +472,7 @@ namespace Poseidon
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
                         CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                     }
+                    if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
                     
 
@@ -536,7 +537,7 @@ namespace Poseidon
                     for (int i = 0; i < enemyBullet.Count; i++) {
                         enemyBullet[i].update();
                     }
-                    Collision.updateBulletOutOfBound(healthBullet, myBullet, frustum);
+                    Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);

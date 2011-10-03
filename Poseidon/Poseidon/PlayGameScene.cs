@@ -265,10 +265,13 @@ namespace Poseidon
                 else shipWrecks[index].LoadContent(Content, randomType, 0);
                 randomType = random.Next(3);
             }
-            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks);
-            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks);
+            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ );
+            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks,
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ );
             //placeFuelCells();
-            AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo);
+            AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo,
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ );
         }
 
         /// <summary>
@@ -756,15 +759,15 @@ namespace Poseidon
                 {
                     shipWreck.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
                 }
             }
 
@@ -799,7 +802,7 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
             DrawBulletType();
-            //DrawHeight();
+            DrawHeight();
             DrawRadar();
             if (tank.activeSkillID != -1) DrawActiveSkill();
         }

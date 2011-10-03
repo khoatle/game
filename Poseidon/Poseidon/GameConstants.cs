@@ -21,6 +21,10 @@ namespace Poseidon
         public const float Velocity = 0.75f;
         public const float BarrierVelocity = 0.1f;
         public const float TurnSpeed = 0.025f;
+        public const int MainGameMinRangeX = 20;
+        public const int MainGameMinRangeZ = 20;
+        public const int ShipWreckMinRangeX = 20;
+        public const int ShipWreckMinRangeZ = 20;
         public const int MainGameMaxRangeX = 500;
         public const int MainGameMaxRangeZ = 500;
         public const int ShipWreckMaxRangeX = 200;

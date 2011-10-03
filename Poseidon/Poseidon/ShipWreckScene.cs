@@ -120,7 +120,12 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            ground.Model = Content.Load<Model>("Models/ground");
+            Random random = new Random();
+            int random_terrain = random.Next(5);
+            string wood_terrain_name = "Image/wood-terrain" + random_terrain;
+            System.Diagnostics.Debug.WriteLine(wood_terrain_name);
+
+            ground.Model = Content.Load<Model>(wood_terrain_name);
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
 
             // Loading main character skill icon textures
@@ -168,6 +173,7 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            Load();
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);

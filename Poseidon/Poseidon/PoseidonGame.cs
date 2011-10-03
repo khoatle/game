@@ -303,6 +303,7 @@ namespace Poseidon
             if (doubleClicked && GetInShipWreck())
             {
                 shipWreckScene.tank.CopyAttribute(playGameScene.tank);
+                shipWreckScene.Load();
                 ShowScene(shipWreckScene);
                 doubleClicked = false;
             }

@@ -121,6 +121,7 @@
     <Compile Include="HelpScene.cs" />
     <Compile Include="Core\ImageComponent.cs" />
     <Compile Include="Core\GameScene.cs" />
+    <Compile Include="LevelObjective.cs" />
     <Compile Include="Plant.cs" />
     <Compile Include="PlayGameScene.cs" />
     <Compile Include="AddingObjects.cs" />

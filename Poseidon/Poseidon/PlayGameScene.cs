@@ -29,7 +29,7 @@ namespace Poseidon
 
         public static AudioLibrary audio;
         int retrievedFruits;
-        TimeSpan startTime, roundTimer, roundTime;
+        public TimeSpan startTime, roundTimer, roundTime;
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
@@ -779,7 +779,7 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
             DrawBulletType();
-            DrawHeight();
+            //DrawHeight();
             DrawRadar();
             if (tank.activeSkillID != -1) DrawActiveSkill();
         }
@@ -834,8 +834,12 @@ namespace Poseidon
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
-
-            str1 += (roundTimer.Seconds).ToString();
+            if (roundTimer.Minutes < 10)
+                str1 += "0";
+            str1 += roundTimer.Minutes + ":";
+            if (roundTimer.Seconds < 10)
+                str1+= "0";
+            str1+= roundTimer.Seconds;
 
             Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
             Vector3 mouseDif = pointIntersect - tank.Position;

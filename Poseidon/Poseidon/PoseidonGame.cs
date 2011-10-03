@@ -270,7 +270,8 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                playGameScene.tank.CopyAttribute(shipWreckScene.tank); 
+                playGameScene.tank.CopyAttribute(shipWreckScene.tank);
+                playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShowScene(playGameScene);
             }
             if (skillPressed)
@@ -303,6 +304,7 @@ namespace Poseidon
             if (doubleClicked && GetInShipWreck())
             {
                 shipWreckScene.tank.CopyAttribute(playGameScene.tank);
+                shipWreckScene.roundTimer = playGameScene.roundTimer;
                 ShowScene(shipWreckScene);
                 doubleClicked = false;
             }

@@ -52,7 +52,7 @@ namespace Poseidon
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(150.25);
+        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(70.25);
         public const string StrTimeRemaining = "Time Remaining: ";
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";

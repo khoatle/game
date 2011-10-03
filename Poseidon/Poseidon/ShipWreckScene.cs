@@ -25,6 +25,7 @@ namespace Poseidon
         MouseState lastMouseState = new MouseState();
         private AudioLibrary audio;
 
+        public TimeSpan roundTimer;
 
         Random random;
         SpriteBatch spriteBatch;
@@ -445,6 +446,11 @@ namespace Poseidon
                     fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100) ,tank, enemyBullet);
                 }
 
+                roundTimer -= gameTime.ElapsedGameTime;
+                if (roundTimer < TimeSpan.Zero)
+                {
+                    dead = true;
+                }
                 // Dead inside a shipwreck
                 if (tank.hitPoint <= 0){
                     dead = true;
@@ -588,7 +594,13 @@ namespace Poseidon
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
-            string str1 = "Ho ";
+            string str1 = GameConstants.StrTimeRemaining;
+            if (roundTimer.Minutes < 10)
+                str1 += "0";
+            str1 += roundTimer.Minutes + ":";
+            if (roundTimer.Seconds < 10)
+                str1 += "0";
+            str1 += roundTimer.Seconds;
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;

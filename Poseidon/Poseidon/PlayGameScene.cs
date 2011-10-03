@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 
+
 namespace Poseidon
 {
     /// <summary>
@@ -51,6 +52,8 @@ namespace Poseidon
 
         List<Plant> plants;
         List<Fruit> fruits;
+
+        List<StaticObjects> starfishes;
 
         Enemy[] enemies;
         Fish[] fish;
@@ -273,6 +276,15 @@ namespace Poseidon
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+            //Initialize the star fishes
+            starfishes = new List<StaticObjects>(GameConstants.NumStarFishes);
+            for (int index = 0; index < GameConstants.NumStarFishes; index++)
+            {
+                starfishes.Add(new StaticObjects());
+                starfishes[index].LoadContent(Content);
+            }
+            AddingObjects.placeStarFish(starfishes, random, heightMapInfo, GameConstants.MainGameMinRangeX, 
+                GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
         }
 
         /// <summary>
@@ -784,7 +796,9 @@ namespace Poseidon
                     GraphicDevice.RasterizerState = rs;
                 }
             }
-
+            //Draw each starfish
+            foreach (StaticObjects starfish in starfishes)
+                starfish.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
             tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);

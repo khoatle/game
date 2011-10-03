@@ -27,7 +27,7 @@ namespace Poseidon
         public const int ShipWreckMinRangeZ = 20;
         public const int MainGameMaxRangeX = 500;
         public const int MainGameMaxRangeZ = 500;
-        public const int ShipWreckMaxRangeX = 200;
+        public const int ShipWreckMaxRangeX = 200; //changing this will mess up the shiwreck width.
         public const int ShipWreckMaxRangeZ = 800;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
@@ -72,6 +72,7 @@ namespace Poseidon
         public const string StrInstructions2 =
             "Control ship using keyboard (A, D, W, S) or the left thumbstick.";
         public const int FloatHeight = 20;
+        public const int NumStarFishes = 15;
 
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;

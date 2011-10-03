@@ -199,5 +199,26 @@ namespace Poseidon
             }
             return false;
         }
+
+        public static void placeStarFish(List<StaticObjects> starfishes, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        {
+            int xValue, zValue;
+            //place star fish
+            foreach (StaticObjects starfish in starfishes)
+            {
+                xValue = random.Next(minX, maxX);
+                zValue = random.Next(minZ, maxZ);
+                if (random.Next(100) % 2 == 0)
+                    xValue *= -1;
+                if (random.Next(100) % 2 == 0)
+                    zValue *= -1;
+
+                //starfish.Position = new Vector3(xValue, 0, zValue);
+                starfish.Position = new Vector3(xValue, zValue, 0);
+                //starfish.Position.Y = heightMapInfo.GetHeight(starfish.Position);
+                starfish.Position.Z = heightMapInfo.GetHeight(starfish.Position);
+            }
+        }
+
     }
 }

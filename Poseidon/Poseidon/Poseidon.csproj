@@ -142,6 +142,7 @@
     <Compile Include="ShipWreck.cs" />
     <Compile Include="ShipWreckScene.cs" />
     <Compile Include="SkillScene.cs" />
+    <Compile Include="StaticObjects.cs" />
     <Compile Include="StartScene.cs" />
     <Compile Include="Tank.cs" />
   </ItemGroup>

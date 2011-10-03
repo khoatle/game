@@ -13,9 +13,15 @@ namespace Poseidon
             public void LoadContent(ContentManager content)
             {
 
-                Model = content.Load<Model>("Models/starfish");
+                Model = content.Load<Model>("Models/chest");
                 Position = Vector3.Down;
+                BoundingSphere = CalculateBoundingSphere();
 
+                BoundingSphere scaledSphere;
+                scaledSphere = BoundingSphere;
+                scaledSphere.Radius *= GameConstants.ShipWreckBoundingSphereFactor;
+                BoundingSphere =
+                    new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             }
 
             public void Draw(Matrix view, Matrix projection)

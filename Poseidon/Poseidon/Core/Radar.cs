@@ -35,7 +35,7 @@ namespace Poseidon.Core
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, Enemy[] enemies, List<DamageBullet> myBullets, List<HealthBullet> healBullets, int enemyAmount)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, Enemy[] enemies, int enemyAmount, List<StaticObject> staticObjects)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 0.0f, RadarImageCenter, RadarScreenRadius / (RadarImage.Height * 0.5f), SpriteEffects.None, 0.0f);
@@ -68,9 +68,9 @@ namespace Poseidon.Core
                 }
             }
             // If my bullet is in range
-            foreach (HealthBullet myBullet in healBullets)
+            foreach (StaticObject staticObject in staticObjects)
             {
-                Vector2 diffVect = new Vector2(myBullet.Position.X - playerPos.X, myBullet.Position.Z - playerPos.Z);
+                Vector2 diffVect = new Vector2(staticObject.Position.X - playerPos.X, staticObject.Position.Z - playerPos.Z);
                 float distance = diffVect.LengthSquared();
 
                 // Check if enemy is within RadarRange
@@ -88,7 +88,7 @@ namespace Poseidon.Core
 
                     // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
                     // at lower elevations have smaller dots.
-                    float scaleHeight = 1.0f + ((myBullet.Position.Y - playerPos.Y) / 200.0f);
+                    float scaleHeight = 1.0f + ((staticObject.Position.Y - playerPos.Y) / 200.0f);
 
                     // Draw enemy dot on radar
                     spriteBatch.Draw(PlayerDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);

@@ -805,7 +805,18 @@ namespace Poseidon
             foreach (StaticObject staticObject in staticObjects)
             {
                 if (staticObject.BoundingSphere.Intersects(frustum))
+                {
                     staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
+
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
+                }
             }
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
@@ -828,7 +839,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, tank.Position, enemies, myBullet, healthBullet, enemiesAmount);
+            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, staticObjects);
         }
 
         public bool TankNearShipWreck(BoundingSphere shipSphere)

@@ -196,7 +196,7 @@ namespace Poseidon
         public static void updateProjectileHitTank(Tank tank, List<DamageBullet> enemyBullets) {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(tank.BoundingSphere)) {
-                    if (!tank.invincibleMode) tank.hitPoint -= enemyBullets[i].damage;
+                    if (!tank.invincibleMode) tank.currentHitPoint -= enemyBullets[i].damage;
                     enemyBullets.RemoveAt(i);
                 }
                 else { i++;  }

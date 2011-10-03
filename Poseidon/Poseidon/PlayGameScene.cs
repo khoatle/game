@@ -569,18 +569,16 @@ namespace Poseidon
                         fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
 
-                    if (tank.hitPoint <= 0) { currentGameState = GameState.Lost; }
+                    //Checking win/lost condition for this level
+                    if (tank.currentHitPoint <= 0) { currentGameState = GameState.Lost; }
 
-                    if (retrievedFruits == GameConstants.NumFuelCells)
-                    {
-                        currentGameState = GameState.Won;
-                    }
                     roundTimer -= gameTime.ElapsedGameTime;
                     if ((roundTimer < TimeSpan.Zero) &&
                         (retrievedFruits != GameConstants.NumFuelCells))
                     {
                         currentGameState = GameState.Lost;
                     }
+                    if (CheckWinCondition()) currentGameState = GameState.Won;
                 }
 
                 prevGameState = currentGameState;
@@ -758,7 +756,7 @@ namespace Poseidon
                 {
                     shipWreck.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
+                    //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;
                     //shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
@@ -861,17 +859,17 @@ namespace Poseidon
             str1 += roundTimer.Minutes + ":";
             if (roundTimer.Seconds < 10)
                 str1+= "0";
-            str1+= roundTimer.Seconds;
-
-            Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
-            Vector3 mouseDif = pointIntersect - tank.Position;
-            float distanceFomTank = mouseDif.Length();
-            str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
-            str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
-            float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-            str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
-            Vector3 posDif = tank.pointToMoveTo - tank.Position;
-            float distanceToDest = posDif.Length();
+            str1 += roundTimer.Seconds;
+            str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
+            //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+            //Vector3 mouseDif = pointIntersect - tank.Position;
+            //float distanceFomTank = mouseDif.Length();
+            //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
+            //str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
+            //float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
+            //str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
+            //Vector3 posDif = tank.pointToMoveTo - tank.Position;
+            //float distanceToDest = posDif.Length();
             //str2 += "\nDistance= " + distanceToDest;
             //str2 += "\nTank Position " + tank.Position;
             //str2 += "\nEnemy Position " + enemies[0].Position;

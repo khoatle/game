@@ -383,8 +383,8 @@ namespace Poseidon
                         break;
                     case 3:
                         if (prevScene == playGameScene)
-                            playGameScene.tank.hitPoint += 30;
-                        else shipWreckScene.tank.hitPoint += 30;
+                            playGameScene.tank.maxHitPoint += 30;
+                        else shipWreckScene.tank.maxHitPoint += 30;
                         break;
                     case 4:
                         ShowScene(prevScene);

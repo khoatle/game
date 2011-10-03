@@ -74,7 +74,7 @@ namespace Poseidon {
                     shoot(enemyBullet);
 
                     if (lastTarget.GetType().Name.Equals("Tank")) {
-                        if (((Tank)lastTarget).hitPoint <= 0) {
+                        if (((Tank)lastTarget).currentHitPoint <= 0) {
                             hasPrevTarget = false;
                             lastTarget = null;
                         }

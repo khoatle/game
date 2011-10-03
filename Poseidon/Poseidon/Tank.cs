@@ -79,7 +79,8 @@ namespace Poseidon
         public float strength;
         public float speed;
         public float shootingRate;
-        public int hitPoint;
+        public int maxHitPoint;
+        public int currentHitPoint;
         // 2 types of bullet
         // 0: killing
         // 1: healing
@@ -181,8 +182,8 @@ namespace Poseidon
             strength = 1.0f;
             speed = 1.0f;
             shootingRate = 1.0f;
-            hitPoint = GameConstants.PlayerHP;
-
+            maxHitPoint = GameConstants.PlayerStartingHP;
+            currentHitPoint = GameConstants.PlayerStartingHP;
             pointToMoveTo = Vector3.Zero;
 
             // No buff up at the beginning
@@ -272,7 +273,8 @@ namespace Poseidon
             strength = tank.strength;
             speed = tank.speed;
             shootingRate = tank.shootingRate;
-            hitPoint = tank.hitPoint;
+            maxHitPoint = tank.maxHitPoint;
+            currentHitPoint = tank.currentHitPoint;
             speedUp = tank.speedUp;
             strengthUp = tank.strengthUp;
             fireRateUp = tank.fireRateUp;
@@ -300,6 +302,7 @@ namespace Poseidon
             strengthUpStartTime = 0;
             speedUpStartTime = 0;
             fireRateUpStartTime = 0;
+            currentHitPoint = maxHitPoint;
         }
 
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)

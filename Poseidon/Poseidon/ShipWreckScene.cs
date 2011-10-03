@@ -466,7 +466,7 @@ namespace Poseidon
                     dead = true;
                 }
                 // Dead inside a shipwreck
-                if (tank.hitPoint <= 0){
+                if (tank.currentHitPoint <= 0){
                     dead = true;
                 }
 
@@ -639,7 +639,7 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Tank Health " + tank.hitPoint;
+            str2 += "\n Tank Health " + tank.currentHitPoint;
             //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Calculate str1 position

@@ -23,8 +23,8 @@ namespace Poseidon
         public const float TurnSpeed = 0.025f;
         public const int MainGameMaxRangeX = 500;
         public const int MainGameMaxRangeZ = 500;
-        public const int ShipWreckMaxRangeX = 500;
-        public const int ShipWreckMaxRangeZ = 500;
+        public const int ShipWreckMaxRangeX = 200;
+        public const int ShipWreckMaxRangeZ = 800;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
 
@@ -70,7 +70,7 @@ namespace Poseidon
         public const float FuelCellBoundingSphereFactor = .5f;
         public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = .9f;
-        public const float ShipWreckBoundingSphereFactor = 1.0f;
+        public const float ShipWreckBoundingSphereFactor = 4.0f;
         public const float PlantBoundingSphereFactor = 0.6f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 2.5f;

@@ -255,10 +255,12 @@ namespace Poseidon
         /// </summary>
         public void HandleShipWreckSceneInput()
         {
-            // Dead inside the ship wreck
-            if (shipWreckScene.dead)
+            // if dead or timeout inside the ship wreck
+            // let the main game dictate about win/lose
+            if (shipWreckScene.returnToMain)
             {
-                playGameScene.currentGameState = GameState.Lost;
+                playGameScene.tank.CopyAttribute(shipWreckScene.tank);
+                playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShowScene(playGameScene);
             }
 

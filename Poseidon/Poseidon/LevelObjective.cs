@@ -17,6 +17,26 @@ namespace Poseidon
                 // kill all enemies to win this level
                 if (enemiesAmount == 0) return true;
             }
+            if (currentLevel == 1)
+            {
+                // save atleast 10 fish to win this level
+                if (roundTimer <= TimeSpan.Zero && fishAmount >= 10)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool CheckLoseCondition()
+        {
+            if (currentLevel == 0)
+            {
+                if (roundTimer < TimeSpan.Zero) return true;
+            }
+            if (currentLevel == 1)
+            {
+                if (fishAmount < 10) return true;
+            }
             return false;
         }
     }

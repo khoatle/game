@@ -14,27 +14,31 @@ namespace Poseidon
 {
     public static class AddingObjects
     {
-        public static void loadContentEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content)
+        public static void loadContentEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
         {
-            enemiesAmount = GameConstants.NumberEnemies;
+            if (mainGame)
+                enemiesAmount = GameConstants.NumberEnemies[currentLevel];
+            else enemiesAmount = GameConstants.ShipNumberEnemies;
             for (int i = 0; i < enemiesAmount; i++) {
                 enemies[i] = new Enemy();
                 enemies[i].LoadContent(Content, "Models/fuelcarrier");
             }
         }
 
-        public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content)
+        public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, bool mainGame)
         {
-            fishAmount = GameConstants.NumberFish;
+            if (mainGame)
+                fishAmount = GameConstants.NumberFish[currentLevel];
+            else fishAmount = GameConstants.ShipNumberFish;
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
                 fish[i].LoadContent(Content, "Models/cube10uR");
             }
         }
 
-        public static void placeEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ)
+        public static void placeEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame)
         {
-            loadContentEnemies(ref enemiesAmount, enemies, Content);
+            loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, mainGame);
 
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;
@@ -54,9 +58,9 @@ namespace Poseidon
             }
         }
 
-        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, Enemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ)
+        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, Enemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame)
         {
-            loadContentFish(ref fishAmount, fish, Content);
+            loadContentFish(ref fishAmount, fish, Content, currentLevel, mainGame);
 
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;

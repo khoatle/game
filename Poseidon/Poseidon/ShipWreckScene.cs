@@ -65,7 +65,7 @@ namespace Poseidon
         protected Texture2D actionTexture;
         protected Texture2D stunnedTexture;
         // He died inside the ship wreck?
-        public bool dead;
+        public bool returnToMain;
         // has artifact?
         public int skillID = 0;
 
@@ -97,13 +97,13 @@ namespace Poseidon
             boundingSphere = new GameObject();
             tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ);
             fireTime = TimeSpan.FromSeconds(0.3f);
-            enemies = new Enemy[GameConstants.NumberEnemies];
-            fish = new Fish[GameConstants.NumberFish];
+            enemies = new Enemy[GameConstants.ShipNumberEnemies];
+            fish = new Fish[GameConstants.ShipNumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
 
-            enemies = new Enemy[GameConstants.NumberEnemies];
-            fish = new Fish[GameConstants.NumberFish];
+            //enemies = new Enemy[GameConstants.NumberEnemies];
+            //fish = new Fish[GameConstants.NumberFish];
             
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
@@ -195,20 +195,20 @@ namespace Poseidon
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
                 tank.Position, aspectRatio);
-            enemiesAmount = GameConstants.NumberEnemies;
-            fishAmount = GameConstants.NumberFish;
+            //enemiesAmount = GameConstants.NumberEnemies;
+            //fishAmount = GameConstants.NumberFish;
             InitializeShipField(Content);
         }
 
         private void InitializeShipField(ContentManager Content)
         {
-            dead = false;
+            returnToMain = false;
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != 0
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
-                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
+                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
-                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
+                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, false);
 
         }
 
@@ -246,7 +246,7 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            if (!paused && !dead)
+            if (!paused && !returnToMain)
             {
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
@@ -465,11 +465,11 @@ namespace Poseidon
                 roundTimer -= gameTime.ElapsedGameTime;
                 if (roundTimer < TimeSpan.Zero)
                 {
-                    dead = true;
+                    returnToMain = true;
                 }
                 // Dead inside a shipwreck
                 if (tank.currentHitPoint <= 0){
-                    dead = true;
+                    returnToMain = true;
                 }
 
                 base.Update(gameTime);
@@ -477,7 +477,7 @@ namespace Poseidon
         }
 
         public override void Draw(GameTime gameTime) {
-            if (dead) return;
+            if (returnToMain) return;
 
 
             base.Draw(gameTime);

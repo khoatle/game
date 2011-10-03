@@ -123,8 +123,8 @@ namespace Poseidon
             prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
-            enemies = new Enemy[GameConstants.NumberEnemies];
-            fish = new Fish[GameConstants.NumberFish];
+            enemies = new Enemy[GameConstants.NumberEnemies[0]];
+            fish = new Fish[GameConstants.NumberFish[0]];
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -265,13 +265,14 @@ namespace Poseidon
                 else shipWrecks[index].LoadContent(Content, randomType, 0);
                 randomType = random.Next(3);
             }
+            enemies = new Enemy[GameConstants.NumberEnemies[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ );
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ );
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true);
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ );
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
         }
 
         /// <summary>
@@ -576,12 +577,8 @@ namespace Poseidon
                     if (tank.currentHitPoint <= 0) { currentGameState = GameState.Lost; }
 
                     roundTimer -= gameTime.ElapsedGameTime;
-                    if ((roundTimer < TimeSpan.Zero) &&
-                        (retrievedFruits != GameConstants.NumFuelCells))
-                    {
-                        currentGameState = GameState.Lost;
-                    }
                     if (CheckWinCondition()) currentGameState = GameState.Won;
+                    if (CheckLoseCondition()) currentGameState = GameState.Lost;
                 }
 
                 prevGameState = currentGameState;

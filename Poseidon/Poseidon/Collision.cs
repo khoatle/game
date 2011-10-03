@@ -28,7 +28,7 @@ namespace Poseidon
         // End-----------------------------------------------------
 
         ///PLANT FUNCTIONS
-        public static bool isPlantPositionValid(Plant plant, List<Plant> plants, List<ShipWreck> shipwrecks)
+        public static bool isPlantPositionValid(Plant plant, List<Plant> plants, List<ShipWreck> shipwrecks, List<StaticObject> staticObjects)
         {
             if (isPlantvsPlantCollision(plant.BoundingSphere, plants))
             {
@@ -38,6 +38,11 @@ namespace Poseidon
             {
                 return false;
             }
+            if (isPlantvsStaticObjectCollision(plant.BoundingSphere, staticObjects))
+            {
+                return false;
+            }
+
             return true;
         }
 
@@ -52,7 +57,17 @@ namespace Poseidon
             }
             return false;
         }
-
+        // Helper
+        private static bool isPlantvsStaticObjectCollision(BoundingSphere plantBoundingSphere, List<StaticObject> staticObjects)
+        {
+            for (int i = 0; i < staticObjects.Count; i++)
+            {
+                if (plantBoundingSphere.Intersects(
+                    staticObjects[i].BoundingSphere))
+                    return true;
+            }
+            return false;
+        }
         //helper
         private static bool isPlantvsShipwreckCollision(BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
         {

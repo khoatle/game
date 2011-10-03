@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 
+
 namespace Poseidon
 {
     /// <summary>
@@ -51,6 +52,8 @@ namespace Poseidon
 
         List<Plant> plants;
         List<Fruit> fruits;
+
+        List<StaticObject> staticObjects;
 
         Enemy[] enemies;
         Fish[] fish;
@@ -119,8 +122,8 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera();
             boundingSphere = new GameObject();
-            tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.FloatHeight);
-            prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.FloatHeight);
+            tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
+            prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new Enemy[GameConstants.NumberEnemies[0]];
@@ -268,12 +271,21 @@ namespace Poseidon
             enemies = new Enemy[GameConstants.NumberEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.FloatHeight);
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.FloatHeight);
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight);
             //placeFuelCells();
-            AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo,
+            AddingObjects.placeShipWreck(shipWrecks, staticObjects, random, heightMapInfo,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+            //Initialize the star fishes
+            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjects);
+            for (int index = 0; index < GameConstants.NumStaticObjects; index++)
+            {
+                staticObjects.Add(new StaticObject());
+                staticObjects[index].LoadContent(Content);
+            }
+            AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, heightMapInfo, GameConstants.MainGameMinRangeX, 
+                GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
         }
 
         /// <summary>
@@ -374,7 +386,7 @@ namespace Poseidon
                         //because this is better for fast action game
                         if (currentMouseState.LeftButton == ButtonState.Pressed)
                         {
-                            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                         }
                     }
                     //if the user click on right mouse button
@@ -386,7 +398,7 @@ namespace Poseidon
                         // Hercules' Bow!!!
                         if (tank.activeSkillID == 0 && mouseOnLivingObject)
                         {
-                            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                             tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                             //if the skill has cooled down
                             //or this is the 1st time the user uses it
@@ -441,7 +453,7 @@ namespace Poseidon
                     {
                         if (currentMouseState.LeftButton == ButtonState.Pressed)
                         {
-                            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                             tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                             if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                             {
@@ -457,13 +469,13 @@ namespace Poseidon
                     //if the user clicks or holds mouse's left button
                     else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                     {
-                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                     }
                     else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
                     {
-                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                         //if it is out of shooting range then just move there
-                        if (!CursorManager.InShootingRange(tank, cursor, gameCamera, GameConstants.FloatHeight))
+                        if (!CursorManager.InShootingRange(tank, cursor, gameCamera, GameConstants.MainGameFloatHeight))
                         {
 
                         }
@@ -489,7 +501,7 @@ namespace Poseidon
 
                     if (tank.supersonicMode == true)
                     {
-                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                         CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
@@ -514,7 +526,7 @@ namespace Poseidon
                     if ((lastKeyboardState.IsKeyDown(Keys.O) && (currentKeyboardState.IsKeyUp(Keys.O))))
                     {
                         audio.Shooting.Play();
-                        AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks);
+                        AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects);
                     }
 
                     //Are the trees ready for fruit?
@@ -789,7 +801,12 @@ namespace Poseidon
                     GraphicDevice.RasterizerState = rs;
                 }
             }
-
+            //Draw each starfish
+            foreach (StaticObject staticObject in staticObjects)
+            {
+                if (staticObject.BoundingSphere.Intersects(frustum))
+                    staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
             tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);

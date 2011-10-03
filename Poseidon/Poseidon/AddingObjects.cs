@@ -47,7 +47,7 @@ namespace Poseidon
             //place enemies
             for (int i = 0; i < enemiesAmount; i++)
             {
-                enemies[i].Position = GenerateRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                enemies[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 enemies[i].Position.Y = floatHeight;
                 tempCenter = enemies[i].BoundingSphere.Center;
                 tempCenter.X = enemies[i].Position.X;
@@ -69,7 +69,7 @@ namespace Poseidon
             //place fish
             for (int i = 0; i < fishAmount; i++)
             {
-                fish[i].Position = GenerateRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = floatHeight;
                 tempCenter = fish[i].BoundingSphere.Center;
                 tempCenter.X = fish[i].Position.X;
@@ -81,7 +81,7 @@ namespace Poseidon
         }
 
 
-        public static void placeShipWreck(List<ShipWreck> shipWrecks, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        public static void placeShipWreck(List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;
@@ -90,12 +90,12 @@ namespace Poseidon
             //place ship wrecks
             foreach (ShipWreck shipWreck in shipWrecks)
             {
-                shipWreck.Position = GenerateRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                shipWreck.Position = GenerateSeaBedRandomPosition(minX, maxX, minZ, maxZ, random, shipWrecks, staticObjects);
                 //ship wreck should not be floating
                 shipWreck.Position.Y = heightMapInfo.GetHeight(shipWreck.Position);
                 tempCenter = shipWreck.BoundingSphere.Center;
                 tempCenter.X = shipWreck.Position.X;
-                tempCenter.Y = GameConstants.FloatHeight;
+                tempCenter.Y = GameConstants.MainGameFloatHeight;
                 tempCenter.Z = shipWreck.Position.Z;
                 shipWreck.BoundingSphere = new BoundingSphere(tempCenter,
                     shipWreck.BoundingSphere.Radius);
@@ -154,19 +154,19 @@ namespace Poseidon
         }
 
         // Helper
-        public static void placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks)
+        public static void placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
         {
             Plant p = new Plant();
             Vector3 possiblePosition = tank.Position;
             possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
             p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
-            if (Collision.isPlantPositionValid(p, plants, shipWrecks)) {
+            if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects)) {
                 plants.Add(p);
             }
         }
 
         // Helper
-        public static Vector3 GenerateRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
+        public static Vector3 GenerateSurfaceRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
         {
             int xValue, zValue;
             do
@@ -178,7 +178,7 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
 
-            } while (IsOccupied(xValue, zValue, enemiesAmount, fishAmount, enemies, fish, shipWrecks));
+            } while (IsSurfaceOccupied(xValue, zValue, enemiesAmount, fishAmount, enemies, fish));
 
             return new Vector3(xValue, 0, zValue);
         }
@@ -199,9 +199,25 @@ namespace Poseidon
 
             return new Vector3(xValue, 0, zValue);
         }
-
         // Helper
-        public static bool IsOccupied(int xValue, int zValue, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
+        public static Vector3 GenerateSeaBedRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+        {
+            int xValue, zValue;
+            do
+            {
+                xValue = random.Next(minX, maxX);
+                zValue = random.Next(minZ, maxZ);
+                if (random.Next(100) % 2 == 0)
+                    xValue *= -1;
+                if (random.Next(100) % 2 == 0)
+                    zValue *= -1;
+
+            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects));
+
+            return new Vector3(xValue, 0, zValue);
+        }
+        // Helper
+        public static bool IsSurfaceOccupied(int xValue, int zValue, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -220,17 +236,7 @@ namespace Poseidon
                     zValue, fish[i].Position.Z)) < 15))
                     return true;
             }
-            if (shipWrecks != null)
-            {
-                foreach (GameObject currentObj in shipWrecks)
-                {
-                    if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 15) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 15))
-                        return true;
-                }
-            }
+           
             return false;
         }
         // Helper
@@ -249,6 +255,54 @@ namespace Poseidon
                 }
             }
             return false;
+        }
+        // Helper
+        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+        {
+
+            if (shipWrecks != null)
+            {
+                //not so close to the ship wreck
+                foreach (GameObject currentObj in shipWrecks)
+                {
+                    if (((int)(MathHelper.Distance(
+                        xValue, currentObj.Position.X)) < 50) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, currentObj.Position.Z)) < 50))
+                        return true;
+                }
+            }
+            if (staticObjects != null)
+            {
+                foreach (GameObject currentObj in staticObjects)
+                {
+                    if (((int)(MathHelper.Distance(
+                        xValue, currentObj.Position.X)) < 15) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, currentObj.Position.Z)) < 15))
+                        return true;
+                }
+            }
+            return false;
+        }
+        public static void PlaceStaticObjects(List<StaticObject> staticObjects, List<ShipWreck> shipWrecks, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        {
+
+            Vector3 tempCenter;
+
+            //place ship wrecks
+            foreach (StaticObject staticObject in staticObjects)
+            {
+                staticObject.Position = GenerateSeaBedRandomPosition(minX, maxX, minZ, maxZ, random, shipWrecks, staticObjects);
+                //ship wreck should not be floating
+                staticObject.Position.Y = heightMapInfo.GetHeight(staticObject.Position);
+                tempCenter = staticObject.BoundingSphere.Center;
+                tempCenter.X = staticObject.Position.X;
+                tempCenter.Y = GameConstants.MainGameFloatHeight;
+                tempCenter.Z = staticObject.Position.Z;
+                staticObject.BoundingSphere = new BoundingSphere(tempCenter,
+                    staticObject.BoundingSphere.Radius);
+            }
         }
     }
 }

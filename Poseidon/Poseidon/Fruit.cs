@@ -19,7 +19,7 @@ namespace Poseidon
         {
             Model = content.Load<Model>(modelName);
             Position = plantPosition;
-            Position.Y = GameConstants.FloatHeight;
+            Position.Y = GameConstants.MainGameFloatHeight;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;

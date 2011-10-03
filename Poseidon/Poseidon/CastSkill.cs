@@ -62,6 +62,8 @@ namespace Poseidon
             Vector3 pushVector = enemy.Position - tank.Position;
             pushVector.Normalize();
             enemy.Position += (pushVector * GameConstants.ThorPushFactor);
+            MathHelper.Clamp(enemy.Position.X, -tank.MaxRangeX, tank.MaxRangeX);
+            MathHelper.Clamp(enemy.Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);
             enemy.BoundingSphere.Center = enemy.Position;
         }
         //Knock out any enemy that you crash into
@@ -76,6 +78,8 @@ namespace Poseidon
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
+                    MathHelper.Clamp(enemies[i].Position.X, -tank.MaxRangeX, tank.MaxRangeX);
+                    MathHelper.Clamp(enemies[i].Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);
                     enemies[i].BoundingSphere.Center = enemies[i].Position;
                     enemies[i].health -= (int)GameConstants.HermesDamage;
                     audio.Shooting.Play();

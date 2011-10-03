@@ -118,6 +118,8 @@ namespace Poseidon
         public Vector3 pointToMoveTo;
         public bool reachDestination = true;
 
+        public float floatHeight;
+
         // Tank moving bound
         public int MaxRangeX;
         public int MaxRangeZ;
@@ -176,7 +178,7 @@ namespace Poseidon
 
         #endregion
 
-        public Tank(int MaxRangeX, int MaxRangeZ)
+        public Tank(int MaxRangeX, int MaxRangeZ, float floatHeight)
         {
             // Original attribute
             strength = 1.0f;
@@ -193,9 +195,10 @@ namespace Poseidon
 
             skills = new bool[GameConstants.numberOfSkills];
             skillPrevUsed = new double[GameConstants.numberOfSkills];
-            firstUse = new bool[GameConstants.numberOfSkills]; 
+            firstUse = new bool[GameConstants.numberOfSkills];
 
-            Position.Y = GameConstants.FloatHeight;
+            this.floatHeight = floatHeight;
+            Position.Y = floatHeight;
 
             this.MaxRangeX = MaxRangeX;
             this.MaxRangeZ = MaxRangeZ;
@@ -239,7 +242,7 @@ namespace Poseidon
 
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Center.Y = GameConstants.FloatHeight;
+            scaledSphere.Center.Y = floatHeight;
             scaledSphere.Radius *=
                 GameConstants.TankBoundingSphereFactor;
             BoundingSphere =
@@ -291,7 +294,7 @@ namespace Poseidon
         internal void Reset()
         {
             Position = Vector3.Zero;
-            Position.Y = GameConstants.FloatHeight;
+            Position.Y = floatHeight;
             ForwardDirection = 0f;
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {

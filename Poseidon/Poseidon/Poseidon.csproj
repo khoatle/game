@@ -121,6 +121,7 @@
     <Compile Include="HelpScene.cs" />
     <Compile Include="Core\ImageComponent.cs" />
     <Compile Include="Core\GameScene.cs" />
+    <Compile Include="InputManager.cs" />
     <Compile Include="LevelObjective.cs" />
     <Compile Include="Plant.cs" />
     <Compile Include="PlayGameScene.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="SkillScene.cs" />
     <Compile Include="StartScene.cs" />
     <Compile Include="Tank.cs" />
+    <Compile Include="TreasureChest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

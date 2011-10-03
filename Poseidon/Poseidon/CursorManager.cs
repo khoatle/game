@@ -14,9 +14,9 @@ namespace Poseidon
 {
     class CursorManager
     {
-        public static bool InShootingRange(Tank tank, Cursor cursor, Camera gameCamera)
+        public static bool InShootingRange(Tank tank, Cursor cursor, Camera gameCamera, float planeHeight)
         {
-            Vector3 pointIntersect = IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+            Vector3 pointIntersect = IntersectPointWithPlane(cursor, gameCamera, planeHeight);
             Vector3 mouseDif = pointIntersect - tank.Position;
             float distanceFromTank = mouseDif.Length();
             if (distanceFromTank < GameConstants.shootingRange)
@@ -37,11 +37,13 @@ namespace Poseidon
         public static bool MouseOnEnemy(Cursor cursor, Camera gameCamera, Enemy[] enemies, int enemiesAmount)
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-
+            BoundingSphere sphere;
             for (int i = 0; i < enemiesAmount; i++)
             {
-
-                if (RayIntersectsBoundingSphere(cursorRay, enemies[i].BoundingSphere))
+                //making it easier to aim
+                sphere = enemies[i].BoundingSphere;
+                sphere.Radius *= 2.0f;
+                if (RayIntersectsBoundingSphere(cursorRay, sphere))
                 {
                     cursor.SetShootingMouseImage();
                     return true;
@@ -54,9 +56,12 @@ namespace Poseidon
 
         public static bool MouseOnFish(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount)
         {
+            BoundingSphere sphere;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             for (int i = 0; i < fishAmount; i++)
             {
+                sphere = fish[i].BoundingSphere;
+                sphere.Radius *= 2.0f;
                 if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
                 {
                     cursor.SetShootingMouseImage();

@@ -45,6 +45,7 @@ namespace Poseidon
         List<DamageBullet> myBullet;
         List<DamageBullet> enemyBullet;
         List<HealthBullet> healthBullet;
+        List<TreasureChest> treasureChests;
 
         //A tank
         public Tank tank;
@@ -67,7 +68,7 @@ namespace Poseidon
         // He died inside the ship wreck?
         public bool returnToMain;
         // has artifact?
-        public int skillID = 0;
+        public int skillID = -1;
 
         // Frustum of the camera
         BoundingFrustum frustum;
@@ -95,7 +96,7 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera();
             boundingSphere = new GameObject();
-            tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ);
+            tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new Enemy[GameConstants.ShipNumberEnemies];
             fish = new Fish[GameConstants.ShipNumberFish];
@@ -112,7 +113,7 @@ namespace Poseidon
             myBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             enemyBullet = new List<DamageBullet>();
-
+            
             this.Load();
         }
 
@@ -182,7 +183,7 @@ namespace Poseidon
             ground.Model = Content.Load<Model>(wood_terrain_name);
             //reset position for the tank
             tank.Position = Vector3.Zero;
-            tank.Position.Y = GameConstants.FloatHeight;
+            tank.Position.Y = GameConstants.ShipWreckFloatHeight;
             tank.ForwardDirection = 0f;
             MediaPlayer.Play(audio.BackMusic);
             InitializeShipField(Content);
@@ -203,13 +204,27 @@ namespace Poseidon
         private void InitializeShipField(ContentManager Content)
         {
             returnToMain = false;
+            enemyBullet = new List<DamageBullet>();
+            healthBullet = new List<HealthBullet>();
+            myBullet = new List<DamageBullet>();
             // Initialize the chests here
-            // Put the skill in one of it if this.skillID != 0
+            // Put the skill in one of it if this.skillID != -1
+            treasureChests = new List<TreasureChest>(GameConstants.NumberChests);
+            int randomType = random.Next(3);
+            for (int index = 0; index < GameConstants.NumberChests; index++)
+            {
+                treasureChests.Add(new TreasureChest());
+                //put a God's relic inside a chest!
+                if (index == 0 && skillID != 0) treasureChests[index].LoadContent(Content, randomType, skillID);
+                else treasureChests[index].LoadContent(Content, randomType, -1);
+                randomType = random.Next(3);
+            }
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
-                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false);
+                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
-                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, false);
-
+                GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, false, GameConstants.ShipWreckFloatHeight);
+            AddingObjects.placeTreasureChests(treasureChests, random, heightMapInfo,
+                GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
         }
 
         /// <summary>
@@ -290,7 +305,7 @@ namespace Poseidon
                     //because this is better for fast action game
                     if (currentMouseState.LeftButton == ButtonState.Pressed)
                     {
-                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                     }
                 }
                 //if the user click on right mouse button
@@ -302,7 +317,7 @@ namespace Poseidon
                     // Hercules' Bow!!!
                     if (tank.activeSkillID == 0 && mouseOnLivingObject)
                     {
-                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                         tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                         //if the skill has cooled down
                         //or this is the 1st time the user uses it
@@ -357,7 +372,7 @@ namespace Poseidon
                 {
                     if (currentMouseState.LeftButton == ButtonState.Pressed)
                     {
-                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                         tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                         if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
                         {
@@ -373,13 +388,13 @@ namespace Poseidon
                 //if the user clicks or holds mouse's left button
                 else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                 {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                 }
                 else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
                 {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                     //if it is out of shooting range then just move there
-                    if (!CursorManager.InShootingRange(tank, cursor, gameCamera))
+                    if (!CursorManager.InShootingRange(tank, cursor, gameCamera, GameConstants.ShipWreckFloatHeight))
                     {
 
                     }
@@ -399,9 +414,13 @@ namespace Poseidon
                         if (doubleClicked == true) pointIntersect = Vector3.Zero;
                     }
                 }
+                //let the user change active skill/bullet too when he presses on number
+                //this is better for fast action
+                InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, tank);
+
                 if (tank.supersonicMode == true)
                 {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                     CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                 }
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
@@ -524,7 +543,27 @@ namespace Poseidon
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
+            BoundingSphere chestSphere;
+            // Drawing ship wrecks
+            foreach (TreasureChest treasureChest in treasureChests)
+            {
+                chestSphere = treasureChest.BoundingSphere;
+                chestSphere.Center = treasureChest.Position;
+                if (chestSphere.Intersects(frustum))
+                {
+                    treasureChest.Draw(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    treasureChest.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
 
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
+                }
+            }
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (enemies[i].BoundingSphere.Intersects(frustum))
@@ -623,7 +662,7 @@ namespace Poseidon
 
             //str1 += (roundTimer.Seconds).ToString();
 
-            Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
+            Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
             Vector3 mouseDif = pointIntersect - tank.Position;
             float distanceFomTank = mouseDif.Length();
             //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;

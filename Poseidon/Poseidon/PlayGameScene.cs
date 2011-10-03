@@ -91,7 +91,7 @@ namespace Poseidon
         Radar radar;
 
         // Frustum of the camera
-        BoundingFrustum frustum;
+        public static BoundingFrustum frustum;
 
         // For mouse inputs
         bool doubleClicked = false;
@@ -119,8 +119,8 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera();
             boundingSphere = new GameObject();
-            tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ);
-            prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ);
+            tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.FloatHeight);
+            prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.FloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new Enemy[GameConstants.NumberEnemies[0]];
@@ -262,14 +262,15 @@ namespace Poseidon
             {
                 shipWrecks.Add(new ShipWreck());
                 if (index == 0) shipWrecks[index].LoadContent(Content, randomType, 1);
-                else shipWrecks[index].LoadContent(Content, randomType, 0);
+                else shipWrecks[index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }
             enemies = new Enemy[GameConstants.NumberEnemies[currentLevel]];
+            fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true);
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.FloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true);
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.FloatHeight);
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, random, enemiesAmount, fishAmount, enemies, fish, heightMapInfo,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
@@ -462,7 +463,7 @@ namespace Poseidon
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
                         //if it is out of shooting range then just move there
-                        if (!CursorManager.InShootingRange(tank, cursor, gameCamera))
+                        if (!CursorManager.InShootingRange(tank, cursor, gameCamera, GameConstants.FloatHeight))
                         {
 
                         }
@@ -482,6 +483,10 @@ namespace Poseidon
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
                     }
+                    //let the user change active skill/bullet too when he presses on number
+                    //this is better for fast action
+                    InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, tank);
+
                     if (tank.supersonicMode == true)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
@@ -756,15 +761,15 @@ namespace Poseidon
                 {
                     shipWreck.Draw(gameCamera.ViewMatrix,
                         gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //shipWreck.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
 

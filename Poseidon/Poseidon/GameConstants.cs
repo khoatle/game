@@ -55,6 +55,7 @@ namespace Poseidon
         public const int ShipNumberEnemies = 10;
         public const int ShipNumberFish = 5;
         public const int NumberShipWrecks = 10;
+        public const int NumberChests = 10;
         public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;
         public const int NumFuelCells = 12;
@@ -71,7 +72,10 @@ namespace Poseidon
             "Retrieve all Fuel Cells before time runs out.";
         public const string StrInstructions2 =
             "Control ship using keyboard (A, D, W, S) or the left thumbstick.";
+        // float height for main game
         public const int FloatHeight = 20;
+        // float height for shipwreck
+        public const int ShipWreckFloatHeight = -50;
 
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;
@@ -81,6 +85,7 @@ namespace Poseidon
         public const float ShipWreckBoundingSphereFactor = 1.0f;
         public const float PlantBoundingSphereFactor = 0.6f;
         public const float FruitBoundingSphereFactor = 0.9f;
+        public const float TreasureChestSphereFactor = 1.0f;
         public const float FruitGrowth = 2.5f;
 
         //skills

@@ -25,6 +25,7 @@ namespace Poseidon
                     return true;
                 }
             }
+
             return false;
         }
         public bool CheckLoseCondition()

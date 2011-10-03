@@ -56,7 +56,8 @@ namespace Poseidon {
 
         private void shoot(List<DamageBullet> enemyBullet) {
             if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
-                AddingObjects.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet, PlayGameScene.audio);
+                AddingObjects.placeEnemyBullet(Position, shootingDirection, GameConstants.DefaultEnemyDamage, enemyBullet);
+                if (this.BoundingSphere.Intersects(PlayGameScene.frustum)) PlayGameScene.audio.Shooting.Play();
                 prevFire = PlayGameScene.timming.TotalGameTime;
             }
         }

@@ -417,7 +417,7 @@ namespace Poseidon
                 //let the user change active skill/bullet too when he presses on number
                 //this is better for fast action
                 InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, tank);
-
+                
                 if (tank.supersonicMode == true)
                 {
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
@@ -476,6 +476,24 @@ namespace Poseidon
                     }
                 }
 
+                foreach (TreasureChest chest in treasureChests)
+                {
+                    if (CharacterNearChest(chest.BoundingSphere) && CursorManager.MouseOnChest(cursor, chest.BoundingSphere, chest.Position, gameCamera)
+                        && chest.opened == false && doubleClicked)
+                    {
+                        chest.opened = true;
+                        if (chest.skillID == -1)
+                        {
+                            // give the player some experience
+                        }
+                        else 
+                        {
+                            // player found a God's relic
+                            // unlock a skill
+                            tank.skills[chest.skillID] = true;
+                        }
+                    }
+                }
 
                 for (int i = 0; i < fishAmount; i++) {
                     fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100) ,tank, enemyBullet);
@@ -697,6 +715,13 @@ namespace Poseidon
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 
-        }    
+        }
+        public bool CharacterNearChest(BoundingSphere chestSphere)
+        {
+            if (tank.BoundingSphere.Intersects(chestSphere))
+                return true;
+            else
+                return false;
+        }
     }
 }

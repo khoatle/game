@@ -846,7 +846,7 @@ namespace Poseidon
             radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, staticObjects);
         }
 
-        public bool TankNearShipWreck(BoundingSphere shipSphere)
+        public bool CharacterNearShipWreck(BoundingSphere shipSphere)
         {
             if (tank.BoundingSphere.Intersects(shipSphere))
                 return true;

@@ -304,7 +304,7 @@ namespace Poseidon
             for (int index = 0; index < GameConstants.NumStaticObjects; index++)
             {
                 staticObjects.Add(new StaticObject());
-                int randomObject = random.Next(2);
+                int randomObject = random.Next(3);
                 switch (randomObject)
                 {
                     case 0:
@@ -312,6 +312,9 @@ namespace Poseidon
                         break;
                     case 1:
                         staticObjects[index].LoadContent(Content, "Models/plant");
+                        break;
+                    case 2:
+                        staticObjects[index].LoadContent(Content, "Models/plant2");
                         break;
                 }
             }

@@ -168,7 +168,7 @@ namespace Poseidon {
 
         // Go straight
         private void goStraight(SwimmingObject[] enemies, int enemiesAmount, Tank tank) {
-            Vector3 futurePosition = Position + GameConstants.BarrierVelocity*headingDirection;
+            Vector3 futurePosition = Position + GameConstants.EnemySpeed*headingDirection;
             if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)) {
                 Position = futurePosition;
                 BoundingSphere.Center = Position;
@@ -201,7 +201,7 @@ namespace Poseidon {
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 headingDirection = Vector3.Transform(movement, orientationMatrix);
-                headingDirection *= GameConstants.BarrierVelocity;
+                headingDirection *= GameConstants.EnemySpeed;
                 futurePosition = Position + headingDirection;
 
                 if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)

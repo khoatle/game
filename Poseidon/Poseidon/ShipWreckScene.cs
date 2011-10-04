@@ -80,6 +80,9 @@ namespace Poseidon
 
         HeightMapInfo heightMapInfo;
 
+        // draw a cutscene when finding a god's relic
+        bool foundRelic = false;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
@@ -261,14 +264,25 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
+            float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
+            lastKeyboardState = currentKeyboardState;
+            //lastMouseState = currentMouseState;
+            currentKeyboardState = Keyboard.GetState();
+            lastGamePadState = currentGamePadState;
+            currentGamePadState = GamePad.GetState(PlayerIndex.One);
+            if (foundRelic)
+            {
+                // Next sentence when the user press Enter
+                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                {
+                    foundRelic = false;
+                }
+            }
             if (!paused && !returnToMain)
             {
-                float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
-                lastKeyboardState = currentKeyboardState;
-                //lastMouseState = currentMouseState;
-                currentKeyboardState = Keyboard.GetState();
-                lastGamePadState = currentGamePadState;
-                currentGamePadState = GamePad.GetState(PlayerIndex.One);
+                
                 //currentMouseState = Mouse.GetState();
                 CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                 //if the user clicks or holds mouse's left button
@@ -485,12 +499,15 @@ namespace Poseidon
                         if (chest.skillID == -1)
                         {
                             // give the player some experience
+                            tank.currentHitPoint += 30;
                         }
                         else 
                         {
                             // player found a God's relic
                             // unlock a skill
                             tank.skills[chest.skillID] = true;
+                            tank.activeSkillID = chest.skillID;
+                            foundRelic = true;
                         }
                     }
                 }
@@ -557,6 +574,11 @@ namespace Poseidon
 
         private void DrawGameplayScreen()
         {
+            if (foundRelic)
+            {
+                DrawFoundRelicScene(skillID);
+                return;
+            }
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -629,6 +651,30 @@ namespace Poseidon
             DrawStats();
             DrawBulletType();
             if (tank.activeSkillID != -1) DrawActiveSkill();
+            
+        }
+        private void DrawFoundRelicScene(int skillID)
+        {
+            float xOffsetText, yOffsetText;
+            string str1 = "You have found relic " + skillID;
+            Rectangle rectSafeArea;
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+
+            Vector2 strSize = statsFont.MeasureString(str1);
+            Vector2 strPosition =
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
+            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            xOffsetText = rectSafeArea.Right - 100;
+            yOffsetText = rectSafeArea.Top + 50;
+
+            Vector2 skillIconPosition =
+                new Vector2((int)xOffsetText, (int)yOffsetText);
+
+            spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
         }
         // Draw the currently selected bullet type
         private void DrawBulletType()

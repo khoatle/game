@@ -183,7 +183,11 @@ namespace Poseidon {
             Random random = new Random();
             float turnAmount = 0;
             //also try to change direction if we are stuck
-            if (changeDirection >= 95 || stucked == true) {
+            if (stucked == true)
+            {
+                ForwardDirection += MathHelper.PiOver4;
+            }
+            else if (changeDirection >= 95) {
                 int rightLeft = random.Next(2);
                 if (rightLeft == 0)
                     turnAmount = 20;
@@ -196,6 +200,7 @@ namespace Poseidon {
 
             movement.Z = 1;
             float prevForwardDir = ForwardDirection;
+            Vector3 prevFuturePosition = futurePosition;
             // try upto 10 times to change direction is there is collision
             for (int i = 0; i < 4; i++)
             {
@@ -220,7 +225,11 @@ namespace Poseidon {
                     stucked = false;
                     break;
                 }
-                else stucked = true;
+                else
+                {
+                    stucked = true;
+                    futurePosition = prevFuturePosition;
+                }
             }
         }
     }

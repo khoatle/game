@@ -263,11 +263,29 @@ namespace Poseidon
             int randomType = random.Next(3);
             // example of how to put skill into a ship wreck at a certain level
             // just put the skill into the 1st ship wrect in the list
+            int relicType = -1;
+            switch (currentLevel)
+            {
+                // learn 1st skill in level 2 and so on
+                case 1:
+                    relicType = 0;
+                    break;
+                case 3:
+                    relicType = 1;
+                    break;
+                case 5:
+                    relicType = 2;
+                    break;
+                case 7:
+                    relicType = 3;
+                    break;
+            }
             for (int index = 0; index < GameConstants.NumberShipWrecks; index++)
             {
                 shipWrecks.Add(new ShipWreck());
-                if (index == 0) shipWrecks[index].LoadContent(Content, randomType, 1);
+                if (index == 0 && relicType != -1) shipWrecks[index].LoadContent(Content, randomType, relicType);
                 else shipWrecks[index].LoadContent(Content, randomType, -1);
+                shipWrecks[index].LoadContent(Content, randomType, 1);
                 randomType = random.Next(3);
             }
             enemiesAmount = 0;
@@ -846,7 +864,7 @@ namespace Poseidon
             radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, staticObjects);
         }
 
-        public bool TankNearShipWreck(BoundingSphere shipSphere)
+        public bool CharacterNearShipWreck(BoundingSphere shipSphere)
         {
             if (tank.BoundingSphere.Intersects(shipSphere))
                 return true;

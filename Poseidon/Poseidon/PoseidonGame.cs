@@ -320,7 +320,7 @@ namespace Poseidon
             {
                 if (!playGameScene.shipWrecks[curWreck].accessed
                     && CursorManager.MouseOnShipWreck(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, playGameScene.gameCamera)
-                    && playGameScene.TankNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
+                    && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
                     // no re-explore a ship wreck

@@ -21,7 +21,7 @@ namespace Poseidon
         {
 
             this.type = type;
-            Model = content.Load<Model>("Models/pyramid10uR");
+            Model = content.Load<Model>("Models/chest");
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 

@@ -325,7 +325,7 @@ namespace Poseidon
                 staticObject.Position.Y = heightMapInfo.GetHeight(staticObject.Position);
                 tempCenter = staticObject.BoundingSphere.Center;
                 tempCenter.X = staticObject.Position.X;
-                tempCenter.Y = GameConstants.MainGameFloatHeight;
+                tempCenter.Y = staticObject.Position.Y;
                 tempCenter.Z = staticObject.Position.Z;
                 staticObject.BoundingSphere = new BoundingSphere(tempCenter,
                     staticObject.BoundingSphere.Radius);

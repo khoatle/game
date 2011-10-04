@@ -116,6 +116,17 @@ namespace Poseidon
                 return true;
             return false;
         }
+        public static bool MouseOnChest(Cursor cursor, BoundingSphere boundingSphere, Vector3 center, Camera gameCamera)
+        {
+
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            BoundingSphere boundingSphiro;
+            boundingSphiro = boundingSphere;
+            boundingSphiro.Center = center;
+            if (CursorManager.RayIntersectsBoundingSphere(cursorRay, boundingSphiro))
+                return true;
+            return false;
+        }
 
     }
 }

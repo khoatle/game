@@ -541,7 +541,7 @@ namespace Poseidon
                             int powerType = random.Next(3) + 1;
                             Fruit fruit = new Fruit(powerType);
                             fruits.Add(fruit);
-                            fruit.LoadContent(Content, "Models/fuelcell", plant.Position);
+                            fruit.LoadContent(Content, "Models/fruit", plant.Position);
                             plant.timeForFruit = false;
                             plant.fruitCreated++;
                         }

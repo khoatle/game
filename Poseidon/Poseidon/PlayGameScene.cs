@@ -52,6 +52,7 @@ namespace Poseidon
 
         List<Plant> plants;
         List<Fruit> fruits;
+        List<Trash> trashes;
 
         List<StaticObject> staticObjects;
 
@@ -299,7 +300,19 @@ namespace Poseidon
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, staticObjects, random, heightMapInfo,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
-            //Initialize the star fishes
+            
+            //Initialize trash
+            trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
+            for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
+            {
+                trashes.Add(new Trash());
+                trashes[index].LoadContent(Content);
+            }
+            AddingObjects.placeTrash(trashes, enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
+                GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight); 
+
+            //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjects);
             for (int index = 0; index < GameConstants.NumStaticObjects; index++)
             {
@@ -539,7 +552,7 @@ namespace Poseidon
                         CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, gameTime, pointIntersect);
+                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
                     
 
                     // Are we shooting?
@@ -835,32 +848,40 @@ namespace Poseidon
                 if (p.BoundingSphere.Intersects(frustum))
                 {
                     p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((p.creationTime - roundTimer.TotalSeconds) / 10.0));
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    p.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //p.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
-            //Draw each starfish
+            // Drawing trash
+            foreach (Trash trash in trashes)
+            {
+                if (!trash.Retrieved && trash.BoundingSphere.Intersects(frustum))
+                {
+                    trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+            //Draw each static object
             foreach (StaticObject staticObject in staticObjects)
             {
                 if (staticObject.BoundingSphere.Intersects(frustum))
                 {
                     staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 

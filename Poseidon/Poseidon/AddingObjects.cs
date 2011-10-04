@@ -183,7 +183,6 @@ namespace Poseidon
             bullets.Add(newBullet);
         }
 
-        // Helper
         public static void placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
         {
             Plant p = new Plant();
@@ -192,6 +191,25 @@ namespace Poseidon
             p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
             if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects)) {
                 plants.Add(p);
+            }
+        }
+
+        public static void placeTrash(
+            List<Trash> trashes, int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        {
+            Vector3 tempCenter;
+
+            foreach (Trash trash in trashes)
+            {
+                trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
+                    fish, shipWrecks);
+                trash.Position.Y = floatHeight;
+                tempCenter = trash.BoundingSphere.Center;
+                tempCenter.X = trash.Position.X;
+                tempCenter.Y = floatHeight;
+                tempCenter.Z = trash.Position.Z;
+                trash.BoundingSphere = new BoundingSphere(tempCenter,
+                    trash.BoundingSphere.Radius);
             }
         }
 

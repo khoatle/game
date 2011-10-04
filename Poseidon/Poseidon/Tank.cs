@@ -308,7 +308,7 @@ namespace Poseidon
             currentHitPoint = maxHitPoint;
         }
 
-        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, GameTime gameTime, Vector3 pointMoveTo)
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo)
         {
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
@@ -454,12 +454,12 @@ namespace Poseidon
             //Interacting with trashs and fruits
             if (keyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fruits, gameTime);
+                Interact_with_trash_and_fruit(fruits, trashes, gameTime);
             }
             //Position = Vector3.Zero;
         }
 
-        private void Interact_with_trash_and_fruit(List<Fruit> fruits, GameTime gameTime)
+        private void Interact_with_trash_and_fruit(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);
@@ -488,6 +488,14 @@ namespace Poseidon
                         }
                         RetrievedSound.Play();
                     }
+                }
+            }
+            foreach (Trash trash in trashes)
+            {
+                if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                {
+                    trash.Retrieved = true;
+                    RetrievedSound.Play();
                 }
             }
             return;

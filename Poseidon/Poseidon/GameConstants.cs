@@ -46,11 +46,15 @@ namespace Poseidon
         public const int DefaultEnemyDamage = 5;
 
         public const float EnemySpeed = 0.5f;
+        public const float EnemyShootingDistance = 15f;
+        public const float EnemyPerceptionRadius = 30f;
 
         //general
         //number of enemy and fish per level for main game
+
         public static int[] NumberEnemies = {10, 15, 10, 10, 10, 10};
         public static int[] NumberFish = {50, 30, 30, 30, 30 , 30};
+
         //number of enemy and fish for ship wreck
         public const int ShipNumberEnemies = 10;
         public const int ShipNumberFish = 5;

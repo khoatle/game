@@ -463,7 +463,7 @@ namespace Poseidon
                             {
                                 prevFireTime = gameTime.TotalGameTime;
                                 audio.Shooting.Play();
-                                if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                                if (tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             }
                         }
@@ -491,7 +491,7 @@ namespace Poseidon
                                 tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                                 prevFireTime = gameTime.TotalGameTime;
                                 audio.Shooting.Play();
-                                if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                                if (tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                                 //so the tank will not move
                                 pointIntersect = Vector3.Zero;
@@ -521,7 +521,7 @@ namespace Poseidon
                     {
                         prevFireTime = gameTime.TotalGameTime;
                         audio.Shooting.Play();
-                        if (tank.bulletType == 0) { AddingObjects.placeDamageBullet(tank, Content, myBullet); }
+                        if (tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                         else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                     }
 
@@ -573,7 +573,7 @@ namespace Poseidon
                     for (int i = 0; i < enemyBullet.Count; i++) {
                         enemyBullet[i].update();
                     }
-                    Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, frustum);
+                    Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);

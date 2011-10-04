@@ -513,7 +513,7 @@ namespace Poseidon
                 }
 
                 for (int i = 0; i < fishAmount; i++) {
-                    fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100) ,tank, enemyBullet);
+                    fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100) ,tank, enemyBullet);
                 }
 
                 roundTimer -= gameTime.ElapsedGameTime;

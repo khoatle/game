@@ -86,8 +86,8 @@ namespace Poseidon
         /// <summary>
         /// BARRIERS FUNCTIONS
         /// </summary>
-        public static bool isBarriersValidMove(SwimmingObject objs, Vector3 futurePosition, SwimmingObject[] objects, int size, Tank tank) {
-            BoundingSphere futureBoundingSphere = objs.BoundingSphere;
+        public static bool isBarriersValidMove(SwimmingObject obj, Vector3 futurePosition, SwimmingObject[] objects, int size, Tank tank) {
+            BoundingSphere futureBoundingSphere = obj.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
@@ -95,24 +95,24 @@ namespace Poseidon
                 return false;
             }
 
-            if (isBarrierVsBarrierCollision(objs, futureBoundingSphere, objects, size)) {
+            if (isBarrierVsBarrierCollision(obj, futureBoundingSphere, objects, size)) {
                 return false;
             }
 
-            if (isBarrierVsTankCollision(objs.BoundingSphere, tank)) {
+            if (isBarrierVsTankCollision(futureBoundingSphere, tank)) {
                 return false;
             }
             return true;
         }
 
         // Helper
-        public static bool isBarrierVsBarrierCollision(SwimmingObject enemy, BoundingSphere vehicleBoundingSphere, SwimmingObject[] objs, int size)
+        public static bool isBarrierVsBarrierCollision(SwimmingObject enemy, BoundingSphere futureBoundingSphere, SwimmingObject[] objs, int size)
         {
             for (int curBarrier = 0; curBarrier < size; curBarrier++)
             {
                 if (enemy.Equals(objs[curBarrier]))
                     continue;
-                if (vehicleBoundingSphere.Intersects(
+                if (futureBoundingSphere.Intersects(
                     objs[curBarrier].BoundingSphere))
                     return true;
             }

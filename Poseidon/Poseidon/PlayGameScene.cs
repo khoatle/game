@@ -609,7 +609,7 @@ namespace Poseidon
                     }
 
                     for (int i = 0; i < fishAmount; i++) {
-                        fish[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                        fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
 
                     //Checking win/lost condition for this level
@@ -768,7 +768,18 @@ namespace Poseidon
             for (int i = 0; i < fishAmount; i++)
             {
                 if (fish[i].BoundingSphere.Intersects(frustum))
+                {
                     fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    fish[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
+
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
+                }
             }
 
             for (int i = 0; i < myBullet.Count; i++)
@@ -861,7 +872,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, staticObjects);
+            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, fish, fishAmount, staticObjects);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)
@@ -929,7 +940,7 @@ namespace Poseidon
             //str2 += "\nTank Position " + tank.Position;
             //str2 += "\nEnemy Position " + enemies[0].Position;
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
-            //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
+            //str2 += "\nFish prevTurnAmount " + fish[0].prevTurnAmount + "Fish pos " +  fish[0].Position + "Stuck " + fish[0].stucked;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             str2 += "\n Type " + tank.GetType().Name.ToString();
             

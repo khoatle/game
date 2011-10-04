@@ -147,7 +147,7 @@ namespace Poseidon {
                 calculateHeadingDirection();
             }
             if (configBits[2] == true) { 
-                goStraight(enemies, enemiesAmount, tank);
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
             if (configBits[3] == true) {
                 startChasingTime = PlayGameScene.timming.TotalGameTime;
@@ -167,9 +167,10 @@ namespace Poseidon {
         } 
 
         // Go straight
-        private void goStraight(SwimmingObject[] enemies, int enemiesAmount, Tank tank) {
+        private void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank) {
             Vector3 futurePosition = Position + GameConstants.EnemySpeed*headingDirection;
-            if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)) {
+            if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
+                    && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank)) {
                 Position = futurePosition;
                 BoundingSphere.Center = Position;
             }

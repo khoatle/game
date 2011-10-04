@@ -218,23 +218,35 @@ namespace Poseidon
             }
         }
 
-        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> heals, List<DamageBullet> dams, BoundingFrustum frustum)
+        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> healBullets, List<DamageBullet> tankBullets, List<DamageBullet> enemyBullets, BoundingFrustum frustum)
         {
-            for (int i = 0; i < heals.Count; ) {
-                if (isOutOfMap(heals[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(heals[i].BoundingSphere, frustum)) {
-                    heals.RemoveAt(i);
+            for (int i = 0; i < healBullets.Count; ) {
+                if (isOutOfMap(healBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(healBullets[i].BoundingSphere, frustum)) {
+                    healBullets.RemoveAt(i);
                 }
                 else {
                     i++;
                 }
             }
 
-            for (int i = 0; i < dams.Count; ) {
-                if (isOutOfMap(dams[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(dams[i].BoundingSphere, frustum))
+            for (int i = 0; i < tankBullets.Count; ) {
+                if (isOutOfMap(tankBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(tankBullets[i].BoundingSphere, frustum))
                 {
-                    dams.RemoveAt(i);
+                    tankBullets.RemoveAt(i);
                 }
                 else {
+                    i++;
+                }
+            }
+
+            for (int i = 0; i < enemyBullets.Count; )
+            {
+                if (isOutOfMap(enemyBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(enemyBullets[i].BoundingSphere, frustum))
+                {
+                    enemyBullets.RemoveAt(i);
+                }
+                else
+                {
                     i++;
                 }
             }

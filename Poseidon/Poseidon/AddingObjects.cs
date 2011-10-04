@@ -132,7 +132,7 @@ namespace Poseidon
             healthBullet.Add(h);
         }
 
-        public static void placeDamageBullet(Tank tank, ContentManager Content, List<DamageBullet> myBullet) {
+        public static void placeTankDamageBullet(Tank tank, ContentManager Content, List<DamageBullet> myBullet) {
             DamageBullet d = new DamageBullet();
 
             Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
@@ -145,10 +145,26 @@ namespace Poseidon
             myBullet.Add(d);
         }
 
-        public static void placeEnemyBullet(Vector3 bulletPosition, Vector3 shootingDirection, int damage, List<DamageBullet> bullets) {
+        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets) {
+            Tank tmp1;
+            SwimmingObject tmp2;
+            Matrix orientationMatrix;
+            if (obj.GetType().Name.Equals("Tank")) {
+                tmp1 = (Tank)obj;
+                orientationMatrix = Matrix.CreateRotationY(tmp1.ForwardDirection);
+            }
+            else {
+                tmp2 = (SwimmingObject)obj;
+                orientationMatrix = Matrix.CreateRotationY(tmp2.ForwardDirection);
+            }
+            
             DamageBullet newBullet = new DamageBullet();
 
-            newBullet.initialize(bulletPosition, shootingDirection, GameConstants.BulletSpeed, damage);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+
+            newBullet.initialize(obj.Position, shootingDirection, GameConstants.BulletSpeed, damage);
             newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
             bullets.Add(newBullet);
         }
@@ -287,7 +303,6 @@ namespace Poseidon
         }
         public static void PlaceStaticObjects(List<StaticObject> staticObjects, List<ShipWreck> shipWrecks, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
-
             Vector3 tempCenter;
 
             //place ship wrecks

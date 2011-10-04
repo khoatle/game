@@ -128,7 +128,6 @@ namespace GeneratedGeometryPipeline
                 terrainTextureFilename = "sea-stone2.jpg";
             else
                 terrainTextureFilename = "blue.jpg";
-            terrainTextureFilename = "coral_reef5.bmp";
         }
 
         /// <summary>

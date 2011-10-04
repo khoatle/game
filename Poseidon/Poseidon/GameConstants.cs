@@ -92,7 +92,7 @@ namespace Poseidon
         public const float PlantBoundingSphereFactor = 0.6f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
-        public const float FruitGrowth = 1f;//2.5f;
+        public const float FruitGrowth = 5.0f;
 
         //skills
         public const int numberOfSkills = 4;

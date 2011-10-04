@@ -475,8 +475,22 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\fruit.fbx">
-      <Name>fruit</Name>
+    <Compile Include="Models\red-fruit.fbx">
+      <Name>red-fruit</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\blue-fruit.fbx">
+      <Name>blue-fruit</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\green-fruit.fbx">
+      <Name>green-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>

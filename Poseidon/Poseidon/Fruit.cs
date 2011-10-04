@@ -15,9 +15,14 @@ namespace Poseidon
         {
         }
 
-        public void LoadContent(ContentManager content, string modelName, Vector3 plantPosition)
+        public void LoadContent(ContentManager content, Vector3 plantPosition)
         {
-            Model = content.Load<Model>(modelName);
+            if(this.powerType ==1 )
+                Model = content.Load<Model>("Models/green-fruit");
+            else if (this.powerType == 2)
+                Model = content.Load<Model>("Models/red-fruit");
+            else if (this.powerType == 3)
+                Model = content.Load<Model>("Models/blue-fruit");
             Position = plantPosition;
             Position.Y = GameConstants.MainGameFloatHeight;
             BoundingSphere = CalculateBoundingSphere();

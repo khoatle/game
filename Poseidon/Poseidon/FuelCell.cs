@@ -60,18 +60,18 @@ namespace Poseidon
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
-                    if (powerType == 1)
-                    {
-                        effect.DiffuseColor = Color.Gold.ToVector3();
-                    }
-                    else if (powerType == 2)
-                    {
-                        effect.DiffuseColor = Color.Red.ToVector3();
-                    }
-                    else if (powerType == 3)
-                    {
-                        effect.DiffuseColor = Color.Blue.ToVector3();
-                    }
+                    //if (powerType == 1)
+                    //{
+                    //    effect.DiffuseColor = Color.Gold.ToVector3();
+                    //}
+                    //else if (powerType == 2)
+                    //{
+                    //    effect.DiffuseColor = Color.Red.ToVector3();
+                    //}
+                    //else if (powerType == 3)
+                    //{
+                    //    effect.DiffuseColor = Color.Blue.ToVector3();
+                    //}
                 }
                 mesh.Draw();
             }

@@ -115,7 +115,6 @@
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CursorManager.cs" />
     <Compile Include="CutSceneDialog.cs" />
-    <Compile Include="Fruit.cs" />
     <Compile Include="HealthBullet.cs" />
     <Compile Include="HeightMapInfo.cs" />
     <Compile Include="HelpScene.cs" />
@@ -135,7 +134,7 @@
     <Compile Include="Barrier.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="FuelCarrier.cs" />
-    <Compile Include="FuelCell.cs" />
+    <Compile Include="Fruit.cs" />
     <Compile Include="PoseidonGame.cs" />
     <Compile Include="GameConstants.cs" />
     <Compile Include="GameObject.cs" />

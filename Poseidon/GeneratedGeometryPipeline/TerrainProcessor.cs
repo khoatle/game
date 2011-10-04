@@ -99,11 +99,11 @@ namespace GeneratedGeometryPipeline
             else if (terrain_name.Contains("terrain15"))
                 terrainTextureFilename = "Seabed.bmp";
             else if (terrain_name.Contains("terrain16"))
-                terrainTextureFilename = "WhiteSand.jpg";
+                terrainTextureFilename = "coral_reef5.bmp";
             else if (terrain_name.Contains("terrain17"))
                 terrainTextureFilename = "roof.jpg";
             else if (terrain_name.Contains("terrain18"))
-                terrainTextureFilename = "Greensand.jpg";
+                terrainTextureFilename = "mine8fy.jpg";
             else if (terrain_name.Contains("terrain19"))
                 terrainTextureFilename = "rocks.bmp";
             else if (terrain_name.Contains("terrain0"))
@@ -113,19 +113,19 @@ namespace GeneratedGeometryPipeline
             else if (terrain_name.Contains("terrain2"))
                 terrainTextureFilename = "granite_or_fruit.jpg";
             else if (terrain_name.Contains("terrain3"))
-                terrainTextureFilename = "Hail_on_Sand.jpg";
+                terrainTextureFilename = "coral_reef4.jpg";
             else if (terrain_name.Contains("terrain4"))
-                terrainTextureFilename = "dark_brown.jpg";
+                terrainTextureFilename = "sea_dark.jpg";
             else if (terrain_name.Contains("terrain5"))
-                terrainTextureFilename = "burnt_soil.jpg";
+                terrainTextureFilename = "sea-stone.jpg";
             else if (terrain_name.Contains("terrain6"))
-                terrainTextureFilename = "cave_floor.jpg";
+                terrainTextureFilename = "shards.jpg";
             else if (terrain_name.Contains("terrain7"))
                 terrainTextureFilename = "mars-rock.jpg";
             else if (terrain_name.Contains("terrain8"))
                 terrainTextureFilename = "sand-cool.jpg";
             else if (terrain_name.Contains("terrain9"))
-                terrainTextureFilename = "Pueblo_Wall.jpg";
+                terrainTextureFilename = "sea-stone2.jpg";
             else
                 terrainTextureFilename = "blue.jpg";
         }

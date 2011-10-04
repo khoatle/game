@@ -304,7 +304,16 @@ namespace Poseidon
             for (int index = 0; index < GameConstants.NumStaticObjects; index++)
             {
                 staticObjects.Add(new StaticObject());
-                staticObjects[index].LoadContent(Content);
+                int randomObject = random.Next(2);
+                switch (randomObject)
+                {
+                    case 0:
+                        staticObjects[index].LoadContent(Content,"Models/chest");
+                        break;
+                    case 1:
+                        staticObjects[index].LoadContent(Content, "Models/plant");
+                        break;
+                }
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, heightMapInfo, GameConstants.MainGameMinRangeX, 
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);

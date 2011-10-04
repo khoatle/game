@@ -51,8 +51,10 @@ namespace Poseidon
 
         //general
         //number of enemy and fish per level for main game
-        public static int[] NumberEnemies = {100, 15, 10, 10, 10, 10};
-        public static int[] NumberFish = {200, 30, 30, 30, 30 , 30};
+
+        public static int[] NumberEnemies = {10, 15, 10, 10, 10, 10};
+        public static int[] NumberFish = {50, 30, 30, 30, 30 , 30};
+
         //number of enemy and fish for ship wreck
         public const int ShipNumberEnemies = 10;
         public const int ShipNumberFish = 5;
@@ -65,7 +67,7 @@ namespace Poseidon
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(121);
+        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(100);
         public const string StrTimeRemaining = "Time Remaining: ";
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";

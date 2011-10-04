@@ -19,7 +19,7 @@ namespace Poseidon
 
         //ship constants
         public const float Velocity = 0.75f;
-        public const float BarrierVelocity = 0.1f;
+        public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -49,11 +49,13 @@ namespace Poseidon
         public const float EnemyShootingDistance = 15f;
         public const float EnemyPerceptionRadius = 30f;
 
+        public const float FishSpeed = 0.5f;
+
         //general
         //number of enemy and fish per level for main game
 
-        public static int[] NumberEnemies = {10, 15, 10, 10, 10, 10};
-        public static int[] NumberFish = {50, 30, 30, 30, 30 , 30};
+        public static int[] NumberEnemies = {20, 15, 10, 10, 10, 10};
+        public static int[] NumberFish = {20, 30, 30, 30, 30 , 30};
 
         //number of enemy and fish for ship wreck
         public const int ShipNumberEnemies = 10;

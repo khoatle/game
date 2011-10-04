@@ -34,9 +34,11 @@ namespace Poseidon
             int type = random.Next(5);
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
+                //fish[i].LoadContent(Content, "Models/squirrel");
+                //fish[i].Load();
                 if (type == 0)
                     fish[i].LoadContent(Content, "Models/fish_fbxascii");
-                else if (type == 1) 
+                else if (type == 1)
                     fish[i].LoadContent(Content, "Models/fish2");
                 else if (type == 2)
                     fish[i].LoadContent(Content, "Models/shark");

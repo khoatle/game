@@ -306,7 +306,7 @@ namespace Poseidon
             trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
             for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
             {
-                random_model = random.Next(2);
+                random_model = random.Next(5);
                 trashes.Add(new Trash());
                 switch (random_model)
                 {
@@ -315,6 +315,15 @@ namespace Poseidon
                         break;
                     case 1:
                         trashes[index].LoadContent(Content, "Models/trash-plastic-cup");
+                        break;
+                    case 2:
+                        trashes[index].LoadContent(Content, "Models/trash-shoe");
+                        break;
+                    case 3:
+                        trashes[index].LoadContent(Content, "Models/trash-pizza");
+                        break;
+                    case 4:
+                        trashes[index].LoadContent(Content, "Models/trash-ball");
                         break;
                 }
             }

@@ -84,7 +84,7 @@ namespace Poseidon
         public const int MainGameFloatHeight = 20;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = -50;
-        public static int[] NumberTrash = { 30, 20, 10, 10, 10, 10 };
+        public static int[] NumberTrash = { 40, 20, 10, 10, 10, 10 };
         
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;

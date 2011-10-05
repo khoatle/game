@@ -10,10 +10,11 @@ namespace Poseidon
 {
     public class StaticObject : GameObject
     {
-            public void LoadContent(ContentManager content)
+            public void LoadContent(ContentManager content, string modelname)
             {
 
-                Model = content.Load<Model>("Models/chest");
+                //Model = content.Load<Model>("Models/chest");
+                Model = content.Load<Model>(modelname);
                 Position = Vector3.Down;
                 BoundingSphere = CalculateBoundingSphere();
 

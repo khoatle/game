@@ -438,7 +438,7 @@ namespace Poseidon
                     CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                 }
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-                tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, gameTime, pointIntersect);
+                tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, null, gameTime, pointIntersect);
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)

@@ -84,6 +84,7 @@ namespace Poseidon
         public const int MainGameFloatHeight = 20;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = -50;
+        public static int[] NumberTrash = { 40, 20, 10, 10, 10, 10 };
         
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;
@@ -91,9 +92,10 @@ namespace Poseidon
         public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = .9f;
         public const float ShipWreckBoundingSphereFactor = 1.0f;
-        public const float PlantBoundingSphereFactor = 0.6f;
+        public const float PlantBoundingSphereFactor = 0.2f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
+        public const float TrashBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 5.0f;
 
         //skills

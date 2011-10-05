@@ -302,11 +302,21 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
             
             //Initialize trash
+            int random_model;
             trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
             for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
             {
+                random_model = random.Next(2);
                 trashes.Add(new Trash());
-                trashes[index].LoadContent(Content);
+                switch (random_model)
+                {
+                    case 0:
+                        trashes[index].LoadContent(Content,"Models/trash-door");
+                        break;
+                    case 1:
+                        trashes[index].LoadContent(Content, "Models/trash-plastic-cup");
+                        break;
+                }
             }
             AddingObjects.placeTrash(trashes, enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
@@ -572,8 +582,8 @@ namespace Poseidon
                     //Are we planting trees?
                     if ((lastKeyboardState.IsKeyDown(Keys.O) && (currentKeyboardState.IsKeyUp(Keys.O))))
                     {
-                        audio.Shooting.Play();
-                        AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects);
+                        if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects))
+                            audio.PowerShow.Play();
                     }
 
                     //Are the trees ready for fruit?

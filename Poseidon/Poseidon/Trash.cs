@@ -18,9 +18,9 @@ namespace Poseidon
             Retrieved = false;
         }
 
-        public void LoadContent(ContentManager content)
+        public void LoadContent(ContentManager content, string modelname)
         {
-            Model = content.Load<Model>("Models/plant2");
+            Model = content.Load<Model>(modelname);
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 

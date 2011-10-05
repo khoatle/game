@@ -92,7 +92,7 @@ namespace Poseidon
         public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = .9f;
         public const float ShipWreckBoundingSphereFactor = 1.0f;
-        public const float PlantBoundingSphereFactor = 0.6f;
+        public const float PlantBoundingSphereFactor = 0.2f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
         public const float TrashBoundingSphereFactor = 0.9f;

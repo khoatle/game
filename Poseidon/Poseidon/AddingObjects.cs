@@ -183,7 +183,7 @@ namespace Poseidon
             bullets.Add(newBullet);
         }
 
-        public static void placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+        public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
         {
             Plant p = new Plant();
             Vector3 possiblePosition = tank.Position;
@@ -191,7 +191,9 @@ namespace Poseidon
             p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
             if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects)) {
                 plants.Add(p);
+                return true;
             }
+            return false;
         }
 
         public static void placeTrash(

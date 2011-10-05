@@ -18,7 +18,9 @@ namespace Poseidon
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
         double timePrevPowerUsed = 0;
-
+        //this boss will fire 3 bullets at once for 3 seconds
+        bool enragedMode = false;
+        double timeEnrageLast = 3;
         public void Load()
         {
             skd = Model.Tag as SkinningData;
@@ -68,13 +70,71 @@ namespace Poseidon
             }
 
         }
-        public void CastSpell()
+        public void RapidFire(List<DamageBullet> bullets)
         {
-            if (PlayGameScene.timming.TotalGameTime.TotalSeconds - timePrevPowerUsed > 5)
+            
+            if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
             {
-                PlayGameScene.audio.Explosion.Play();
-                timePrevPowerUsed = PlayGameScene.timming.TotalGameTime.TotalSeconds;
+                float originalForwardDir = ForwardDirection;
+                ForwardDirection += MathHelper.PiOver4 / 4;
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets);
+                PlayGameScene.audio.Shooting.Play();
+                ForwardDirection -= MathHelper.PiOver4 / 2;
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets);
+                PlayGameScene.audio.Shooting.Play();
+                ForwardDirection = originalForwardDir;
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets);
+                PlayGameScene.audio.Shooting.Play();
+                prevFire = PlayGameScene.timming.TotalGameTime;
+
             }
         }
+        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank)
+        {
+            if (configBits[0] == true)
+            {
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
+                return;
+            }
+            if (currentHuntingTarget != null)
+            {
+                calculateHeadingDirection();
+            }
+            if (configBits[2] == true)
+            {
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
+            }
+            if (configBits[3] == true)
+            {
+                startChasingTime = PlayGameScene.timming.TotalGameTime;
+
+                if (currentHuntingTarget.GetType().Name.Equals("Fish"))
+                {
+                    Fish tmp = (Fish)currentHuntingTarget;
+                    if (tmp.health <= 0)
+                    {
+                        currentHuntingTarget = null;
+                    }
+                }
+                if (enragedMode == true)
+                {
+                    RapidFire(bullets);
+                    
+                    if (PlayGameScene.timming.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
+                        enragedMode = false;
+                }
+                else if (PlayGameScene.timming.TotalGameTime.TotalSeconds - timePrevPowerUsed > 10)
+                {
+                    enragedMode = true;
+                    PlayGameScene.audio.MinigunWindUp.Play();
+                    timePrevPowerUsed = PlayGameScene.timming.TotalGameTime.TotalSeconds;
+                }
+                else if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                {
+                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets);
+                    prevFire = PlayGameScene.timming.TotalGameTime;
+                }
+            }
+        } 
     }
 }

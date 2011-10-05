@@ -654,8 +654,6 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
-                        if (!isBossKilled)
-                            ((Terminator)enemies[enemiesAmount - 1]).CastSpell();
                         enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
 

@@ -33,7 +33,7 @@ namespace Poseidon
         public const int EffectExpired = 10;
 
         // bullet consts
-        public const float BulletSpeed = 1.0f;
+        public const float BulletSpeed = 2.0f;
         public const int HealingAmount = 5;
 
         // HP const

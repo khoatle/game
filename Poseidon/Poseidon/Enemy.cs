@@ -28,16 +28,16 @@ namespace Poseidon {
         public Vector3 headingDirection;
         private Vector3 futurePosition; 
 
-        private GameObject currentHuntingTarget;
+        protected GameObject currentHuntingTarget;
 
         //stunned and cannot move
         public bool stunned;
         public double stunnedStartTime;
 
         // Time stampt since the robot starts chasing
-        private TimeSpan startChasingTime;
+        protected TimeSpan startChasingTime;
         public TimeSpan prevFire;
-        private float timeBetweenFire;
+        protected float timeBetweenFire;
 
         // Give up after 3 seconds
         private TimeSpan giveUpTime;
@@ -79,7 +79,7 @@ namespace Poseidon {
             return false;
         }
 
-        private void calculateHeadingDirection() {
+        protected void calculateHeadingDirection() {
             ForwardDirection = Tank.CalculateAngle(currentHuntingTarget.Position, Position);
             headingDirection = currentHuntingTarget.Position - Position;
             headingDirection.Normalize();
@@ -142,7 +142,7 @@ namespace Poseidon {
         }
 
         // Execute the actions
-        protected void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank) {
+        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank) {
             if (configBits[0] == true) {
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
                 return;
@@ -171,7 +171,7 @@ namespace Poseidon {
         } 
 
         // Go straight
-        private void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank) {
+        protected void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank) {
             Vector3 futurePosition = Position + GameConstants.EnemySpeed*headingDirection;
             if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
                     && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank)) {
@@ -181,7 +181,7 @@ namespace Poseidon {
         }
 
         // Go randomly
-        private void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank) {
+        protected  void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank) {
             futurePosition = Position;
             //int barrier_move
             Random random = new Random();

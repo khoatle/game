@@ -163,7 +163,7 @@ namespace Poseidon
             myBullet.Add(d);
         }
 
-        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets) {
+        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type) {
             Tank tmp1;
             SwimmingObject tmp2;
             Matrix orientationMatrix;
@@ -183,7 +183,9 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
             newBullet.initialize(obj.Position, shootingDirection, GameConstants.BulletSpeed, damage);
-            newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
+            if (type == 1)
+                newBullet.loadContent(PlayGameScene.Content, "Models/bossBullet1");
+            else newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
             bullets.Add(newBullet);
         }
 

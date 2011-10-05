@@ -48,7 +48,7 @@ namespace Poseidon
         public const float EnemySpeed = 0.5f;
         public const float EnemyShootingDistance = 15f;
         public const float EnemyPerceptionRadius = 30f;
-
+        public const float BossPerceptionRadius = 100f;
         public const float FishSpeed = 0.5f;
 
         //general
@@ -69,7 +69,7 @@ namespace Poseidon
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(100);
+        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(120);
         public const string StrTimeRemaining = "Time Remaining: ";
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";

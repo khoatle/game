@@ -103,6 +103,10 @@ namespace Poseidon
 
         private Texture2D stunnedTexture;
 
+        // to know whether the big boss has been terminated
+        // and the level is won
+        public static bool isBossKilled = false;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -213,6 +217,8 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            isBossKilled = false;
+
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
@@ -387,7 +393,7 @@ namespace Poseidon
                         {
                             tank.bulletType++;
                             if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
-
+                            audio.ChangeBullet.Play();
                         }
                         // changing active skill
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
@@ -440,7 +446,7 @@ namespace Poseidon
                             {
                                 tank.firstUse[1] = false;
                                 tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
-                                audio.Explosion.Play();
+                                audio.Explo1.Play();
                                 CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount);
                             }
                         }
@@ -597,15 +603,16 @@ namespace Poseidon
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
                     Collision.updateProjectileHitTank(tank, enemyBullet);
 
-                    for (int i = 0; i < enemiesAmount; i++) {
-                        if (!enemies[i].stunned)
-                            enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                    for (int i = 0; i < enemiesAmount; i++) {          
                         //disable stun if stun effect times out
-                        else
+                        if (enemies[i].stunned)
                         {
                             if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
+                        if (!isBossKilled)
+                            ((Terminator)enemies[enemiesAmount - 1]).CastSpell();
+                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
 
                     for (int i = 0; i < fishAmount; i++) {

@@ -19,10 +19,14 @@ namespace Poseidon
             if (mainGame)
                 enemiesAmount = GameConstants.NumberEnemies[currentLevel];
             else enemiesAmount = GameConstants.ShipNumberEnemies;
-            for (int i = 0; i < enemiesAmount; i++) {
+            for (int i = 0; i < enemiesAmount - 1; i++) {
                 enemies[i] = new Enemy();
                 enemies[i].LoadContent(Content, "Models/fuelcarrier");
             }
+            Terminator terminator = new Terminator();
+            terminator.LoadContent(Content, "Models/squirrel");
+            terminator.Load();
+            enemies[enemiesAmount - 1] = terminator;
         }
 
         public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, bool mainGame)
@@ -34,7 +38,7 @@ namespace Poseidon
             int type = random.Next(5);
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //fish[i].LoadContent(Content, "Models/squirrel");
+                //fish[i].LoadContent(Content, "Models/orca1");
                 //fish[i].Load();
                 if (type == 0)
                     fish[i].LoadContent(Content, "Models/fish_fbxascii");
@@ -45,7 +49,7 @@ namespace Poseidon
                 else if (type == 3)
                     fish[i].LoadContent(Content, "Models/dolphin");
                 else if (type == 4)
-                    fish[i].LoadContent(Content, "Models/orca");
+                    fish[i].LoadContent(Content, "Models/orca1");
                 type = random.Next(5);
             }
         }
@@ -252,18 +256,18 @@ namespace Poseidon
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (((int)(MathHelper.Distance(
-                    xValue, enemies[i].Position.X)) < 15) &&
+                    xValue, enemies[i].Position.X)) < 50) &&
                     ((int)(MathHelper.Distance(
-                    zValue, enemies[i].Position.Z)) < 15))
+                    zValue, enemies[i].Position.Z)) < 50))
                     return true;
             }
 
             for (int i = 0; i < fishAmount; i++)
             {
                 if (((int)(MathHelper.Distance(
-                    xValue, fish[i].Position.X)) < 15) &&
+                    xValue, fish[i].Position.X)) < 50) &&
                     ((int)(MathHelper.Distance(
-                    zValue, fish[i].Position.Z)) < 15))
+                    zValue, fish[i].Position.Z)) < 50))
                     return true;
             }
            

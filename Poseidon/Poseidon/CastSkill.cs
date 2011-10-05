@@ -39,6 +39,7 @@ namespace Poseidon
                     PushEnemy(tank, enemies[i]);
                     if (enemies[i].health <= 0)
                     {
+                        if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
                         for (int k = i + 1; k < enemiesAmount; k++) {
                             enemies[k - 1] = enemies[k];
                         }
@@ -85,6 +86,7 @@ namespace Poseidon
                     audio.Shooting.Play();
                     if (enemies[i].health <= 0)
                     {
+                        if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
                         for (int k = i + 1; k < enemiesAmount; k++)
                         {
                             enemies[k - 1] = enemies[k];

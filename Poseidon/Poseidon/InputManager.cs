@@ -21,6 +21,7 @@ namespace Poseidon
             {
                 tank.bulletType++;
                 if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
+                PlayGameScene.audio.ChangeBullet.Play();
             }
         }
     }

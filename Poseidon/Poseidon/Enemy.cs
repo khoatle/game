@@ -62,7 +62,9 @@ namespace Poseidon {
             currentHuntingTarget = null;
         }
 
-        public void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> bullets) {
+        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> bullets) {
+            //do not delete this
+            if (stunned) return;
             int perceptionID = perceptAndLock(tank, fishList, fishSize);
             configAction(perceptionID);
             makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, bullets, tank);
@@ -84,7 +86,8 @@ namespace Poseidon {
         }
 
         // Return the perceptID correspondingly
-        private int perceptAndLock(Tank tank, SwimmingObject[] enemyList, int enemySize) {
+        protected int perceptAndLock(Tank tank, SwimmingObject[] enemyList, int enemySize)
+        {
             if (Vector3.Distance(Position, tank.Position) < perceptionRadius) {
                 closeEnough = (Vector3.Distance(Position, tank.Position) > shortDistance)? false : true;
                 currentHuntingTarget = tank;
@@ -108,7 +111,8 @@ namespace Poseidon {
         }
 
         // Config what action to take
-        private void configAction(int perception) {
+        protected void configAction(int perception)
+        {
             if (perception == perceptID[0]) {
                 if (currentHuntingTarget != null && clearMind() == false) {
                     configBits[0] = false;
@@ -138,7 +142,7 @@ namespace Poseidon {
         }
 
         // Execute the actions
-        private void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank) {
+        protected void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank) {
             if (configBits[0] == true) {
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
                 return;

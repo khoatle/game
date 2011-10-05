@@ -19,6 +19,11 @@ namespace Poseidon
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
 
+        // is this enemy a big boss
+        // in order to know whether the big boss is killed
+        // and the level is won
+        public bool isBigBoss;
+
         public SwimmingObject()
             : base()
         {
@@ -41,7 +46,7 @@ namespace Poseidon
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
 
-        public void Draw(Matrix view, Matrix projection) {
+        public virtual void Draw(Matrix view, Matrix projection) {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             //Matrix translateMatrix = Matrix.CreateTranslation(Position);

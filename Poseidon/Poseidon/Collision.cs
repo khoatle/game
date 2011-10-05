@@ -181,6 +181,7 @@ namespace Poseidon
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
                         barriers[j].health -= bullets[i].damage;
                         if (barriers[j].health <= 0) {
+                            if (barriers[j].isBigBoss == true) PlayGameScene.isBossKilled = true;
                             for (int k = j + 1; k < size; k++) {
                                 barriers[k - 1] = barriers[k];
                             }

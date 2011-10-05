@@ -16,6 +16,7 @@ namespace Poseidon
             {
                 // kill all enemies to win this level
                 if (enemiesAmount == 0) return true;
+                if (isBossKilled) return true;
             }
             if (currentLevel == 1)
             {

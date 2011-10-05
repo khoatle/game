@@ -298,7 +298,7 @@ namespace Poseidon
                     {
                         tank.bulletType++;
                         if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
-
+                        audio.ChangeBullet.Play();
                     }
                     // changing active skill
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
@@ -480,14 +480,12 @@ namespace Poseidon
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
-                    if (!enemies[i].stunned)
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
-                    //disable stun if stun effect times out
-                    else
+                    if (enemies[i].stunned)
                     {
                         if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
+                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                 }
 
                 foreach (TreasureChest chest in treasureChests)

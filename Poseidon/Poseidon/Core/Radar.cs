@@ -11,6 +11,7 @@ namespace Poseidon.Core
     {
         private Texture2D PlayerDotImage;
         private Texture2D EnemyDotImage;
+        private Texture2D BigBossDotImage;
         private Texture2D RadarImage;
 
         // Local coords of the radar image's center, used to offset image when being drawn
@@ -26,10 +27,11 @@ namespace Poseidon.Core
         // This is the center position of the radar hud on the screen. 
         private Vector2 RadarCenterPos;// = new Vector2(500, 175);
 
-        public Radar(ContentManager Content, string playerDotPath, string enemyDotPath, string radarImagePath, Vector2 radarCenter)
+        public Radar(ContentManager Content, string playerDotPath, string enemyDotPath, string radarImagePath, string bigBossDotPath, Vector2 radarCenter)
         {
             PlayerDotImage = Content.Load<Texture2D>(playerDotPath);
             EnemyDotImage = Content.Load<Texture2D>(enemyDotPath);
+            BigBossDotImage = Content.Load<Texture2D>(bigBossDotPath);
             RadarImage = Content.Load<Texture2D>(radarImagePath);
             this.RadarCenterPos = radarCenter;
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
@@ -64,7 +66,9 @@ namespace Poseidon.Core
                     float scaleHeight = 1.0f + ((enemies[i].Position.Y - playerPos.Y) / 200.0f);
 
                     // Draw enemy dot on radar
-                    spriteBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
+                    if (enemies[i].isBigBoss)
+                        spriteBatch.Draw(BigBossDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
+                    else spriteBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
                 }
             }
             // If fish is in range

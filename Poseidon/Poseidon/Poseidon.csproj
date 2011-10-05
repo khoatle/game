@@ -146,6 +146,7 @@
     <Compile Include="StaticObject.cs" />
     <Compile Include="StartScene.cs" />
     <Compile Include="Tank.cs" />
+    <Compile Include="Terminator.cs" />
     <Compile Include="TreasureChest.cs" />
   </ItemGroup>
   <ItemGroup>

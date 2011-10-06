@@ -102,6 +102,7 @@ namespace Poseidon {
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
         }
+
         public new void Draw(Matrix view, Matrix projection)
         {
             if (clipPlayer == null)

@@ -127,22 +127,22 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            Random random = new Random();
-            int random_terrain = random.Next(5);
-            string wood_terrain_name = "Image/wood-terrain" + random_terrain;
-            System.Diagnostics.Debug.WriteLine(wood_terrain_name);
+            //Random random = new Random();
+            //int random_terrain = random.Next(5);
+            //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
+            //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
-            ground.Model = Content.Load<Model>(wood_terrain_name);
-
+            //ground.Model = Content.Load<Model>(wood_terrain_name);
+            ground.Model = Content.Load<Model>("Models/shipwreckscene");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
-            heightMapInfo = ground.Model.Tag as HeightMapInfo;
-            if (heightMapInfo == null)
-            {
-                string message = "The terrain model did not have a HeightMapInfo " +
-                    "object attached. Are you sure you are using the " +
-                    "TerrainProcessor?";
-                throw new InvalidOperationException(message);
-            }
+            //heightMapInfo = ground.Model.Tag as HeightMapInfo;
+            //if (heightMapInfo == null)
+            //{
+            //    string message = "The terrain model did not have a HeightMapInfo " +
+            //        "object attached. Are you sure you are using the " +
+            //        "TerrainProcessor?";
+            //    throw new InvalidOperationException(message);
+            //}
             // Loading main character skill icon textures
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
@@ -180,10 +180,10 @@ namespace Poseidon
             //initialize random shipwreck terrain
             Random random = new Random();
             int random_terrain = random.Next(5);
-            string wood_terrain_name = "Image/wood-terrain" + random_terrain;
-            System.Diagnostics.Debug.WriteLine(wood_terrain_name);
+            //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
+            //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
-            ground.Model = Content.Load<Model>(wood_terrain_name);
+            //ground.Model = Content.Load<Model>(wood_terrain_name);
             //reset position for the tank
             tank.Position = Vector3.Zero;
             tank.Position.Y = GameConstants.ShipWreckFloatHeight;
@@ -437,7 +437,7 @@ namespace Poseidon
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                     CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
                 }
-                if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
+                //if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, null, gameTime, pointIntersect);
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
@@ -572,6 +572,7 @@ namespace Poseidon
 
         private void DrawGameplayScreen()
         {
+            graphics.GraphicsDevice.Clear(Color.Black);
             if (foundRelic)
             {
                 DrawFoundRelicScene(skillID);

@@ -135,7 +135,7 @@ namespace Poseidon
             {
                 chest.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests);
                 //ship wreck should not be floating
-                chest.Position.Y = heightMapInfo.GetHeight(chest.Position);
+                chest.Position.Y = 0;// heightMapInfo.GetHeight(chest.Position);
                 tempCenter = chest.BoundingSphere.Center;
                 tempCenter.X = chest.Position.X;
                 tempCenter.Y = GameConstants.ShipWreckFloatHeight;

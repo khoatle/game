@@ -40,8 +40,10 @@ namespace Poseidon
                 fish[i] = new Fish();
                 //fish[i].LoadContent(Content, "Models/orca1");
                 //fish[i].Load();
-                if (type == 0)
+                if (type == 0) {
                     fish[i].LoadContent(Content, "Models/fish_fbxascii");
+                    fish[i].Load();
+                }
                 else if (type == 1)
                     fish[i].LoadContent(Content, "Models/fish2");
                 else if (type == 2)

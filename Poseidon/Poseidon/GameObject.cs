@@ -63,7 +63,7 @@ namespace Poseidon
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.World = worldMatrix;
+                    effect.World = worldMatrix ;
                     effect.View = view;
                     effect.Projection = projection;
                 }

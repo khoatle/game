@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <ProjectGuid>{EC0537F8-B5FE-4F94-810A-CDE4DB4AB319}</ProjectGuid>
@@ -123,6 +123,7 @@
     <Compile Include="Core\GameScene.cs" />
     <Compile Include="InputManager.cs" />
     <Compile Include="LevelObjective.cs" />
+    <Compile Include="MutantShark.cs" />
     <Compile Include="Plant.cs" />
     <Compile Include="PlayGameScene.cs" />
     <Compile Include="AddingObjects.cs" />

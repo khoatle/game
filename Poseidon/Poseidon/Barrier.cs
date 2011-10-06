@@ -32,7 +32,7 @@ namespace Poseidon
             //MaxRange = GameConstants.MaxRange;
         }
 
-        public void LoadContent(ContentManager content, string modelName)
+        public virtual void LoadContent(ContentManager content, string modelName)
         {
             Model = content.Load<Model>(modelName);
             BarrierType = modelName;

@@ -46,7 +46,7 @@ namespace Poseidon
                 //fish[i].Load();
                 if (type == 0) {
                     fish[i].LoadContent(Content, "Models/fish_fbxascii");
-                    fish[i].Load();
+                    fish[i].Load(1, 47, 24);
                 }
                 else if (type == 1)
                     fish[i].LoadContent(Content, "Models/fish2");
@@ -55,7 +55,10 @@ namespace Poseidon
                 else if (type == 3)
                     fish[i].LoadContent(Content, "Models/dolphin");
                 else if (type == 4)
-                    fish[i].LoadContent(Content, "Models/orca1");
+                {
+                    fish[i].LoadContent(Content, "Models/orca");
+                    fish[i].Load(1, 20, 24);
+                }
                 else if (type == 5)
                     fish[i].LoadContent(Content, "Models/shark2");
                 type = random.Next(6);

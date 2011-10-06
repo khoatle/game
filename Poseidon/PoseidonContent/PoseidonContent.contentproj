@@ -467,7 +467,7 @@
     <Compile Include="Models\orca.fbx">
       <Name>orca</Name>
       <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>

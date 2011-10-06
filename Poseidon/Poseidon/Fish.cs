@@ -18,17 +18,17 @@ namespace Poseidon {
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
 
-        public void Load()
+        public void Load(int clipStart, int clipEnd, int fpsRate)
         {
             skd = Model.Tag as SkinningData;
-            clipPlayer = new ClipPlayer(skd, 24);//ClipPlayer running at 24 frames/sec
+            clipPlayer = new ClipPlayer(skd, fpsRate);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
-            clipPlayer.play(clip, 1, 47, true);
-            fishMatrix = Matrix.CreateScale(1.5f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            clipPlayer.play(clip, clipStart, clipEnd, true);
+            fishMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.04f;
+            scaledSphere.Radius *= 1.5f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
@@ -96,17 +96,18 @@ namespace Poseidon {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                fishMatrix = Matrix.CreateScale(2.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                fishMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
         }
-        public new void  Draw(Matrix view, Matrix projection)
+        public new void Draw(Matrix view, Matrix projection)
         {
             if (clipPlayer == null)
             {
                 // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
+                base.Draw(view, projection);
                 return;
             }
 

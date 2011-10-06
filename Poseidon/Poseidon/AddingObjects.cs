@@ -19,10 +19,14 @@ namespace Poseidon
             if (mainGame)
                 enemiesAmount = GameConstants.NumberEnemies[currentLevel];
             else enemiesAmount = GameConstants.ShipNumberEnemies;
-            for (int i = 0; i < enemiesAmount - 1; i++) {
+            for (int i = 0; i < enemiesAmount - 2; i++) {
                 enemies[i] = new Enemy();
-                enemies[i].LoadContent(Content, "Models/fuelcarrier");
+                enemies[i].LoadContent(Content, "Models/Fuelcarrier");
             }
+            MutantShark mutantShark = new MutantShark();
+            mutantShark.LoadContent(Content, "Models/mutantShark");
+            enemies[enemiesAmount - 2] = mutantShark;
+            
             Terminator terminator = new Terminator();
             terminator.LoadContent(Content, "Models/squirrel");
             terminator.Load();
@@ -35,7 +39,7 @@ namespace Poseidon
                 fishAmount = GameConstants.NumberFish[currentLevel];
             else fishAmount = GameConstants.ShipNumberFish;
             Random random = new Random();
-            int type = random.Next(5);
+            int type = random.Next(6);
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
                 //fish[i].LoadContent(Content, "Models/orca1");
@@ -50,7 +54,9 @@ namespace Poseidon
                     fish[i].LoadContent(Content, "Models/dolphin");
                 else if (type == 4)
                     fish[i].LoadContent(Content, "Models/orca1");
-                type = random.Next(5);
+                else if (type == 5)
+                    fish[i].LoadContent(Content, "Models/shark2");
+                type = random.Next(6);
             }
         }
 

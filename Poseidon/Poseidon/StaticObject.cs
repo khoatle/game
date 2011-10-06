@@ -13,7 +13,7 @@ namespace Poseidon
             public void LoadContent(ContentManager content, string modelname)
             {
 
-                //Model = content.Load<Model>("Models/chest");
+                //Model = content.Load<Model>("Models/shark2");
                 Model = content.Load<Model>(modelname);
                 Position = Vector3.Down;
                 BoundingSphere = CalculateBoundingSphere();

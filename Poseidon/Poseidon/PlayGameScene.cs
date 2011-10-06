@@ -811,6 +811,15 @@ namespace Poseidon
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
                     }
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //enemies[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
 

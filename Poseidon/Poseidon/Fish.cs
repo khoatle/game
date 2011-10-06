@@ -102,11 +102,12 @@ namespace Poseidon {
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
         }
-        public new void  Draw(Matrix view, Matrix projection)
+        public void  Draw(Matrix view, Matrix projection)
         {
             if (clipPlayer == null)
             {
                 // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
+                base.Draw(view, projection);
                 return;
             }
 

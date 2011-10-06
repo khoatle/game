@@ -16,6 +16,9 @@ namespace Poseidon
         GraphicsDeviceManager graphics;
         GraphicsDevice GraphicDevice;
         ContentManager Content;
+
+        private Texture2D HealthBar;
+
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
@@ -168,6 +171,9 @@ namespace Poseidon
             InitializeShipField(Content);
 
             tank.Load(Content);
+
+            //Load healthbar
+            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
         }
 
         /// <summary>
@@ -745,6 +751,19 @@ namespace Poseidon
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             str2 += "\n Tank Health " + tank.currentHitPoint;
             //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
+
+            //Display Fish Health
+            Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+            if (fishPontedAt != null)
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPontedAt.health, fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
+
+            //Display Enemy Health
+            Enemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+            if (enemyPointedAt != null)
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+
+            //Display Cyborg health
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height - 30, "CYBORG", Color.Brown);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

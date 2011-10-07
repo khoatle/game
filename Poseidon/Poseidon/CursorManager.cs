@@ -53,6 +53,25 @@ namespace Poseidon
             return false;
         }
 
+        public static BaseEnemy MouseOnWhichEnemy(Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount)
+        {
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            BoundingSphere sphere;
+            for (int i = 0; i < enemiesAmount; i++)
+            {
+                //making it easier to aim
+                sphere = enemies[i].BoundingSphere;
+                sphere.Radius *= 2.0f;
+                if (RayIntersectsBoundingSphere(cursorRay, sphere))
+                {
+                    cursor.SetShootingMouseImage();
+                    return enemies[i];
+                }
+            }
+            cursor.SetNormalMouseImage();
+            return null;
+        }
+
 
         public static bool MouseOnFish(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount)
         {
@@ -71,6 +90,25 @@ namespace Poseidon
             cursor.SetNormalMouseImage();
             return false;
         }
+
+        public static Fish MouseOnWhichFish(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount)
+        {
+            BoundingSphere sphere;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            for (int i = 0; i < fishAmount; i++)
+            {
+                sphere = fish[i].BoundingSphere;
+                sphere.Radius *= 2.0f;
+                if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                {
+                    cursor.SetShootingMouseImage();
+                    return fish[i];
+                }
+            }
+            cursor.SetNormalMouseImage();
+            return null;
+        }
+
         public static void CheckClick(ref MouseState lastMouseState, ref MouseState currentMouseState, GameTime gameTime, ref double clickTimer, ref bool clicked, ref bool doubleClicked)
         {
             lastMouseState = currentMouseState;

@@ -19,6 +19,8 @@ namespace Poseidon
         public static GraphicsDevice GraphicDevice;
         public static ContentManager Content;
         public static GameTime timming;
+        
+        private Texture2D HealthBar;
 
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
@@ -34,6 +36,7 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
+        SpriteFont menuSmall;
         GameObject ground;
         public Camera gameCamera;
         public GameState currentGameState = GameState.PlayingCutScene;
@@ -151,6 +154,7 @@ namespace Poseidon
         public void Load()
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -203,6 +207,9 @@ namespace Poseidon
 
             prevTank.Load(Content);
             roundTimer = roundTime;
+
+            //Load healthbar
+            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
         }
 
         /// <summary>
@@ -954,39 +961,39 @@ namespace Poseidon
 
         private void DrawHeight()
         {
-            float xOffsetText, yOffsetText;
-            string str1 = "Height: " + heightMapInfo.GetHeight(tank.Position);
-            Rectangle rectSafeArea;
-            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            BoundingSphere boundingSphere;
-            foreach (ShipWreck shipWreck in shipWrecks)
-            {
-                boundingSphere = shipWreck.BoundingSphere;
-                boundingSphere.Center = shipWreck.Position;
-                if (CursorManager.RayIntersectsBoundingSphere(cursorRay, boundingSphere))
-                    str1 += " Pointing to ship wreck ";
+            //float xOffsetText, yOffsetText;
+            //string str1 = " Height: " + heightMapInfo.GetHeight(tank.Position);
+            //Rectangle rectSafeArea;
+            //Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            //BoundingSphere boundingSphere;
+            //foreach (ShipWreck shipWreck in shipWrecks)
+            //{
+            //    boundingSphere = shipWreck.BoundingSphere;
+            //    boundingSphere.Center = shipWreck.Position;
+            //    if (CursorManager.RayIntersectsBoundingSphere(cursorRay, boundingSphere))
+            //        str1 += " Pointing to ship wreck ";
 
-            }
+            //}
 
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            ////Calculate str1 position
+            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+            //xOffsetText = rectSafeArea.X;
+            //yOffsetText = rectSafeArea.Y;
 
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 200, (int)yOffsetText);
+            //Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strPosition =
+            //    new Vector2((int)xOffsetText + 200, (int)yOffsetText);
 
-            //spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            ////spriteBatch.Begin();
+            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
+            //string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
             if (roundTimer.Minutes < 10)
@@ -995,7 +1002,7 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1+= "0";
             str1 += roundTimer.Seconds;
-            str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
+            //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
             //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
             //Vector3 mouseDif = pointIntersect - tank.Position;
             //float distanceFomTank = mouseDif.Length();
@@ -1012,7 +1019,21 @@ namespace Poseidon
             //str2 += "\nFish prevTurnAmount " + fish[0].prevTurnAmount + "Fish pos " +  fish[0].Position + "Stuck " + fish[0].stucked;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
-            
+            //str2 += "Type " + tank.GetType().Name.ToString();
+
+            //Display Fish Health
+            Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+            if (fishPontedAt != null)
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPontedAt.health, fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
+
+            //Display Enemy Health
+            BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+            if (enemyPointedAt != null)
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+
+            //Display Cyborg health
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height-30, "CYBORG", Color.Brown);
+
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
@@ -1023,9 +1044,9 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
-            strPosition.Y += strSize.Y;
-            spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
+            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
+            //strPosition.Y += strSize.Y;
+            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
         }
 
         // Draw the currently selected bullet type

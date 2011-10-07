@@ -22,13 +22,16 @@ namespace Poseidon
             for (int i = 0; i < enemiesAmount - 2; i++) {
                 enemies[i] = new ShootingEnemy();
                 enemies[i].LoadContent(Content, "Models/Fuelcarrier");
+                enemies[i].Name = "minion enemy";
             }
             MutantShark mutantShark = new MutantShark();
             mutantShark.LoadContent(Content, "Models/mutantShark");
+            mutantShark.Name = "mutant shark";
             enemies[enemiesAmount - 2] = mutantShark;
             
             Terminator terminator = new Terminator();
             terminator.LoadContent(Content, "Models/squirrel");
+            terminator.Name = "terminator";
             terminator.Load();
             enemies[enemiesAmount - 1] = terminator;
         }
@@ -46,18 +49,35 @@ namespace Poseidon
                 //fish[i].Load();
                 if (type == 0) {
                     fish[i].LoadContent(Content, "Models/fish_fbxascii");
-                    fish[i].Load();
+                    fish[i].Load(1, 47, 24);
+                    fish[i].Name = "fish";
                 }
                 else if (type == 1)
+                {
                     fish[i].LoadContent(Content, "Models/fish2");
+                    fish[i].Name = "big fish";
+                }
                 else if (type == 2)
+                {
                     fish[i].LoadContent(Content, "Models/shark");
+                    fish[i].Name = "shark";
+                }
                 else if (type == 3)
+                {
                     fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].Name = "dolphin";
+                }
                 else if (type == 4)
-                    fish[i].LoadContent(Content, "Models/orca1");
+                {
+                    fish[i].LoadContent(Content, "Models/orca");
+                    fish[i].Load(1, 20, 24);
+                    fish[i].Name = "orca";
+                }
                 else if (type == 5)
+                {
                     fish[i].LoadContent(Content, "Models/shark2");
+                    fish[i].Name = "leopard shark";
+                }
                 type = random.Next(6);
             }
         }
@@ -367,5 +387,37 @@ namespace Poseidon
                     staticObject.BoundingSphere.Radius);
             }
         }
+
+        public static void DrawHealthBar(Texture2D HealthBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
+        {
+            int barX = game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2;
+            int barY = heightFromTop;
+            int barHeight = 22;
+            double healthiness = (double)currentHealth/maxHealth;
+            //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
+            //Draw the negative space for the health bar
+            spriteBatch.Draw(HealthBar,
+                new Rectangle(barX, barY, HealthBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
+                Color.Transparent);
+            //Draw the current health level based on the current Health
+            Color healthColor = Color.Lime;
+            if (healthiness < 0.2)
+                healthColor = Color.DarkRed;
+            else if (healthiness < 0.5)
+                healthColor = Color.Orange;
+            spriteBatch.Draw(HealthBar,
+                new Rectangle(barX, barY, (int)(HealthBar.Width * healthiness), barHeight),
+                new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
+                healthColor);
+            //Draw the box around the health bar
+            spriteBatch.Draw(HealthBar,
+                new Rectangle(barX, barY, HealthBar.Width, barHeight),
+                new Rectangle(0, 0, HealthBar.Width, barHeight),
+                Color.White);
+            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
+        }
+
+
     }
 }

@@ -393,6 +393,7 @@ namespace Poseidon
             int barX = game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2;
             int barY = heightFromTop;
             int barHeight = 22;
+            double healthiness = (double)currentHealth/maxHealth;
             //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
             //Draw the negative space for the health bar
             spriteBatch.Draw(HealthBar,
@@ -400,10 +401,15 @@ namespace Poseidon
                 new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
                 Color.Transparent);
             //Draw the current health level based on the current Health
+            Color healthColor = Color.Lime;
+            if (healthiness < 0.2)
+                healthColor = Color.DarkRed;
+            else if (healthiness < 0.5)
+                healthColor = Color.Orange;
             spriteBatch.Draw(HealthBar,
-                new Rectangle(barX, barY, (int)(HealthBar.Width * ((double)currentHealth / maxHealth)), barHeight),
+                new Rectangle(barX, barY, (int)(HealthBar.Width * healthiness), barHeight),
                 new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
-                Color.Lime);
+                healthColor);
             //Draw the box around the health bar
             spriteBatch.Draw(HealthBar,
                 new Rectangle(barX, barY, HealthBar.Width, barHeight),

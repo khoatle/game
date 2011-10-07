@@ -35,8 +35,7 @@ namespace Poseidon
         
         GameObject boundingSphere;
 
-
-        Enemy[] enemies;
+        BaseEnemy[] enemies;
         Fish[] fish;
 
         int enemiesAmount = 0;
@@ -101,7 +100,7 @@ namespace Poseidon
             boundingSphere = new GameObject();
             tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
-            enemies = new Enemy[GameConstants.ShipNumberEnemies];
+            enemies = new BaseEnemy[GameConstants.ShipNumberEnemies];
             fish = new Fish[GameConstants.ShipNumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -470,13 +469,16 @@ namespace Poseidon
                 }
 
                 for (int i = 0; i < enemyBullet.Count; i++) {
-                    enemyBullet[i].update();    
+                    enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, frustum);
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
                 Collision.updateProjectileHitTank(tank, enemyBullet);
+
+                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
+                Collision.deleteSmallerThanZero(fish, ref fishAmount);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {

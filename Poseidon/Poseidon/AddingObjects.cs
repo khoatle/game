@@ -14,13 +14,13 @@ namespace Poseidon
 {
     public static class AddingObjects
     {
-        public static void loadContentEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
+        public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
         {
             if (mainGame)
-                enemiesAmount = GameConstants.NumberEnemies[currentLevel];
+                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel];
             else enemiesAmount = GameConstants.ShipNumberEnemies;
             for (int i = 0; i < enemiesAmount - 2; i++) {
-                enemies[i] = new Enemy();
+                enemies[i] = new ShootingEnemy();
                 enemies[i].LoadContent(Content, "Models/Fuelcarrier");
             }
             MutantShark mutantShark = new MutantShark();
@@ -62,7 +62,7 @@ namespace Poseidon
             }
         }
 
-        public static void placeEnemies(ref int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
         {
             loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, mainGame);
 
@@ -84,7 +84,7 @@ namespace Poseidon
             }
         }
 
-        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, Enemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, BaseEnemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
         {
             loadContentFish(ref fishAmount, fish, Content, currentLevel, mainGame);
 
@@ -211,7 +211,7 @@ namespace Poseidon
         }
 
         public static void placeTrash(
-            List<Trash> trashes, int enemiesAmount, Enemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+            List<Trash> trashes, int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
         {
             Vector3 tempCenter;
 
@@ -230,7 +230,7 @@ namespace Poseidon
         }
 
         // Helper
-        public static Vector3 GenerateSurfaceRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
+        public static Vector3 GenerateSurfaceRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
         {
             int xValue, zValue;
             do
@@ -281,7 +281,7 @@ namespace Poseidon
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
-        public static bool IsSurfaceOccupied(int xValue, int zValue, int enemiesAmount, int fishAmount, Enemy[] enemies, Fish[] fish)
+        public static bool IsSurfaceOccupied(int xValue, int zValue, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {

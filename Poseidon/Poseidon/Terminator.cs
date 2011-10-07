@@ -10,7 +10,7 @@ using SkinnedModel;
 using Poseidon.Core;
 namespace Poseidon
 {
-    class Terminator : Enemy
+    class Terminator : ShootingEnemy
     {
         Matrix[] bones;
         SkinningData skd;
@@ -78,6 +78,7 @@ namespace Poseidon
             }
 
         }
+
         public void RapidFire(List<DamageBullet> bullets)
         {
             
@@ -95,6 +96,7 @@ namespace Poseidon
 
             }
         }
+
         public void RapidFire2(List<DamageBullet> bullets)
         {
 

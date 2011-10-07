@@ -56,7 +56,7 @@ namespace Poseidon
 
         List<StaticObject> staticObjects;
 
-        Enemy[] enemies;
+        BaseEnemy[] enemies;
         Fish[] fish;
         int enemiesAmount = 0;
         int fishAmount = 0;
@@ -131,7 +131,7 @@ namespace Poseidon
             prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
-            enemies = new Enemy[GameConstants.NumberEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
@@ -297,7 +297,7 @@ namespace Poseidon
             }
             enemiesAmount = 0;
             fishAmount = 0;
-            enemies = new Enemy[GameConstants.NumberEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight);
@@ -646,6 +646,9 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
                     Collision.updateProjectileHitTank(tank, enemyBullet);
+
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount);
 
                     for (int i = 0; i < enemiesAmount; i++) {          
                         //disable stun if stun effect times out
@@ -1008,7 +1011,7 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nFish prevTurnAmount " + fish[0].prevTurnAmount + "Fish pos " +  fish[0].Position + "Stuck " + fish[0].stucked;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Type " + tank.GetType().Name.ToString();
+            //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
             
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

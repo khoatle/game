@@ -108,7 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioLibrary.cs" />
+    <Compile Include="BaseEnemy.cs" />
     <Compile Include="CastSkill.cs" />
+    <Compile Include="CombatEnemy.cs" />
     <Compile Include="Core\ClipPlayer.cs" />
     <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\Radar.cs" />
@@ -129,7 +131,6 @@
     <Compile Include="AddingObjects.cs" />
     <Compile Include="Collision.cs" />
     <Compile Include="DamageBullet.cs" />
-    <Compile Include="Enemy.cs" />
     <Compile Include="Fish.cs" />
     <Compile Include="Projectiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -143,6 +144,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="ShipWreck.cs" />
     <Compile Include="ShipWreckScene.cs" />
+    <Compile Include="ShootingEnemy.cs" />
     <Compile Include="SkillScene.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="StartScene.cs" />

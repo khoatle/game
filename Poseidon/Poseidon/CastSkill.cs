@@ -28,7 +28,7 @@ namespace Poseidon
             d.loadContent(Content, "Models/fuelcarrier");
             myBullets.Add(d);
         }
-        public static void UseThorHammer(GameTime gameTime, Tank tank, Enemy[] enemies, ref int enemiesAmount)
+        public static void UseThorHammer(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -58,7 +58,7 @@ namespace Poseidon
             else return false;
         }
         // push enemy away
-        public static void PushEnemy(Tank tank, Enemy enemy)
+        public static void PushEnemy(Tank tank, BaseEnemy enemy)
         {
             Vector3 pushVector = enemy.Position - tank.Position;
             pushVector.Normalize();
@@ -68,7 +68,7 @@ namespace Poseidon
             enemy.BoundingSphere.Center = enemy.Position;
         }
         //Knock out any enemy that you crash into
-        public static void KnockOutEnemies(GameTime gameTime, Tank tank, Enemy[] enemies, ref int enemiesAmount, AudioLibrary audio)
+        public static void KnockOutEnemies(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, AudioLibrary audio)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {

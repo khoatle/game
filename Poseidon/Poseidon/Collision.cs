@@ -25,6 +25,18 @@ namespace Poseidon
             return Math.Abs(futurePosition.X) > MaxRangeX ||
                 Math.Abs(futurePosition.Z) > MaxRangeZ;
         }
+
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size) {
+            for (int i = 0; i < size; i++) {
+                if (objs[i].health <= 0) {
+                    if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
+                    for (int k = i; k < size-1; k++) {
+                        objs[k] = objs[k+1];
+                    }
+                    objs[--size] = null;
+                }
+            }
+        }
         // End-----------------------------------------------------
 
         ///PLANT FUNCTIONS
@@ -180,13 +192,6 @@ namespace Poseidon
                 for (int j = 0; j < size; j++) {
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
                         barriers[j].health -= bullets[i].damage;
-                        if (barriers[j].health <= 0) {
-                            if (barriers[j].isBigBoss == true) PlayGameScene.isBossKilled = true;
-                            for (int k = j + 1; k < size; k++) {
-                                barriers[k - 1] = barriers[k];
-                            }
-                            barriers[--size] = null;
-                        }
                         bullets.RemoveAt(i--);
                         break;
                     }
@@ -199,7 +204,7 @@ namespace Poseidon
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
-                        if (barriers[j].health < GameConstants.EnemyHP) {
+                        if (barriers[j].health < GameConstants.DefaultEnemyHP) {
                             barriers[j].health += GameConstants.HealingAmount;
                         }
                         bullets.RemoveAt(i--);

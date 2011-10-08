@@ -353,15 +353,16 @@ namespace Poseidon
                 switch (randomObject)
                 {
                     case 0:
-                        staticObjects[index].LoadContent(Content,"Models/chest");
+                        staticObjects[index].LoadContent(Content, "Models/chest");
                         break;
                     case 1:
                         staticObjects[index].LoadContent(Content, "Models/plant");
                         break;
                     case 2:
                         staticObjects[index].LoadContent(Content, "Models/plant2");
-                        break;
+                        break;               
                 }
+                staticObjects[index].LoadContent(Content, "Models/chest");
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, heightMapInfo, GameConstants.MainGameMinRangeX, 
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);

@@ -749,6 +749,11 @@ namespace Poseidon
                     // Use the matrices provided by the game camera
                     effect.View = gameCamera.ViewMatrix;
                     effect.Projection = gameCamera.ProjectionMatrix;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
                 mesh.Draw();
             }

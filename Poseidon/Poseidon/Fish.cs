@@ -122,6 +122,11 @@ namespace Poseidon {
                     effect.SetBoneTransforms(bones);
                     effect.View = view;
                     effect.Projection = projection;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
                 mesh.Draw();
             }

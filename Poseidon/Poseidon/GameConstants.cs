@@ -80,8 +80,9 @@ namespace Poseidon
             "Retrieve all Fuel Cells before time runs out.";
         public const string StrInstructions2 =
             "Control ship using keyboard (A, D, W, S) or the left thumbstick.";
+
         // float height for main game
-        public const int MainGameFloatHeight = 20;
+        public const int MainGameFloatHeight = 20;//20;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 50;
         public static int[] NumberTrash = { 40, 20, 10, 10, 10, 10 };
@@ -125,5 +126,9 @@ namespace Poseidon
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
         
+        //const for the fog effect
+        public const float FogStart = 10;
+        public const float FogEnd = 335;
+        public static Color FogColor = Color.Blue;
     }
 }

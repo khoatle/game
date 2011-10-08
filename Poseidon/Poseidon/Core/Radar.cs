@@ -37,7 +37,7 @@ namespace Poseidon.Core
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, Enemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<StaticObject> staticObjects)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<StaticObject> staticObjects)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, new Color(100, 100, 100, 150), 0.0f, RadarImageCenter, RadarScreenRadius / (RadarImage.Height * 0.5f), SpriteEffects.None, 0.0f);

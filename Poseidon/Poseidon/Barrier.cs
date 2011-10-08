@@ -15,8 +15,8 @@ namespace Poseidon
         public string BarrierType { get; set; }
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
-        public int health = GameConstants.EnemyHP;
-        public int maxHealth = GameConstants.EnemyHP;
+        public int health = GameConstants.DefaultEnemyHP;
+        public int maxHealth = GameConstants.DefaultEnemyHP;
         public string Name = "Swimming Object";
         // Is the object stucked and needs to change direction?
         public bool stucked = false;

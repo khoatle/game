@@ -10,7 +10,7 @@ using SkinnedModel;
 using Poseidon.Core;
 namespace Poseidon
 {
-    class MutantShark : Enemy
+    class MutantShark : CombatEnemy
     {
         public override void LoadContent(ContentManager content, string modelName)
         {

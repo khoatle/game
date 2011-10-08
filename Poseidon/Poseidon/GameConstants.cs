@@ -8,8 +8,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
-namespace Poseidon
-{
+namespace Poseidon {
     class GameConstants
     {
         //camera constants
@@ -37,7 +36,7 @@ namespace Poseidon
         public const int HealingAmount = 5;
 
         // HP const
-        public const int EnemyHP = 100;
+        public const int DefaultEnemyHP = 100;
         public const int FishHP = 50;
         public const int PlayerStartingHP = 1000;
 
@@ -54,8 +53,9 @@ namespace Poseidon
         //general
         //number of enemy and fish per level for main game
 
-        public static int[] NumberEnemies = {20, 15, 10, 10, 10, 10};
-        public static int[] NumberFish = {20, 30, 30, 30, 30 , 30};
+        public static int[] NumberShootingEnemies = {50, 15, 10, 10, 10, 10};
+        public static int[] NumberCombatEnemies = {50, 50, 50, 50, 50};
+        public static int[] NumberFish = {70, 30, 30, 30, 30 , 30};
 
         //number of enemy and fish for ship wreck
         public const int ShipNumberEnemies = 10;

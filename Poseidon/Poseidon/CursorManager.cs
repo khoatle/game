@@ -34,7 +34,7 @@ namespace Poseidon
             return false;
         }
 
-        public static bool MouseOnEnemy(Cursor cursor, Camera gameCamera, Enemy[] enemies, int enemiesAmount)
+        public static bool MouseOnEnemy(Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount)
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             BoundingSphere sphere;
@@ -53,7 +53,7 @@ namespace Poseidon
             return false;
         }
 
-        public static Enemy MouseOnWhichEnemy(Cursor cursor, Camera gameCamera, Enemy[] enemies, int enemiesAmount)
+        public static BaseEnemy MouseOnWhichEnemy(Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount)
         {
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             BoundingSphere sphere;

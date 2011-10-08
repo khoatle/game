@@ -551,6 +551,11 @@ namespace Poseidon
                         effect.DiffuseColor = Color.Gold.ToVector3();
                     }
                     else effect.DiffuseColor = Vector3.One;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
 
                 mesh.Draw();
@@ -571,6 +576,8 @@ namespace Poseidon
                     effect.World = worldMatrix;
                     effect.View = view;
                     effect.Projection = projection;
+
+
                 }
                 mesh.Draw();
             }

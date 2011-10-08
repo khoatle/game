@@ -105,6 +105,7 @@ namespace Poseidon
                     Fish tmp = (Fish)currentHuntingTarget;
                     if (tmp.health <= 0) {
                         currentHuntingTarget = null;
+                        return;
                     }
                 }
 

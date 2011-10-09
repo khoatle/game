@@ -347,8 +347,8 @@ namespace Poseidon
                 GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight); 
 
             //Initialize the static objects.
-            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjects);
-            for (int index = 0; index < GameConstants.NumStaticObjects; index++)
+            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
+            for (int index = 0; index < GameConstants.NumStaticObjectsMain; index++)
             {
                 staticObjects.Add(new StaticObject());
                 int randomObject = random.Next(3);
@@ -364,7 +364,7 @@ namespace Poseidon
                         staticObjects[index].LoadContent(Content, "Models/plant2");
                         break;
                 }
-                staticObjects[index].LoadContent(Content, "Models/chest");
+                staticObjects[index].LoadContent(Content, "Models/barrelstack");
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);

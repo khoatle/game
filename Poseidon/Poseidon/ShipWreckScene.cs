@@ -48,6 +48,7 @@ namespace Poseidon
         List<DamageBullet> enemyBullet;
         List<HealthBullet> healthBullet;
         List<TreasureChest> treasureChests;
+        List<StaticObject> staticObjects;
 
         //A tank
         public Tank tank;
@@ -231,8 +232,31 @@ namespace Poseidon
                 GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, false, GameConstants.ShipWreckFloatHeight);
-            AddingObjects.placeTreasureChests(treasureChests, random, heightMapInfo,
+            AddingObjects.placeTreasureChests(treasureChests, staticObjects, random, heightMapInfo,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
+            
+            //Initialize the static objects.
+            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsShip);
+            for (int index = 0; index < GameConstants.NumStaticObjectsShip; index++)
+            {
+                staticObjects.Add(new StaticObject());
+                int randomObject = random.Next(3);
+                switch (randomObject)
+                {
+                    case 0:
+                        staticObjects[index].LoadContent(Content, "Models/barrel");
+                        break;
+                    case 1:
+                        staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                        break;
+                    case 2:
+                        staticObjects[index].LoadContent(Content, "Models/boxstack");
+                        break;
+                }
+                //staticObjects[index].LoadContent(Content, "Models/boxstack");
+            }
+            AddingObjects.PlaceStaticObjectsOnShipFloor(staticObjects, treasureChests, random, heightMapInfo, GameConstants.ShipWreckMinRangeX,
+                GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
         }
 
         /// <summary>
@@ -610,6 +634,23 @@ namespace Poseidon
                     rs = new RasterizerState();
                     rs.FillMode = FillMode.Solid;
                     GraphicDevice.RasterizerState = rs;
+                }
+            }
+            //Draw each static object
+            foreach (StaticObject staticObject in staticObjects)
+            {
+                if (staticObject.BoundingSphere.Intersects(frustum))
+                {
+                    staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
             for (int i = 0; i < enemiesAmount; i++)

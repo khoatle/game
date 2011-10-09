@@ -147,7 +147,7 @@ namespace Poseidon
                     shipWreck.BoundingSphere.Radius);
             }
         }
-        public static void placeTreasureChests(List<TreasureChest> treasureChests, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        public static void placeTreasureChests(List<TreasureChest> treasureChests, List<StaticObject> staticObjects, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
 
             Vector3 tempCenter;
@@ -155,7 +155,7 @@ namespace Poseidon
             //place treasure chests
             foreach (TreasureChest chest in treasureChests)
             {
-                chest.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests);
+                chest.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests, staticObjects);
                 //ship wreck should not be floating
                 chest.Position.Y = 0;// heightMapInfo.GetHeight(chest.Position);
                 tempCenter = chest.BoundingSphere.Center;
@@ -267,7 +267,7 @@ namespace Poseidon
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
-        public static Vector3 GenerateShipFloorRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, List<TreasureChest> treasureChests)
+        public static Vector3 GenerateShipFloorRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, List<TreasureChest> treasureChests, List<StaticObject> staticObjects)
         {
             int xValue, zValue;
             do
@@ -279,8 +279,9 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
 
-            } while (IsShipFloorPlaceOccupied(xValue, zValue, treasureChests));
-
+            } while (IsShipFloorPlaceOccupied(xValue, zValue, treasureChests, staticObjects));
+            if (xValue > 0) xValue = maxX - 15;
+            else xValue = -maxX + 15;
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
@@ -295,9 +296,9 @@ namespace Poseidon
                     xValue *= -1;
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
-
+                
             } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects));
-
+            
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
@@ -324,7 +325,7 @@ namespace Poseidon
             return false;
         }
         // Helper
-        public static bool IsShipFloorPlaceOccupied(int xValue, int zValue, List<TreasureChest> treasureChests)
+        public static bool IsShipFloorPlaceOccupied(int xValue, int zValue, List<TreasureChest> treasureChests, List<StaticObject> staticObjects)
         {
 
             if (treasureChests != null)
@@ -332,9 +333,20 @@ namespace Poseidon
                 foreach (GameObject currentObj in treasureChests)
                 {
                     if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 15) &&
+                        xValue, currentObj.Position.X)) < 50) &&
                         ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 15))
+                        zValue, currentObj.Position.Z)) < 50))
+                        return true;
+                }
+            }
+            if (staticObjects != null)
+            {
+                foreach (GameObject currentObj in staticObjects)
+                {
+                    if (((int)(MathHelper.Distance(
+                        xValue, currentObj.Position.X)) < 50) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, currentObj.Position.Z)) < 50))
                         return true;
                 }
             }
@@ -379,6 +391,24 @@ namespace Poseidon
                 staticObject.Position = GenerateSeaBedRandomPosition(minX, maxX, minZ, maxZ, random, shipWrecks, staticObjects);
                 //ship wreck should not be floating
                 staticObject.Position.Y = heightMapInfo.GetHeight(staticObject.Position);
+                tempCenter = staticObject.BoundingSphere.Center;
+                tempCenter.X = staticObject.Position.X;
+                tempCenter.Y = staticObject.Position.Y;
+                tempCenter.Z = staticObject.Position.Z;
+                staticObject.BoundingSphere = new BoundingSphere(tempCenter,
+                    staticObject.BoundingSphere.Radius);
+            }
+        }
+        public static void PlaceStaticObjectsOnShipFloor(List<StaticObject> staticObjects, List<TreasureChest> treasureChests, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        {
+            Vector3 tempCenter;
+
+            //place ship wrecks
+            foreach (StaticObject staticObject in staticObjects)
+            {
+                staticObject.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests, staticObjects);
+                //ship wreck should not be floating
+                staticObject.Position.Y = 0;// heightMapInfo.GetHeight(staticObject.Position);
                 tempCenter = staticObject.BoundingSphere.Center;
                 tempCenter.X = staticObject.Position.X;
                 tempCenter.Y = staticObject.Position.Y;

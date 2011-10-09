@@ -350,9 +350,9 @@ namespace Poseidon
                 foreach (GameObject currentObj in shipWrecks)
                 {
                     if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 50) &&
+                        xValue, currentObj.Position.X)) < 200) &&
                         ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 50))
+                        zValue, currentObj.Position.Z)) < 200))
                         return true;
                 }
             }

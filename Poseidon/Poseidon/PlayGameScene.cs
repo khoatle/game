@@ -278,6 +278,7 @@ namespace Poseidon
             // example of how to put skill into a ship wreck at a certain level
             // just put the skill into the 1st ship wrect in the list
             int relicType = -1;
+            float oritentation = random.Next(100);
             switch (currentLevel)
             {
                 // learn 1st skill in level 2 and so on
@@ -297,10 +298,11 @@ namespace Poseidon
             for (int index = 0; index < GameConstants.NumberShipWrecks; index++)
             {
                 shipWrecks.Add(new ShipWreck());
-                if (index == 0 && relicType != -1) shipWrecks[index].LoadContent(Content, randomType, relicType);
-                else shipWrecks[index].LoadContent(Content, randomType, -1);
-                shipWrecks[index].LoadContent(Content, randomType, 1);
+                if (index == 0 && relicType != -1) shipWrecks[index].LoadContent(Content, randomType, relicType, oritentation);
+                else shipWrecks[index].LoadContent(Content, randomType, -1, oritentation);
+                //shipWrecks[index].LoadContent(Content, randomType, 1);
                 randomType = random.Next(3);
+                oritentation = random.Next(100);
             }
             enemiesAmount = 0;
             fishAmount = 0;
@@ -360,11 +362,11 @@ namespace Poseidon
                         break;
                     case 2:
                         staticObjects[index].LoadContent(Content, "Models/plant2");
-                        break;               
+                        break;
                 }
                 staticObjects[index].LoadContent(Content, "Models/chest");
             }
-            AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, heightMapInfo, GameConstants.MainGameMinRangeX, 
+            AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
         }
 

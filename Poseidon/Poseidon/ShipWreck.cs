@@ -13,15 +13,28 @@ namespace Poseidon
         // different types of ship wreck
         // or maybe just its orientation
         int type;
+        float orientation;
         // no re-access
         public bool accessed;
         // special skill's ID that this ship wreck will have in one of its chests
         public int skillID = 0;
-        public void LoadContent(ContentManager content, int type, int skillID)
+        public void LoadContent(ContentManager content, int type, int skillID, float orientation)
         {
             
             this.type = type;
-            Model = content.Load<Model>("Models/shipwreck");
+            switch (type)
+            {
+                case 0:
+                    Model = content.Load<Model>("Models/shipwreck2");
+                    break;
+                case 1:
+                    Model = content.Load<Model>("Models/shipwreck3");
+                    break;
+                case 2:
+                    Model = content.Load<Model>("Models/shipwreck4");
+                    break;
+            }
+            
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 
@@ -32,6 +45,7 @@ namespace Poseidon
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             accessed = false;
             this.skillID = skillID;
+            this.orientation = orientation;
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -39,7 +53,8 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {

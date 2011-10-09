@@ -62,7 +62,7 @@ namespace Poseidon {
         public const int ShipNumberFish = 5;
         public const int NumberShipWrecks = 10;
         public const int NumberChests = 10;
-        public const int NumStaticObjects = 15;
+        public const int NumStaticObjects = 0;
 
         public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;
@@ -128,7 +128,7 @@ namespace Poseidon {
         
         //const for the fog effect
         public const float FogStart = 10;
-        public const float FogEnd = 335;
+        public const float FogEnd = 350;
         public static Color FogColor = Color.Blue;
     }
 }

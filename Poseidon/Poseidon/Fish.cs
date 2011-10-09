@@ -18,6 +18,10 @@ namespace Poseidon {
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
 
+        public Fish() : base() {
+            experienceReward = 2;
+        }
+
         public void Load(int clipStart, int clipEnd, int fpsRate)
         {
             skd = Model.Tag as SkinningData;

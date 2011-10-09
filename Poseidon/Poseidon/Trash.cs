@@ -10,12 +10,15 @@ namespace Poseidon
 {
     public class Trash : GameObject
     {
+        public int experienceReward;
+
         public bool Retrieved { get; set; }
 
         public Trash()
             : base()
         {
             Retrieved = false;
+            experienceReward = 10;
         }
 
         public void LoadContent(ContentManager content, string modelname)

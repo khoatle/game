@@ -28,6 +28,7 @@ namespace Poseidon
             health = 1000;
             maxHealth = 1000;
             perceptionRadius = GameConstants.BossPerceptionRadius;
+            experienceReward = 1000;
         }
 
     }

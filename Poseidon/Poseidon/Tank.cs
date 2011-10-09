@@ -120,6 +120,11 @@ namespace Poseidon
 
         public float floatHeight;
 
+        public static int currentExperiencePts;
+        public static int nextLevelExperience;
+        private static int increaseBy;
+        public int level;
+
         // Tank moving bound
         public int MaxRangeX;
         public int MaxRangeZ;
@@ -202,7 +207,13 @@ namespace Poseidon
 
             this.MaxRangeX = MaxRangeX;
             this.MaxRangeZ = MaxRangeZ;
+
+            currentExperiencePts = 0;
+            nextLevelExperience = 100;
+            increaseBy = 100; 
+            level = 1;
         }
+
         /// <summary>
         /// Loads the tank model.
         /// </summary>
@@ -310,6 +321,16 @@ namespace Poseidon
 
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo)
         {
+            if (currentExperiencePts >= nextLevelExperience) {
+                increaseBy = (int)(increaseBy * 1.5);
+                nextLevelExperience += increaseBy;
+                strength *= 1.15f;
+                maxHitPoint = (int)(maxHitPoint * 1.10f);
+                currentHitPoint = maxHitPoint;
+
+                level++;
+            }
+
             Vector3 futurePosition = Position;
             //if (steerRotationValue != 0) steerRotationValue = 0;
             //if (wheelRotationValue != 0) wheelRotationValue = 0;
@@ -495,6 +516,7 @@ namespace Poseidon
                 if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                 {
                     trash.Retrieved = true;
+                    currentExperiencePts += trash.experienceReward;
                     RetrievedSound.Play();
                 }
             }

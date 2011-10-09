@@ -30,6 +30,9 @@ namespace Poseidon
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
+
+                    Tank.currentExperiencePts += objs[i].experienceReward;
+
                     for (int k = i; k < size-1; k++) {
                         objs[k] = objs[k+1];
                     }
@@ -206,6 +209,7 @@ namespace Poseidon
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
                         if (barriers[j].health < GameConstants.DefaultEnemyHP) {
                             barriers[j].health += GameConstants.HealingAmount;
+                            Tank.currentExperiencePts += barriers[j].experienceReward;
                         }
                         bullets.RemoveAt(i--);
                         break;

@@ -1010,6 +1010,8 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1+= "0";
             str1 += roundTimer.Seconds;
+            str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
+            str1 += "\n Level: " + tank.level;
             //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
             //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
             //Vector3 mouseDif = pointIntersect - tank.Position;

@@ -54,6 +54,7 @@ namespace Poseidon
             health = GameConstants.DefaultEnemyHP;
             speed = GameConstants.EnemySpeed;
             damage = GameConstants.DefaultEnemyDamage;
+            experienceReward = 20;
         }
 
         // Is it the time to forget about old target?
@@ -121,8 +122,7 @@ namespace Poseidon
             float prevForwardDir = ForwardDirection;
             Vector3 prevFuturePosition = futurePosition;
             // try upto 10 times to change direction is there is collision
-            for (int i = 0; i < 4; i++)
-            {
+            for (int i = 0; i < 4; i++) {
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 headingDirection = Vector3.Transform(movement, orientationMatrix);
@@ -144,9 +144,7 @@ namespace Poseidon
 
                     stucked = false;
                     break;
-                }
-                else
-                {
+                } else {
                     stucked = true;
                     futurePosition = prevFuturePosition;
                 }

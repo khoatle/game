@@ -20,6 +20,7 @@ namespace Poseidon
         public string Name = "Swimming Object";
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
+        public int experienceReward;
 
         // is this enemy a big boss
         // in order to know whether the big boss is killed
@@ -32,6 +33,7 @@ namespace Poseidon
             BarrierType = null;
             ForwardDirection = 0.0f;
             //MaxRange = GameConstants.MaxRange;
+            experienceReward = 20;
         }
 
         public virtual void LoadContent(ContentManager content, string modelName)

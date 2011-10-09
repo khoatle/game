@@ -100,7 +100,7 @@ namespace Poseidon
             this.stunnedTexture = stunnedTexture;
             random = new Random();
             ground = new GameObject();
-            gameCamera = new Camera();
+            gameCamera = new Camera(GameConstants.ShipCamHeight);
             boundingSphere = new GameObject();
             tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);

@@ -128,7 +128,7 @@ namespace Poseidon
             roundTime = GameConstants.RoundTime;
             random = new Random();
             ground = new GameObject();
-            gameCamera = new Camera();
+            gameCamera = new Camera(GameConstants.MainCamHeight);
             boundingSphere = new GameObject();
             tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);

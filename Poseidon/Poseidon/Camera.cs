@@ -15,9 +15,9 @@ namespace Poseidon
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
 
-        public Camera()
+        public Camera(float camHeight)
         {
-            AvatarHeadOffset = new Vector3(0, 200, 0);
+            AvatarHeadOffset = new Vector3(0, camHeight, 0);
             TargetOffset = new Vector3(0, 0, 0);
             ViewMatrix = Matrix.Identity;
             ProjectionMatrix = Matrix.Identity;

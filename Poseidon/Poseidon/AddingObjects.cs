@@ -280,8 +280,8 @@ namespace Poseidon
                     zValue *= -1;
 
             } while (IsShipFloorPlaceOccupied(xValue, zValue, treasureChests, staticObjects));
-            if (xValue > 0) xValue = maxX - 15;
-            else xValue = -maxX + 15;
+            if (xValue > 0) xValue = maxX - 8;
+            else xValue = -maxX + 8;
             return new Vector3(xValue, 0, zValue);
         }
         // Helper

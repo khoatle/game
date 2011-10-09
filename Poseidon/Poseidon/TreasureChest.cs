@@ -13,6 +13,7 @@ namespace Poseidon
         // different types of treasure chest
         // or maybe just its orientation
         int type;
+        public float orientation;
         // no re-open
         public bool opened;
         // special skill's ID that this chest will contain
@@ -21,7 +22,7 @@ namespace Poseidon
         {
 
             this.type = type;
-            Model = content.Load<Model>("Models/chest");
+            Model = content.Load<Model>("Models/chest-closed");
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 
@@ -39,7 +40,8 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {

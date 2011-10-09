@@ -164,6 +164,8 @@ namespace Poseidon
                 tempCenter.Z = chest.Position.Z;
                 chest.BoundingSphere = new BoundingSphere(tempCenter,
                     chest.BoundingSphere.Radius);
+                if (chest.Position.X > 0) chest.orientation = -MathHelper.PiOver2;
+                else chest.orientation = MathHelper.PiOver2;
             }
         }
         public static void placeHealingBullet(Tank tank, ContentManager Content, List<HealthBullet> healthBullet) {

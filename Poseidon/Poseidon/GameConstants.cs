@@ -59,7 +59,7 @@ namespace Poseidon {
 
         //number of enemy and fish for ship wreck
         public const int ShipNumberEnemies = 10;
-        public const int ShipNumberFish = 5;
+        public const int ShipNumberFish = 0;
         public const int NumberShipWrecks = 10;
         public const int NumberChests = 10;
         public const int NumStaticObjectsMain = 0;
@@ -88,7 +88,7 @@ namespace Poseidon {
         public const float MainCamHeight = 200;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 20;
-        public const float ShipCamHeight = 80;
+        public const float ShipCamHeight = 120;
         public static int[] NumberTrash = { 40, 20, 10, 10, 10, 10 };
         
         //bounding sphere scaling factors

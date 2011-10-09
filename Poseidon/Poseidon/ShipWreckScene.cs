@@ -523,6 +523,8 @@ namespace Poseidon
                         && chest.opened == false && doubleClicked)
                     {
                         chest.opened = true;
+                        audio.OpenChest.Play();
+                        chest.Model = Content.Load<Model>("Models/chest");
                         if (chest.skillID == -1)
                         {
                             // give the player some experience

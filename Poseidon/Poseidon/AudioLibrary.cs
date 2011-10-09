@@ -17,6 +17,7 @@ namespace Poseidon
         private SoundEffect explo1;
         private SoundEffect changeBullet;
         private SoundEffect miniGunWindUp;
+        private SoundEffect openChest;
         private Song backMusic;
         private Song startMusic;
 
@@ -71,6 +72,10 @@ namespace Poseidon
         {
             get { return miniGunWindUp; }
         }
+        public SoundEffect OpenChest
+        {
+            get { return openChest; }
+        }
         public Song BackMusic
         {
             get { return backMusic; }
@@ -96,6 +101,7 @@ namespace Poseidon
             explo1 = Content.Load<SoundEffect>("Sound/Explo1");
             changeBullet = Content.Load<SoundEffect>("Sound/equip");
             miniGunWindUp = Content.Load<SoundEffect>("Sound/MiinigunWindup#1");
+            openChest = Content.Load<SoundEffect>("Sound/openChest");
         }
     }
 }

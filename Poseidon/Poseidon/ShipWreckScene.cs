@@ -58,10 +58,8 @@ namespace Poseidon
 
         // For drawing the currently selected skill
         protected Texture2D[] skillTextures;
-        public string[] iconNames = { "Image/skill0Icon", "Image/skill1Icon", "Image/skill2Icon", "Image/skill3Icon" };
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
-        public string[] bulletNames = { "Image/skill0Icon", "Image/skill1Icon" };
         // Game is paused?
         protected bool paused;
         protected Vector2 pausePosition;
@@ -149,12 +147,12 @@ namespace Poseidon
             // Loading main character skill icon textures
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
-                skillTextures[index] = Content.Load<Texture2D>(iconNames[index]);
+                skillTextures[index] = Content.Load<Texture2D>(GameConstants.iconNames[index]);
             }
             // Loading main character bullet icon textures
             for (int index = 0; index < GameConstants.numBulletTypes; index++)
             {
-                bulletTypeTextures[index] = Content.Load<Texture2D>(bulletNames[index]);
+                bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
 
             //Initialize fuel cells
@@ -730,24 +728,25 @@ namespace Poseidon
         // Draw the currently selected bullet type
         private void DrawBulletType()
         {
-            float xOffsetText, yOffsetText;
+            int xOffsetText, yOffsetText;
             Rectangle rectSafeArea;
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 50;
+            xOffsetText = rectSafeArea.Right - 100;
             yOffsetText = rectSafeArea.Top;
 
             Vector2 bulletIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
+            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
+            //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
+            spriteBatch.Draw(bulletTypeTextures[tank.bulletType], destRectangle, Color.White);
         }
         // Draw the currently selected skill/spell
         private void DrawActiveSkill()
         {
-            float xOffsetText, yOffsetText;
+            int xOffsetText, yOffsetText;
             Rectangle rectSafeArea;
 
             //Calculate str1 position
@@ -758,8 +757,10 @@ namespace Poseidon
 
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
+            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
-            spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
+            //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
+            spriteBatch.Draw(skillTextures[tank.activeSkillID], destRectangle, Color.White);
         }
         private void DrawStats()
         {

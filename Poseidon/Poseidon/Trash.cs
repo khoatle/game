@@ -14,6 +14,11 @@ namespace Poseidon
 
         public bool Retrieved { get; set; }
 
+        public float orientation;
+
+        public float heightChange = 0.5f;
+        public float currentChange = 0.0f;
+        public bool floatUp;
         public Trash()
             : base()
         {
@@ -21,7 +26,7 @@ namespace Poseidon
             experienceReward = 10;
         }
 
-        public void LoadContent(ContentManager content, string modelname)
+        public void LoadContent(ContentManager content, string modelname, float orientation)
         {
             Model = content.Load<Model>(modelname);
             Position = Vector3.Down;
@@ -32,14 +37,28 @@ namespace Poseidon
             scaledSphere.Radius *= GameConstants.TrashBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            this.orientation = orientation;
+            if (orientation > 50) floatUp = true;
+            else floatUp = false;
         }
-
+        public void Update(GameTime gameTime)
+        {
+            if (currentChange >= heightChange)
+            {
+                currentChange = 0.0f;
+                floatUp = !floatUp;
+            }
+            currentChange += 0.025f;
+            if (floatUp) Position.Y += currentChange;
+            else Position.Y -= currentChange;
+        }
         public void Draw(Matrix view, Matrix projection)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -52,6 +71,11 @@ namespace Poseidon
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
+
+                    //effect.FogEnabled = true;
+                    //effect.FogStart = GameConstants.FogStart;
+                    //effect.FogEnd = GameConstants.FogEnd;
+                    //effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
                 mesh.Draw();
             }

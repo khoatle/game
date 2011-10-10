@@ -71,8 +71,10 @@ namespace Poseidon
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
+
             graphics.PreferredBackBufferWidth = 850;
             graphics.PreferredBackBufferHeight = 800;//700;
+
             //graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";

@@ -40,7 +40,7 @@ namespace Poseidon
         protected GameScene prevScene;
         // For the Start scene
         private SpriteFont smallFont, largeFont;
-        protected Texture2D startBackgroundTexture, startElementsTexture;
+        protected Texture2D startBackgroundTexture, startElementsTexture, SkillBackgroundTexture;
         StartScene startScene;
         // For the Skill board
         SkillScene skillScene;
@@ -71,7 +71,7 @@ namespace Poseidon
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
-            graphics.PreferredBackBufferWidth = 853;
+            graphics.PreferredBackBufferWidth = 850;
             graphics.PreferredBackBufferHeight = 800;//700;
             //graphics.IsFullScreen = true;
 
@@ -135,6 +135,7 @@ namespace Poseidon
             startScene = new StartScene(this, smallFont, largeFont,
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
+            SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
@@ -149,7 +150,7 @@ namespace Poseidon
 
             // Create the Skill board
             skillScene = new SkillScene(this, smallFont, largeFont,
-                startBackgroundTexture, startElementsTexture, Content);
+                SkillBackgroundTexture, Content);
             Components.Add(skillScene);
 
             
@@ -361,39 +362,70 @@ namespace Poseidon
         /// </summary>
         private void HandleSkillSceneInput()
         {
-            if (enterPressed)
+            if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
+                && skillScene.cursor.Position.Y > 110 && skillScene.cursor.Position.Y < 315
+                && lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
             {
                 audio.MenuSelect.Play();
-                switch (skillScene.SelectedMenuIndex)
+                if (playGameScene.tank.speed < 2)
                 {
-                    case 0:
-                        if (playGameScene.tank.strength == 2) break;
-                        if (prevScene == playGameScene)
-                            playGameScene.tank.strength += 0.25f;
-                        else shipWreckScene.tank.strength += 0.25f;
-                        break;
-                    case 1:
-                        if (playGameScene.tank.speed == 2) break;
-                        if (prevScene == playGameScene)
-                            playGameScene.tank.speed += 0.25f;
-                        else shipWreckScene.tank.speed += 0.25f;
-                        break;
-                    case 2:
-                        if (playGameScene.tank.shootingRate == 2) break;
-                        if (prevScene == playGameScene)
-                            playGameScene.tank.shootingRate += 0.25f;
-                        else shipWreckScene.tank.shootingRate += 0.25f;
-                        break;
-                    case 3:
-                        if (prevScene == playGameScene)
-                            playGameScene.tank.maxHitPoint += 30;
-                        else shipWreckScene.tank.maxHitPoint += 30;
-                        break;
-                    case 4:
-                        ShowScene(prevScene);
-                        break;
+                    if (prevScene == playGameScene)
+                        playGameScene.tank.speed += 0.25f;
+                    else shipWreckScene.tank.speed += 0.25f;
                 }
             }
+            if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
+                && skillScene.cursor.Position.Y > 110 && skillScene.cursor.Position.Y < 315
+                && lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                audio.MenuSelect.Play();
+                if (prevScene == playGameScene)
+                {
+                    playGameScene.tank.maxHitPoint += 30;
+                    playGameScene.tank.currentHitPoint += 30;
+                }
+                else
+                {
+                    shipWreckScene.tank.maxHitPoint += 30;
+                    shipWreckScene.tank.currentHitPoint += 30;
+                }
+            }
+            if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
+                && skillScene.cursor.Position.Y > 400 && skillScene.cursor.Position.Y < 600
+                && lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                audio.MenuSelect.Play();
+                if (playGameScene.tank.shootingRate == 2)
+                {
+                    if (prevScene == playGameScene)
+                        playGameScene.tank.shootingRate += 0.25f;
+                    else shipWreckScene.tank.shootingRate += 0.25f;
+                }
+            }
+            if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
+                && skillScene.cursor.Position.Y > 400 && skillScene.cursor.Position.Y < 600
+                && lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                audio.MenuSelect.Play();
+                if (playGameScene.tank.strength < 2)
+                {
+                    if (prevScene == playGameScene)
+                        playGameScene.tank.strength += 0.25f;
+                    else shipWreckScene.tank.strength += 0.25f;
+                }
+            }
+            if (skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554
+                && skillScene.cursor.Position.Y > 670 && skillScene.cursor.Position.Y < 775
+                && lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released)
+            {
+                ShowScene(prevScene);
+            }
+
         }
         protected void ShowScene(GameScene scene)
         {

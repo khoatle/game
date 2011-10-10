@@ -278,7 +278,7 @@ namespace Poseidon
             // example of how to put skill into a ship wreck at a certain level
             // just put the skill into the 1st ship wrect in the list
             int relicType = -1;
-            float oritentation = random.Next(100);
+            float orientation = random.Next(100);
             switch (currentLevel)
             {
                 // learn 1st skill in level 2 and so on
@@ -298,11 +298,11 @@ namespace Poseidon
             for (int index = 0; index < GameConstants.NumberShipWrecks; index++)
             {
                 shipWrecks.Add(new ShipWreck());
-                if (index == 0 && relicType != -1) shipWrecks[index].LoadContent(Content, randomType, relicType, oritentation);
-                else shipWrecks[index].LoadContent(Content, randomType, -1, oritentation);
+                if (index == 0 && relicType != -1) shipWrecks[index].LoadContent(Content, randomType, relicType, orientation);
+                else shipWrecks[index].LoadContent(Content, randomType, -1, orientation);
                 //shipWrecks[index].LoadContent(Content, randomType, 1);
                 randomType = random.Next(3);
-                oritentation = random.Next(100);
+                orientation = random.Next(100);
             }
             enemiesAmount = 0;
             fishAmount = 0;
@@ -321,26 +321,31 @@ namespace Poseidon
             trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
             for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
             {
-                random_model = random.Next(5);
+                random_model = random.Next(6);
+                orientation = random.Next(100);
                 trashes.Add(new Trash());
                 switch (random_model)
                 {
                     case 0:
-                        trashes[index].LoadContent(Content,"Models/trash-door");
+                        trashes[index].LoadContent(Content,"Models/oilspill1", orientation);
                         break;
                     case 1:
-                        trashes[index].LoadContent(Content, "Models/trash-plastic-cup");
+                        trashes[index].LoadContent(Content, "Models/oilspill2", orientation);
                         break;
                     case 2:
-                        trashes[index].LoadContent(Content, "Models/trash-shoe");
+                        trashes[index].LoadContent(Content, "Models/oilspill3", orientation);
                         break;
                     case 3:
-                        trashes[index].LoadContent(Content, "Models/trash-pizza");
+                        trashes[index].LoadContent(Content, "Models/trashGroup1", orientation);
                         break;
                     case 4:
-                        trashes[index].LoadContent(Content, "Models/trash-ball");
+                        trashes[index].LoadContent(Content, "Models/trashGroup2", orientation);
+                        break;
+                    case 5:
+                        trashes[index].LoadContent(Content, "Models/trashGroup3", orientation);
                         break;
                 }
+                //trashes[index].LoadContent(Content, "Models/trashGroup4", orientation);
             }
             AddingObjects.placeTrash(trashes, enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
@@ -636,6 +641,11 @@ namespace Poseidon
                         if (fruit.Retrieved) {
                             retrievedFruits++;
                         }
+                    }
+
+                    foreach (Trash trash in trashes)
+                    {
+                        trash.Update(gameTime);
                     }
 
                     for (int i = 0; i < myBullet.Count; i++)
@@ -1001,7 +1011,7 @@ namespace Poseidon
         {
             float xOffsetText, yOffsetText;
             string str1 = GameConstants.StrTimeRemaining;
-            //string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
+            string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
             if (roundTimer.Minutes < 10)
@@ -1030,7 +1040,7 @@ namespace Poseidon
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
             //str2 += "Type " + tank.GetType().Name.ToString();
-
+            str2 += "Current Change " + trashes[0].currentChange;
             //Display Fish Health
             Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPontedAt != null)
@@ -1055,8 +1065,8 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
             spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
-            //strPosition.Y += strSize.Y;
-            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
+            strPosition.Y += strSize.Y;
+            spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
         }
 
         // Draw the currently selected bullet type

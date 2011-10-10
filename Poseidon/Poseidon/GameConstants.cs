@@ -84,12 +84,13 @@ namespace Poseidon {
 
         // float height for main game
         public const int MainGameFloatHeight = 20;
+        public const int TrashFloatHeight = 30;
         // camera height for main game
         public const float MainCamHeight = 200;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 20;
         public const float ShipCamHeight = 120;
-        public static int[] NumberTrash = { 40, 20, 10, 10, 10, 10 };
+        public static int[] NumberTrash = { 50, 20, 10, 10, 10, 10 };
         
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;

@@ -236,12 +236,13 @@ namespace Poseidon
             List<Trash> trashes, int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
         {
             Vector3 tempCenter;
-
             foreach (Trash trash in trashes)
             {
-                trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
-                    fish, shipWrecks);
-                trash.Position.Y = floatHeight;
+                //trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
+                //    fish, shipWrecks);
+                trash.Position.X= random.Next(minX, maxX);
+                trash.Position.Z = random.Next(minZ, maxZ);
+                trash.Position.Y = GameConstants.TrashFloatHeight;
                 tempCenter = trash.BoundingSphere.Center;
                 tempCenter.X = trash.Position.X;
                 tempCenter.Y = floatHeight;

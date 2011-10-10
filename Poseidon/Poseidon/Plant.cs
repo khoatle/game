@@ -29,7 +29,7 @@ namespace Poseidon
         public void LoadContent(ContentManager content, Vector3 cyborgPosition, double loadTime)
         {
             creationTime = loadTime;
-            Model = content.Load<Model>("Models/plant");
+            Model = content.Load<Model>("Models/plant1");
             Position = cyborgPosition;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;

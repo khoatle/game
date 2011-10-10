@@ -118,7 +118,7 @@ namespace Poseidon {
         //shooting range
         public const float shootingRange = 70.0f;
 
-        //cool down time for each skill
+        //skills specifications
         public const float coolDownForHerculesBow = 5;
         public const float coolDownForArchillesArmor = 5;
         public const float coolDownForThorHammer = 5;
@@ -130,7 +130,9 @@ namespace Poseidon {
         public const float ThorPushFactor = 10;
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
-        
+        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal" };
+        public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
+
         //const for the fog effect
         public const float FogStart = 10;
         public const float FogEnd = 350;

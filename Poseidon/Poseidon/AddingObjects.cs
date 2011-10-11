@@ -47,14 +47,20 @@ namespace Poseidon
                 fish[i] = new Fish();
                 if (type == 0)
                 {
-                    fish[i].LoadContent(Content, "Models/fish_fbxascii");
-                    fish[i].Load(1, 47, 24);
-                    fish[i].Name = "fish";
+                    //fish[i].LoadContent(Content, "Models/fish_fbxascii");
+                    //fish[i].Load(1, 47, 24);
+                    //fish[i].Name = "fish";
+                    fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "dolphin";
                 }
                 else if (type == 1)
                 {
-                    fish[i].LoadContent(Content, "Models/shark2");
-                    fish[i].Name = "big fish";
+                    //fish[i].LoadContent(Content, "Models/shark2");
+                    //fish[i].Name = "big fish";
+                    fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "dolphin";
                 }
                 else if (type == 2)
                 {
@@ -65,6 +71,7 @@ namespace Poseidon
                 else if (type == 3)
                 {
                     fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].Load(1, 24, 24);
                     fish[i].Name = "dolphin";
                 }
                 else if (type == 4)
@@ -81,9 +88,9 @@ namespace Poseidon
                     //fish[i].LoadContent(Content, "Models/dolphin");
                     //fish[i].Name = "dolphin";
                 }
-                //fish[i].LoadContent(Content, "Models/leopardshark");
+                //fish[i].LoadContent(Content, "Models/dolphin");
                 //fish[i].Load(1, 24, 24);
-                //fish[i].Name = "shark";
+                //fish[i].Name = "dolphin";
                 type = random.Next(6);
             }
         }

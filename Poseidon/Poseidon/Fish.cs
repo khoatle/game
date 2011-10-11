@@ -100,7 +100,9 @@ namespace Poseidon {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                fishMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                float scale = 1.0f;
+                if (Name.Contains("dolphin")) scale = 0.5f;
+                fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);

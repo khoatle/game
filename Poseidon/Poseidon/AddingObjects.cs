@@ -457,6 +457,65 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
         }
 
+        public static void DrawExperienceBar(Texture2D ExperienceBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int heightFromTop, string type, Color typeColor)
+        {
+            int barX = game.Window.ClientBounds.Width / 2 - ExperienceBar.Width / 2;
+            int barY = heightFromTop;
+            int barHeight = 44;
+            double Experienceiness;
+            int maxExperience = 2000;
+            int level;
+            Color ExperienceColor;
+            //System.Diagnostics.Debug.WriteLine(currentExperience+","+maxExperience);
+            //Draw the negative space for the Experience bar
+            spriteBatch.Draw(ExperienceBar,
+                new Rectangle(barX, barY, ExperienceBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),
+                Color.Transparent);
+            //Draw the current Experience level based on the current Experience
+            level = currentExperience/maxExperience;
+            if (level >0)
+                type += " + "+level.ToString();
+            currentExperience = currentExperience%maxExperience;
+            if (currentExperience == 0 && level > 0)
+            {
+                level--;
+                currentExperience = maxExperience;
+            }
+            Experienceiness = (double)currentExperience/maxExperience;
+            switch (level)
+            {
+                case 0:
+                    ExperienceColor = Color.Aqua;
+                    break;
+                case 1:
+                    ExperienceColor = Color.Tan;
+                    break;
+                case 2:
+                    ExperienceColor = Color.Goldenrod;
+                    break;
+                case 3:
+                    ExperienceColor = Color.DarkGoldenrod;
+                    break;
+                case 4:
+                    ExperienceColor = Color.DarkOrange;
+                    break;
+                default:
+                    ExperienceColor = Color.DarkRed;
+                    break;
+            }
+            spriteBatch.Draw(ExperienceBar,
+                new Rectangle(barX, barY, (int)(ExperienceBar.Width * Experienceiness), barHeight),
+                new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),
+                ExperienceColor);
+            //Draw the box around the Experience bar
+            spriteBatch.Draw(ExperienceBar,
+                new Rectangle(barX, barY, ExperienceBar.Width, barHeight),
+                new Rectangle(0, 0, ExperienceBar.Width, barHeight),
+                Color.White);
+            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop+10), typeColor);
+        }
+
 
     }
 }

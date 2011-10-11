@@ -101,7 +101,9 @@ namespace Poseidon {
                                 Vector3.Up,
                                 ForwardDirection);
                 float scale = 1.0f;
-                if (Name.Contains("dolphin")) scale = 0.5f;
+                if (Name.Contains("dolphin") || Name.Contains("turtle")) scale = 0.5f;
+                if (Name.Contains("manetee")) scale = 0.6f;
+             
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);

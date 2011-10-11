@@ -122,7 +122,6 @@ namespace Poseidon {
             {
                 foreach (SkinnedEffect effect in mesh.Effects)
                 {
-
                     effect.SetBoneTransforms(bones);
                     effect.View = view;
                     effect.Projection = projection;

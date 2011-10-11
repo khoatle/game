@@ -30,6 +30,10 @@ namespace Poseidon
             int index = 0;
             int meshCount = Model.Meshes.Count;
 
+            if (Model.Meshes.Count == 0)
+            {
+                Console.WriteLine("testing");
+            }
             boundingSpheres = new BoundingSphere[meshCount];
             foreach (ModelMesh mesh in Model.Meshes)
             {

@@ -45,21 +45,21 @@ namespace Poseidon
             int type = random.Next(6);
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //fish[i].LoadContent(Content, "Models/orca1");
-                //fish[i].Load();
-                if (type == 0) {
+                if (type == 0)
+                {
                     fish[i].LoadContent(Content, "Models/fish_fbxascii");
                     fish[i].Load(1, 47, 24);
                     fish[i].Name = "fish";
                 }
                 else if (type == 1)
                 {
-                    fish[i].LoadContent(Content, "Models/fish2");
+                    fish[i].LoadContent(Content, "Models/shark2");
                     fish[i].Name = "big fish";
                 }
                 else if (type == 2)
                 {
-                    fish[i].LoadContent(Content, "Models/shark");
+                    fish[i].LoadContent(Content, "Models/normalshark");
+                    fish[i].Load(1, 24, 24);
                     fish[i].Name = "shark";
                 }
                 else if (type == 3)
@@ -75,9 +75,15 @@ namespace Poseidon
                 }
                 else if (type == 5)
                 {
-                    fish[i].LoadContent(Content, "Models/shark2");
+                    fish[i].LoadContent(Content, "Models/leopardshark");
+                    fish[i].Load(1, 24, 24);
                     fish[i].Name = "leopard shark";
+                    //fish[i].LoadContent(Content, "Models/dolphin");
+                    //fish[i].Name = "dolphin";
                 }
+                //fish[i].LoadContent(Content, "Models/leopardshark");
+                //fish[i].Load(1, 24, 24);
+                //fish[i].Name = "shark";
                 type = random.Next(6);
             }
         }

@@ -42,22 +42,17 @@ namespace Poseidon
                 fishAmount = GameConstants.NumberFish[currentLevel];
             else fishAmount = GameConstants.ShipNumberFish;
             Random random = new Random();
-            int type = random.Next(6);
+            int type = random.Next(7);
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
                 if (type == 0)
                 {
-                    //fish[i].LoadContent(Content, "Models/fish_fbxascii");
-                    //fish[i].Load(1, 47, 24);
-                    //fish[i].Name = "fish";
-                    fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].LoadContent(Content, "Models/turtle");
                     fish[i].Load(1, 24, 24);
-                    fish[i].Name = "dolphin";
+                    fish[i].Name = "turtle";
                 }
                 else if (type == 1)
                 {
-                    //fish[i].LoadContent(Content, "Models/shark2");
-                    //fish[i].Name = "big fish";
                     fish[i].LoadContent(Content, "Models/dolphin");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "dolphin";
@@ -70,9 +65,9 @@ namespace Poseidon
                 }
                 else if (type == 3)
                 {
-                    fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].LoadContent(Content, "Models/stingray");
                     fish[i].Load(1, 24, 24);
-                    fish[i].Name = "dolphin";
+                    fish[i].Name = "sting ray";
                 }
                 else if (type == 4)
                 {
@@ -85,13 +80,17 @@ namespace Poseidon
                     fish[i].LoadContent(Content, "Models/leopardshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "leopard shark";
-                    //fish[i].LoadContent(Content, "Models/dolphin");
-                    //fish[i].Name = "dolphin";
                 }
-                //fish[i].LoadContent(Content, "Models/dolphin");
+                else if (type == 6)
+                {
+                    fish[i].LoadContent(Content, "Models/manetee");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "manetee";
+                }
+                //fish[i].LoadContent(Content, "Models/manetee");
                 //fish[i].Load(1, 24, 24);
-                //fish[i].Name = "dolphin";
-                type = random.Next(6);
+                //fish[i].Name = "manetee";
+                type = random.Next(7);
             }
         }
 

@@ -369,12 +369,14 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                audio.MenuSelect.Play();
-                if (playGameScene.tank.speed < 2)
+                //if (playGameScene.tank.speed < 2)
+                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
                 {
+                    audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
-                        playGameScene.tank.speed += 0.25f;
-                    else shipWreckScene.tank.speed += 0.25f;
+                        playGameScene.tank.speed += 0.1f;
+                    else shipWreckScene.tank.speed += 0.1f;
+                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
@@ -382,16 +384,20 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                audio.MenuSelect.Play();
-                if (prevScene == playGameScene)
+                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
                 {
-                    playGameScene.tank.maxHitPoint += 30;
-                    playGameScene.tank.currentHitPoint += 30;
-                }
-                else
-                {
-                    shipWreckScene.tank.maxHitPoint += 30;
-                    shipWreckScene.tank.currentHitPoint += 30;
+                    audio.MenuSelect.Play();
+                    if (prevScene == playGameScene)
+                    {
+                        playGameScene.tank.maxHitPoint += 10;
+                        playGameScene.tank.currentHitPoint += 10;
+                    }
+                    else
+                    {
+                        shipWreckScene.tank.maxHitPoint += 10;
+                        shipWreckScene.tank.currentHitPoint += 10;
+                    }
+                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
@@ -399,12 +405,14 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                audio.MenuSelect.Play();
-                if (playGameScene.tank.shootingRate == 2)
+                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                //if (playGameScene.tank.shootingRate < 2)
                 {
+                    audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
-                        playGameScene.tank.shootingRate += 0.25f;
-                    else shipWreckScene.tank.shootingRate += 0.25f;
+                        playGameScene.tank.shootingRate += 0.1f;
+                    else shipWreckScene.tank.shootingRate += 0.1f;
+                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
@@ -412,12 +420,15 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                audio.MenuSelect.Play();
-                if (playGameScene.tank.strength < 2)
+
+                //if (playGameScene.tank.strength < 2)
+                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
                 {
+                    audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
-                        playGameScene.tank.strength += 0.25f;
-                    else shipWreckScene.tank.strength += 0.25f;
+                        playGameScene.tank.strength += 0.1f;
+                    else shipWreckScene.tank.strength += 0.1f;
+                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554

@@ -1,4 +1,5 @@
-﻿#region Using Statements
+﻿/*
+#region Using Statements
 
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
@@ -7,6 +8,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 
 #endregion
+
 
 namespace Poseidon.Core
 {
@@ -230,3 +232,5 @@ namespace Poseidon.Core
         }
     }
 }
+
+ */

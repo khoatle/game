@@ -1051,7 +1051,7 @@ namespace Poseidon
                 AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height-30, "CYBORG", Color.Brown);
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height-30, "HYDROBOT", Color.Brown);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

@@ -47,13 +47,12 @@ namespace Poseidon
             experienceReward = 3000;
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> bullets)
-        {
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
             if (!stunned)
             {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
                 configAction(perceptionID);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, bullets, tank);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
             }
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,

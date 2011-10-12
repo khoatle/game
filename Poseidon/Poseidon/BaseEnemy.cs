@@ -43,6 +43,9 @@ namespace Poseidon
         protected float speed;
         public int damage;
 
+        public bool isHypnotise;
+        protected TimeSpan startHypnotiseTime;
+
         public BaseEnemy()
             : base()
         {
@@ -55,6 +58,16 @@ namespace Poseidon
             speed = GameConstants.EnemySpeed;
             damage = GameConstants.DefaultEnemyDamage;
             experienceReward = 20;
+        }
+
+        public void setHypnotise() {
+            isHypnotise = true;
+            currentHuntingTarget = null;
+        }
+
+        public void wearOutHypnotise() {
+            isHypnotise = false;
+            currentHuntingTarget = null;
         }
 
         // Is it the time to forget about old target?
@@ -90,8 +103,7 @@ namespace Poseidon
             }
         }
 
-        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> bullets)
-        {
+        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
         }
 
         // Go randomly is default move

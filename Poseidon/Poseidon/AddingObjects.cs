@@ -472,14 +472,7 @@ namespace Poseidon
             double Experienceiness;
             int maxExperience = 2000;
             int level;
-            Color ExperienceColor;
-            //System.Diagnostics.Debug.WriteLine(currentExperience+","+maxExperience);
-            //Draw the negative space for the Experience bar
-            spriteBatch.Draw(ExperienceBar,
-                new Rectangle(barX, barY, ExperienceBar.Width, barHeight),
-                new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),
-                Color.Transparent);
-            //Draw the current Experience level based on the current Experience
+            Color ExperienceColor, BackupColor;
             level = currentExperience/maxExperience;
             if (level >0)
                 type += " + "+level.ToString();
@@ -494,23 +487,36 @@ namespace Poseidon
             {
                 case 0:
                     ExperienceColor = Color.Aqua;
+                    BackupColor = Color.Transparent;
                     break;
                 case 1:
                     ExperienceColor = Color.Tan;
+                    BackupColor = Color.Aqua;
                     break;
                 case 2:
                     ExperienceColor = Color.Goldenrod;
+                    BackupColor = Color.Tan;
                     break;
                 case 3:
                     ExperienceColor = Color.DarkGoldenrod;
+                    BackupColor = Color.Goldenrod;
                     break;
                 case 4:
                     ExperienceColor = Color.DarkOrange;
+                    BackupColor = Color.DarkGoldenrod;
                     break;
                 default:
                     ExperienceColor = Color.DarkRed;
+                    BackupColor = Color.DarkOrange;
                     break;
             }
+            //System.Diagnostics.Debug.WriteLine(currentExperience+","+maxExperience);
+            //Draw the negative space for the Experience bar
+            spriteBatch.Draw(ExperienceBar,
+                new Rectangle(barX, barY, ExperienceBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),
+                BackupColor);
+            //Draw the current Experience level based on the current Experience
             spriteBatch.Draw(ExperienceBar,
                 new Rectangle(barX, barY, (int)(ExperienceBar.Width * Experienceiness), barHeight),
                 new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),

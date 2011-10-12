@@ -75,44 +75,46 @@ namespace Poseidon
         //public int MaxRange { get; set; }
         #endregion
 
+
+
         //Attributes of our main character
-        public float strength;
-        public float speed;
-        public float shootingRate;
-        public int maxHitPoint;
-        public int currentHitPoint;
+        public static float strength;
+        public static float speed;
+        public static float shootingRate;
+        public static int maxHitPoint;
+        public static int currentHitPoint;
         // 2 types of bullet
         // 0: killing
         // 1: healing
-        public int bulletType = 0;
+        public static int bulletType = 0;
 
         //Skills/Spells of our main character
         //true = enabled/found
-        public bool[] skills;
+        public static bool[] skills;
         //which skill is being selected
-        public int activeSkillID;
+        public static int activeSkillID;
         //time that skills were previously casted
         //for managing skills' cool down time
-        public double[] skillPrevUsed;
+        public static double[] skillPrevUsed;
         //invincible mode when Achilles' Armor is used
-        public bool invincibleMode;
+        public static bool invincibleMode;
         //supersonic mode when using Hermes' winged sandal
-        public bool supersonicMode;
+        public static bool supersonicMode;
         //if it is the 1st time the user use it
         //let him use it
-        public bool[] firstUse;
+        public static bool[] firstUse;
 
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
         SoundEffect RetrievedSound;
         //temporary power-up for the cyborg
         //int tempPower;
-        public float speedUp;
-        public float strengthUp;
-        public float fireRateUp;
-        public double strengthUpStartTime;
-        public double speedUpStartTime;
-        public double fireRateUpStartTime;
+        public static float speedUp;
+        public static float strengthUp;
+        public static float fireRateUp;
+        public static double strengthUpStartTime;
+        public static double speedUpStartTime;
+        public static double fireRateUpStartTime;
 
         public float desiredAngle;
         public Vector3 pointToMoveTo;
@@ -186,6 +188,11 @@ namespace Poseidon
 
         public Tank(int MaxRangeX, int MaxRangeZ, float floatHeight)
         {
+            TankInit(MaxRangeX, MaxRangeZ, floatHeight);
+        }
+
+        public void TankInit(int pMaxRangeX, int pMaxRangeZ, float pfloatHeight)
+        {
             // Original attribute
             strength = 1.0f;
             speed = 1.0f;
@@ -203,16 +210,27 @@ namespace Poseidon
             skillPrevUsed = new double[GameConstants.numberOfSkills];
             firstUse = new bool[GameConstants.numberOfSkills];
 
-            this.floatHeight = floatHeight;
+            floatHeight = pfloatHeight;
             Position.Y = floatHeight;
 
-            this.MaxRangeX = MaxRangeX;
-            this.MaxRangeZ = MaxRangeZ;
+            MaxRangeX = pMaxRangeX;
+            MaxRangeZ = pMaxRangeZ;
 
             currentExperiencePts = 0;
             nextLevelExperience = 100;
-            increaseBy = 100; 
+            increaseBy = 100;
             level = 1;
+
+            activeSkillID = -1;
+            invincibleMode = false;
+            supersonicMode = false;
+            //just for testing
+            //should be removed
+            activeSkillID = 0;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = true;
+            skills[3] = true;
         }
 
         /// <summary>
@@ -283,26 +301,26 @@ namespace Poseidon
         }
 
         // Copy every attributes but the position and direction
-        public void CopyAttribute(Tank tank)
-        {
-            strength = tank.strength;
-            speed = tank.speed;
-            shootingRate = tank.shootingRate;
-            maxHitPoint = tank.maxHitPoint;
-            currentHitPoint = tank.currentHitPoint;
-            speedUp = tank.speedUp;
-            strengthUp = tank.strengthUp;
-            fireRateUp = tank.fireRateUp;
-            strengthUpStartTime = tank.strengthUpStartTime;
-            speedUpStartTime = tank.speedUpStartTime;
-            fireRateUpStartTime = tank.fireRateUpStartTime;
-            skills = tank.skills;
-            skillPrevUsed = tank.skillPrevUsed;
-            activeSkillID = tank.activeSkillID;
-            invincibleMode = tank.invincibleMode;
-            supersonicMode = tank.supersonicMode;
-            firstUse = tank.firstUse;
-        }
+        //public void CopyAttribute(Tank tank)
+        //{
+        //    strength = tank.strength;
+        //    //speed = tank.speed;
+        //    shootingRate = tank.shootingRate;
+        //    maxHitPoint = tank.maxHitPoint;
+        //    currentHitPoint = tank.currentHitPoint;
+        //    speedUp = tank.speedUp;
+        //    strengthUp = tank.strengthUp;
+        //    fireRateUp = tank.fireRateUp;
+        //    strengthUpStartTime = tank.strengthUpStartTime;
+        //    speedUpStartTime = tank.speedUpStartTime;
+        //    fireRateUpStartTime = tank.fireRateUpStartTime;
+        //    skills = tank.skills;
+        //    skillPrevUsed = tank.skillPrevUsed;
+        //    activeSkillID = tank.activeSkillID;
+        //    invincibleMode = tank.invincibleMode;
+        //    supersonicMode = tank.supersonicMode;
+        //    firstUse = tank.firstUse;
+        //}
         internal void Reset()
         {
             Position = Vector3.Zero;
@@ -388,7 +406,7 @@ namespace Poseidon
             else steerRotationValue = 0;
             // Player has speed buff from both temporary powerups and his speed attritubte
             
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * this.speed;
+            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * speed;
             //ForwardDirection = WrapAngle(ForwardDirection);
             Vector3 movement = Vector3.Zero;
 
@@ -453,10 +471,10 @@ namespace Poseidon
             }
             else wheelRotationValue = 0;
             //if (desiredAngle != 0) movement.Z = 1;
-            Vector3 speed = Vector3.Transform(movement, orientationMatrix);
-            speed *= GameConstants.Velocity * speedUp * this.speed;
-            if (supersonicMode == true) speed *= 5;
-            futurePosition = Position + speed;
+            Vector3 speedl = Vector3.Transform(movement, orientationMatrix);
+            speedl *= GameConstants.Velocity * speedUp * speed;
+            if (supersonicMode == true) speedl *= 5;
+            futurePosition = Position + speedl;
             steerRotationValue = turnAmount;
             wheelRotationValue += movement.Z * 20;
             if (Collision.isTankValidMove(this, futurePosition, enemies, enemyAmount, fishes, fishAmount))

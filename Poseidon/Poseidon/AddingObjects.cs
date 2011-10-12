@@ -42,7 +42,7 @@ namespace Poseidon
                 fishAmount = GameConstants.NumberFish[currentLevel];
             else fishAmount = GameConstants.ShipNumberFish;
             Random random = new Random();
-            int type = random.Next(7);
+            int type = random.Next(9);
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
                 if (type == 0)
@@ -87,10 +87,22 @@ namespace Poseidon
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "manetee";
                 }
-                //fish[i].LoadContent(Content, "Models/manetee");
+                else if (type == 7)
+                {
+                    fish[i].LoadContent(Content, "Models/seal");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "seal";
+                }
+                else if (type == 8)
+                {
+                    fish[i].LoadContent(Content, "Models/hammershark");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "hammer shark";
+                }
+                //fish[i].LoadContent(Content, "Models/orca");
                 //fish[i].Load(1, 24, 24);
-                //fish[i].Name = "manetee";
-                type = random.Next(7);
+                //fish[i].Name = "hammer shark";
+                type = random.Next(9);
             }
         }
 

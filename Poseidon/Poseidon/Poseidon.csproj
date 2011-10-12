@@ -148,7 +148,9 @@
     <Compile Include="SkillScene.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="StartScene.cs" />
-    <Compile Include="Tank.cs" />
+    <Compile Include="..\..\..\Desktop\Tank.cs">
+      <Link>Tank.cs</Link>
+    </Compile>
     <Compile Include="Terminator.cs" />
     <Compile Include="Trash.cs" />
     <Compile Include="TreasureChest.cs" />

@@ -48,6 +48,7 @@ namespace Poseidon
         List<DamageBullet> myBullet;
         List<DamageBullet> enemyBullet;
         List<HealthBullet> healthBullet;
+        List<DamageBullet> alliesBullets;
         List<TreasureChest> treasureChests;
         List<StaticObject> staticObjects;
 
@@ -118,6 +119,7 @@ namespace Poseidon
             myBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             enemyBullet = new List<DamageBullet>();
+            alliesBullets = new List<DamageBullet>();
             
             this.Load();
         }
@@ -216,6 +218,7 @@ namespace Poseidon
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             myBullet = new List<DamageBullet>();
+            alliesBullets = new List<DamageBullet>();
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != -1
             treasureChests = new List<TreasureChest>(GameConstants.NumberChests);
@@ -498,7 +501,7 @@ namespace Poseidon
                 for (int i = 0; i < enemyBullet.Count; i++) {
                     enemyBullet[i].update();
                 }
-                Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, frustum);
+                Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
@@ -514,7 +517,7 @@ namespace Poseidon
                         if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets);
                 }
 
                 foreach (TreasureChest chest in treasureChests)

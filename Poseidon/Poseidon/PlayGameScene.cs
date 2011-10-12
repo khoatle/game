@@ -69,7 +69,7 @@ namespace Poseidon
         public Tank tank;
         // The main character at the beginning of this level
         // Used for restarting the level
-        Tank prevTank;
+        //Tank prevTank;
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
@@ -131,7 +131,7 @@ namespace Poseidon
             gameCamera = new Camera(GameConstants.MainCamHeight);
             boundingSphere = new GameObject();
             tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
-            prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
+            //prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
@@ -206,7 +206,7 @@ namespace Poseidon
 
             tank.Load(Content);
 
-            prevTank.Load(Content);
+            //prevTank.Load(Content);
             roundTimer = roundTime;
 
             //Load healthbar
@@ -235,7 +235,7 @@ namespace Poseidon
             Random random = new Random();
             int random_level = random.Next(20);
             string terrain_name = "Image/terrain" + random_level;
-            System.Diagnostics.Debug.WriteLine(terrain_name);
+            //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
@@ -246,7 +246,9 @@ namespace Poseidon
             //else prevTank.CopyAttribute(tank);
 
             if (prevGameState == GameState.Lost)
-                tank.TankInit(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
+                tank.ResetToLevelStart();
+            else
+                tank.SetLevelStartValues();
 
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
@@ -1070,7 +1072,7 @@ namespace Poseidon
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "LEVEL", Color.GreenYellow);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.GreenYellow);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

@@ -563,7 +563,7 @@ namespace Poseidon
                 new Rectangle(barX, barY, LevelBar.Width, barHeight),
                 new Rectangle(0, 0, LevelBar.Width, barHeight),
                 Color.White);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
+            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 11), heightFromTop - 1), typeColor);
         }
 
 

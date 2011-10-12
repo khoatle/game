@@ -76,23 +76,22 @@ namespace Poseidon
         #endregion
 
 
-
-        //Attributes of our main character
-        public static float strength;
-        public static float speed;
-        public static float shootingRate;
-        public static int maxHitPoint;
-        public static int currentHitPoint;
+        //Attributes of our main character ls=LevelStart
+        public static float strength, lsStrength;
+        public static float speed, lsSpeed;
+        public static float shootingRate, lsShootingRate;
+        public static int maxHitPoint, lsMaxHitPoint;
+        public static int currentHitPoint, lsCurrentHitPoint;
         // 2 types of bullet
         // 0: killing
         // 1: healing
-        public static int bulletType = 0;
+        public static int bulletType;
 
         //Skills/Spells of our main character
         //true = enabled/found
-        public static bool[] skills;
+        public static bool[] skills, lsSkills;
         //which skill is being selected
-        public static int activeSkillID;
+        public static int activeSkillID, lsActiveSkillID;
         //time that skills were previously casted
         //for managing skills' cool down time
         public static double[] skillPrevUsed;
@@ -122,11 +121,11 @@ namespace Poseidon
 
         public float floatHeight;
 
-        public static int currentExperiencePts;
-        public static int nextLevelExperience;
-        private static int increaseBy;
-        public static int level;
-        public static int unassignedPts=0;
+        public static int currentExperiencePts, lsCurrentExperiencePts;
+        public static int nextLevelExperience, lsNextLevelExperience;
+        private static int increaseBy, lsIncreaseBy;
+        public static int level, lsLevel;
+        public static int unassignedPts, lsUnassignedPts;
 
         // Tank moving bound
         public int MaxRangeX;
@@ -188,17 +187,13 @@ namespace Poseidon
 
         public Tank(int MaxRangeX, int MaxRangeZ, float floatHeight)
         {
-            TankInit(MaxRangeX, MaxRangeZ, floatHeight);
-        }
-
-        public void TankInit(int pMaxRangeX, int pMaxRangeZ, float pfloatHeight)
-        {
             // Original attribute
-            strength = 1.0f;
-            speed = 1.0f;
-            shootingRate = 1.0f;
-            maxHitPoint = GameConstants.PlayerStartingHP;
-            currentHitPoint = GameConstants.PlayerStartingHP;
+            strength = lsStrength = 1.0f;
+            speed = lsSpeed = 1.0f;
+            shootingRate = lsShootingRate = 1.0f;
+            bulletType = 0;
+            maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
+            currentHitPoint = lsCurrentHitPoint = GameConstants.PlayerStartingHP;
             pointToMoveTo = Vector3.Zero;
 
             // No buff up at the beginning
@@ -206,31 +201,33 @@ namespace Poseidon
             strengthUp = 1.0f;
             fireRateUp = 1.0f;
 
-            skills = new bool[GameConstants.numberOfSkills];
+            skills = lsSkills = new bool[GameConstants.numberOfSkills];
             skillPrevUsed = new double[GameConstants.numberOfSkills];
             firstUse = new bool[GameConstants.numberOfSkills];
 
-            floatHeight = pfloatHeight;
+            this.floatHeight = floatHeight;
             Position.Y = floatHeight;
 
-            MaxRangeX = pMaxRangeX;
-            MaxRangeZ = pMaxRangeZ;
+            this.MaxRangeX = MaxRangeX;
+            this.MaxRangeZ = MaxRangeZ;
 
-            currentExperiencePts = 0;
-            nextLevelExperience = 100;
-            increaseBy = 100;
-            level = 1;
+            currentExperiencePts = lsCurrentExperiencePts = 0;
+            nextLevelExperience = lsNextLevelExperience = 100;
+            increaseBy = lsIncreaseBy = 100;
+            level = lsLevel = 1;
+            unassignedPts = lsUnassignedPts = 0;
 
-            activeSkillID = -1;
+            activeSkillID = lsActiveSkillID = -1;
             invincibleMode = false;
             supersonicMode = false;
             //just for testing
             //should be removed
-            activeSkillID = 0;
+            activeSkillID = lsActiveSkillID = 0;
             skills[0] = true;
             skills[1] = true;
             skills[2] = true;
             skills[3] = true;
+            lsSkills = skills;
         }
 
         /// <summary>
@@ -283,7 +280,8 @@ namespace Poseidon
             RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
 
             //no skill yet activated
-            for (int index = 0; index < GameConstants.numberOfSkills; index++) {
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
                 skills[index] = false;
                 firstUse[index] = true;
                 skillPrevUsed[index] = 0;
@@ -300,6 +298,68 @@ namespace Poseidon
             skills[3] = true;
         }
 
+
+        public void ResetToLevelStart()
+        {
+            strength = lsStrength;
+            speed = lsSpeed;
+            shootingRate = lsShootingRate;
+            bulletType = 0;
+            maxHitPoint = lsMaxHitPoint;
+            currentHitPoint = lsCurrentExperiencePts;
+            skills = lsSkills;
+            activeSkillID = lsActiveSkillID;
+
+            currentExperiencePts = lsCurrentExperiencePts;
+            nextLevelExperience = lsNextLevelExperience;
+            increaseBy = lsIncreaseBy;
+            level = lsLevel;
+            unassignedPts = lsUnassignedPts;
+        }
+
+        public void SetLevelStartValues()
+        {
+            // Original attribute
+            lsStrength = strength;
+            lsSpeed = speed;
+            lsShootingRate = shootingRate;
+            lsMaxHitPoint = maxHitPoint;
+            lsCurrentHitPoint = currentHitPoint;
+
+            lsSkills = skills;
+            lsActiveSkillID = activeSkillID;
+
+            lsCurrentExperiencePts = currentExperiencePts;
+            lsNextLevelExperience = nextLevelExperience;
+            lsIncreaseBy = increaseBy;
+            lsLevel = level;
+            lsUnassignedPts = unassignedPts;
+        }
+
+        internal void Reset()
+        {
+            Position = Vector3.Zero;
+            Position.Y = floatHeight;
+            ForwardDirection = 0f;
+            pointToMoveTo = Vector3.Zero;
+            reachDestination = true;
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                firstUse[index] = true;
+                skillPrevUsed[index] = 0;
+            }
+            invincibleMode = false;
+            // No buff up at the beginning
+            speedUp = 1.0f;
+            strengthUp = 1.0f;
+            fireRateUp = 1.0f;
+            strengthUpStartTime = 0;
+            speedUpStartTime = 0;
+            fireRateUpStartTime = 0;
+            currentHitPoint = maxHitPoint;
+        }
+
+ 
         // Copy every attributes but the position and direction
         //public void CopyAttribute(Tank tank)
         //{
@@ -321,22 +381,6 @@ namespace Poseidon
         //    supersonicMode = tank.supersonicMode;
         //    firstUse = tank.firstUse;
         //}
-        internal void Reset()
-        {
-            Position = Vector3.Zero;
-            Position.Y = floatHeight;
-            ForwardDirection = 0f;
-            for (int index = 0; index < GameConstants.numberOfSkills; index++)
-            {
-                firstUse[index] = true;
-                skillPrevUsed[index] = 0;
-            }
-            invincibleMode = false;
-            strengthUpStartTime = 0;
-            speedUpStartTime = 0;
-            fireRateUpStartTime = 0;
-            currentHitPoint = maxHitPoint;
-        }
 
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo)
         {

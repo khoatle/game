@@ -24,7 +24,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, tank.strength * 10, tank.strengthUp);
+            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10, Tank.strengthUp);
             d.loadContent(Content, "Models/fuelcarrier");
             myBullets.Add(d);
         }

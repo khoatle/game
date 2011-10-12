@@ -13,14 +13,14 @@ namespace Poseidon
     {
         public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, Tank tank)
         {
-            if (currentKeyboardState.IsKeyDown(Keys.D1)) tank.activeSkillID = 0;
-            if (currentKeyboardState.IsKeyDown(Keys.D2)) tank.activeSkillID = 1;
-            if (currentKeyboardState.IsKeyDown(Keys.D3)) tank.activeSkillID = 2;
-            if (currentKeyboardState.IsKeyDown(Keys.D4)) tank.activeSkillID = 3;
+            if (currentKeyboardState.IsKeyDown(Keys.D1)) Tank.activeSkillID = 0;
+            if (currentKeyboardState.IsKeyDown(Keys.D2)) Tank.activeSkillID = 1;
+            if (currentKeyboardState.IsKeyDown(Keys.D3)) Tank.activeSkillID = 2;
+            if (currentKeyboardState.IsKeyDown(Keys.D4)) Tank.activeSkillID = 3;
             if (lastKeyboardState.IsKeyDown(Keys.Space) && currentKeyboardState.IsKeyUp(Keys.Space))
             {
-                tank.bulletType++;
-                if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
+                Tank.bulletType++;
+                if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
                 PlayGameScene.audio.ChangeBullet.Play();
             }
         }

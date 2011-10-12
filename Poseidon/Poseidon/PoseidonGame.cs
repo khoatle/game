@@ -266,7 +266,7 @@ namespace Poseidon
             // let the main game dictate about win/lose
             if (shipWreckScene.returnToMain)
             {
-                playGameScene.tank.CopyAttribute(shipWreckScene.tank);
+                //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShowScene(playGameScene);
             }
@@ -279,7 +279,7 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                playGameScene.tank.CopyAttribute(shipWreckScene.tank);
+                //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShowScene(playGameScene);
             }
@@ -312,7 +312,7 @@ namespace Poseidon
             }
             if (doubleClicked && GetInShipWreck())
             {
-                shipWreckScene.tank.CopyAttribute(playGameScene.tank);
+                //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
                 //shipWreckScene.Load();
                 ShowScene(shipWreckScene);
@@ -372,13 +372,10 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                //if (playGameScene.tank.speed < 2)
                 if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                        playGameScene.tank.speed += 0.1f;
-                    else shipWreckScene.tank.speed += 0.1f;
+                    Tank.speed += 0.1f;
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
@@ -390,16 +387,8 @@ namespace Poseidon
                 if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                    {
-                        playGameScene.tank.maxHitPoint += 10;
-                        playGameScene.tank.currentHitPoint += 10;
-                    }
-                    else
-                    {
-                        shipWreckScene.tank.maxHitPoint += 10;
-                        shipWreckScene.tank.currentHitPoint += 10;
-                    }
+                    Tank.maxHitPoint += 10;
+                    Tank.currentHitPoint += 10;
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
@@ -409,12 +398,9 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
                 if (Tank.unassignedPts >= GameConstants.gainSkillCost)
-                //if (playGameScene.tank.shootingRate < 2)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                        playGameScene.tank.shootingRate += 0.1f;
-                    else shipWreckScene.tank.shootingRate += 0.1f;
+                    Tank.shootingRate += 0.1f;
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
@@ -424,13 +410,10 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
 
-                //if (playGameScene.tank.strength < 2)
                 if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                        playGameScene.tank.strength += 0.1f;
-                    else shipWreckScene.tank.strength += 0.1f;
+                    Tank.strength += 0.1f;
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }

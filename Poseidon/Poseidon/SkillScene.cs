@@ -27,6 +27,7 @@ namespace Poseidon
         private Texture2D UnassignedPtsBar;
         Game game;
         SpriteFont statsFont;
+        SpriteFont menuLarge;
         /// <summary>
         /// Default Constructor
          public SkillScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
@@ -51,6 +52,7 @@ namespace Poseidon
 
             UnassignedPtsBar = Content.Load<Texture2D>("Image/UnassignedPtsBar");
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            menuLarge = Content.Load<SpriteFont>("Fonts/menuLarge");
             this.game = game;            
         }
 
@@ -90,6 +92,12 @@ namespace Poseidon
         {
             base.Draw(gameTime);
             AddingObjects.DrawUnassignedPtsBar(UnassignedPtsBar, game, spriteBatch, statsFont, Tank.unassignedPts, (game.Window.ClientBounds.Height/2)-50, "UNASSIGNED POINTS", Color.DarkBlue);
+            spriteBatch.DrawString(menuLarge, Tank.speed.ToString(), new Vector2(210, 225), Color.Black);
+            spriteBatch.DrawString(menuLarge, Tank.maxHitPoint.ToString(), new Vector2(game.Window.ClientBounds.Width-295, 180), Color.Black);
+            spriteBatch.DrawString(menuLarge, Tank.shootingRate.ToString(), new Vector2(210, game.Window.ClientBounds.Height-320), Color.Black);
+            spriteBatch.DrawString(menuLarge, Tank.strength.ToString(), new Vector2(game.Window.ClientBounds.Width - 270, game.Window.ClientBounds.Height-260), Color.Black);
         }
     }
 }
+
+

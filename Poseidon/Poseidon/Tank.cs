@@ -123,7 +123,7 @@ namespace Poseidon
         public static int currentExperiencePts;
         public static int nextLevelExperience;
         private static int increaseBy;
-        public int level;
+        public static int level;
         public static int unassignedPts=0;
 
         // Tank moving bound
@@ -324,10 +324,12 @@ namespace Poseidon
         {
             if (currentExperiencePts >= nextLevelExperience) {
                 increaseBy = (int)(increaseBy * 1.5);
-                nextLevelExperience += increaseBy;
-                strength *= 1.15f;
-                maxHitPoint = (int)(maxHitPoint * 1.10f);
-                currentHitPoint = maxHitPoint;
+                //nextLevelExperience += increaseBy;
+                currentExperiencePts -= nextLevelExperience;
+                nextLevelExperience = increaseBy;
+                //strength *= 1.15f;
+                //maxHitPoint = (int)(maxHitPoint * 1.10f);
+                //currentHitPoint = maxHitPoint;
                 unassignedPts += 5;
                 level++;
             }

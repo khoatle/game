@@ -33,6 +33,7 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
+        SpriteFont menuSmall;
         GameObject ground;
         Camera gameCamera;
         
@@ -124,6 +125,7 @@ namespace Poseidon
         public void Load()
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -813,7 +815,7 @@ namespace Poseidon
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, tank.level, game.Window.ClientBounds.Height - 30, "LEVEL", Color.GreenYellow);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height - 30, "LEVEL", Color.GreenYellow);
 
 
             //Calculate str1 position
@@ -826,7 +828,7 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 

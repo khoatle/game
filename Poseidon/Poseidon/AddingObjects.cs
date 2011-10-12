@@ -473,14 +473,14 @@ namespace Poseidon
             int level;
             Color UnassignedPtsColor, BackupColor;
             level = currentUnassignedPts/maxUnassignedPts;
-            if (level >0)
-                type += " + "+level.ToString();
             currentUnassignedPts = currentUnassignedPts%maxUnassignedPts;
             if (currentUnassignedPts == 0 && level > 0)
             {
                 level--;
                 currentUnassignedPts = maxUnassignedPts;
             }
+            if (level > 0)
+                type += " + " + level.ToString();
             UnassignedPtsiness = (double)currentUnassignedPts/maxUnassignedPts;
             switch (level)
             {
@@ -545,7 +545,7 @@ namespace Poseidon
             spriteBatch.Draw(LevelBar,
                 new Rectangle(barX, barY, (int)(LevelBar.Width * experience), barHeight),
                 new Rectangle(0, barHeight + 1, LevelBar.Width, barHeight),
-                Color.Indigo);
+                Color.DarkSlateBlue);
             //Draw the box around the health bar
             spriteBatch.Draw(LevelBar,
                 new Rectangle(barX, barY, LevelBar.Width, barHeight),

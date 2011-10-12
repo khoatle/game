@@ -1019,8 +1019,8 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1+= "0";
             str1 += roundTimer.Seconds;
-            str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
-            str1 += "\n Level: " + tank.level;
+            //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
+            //str1 += "\n Level: " + Tank.level;
             //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
             //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
             //Vector3 mouseDif = pointIntersect - tank.Position;
@@ -1054,7 +1054,7 @@ namespace Poseidon
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, tank.level, game.Window.ClientBounds.Height-30, "LEVEL", Color.GreenYellow);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "LEVEL", Color.GreenYellow);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

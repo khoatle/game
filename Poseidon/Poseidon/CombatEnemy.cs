@@ -29,11 +29,11 @@ namespace Poseidon
             damage = GameConstants.DefaultEnemyDamage * 2;
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> bullets) {
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
             if (stunned) return;
             int perceptionID = perceptAndLock(tank, fishList, fishSize);
             configAction(perceptionID);
-            makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, bullets, tank);
+            makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
         }
 
         protected int perceptAndLock(Tank tank, SwimmingObject[] enemyList, int enemySize) {

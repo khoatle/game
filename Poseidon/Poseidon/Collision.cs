@@ -228,7 +228,7 @@ namespace Poseidon
             }
         }
 
-        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> healBullets, List<DamageBullet> tankBullets, List<DamageBullet> enemyBullets, BoundingFrustum frustum)
+        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> healBullets, List<DamageBullet> tankBullets, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBulleys, BoundingFrustum frustum)
         {
             for (int i = 0; i < healBullets.Count; ) {
                 if (isOutOfMap(healBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(healBullets[i].BoundingSphere, frustum)) {
@@ -249,14 +249,18 @@ namespace Poseidon
                 }
             }
 
-            for (int i = 0; i < enemyBullets.Count; )
-            {
-                if (isOutOfMap(enemyBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(enemyBullets[i].BoundingSphere, frustum))
-                {
+            for (int i = 0; i < enemyBullets.Count; ) {
+                if (isOutOfMap(enemyBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(enemyBullets[i].BoundingSphere, frustum)) {
                     enemyBullets.RemoveAt(i);
+                } else {
+                    i++;
                 }
-                else
-                {
+            }
+
+            for (int i = 0; i < alliesBulleys.Count; ) {
+                if (isOutOfMap(alliesBulleys[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(alliesBulleys[i].BoundingSphere, frustum)) {
+                    alliesBulleys.RemoveAt(i);
+                } else {
                     i++;
                 }
             }

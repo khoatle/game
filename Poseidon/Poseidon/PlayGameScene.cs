@@ -615,7 +615,10 @@ namespace Poseidon
                     if ((lastKeyboardState.IsKeyDown(Keys.O) && (currentKeyboardState.IsKeyUp(Keys.O))))
                     {
                         if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects))
+                        {
                             audio.PowerShow.Play();
+                            Tank.currentExperiencePts += Plant.experienceReward;
+                        }
                     }
 
                     //Are the trees ready for fruit?

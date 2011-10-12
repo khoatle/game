@@ -17,6 +17,7 @@ namespace Poseidon
         public double creationTime;
         public bool timeForFruit;
         public int fruitCreated;
+        public static int experienceReward = 10;
         
         public Plant()
             : base()

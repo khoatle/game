@@ -24,10 +24,9 @@ namespace Poseidon
         // Spritebatch
         protected SpriteBatch spriteBatch = null;
         ContentManager Content;
-        private Texture2D ExperienceBar;
+        private Texture2D UnassignedPtsBar;
         Game game;
         SpriteFont statsFont;
-        private int accumulated_experience_points;
         /// <summary>
         /// Default Constructor
          public SkillScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
@@ -50,7 +49,7 @@ namespace Poseidon
             cursor = new Cursor(game, spriteBatch);
             Components.Add(cursor);
 
-            ExperienceBar = Content.Load<Texture2D>("Image/ExperienceBar");
+            UnassignedPtsBar = Content.Load<Texture2D>("Image/UnassignedPtsBar");
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             this.game = game;            
         }
@@ -62,8 +61,7 @@ namespace Poseidon
         public override void Show()
         {
             audio.NewMeteor.Play();
-            accumulated_experience_points = Tank.currentExperiencePts;
-             base.Show();
+            base.Show();
         }
 
         /// <summary>
@@ -91,7 +89,7 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
             base.Draw(gameTime);
-            AddingObjects.DrawExperienceBar(ExperienceBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, (game.Window.ClientBounds.Height/2)-50, "EXPERIENCE", Color.Yellow);
+            AddingObjects.DrawUnassignedPtsBar(UnassignedPtsBar, game, spriteBatch, statsFont, Tank.unassignedPts, (game.Window.ClientBounds.Height/2)-50, "UNASSIGNED POINTS", Color.DarkBlue);
         }
     }
 }

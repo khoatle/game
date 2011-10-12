@@ -463,69 +463,95 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
         }
 
-        public static void DrawExperienceBar(Texture2D ExperienceBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int heightFromTop, string type, Color typeColor)
+        public static void DrawUnassignedPtsBar(Texture2D UnassignedPtsBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentUnassignedPts, int heightFromTop, string type, Color typeColor)
         {
-            int barX = game.Window.ClientBounds.Width / 2 - ExperienceBar.Width / 2;
+            int barX = game.Window.ClientBounds.Width / 2 - UnassignedPtsBar.Width / 2;
             int barY = heightFromTop;
             int barHeight = 44;
-            double Experienceiness;
-            int maxExperience = 2000;
+            double UnassignedPtsiness;
+            int maxUnassignedPts = 5;
             int level;
-            Color ExperienceColor, BackupColor;
-            level = currentExperience/maxExperience;
+            Color UnassignedPtsColor, BackupColor;
+            level = currentUnassignedPts/maxUnassignedPts;
             if (level >0)
                 type += " + "+level.ToString();
-            currentExperience = currentExperience%maxExperience;
-            if (currentExperience == 0 && level > 0)
+            currentUnassignedPts = currentUnassignedPts%maxUnassignedPts;
+            if (currentUnassignedPts == 0 && level > 0)
             {
                 level--;
-                currentExperience = maxExperience;
+                currentUnassignedPts = maxUnassignedPts;
             }
-            Experienceiness = (double)currentExperience/maxExperience;
+            UnassignedPtsiness = (double)currentUnassignedPts/maxUnassignedPts;
             switch (level)
             {
                 case 0:
-                    ExperienceColor = Color.Aqua;
+                    UnassignedPtsColor = Color.Tan;
                     BackupColor = Color.Transparent;
                     break;
                 case 1:
-                    ExperienceColor = Color.Tan;
-                    BackupColor = Color.Aqua;
-                    break;
-                case 2:
-                    ExperienceColor = Color.Goldenrod;
+                    UnassignedPtsColor = Color.Khaki;
                     BackupColor = Color.Tan;
                     break;
+                case 2:
+                    UnassignedPtsColor = Color.Goldenrod;
+                    BackupColor = Color.Khaki;
+                    break;
                 case 3:
-                    ExperienceColor = Color.DarkGoldenrod;
+                    UnassignedPtsColor = Color.DarkGoldenrod;
                     BackupColor = Color.Goldenrod;
                     break;
                 case 4:
-                    ExperienceColor = Color.DarkOrange;
+                    UnassignedPtsColor = Color.DarkOrange;
                     BackupColor = Color.DarkGoldenrod;
                     break;
                 default:
-                    ExperienceColor = Color.DarkRed;
+                    UnassignedPtsColor = Color.DarkRed;
                     BackupColor = Color.DarkOrange;
                     break;
             }
-            //System.Diagnostics.Debug.WriteLine(currentExperience+","+maxExperience);
-            //Draw the negative space for the Experience bar
-            spriteBatch.Draw(ExperienceBar,
-                new Rectangle(barX, barY, ExperienceBar.Width, barHeight),
-                new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),
+            //System.Diagnostics.Debug.WriteLine(currentUnassignedPts+","+maxUnassignedPts);
+            //Draw the negative space for the UnassignedPts bar
+            spriteBatch.Draw(UnassignedPtsBar,
+                new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
                 BackupColor);
-            //Draw the current Experience level based on the current Experience
-            spriteBatch.Draw(ExperienceBar,
-                new Rectangle(barX, barY, (int)(ExperienceBar.Width * Experienceiness), barHeight),
-                new Rectangle(0, barHeight + 1, ExperienceBar.Width, barHeight),
-                ExperienceColor);
-            //Draw the box around the Experience bar
-            spriteBatch.Draw(ExperienceBar,
-                new Rectangle(barX, barY, ExperienceBar.Width, barHeight),
-                new Rectangle(0, 0, ExperienceBar.Width, barHeight),
+            //Draw the current UnassignedPts level based on the current UnassignedPts
+            spriteBatch.Draw(UnassignedPtsBar,
+                new Rectangle(barX, barY, (int)(UnassignedPtsBar.Width * UnassignedPtsiness), barHeight),
+                new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
+                UnassignedPtsColor);
+            //Draw the box around the UnassignedPts bar
+            spriteBatch.Draw(UnassignedPtsBar,
+                new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),
+                new Rectangle(0, 0, UnassignedPtsBar.Width, barHeight),
                 Color.White);
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop+10), typeColor);
+        }
+
+        public static void DrawLevelBar(Texture2D LevelBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
+        {
+            int barX = game.Window.ClientBounds.Width / 2 - LevelBar.Width / 2;
+            int barY = heightFromTop;
+            int barHeight = 22;
+            double experience = (double)currentExperience / nextLevelExp;
+            type += " " + level.ToString();
+            //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
+            //Draw the negative space for the health bar
+            spriteBatch.Draw(LevelBar,
+                new Rectangle(barX, barY, LevelBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, LevelBar.Width, barHeight),
+                Color.Transparent);
+            //Draw the current health level based on the current Health
+            spriteBatch.Draw(LevelBar,
+                new Rectangle(barX, barY, (int)(LevelBar.Width * experience), barHeight),
+                new Rectangle(0, barHeight + 1, LevelBar.Width, barHeight),
+                Color.Indigo);
+            //Draw the box around the health bar
+            spriteBatch.Draw(LevelBar,
+                new Rectangle(barX, barY, LevelBar.Width, barHeight),
+                new Rectangle(0, 0, LevelBar.Width, barHeight),
+                Color.White);
+            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
         }
 
 

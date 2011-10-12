@@ -59,6 +59,7 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool skillPressed;
+        bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
         double clickTimer = 0;
@@ -215,6 +216,8 @@ namespace Poseidon
                 (keyboardState.IsKeyUp(Keys.Escape)));
             skillPressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
                 (keyboardState.IsKeyUp(Keys.I)));
+            EscPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
+                (keyboardState.IsKeyUp(Keys.Escape)));
             lastKeyboardState = keyboardState;
             lastGamePadState = gamepadState;
 
@@ -370,13 +373,13 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
                 //if (playGameScene.tank.speed < 2)
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
                         playGameScene.tank.speed += 0.1f;
                     else shipWreckScene.tank.speed += 0.1f;
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
@@ -384,7 +387,7 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
@@ -397,7 +400,7 @@ namespace Poseidon
                         shipWreckScene.tank.maxHitPoint += 10;
                         shipWreckScene.tank.currentHitPoint += 10;
                     }
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
@@ -405,14 +408,14 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 //if (playGameScene.tank.shootingRate < 2)
                 {
                     audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
                         playGameScene.tank.shootingRate += 0.1f;
                     else shipWreckScene.tank.shootingRate += 0.1f;
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
@@ -422,19 +425,20 @@ namespace Poseidon
             {
 
                 //if (playGameScene.tank.strength < 2)
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
                     if (prevScene == playGameScene)
                         playGameScene.tank.strength += 0.1f;
                     else shipWreckScene.tank.strength += 0.1f;
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
-            if (skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554
+            if ((skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554
                 && skillScene.cursor.Position.Y > 670 && skillScene.cursor.Position.Y < 775
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
+                || EscPressed )
             {
                 ShowScene(prevScene);
             }

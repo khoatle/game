@@ -708,8 +708,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\ExperienceBar.png">
-      <Name>ExperienceBar</Name>
+    <Compile Include="Image\UnassignedPtsBar.png">
+      <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

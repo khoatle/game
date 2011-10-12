@@ -124,6 +124,7 @@ namespace Poseidon
         public static int nextLevelExperience;
         private static int increaseBy;
         public int level;
+        public static int unassignedPts=0;
 
         // Tank moving bound
         public int MaxRangeX;
@@ -327,7 +328,7 @@ namespace Poseidon
                 strength *= 1.15f;
                 maxHitPoint = (int)(maxHitPoint * 1.10f);
                 currentHitPoint = maxHitPoint;
-
+                unassignedPts += 5;
                 level++;
             }
 

@@ -33,6 +33,7 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
+        SpriteFont menuSmall;
         GameObject ground;
         Camera gameCamera;
         
@@ -126,6 +127,7 @@ namespace Poseidon
         public void Load()
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -325,22 +327,22 @@ namespace Poseidon
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
                             && currentKeyboardState.IsKeyUp(Keys.L)) || (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)))
                     {
-                        tank.bulletType++;
-                        if (tank.bulletType == GameConstants.numBulletTypes) tank.bulletType = 0;
+                        Tank.bulletType++;
+                        if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
                         audio.ChangeBullet.Play();
                     }
                     // changing active skill
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
                             && currentKeyboardState.IsKeyUp(Keys.K)) || (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)))
                     {
-                        if (tank.activeSkillID != -1)
+                        if (Tank.activeSkillID != -1)
                         {
-                            tank.activeSkillID++;
-                            if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
-                            while (tank.skills[tank.activeSkillID] == false)
+                            Tank.activeSkillID++;
+                            if (Tank.activeSkillID == GameConstants.numberOfSkills) Tank.activeSkillID = 0;
+                            while (Tank.skills[Tank.activeSkillID] == false)
                             {
-                                tank.activeSkillID++;
-                                if (tank.activeSkillID == GameConstants.numberOfSkills) tank.activeSkillID = 0;
+                                Tank.activeSkillID++;
+                                if (Tank.activeSkillID == GameConstants.numberOfSkills) Tank.activeSkillID = 0;
                             }
                         }
                     }
@@ -358,53 +360,53 @@ namespace Poseidon
                 {
 
                     // Hercules' Bow!!!
-                    if (tank.activeSkillID == 0 && mouseOnLivingObject)
+                    if (Tank.activeSkillID == 0 && mouseOnLivingObject)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                         tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                         //if the skill has cooled down
                         //or this is the 1st time the user uses it
-                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || tank.firstUse[0] == true)
+                        if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || Tank.firstUse[0] == true)
                         {
-                            tank.firstUse[0] = false;
-                            tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.firstUse[0] = false;
+                            Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
                             CastSkill.UseHerculesBow(tank, Content, myBullet);
                         }
 
                     }
                     //Thor's Hammer!!!
-                    if (tank.activeSkillID == 1)
+                    if (Tank.activeSkillID == 1)
                     {
-                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || tank.firstUse[1] == true)
+                        if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || Tank.firstUse[1] == true)
                         {
-                            tank.firstUse[1] = false;
-                            tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.firstUse[1] = false;
+                            Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
                             CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount);
                         }
                     }
                     // Achilles' Armor!!!
-                    if (tank.activeSkillID == 2)
+                    if (Tank.activeSkillID == 2)
                     {
-                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || tank.firstUse[2] == true)
+                        if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || Tank.firstUse[2] == true)
                         {
-                            tank.firstUse[2] = false;
-                            tank.invincibleMode = true;
+                            Tank.firstUse[2] = false;
+                            Tank.invincibleMode = true;
                             audio.NewMeteor.Play();
-                            tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                         }
                     }
 
                     //Hermes' Winged Sandal!!!
-                    if (tank.activeSkillID == 3)
+                    if (Tank.activeSkillID == 3)
                     {
-                        if ((gameTime.TotalGameTime.TotalSeconds - tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || tank.firstUse[3] == true)
+                        if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || Tank.firstUse[3] == true)
                         {
-                            tank.firstUse[3] = false;
+                            Tank.firstUse[3] = false;
                             audio.NewMeteor.Play();
-                            tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
-                            tank.supersonicMode = true;
+                            Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.supersonicMode = true;
                         }
                     }
                     pointIntersect = Vector3.Zero;
@@ -417,12 +419,12 @@ namespace Poseidon
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                         tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-                        if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                        if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
                         {
                             prevFireTime = gameTime.TotalGameTime;
                             audio.Shooting.Play();
-                            if (tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
-                            else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
+                            if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
+                            else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                         }
                     }
                     pointIntersect = Vector3.Zero;
@@ -444,13 +446,13 @@ namespace Poseidon
                     else
                     {
                         //if the enemy is in the shooting range then shoot it w/o moving to it
-                        if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp))
+                        if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
                         {
                             tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                             prevFireTime = gameTime.TotalGameTime;
                             audio.Shooting.Play();
-                            if (tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
-                            else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
+                            if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
+                            else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             //so the tank will not move
                             pointIntersect = Vector3.Zero;
                         }
@@ -461,7 +463,7 @@ namespace Poseidon
                 //this is better for fast action
                 InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, tank);
                 
-                if (tank.supersonicMode == true)
+                if (Tank.supersonicMode == true)
                 {
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
                     CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
@@ -471,7 +473,7 @@ namespace Poseidon
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
-                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (tank.shootingRate * tank.fireRateUp)
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp)
                         )
                         //||
                         //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && InShootingRange())
@@ -479,8 +481,8 @@ namespace Poseidon
                 {
                     prevFireTime = gameTime.TotalGameTime;
                     audio.Shooting.Play();
-                    if (tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
-                    else if (tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
+                    if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
+                    else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                 }
 
                 gameCamera.Update(tank.ForwardDirection,
@@ -529,14 +531,14 @@ namespace Poseidon
                         if (chest.skillID == -1)
                         {
                             // give the player some experience
-                            tank.currentHitPoint += 30;
+                            Tank.currentHitPoint += 30;
                         }
                         else 
                         {
                             // player found a God's relic
                             // unlock a skill
-                            tank.skills[chest.skillID] = true;
-                            tank.activeSkillID = chest.skillID;
+                            Tank.skills[chest.skillID] = true;
+                            Tank.activeSkillID = chest.skillID;
                             foundRelic = true;
                         }
                     }
@@ -552,7 +554,7 @@ namespace Poseidon
                     returnToMain = true;
                 }
                 // Dead inside a shipwreck
-                if (tank.currentHitPoint <= 0){
+                if (Tank.currentHitPoint <= 0){
                     returnToMain = true;
                 }
 
@@ -702,7 +704,7 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
             DrawBulletType();
-            if (tank.activeSkillID != -1) DrawActiveSkill();
+            if (Tank.activeSkillID != -1) DrawActiveSkill();
             
         }
         private void DrawFoundRelicScene(int skillID)
@@ -726,7 +728,7 @@ namespace Poseidon
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
+            spriteBatch.Draw(skillTextures[Tank.activeSkillID], skillIconPosition, Color.White);
         }
         // Draw the currently selected bullet type
         private void DrawBulletType()
@@ -744,7 +746,7 @@ namespace Poseidon
                 new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
             //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
-            spriteBatch.Draw(bulletTypeTextures[tank.bulletType], destRectangle, Color.White);
+            spriteBatch.Draw(bulletTypeTextures[Tank.bulletType], destRectangle, Color.White);
         }
         // Draw the currently selected skill/spell
         private void DrawActiveSkill()
@@ -763,7 +765,7 @@ namespace Poseidon
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
-            spriteBatch.Draw(skillTextures[tank.activeSkillID], destRectangle, Color.White);
+            spriteBatch.Draw(skillTextures[Tank.activeSkillID], destRectangle, Color.White);
         }
         private void DrawStats()
         {
@@ -799,7 +801,7 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Tank Health " + tank.currentHitPoint;
+            str2 += "\n Tank Health " + Tank.currentHitPoint;
             //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Display Fish Health
@@ -813,7 +815,11 @@ namespace Poseidon
                 AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, tank.currentHitPoint, tank.maxHitPoint, game.Window.ClientBounds.Height - 30, "CYBORG", Color.Brown);
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
+
+            //Display Level/Experience Bar
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.GreenYellow);
+
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -825,7 +831,7 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 

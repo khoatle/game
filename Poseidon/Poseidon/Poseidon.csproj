@@ -116,6 +116,7 @@
     <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
+    <Compile Include="Tank.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CursorManager.cs" />
     <Compile Include="CutSceneDialog.cs" />
@@ -149,7 +150,6 @@
     <Compile Include="SkillScene.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="StartScene.cs" />
-    <Compile Include="Tank.cs" />
     <Compile Include="Terminator.cs" />
     <Compile Include="Trash.cs" />
     <Compile Include="TreasureChest.cs" />

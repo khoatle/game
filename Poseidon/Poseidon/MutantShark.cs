@@ -36,7 +36,7 @@ namespace Poseidon
             health = 1000;
             maxHealth = 1000;
             perceptionRadius = GameConstants.BossPerceptionRadius;
-            experienceReward = 1000;
+            experienceReward = 200; //1000
         }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {

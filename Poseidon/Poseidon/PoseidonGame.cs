@@ -59,6 +59,7 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool skillPressed;
+        bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
         double clickTimer = 0;
@@ -215,6 +216,8 @@ namespace Poseidon
                 (keyboardState.IsKeyUp(Keys.Escape)));
             skillPressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
                 (keyboardState.IsKeyUp(Keys.I)));
+            EscPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
+                (keyboardState.IsKeyUp(Keys.Escape)));
             lastKeyboardState = keyboardState;
             lastGamePadState = gamepadState;
 
@@ -263,7 +266,7 @@ namespace Poseidon
             // let the main game dictate about win/lose
             if (shipWreckScene.returnToMain)
             {
-                playGameScene.tank.CopyAttribute(shipWreckScene.tank);
+                //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShowScene(playGameScene);
             }
@@ -276,7 +279,7 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                playGameScene.tank.CopyAttribute(shipWreckScene.tank);
+                //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShowScene(playGameScene);
             }
@@ -309,7 +312,7 @@ namespace Poseidon
             }
             if (doubleClicked && GetInShipWreck())
             {
-                shipWreckScene.tank.CopyAttribute(playGameScene.tank);
+                //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
                 //shipWreckScene.Load();
                 ShowScene(shipWreckScene);
@@ -369,14 +372,11 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                //if (playGameScene.tank.speed < 2)
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                        playGameScene.tank.speed += 0.1f;
-                    else shipWreckScene.tank.speed += 0.1f;
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.speed += 0.1f;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
@@ -384,20 +384,12 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                    {
-                        playGameScene.tank.maxHitPoint += 10;
-                        playGameScene.tank.currentHitPoint += 10;
-                    }
-                    else
-                    {
-                        shipWreckScene.tank.maxHitPoint += 10;
-                        shipWreckScene.tank.currentHitPoint += 10;
-                    }
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.maxHitPoint += 10;
+                    Tank.currentHitPoint += 10;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
@@ -405,14 +397,11 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
-                //if (playGameScene.tank.shootingRate < 2)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                        playGameScene.tank.shootingRate += 0.1f;
-                    else shipWreckScene.tank.shootingRate += 0.1f;
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.shootingRate += 0.1f;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
             if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
@@ -421,20 +410,18 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
 
-                //if (playGameScene.tank.strength < 2)
-                if (Tank.currentExperiencePts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    if (prevScene == playGameScene)
-                        playGameScene.tank.strength += 0.1f;
-                    else shipWreckScene.tank.strength += 0.1f;
-                    Tank.currentExperiencePts -= GameConstants.gainSkillCost;
+                    Tank.strength += 0.1f;
+                    Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
-            if (skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554
+            if ((skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554
                 && skillScene.cursor.Position.Y > 670 && skillScene.cursor.Position.Y < 775
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
+                || EscPressed )
             {
                 ShowScene(prevScene);
             }
@@ -476,3 +463,4 @@ namespace Poseidon
 
     }
 }
+

@@ -1,0 +1,4 @@
+1) The Shield does not work when mutant shark bites.
+2) Hammer push needs to be checked. Sometimes the enemy goes out of the game. Or gets stuck to each other.
+3) Fishes have helicopter syndrome. Also need to change the bounding sphere.
+4) Sometimes I gain experience even when I do nothing.

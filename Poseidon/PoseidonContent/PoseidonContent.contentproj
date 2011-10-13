@@ -708,8 +708,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\ExperienceBar.png">
-      <Name>ExperienceBar</Name>
+    <Compile Include="Image\UnassignedPtsBar.png">
+      <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -731,6 +731,20 @@
   <ItemGroup>
     <Compile Include="Models\manetee.fbx">
       <Name>manetee</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\seal.fbx">
+      <Name>seal</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\hammershark.fbx">
+      <Name>hammershark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>

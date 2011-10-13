@@ -68,6 +68,7 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
         protected Texture2D stunnedTexture;
+        protected Texture2D gameObjectiveIconTexture;
         // He died inside the ship wreck?
         public bool returnToMain;
         // has artifact?
@@ -739,8 +740,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top;
+            xOffsetText = rectSafeArea.Left + 225;
+            yOffsetText = rectSafeArea.Bottom - 80;
 
             Vector2 bulletIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
@@ -757,8 +758,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top + 50;
+            xOffsetText = rectSafeArea.Right - 300;
+            yOffsetText = rectSafeArea.Bottom - 100;
 
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);

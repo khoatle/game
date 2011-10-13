@@ -62,8 +62,8 @@ namespace Poseidon
 
         BaseEnemy[] enemies;
         Fish[] fish;
-        int enemiesAmount = 0;
-        int fishAmount = 0;
+        public int enemiesAmount = 0;
+        public int fishAmount = 0;
 
         // The main character for this level
         public Tank tank;
@@ -84,6 +84,8 @@ namespace Poseidon
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
 
+        protected Texture2D levelObjectiveIconTexture;
+        Rectangle levelObjectiveIconRectangle;
 
         // Current game level
         public int currentLevel = 0;
@@ -193,6 +195,8 @@ namespace Poseidon
             {
                 bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
+
+            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/LevelObjectiveIcon");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -734,7 +738,7 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
 
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
             if (paused)
             {
                 // Draw the "pause" text
@@ -759,7 +763,8 @@ namespace Poseidon
                 case GameState.Lost:
                     DrawWinOrLossScreen(GameConstants.StrGameLost);
                     break;
-            };
+            }
+            base.Draw(gameTime);
 
         }
         /// <summary>
@@ -976,9 +981,10 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             DrawStats();
             DrawBulletType();
-            DrawHeight();
+            //DrawHeight();
             DrawRadar();
             if (Tank.activeSkillID != -1) DrawActiveSkill();
+            DrawLevelObjectiveIcon();
         }
 
         private void DrawRadar()
@@ -1098,11 +1104,11 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top;
+            xOffsetText = rectSafeArea.Left + 225;
+            yOffsetText = rectSafeArea.Bottom - 80;
 
-            Vector2 bulletIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 bulletIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
             //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
             spriteBatch.Draw(bulletTypeTextures[Tank.bulletType], destRectangle, Color.White);
@@ -1117,15 +1123,42 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top + 100;
+            xOffsetText = rectSafeArea.Right - 300;
+            yOffsetText = rectSafeArea.Bottom - 100;
 
-            Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 skillIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
             spriteBatch.Draw(skillTextures[Tank.activeSkillID], destRectangle, Color.White);
+            
+        }
+
+        //Draw level objective icon
+        private void DrawLevelObjectiveIcon()
+        {
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.Right - 100;
+            yOffsetText = rectSafeArea.Top;
+
+            levelObjectiveIconRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
+
+            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, Color.White);
+
+        }
+
+        public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
+        {
+            if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+                return true;
+            else
+                return false;
         }
 
         private void DrawCutScene()

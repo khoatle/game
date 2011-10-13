@@ -136,7 +136,7 @@ namespace Poseidon
             //prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
@@ -317,7 +317,7 @@ namespace Poseidon
             }
             enemiesAmount = 0;
             fishAmount = 0;
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight);

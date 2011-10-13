@@ -321,7 +321,10 @@ namespace Poseidon
                 prevScene = playGameScene;
                 ShowScene(skillScene);
             }
-            if (doubleClicked && GetInShipWreck())
+            if (doubleClicked 
+                && !CursorManager.MouseOnEnemy(playGameScene.cursor, playGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
+                && !CursorManager.MouseOnFish(playGameScene.cursor, playGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
+                && GetInShipWreck())
             {
                 //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;

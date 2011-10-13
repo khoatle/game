@@ -60,8 +60,8 @@ namespace Poseidon
 
         List<StaticObject> staticObjects;
 
-        BaseEnemy[] enemies;
-        Fish[] fish;
+        public BaseEnemy[] enemies;
+        public Fish[] fish;
         public int enemiesAmount = 0;
         public int fishAmount = 0;
 

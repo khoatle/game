@@ -231,6 +231,28 @@ namespace Poseidon
             bullets.Add(newBullet);
         }
 
+        public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets) {
+            Tank tmp1;
+            SwimmingObject tmp2;
+            Matrix orientationMatrix;
+            if (shooter.GetType().Name.Equals("Tank")) {
+                tmp1 = (Tank)shooter;
+                orientationMatrix = Matrix.CreateRotationY(tmp1.ForwardDirection);
+            } else {
+                tmp2 = (SwimmingObject)shooter;
+                orientationMatrix = Matrix.CreateRotationY(tmp2.ForwardDirection);
+            }
+
+            ChasingBullet newBullet = new ChasingBullet();
+
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
+            newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
+            bullets.Add(newBullet);
+        }
+
         public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
         {
             Plant p = new Plant();

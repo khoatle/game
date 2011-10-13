@@ -110,6 +110,7 @@
     <Compile Include="AudioLibrary.cs" />
     <Compile Include="BaseEnemy.cs" />
     <Compile Include="CastSkill.cs" />
+    <Compile Include="ChasingBullet.cs" />
     <Compile Include="CombatEnemy.cs" />
     <Compile Include="Core\ClipPlayer.cs" />
     <Compile Include="Core\Cursor.cs" />

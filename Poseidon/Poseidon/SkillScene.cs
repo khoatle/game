@@ -118,7 +118,7 @@ namespace Poseidon
             int stringHeight = 60;
             int stringLength = 30;
             spriteBatch.DrawString(menuLarge, Tank.speed.ToString("F1"), new Vector2(speedIconRectangle.Center.X-stringLength,speedIconRectangle.Bottom-stringHeight), Color.Black);
-            spriteBatch.DrawString(menuLarge, Tank.maxHitPoint.ToString(), new Vector2(hitpointIconRectangle.Center.X - stringLength, hitpointIconRectangle.Bottom - stringHeight), Color.Black);
+            spriteBatch.DrawString(menuLarge, Tank.currentHitPoint.ToString()+"/"+Tank.maxHitPoint.ToString(), new Vector2(hitpointIconRectangle.Center.X - stringLength*3, hitpointIconRectangle.Bottom - stringHeight), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.shootingRate.ToString("F1"), new Vector2(shootrateIconRectangle.Center.X - stringLength, shootrateIconRectangle.Bottom - stringHeight), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.strength.ToString("F1"), new Vector2(bulletStrengthIconRectangle.Center.X - stringLength, bulletStrengthIconRectangle.Bottom - stringHeight), Color.Black);
             cursor.Draw(gameTime);

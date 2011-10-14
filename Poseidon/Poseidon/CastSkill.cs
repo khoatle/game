@@ -24,7 +24,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10, Tank.strengthUp);
+            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * Tank.currentHitPoint/GameConstants.PlayerStartingHP , Tank.strengthUp);
             d.loadContent(Content, "Models/fuelcarrier");
             myBullets.Add(d);
         }
@@ -35,7 +35,7 @@ namespace Poseidon
                 if (InThorRange(tank, enemies[i].Position)){
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                    enemies[i].health -= (int) GameConstants.ThorDamage;
+                    enemies[i].health -= (int)GameConstants.ThorDamage * Tank.currentHitPoint / GameConstants.PlayerStartingHP; //Healthier players damage more
                     PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
                     if (enemies[i].health <= 0)
                     {
@@ -96,7 +96,7 @@ namespace Poseidon
                         enemies[i].Position = oldPosition;
                         enemies[i].BoundingSphere.Center = oldPosition;
                     }
-                    enemies[i].health -= (int)GameConstants.HermesDamage;
+                    enemies[i].health -= (int)GameConstants.HermesDamage * Tank.currentHitPoint / GameConstants.PlayerStartingHP; //Healthier players damage more;
                     audio.Shooting.Play();
                     if (enemies[i].health <= 0)
                     {

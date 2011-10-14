@@ -133,6 +133,7 @@ namespace Poseidon {
         public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal" };
         public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
         public static int gainSkillCost = 1;
+        public static int skillHealthLoss = 10;
 
         //const for the fog effect
         public const float FogStart = 10;

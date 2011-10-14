@@ -169,7 +169,7 @@ namespace Poseidon
             Random random = new Random();
             int random_level = random.Next(20);
             string terrain_name = "Image/terrain" + random_level;
-            System.Diagnostics.Debug.WriteLine(terrain_name);
+            //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
@@ -506,6 +506,7 @@ namespace Poseidon
                                 Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(tank, Content, myBullet);
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
 
                         }
@@ -518,6 +519,7 @@ namespace Poseidon
                                 Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
                                 CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
                         // Achilles' Armor!!!
@@ -529,6 +531,7 @@ namespace Poseidon
                                 Tank.invincibleMode = true;
                                 audio.NewMeteor.Play();
                                 Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
 
@@ -541,6 +544,7 @@ namespace Poseidon
                                 audio.NewMeteor.Play();
                                 Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.supersonicMode = true;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
                         pointIntersect = Vector3.Zero;

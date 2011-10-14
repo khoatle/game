@@ -373,6 +373,7 @@ namespace Poseidon
                             Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
                             CastSkill.UseHerculesBow(tank, Content, myBullet);
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
 
                     }
@@ -385,6 +386,7 @@ namespace Poseidon
                             Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
                             CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
                     // Achilles' Armor!!!
@@ -396,6 +398,7 @@ namespace Poseidon
                             Tank.invincibleMode = true;
                             audio.NewMeteor.Play();
                             Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
 
@@ -408,6 +411,7 @@ namespace Poseidon
                             audio.NewMeteor.Play();
                             Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.supersonicMode = true;
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
                     pointIntersect = Vector3.Zero;

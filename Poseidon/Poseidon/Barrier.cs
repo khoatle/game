@@ -68,6 +68,7 @@ namespace Poseidon
                         worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = view;
                     effect.Projection = projection;
+                    effect.DiffuseColor = Color.White.ToVector3();
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;

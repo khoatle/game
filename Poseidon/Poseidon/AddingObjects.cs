@@ -17,12 +17,22 @@ namespace Poseidon
         public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
         {
             if (mainGame)
-                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel];
+                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel];
             else enemiesAmount = GameConstants.ShipNumberEnemies;
+            Random rnd = new Random();
             for (int i = 0; i < enemiesAmount - 2; i++) {
-                enemies[i] = new ShootingEnemy();
+                //enemies[i] = new ShootingEnemy();
+                if (i < GameConstants.NumberCombatEnemies[currentLevel]) {
+                    enemies[i] = new CombatEnemy();
+                    enemies[i].Name = "Combat Enemy";
+                }
+                else {
+                    enemies[i] = new ShootingEnemy();
+                    enemies[i].Name = "Shooting Enemy";
+                }
+                
                 enemies[i].LoadContent(Content, "Models/Fuelcarrier");
-                enemies[i].Name = "minion enemy";
+                //enemies[i].Name = "minion enemy";
             }
             MutantShark mutantShark = new MutantShark();
             mutantShark.LoadContent(Content, "Models/mutantShark");

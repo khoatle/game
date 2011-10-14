@@ -108,6 +108,7 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin();
             base.Draw(gameTime);
             DrawSpeedIcon();
             DrawHitPointIcon();
@@ -122,6 +123,7 @@ namespace Poseidon
             spriteBatch.DrawString(menuLarge, Tank.shootingRate.ToString("F1"), new Vector2(shootrateIconRectangle.Center.X - stringLength, shootrateIconRectangle.Bottom - stringHeight), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.strength.ToString("F1"), new Vector2(bulletStrengthIconRectangle.Center.X - stringLength, bulletStrengthIconRectangle.Bottom - stringHeight), Color.Black);
             cursor.Draw(gameTime);
+            spriteBatch.End();
         }
 
         private void DrawSpeedIcon()

@@ -159,7 +159,7 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
-            //spriteBatch.Begin();
+            spriteBatch.Begin();
             base.Draw(gameTime);
             
             spriteBatch.Draw(elements, rockPosition, rockRect, Color.White);
@@ -169,7 +169,7 @@ namespace Poseidon
                 spriteBatch.Draw(elements, enhancedPosition, enhancedRect,
                                  Color.White);
             }
-            //spriteBatch.End();
+            spriteBatch.End();
         }
     }
 }

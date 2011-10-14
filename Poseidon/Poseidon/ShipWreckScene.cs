@@ -87,6 +87,13 @@ namespace Poseidon
         // draw a cutscene when finding a god's relic
         bool foundRelic = false;
 
+        // shader for underwater effect
+        // Our Post Process effect object, this is where our shader will be loaded and compiled
+        Effect effectPost;
+        float m_Timer = 0;
+        RenderTarget2D renderTarget;
+        Texture2D SceneTexture;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
@@ -115,7 +122,7 @@ namespace Poseidon
             
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
-            Components.Add(cursor);
+            //Components.Add(cursor);
 
             myBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
@@ -177,6 +184,12 @@ namespace Poseidon
 
             //Load healthbar
             HealthBar = Content.Load<Texture2D>("Image/HealthBar");
+
+            // Load and compile our Shader into our Effect instance.
+            effectPost = Content.Load<Effect>("Shaders/PostProcess");
+            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
+            renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
         }
 
         /// <summary>
@@ -553,6 +566,12 @@ namespace Poseidon
                     fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100) ,tank, enemyBullet);
                 }
 
+                //for the shader
+                m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
+
+                //cursor update
+                cursor.Update(gameTime);
+
                 roundTimer -= gameTime.ElapsedGameTime;
                 if (roundTimer < TimeSpan.Zero)
                 {
@@ -574,8 +593,10 @@ namespace Poseidon
             if (paused)
             {
                 // Draw the "pause" text
+                spriteBatch.Begin();
                 spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
                     Color.White);
+                spriteBatch.End();
             }
 
             // Change back the config changed by spriteBatch
@@ -583,7 +604,7 @@ namespace Poseidon
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
             GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
 
-            DrawGameplayScreen();
+            DrawGameplayScreen(gameTime);
 
         }
         /// <summary>
@@ -613,12 +634,15 @@ namespace Poseidon
             }
         }
 
-        private void DrawGameplayScreen()
+        private void DrawGameplayScreen(GameTime gameTime)
         {
-            graphics.GraphicsDevice.Clear(Color.Black);
+            graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
             if (foundRelic)
             {
+                spriteBatch.Begin();
                 DrawFoundRelicScene(skillID);
+                spriteBatch.End();
                 return;
             }
             DrawTerrain(ground.Model);
@@ -672,7 +696,9 @@ namespace Poseidon
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
+                        spriteBatch.End();
                     }
                 }
             }
@@ -707,9 +733,28 @@ namespace Poseidon
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            SceneTexture = renderTarget;
+            // Render the scene with Edge Detection, using the render target from last frame.
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            {
+                // Apply the post process shader
+                effectPost.CurrentTechnique.Passes[0].Apply();
+                {
+                    effectPost.Parameters["fTimer"].SetValue(m_Timer);
+                    spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                }
+            }
+            spriteBatch.End();
+            spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
             if (Tank.activeSkillID != -1) DrawActiveSkill();
+            cursor.Draw(gameTime);
+            spriteBatch.End();
             
         }
         private void DrawFoundRelicScene(int skillID)

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectGuid>{6CE38EB8-C6A5-47A3-9B46-F3DE6E7E2D52}</ProjectGuid>
@@ -515,7 +515,7 @@
     <Compile Include="Models\mutantShark.fbx">
       <Name>mutantShark</Name>
       <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -747,6 +747,13 @@
       <Name>hammershark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shaders\PostProcess.fx">
+      <Name>PostProcess</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>

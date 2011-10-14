@@ -80,7 +80,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = 850;
             graphics.PreferredBackBufferHeight = 700;
 
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 

@@ -51,7 +51,7 @@ namespace Poseidon {
             //also try to change direction if we are stuck
             if (stucked == true)
             {
-                ForwardDirection += MathHelper.PiOver4;
+                ForwardDirection += MathHelper.PiOver4/2;
             }
             else if (changeDirection >= 95)
             {

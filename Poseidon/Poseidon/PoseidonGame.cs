@@ -409,8 +409,9 @@ namespace Poseidon
                 if (Tank.unassignedPts >= GameConstants.gainSkillCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.maxHitPoint += 10;
                     Tank.currentHitPoint += 10;
+                    if (Tank.currentHitPoint > Tank.maxHitPoint)
+                        Tank.maxHitPoint = Tank.currentHitPoint;
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }

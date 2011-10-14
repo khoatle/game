@@ -53,9 +53,9 @@ namespace Poseidon {
         //general
         //number of enemy and fish per level for main game
 
-        public static int[] NumberShootingEnemies = {50, 15, 10, 10, 10, 10};
-        public static int[] NumberCombatEnemies = {50, 50, 50, 50, 50};
-        public static int[] NumberFish = {70, 30, 30, 30, 30 , 30};
+        public static int[] NumberShootingEnemies = {25, 15, 10, 10, 10, 10};
+        public static int[] NumberCombatEnemies = {25, 50, 50, 50, 50};
+        public static int[] NumberFish = {50, 30, 30, 30, 30 , 30};
 
         //number of enemy and fish for ship wreck
         public const int ShipNumberEnemies = 10;
@@ -133,6 +133,7 @@ namespace Poseidon {
         public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal" };
         public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
         public static int gainSkillCost = 1;
+        public static int skillHealthLoss = 10;
 
         //const for the fog effect
         public const float FogStart = 10;

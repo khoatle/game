@@ -12,11 +12,20 @@ namespace Poseidon
 {
     class MutantShark : CombatEnemy
     {
+
         Matrix[] bones;
         SkinningData skd;
         ClipPlayer clipPlayer;
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
+
+        private TimeSpan shootingStartTime;
+        private float shootingSeconds;
+
+        public MutantShark() : base() {
+            shootingStartTime = new TimeSpan();
+            shootingSeconds = 4f;
+        }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
         {
@@ -31,6 +40,7 @@ namespace Poseidon
             //scaledSphere.Radius *= 1.5f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+
         }
 
         public override void LoadContent(ContentManager content, string modelName)
@@ -55,6 +65,14 @@ namespace Poseidon
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
         {
             if (stunned) return;
+
+            if (currentHuntingTarget != null && PlayGameScene.timming.TotalGameTime.TotalSeconds - shootingStartTime.TotalSeconds >= shootingSeconds)
+            {
+                AddingObjects.placeChasingBullet(this, currentHuntingTarget, damage, enemyBullets);
+                shootingStartTime = PlayGameScene.timming.TotalGameTime;
+                return;
+            }
+
             int perceptionID = perceptAndLock(tank, fishList, fishSize);
             configAction(perceptionID);
             makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
@@ -106,8 +124,8 @@ namespace Poseidon
 
                 if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
-                    if (!clipPlayer.inRange(25, 35))
-                        clipPlayer.switchRange(25, 35);
+                    //if (!clipPlayer.inRange(25, 35))
+                    //    clipPlayer.switchRange(25, 35);
 
                     if (currentHuntingTarget.GetType().Name.Equals("Tank"))
                     {
@@ -126,8 +144,8 @@ namespace Poseidon
         // Go straight
         protected override void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
         {
-            if (!clipPlayer.inRange(1, 24))
-                clipPlayer.switchRange(1, 24);
+            //if (!clipPlayer.inRange(1, 24))
+            //    clipPlayer.switchRange(1, 24);
             Vector3 futurePosition = Position + speed * headingDirection;
             if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
                     && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))

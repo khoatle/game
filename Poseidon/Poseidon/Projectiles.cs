@@ -15,8 +15,8 @@ namespace Poseidon
 {
     public class Projectiles : GameObject
     {
-        private Vector3 unitDirection;
-        private float projectionSpeed;
+        public Vector3 unitDirection;
+        public float projectionSpeed;
 
         private bool isActive;
 
@@ -43,11 +43,11 @@ namespace Poseidon
         //    unitDirection.Normalize();
         //}
 
-        private Vector3 calculateFuturePosition() {
-            return Position + unitDirection * GameConstants.BulletSpeed;
+        protected Vector3 calculateFuturePosition() {
+            return Position + unitDirection * projectionSpeed;
         }
 
-        public void update()
+        public virtual void update()
         {
             Vector3 tmp = calculateFuturePosition();
 
@@ -55,7 +55,7 @@ namespace Poseidon
             BoundingSphere = new BoundingSphere(tmp, BoundingSphere.Radius);
         }
 
-        public void loadContent(ContentManager content, string modelName)
+        public virtual void loadContent(ContentManager content, string modelName)
         {
             this.Model = content.Load<Model>(modelName);
             BoundingSphere = CalculateBoundingSphere();
@@ -63,7 +63,7 @@ namespace Poseidon
 
         public bool getStatus() { return isActive; }
 
-        public void draw(Matrix view, Matrix projection)
+        public virtual void draw(Matrix view, Matrix projection)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -76,6 +76,7 @@ namespace Poseidon
                 {
                     effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = view;
+                    effect.DiffuseColor = Color.White.ToVector3();
                     effect.Projection = projection;
 
                     effect.EnableDefaultLighting();

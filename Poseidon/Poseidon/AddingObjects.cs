@@ -17,12 +17,22 @@ namespace Poseidon
         public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
         {
             if (mainGame)
-                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel];
+                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel];
             else enemiesAmount = GameConstants.ShipNumberEnemies;
+            Random rnd = new Random();
             for (int i = 0; i < enemiesAmount - 2; i++) {
-                enemies[i] = new ShootingEnemy();
+                //enemies[i] = new ShootingEnemy();
+                if (i < GameConstants.NumberCombatEnemies[currentLevel]) {
+                    enemies[i] = new CombatEnemy();
+                    enemies[i].Name = "Combat Enemy";
+                }
+                else {
+                    enemies[i] = new ShootingEnemy();
+                    enemies[i].Name = "Shooting Enemy";
+                }
+                
                 enemies[i].LoadContent(Content, "Models/Fuelcarrier");
-                enemies[i].Name = "minion enemy";
+                //enemies[i].Name = "minion enemy";
             }
             MutantShark mutantShark = new MutantShark();
             mutantShark.LoadContent(Content, "Models/mutantShark");
@@ -240,6 +250,28 @@ namespace Poseidon
             if (type == 1)
                 newBullet.loadContent(PlayGameScene.Content, "Models/bossBullet1");
             else newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
+            bullets.Add(newBullet);
+        }
+
+        public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets) {
+            Tank tmp1;
+            SwimmingObject tmp2;
+            Matrix orientationMatrix;
+            if (shooter.GetType().Name.Equals("Tank")) {
+                tmp1 = (Tank)shooter;
+                orientationMatrix = Matrix.CreateRotationY(tmp1.ForwardDirection);
+            } else {
+                tmp2 = (SwimmingObject)shooter;
+                orientationMatrix = Matrix.CreateRotationY(tmp2.ForwardDirection);
+            }
+
+            ChasingBullet newBullet = new ChasingBullet();
+
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
+            newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
             bullets.Add(newBullet);
         }
 
@@ -475,70 +507,6 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
         }
 
-        public static void DrawUnassignedPtsBar(Texture2D UnassignedPtsBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentUnassignedPts, int heightFromTop, string type, Color typeColor)
-        {
-            int barX = game.Window.ClientBounds.Width / 2 - UnassignedPtsBar.Width / 2;
-            int barY = heightFromTop;
-            int barHeight = 44;
-            double UnassignedPtsiness;
-            int maxUnassignedPts = 5;
-            int level;
-            Color UnassignedPtsColor, BackupColor;
-            level = currentUnassignedPts/maxUnassignedPts;
-            currentUnassignedPts = currentUnassignedPts%maxUnassignedPts;
-            if (currentUnassignedPts == 0 && level > 0)
-            {
-                level--;
-                currentUnassignedPts = maxUnassignedPts;
-            }
-            if (level > 0)
-                type += " + " + level.ToString();
-            UnassignedPtsiness = (double)currentUnassignedPts/maxUnassignedPts;
-            switch (level)
-            {
-                case 0:
-                    UnassignedPtsColor = Color.Tan;
-                    BackupColor = Color.Transparent;
-                    break;
-                case 1:
-                    UnassignedPtsColor = Color.Khaki;
-                    BackupColor = Color.Tan;
-                    break;
-                case 2:
-                    UnassignedPtsColor = Color.Goldenrod;
-                    BackupColor = Color.Khaki;
-                    break;
-                case 3:
-                    UnassignedPtsColor = Color.DarkGoldenrod;
-                    BackupColor = Color.Goldenrod;
-                    break;
-                case 4:
-                    UnassignedPtsColor = Color.DarkOrange;
-                    BackupColor = Color.DarkGoldenrod;
-                    break;
-                default:
-                    UnassignedPtsColor = Color.DarkRed;
-                    BackupColor = Color.DarkOrange;
-                    break;
-            }
-            //System.Diagnostics.Debug.WriteLine(currentUnassignedPts+","+maxUnassignedPts);
-            //Draw the negative space for the UnassignedPts bar
-            spriteBatch.Draw(UnassignedPtsBar,
-                new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),
-                new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
-                BackupColor);
-            //Draw the current UnassignedPts level based on the current UnassignedPts
-            spriteBatch.Draw(UnassignedPtsBar,
-                new Rectangle(barX, barY, (int)(UnassignedPtsBar.Width * UnassignedPtsiness), barHeight),
-                new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
-                UnassignedPtsColor);
-            //Draw the box around the UnassignedPts bar
-            spriteBatch.Draw(UnassignedPtsBar,
-                new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),
-                new Rectangle(0, 0, UnassignedPtsBar.Width, barHeight),
-                Color.White);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop+10), typeColor);
-        }
 
         public static void DrawLevelBar(Texture2D LevelBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
         {

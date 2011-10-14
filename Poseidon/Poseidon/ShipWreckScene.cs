@@ -68,6 +68,7 @@ namespace Poseidon
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
         protected Texture2D stunnedTexture;
+        protected Texture2D gameObjectiveIconTexture;
         // He died inside the ship wreck?
         public bool returnToMain;
         // has artifact?
@@ -385,6 +386,7 @@ namespace Poseidon
                             Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
                             CastSkill.UseHerculesBow(tank, Content, myBullet);
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
 
                     }
@@ -396,7 +398,8 @@ namespace Poseidon
                             Tank.firstUse[1] = false;
                             Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
-                            CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount);
+                            CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
                     // Achilles' Armor!!!
@@ -408,6 +411,7 @@ namespace Poseidon
                             Tank.invincibleMode = true;
                             audio.NewMeteor.Play();
                             Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
 
@@ -420,6 +424,7 @@ namespace Poseidon
                             audio.NewMeteor.Play();
                             Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.supersonicMode = true;
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
                     pointIntersect = Vector3.Zero;
@@ -479,7 +484,7 @@ namespace Poseidon
                 if (Tank.supersonicMode == true)
                 {
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
-                    CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
+                    CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount, audio);
                 }
                 //if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, null, gameTime, pointIntersect);
@@ -691,7 +696,9 @@ namespace Poseidon
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
+                        spriteBatch.End();
                     }
                 }
             }
@@ -782,8 +789,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top;
+            xOffsetText = rectSafeArea.Left + 225;
+            yOffsetText = rectSafeArea.Bottom - 80;
 
             Vector2 bulletIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
@@ -800,8 +807,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top + 50;
+            xOffsetText = rectSafeArea.Right - 300;
+            yOffsetText = rectSafeArea.Bottom - 100;
 
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);

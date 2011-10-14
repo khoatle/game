@@ -663,8 +663,6 @@ namespace Poseidon
                     effect.World = worldMatrix;
                     effect.View = view;
                     effect.Projection = projection;
-
-
                 }
                 mesh.Draw();
             }

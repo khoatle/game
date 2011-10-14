@@ -60,10 +60,10 @@ namespace Poseidon
 
         List<StaticObject> staticObjects;
 
-        BaseEnemy[] enemies;
-        Fish[] fish;
-        int enemiesAmount = 0;
-        int fishAmount = 0;
+        public BaseEnemy[] enemies;
+        public Fish[] fish;
+        public int enemiesAmount = 0;
+        public int fishAmount = 0;
 
         // The main character for this level
         public Tank tank;
@@ -84,6 +84,8 @@ namespace Poseidon
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
 
+        protected Texture2D levelObjectiveIconTexture;
+        Rectangle levelObjectiveIconRectangle;
 
         // Current game level
         public int currentLevel = 0;
@@ -141,7 +143,7 @@ namespace Poseidon
             //prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
 
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
@@ -174,7 +176,7 @@ namespace Poseidon
             Random random = new Random();
             int random_level = random.Next(20);
             string terrain_name = "Image/terrain" + random_level;
-            System.Diagnostics.Debug.WriteLine(terrain_name);
+            //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
@@ -200,6 +202,8 @@ namespace Poseidon
             {
                 bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
+
+            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/LevelObjectiveIcon");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -326,7 +330,7 @@ namespace Poseidon
             }
             enemiesAmount = 0;
             fishAmount = 0;
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight);
@@ -515,6 +519,7 @@ namespace Poseidon
                                 Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(tank, Content, myBullet);
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
 
                         }
@@ -526,7 +531,8 @@ namespace Poseidon
                                 Tank.firstUse[1] = false;
                                 Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
-                                CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount);
+                                CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
                         // Achilles' Armor!!!
@@ -538,6 +544,7 @@ namespace Poseidon
                                 Tank.invincibleMode = true;
                                 audio.NewMeteor.Play();
                                 Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
 
@@ -550,6 +557,7 @@ namespace Poseidon
                                 audio.NewMeteor.Play();
                                 Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.supersonicMode = true;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
                         pointIntersect = Vector3.Zero;
@@ -609,7 +617,7 @@ namespace Poseidon
                     if (Tank.supersonicMode == true)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                        CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
+                        CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount, audio);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
@@ -753,7 +761,7 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
 
-            base.Draw(gameTime);
+            //base.Draw(gameTime);
             if (paused)
             {
                 // Draw the "pause" text
@@ -782,7 +790,8 @@ namespace Poseidon
                 case GameState.Lost:
                     DrawWinOrLossScreen(GameConstants.StrGameLost);
                     break;
-            };
+            }
+            base.Draw(gameTime);
 
         }
         /// <summary>
@@ -878,7 +887,9 @@ namespace Poseidon
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
+                        spriteBatch.End();
                     }
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
@@ -1020,9 +1031,10 @@ namespace Poseidon
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
-            DrawHeight();
+            //DrawHeight();
             DrawRadar();
             if (Tank.activeSkillID != -1) DrawActiveSkill();
+            DrawLevelObjectiveIcon();
             cursor.Draw(timming);
             spriteBatch.End();
         }
@@ -1144,11 +1156,11 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top;
+            xOffsetText = rectSafeArea.Left + 225;
+            yOffsetText = rectSafeArea.Bottom - 80;
 
-            Vector2 bulletIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 bulletIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
             //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
             spriteBatch.Draw(bulletTypeTextures[Tank.bulletType], destRectangle, Color.White);
@@ -1163,15 +1175,42 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top + 100;
+            xOffsetText = rectSafeArea.Right - 300;
+            yOffsetText = rectSafeArea.Bottom - 100;
 
-            Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 skillIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
             spriteBatch.Draw(skillTextures[Tank.activeSkillID], destRectangle, Color.White);
+            
+        }
+
+        //Draw level objective icon
+        private void DrawLevelObjectiveIcon()
+        {
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.Right - 100;
+            yOffsetText = rectSafeArea.Top;
+
+            levelObjectiveIconRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
+
+            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, Color.White);
+
+        }
+
+        public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
+        {
+            if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+                return true;
+            else
+                return false;
         }
 
         private void DrawCutScene()

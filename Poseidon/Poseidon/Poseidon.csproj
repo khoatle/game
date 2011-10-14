@@ -110,11 +110,13 @@
     <Compile Include="AudioLibrary.cs" />
     <Compile Include="BaseEnemy.cs" />
     <Compile Include="CastSkill.cs" />
+    <Compile Include="ChasingBullet.cs" />
     <Compile Include="CombatEnemy.cs" />
     <Compile Include="Core\ClipPlayer.cs" />
     <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
+    <Compile Include="LevelObjectiveScene.cs" />
     <Compile Include="Tank.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CursorManager.cs" />

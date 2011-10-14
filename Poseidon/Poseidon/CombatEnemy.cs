@@ -121,5 +121,38 @@ namespace Poseidon
                 }
             }
         }
+
+        public override void Draw(Matrix view, Matrix projection)
+        {
+            Matrix[] transforms = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(transforms);
+            //Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            //Matrix worldMatrix = translateMatrix;
+            Matrix worldMatrix = Matrix.Identity;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
+            Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            worldMatrix = rotationYMatrix * translateMatrix;
+
+            foreach (ModelMesh mesh in Model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.World =
+                        worldMatrix * transforms[mesh.ParentBone.Index];
+                    effect.View = view;
+                    effect.Projection = projection;
+                    effect.DiffuseColor = Color.Red.ToVector3();
+
+                    effect.EnableDefaultLighting();
+                    effect.PreferPerPixelLighting = true;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                }
+                mesh.Draw();
+            }
+        }
     }
 }

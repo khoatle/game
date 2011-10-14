@@ -24,19 +24,19 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10, Tank.strengthUp);
+            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * Tank.currentHitPoint/GameConstants.PlayerStartingHP , Tank.strengthUp);
             d.loadContent(Content, "Models/fuelcarrier");
             myBullets.Add(d);
         }
-        public static void UseThorHammer(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount)
+        public static void UseThorHammer(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (InThorRange(tank, enemies[i].Position)){
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                    enemies[i].health -= (int) GameConstants.ThorDamage;
-                    PushEnemy(tank, enemies[i]);
+                    enemies[i].health -= (int)GameConstants.ThorDamage * Tank.currentHitPoint / GameConstants.PlayerStartingHP; //Healthier players damage more
+                    PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
                     if (enemies[i].health <= 0)
                     {
                         if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
@@ -58,31 +58,45 @@ namespace Poseidon
             else return false;
         }
         // push enemy away
-        public static void PushEnemy(Tank tank, BaseEnemy enemy)
+        public static void PushEnemy(Tank tank, BaseEnemy enemy, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount )
         {
+            Vector3 oldPosition = enemy.Position;
             Vector3 pushVector = enemy.Position - tank.Position;
             pushVector.Normalize();
             enemy.Position += (pushVector * GameConstants.ThorPushFactor);
-            MathHelper.Clamp(enemy.Position.X, -tank.MaxRangeX, tank.MaxRangeX);
-            MathHelper.Clamp(enemy.Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);
+            enemy.Position.X = MathHelper.Clamp(enemy.Position.X, -tank.MaxRangeX, tank.MaxRangeX);
+            enemy.Position.Z = MathHelper.Clamp(enemy.Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);
             enemy.BoundingSphere.Center = enemy.Position;
+            if (Collision.isBarrierVsBarrierCollision(enemy, enemy.BoundingSphere, fishes, fishAmount)
+                || Collision.isBarrierVsBarrierCollision(enemy, enemy.BoundingSphere, enemies, enemiesAmount))
+            {
+                enemy.Position = oldPosition;
+                enemy.BoundingSphere.Center = oldPosition;
+            }
         }
         //Knock out any enemy that you crash into
-        public static void KnockOutEnemies(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, AudioLibrary audio)
+        public static void KnockOutEnemies(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, AudioLibrary audio)
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (tank.BoundingSphere.Intersects(enemies[i].BoundingSphere))
                 {
+                    Vector3 oldPosition = enemies[i].Position;
                     Vector3 pushVector = enemies[i].Position - tank.Position;
                     pushVector.Normalize();
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
-                    MathHelper.Clamp(enemies[i].Position.X, -tank.MaxRangeX, tank.MaxRangeX);
-                    MathHelper.Clamp(enemies[i].Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);
+                    enemies[i].Position.X = MathHelper.Clamp(enemies[i].Position.X, -tank.MaxRangeX, tank.MaxRangeX);
+                    enemies[i].Position.Z = MathHelper.Clamp(enemies[i].Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);
                     enemies[i].BoundingSphere.Center = enemies[i].Position;
-                    enemies[i].health -= (int)GameConstants.HermesDamage;
+                    if (Collision.isBarrierVsBarrierCollision(enemies[i], enemies[i].BoundingSphere, fishes, fishAmount)
+                        || Collision.isBarrierVsBarrierCollision(enemies[i], enemies[i].BoundingSphere, enemies, enemiesAmount))
+                    {
+                        enemies[i].Position = oldPosition;
+                        enemies[i].BoundingSphere.Center = oldPosition;
+                    }
+                    enemies[i].health -= (int)GameConstants.HermesDamage * Tank.currentHitPoint / GameConstants.PlayerStartingHP; //Healthier players damage more;
                     audio.Shooting.Play();
                     if (enemies[i].health <= 0)
                     {

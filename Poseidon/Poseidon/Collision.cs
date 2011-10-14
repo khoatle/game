@@ -160,6 +160,8 @@ namespace Poseidon
             //in supersonice mode, you knock and you stun the enemies
             if (Tank.supersonicMode == true)
             {
+                if (isTankVsBarrierCollision(futureBoundingSphere, fish, fishAmount))
+                    return false;
                 return true;
             }
             //else don't allow driving through an enemy

@@ -40,10 +40,14 @@ namespace Poseidon
         protected GameScene prevScene;
         // For the Start scene
         private SpriteFont smallFont, largeFont;
-        protected Texture2D startBackgroundTexture, startElementsTexture, SkillBackgroundTexture;
+        protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
         // For the Skill board
         SkillScene skillScene;
+        protected Texture2D SkillBackgroundTexture;
+        //For the Level Objective
+        LevelObjectiveScene levelObjectiveScene;
+        protected Texture2D LevelObjectiveBackgroundTexture;
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
@@ -76,7 +80,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = 850;
             graphics.PreferredBackBufferHeight = 700;
 
-            //graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -137,8 +141,9 @@ namespace Poseidon
             startScene = new StartScene(this, smallFont, largeFont,
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
-            SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
-
+            //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
+            SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
+            LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 
@@ -155,7 +160,9 @@ namespace Poseidon
                 SkillBackgroundTexture, Content);
             Components.Add(skillScene);
 
-            
+            levelObjectiveScene = new LevelObjectiveScene(this, smallFont,
+                largeFont, LevelObjectiveBackgroundTexture, Content, playGameScene);
+            Components.Add(levelObjectiveScene);
 
             // Start the game in the start Scene
             startScene.Show();
@@ -219,7 +226,7 @@ namespace Poseidon
                 (keyboardState.IsKeyUp(Keys.Escape)));
             lastKeyboardState = keyboardState;
             lastGamePadState = gamepadState;
-
+            
         }
         /// <summary>
         /// Handle input of all game scenes
@@ -253,6 +260,10 @@ namespace Poseidon
             else if (activeScene == shipWreckScene)
             {
                 HandleShipWreckSceneInput();
+            }
+            else if (activeScene == levelObjectiveScene)
+            {
+                HandleLevelObjectiveInput();
             }
         }
 
@@ -309,7 +320,10 @@ namespace Poseidon
                 prevScene = playGameScene;
                 ShowScene(skillScene);
             }
-            if (doubleClicked && GetInShipWreck())
+            if (doubleClicked 
+                && !CursorManager.MouseOnEnemy(playGameScene.cursor, playGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
+                && !CursorManager.MouseOnFish(playGameScene.cursor, playGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
+                && GetInShipWreck())
             {
                 //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
@@ -317,7 +331,17 @@ namespace Poseidon
                 ShowScene(shipWreckScene);
                 doubleClicked = false;
             }
-            else doubleClicked = false;
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && playGameScene.mouseOnLevelObjectiveIcon(currentMouseState))
+            {
+                prevScene = playGameScene;
+                ShowScene(levelObjectiveScene);
+            }
+            else
+            {
+                doubleClicked = false;
+            }
         }
         public bool GetInShipWreck()
         {
@@ -366,8 +390,7 @@ namespace Poseidon
         /// </summary>
         private void HandleSkillSceneInput()
         {
-            if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
-                && skillScene.cursor.Position.Y > 110 && skillScene.cursor.Position.Y < 315
+            if (skillScene.speedIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
@@ -378,8 +401,7 @@ namespace Poseidon
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
-            if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
-                && skillScene.cursor.Position.Y > 110 && skillScene.cursor.Position.Y < 315
+            if (skillScene.hitpointIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
@@ -391,8 +413,7 @@ namespace Poseidon
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
-            if (skillScene.cursor.Position.X > 100 && skillScene.cursor.Position.X < 370
-                && skillScene.cursor.Position.Y > 400 && skillScene.cursor.Position.Y < 600
+            if (skillScene.shootrateIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
@@ -403,8 +424,7 @@ namespace Poseidon
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
-            if (skillScene.cursor.Position.X > 470 && skillScene.cursor.Position.X < 740
-                && skillScene.cursor.Position.Y > 400 && skillScene.cursor.Position.Y < 600
+            if (skillScene.bulletStrengthIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
@@ -416,8 +436,7 @@ namespace Poseidon
                     Tank.unassignedPts -= GameConstants.gainSkillCost;
                 }
             }
-            if ((skillScene.cursor.Position.X > 290 && skillScene.cursor.Position.X < 554
-                && skillScene.cursor.Position.Y > 670 && skillScene.cursor.Position.Y < 775
+            if ((skillScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1,1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
                 || EscPressed )
@@ -426,6 +445,14 @@ namespace Poseidon
             }
 
         }
+
+        private void HandleLevelObjectiveInput()
+        {
+            if (EscPressed)
+                ShowScene(prevScene);
+        }
+
+
         protected void ShowScene(GameScene scene)
         {
             activeScene.Hide();

@@ -517,7 +517,7 @@ namespace Poseidon
                                 Tank.firstUse[1] = false;
                                 Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
-                                CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount);
+                                CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
                             }
                         }
                         // Achilles' Armor!!!
@@ -600,7 +600,7 @@ namespace Poseidon
                     if (Tank.supersonicMode == true)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                        CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, audio);
+                        CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount, audio);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);

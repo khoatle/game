@@ -111,6 +111,13 @@ namespace Poseidon
         // and the level is won
         public static bool isBossKilled = false;
 
+        // shader for underwater effect
+        // Our Post Process effect object, this is where our shader will be loaded and compiled
+        Effect effectPost;
+        float m_Timer = 0;
+        RenderTarget2D renderTarget;
+        Texture2D SceneTexture;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -142,7 +149,7 @@ namespace Poseidon
 
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
-            Components.Add(cursor);
+            //Components.Add(cursor);
 
             myBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
@@ -211,6 +218,12 @@ namespace Poseidon
 
             //Load healthbar
             HealthBar = Content.Load<Texture2D>("Image/HealthBar");
+
+            // Load and compile our Shader into our Effect instance.
+            effectPost = Content.Load<Effect>("Shaders/PostProcess");
+            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
+            renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
         }
 
         /// <summary>
@@ -704,6 +717,12 @@ namespace Poseidon
                     roundTimer -= gameTime.ElapsedGameTime;
                     if (CheckWinCondition()) currentGameState = GameState.Won;
                     if (CheckLoseCondition()) currentGameState = GameState.Lost;
+
+                    //for the shader
+                    m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
+
+                    //cursor update
+                    cursor.Update(gameTime);
                 }
 
                 prevGameState = currentGameState;
@@ -738,13 +757,17 @@ namespace Poseidon
             if (paused)
             {
                 // Draw the "pause" text
+                spriteBatch.Begin();
                 spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
                     Color.White);
+                spriteBatch.End();
             }
             switch (currentGameState)
             {
                 case GameState.PlayingCutScene:
+                    spriteBatch.Begin();
                     DrawCutScene();
+                    spriteBatch.End();
                     break;
                 case GameState.Running:
                     // Change back the config changed by spriteBatch
@@ -791,6 +814,7 @@ namespace Poseidon
 
         private void DrawWinOrLossScreen(string gameResult)
         {
+            spriteBatch.Begin();
             float xOffsetText, yOffsetText;
             Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
                 GraphicDevice.Viewport.Height);
@@ -818,10 +842,13 @@ namespace Poseidon
             strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
             spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
                 strPosition, Color.AntiqueWhite);
+            spriteBatch.End();
         }
 
         private void DrawGameplayScreen()
         {
+            graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -974,11 +1001,30 @@ namespace Poseidon
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            SceneTexture = renderTarget;
+            // Render the scene with Edge Detection, using the render target from last frame.
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            {
+                // Apply the post process shader
+                effectPost.CurrentTechnique.Passes[0].Apply();
+                {
+                    effectPost.Parameters["fTimer"].SetValue(m_Timer);
+                    spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                }
+            }
+            spriteBatch.End();
+            spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
             DrawHeight();
             DrawRadar();
             if (Tank.activeSkillID != -1) DrawActiveSkill();
+            cursor.Draw(timming);
+            spriteBatch.End();
         }
 
         private void DrawRadar()

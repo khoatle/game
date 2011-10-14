@@ -32,7 +32,7 @@ namespace Poseidon {
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 1.5f;
+            //scaledSphere.Radius *= 1.5f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }

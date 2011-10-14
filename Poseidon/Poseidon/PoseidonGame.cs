@@ -74,7 +74,7 @@ namespace Poseidon
             graphics = new GraphicsDeviceManager(this);
 
             graphics.PreferredBackBufferWidth = 850;
-            graphics.PreferredBackBufferHeight = 800;//700;
+            graphics.PreferredBackBufferHeight = 700;
 
             //graphics.IsFullScreen = true;
 
@@ -126,8 +126,7 @@ namespace Poseidon
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
             helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
-            helpScene = new HelpScene(this, helpBackgroundTexture,
-            helpForegroundTexture);
+            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture, spriteBatch);
             Components.Add(helpScene);
 
             // Create the Start Scene
@@ -456,9 +455,9 @@ namespace Poseidon
         {
             
             //graphics.GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
+            //spriteBatch.Begin();
             base.Draw(gameTime);
-            spriteBatch.End();
+            //spriteBatch.End();
         }
 
     }

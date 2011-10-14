@@ -90,12 +90,14 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin();
             base.Draw(gameTime);
             AddingObjects.DrawUnassignedPtsBar(UnassignedPtsBar, game, spriteBatch, statsFont, Tank.unassignedPts, (game.Window.ClientBounds.Height/2)-50, "UNASSIGNED POINTS", Color.DarkBlue);
             spriteBatch.DrawString(menuLarge, Tank.speed.ToString("F1"), new Vector2(210, 225), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.maxHitPoint.ToString(), new Vector2(game.Window.ClientBounds.Width-295, 180), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.shootingRate.ToString("F1"), new Vector2(210, game.Window.ClientBounds.Height-320), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.strength.ToString("F1"), new Vector2(game.Window.ClientBounds.Width - 270, game.Window.ClientBounds.Height-260), Color.Black);
+            spriteBatch.End();
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Poseidon
             speed = (float)(GameConstants.EnemySpeed*1.5);
             damage = GameConstants.DefaultEnemyDamage * 3;
             perceptionRadius *= 2;
-            isHypnotise = true;
+            isHypnotise = false;
         }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {

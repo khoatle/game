@@ -63,6 +63,7 @@ namespace Poseidon
         public void setHypnotise() {
             isHypnotise = true;
             currentHuntingTarget = null;
+            startHypnotiseTime = PlayGameScene.timming.TotalGameTime;
         }
 
         public void wearOutHypnotise() {

@@ -123,8 +123,10 @@ namespace Poseidon {
         public const float coolDownForArchillesArmor = 5;
         public const float coolDownForThorHammer = 5;
         public const float coolDownForHermesSandle = 5;
+        public const float coolDownForHypnotise = 5;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
+        public const float timeHypnotiseLast = 10;
         public const float ThorDamage = 20;
         public const float ThorRange = 40;
         public const float ThorPushFactor = 10;

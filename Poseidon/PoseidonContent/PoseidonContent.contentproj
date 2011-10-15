@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectGuid>{6CE38EB8-C6A5-47A3-9B46-F3DE6E7E2D52}</ProjectGuid>
@@ -802,6 +802,13 @@
   <ItemGroup>
     <Compile Include="Image\LevelObjectiveIcon.png">
       <Name>LevelObjectiveIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\confuse.jpg">
+      <Name>confuse</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

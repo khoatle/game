@@ -25,7 +25,7 @@ namespace Poseidon
         public CombatEnemy() : base() {
             perceptID = new int[] {0,1,2,3};
             configBits = new bool[] {false, false, false, false};
-            speed = (float)(GameConstants.EnemySpeed*2);
+            speed = (float)(GameConstants.EnemySpeed*1.5);
             damage = GameConstants.DefaultEnemyDamage * 3;
             perceptionRadius *= 2;
             isHypnotise = true;
@@ -34,6 +34,9 @@ namespace Poseidon
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
             if (stunned) return;
 
+            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast) {
+                wearOutHypnotise();
+            }
             if (!isHypnotise) {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
                 configAction(perceptionID);

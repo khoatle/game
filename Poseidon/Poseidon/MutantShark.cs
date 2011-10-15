@@ -19,12 +19,7 @@ namespace Poseidon
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
 
-        private TimeSpan shootingStartTime;
-        private float shootingSeconds;
-
         public MutantShark() : base() {
-            shootingStartTime = new TimeSpan();
-            shootingSeconds = 4f;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -66,16 +61,24 @@ namespace Poseidon
         {
             if (stunned) return;
 
-            if (currentHuntingTarget != null && PlayGameScene.timming.TotalGameTime.TotalSeconds - shootingStartTime.TotalSeconds >= shootingSeconds)
+            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast)
             {
-                AddingObjects.placeChasingBullet(this, currentHuntingTarget, damage, enemyBullets);
-                shootingStartTime = PlayGameScene.timming.TotalGameTime;
-                return;
+                wearOutHypnotise();
             }
 
-            int perceptionID = perceptAndLock(tank, fishList, fishSize);
-            configAction(perceptionID);
-            makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+            if (!isHypnotise)
+            {
+                int perceptionID = perceptAndLock(tank, fishList, fishSize);
+                configAction(perceptionID);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+            }
+            else
+            {
+                int perceptionID = perceptAndLock(tank, enemyList, enemySize);
+                configAction(perceptionID);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+            }
+
 
             // if clip player has been initialized, update it
             if (clipPlayer != null)

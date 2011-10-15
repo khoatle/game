@@ -114,6 +114,11 @@ namespace Poseidon
         {
             // do not delete this
             if (stunned) return;
+
+            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast) {
+                wearOutHypnotise();
+            }
+
             if (!isHypnotise) {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
                 configAction(perceptionID);

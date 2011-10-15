@@ -105,7 +105,7 @@ namespace Poseidon {
         public const float FruitGrowth = 5.0f;
 
         //skills
-        public const int numberOfSkills = 4;
+        public const int numberOfSkills = 5;
         public const int numBulletTypes = 2;
 
         //radar
@@ -132,7 +132,7 @@ namespace Poseidon {
         public const float ThorPushFactor = 10;
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
-        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal" };
+        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal", "Image/confuse"};
         public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
         public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;

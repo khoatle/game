@@ -563,10 +563,13 @@ namespace Poseidon
 
                         // Hypnotise skill
                         if (Tank.activeSkillID == 4) {
-                            if (gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise) {
+                            BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+
+                            if (Tank.firstUse[3] == true || 
+                                (enemy != null && gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)) {
                                 Tank.firstUse[4] = false;
 
-                                // Logic here
+                                enemy.setHypnotise();
 
                                 Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss;
@@ -1108,6 +1111,7 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1+= "0";
             str1 += roundTimer.Seconds;
+            str1 += "\n Active skill " + Tank.activeSkillID;
             //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
             //str1 += "\n Level: " + Tank.level;
             //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 

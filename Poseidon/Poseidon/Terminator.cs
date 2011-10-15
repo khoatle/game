@@ -122,7 +122,7 @@ namespace Poseidon
             }
             if (configBits[2] == true)
             {
-                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank); 
             }
             if (configBits[3] == true)
             {

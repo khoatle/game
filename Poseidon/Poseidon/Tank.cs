@@ -462,7 +462,7 @@ namespace Poseidon
                 reachDestination = false;
             }
             //if (desiredAngle != 0)
-            if (reachDestination == false)
+            if (reachDestination == false && pointMoveTo!= Vector3.Zero)
             {
                 
                 //float difference = WrapAngle(desiredAngle - ForwardDirection);

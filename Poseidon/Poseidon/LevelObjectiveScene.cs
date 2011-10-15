@@ -88,12 +88,14 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin();
             base.Draw(gameTime);
             //AddingObjects.DrawUnassignedPtsBar(UnassignedPtsBar, game, spriteBatch, statsFont, Tank.unassignedPts, (game.Window.ClientBounds.Height / 2) - 50, "UNASSIGNED POINTS", Color.DarkBlue);
             spriteBatch.DrawString(menuLarge, "LEVEL1:\nYou Need to kill all enemies or the big boss", new Vector2(100, 200), Color.Black);
             spriteBatch.DrawString(menuLarge, playgamescene.enemiesAmount.ToString()+" enemies left", new Vector2(100, 400), Color.Black);
             //spriteBatch.DrawString(menuLarge, Tank.shootingRate.ToString("F1"), new Vector2(210, game.Window.ClientBounds.Height - 320), Color.Black);
             //spriteBatch.DrawString(menuLarge, Tank.strength.ToString("F1"), new Vector2(game.Window.ClientBounds.Width - 270, game.Window.ClientBounds.Height - 260), Color.Black);
+            spriteBatch.End();
         }
     }
 }

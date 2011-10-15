@@ -90,7 +90,7 @@ namespace Poseidon
             }
         }
 
-        private void calculateFutureBoundingSphere() {
+        protected void calculateFutureBoundingSphere() {
             Vector3 futurePosition = Position + speed * headingDirection;
             futureBoundingSphere = new BoundingSphere(futurePosition, BoundingSphere.Radius);
         }

@@ -38,6 +38,8 @@ namespace Poseidon
         public Rectangle shootrateIconRectangle;
         public Rectangle bulletStrengthIconRectangle;
         public Rectangle doneIconRectangle;
+        private int centerX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.X;
+        private int centerY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y + 50;
         /// <summary>
         /// Default Constructor
          public SkillScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
@@ -46,7 +48,7 @@ namespace Poseidon
         {
             this.Content = Content;
             Components.Add(new ImageComponent(game, background,
-                                            ImageComponent.DrawMode.Stretch));
+                                            ImageComponent.DrawMode.Center));
 
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)Game.Services.GetService(
@@ -108,13 +110,15 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
+            spriteBatch.Begin();
             base.Draw(gameTime);
             DrawSpeedIcon();
             DrawHitPointIcon();
             DrawShootRateIcon();
             DrawBulletStrengthIcon();
             DrawDoneIcon();
-            DrawUnassignedPtsBar(Tank.unassignedPts, (game.Window.ClientBounds.Top)+410, "UNASSIGNED POINTS", Color.DarkBlue);
+            //DrawUnassignedPtsBar(Tank.unassignedPts, (game.Window.ClientBounds.Top)+410, "UNASSIGNED POINTS", Color.DarkBlue);
+            DrawUnassignedPtsBar(Tank.unassignedPts, centerY-15, "UNASSIGNED POINTS", Color.DarkBlue);
             int stringHeight = 60;
             int stringLength = 30;
             spriteBatch.DrawString(menuLarge, Tank.speed.ToString("F1"), new Vector2(speedIconRectangle.Center.X-stringLength,speedIconRectangle.Bottom-stringHeight), Color.Black);
@@ -122,14 +126,17 @@ namespace Poseidon
             spriteBatch.DrawString(menuLarge, Tank.shootingRate.ToString("F1"), new Vector2(shootrateIconRectangle.Center.X - stringLength, shootrateIconRectangle.Bottom - stringHeight), Color.Black);
             spriteBatch.DrawString(menuLarge, Tank.strength.ToString("F1"), new Vector2(bulletStrengthIconRectangle.Center.X - stringLength, bulletStrengthIconRectangle.Bottom - stringHeight), Color.Black);
             cursor.Draw(gameTime);
+            spriteBatch.End();
         }
 
         private void DrawSpeedIcon()
         {
             int xOffsetText, yOffsetText;
 
-            xOffsetText = game.Window.ClientBounds.Left + 100;
-            yOffsetText = game.Window.ClientBounds.Top + 200;
+            //xOffsetText = game.Window.ClientBounds.Left + 100;
+            xOffsetText = centerX - 370;
+            //yOffsetText = game.Window.ClientBounds.Top + 200;
+            yOffsetText = centerY - 230;
 
             speedIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
@@ -140,8 +147,10 @@ namespace Poseidon
         {
             int xOffsetText, yOffsetText;
 
-            xOffsetText = game.Window.ClientBounds.Right - 370;
-            yOffsetText = game.Window.ClientBounds.Top + 200;
+            //xOffsetText = game.Window.ClientBounds.Right - 370;
+            //yOffsetText = game.Window.ClientBounds.Top + 200;
+            xOffsetText = centerX + 100;
+            yOffsetText = centerY - 230;
 
             hitpointIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
@@ -152,8 +161,10 @@ namespace Poseidon
         {
             int xOffsetText, yOffsetText;
 
-            xOffsetText = game.Window.ClientBounds.Left + 100;
-            yOffsetText = game.Window.ClientBounds.Bottom - 300;
+            //xOffsetText = game.Window.ClientBounds.Left + 100;
+            xOffsetText = centerX - 370;
+            //yOffsetText = game.Window.ClientBounds.Bottom - 300;
+            yOffsetText =  centerY + 50;
 
             shootrateIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
@@ -164,8 +175,10 @@ namespace Poseidon
         {
             int xOffsetText, yOffsetText;
 
-            xOffsetText = game.Window.ClientBounds.Right - 370;
-            yOffsetText = game.Window.ClientBounds.Bottom - 300;
+            //xOffsetText = game.Window.ClientBounds.Right - 370;
+            //yOffsetText = game.Window.ClientBounds.Bottom - 300;
+            xOffsetText = centerX + 100;
+            yOffsetText = centerY + 50;
 
             bulletStrengthIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
@@ -176,8 +189,10 @@ namespace Poseidon
         {
             int xOffsetText, yOffsetText;
 
-            xOffsetText = game.Window.ClientBounds.Center.X - 100;
-            yOffsetText = game.Window.ClientBounds.Bottom - 100;
+            //xOffsetText = game.Window.ClientBounds.Center.X - 100;
+            //yOffsetText = game.Window.ClientBounds.Bottom - 100;
+            xOffsetText = centerX - 100;
+            yOffsetText = centerY + 250;
 
             doneIconRectangle = new Rectangle(xOffsetText, yOffsetText, 200, 100);
 

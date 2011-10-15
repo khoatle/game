@@ -17,6 +17,8 @@ namespace Poseidon
     {
         public static void UseHerculesBow(Tank tank, ContentManager Content, List<DamageBullet> myBullets)
         {
+            float healthiness = (float)Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            System.Diagnostics.Debug.WriteLine(healthiness);
             DamageBullet d = new DamageBullet();
 
             Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
@@ -24,7 +26,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10, Tank.strengthUp);
+            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * healthiness, Tank.strengthUp);
             d.loadContent(Content, "Models/fuelcarrier");
             myBullets.Add(d);
         }
@@ -33,9 +35,10 @@ namespace Poseidon
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (InThorRange(tank, enemies[i].Position)){
+                    float healthiness = (float) Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                    enemies[i].health -= (int) GameConstants.ThorDamage;
+                    enemies[i].health -= (int) (GameConstants.ThorDamage * healthiness * Tank.strength);
                     PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
                     if (enemies[i].health <= 0)
                     {
@@ -81,6 +84,7 @@ namespace Poseidon
             {
                 if (tank.BoundingSphere.Intersects(enemies[i].BoundingSphere))
                 {
+                    float healthiness = (float)Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
                     Vector3 oldPosition = enemies[i].Position;
                     Vector3 pushVector = enemies[i].Position - tank.Position;
                     pushVector.Normalize();
@@ -96,7 +100,7 @@ namespace Poseidon
                         enemies[i].Position = oldPosition;
                         enemies[i].BoundingSphere.Center = oldPosition;
                     }
-                    enemies[i].health -= (int)GameConstants.HermesDamage;
+                    enemies[i].health -= (int)(GameConstants.HermesDamage * healthiness * Tank.strength);
                     audio.Shooting.Play();
                     if (enemies[i].health <= 0)
                     {

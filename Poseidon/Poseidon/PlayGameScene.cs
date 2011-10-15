@@ -113,6 +113,13 @@ namespace Poseidon
         // and the level is won
         public static bool isBossKilled = false;
 
+        // shader for underwater effect
+        // Our Post Process effect object, this is where our shader will be loaded and compiled
+        Effect effectPost;
+        float m_Timer = 0;
+        RenderTarget2D renderTarget;
+        Texture2D SceneTexture;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -144,7 +151,7 @@ namespace Poseidon
 
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
-            Components.Add(cursor);
+            //Components.Add(cursor);
 
             myBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
@@ -169,7 +176,7 @@ namespace Poseidon
             Random random = new Random();
             int random_level = random.Next(20);
             string terrain_name = "Image/terrain" + random_level;
-            System.Diagnostics.Debug.WriteLine(terrain_name);
+            //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
@@ -215,6 +222,12 @@ namespace Poseidon
 
             //Load healthbar
             HealthBar = Content.Load<Texture2D>("Image/HealthBar");
+
+            // Load and compile our Shader into our Effect instance.
+            effectPost = Content.Load<Effect>("Shaders/PostProcess");
+            PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
+            renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
         }
 
         /// <summary>
@@ -506,6 +519,7 @@ namespace Poseidon
                                 Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(tank, Content, myBullet);
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
 
                         }
@@ -518,6 +532,7 @@ namespace Poseidon
                                 Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
                                 CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
                         // Achilles' Armor!!!
@@ -529,6 +544,7 @@ namespace Poseidon
                                 Tank.invincibleMode = true;
                                 audio.NewMeteor.Play();
                                 Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
 
@@ -541,6 +557,7 @@ namespace Poseidon
                                 audio.NewMeteor.Play();
                                 Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.supersonicMode = true;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
                         pointIntersect = Vector3.Zero;
@@ -708,6 +725,12 @@ namespace Poseidon
                     roundTimer -= gameTime.ElapsedGameTime;
                     if (CheckWinCondition()) currentGameState = GameState.Won;
                     if (CheckLoseCondition()) currentGameState = GameState.Lost;
+
+                    //for the shader
+                    m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
+
+                    //cursor update
+                    cursor.Update(gameTime);
                 }
 
                 prevGameState = currentGameState;
@@ -742,13 +765,17 @@ namespace Poseidon
             if (paused)
             {
                 // Draw the "pause" text
+                spriteBatch.Begin();
                 spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
                     Color.White);
+                spriteBatch.End();
             }
             switch (currentGameState)
             {
                 case GameState.PlayingCutScene:
+                    spriteBatch.Begin();
                     DrawCutScene();
+                    spriteBatch.End();
                     break;
                 case GameState.Running:
                     // Change back the config changed by spriteBatch
@@ -796,6 +823,7 @@ namespace Poseidon
 
         private void DrawWinOrLossScreen(string gameResult)
         {
+            spriteBatch.Begin();
             float xOffsetText, yOffsetText;
             Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
                 GraphicDevice.Viewport.Height);
@@ -823,10 +851,13 @@ namespace Poseidon
             strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
             spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
                 strPosition, Color.AntiqueWhite);
+            spriteBatch.End();
         }
 
         private void DrawGameplayScreen()
         {
+            graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -856,7 +887,9 @@ namespace Poseidon
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
+                        spriteBatch.End();
                     }
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
@@ -979,12 +1012,31 @@ namespace Poseidon
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            SceneTexture = renderTarget;
+            // Render the scene with Edge Detection, using the render target from last frame.
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+
+
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            {
+                // Apply the post process shader
+                effectPost.CurrentTechnique.Passes[0].Apply();
+                {
+                    effectPost.Parameters["fTimer"].SetValue(m_Timer);
+                    spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                }
+            }
+            spriteBatch.End();
+            spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
             //DrawHeight();
             DrawRadar();
             if (Tank.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
+            cursor.Draw(timming);
+            spriteBatch.End();
         }
 
         private void DrawRadar()
@@ -1104,7 +1156,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Left + 225;
+            //xOffsetText = rectSafeArea.Left + 325;
+            xOffsetText = rectSafeArea.Center.X - 150 -64;
             yOffsetText = rectSafeArea.Bottom - 80;
 
             //Vector2 bulletIconPosition =
@@ -1123,7 +1176,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 300;
+            //xOffsetText = rectSafeArea.Right - 400;
+            xOffsetText = rectSafeArea.Center.X + 150;
             yOffsetText = rectSafeArea.Bottom - 100;
 
             //Vector2 skillIconPosition =

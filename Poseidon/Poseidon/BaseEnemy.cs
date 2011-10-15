@@ -107,6 +107,44 @@ namespace Poseidon
         public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
         }
 
+        public override void Draw(Matrix view, Matrix projection)
+        {
+            Matrix[] transforms = new Matrix[Model.Bones.Count];
+            Model.CopyAbsoluteBoneTransformsTo(transforms);
+            //Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            //Matrix worldMatrix = translateMatrix;
+            Matrix worldMatrix = Matrix.Identity;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
+            Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            worldMatrix = rotationYMatrix * translateMatrix;
+
+            foreach (ModelMesh mesh in Model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
+                    effect.World =
+                        worldMatrix * transforms[mesh.ParentBone.Index];
+                    effect.View = view;
+                    effect.Projection = projection;
+                    if (isHypnotise)
+                    {
+                        effect.DiffuseColor = Color.Yellow.ToVector3();
+                    }
+                    else
+                        effect.DiffuseColor = Color.White.ToVector3();
+
+                    effect.EnableDefaultLighting();
+                    effect.PreferPerPixelLighting = true;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                }
+                mesh.Draw();
+            }
+        }
+
         // Go randomly is default move
         protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
         {

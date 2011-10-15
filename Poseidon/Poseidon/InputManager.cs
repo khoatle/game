@@ -17,6 +17,7 @@ namespace Poseidon
             if (currentKeyboardState.IsKeyDown(Keys.D2)) Tank.activeSkillID = 1;
             if (currentKeyboardState.IsKeyDown(Keys.D3)) Tank.activeSkillID = 2;
             if (currentKeyboardState.IsKeyDown(Keys.D4)) Tank.activeSkillID = 3;
+            if (currentKeyboardState.IsKeyDown(Keys.D5)) Tank.activeSkillID = 4;
             if (lastKeyboardState.IsKeyDown(Keys.Space) && currentKeyboardState.IsKeyUp(Keys.Space))
             {
                 Tank.bulletType++;

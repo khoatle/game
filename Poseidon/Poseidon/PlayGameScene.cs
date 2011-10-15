@@ -565,8 +565,11 @@ namespace Poseidon
                         if (Tank.activeSkillID == 4) {
                             BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
 
-                            if (Tank.firstUse[3] == true || 
-                                (enemy != null && gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)) {
+                            if (enemy == null) {
+                                return;
+                            }
+
+                            if (Tank.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise) {
                                 Tank.firstUse[4] = false;
 
                                 enemy.setHypnotise();
@@ -578,6 +581,7 @@ namespace Poseidon
 
                         pointIntersect = Vector3.Zero;
                     }
+
                     //if the user holds down Ctrl button
                     //just shoot at wherever the mouse is pointing w/o moving
                     else if (currentKeyboardState.IsKeyDown(Keys.RightControl) || currentKeyboardState.IsKeyDown(Keys.LeftControl))

@@ -82,7 +82,7 @@ namespace Poseidon
                 else if (type == 4)
                 {
                     fish[i].LoadContent(Content, "Models/orca");
-                    fish[i].Load(1, 20, 24);
+                    fish[i].Load(1, 24, 24);
                     fish[i].Name = "orca";
                 }
                 else if (type == 5)

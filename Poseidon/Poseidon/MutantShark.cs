@@ -96,6 +96,8 @@ namespace Poseidon
         {
             if (configBits[0] == true)
             {
+                if (!clipPlayer.inRange(1, 24) && !configBits[3])
+                    clipPlayer.switchRange(1, 24);
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
                 return;
             }
@@ -106,6 +108,8 @@ namespace Poseidon
             }
             if (configBits[2] == true)
             {
+                if (!clipPlayer.inRange(1, 24) && !configBits[3])
+                    clipPlayer.switchRange(1, 24);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
             if (configBits[3] == true)
@@ -124,8 +128,8 @@ namespace Poseidon
 
                 if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
-                    //if (!clipPlayer.inRange(25, 35))
-                    //    clipPlayer.switchRange(25, 35);
+                    if (!clipPlayer.inRange(25, 48))
+                        clipPlayer.switchRange(25, 48);
 
                     if (currentHuntingTarget.GetType().Name.Equals("Tank"))
                     {
@@ -144,8 +148,7 @@ namespace Poseidon
         // Go straight
         protected override void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
         {
-            //if (!clipPlayer.inRange(1, 24))
-            //    clipPlayer.switchRange(1, 24);
+            
             Vector3 futurePosition = Position + speed * headingDirection;
             if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
                     && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))

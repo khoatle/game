@@ -1156,7 +1156,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Left + 225;
+            //xOffsetText = rectSafeArea.Left + 325;
+            xOffsetText = rectSafeArea.Center.X - 150 -64;
             yOffsetText = rectSafeArea.Bottom - 80;
 
             //Vector2 bulletIconPosition =
@@ -1175,7 +1176,8 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 300;
+            //xOffsetText = rectSafeArea.Right - 400;
+            xOffsetText = rectSafeArea.Center.X + 150;
             yOffsetText = rectSafeArea.Bottom - 100;
 
             //Vector2 skillIconPosition =

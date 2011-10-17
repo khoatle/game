@@ -20,7 +20,7 @@ namespace Poseidon
                 enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel];
             else enemiesAmount = GameConstants.ShipNumberEnemies;
             Random rnd = new Random();
-            for (int i = 0; i < enemiesAmount - 2; i++) {
+            for (int i = 0; i < enemiesAmount - 3; i++) {
                 //enemies[i] = new ShootingEnemy();
                 if (i < GameConstants.NumberCombatEnemies[currentLevel]) {
                     enemies[i] = new CombatEnemy();
@@ -37,13 +37,19 @@ namespace Poseidon
             MutantShark mutantShark = new MutantShark();
             mutantShark.LoadContent(Content, "Models/mutantShark");
             mutantShark.Name = "mutant shark";
-            enemies[enemiesAmount - 2] = mutantShark;
+            enemies[enemiesAmount - 3] = mutantShark;
             
             Terminator terminator = new Terminator();
             terminator.LoadContent(Content, "Models/squirrel");
             terminator.Name = "terminator";
             terminator.Load();
-            enemies[enemiesAmount - 1] = terminator;
+            enemies[enemiesAmount - 2] = terminator;
+
+            Terminator hunter = new Terminator();
+            hunter.LoadContent(Content, "Models/diver");
+            hunter.Name = "Whale Hunter";
+            hunter.Load(1, 50, 24);
+            enemies[enemiesAmount - 1] = hunter;
         }
 
         public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, bool mainGame)

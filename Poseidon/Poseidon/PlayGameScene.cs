@@ -954,8 +954,8 @@ namespace Poseidon
                 enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-            for (int i = 0; i < enemyBullet.Count; i++) {
-                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            for (int i = 0; i < alliesBullets.Count; i++) {
+                alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
             BoundingSphere shipSphere;
             // Drawing ship wrecks

@@ -165,9 +165,9 @@ namespace Poseidon
                     effect.View = view;
                     effect.Projection = projection;
                     if (isHypnotise) {
-                        effect.DiffuseColor = Color.Yellow.ToVector3();
+                        effect.DiffuseColor = Color.Black.ToVector3();
                     } else 
-                        effect.DiffuseColor = Color.Red.ToVector3();
+                        effect.DiffuseColor = Color.Green.ToVector3();
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;

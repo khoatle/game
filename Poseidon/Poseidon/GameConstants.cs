@@ -53,8 +53,8 @@ namespace Poseidon {
         //general
         //number of enemy and fish per level for main game
 
-        public static int[] NumberShootingEnemies = {25, 15, 10, 10, 10, 10};
-        public static int[] NumberCombatEnemies = {25, 50, 50, 50, 50};
+        public static int[] NumberShootingEnemies = {100, 15, 10, 10, 10, 10};
+        public static int[] NumberCombatEnemies = {0, 50, 50, 50, 50};
         public static int[] NumberFish = {50, 30, 30, 30, 30 , 30};
 
         //number of enemy and fish for ship wreck

@@ -197,6 +197,12 @@ namespace Poseidon
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                        if (barriers[j] is BaseEnemy) {
+                            if (((BaseEnemy)barriers[j]).isHypnotise) {
+                                return;
+                            }
+                        }
+
                         barriers[j].health -= bullets[i].damage;
                         bullets.RemoveAt(i--);
                         break;

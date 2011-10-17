@@ -127,7 +127,7 @@ namespace Poseidon
             else {
                 int perceptionID = perceptAndLock(tank, enemyList, enemySize);
                 configAction(perceptionID);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, tank);
             }
         }
     }

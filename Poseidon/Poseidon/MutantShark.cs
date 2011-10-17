@@ -59,8 +59,28 @@ namespace Poseidon
         }
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
         {
-            if (stunned) return;
+            // if clip player has been initialized, update it
+            if (clipPlayer != null)
+            {
 
+                qRotation = Quaternion.CreateFromAxisAngle(
+                                Vector3.Up,
+                                ForwardDirection);
+                float scale = 1.0f;
+
+                fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                                    Matrix.CreateFromQuaternion(qRotation) *
+                                    Matrix.CreateTranslation(Position);
+                clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, fishMatrix);
+            }
+            //if stunned, switch to idle anim
+            //for mutant shark, idle = swimming normally
+            if (stunned)
+            {
+                if (!clipPlayer.inRange(1, 24))
+                    clipPlayer.switchRange(1, 24);
+                return;
+            }
             if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast)
             {
                 wearOutHypnotise();
@@ -78,27 +98,14 @@ namespace Poseidon
                 configAction(perceptionID);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
             }
-
-
-            // if clip player has been initialized, update it
-            if (clipPlayer != null)
-            {
-                qRotation = Quaternion.CreateFromAxisAngle(
-                                Vector3.Up,
-                                ForwardDirection);
-                float scale = 1.0f;
-
-                fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
-                                    Matrix.CreateFromQuaternion(qRotation) *
-                                    Matrix.CreateTranslation(Position);
-                clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, fishMatrix);
-            }
+        
         }
         // Execute the actions
         protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank)
         {
             if (configBits[0] == true)
             {
+                // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 24) && !configBits[3])
                     clipPlayer.switchRange(1, 24);
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
@@ -111,6 +118,7 @@ namespace Poseidon
             }
             if (configBits[2] == true)
             {
+                // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 24) && !configBits[3])
                     clipPlayer.switchRange(1, 24);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
@@ -131,6 +139,8 @@ namespace Poseidon
 
                 if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
+                    //if attack and swim both at the same time or not
+                    //just use attacking anim
                     if (!clipPlayer.inRange(25, 48))
                         clipPlayer.switchRange(25, 48);
 

@@ -48,7 +48,7 @@ namespace Poseidon
             Terminator hunter = new Terminator();
             hunter.LoadContent(Content, "Models/diver");
             hunter.Name = "Whale Hunter";
-            hunter.Load(1, 50, 24);
+            hunter.Load(1, 25, 24);
             enemies[enemiesAmount - 1] = hunter;
         }
 

@@ -25,13 +25,13 @@ namespace Poseidon
 
         Random random;
         int powerupsType;
-
-        public void Load()
+        
+        public void Load(int clipStart, int clipEnd, int fps)
         {
             skd = Model.Tag as SkinningData;
-            clipPlayer = new ClipPlayer(skd, 60);//ClipPlayer running at 24 frames/sec
+            clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
-            clipPlayer.play(clip, 99, 124, true);
+            clipPlayer.play(clip, clipStart, clipEnd, true);
             fishMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
@@ -45,6 +45,11 @@ namespace Poseidon
             maxHealth = 1000;
             perceptionRadius = GameConstants.BossPerceptionRadius;
             experienceReward = 400; //3000
+        }
+
+        public void Load()
+        {
+            Load(99, 124, 60);
         }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {

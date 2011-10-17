@@ -210,7 +210,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
  
             h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
-            h.loadContent(Content, "Models/sphere1uR");
+            h.loadContent(Content, "Models/healBullet");
             healthBullet.Add(h);
         }
 
@@ -223,7 +223,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
-            d.loadContent(Content, "Models/fuelcell");
+            d.loadContent(Content, "Models/damageBullet");
             myBullet.Add(d);
         }
 
@@ -248,9 +248,11 @@ namespace Poseidon
 
             newBullet.initialize(obj.Position, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
-                newBullet.loadContent(PlayGameScene.Content, "Models/bossBullet1");
-            else newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
-            bullets.Add(newBullet);
+            {
+                newBullet.loadContent(PlayGameScene.Content, "Models/bossBullet");
+            }
+            else newBullet.loadContent(PlayGameScene.Content, "Models/normalbullet");
+            bullets.Add(newBullet);         
         }
 
         public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets) {
@@ -271,7 +273,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
-            newBullet.loadContent(PlayGameScene.Content, "Models/sphere1uR");
+            newBullet.loadContent(PlayGameScene.Content, "Models/chasingBullet");
             bullets.Add(newBullet);
         }
 

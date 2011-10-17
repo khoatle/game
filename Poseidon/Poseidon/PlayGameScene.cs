@@ -626,6 +626,7 @@ namespace Poseidon
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                                 //so the tank will not move
                                 pointIntersect = Vector3.Zero;
+                                tank.reachDestination = true;
                             }
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
@@ -798,10 +799,7 @@ namespace Poseidon
                     spriteBatch.End();
                     break;
                 case GameState.Running:
-                    // Change back the config changed by spriteBatch
-                    GraphicDevice.BlendState = BlendState.Opaque;
-                    GraphicDevice.DepthStencilState = DepthStencilState.Default;
-                    GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                    RestoreGraphicConfig();
                     DrawGameplayScreen();
                     break;
                 case GameState.Won:
@@ -910,6 +908,7 @@ namespace Poseidon
                         spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
                         spriteBatch.End();
+                        RestoreGraphicConfig();
                     }
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
@@ -1253,5 +1252,13 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
+        private void RestoreGraphicConfig()
+        {
+            // Change back the config changed by spriteBatch
+            GraphicDevice.BlendState = BlendState.Opaque;
+            GraphicDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            return;
+        }
     }
 }

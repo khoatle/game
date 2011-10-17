@@ -17,9 +17,10 @@ namespace Poseidon
     {
         public Vector3 unitDirection;
         public float projectionSpeed;
-
+        
         private bool isActive;
 
+        //float forwardDir;
         public Projectiles()
             : base() {
             isActive = true;
@@ -69,7 +70,9 @@ namespace Poseidon
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translationMatrix = Matrix.CreateTranslation(Position);
             Matrix worldMatrix = translationMatrix;
-
+            //forwardDir += MathHelper.PiOver4 / 4;
+            //Matrix rotationMatrix = Matrix.CreateRotationY(forwardDir);
+            //Matrix worldMatrix = rotationMatrix * translationMatrix;
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -81,6 +84,11 @@ namespace Poseidon
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
                 mesh.Draw();
             }

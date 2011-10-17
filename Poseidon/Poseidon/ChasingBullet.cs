@@ -11,7 +11,8 @@ namespace Poseidon
 {
     public class ChasingBullet : DamageBullet {
         public GameObject target;
-        
+        public float forwardDir;
+
         public ChasingBullet() : base() { 
         }
 
@@ -37,7 +38,9 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translationMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translationMatrix;
+            forwardDir += MathHelper.PiOver4/4;
+            Matrix rotationMatrix = Matrix.CreateRotationY(forwardDir);
+            Matrix worldMatrix =  rotationMatrix * translationMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes) {
                 foreach (BasicEffect effect in mesh.Effects){
@@ -48,6 +51,11 @@ namespace Poseidon
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
+
+                    effect.FogEnabled = true;
+                    effect.FogStart = GameConstants.FogStart;
+                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
                 mesh.Draw();
             }

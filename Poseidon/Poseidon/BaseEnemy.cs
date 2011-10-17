@@ -5,12 +5,21 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SkinnedModel;
+using Poseidon.Core;
 
 
 namespace Poseidon
 {
     public class BaseEnemy : SwimmingObject
     {
+        // For the animation
+        protected Matrix[] bones;
+        protected SkinningData skd;
+        protected ClipPlayer clipPlayer;
+        protected Matrix enemyMatrix;
+        protected Quaternion qRotation = Quaternion.Identity;
+
         // Percept ID:
         // 0 = nothing detected
         // 1 = tank detected - 1st priory
@@ -45,6 +54,27 @@ namespace Poseidon
 
         public bool isHypnotise;
         protected TimeSpan startHypnotiseTime;
+
+        public virtual void Load(int clipStart, int clipEnd, int fps)
+        {
+            skd = Model.Tag as SkinningData;
+            clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
+            AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
+            clipPlayer.play(clip, clipStart, clipEnd, true);
+            enemyMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                               Matrix.CreateTranslation(Position);
+            BoundingSphere scaledSphere;
+            scaledSphere = BoundingSphere;
+            scaledSphere.Radius *= 0.1f;
+            BoundingSphere =
+                new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            //isBigBoss = true;
+            //random = new Random();
+            //health = 1000;
+            //maxHealth = 1000;
+            //perceptionRadius = GameConstants.BossPerceptionRadius;
+            //experienceReward = 400; //3000
+        }
 
         public BaseEnemy()
             : base()
@@ -109,33 +139,22 @@ namespace Poseidon
 
         public override void Draw(Matrix view, Matrix projection)
         {
-            Matrix[] transforms = new Matrix[Model.Bones.Count];
-            Model.CopyAbsoluteBoneTransformsTo(transforms);
-            //Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            //Matrix worldMatrix = translateMatrix;
-            Matrix worldMatrix = Matrix.Identity;
-            Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
-            Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            worldMatrix = rotationYMatrix * translateMatrix;
+            bones = clipPlayer.GetSkinTransforms();
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                foreach (SkinnedEffect effect in mesh.Effects)
                 {
-                    effect.World =
-                        worldMatrix * transforms[mesh.ParentBone.Index];
+
+                    effect.SetBoneTransforms(bones);
                     effect.View = view;
                     effect.Projection = projection;
                     if (isHypnotise)
                     {
-                        effect.DiffuseColor = Color.Black.ToVector3();
+                        effect.DiffuseColor = Color.Red.ToVector3();
                     }
                     else
                         effect.DiffuseColor = Color.White.ToVector3();
-
-                    effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
-
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
@@ -143,6 +162,40 @@ namespace Poseidon
                 }
                 mesh.Draw();
             }
+            //Matrix[] transforms = new Matrix[Model.Bones.Count];
+            //Model.CopyAbsoluteBoneTransformsTo(transforms);
+            ////Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            ////Matrix worldMatrix = translateMatrix;
+            //Matrix worldMatrix = Matrix.Identity;
+            //Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
+            //Matrix translateMatrix = Matrix.CreateTranslation(Position);
+            //worldMatrix = rotationYMatrix * translateMatrix;
+
+            //foreach (ModelMesh mesh in Model.Meshes)
+            //{
+            //    foreach (BasicEffect effect in mesh.Effects)
+            //    {
+            //        effect.World =
+            //            worldMatrix * transforms[mesh.ParentBone.Index];
+            //        effect.View = view;
+            //        effect.Projection = projection;
+            //        if (isHypnotise)
+            //        {
+            //            effect.DiffuseColor = Color.Black.ToVector3();
+            //        }
+            //        else
+            //            effect.DiffuseColor = Color.White.ToVector3();
+
+            //        effect.EnableDefaultLighting();
+            //        effect.PreferPerPixelLighting = true;
+
+            //        effect.FogEnabled = true;
+            //        effect.FogStart = GameConstants.FogStart;
+            //        effect.FogEnd = GameConstants.FogEnd;
+            //        effect.FogColor = GameConstants.FogColor.ToVector3();
+            //    }
+            //    mesh.Draw();
+            //}
         }
 
         // Go randomly is default move

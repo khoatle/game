@@ -112,6 +112,13 @@ namespace Poseidon
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
         {
+            qRotation = Quaternion.CreateFromAxisAngle(
+                            Vector3.Up,
+                            ForwardDirection);
+            enemyMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                                Matrix.CreateFromQuaternion(qRotation) *
+                                Matrix.CreateTranslation(Position);
+            clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, enemyMatrix);
             // do not delete this
             if (stunned) return;
 

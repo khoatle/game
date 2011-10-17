@@ -12,11 +12,11 @@ namespace Poseidon
 {
     class Terminator : ShootingEnemy
     {
-        Matrix[] bones;
-        SkinningData skd;
-        ClipPlayer clipPlayer;
-        Matrix fishMatrix;
-        Quaternion qRotation = Quaternion.Identity;
+        //Matrix[] bones;
+        //SkinningData skd;
+        //ClipPlayer clipPlayer;
+        //Matrix fishMatrix;
+        //Quaternion qRotation = Quaternion.Identity;
         double timePrevPowerUsed = 0;
         //this boss will fire 3 bullets at once for 3 seconds
         bool enragedMode = false;
@@ -26,13 +26,13 @@ namespace Poseidon
         Random random;
         int powerupsType;
         
-        public void Load(int clipStart, int clipEnd, int fps)
+        public override void Load(int clipStart, int clipEnd, int fps)
         {
             skd = Model.Tag as SkinningData;
             clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, true);
-            fishMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
@@ -56,10 +56,10 @@ namespace Poseidon
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
                             ForwardDirection);
-            fishMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                 Matrix.CreateFromQuaternion(qRotation) *
                                 Matrix.CreateTranslation(Position);
-            clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, fishMatrix);
+            clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, enemyMatrix);
             if (!stunned)
             {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
@@ -68,23 +68,23 @@ namespace Poseidon
             }
             
         }
-        public override void Draw(Matrix view, Matrix projection)
-        {
-            bones = clipPlayer.GetSkinTransforms();
+        //public override void Draw(Matrix view, Matrix projection)
+        //{
+        //    bones = clipPlayer.GetSkinTransforms();
 
-            foreach (ModelMesh mesh in Model.Meshes)
-            {
-                foreach (SkinnedEffect effect in mesh.Effects)
-                {
+        //    foreach (ModelMesh mesh in Model.Meshes)
+        //    {
+        //        foreach (SkinnedEffect effect in mesh.Effects)
+        //        {
 
-                    effect.SetBoneTransforms(bones);
-                    effect.View = view;
-                    effect.Projection = projection;
-                }
-                mesh.Draw();
-            }
+        //            effect.SetBoneTransforms(bones);
+        //            effect.View = view;
+        //            effect.Projection = projection;
+        //        }
+        //        mesh.Draw();
+        //    }
 
-        }
+        //}
 
         public void RapidFire(List<DamageBullet> bullets)
         {

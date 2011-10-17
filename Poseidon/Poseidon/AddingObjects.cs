@@ -31,7 +31,9 @@ namespace Poseidon
                     enemies[i].Name = "Shooting Enemy";
                 }
                 
-                enemies[i].LoadContent(Content, "Models/Fuelcarrier");
+                enemies[i].LoadContent(Content, "Models/diver");
+                enemies[i].Name = "Shooting Hunter";
+                enemies[i].Load(1, 50, 24);
                 //enemies[i].Name = "minion enemy";
             }
             MutantShark mutantShark = new MutantShark();

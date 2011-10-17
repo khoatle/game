@@ -13,22 +13,22 @@ namespace Poseidon
     class MutantShark : CombatEnemy
     {
 
-        Matrix[] bones;
-        SkinningData skd;
-        ClipPlayer clipPlayer;
-        Matrix fishMatrix;
-        Quaternion qRotation = Quaternion.Identity;
+        //Matrix[] bones;
+        //SkinningData skd;
+        //ClipPlayer clipPlayer;
+        //Matrix fishMatrix;
+        //Quaternion qRotation = Quaternion.Identity;
 
         public MutantShark() : base() {
         }
 
-        public void Load(int clipStart, int clipEnd, int fpsRate)
+        public override void Load(int clipStart, int clipEnd, int fpsRate)
         {
             skd = Model.Tag as SkinningData;
             clipPlayer = new ClipPlayer(skd, fpsRate);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, true);
-            fishMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
@@ -68,10 +68,10 @@ namespace Poseidon
                                 ForwardDirection);
                 float scale = 1.0f;
 
-                fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                enemyMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
-                clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, fishMatrix);
+                clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, enemyMatrix);
             }
             //if stunned, switch to idle anim
             //for mutant shark, idle = swimming normally
@@ -171,34 +171,34 @@ namespace Poseidon
             }
 
         }
-        public override void Draw(Matrix view, Matrix projection)
-        {
-            if (clipPlayer == null)
-            {
-                // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
-                base.Draw(view, projection);
-                return;
-            }
+        //public override void Draw(Matrix view, Matrix projection)
+        //{
+        //    if (clipPlayer == null)
+        //    {
+        //        // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
+        //        base.Draw(view, projection);
+        //        return;
+        //    }
 
-            bones = clipPlayer.GetSkinTransforms();
+        //    bones = clipPlayer.GetSkinTransforms();
 
-            foreach (ModelMesh mesh in Model.Meshes)
-            {
-                foreach (SkinnedEffect effect in mesh.Effects)
-                {
-                    effect.SetBoneTransforms(bones);
-                    effect.View = view;
-                    effect.Projection = projection;
+        //    foreach (ModelMesh mesh in Model.Meshes)
+        //    {
+        //        foreach (SkinnedEffect effect in mesh.Effects)
+        //        {
+        //            effect.SetBoneTransforms(bones);
+        //            effect.View = view;
+        //            effect.Projection = projection;
 
-                    effect.FogEnabled = true;
-                    effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
-                }
-                mesh.Draw();
-            }
+        //            effect.FogEnabled = true;
+        //            effect.FogStart = GameConstants.FogStart;
+        //            effect.FogEnd = GameConstants.FogEnd;
+        //            effect.FogColor = GameConstants.FogColor.ToVector3();
+        //        }
+        //        mesh.Draw();
+        //    }
 
-        }
+        //}
 
     }
 }

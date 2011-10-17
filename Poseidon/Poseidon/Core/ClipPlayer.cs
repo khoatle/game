@@ -10,7 +10,7 @@ using SkinnedModel;
 
 namespace Poseidon.Core
 {
-    class ClipPlayer
+    public class ClipPlayer
     {
         Matrix[] boneTransforms, skinTransforms, worldTransforms;
         AnimationClip currentClip;

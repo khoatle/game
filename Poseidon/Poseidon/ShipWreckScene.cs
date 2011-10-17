@@ -600,9 +600,7 @@ namespace Poseidon
             }
 
             // Change back the config changed by spriteBatch
-            GraphicDevice.BlendState = BlendState.Opaque;
-            GraphicDevice.DepthStencilState = DepthStencilState.Default;
-            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            RestoreGraphicConfig();
 
             DrawGameplayScreen(gameTime);
 
@@ -699,6 +697,7 @@ namespace Poseidon
                         spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
                         spriteBatch.End();
+                        RestoreGraphicConfig();
                     }
                 }
             }
@@ -892,6 +891,14 @@ namespace Poseidon
                 return true;
             else
                 return false;
+        }
+        private void RestoreGraphicConfig()
+        {
+            // Change back the config changed by spriteBatch
+            GraphicDevice.BlendState = BlendState.Opaque;
+            GraphicDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            return;
         }
     }
 }

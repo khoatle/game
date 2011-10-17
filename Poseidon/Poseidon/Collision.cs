@@ -31,7 +31,9 @@ namespace Poseidon
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
 
-                    Tank.currentExperiencePts += objs[i].experienceReward;
+                    if (objs[i] is BaseEnemy) {
+                        Tank.currentExperiencePts += objs[i].experienceReward;
+                    }
 
                     for (int k = i; k < size-1; k++) {
                         objs[k] = objs[k+1];
@@ -53,8 +55,7 @@ namespace Poseidon
             {
                 return false;
             }
-            if (isPlantvsStaticObjectCollision(plant.BoundingSphere, staticObjects))
-            {
+            if (isPlantvsStaticObjectCollision(plant.BoundingSphere, staticObjects)) {
                 return false;
             }
 
@@ -196,6 +197,12 @@ namespace Poseidon
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                        if (barriers[j] is BaseEnemy) {
+                            if (((BaseEnemy)barriers[j]).isHypnotise) {
+                                return;
+                            }
+                        }
+
                         barriers[j].health -= bullets[i].damage;
                         bullets.RemoveAt(i--);
                         break;

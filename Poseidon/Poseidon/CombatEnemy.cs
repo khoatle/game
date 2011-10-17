@@ -26,18 +26,31 @@ namespace Poseidon
             perceptID = new int[] {0,1,2,3};
             configBits = new bool[] {false, false, false, false};
             speed = (float)(GameConstants.EnemySpeed*1.5);
-            damage = GameConstants.DefaultEnemyDamage * 2;
+            damage = GameConstants.DefaultEnemyDamage * 3;
+            perceptionRadius *= 2;
+            isHypnotise = false;
         }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
             if (stunned) return;
-            int perceptionID = perceptAndLock(tank, fishList, fishSize);
-            configAction(perceptionID);
-            makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+
+            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast) {
+                wearOutHypnotise();
+            }
+            if (!isHypnotise) {
+                int perceptionID = perceptAndLock(tank, fishList, fishSize);
+                configAction(perceptionID);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+            }
+            else {
+                int perceptionID = perceptAndLock(tank, enemyList, enemySize);
+                configAction(perceptionID);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+            }
         }
 
         protected int perceptAndLock(Tank tank, SwimmingObject[] enemyList, int enemySize) {
-            if (Vector3.Distance(Position, tank.Position) < perceptionRadius) {
+            if (!isHypnotise && Vector3.Distance(Position, tank.Position) < perceptionRadius) {
                 currentHuntingTarget = tank;
                 return perceptID[1];
             } else {
@@ -47,7 +60,7 @@ namespace Poseidon
                 }
 
                 for (int i = 0; i < enemySize; i++) {
-                    if (Vector3.Distance(Position, enemyList[i].Position) < perceptionRadius) { 
+                    if (this != enemyList[i] && Vector3.Distance(Position, enemyList[i].Position) < perceptionRadius) { 
                         currentHuntingTarget = enemyList[i];
                         return perceptID[3];
                     }
@@ -109,12 +122,22 @@ namespace Poseidon
                     }
                 }
 
+                if (currentHuntingTarget is BaseEnemy)
+                {
+                    BaseEnemy tmp = (BaseEnemy)currentHuntingTarget;
+                    if (tmp.health <= 0)
+                    {
+                        currentHuntingTarget = null;
+                        return;
+                    }
+                }
+
                 if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
                     if (currentHuntingTarget.GetType().Name.Equals("Tank")) {
                         //((Tank)currentHuntingTarget).currentHitPoint -= damage;
                         Tank.currentHitPoint -= damage;
                     }
-                    if (currentHuntingTarget.GetType().Name.Equals("SwimmingObject")) {
+                    if (currentHuntingTarget is SwimmingObject) {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
                     }
                     prevFire = PlayGameScene.timming.TotalGameTime;
@@ -141,7 +164,10 @@ namespace Poseidon
                         worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = view;
                     effect.Projection = projection;
-                    effect.DiffuseColor = Color.Red.ToVector3();
+                    if (isHypnotise) {
+                        effect.DiffuseColor = Color.Black.ToVector3();
+                    } else 
+                        effect.DiffuseColor = Color.Green.ToVector3();
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;

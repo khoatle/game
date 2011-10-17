@@ -560,8 +560,28 @@ namespace Poseidon
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
                         }
+
+                        // Hypnotise skill
+                        if (Tank.activeSkillID == 4) {
+                            BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+
+                            if (enemy == null) {
+                                return;
+                            }
+
+                            if (Tank.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise) {
+                                Tank.firstUse[4] = false;
+
+                                enemy.setHypnotise();
+
+                                Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
+                                Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                            }
+                        }
+
                         pointIntersect = Vector3.Zero;
                     }
+
                     //if the user holds down Ctrl button
                     //just shoot at wherever the mouse is pointing w/o moving
                     else if (currentKeyboardState.IsKeyDown(Keys.RightControl) || currentKeyboardState.IsKeyDown(Keys.LeftControl))
@@ -606,6 +626,7 @@ namespace Poseidon
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                                 //so the tank will not move
                                 pointIntersect = Vector3.Zero;
+                                tank.reachDestination = true;
                             }
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
@@ -778,10 +799,7 @@ namespace Poseidon
                     spriteBatch.End();
                     break;
                 case GameState.Running:
-                    // Change back the config changed by spriteBatch
-                    GraphicDevice.BlendState = BlendState.Opaque;
-                    GraphicDevice.DepthStencilState = DepthStencilState.Default;
-                    GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+                    RestoreGraphicConfig();
                     DrawGameplayScreen();
                     break;
                 case GameState.Won:
@@ -890,6 +908,7 @@ namespace Poseidon
                         spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
                         spriteBatch.End();
+                        RestoreGraphicConfig();
                     }
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
@@ -934,8 +953,8 @@ namespace Poseidon
                 enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
 
-            for (int i = 0; i < enemyBullet.Count; i++) {
-                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            for (int i = 0; i < alliesBullets.Count; i++) {
+                alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             }
             BoundingSphere shipSphere;
             // Drawing ship wrecks
@@ -1095,6 +1114,7 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1+= "0";
             str1 += roundTimer.Seconds;
+            str1 += "\n Active skill " + Tank.activeSkillID;
             //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
             //str1 += "\n Level: " + Tank.level;
             //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
@@ -1232,5 +1252,13 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
+        private void RestoreGraphicConfig()
+        {
+            // Change back the config changed by spriteBatch
+            GraphicDevice.BlendState = BlendState.Opaque;
+            GraphicDevice.DepthStencilState = DepthStencilState.Default;
+            GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
+            return;
+        }
     }
 }

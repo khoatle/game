@@ -227,6 +227,8 @@ namespace Poseidon
             skills[1] = true;
             skills[2] = true;
             skills[3] = true;
+            skills[4] = true;
+            
             lsSkills = skills;
         }
 
@@ -296,6 +298,7 @@ namespace Poseidon
             skills[1] = true;
             skills[2] = true;
             skills[3] = true;
+            skills[4] = true;
         }
 
 
@@ -462,7 +465,8 @@ namespace Poseidon
                 reachDestination = false;
             }
             //if (desiredAngle != 0)
-            if (reachDestination == false && pointMoveTo!= Vector3.Zero)
+
+            if (reachDestination == false)// && pointMoveTo != Vector3.Zero)
             {
                 
                 //float difference = WrapAngle(desiredAngle - ForwardDirection);

@@ -53,8 +53,8 @@ namespace Poseidon {
         //general
         //number of enemy and fish per level for main game
 
-        public static int[] NumberShootingEnemies = {25, 15, 10, 10, 10, 10};
-        public static int[] NumberCombatEnemies = {25, 50, 50, 50, 50};
+        public static int[] NumberShootingEnemies = {100, 15, 10, 10, 10, 10};
+        public static int[] NumberCombatEnemies = {0, 50, 50, 50, 50};
         public static int[] NumberFish = {50, 30, 30, 30, 30 , 30};
 
         //number of enemy and fish for ship wreck
@@ -105,7 +105,7 @@ namespace Poseidon {
         public const float FruitGrowth = 5.0f;
 
         //skills
-        public const int numberOfSkills = 4;
+        public const int numberOfSkills = 5;
         public const int numBulletTypes = 2;
 
         //radar
@@ -123,14 +123,16 @@ namespace Poseidon {
         public const float coolDownForArchillesArmor = 5;
         public const float coolDownForThorHammer = 5;
         public const float coolDownForHermesSandle = 5;
+        public const float coolDownForHypnotise = 5;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
+        public const float timeHypnotiseLast = 10;
         public const float ThorDamage = 20;
         public const float ThorRange = 40;
         public const float ThorPushFactor = 10;
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
-        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal" };
+        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal", "Image/AphroBelt" };
         public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
         public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;

@@ -114,6 +114,11 @@ namespace Poseidon
         {
             // do not delete this
             if (stunned) return;
+
+            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast) {
+                wearOutHypnotise();
+            }
+
             if (!isHypnotise) {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
                 configAction(perceptionID);
@@ -122,7 +127,7 @@ namespace Poseidon
             else {
                 int perceptionID = perceptAndLock(tank, enemyList, enemySize);
                 configAction(perceptionID);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, tank);
             }
         }
     }

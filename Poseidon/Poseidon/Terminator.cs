@@ -53,12 +53,6 @@ namespace Poseidon
         }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
-            if (!stunned)
-            {
-                int perceptionID = perceptAndLock(tank, fishList, fishSize);
-                configAction(perceptionID);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
-            }
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
                             ForwardDirection);
@@ -66,6 +60,13 @@ namespace Poseidon
                                 Matrix.CreateFromQuaternion(qRotation) *
                                 Matrix.CreateTranslation(Position);
             clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, fishMatrix);
+            if (!stunned)
+            {
+                int perceptionID = perceptAndLock(tank, fishList, fishSize);
+                configAction(perceptionID);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+            }
+            
         }
         public override void Draw(Matrix view, Matrix projection)
         {
@@ -127,7 +128,7 @@ namespace Poseidon
             }
             if (configBits[2] == true)
             {
-                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank); 
             }
             if (configBits[3] == true)
             {

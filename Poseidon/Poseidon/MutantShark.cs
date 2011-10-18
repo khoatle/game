@@ -141,8 +141,10 @@ namespace Poseidon
                 {
                     //if attack and swim both at the same time or not
                     //just use attacking anim
-                    if (!clipPlayer.inRange(25, 48))
-                        clipPlayer.switchRange(25, 48);
+                    if (!clipPlayer.inRange(30, 53))
+                        clipPlayer.switchRange(30, 53);
+                    //if (!clipPlayer.inRange(60, 83))
+                    //    clipPlayer.switchRange(60, 83);
 
                     if (currentHuntingTarget.GetType().Name.Equals("Tank"))
                     {

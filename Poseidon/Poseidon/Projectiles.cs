@@ -85,10 +85,13 @@ namespace Poseidon
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
 
+                    //effect.Alpha = 0.7f;
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
                     effect.FogColor = GameConstants.FogColor.ToVector3();
+
+
                 }
                 mesh.Draw();
             }

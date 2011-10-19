@@ -322,8 +322,8 @@ namespace Poseidon
                 ShowScene(skillScene);
             }
             if (doubleClicked 
-                && !CursorManager.MouseOnEnemy(playGameScene.cursor, playGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
-                && !CursorManager.MouseOnFish(playGameScene.cursor, playGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
+                && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
+                && !CursorManager.MouseOnFish(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
                 && GetInShipWreck())
             {
                 //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
@@ -350,7 +350,7 @@ namespace Poseidon
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
                 if (!playGameScene.shipWrecks[curWreck].accessed
-                    && CursorManager.MouseOnShipWreck(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, playGameScene.gameCamera)
+                    && CursorManager.MouseOnShipWreck(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            

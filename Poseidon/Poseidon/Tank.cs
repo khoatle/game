@@ -635,7 +635,6 @@ namespace Poseidon
                     effect.World = boneTransforms[mesh.ParentBone.Index];
                     effect.View = view;
                     effect.Projection = projection;
-
                     effect.EnableDefaultLighting();
                     if (invincibleMode == true)
                     {

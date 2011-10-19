@@ -595,13 +595,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\skill_background.jpg">
-      <Name>skill_background</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\oilspill1.fbx">
       <Name>oilspill1</Name>
       <Importer>FbxImporter</Importer>

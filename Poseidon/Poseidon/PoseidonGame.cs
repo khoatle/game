@@ -213,8 +213,8 @@ namespace Poseidon
 
             enterPressed = (lastKeyboardState.IsKeyDown(Keys.Enter) &&
                 (keyboardState.IsKeyUp(Keys.Enter)));
-            enterPressed |= (lastGamePadState.Buttons.A == ButtonState.Pressed) &&
-                      (gamepadState.Buttons.A == ButtonState.Released);
+            //enterPressed |= (lastGamePadState.Buttons.A == ButtonState.Pressed) &&
+            //          (gamepadState.Buttons.A == ButtonState.Released);
             pPressed = (lastKeyboardState.IsKeyDown(Keys.P) &&
                 (keyboardState.IsKeyUp(Keys.P)));
             zPressed = (lastKeyboardState.IsKeyDown(Keys.Z) &&
@@ -242,7 +242,7 @@ namespace Poseidon
             // Handle Help Scene input
             else if (activeScene == helpScene)
             {
-                if (enterPressed)
+                if (enterPressed || EscPressed)
                 {
                     ShowScene(startScene);
                 }

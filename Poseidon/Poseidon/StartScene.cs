@@ -24,14 +24,14 @@ namespace Poseidon
         // Spritebatch
         protected SpriteBatch spriteBatch = null;
         // Gui Stuff
-        protected Rectangle rockRect = new Rectangle(0, 0, 536, 131);
+        protected Rectangle rockRect = new Rectangle(0, 0, 681, 126);
         protected Vector2 rockPosition;
-        protected Rectangle rainRect = new Rectangle(120, 165, 517, 130);
+        protected Rectangle rainRect = new Rectangle(90, 169, 620, 126);
         protected Vector2 rainPosition;
-        protected Rectangle enhancedRect = new Rectangle(8, 304, 375, 144);
-        protected Vector2 enhancedPosition;
-        protected bool showEnhanced;
-        protected TimeSpan elapsedTime = TimeSpan.Zero;
+        //protected Rectangle enhancedRect = new Rectangle(8, 304, 375, 144);
+        //protected Vector2 enhancedPosition;
+        //protected bool showEnhanced;
+        //protected TimeSpan elapsedTime = TimeSpan.Zero;
 
         /// <summary>
         /// Default Constructor
@@ -83,7 +83,7 @@ namespace Poseidon
             // is done.
             menu.Visible = false;
             menu.Enabled = false;
-            showEnhanced = false;
+            //showEnhanced = false;
 
             base.Show();
         }
@@ -128,27 +128,27 @@ namespace Poseidon
                     menu.Enabled = true;
 
                     MediaPlayer.Play(audio.StartMusic);
-#if XBOX360
-                    enhancedPosition = new Vector2((rainPosition.X + 
-                    rainRect.Width - enhancedRect.Width / 2), rainPosition.Y);
-#else
-                    enhancedPosition =
-                        new Vector2((rainPosition.X + rainRect.Width -
-                        enhancedRect.Width / 2) - 80, rainPosition.Y);
-#endif
-                    showEnhanced = true;
+//#if XBOX360
+//                    enhancedPosition = new Vector2((rainPosition.X + 
+//                    rainRect.Width - enhancedRect.Width / 2), rainPosition.Y);
+//#else
+//                    enhancedPosition =
+//                        new Vector2((rainPosition.X + rainRect.Width -
+//                        enhancedRect.Width / 2) - 80, rainPosition.Y);
+//#endif
+//                    showEnhanced = true;
                 }
             }
-            else
-            {
-                elapsedTime += gameTime.ElapsedGameTime;
+            //else
+            //{
+            //    elapsedTime += gameTime.ElapsedGameTime;
 
-                if (elapsedTime > TimeSpan.FromSeconds(1))
-                {
-                    elapsedTime -= TimeSpan.FromSeconds(1);
-                    showEnhanced = !showEnhanced;
-                }
-            }
+            //    if (elapsedTime > TimeSpan.FromSeconds(1))
+            //    {
+            //        elapsedTime -= TimeSpan.FromSeconds(1);
+            //        showEnhanced = !showEnhanced;
+            //    }
+            //}
 
             base.Update(gameTime);
         }
@@ -164,11 +164,11 @@ namespace Poseidon
             
             spriteBatch.Draw(elements, rockPosition, rockRect, Color.White);
             spriteBatch.Draw(elements, rainPosition, rainRect, Color.White);
-            if (showEnhanced)
-            {
-                spriteBatch.Draw(elements, enhancedPosition, enhancedRect,
-                                 Color.White);
-            }
+            //if (showEnhanced)
+            //{
+            //    spriteBatch.Draw(elements, enhancedPosition, enhancedRect,
+            //                     Color.White);
+            //}
             spriteBatch.End();
         }
     }

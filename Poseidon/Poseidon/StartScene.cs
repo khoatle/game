@@ -24,7 +24,7 @@ namespace Poseidon
         // Spritebatch
         protected SpriteBatch spriteBatch = null;
         // Gui Stuff
-        protected Rectangle rockRect = new Rectangle(0, 0, 681, 126);
+        protected Rectangle rockRect = new Rectangle(0, 0, 588, 126);
         protected Vector2 rockPosition;
         protected Rectangle rainRect = new Rectangle(90, 169, 620, 126);
         protected Vector2 rainPosition;

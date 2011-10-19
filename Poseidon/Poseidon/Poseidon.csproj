@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="AudioLibrary.cs" />
     <Compile Include="BaseEnemy.cs" />
+    <Compile Include="Bubble.cs" />
     <Compile Include="CastSkill.cs" />
     <Compile Include="ChasingBullet.cs" />
     <Compile Include="CombatEnemy.cs" />

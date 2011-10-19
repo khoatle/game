@@ -38,7 +38,7 @@ namespace Poseidon
         SpriteFont statsFont;
         SpriteFont menuSmall;
         GameObject ground;
-        public Camera gameCamera;
+        public static Camera gameCamera;
         public GameState currentGameState = GameState.PlayingCutScene;
         // In order to know we are resetting the level winning or losing
         // winning: keep the current tank
@@ -120,6 +120,10 @@ namespace Poseidon
         RenderTarget2D renderTarget;
         Texture2D SceneTexture;
 
+        // Bubbles over characters
+        List<Bubble> bubbles;
+        float timeNextBubble = 200.0f;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -157,6 +161,8 @@ namespace Poseidon
             healthBullet = new List<HealthBullet>();
             enemyBullet = new List<DamageBullet>();
             alliesBullets = new List<DamageBullet>();
+
+            bubbles = new List<Bubble>();
 
             this.Load();
         }
@@ -642,8 +648,35 @@ namespace Poseidon
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
-                    
+                    //add 1 bubble over tank and each enemy
+                    timeNextBubble -= (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+                    if (timeNextBubble <= 0)
+                    {
+                        Bubble bubble = new Bubble();
+                        bubble.LoadContent(Content, tank.Position);
+                        bubbles.Add(bubble);
+                        for (int i = 0; i < enemiesAmount; i++)
+                        {
+                            if (enemies[i].BoundingSphere.Intersects(frustum))
+                            {
+                                Bubble aBubble = new Bubble();
+                                aBubble.LoadContent(Content, enemies[i].Position);
+                                bubbles.Add(aBubble);
+                            }
+                        }
+                        timeNextBubble = 200.0f;
+                    }
 
+                    for (int i = 0; i < bubbles.Count; i++)
+                    {
+                        if (bubbles[i].timeLast <= 0)
+                            bubbles.RemoveAt(i--);
+                    }
+
+                    foreach (Bubble aBubble in bubbles)
+                    {
+                        aBubble.Update();
+                    }
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
@@ -1027,7 +1060,10 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             //tank.DrawBoundingSphere(gameCamera.ViewMatrix,
             //    gameCamera.ProjectionMatrix, boundingSphere);
-
+            foreach (Bubble bubble in bubbles)
+            {
+                bubble.Draw(spriteBatch);
+            }
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
@@ -1135,7 +1171,11 @@ namespace Poseidon
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
             //str2 += "Type " + tank.GetType().Name.ToString();
-            str2 += "Current Change " + trashes[0].currentChange;
+            if (bubbles.Count > 0)
+            {
+                str2 += "Bubbles " + bubbles.Count + " Scale " + bubbles[0].scale + " Time last " + bubbles[0].timeLast;
+                //str2 += "\nBub pos " + bubbles[0].bubblePos;
+            }
             //Display Fish Health
             Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPontedAt != null)

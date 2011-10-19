@@ -689,7 +689,7 @@ namespace Poseidon
                             bubbles.Add(aBubble);
                         }
                         //audio.Bubble.Play();
-                        timeNextSeaBedBubble =  (random.Next(3) + 5) * 1000.0f;
+                        timeNextSeaBedBubble =  (random.Next(3) + 3) * 1000.0f;
                     }
                     for (int i = 0; i < bubbles.Count; i++)
                     {

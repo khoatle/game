@@ -1,0 +1,122 @@
+19-oct Meeting:
+
+SUMMARY of New Ideas:
+
+Drop trash -- less
+environment bar: sea animals health degrade gradually when env is polluted -- top
+found an old painting/photo of sea - educational value. -- less
+antient shark fossil found, recreate the shark to be a friend and fight for you. - very less
+education session in a class room, 2d picture, answer questions, more correct answer gain exp, 
+	easier level, other bonus ( last level - special skill ).make user to type like typeracer. mini game. -- top
+fossil - zigsaw puzzle.. gain exp, put picture in an achievement section. -- less
+replayability: To make the player play again after he completed whole game. -- next sem
+save info (attr, etc) from last play. make the enemy stronger based on points. -- next sem
+information bar: click on a fish to display information. --less
+
+TODO:
+environment bar -- deb
+no texture for stun - deb
+new texture for cursor.. make smaller -- deb
+fish cursor. -- deb
+level obective -- hien on putting obj, Deb-- display them.
+cool down time for planting trees --deb
+Sound 
+poison: health reduce over time -- khoa
+type game -- khoa
+Design question answer game scene. qs + 4 corresponding answer.
+
+GamePlay:
+
+Script:
+very first scene: dying hydrobot.
+3 years earlier:  ( make 1 sec = 1 day)
+
+
+
+Level 1:
+
+cutscene: UH prof instructing the hydrobot to improve environment.
+ 
+No hunters, no shipwrecks, no bullets.
+
+Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).
+
+
+
+Level 2: 
+
+cutcene: Witness some guys killing fish. tries to stop them. get shot.
+whirlpool. bot gets sucked in. Meets poseidon.
+Poseidon introduces himself. 
+gives him power to heal and zap enemies.
+
+Level Obj: Save at least 90% of fish during 3 min ( 90 days ).
+
+No shipwreck, no boss.
+
+
+
+Level 3:
+ 
+cutscene: Poseidon warns him about the mutant shark.
+How they create the mutant shark.
+ Need to find a hermes relic in shipwreck within 90 days.
+ 
+I will teach you how to use it.
+In order to open the chest, you need the key. Some fish know where it is. But you need to please them to tell you.
+
+Oh, and improving the environment helps.
+
+obj: Find the relic in 3 months.
+
+
+
+
+
+Level 4:
+
+cutscene: Good that you found the relic, & you will surely need it. We extract the power from it.
+The mutant shark is here. Nothing else in this
+ level. You & the mutant shark.
+
+Level obj: Defeat the mutant shark.
+
+
+
+Level 5:
+
+Cutscene:
+ Poseidin congratulates. Poseidon is worried. He says there are more mutant shark being created. Need to save leopard
+ shark.
+
+Target: save at least 50% of leopard sharks in 3 mins.
+
+Random encounter with ???
+
+
+
+Level 6: 
+cutscene: cry to poseidon about ???. He tells you its the terminator. And you need more skills to defeat him.
+
+Level Obj: Find hammer & shield relic.
+Encounter more mutant shark.
+
+
+
+Level 7: 
+level Obj: Find the belt & bow relic.
+
+
+
+Level 8:
+Direct confrontation with the terminator. The terminator health does not reduce at all. Player is frustrated.
+Get ass-raped.
+ Almost gets killed. Draw the initial cutscene here. Then another whirlpool. Poseidon appears.
+He gives you the power of poseidon trident.
+ Play the most cool music. 
+
+level Obj: Kill the terminator.
+
+
+Last Cut scene: Savior of the sea. 
+

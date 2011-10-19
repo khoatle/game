@@ -123,6 +123,7 @@ namespace Poseidon
         // Bubbles over characters
         List<Bubble> bubbles;
         float timeNextBubble = 200.0f;
+        float timeNextSeaBedBubble = 3000.0f;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -568,14 +569,17 @@ namespace Poseidon
                         }
 
                         // Hypnotise skill
-                        if (Tank.activeSkillID == 4) {
+                        if (Tank.activeSkillID == 4)
+                        {
                             BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
 
-                            if (enemy == null) {
+                            if (enemy == null)
+                            {
                                 return;
                             }
 
-                            if (Tank.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise) {
+                            if (Tank.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
+                            {
                                 Tank.firstUse[4] = false;
 
                                 enemy.setHypnotise();
@@ -649,40 +653,66 @@ namespace Poseidon
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                     tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
                     //add 1 bubble over tank and each enemy
-                    timeNextBubble -= (float) gameTime.ElapsedGameTime.TotalMilliseconds;
+                    timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (timeNextBubble <= 0)
                     {
                         Bubble bubble = new Bubble();
-                        bubble.LoadContent(Content, tank.Position);
+                        bubble.LoadContent(Content, tank.Position, false, 0.025f);
                         bubbles.Add(bubble);
                         for (int i = 0; i < enemiesAmount; i++)
                         {
                             if (enemies[i].BoundingSphere.Intersects(frustum))
                             {
                                 Bubble aBubble = new Bubble();
-                                aBubble.LoadContent(Content, enemies[i].Position);
+                                aBubble.LoadContent(Content, enemies[i].Position, false, 0.025f);
                                 bubbles.Add(aBubble);
                             }
                         }
+
                         timeNextBubble = 200.0f;
                     }
 
+                    //randomly generate few bubbles from sea bed
+                    timeNextSeaBedBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                    if (timeNextSeaBedBubble <= 0)
+                    {
+                        Vector3 bubblePos = tank.Position;
+                        bubblePos.X += random.Next(-100, 100);
+                        //bubblePos.Y = 0;
+                        bubblePos.Z += random.Next(-100, 100);
+                        for (int i = 0; i < 7; i++)
+                        {
+                            Bubble aBubble = new Bubble();
+                            bubblePos.X += random.Next(-2, 2);
+                            bubblePos.Z += random.Next(-2, 2);
+                            aBubble.LoadContent(Content, bubblePos, true, (float) random.NextDouble() / 80);
+                            bubbles.Add(aBubble);
+                        }
+                        //audio.Bubble.Play();
+                        timeNextSeaBedBubble =  (random.Next(3) + 3) * 1000.0f;
+                    }
                     for (int i = 0; i < bubbles.Count; i++)
                     {
                         if (bubbles[i].timeLast <= 0)
+                            bubbles.RemoveAt(i--);
+                        else if (bubbles[i].scale >= 0.06)
                             bubbles.RemoveAt(i--);
                     }
 
                     foreach (Bubble aBubble in bubbles)
                     {
+                        if (random.Next(100) >= 95) aBubble.bubble3DPos.X += 0.5f;
+                        else if (random.Next(100) >= 95) aBubble.bubble3DPos.X -= 0.5f;
+                        if (random.Next(100) >= 95) aBubble.bubble3DPos.Z += 0.5f;
+                        else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
                         aBubble.Update();
                     }
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
                         && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
-                        //||
-                        //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
+                    //||
+                    //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
                     {
                         prevFireTime = gameTime.TotalGameTime;
                         audio.Shooting.Play();
@@ -690,7 +720,7 @@ namespace Poseidon
                         else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                     }
 
-                    
+
                     //Are we planting trees?
                     if ((lastKeyboardState.IsKeyDown(Keys.X) && (currentKeyboardState.IsKeyUp(Keys.X))))
                     {
@@ -704,7 +734,7 @@ namespace Poseidon
                     //Are the trees ready for fruit?
                     foreach (Plant plant in plants)
                     {
-                        if (plant.timeForFruit == true )
+                        if (plant.timeForFruit == true)
                         {
                             int powerType = random.Next(3) + 1;
                             Fruit fruit = new Fruit(powerType);
@@ -723,7 +753,8 @@ namespace Poseidon
                     foreach (Fruit fruit in fruits)
                     {
                         fruit.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
-                        if (fruit.Retrieved) {
+                        if (fruit.Retrieved)
+                        {
                             retrievedFruits++;
                         }
                     }
@@ -743,10 +774,12 @@ namespace Poseidon
                         healthBullet[i].update();
                     }
 
-                    for (int i = 0; i < enemyBullet.Count; i++) {
+                    for (int i = 0; i < enemyBullet.Count; i++)
+                    {
                         enemyBullet[i].update();
                     }
-                    for (int i = 0; i < alliesBullets.Count; i++) {
+                    for (int i = 0; i < alliesBullets.Count; i++)
+                    {
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
@@ -759,7 +792,8 @@ namespace Poseidon
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
                     Collision.deleteSmallerThanZero(fish, ref fishAmount);
 
-                    for (int i = 0; i < enemiesAmount; i++) {          
+                    for (int i = 0; i < enemiesAmount; i++)
+                    {
                         //disable stun if stun effect times out
                         if (enemies[i].stunned)
                         {
@@ -769,7 +803,8 @@ namespace Poseidon
                         enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets);
                     }
 
-                    for (int i = 0; i < fishAmount; i++) {
+                    for (int i = 0; i < fishAmount; i++)
+                    {
                         fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
                     }
 

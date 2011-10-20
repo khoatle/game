@@ -112,7 +112,7 @@ namespace Poseidon
             boundingSphere = new GameObject();
             tank = new Tank(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
             fireTime = TimeSpan.FromSeconds(0.3f);
-            enemies = new BaseEnemy[GameConstants.ShipNumberEnemies];
+            enemies = new BaseEnemy[GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies];
             fish = new Fish[GameConstants.ShipNumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];

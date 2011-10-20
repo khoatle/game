@@ -51,16 +51,18 @@ namespace Poseidon {
         public const float FishSpeed = 0.5f;
 
         //general
-        //number of enemy and fish per level for main game
-
-        public static int[] NumberShootingEnemies = {20, 15, 10, 10, 10, 10};
-        public static int[] NumberCombatEnemies = {20, 50, 50, 50, 50};
-        public static int[] NumberFish = {30, 30, 30, 30, 30 , 30};
-
+        //number of trash, enemy and fish per level for main game
+        public static int[] NumberTrash =           { 100,  50,  50,   0,  50,  50,  50,   0  };
+        public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,   10 };
+        public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,   10 };
+        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,   0  };
+        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   0  };
+        public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   1  };
+        public static int[] NumberShipWreck =       {   0,   0,   5,   0,   0,   5,   5,   0  };
         //number of enemy and fish for ship wreck
-        public const int ShipNumberEnemies = 10;
+        public const int ShipNumberShootingEnemies = 5;
+        public const int ShipNumberCombatEnemies = 5;
         public const int ShipNumberFish = 0;
-        public const int NumberShipWrecks = 10;
         public const int NumberChests = 10;
         public const int NumStaticObjectsMain = 0;
         public const int NumStaticObjectsShip = 10;
@@ -90,7 +92,7 @@ namespace Poseidon {
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 20;
         public const float ShipCamHeight = 120;
-        public static int[] NumberTrash = { 50, 20, 10, 10, 10, 10 };
+        
         
         //bounding sphere scaling factors
         public const float FuelCarrierBoundingSphereFactor = .8f;

@@ -304,7 +304,7 @@ namespace Poseidon
             alliesBullets = new List<DamageBullet>();
 
             //Initialize the ship wrecks
-            shipWrecks = new List<ShipWreck>(GameConstants.NumberShipWrecks);
+            shipWrecks = new List<ShipWreck>(GameConstants.NumberShipWreck[currentLevel]);
             int randomType = random.Next(3);
             // example of how to put skill into a ship wreck at a certain level
             // just put the skill into the 1st ship wrect in the list
@@ -326,7 +326,7 @@ namespace Poseidon
                     relicType = 3;
                     break;
             }
-            for (int index = 0; index < GameConstants.NumberShipWrecks; index++)
+            for (int index = 0; index < GameConstants.NumberShipWreck[currentLevel]; index++)
             {
                 shipWrecks.Add(new ShipWreck());
                 if (index == 0 && relicType != -1) shipWrecks[index].LoadContent(Content, randomType, relicType, orientation);
@@ -337,7 +337,8 @@ namespace Poseidon
             }
             enemiesAmount = 0;
             fishAmount = 0;
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
+                + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight);

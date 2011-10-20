@@ -17,29 +17,56 @@ namespace Poseidon
         public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
         {
             if (mainGame)
-                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel];
-            else enemiesAmount = GameConstants.ShipNumberEnemies;
+                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
+                    + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel];
+            else enemiesAmount = GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies;
+            int numShootingEnemies;
+            int numCombatEnemies;
+            int numMutantShark = 0;
+            int numTerminator = 0;
+            if (mainGame)
+            {
+                numShootingEnemies = GameConstants.NumberShootingEnemies[currentLevel];
+                numCombatEnemies = GameConstants.NumberCombatEnemies[currentLevel];
+                numMutantShark = GameConstants.NumberMutantShark[currentLevel];
+                numTerminator = GameConstants.NumberTerminator[currentLevel];
+            }
+            else
+            {
+                numShootingEnemies = GameConstants.ShipNumberShootingEnemies;
+                numCombatEnemies = GameConstants.ShipNumberCombatEnemies;
+            }
             Random rnd = new Random();
-            for (int i = 0; i < enemiesAmount - 1; i++) {
-                //enemies[i] = new ShootingEnemy();
-                if (i < GameConstants.NumberShootingEnemies[currentLevel]) {
+            for (int i = 0; i < enemiesAmount; i++) {
+                if (i < numShootingEnemies)
+                {
                     enemies[i] = new ShootingEnemy();
                     enemies[i].Name = "Shooting Enemy";
                     enemies[i].LoadContent(Content, "Models/diver");
                     enemies[i].Load(1, 25, 24);
                 }
-                else {
+                else if (i < numShootingEnemies + numCombatEnemies){
                     enemies[i] = new CombatEnemy();
                     enemies[i].Name = "Combat Enemy";
                     enemies[i].LoadContent(Content, "Models/diver_knife");
                     enemies[i].Load(1, 30, 24);// 31 60 for attack
-
+                }
+                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark)
+                {
+                    MutantShark mutantShark = new MutantShark();
+                    mutantShark.LoadContent(Content, "Models/mutantSharkVer2");
+                    mutantShark.Name = "mutant shark";
+                    enemies[i] = mutantShark;
+                }
+                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
+                {
+                    Terminator terminator = new Terminator();
+                    terminator.LoadContent(Content, "Models/diver");
+                    terminator.Name = "terminator";
+                    terminator.Load();
+                    enemies[i] = terminator;
                 }
             }
-            MutantShark mutantShark = new MutantShark();
-            mutantShark.LoadContent(Content, "Models/mutantSharkVer2");
-            mutantShark.Name = "mutant shark";
-            enemies[enemiesAmount - 1] = mutantShark;
             
             //Terminator terminator = new Terminator();
             //terminator.LoadContent(Content, "Models/squirrel");

@@ -40,7 +40,12 @@ namespace Poseidon
                                 Matrix.CreateTranslation(Position);
             clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, enemyMatrix);
 
-            if (stunned) return;
+            if (stunned)
+            {
+                if (!clipPlayer.inRange(1, 30))
+                    clipPlayer.switchRange(1, 30);
+                return;
+            }
 
             if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast) {
                 wearOutHypnotise();
@@ -108,7 +113,10 @@ namespace Poseidon
 
         // Execute the actions
         protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank) {
-            if (configBits[0] == true) { 
+            if (configBits[0] == true) {
+                // swimming w/o attacking
+                if (!clipPlayer.inRange(1, 30) && !configBits[3])
+                    clipPlayer.switchRange(1, 30);
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
                 return;
             }
@@ -117,6 +125,9 @@ namespace Poseidon
                 calculateFutureBoundingSphere();
             }
             if (configBits[2] == true) {
+                // swimming w/o attacking
+                if (!clipPlayer.inRange(1, 30) && !configBits[3])
+                    clipPlayer.switchRange(1, 30);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
             if (configBits[3] == true) {
@@ -141,6 +152,8 @@ namespace Poseidon
                 }
 
                 if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
+                    if (!clipPlayer.inRange(31, 60))
+                        clipPlayer.switchRange(31, 60);
                     if (currentHuntingTarget.GetType().Name.Equals("Tank")) {
                         //((Tank)currentHuntingTarget).currentHitPoint -= damage;
                         Tank.currentHitPoint -= damage;

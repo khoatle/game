@@ -22,19 +22,19 @@ namespace Poseidon
             Random rnd = new Random();
             for (int i = 0; i < enemiesAmount - 1; i++) {
                 //enemies[i] = new ShootingEnemy();
-                if (i < GameConstants.NumberCombatEnemies[currentLevel]) {
-                    enemies[i] = new CombatEnemy();
-                    enemies[i].Name = "Combat Enemy";
-                }
-                else {
+                if (i < GameConstants.NumberShootingEnemies[currentLevel]) {
                     enemies[i] = new ShootingEnemy();
                     enemies[i].Name = "Shooting Enemy";
+                    enemies[i].LoadContent(Content, "Models/diver");
+                    enemies[i].Load(1, 25, 24);
                 }
-                
-                enemies[i].LoadContent(Content, "Models/diver");
-                enemies[i].Name = "Shooting Hunter";
-                enemies[i].Load(1, 25, 24);
-                //enemies[i].Name = "minion enemy";
+                else {
+                    enemies[i] = new CombatEnemy();
+                    enemies[i].Name = "Combat Enemy";
+                    enemies[i].LoadContent(Content, "Models/diver_knife");
+                    enemies[i].Load(1, 30, 24);// 31 60 for attack
+
+                }
             }
             MutantShark mutantShark = new MutantShark();
             mutantShark.LoadContent(Content, "Models/mutantSharkVer2");

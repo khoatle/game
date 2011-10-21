@@ -901,7 +901,7 @@
       <Name>startScreenLarge</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
-	</Compile>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\classroom.jpg">
@@ -913,6 +913,13 @@
   <ItemGroup>
     <Compile Include="Image\dizzy-icon.png">
       <Name>dizzy-icon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\EnvironmentBar.png">
+      <Name>EnvironmentBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

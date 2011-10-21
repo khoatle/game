@@ -40,6 +40,10 @@ namespace Poseidon {
         public const int FishHP = 50;
         public const int PlayerStartingHP = 1000;
 
+        //Environment Const
+        public const int PlayerStartingEnv = 500;
+        public const int MaxEnv = 1000;
+
         // Bullet const
         public const int DefaultBulletDamage = 10;
         public const int DefaultEnemyDamage = 5;

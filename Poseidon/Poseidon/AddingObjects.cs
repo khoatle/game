@@ -533,7 +533,7 @@ namespace Poseidon
                 new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
                 Color.Transparent);
             //Draw the current health level based on the current Health
-            Color healthColor = Color.Lime;
+            Color healthColor = Color.Tan;
             if (healthiness < 0.2)
                 healthColor = Color.DarkRed;
             else if (healthiness < 0.5)
@@ -548,6 +548,40 @@ namespace Poseidon
                 new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
+        }
+
+        public static void DrawEnvironmentBar(Texture2D Bar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)
+        {
+            int barX = game.Window.ClientBounds.Right - 50;
+            int barY = game.Window.ClientBounds.Center.Y-Bar.Height/2;
+            string type = "ENVIRONMENT";
+            Color typeColor = Color.Blue;
+            int barWidth = Bar.Width/2;
+            double healthiness = (double)currentEnvironment / maxEnvironemnt;
+            //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
+            //Draw the negative space for the health bar
+            spriteBatch.Draw(Bar,
+                new Rectangle(barX, barY, barWidth, Bar.Height),
+                new Rectangle(barWidth+1, 0, barWidth, Bar.Height),
+                Color.Transparent);
+            //Draw the current health level based on the current Health
+            Color healthColor = Color.LawnGreen;
+            if (healthiness < 0.2)
+                healthColor = Color.Red;
+            else if (healthiness < 0.5)
+                healthColor = Color.Green;
+            spriteBatch.Draw(Bar,
+                new Rectangle(barX, barY + (Bar.Height - (int)(Bar.Height * healthiness)), barWidth, (int)(Bar.Height * healthiness)),
+                new Rectangle(barWidth+1, 0, barWidth, Bar.Height),
+                healthColor);
+            //Draw the box around the health bar
+            spriteBatch.Draw(Bar,
+                new Rectangle(barX, barY, barWidth, Bar.Height),
+                new Rectangle(0, 0, barWidth, Bar.Height),
+                Color.White);
+            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
+            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 20), typeColor, 90.0f, new Vector2(barX + 10, barY + 20), 1, SpriteEffects.FlipVertically, 0);
+            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 35, barY + 70), typeColor, 3.14f / 2, new Vector2(0,0), 1, SpriteEffects.None, 0);
         }
 
 

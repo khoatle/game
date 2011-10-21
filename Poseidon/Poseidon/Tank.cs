@@ -82,6 +82,8 @@ namespace Poseidon
         public static float shootingRate, lsShootingRate;
         public static int maxHitPoint, lsMaxHitPoint;
         public static int currentHitPoint, lsCurrentHitPoint;
+        public static int currentEnvPoint, lsCurrentEnvPoint;
+        public static int maxEnvPoint;
         // 2 types of bullet
         // 0: killing
         // 1: healing
@@ -198,6 +200,8 @@ namespace Poseidon
             bulletType = 0;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
             currentHitPoint = lsCurrentHitPoint = GameConstants.PlayerStartingHP;
+            maxEnvPoint = GameConstants.MaxEnv;
+            currentEnvPoint = lsCurrentEnvPoint = GameConstants.PlayerStartingEnv;
             pointToMoveTo = Vector3.Zero;
 
             // No buff up at the beginning
@@ -317,6 +321,7 @@ namespace Poseidon
             bulletType = 0;
             maxHitPoint = lsMaxHitPoint;
             currentHitPoint = lsCurrentExperiencePts;
+            currentEnvPoint = lsCurrentEnvPoint;
             skills = lsSkills;
             activeSkillID = lsActiveSkillID;
 
@@ -344,6 +349,7 @@ namespace Poseidon
             lsIncreaseBy = increaseBy;
             lsLevel = level;
             lsUnassignedPts = unassignedPts;
+            lsCurrentEnvPoint = currentEnvPoint;
         }
 
         internal void Reset()
@@ -595,6 +601,7 @@ namespace Poseidon
                 {
                     trash.Retrieved = true;
                     currentExperiencePts += trash.experienceReward;
+                    currentEnvPoint += trash.environmentReward;
                     RetrievedSound.Play();
                 }
             }

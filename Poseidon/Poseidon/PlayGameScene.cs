@@ -21,6 +21,7 @@ namespace Poseidon
         public static GameTime timming;
         
         private Texture2D HealthBar;
+        private Texture2D EnvironmentBar;
 
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
@@ -229,6 +230,7 @@ namespace Poseidon
 
             //Load healthbar
             HealthBar = Content.Load<Texture2D>("Image/HealthBar");
+            EnvironmentBar = Content.Load<Texture2D>("Image/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
@@ -733,6 +735,7 @@ namespace Poseidon
                         {
                             audio.PowerShow.Play();
                             Tank.currentExperiencePts += Plant.experienceReward;
+                            Tank.currentEnvPoint += Plant.environmentReward;
                         }
                     }
 
@@ -1230,6 +1233,9 @@ namespace Poseidon
 
             //Display Cyborg health
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
+
+            //Display Environment Bar
+            AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, Tank.currentEnvPoint, Tank.maxEnvPoint);
 
             //Display Level/Experience Bar
             AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.GreenYellow);

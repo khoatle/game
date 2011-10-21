@@ -387,6 +387,7 @@ namespace Poseidon
                             audio.Explosion.Play();
                             CastSkill.UseHerculesBow(tank, Content, myBullet);
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                            tank.reachDestination = true;
                         }
 
                     }
@@ -473,6 +474,7 @@ namespace Poseidon
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             //so the tank will not move
                             pointIntersect = Vector3.Zero;
+                            tank.reachDestination = true;
                         }
                         if (doubleClicked == true) pointIntersect = Vector3.Zero;
                     }

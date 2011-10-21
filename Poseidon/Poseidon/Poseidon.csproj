@@ -117,6 +117,7 @@
     <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
+    <Compile Include="HerculesBullet.cs" />
     <Compile Include="LevelObjectiveScene.cs" />
     <Compile Include="MiniGameScene.cs" />
     <Compile Include="QuizzesLibrary.cs" />

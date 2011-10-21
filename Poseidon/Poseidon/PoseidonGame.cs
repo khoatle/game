@@ -284,7 +284,7 @@ namespace Poseidon
 
         public void HandleMiniGameInput()
         {
-            if (miniGameScene.questionAnswered >= 4)
+            if (miniGameScene.questionAnswered >= 4 || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);

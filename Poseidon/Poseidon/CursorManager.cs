@@ -83,7 +83,7 @@ namespace Poseidon
                 sphere.Radius *= 2.0f;
                 if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
                 {
-                    cursor.SetShootingMouseImage();
+                    cursor.SetOnFishMouseImage();
                     return true;
                 }
             }
@@ -101,7 +101,7 @@ namespace Poseidon
                 sphere.Radius *= 2.0f;
                 if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
                 {
-                    cursor.SetShootingMouseImage();
+                    cursor.SetOnFishMouseImage();
                     return fish[i];
                 }
             }

@@ -19,7 +19,7 @@ namespace Poseidon
         {
             float healthiness = (float)Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
             System.Diagnostics.Debug.WriteLine(healthiness);
-            DamageBullet d = new DamageBullet();
+            HerculesBullet d = new HerculesBullet();
 
             Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
             Vector3 movement = Vector3.Zero;
@@ -27,7 +27,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * healthiness, Tank.strengthUp);
-            d.loadContent(Content, "Models/fuelcarrier");
+            d.loadContent(Content, "Models/herculesBullet");
             myBullets.Add(d);
         }
         public static void UseThorHammer(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount)

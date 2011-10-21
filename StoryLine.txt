@@ -14,6 +14,7 @@ save info (attr, etc) from last play. make the enemy stronger based on points. -
 information bar: click on a fish to display information. --less
 
 TODO:
+Win/lost scene & win/lost musics
 environment bar -- deb
 no texture for stun - deb
 new texture for cursor.. make smaller -- deb

@@ -14,7 +14,7 @@ using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
 namespace Poseidon
 {
-    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost }
+    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel }
 
     /// <summary>
     /// This is the main type for your game
@@ -45,9 +45,12 @@ namespace Poseidon
         // For the Skill board
         SkillScene skillScene;
         protected Texture2D SkillBackgroundTexture;
-        //For the Level Objective
+        // For the Level Objective
         LevelObjectiveScene levelObjectiveScene;
         protected Texture2D LevelObjectiveBackgroundTexture;
+        // For the mini game
+        MiniGameScene miniGameScene;
+        protected Texture2D miniGameBackgroundTexture;
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
@@ -73,6 +76,7 @@ namespace Poseidon
 
         // Radar for the game
         Radar radar;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -122,7 +126,7 @@ namespace Poseidon
 
             //For general game control
             actionTexture = Content.Load<Texture2D>("Image/rockrainenhanced");
-            stunnedTexture = Content.Load<Texture2D>("Image/stunned");
+            stunnedTexture = Content.Load<Texture2D>("Image/dizzy-icon");
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
@@ -147,6 +151,7 @@ namespace Poseidon
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
+            miniGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 
@@ -163,10 +168,15 @@ namespace Poseidon
                 SkillBackgroundTexture, Content);
             Components.Add(skillScene);
 
+            // Create level objective scene
             levelObjectiveScene = new LevelObjectiveScene(this, smallFont,
                 largeFont, LevelObjectiveBackgroundTexture, Content, playGameScene);
             Components.Add(levelObjectiveScene);
 
+            // Create minigame scene
+            miniGameScene = new MiniGameScene(this, smallFont,
+                largeFont, miniGameBackgroundTexture, Content);
+            Components.Add(miniGameScene);
             // Start the game in the start Scene
             startScene.Show();
             activeScene = startScene;
@@ -268,8 +278,20 @@ namespace Poseidon
             {
                 HandleLevelObjectiveInput();
             }
+            else if (activeScene == miniGameScene)
+            {
+                HandleMiniGameInput();
+            }
         }
 
+        public void HandleMiniGameInput()
+        {
+            if (miniGameScene.questionAnswered >= 4)
+            {
+                playGameScene.currentGameState = GameState.ToNextLevel;
+                ShowScene(playGameScene);
+            }
+        }
         /// <summary>
         /// Handle update for the ship wreck scene
         /// </summary>
@@ -344,6 +366,10 @@ namespace Poseidon
             else
             {
                 doubleClicked = false;
+            }
+            if (playGameScene.currentGameState == GameState.ToMiniGame)
+            {
+                ShowScene(miniGameScene);
             }
         }
         public bool GetInShipWreck()

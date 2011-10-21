@@ -118,6 +118,8 @@
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
     <Compile Include="LevelObjectiveScene.cs" />
+    <Compile Include="MiniGameScene.cs" />
+    <Compile Include="QuizzesLibrary.cs" />
     <Compile Include="Tank.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CursorManager.cs" />

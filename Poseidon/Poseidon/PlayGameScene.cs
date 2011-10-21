@@ -470,6 +470,10 @@ namespace Poseidon
                             currentGameState = GameState.Running;
                     }
                 }
+                if (currentGameState == GameState.ToNextLevel)
+                {
+                    ResetGame(gameTime, aspectRatio);
+                }
                 if ((currentGameState == GameState.Running))
                 {
                     Vector3 pointIntersect = Vector3.Zero;
@@ -831,6 +835,7 @@ namespace Poseidon
                         (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
+                        //always reset the level when losing
                         ResetGame(gameTime, aspectRatio);
                     }
                 }
@@ -841,7 +846,8 @@ namespace Poseidon
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
                         currentLevel++;
-                        ResetGame(gameTime, aspectRatio);
+                        currentGameState = GameState.ToMiniGame;
+                        //ResetGame(gameTime, aspectRatio);
                     }
                 }
                 base.Update(gameTime);

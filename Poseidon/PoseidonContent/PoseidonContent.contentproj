@@ -890,6 +890,20 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fonts\startScreenSmall.spritefont">
+      <Name>startScreenSmall</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\startScreenLarge.spritefont">
+      <Name>startScreenLarge</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+	</Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Image\classroom.jpg">
       <Name>classroom</Name>
       <Importer>TextureImporter</Importer>

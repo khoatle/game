@@ -64,11 +64,11 @@ namespace Poseidon
                 sphere.Radius *= 2.0f;
                 if (RayIntersectsBoundingSphere(cursorRay, sphere))
                 {
-                    cursor.SetShootingMouseImage();
+                    //cursor.SetShootingMouseImage();
                     return enemies[i];
                 }
             }
-            cursor.SetNormalMouseImage();
+            //cursor.SetNormalMouseImage();
             return null;
         }
 
@@ -101,11 +101,10 @@ namespace Poseidon
                 sphere.Radius *= 2.0f;
                 if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
                 {
-                    cursor.SetOnFishMouseImage();
                     return fish[i];
                 }
             }
-            cursor.SetNormalMouseImage();
+            //cursor.SetNormalMouseImage();
             return null;
         }
 

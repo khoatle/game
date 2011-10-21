@@ -50,7 +50,7 @@ namespace Poseidon
                                             ImageComponent.DrawMode.Center));
 
             // Create the Menu
-            string[] items = { "Start the game!", "Help", "Quit" };
+            string[] items = { "Start Game", "Help", "Quit" };
             menu = new TextMenuComponent(game, smallFont, largeFont);
             menu.SetMenuItems(items);
             Components.Add(menu);
@@ -76,8 +76,8 @@ namespace Poseidon
             rainPosition.X = Game.Window.ClientBounds.Width;
             rainPosition.Y = 180;
             // Put the menu centered in screen
-            menu.Position = new Vector2((Game.Window.ClientBounds.Width -
-                                          menu.Width) / 2, 330);
+            menu.Position = new Vector2(Game.Window.ClientBounds.Width/2
+                                          , 370);
 
             // These elements will be visible when the 'Rock Rain' title
             // is done.

@@ -39,7 +39,7 @@ namespace Poseidon
         protected GameScene activeScene;
         protected GameScene prevScene;
         // For the Start scene
-        private SpriteFont smallFont, largeFont;
+        private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge;
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
         // For the Skill board
@@ -135,11 +135,13 @@ namespace Poseidon
             Components.Add(helpScene);
 
             // Create the Start Scene
+            startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenSmall");
+            startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             startBackgroundTexture = Content.Load<Texture2D>("Image/startbackground");
             startElementsTexture = Content.Load<Texture2D>("Image/startSceneElements");
-            startScene = new StartScene(this, smallFont, largeFont,
+            startScene = new StartScene(this, startSceneSmall, startSceneLarge,
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");

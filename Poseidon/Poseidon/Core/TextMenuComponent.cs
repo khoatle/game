@@ -19,7 +19,7 @@ namespace Poseidon.Core
         // Fonts
         protected readonly SpriteFont regularFont, selectedFont;
         // Colors
-        protected Color regularColor = Color.White, selectedColor = Color.Red;
+        protected Color regularColor = Color.Orange, selectedColor = Color.Red;
         // Menu Position
         protected Vector2 position = new Vector2();
         // Items
@@ -197,10 +197,12 @@ namespace Poseidon.Core
         public override void Draw(GameTime gameTime)
         {
             float y = position.Y;
+            float x;
             for (int i = 0; i < menuItems.Count; i++)
             {
                 SpriteFont font;
                 Color theColor;
+                x = position.X - ((menuItems[i].Length*45)/2);
                 if (i == SelectedIndex)
                 {
                     font = selectedFont;
@@ -214,10 +216,10 @@ namespace Poseidon.Core
 
                 // Draw the text shadow
                 spriteBatch.DrawString(font, menuItems[i],
-                    new Vector2(position.X + 1, y + 1), Color.Black);
+                    new Vector2(x + 1, y + 1), Color.Black);
                 // Draw the text item
                 spriteBatch.DrawString(font, menuItems[i],
-                    new Vector2(position.X, y), theColor);
+                    new Vector2(x, y), theColor);
                 y += font.LineSpacing;
             }
 

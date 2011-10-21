@@ -729,7 +729,7 @@ namespace Poseidon
                     //Are we planting trees?
                     if ((lastKeyboardState.IsKeyDown(Keys.X) && (currentKeyboardState.IsKeyUp(Keys.X))))
                     {
-                        if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects))
+                        if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects, gameTime))
                         {
                             audio.PowerShow.Play();
                             Tank.currentExperiencePts += Plant.experienceReward;

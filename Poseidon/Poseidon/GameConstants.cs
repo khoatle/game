@@ -139,6 +139,8 @@ namespace Poseidon {
         public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;
 
+        public const float coolDownForPlant = 5;
+
         //const for the fog effect
         public const float FogStart = 10;
         public const float FogEnd = 350;

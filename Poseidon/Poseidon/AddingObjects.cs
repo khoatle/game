@@ -312,15 +312,21 @@ namespace Poseidon
             bullets.Add(newBullet);
         }
 
-        public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+        public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)
         {
-            Plant p = new Plant();
-            Vector3 possiblePosition = tank.Position;
-            possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
-            p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
-            if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects)) {
-                plants.Add(p);
-                return true;
+            if ((gameTime.TotalGameTime.TotalSeconds - Tank.prevPlantTime > GameConstants.coolDownForPlant) || Tank.firstPlant == true)
+            {
+                Plant p = new Plant();
+                Vector3 possiblePosition = tank.Position;
+                possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
+                p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
+                if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects))
+                {
+                    plants.Add(p);
+                    Tank.firstPlant = false;
+                    Tank.prevPlantTime = gameTime.TotalGameTime.TotalSeconds;
+                    return true;
+                }
             }
             return false;
         }

@@ -103,6 +103,10 @@ namespace Poseidon
         //let him use it
         public static bool[] firstUse;
 
+        //Cool down time for plant
+        public static double prevPlantTime;
+        public static bool firstPlant;
+
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
         SoundEffect RetrievedSound;
@@ -299,6 +303,9 @@ namespace Poseidon
             skills[2] = true;
             skills[3] = true;
             skills[4] = true;
+
+            firstPlant = true;
+            prevPlantTime = 0;
         }
 
 
@@ -360,6 +367,8 @@ namespace Poseidon
             speedUpStartTime = 0;
             fireRateUpStartTime = 0;
             currentHitPoint = maxHitPoint;
+            firstPlant = true;
+            prevPlantTime = 0;
         }
 
  

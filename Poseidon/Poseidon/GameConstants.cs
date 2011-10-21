@@ -56,7 +56,8 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        public static int[] NumberTrash =           { 100,  50,  50,   0,  50,  50,  50,   0  };
+        //public static int[] NumberTrash =           { 100,  50,  50,   0,  50,  50,  50,   0  };
+        public static int[] NumberTrash =           { 0, 0, 0, 0, 0, 0, 0, 0 };
         public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,   10 };
         public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,   10 };
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,   0  };

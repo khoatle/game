@@ -534,6 +534,7 @@ namespace Poseidon
                                 audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(tank, Content, myBullet);
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                tank.reachDestination = true;
                             }
 
                         }
@@ -1222,9 +1223,9 @@ namespace Poseidon
                 //str2 += "\nBub pos " + bubbles[0].bubblePos;
             }
             //Display Fish Health
-            Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
-            if (fishPontedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPontedAt.health, fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
+            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+            if (fishPointedAt != null)
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPointedAt.health, fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.BlueViolet);
 
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);

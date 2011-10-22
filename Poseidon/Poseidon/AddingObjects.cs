@@ -62,7 +62,8 @@ namespace Poseidon
                 {
                     Terminator terminator = new Terminator();
                     terminator.LoadContent(Content, "Models/diver");
-                    terminator.Name = "terminator";
+                    if (currentLevel == 4) terminator.Name = "???";
+                    else terminator.Name = "terminator";
                     terminator.Load();
                     enemies[i] = terminator;
                 }

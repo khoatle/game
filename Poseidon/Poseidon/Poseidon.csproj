@@ -120,6 +120,7 @@
     <Compile Include="HerculesBullet.cs" />
     <Compile Include="LevelObjectiveScene.cs" />
     <Compile Include="MiniGameScene.cs" />
+    <Compile Include="OceanPaintings.cs" />
     <Compile Include="QuizzesLibrary.cs" />
     <Compile Include="Tank.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />

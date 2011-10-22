@@ -94,6 +94,11 @@ namespace Poseidon
         RenderTarget2D renderTarget;
         Texture2D SceneTexture;
 
+        // showing paintings when openning treasure chests
+        OceanPaintings oceanPaintings;
+        bool showPainting = false;
+        int paintingToShow = 0;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
@@ -129,6 +134,9 @@ namespace Poseidon
             enemyBullet = new List<DamageBullet>();
             alliesBullets = new List<DamageBullet>();
             
+            //for paintings inside treasure chests
+            oceanPaintings = new OceanPaintings(Content);
+
             this.Load();
         }
 
@@ -318,13 +326,25 @@ namespace Poseidon
             currentGamePadState = GamePad.GetState(PlayerIndex.One);
             if (foundRelic)
             {
-                // Next sentence when the user press Enter
+                // return to game if enter pressed
                 if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
                     (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                     currentGamePadState.Buttons.Start == ButtonState.Pressed)
                 {
                     foundRelic = false;
                 }
+                return;
+            }
+            if (showPainting)
+            {
+                // return to game if enter pressed
+                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                {
+                    showPainting = false;
+                }
+                return;
             }
             if (!paused && !returnToMain)
             {   
@@ -550,8 +570,12 @@ namespace Poseidon
                         chest.Model = Content.Load<Model>("Models/chest");
                         if (chest.skillID == -1)
                         {
-                            // give the player some experience
-                            Tank.currentHitPoint += 30;
+                            // give the player some experience as reward
+                            Tank.currentExperiencePts += 20;
+                            // show a random painting
+                            paintingToShow = random.Next(oceanPaintings.paintings.Count);
+                            showPainting = true;
+                            
                         }
                         else 
                         {
@@ -636,8 +660,6 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
-            graphics.GraphicsDevice.SetRenderTarget(renderTarget);
-            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
             if (foundRelic)
             {
                 spriteBatch.Begin();
@@ -645,6 +667,17 @@ namespace Poseidon
                 spriteBatch.End();
                 return;
             }
+            if (showPainting)
+            {
+                spriteBatch.Begin();
+                DrawPainting();
+                spriteBatch.End();
+                return;
+            }
+
+            graphics.GraphicsDevice.SetRenderTarget(renderTarget);
+            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
+            
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -757,6 +790,12 @@ namespace Poseidon
             cursor.Draw(gameTime);
             spriteBatch.End();
             
+        }
+        private void DrawPainting()
+        {
+            spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
+                new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+            spriteBatch.DrawString(statsFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(0, 0), Color.White);
         }
         private void DrawFoundRelicScene(int skillID)
         {

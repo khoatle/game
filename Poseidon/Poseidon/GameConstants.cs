@@ -63,7 +63,7 @@ namespace Poseidon {
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   1  };
-        public static int[] NumberShipWreck =       {   0,   0,   5,   0,   0,   5,   5,   0  };
+        public static int[] NumberShipWreck =       {   0,   5,   5,   0,   0,   5,   5,   0  };
         //number of enemy and fish for ship wreck
         public const int ShipNumberShootingEnemies = 5;
         public const int ShipNumberCombatEnemies = 5;

@@ -16,15 +16,10 @@ information bar: click on a fish to display information. --less
 TODO:
 Win/lost scene & win/lost musics
 environment bar -- deb
-no texture for stun - deb
-new texture for cursor.. make smaller -- deb
-fish cursor. -- deb
 level obective -- hien on putting obj, Deb-- display them.
-cool down time for planting trees --deb
 Sound 
 poison: health reduce over time -- khoa
 type game -- khoa
-Design question answer game scene. qs + 4 corresponding answer.
 
 GamePlay:
 

@@ -49,9 +49,9 @@ namespace Poseidon
                         enemies[--enemiesAmount] = null;
                         i--;
                     }
-                }
-                
+                }       
             }
+            PlayGameScene.gameCamera.Shake(25f, .4f);
         }
 
         public static void useHypnotise(BaseEnemy enemy) {

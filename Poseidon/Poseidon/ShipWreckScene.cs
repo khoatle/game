@@ -228,7 +228,7 @@ namespace Poseidon
             
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
-                tank.Position, aspectRatio);
+                tank.Position, aspectRatio, gameTime);
             //enemiesAmount = GameConstants.NumberEnemies;
             //fishAmount = GameConstants.NumberFish;
             InitializeShipField(Content);
@@ -526,7 +526,7 @@ namespace Poseidon
                 }
 
                 gameCamera.Update(tank.ForwardDirection,
-                    tank.Position, aspectRatio);
+                    tank.Position, aspectRatio, gameTime);
                 // Updating camera's frustum
                 frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 

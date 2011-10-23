@@ -278,7 +278,7 @@ namespace Poseidon
 
             tank.Reset();
             gameCamera.Update(tank.ForwardDirection,
-                tank.Position, aspectRatio);
+                tank.Position, aspectRatio, gameTime);
 
             
 
@@ -754,7 +754,7 @@ namespace Poseidon
                         }
                     }
 
-                    gameCamera.Update(tank.ForwardDirection, tank.Position, aspectRatio);
+                    gameCamera.Update(tank.ForwardDirection, tank.Position, aspectRatio, gameTime);
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 

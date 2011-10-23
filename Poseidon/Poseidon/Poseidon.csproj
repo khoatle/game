@@ -117,6 +117,16 @@
     <Compile Include="Core\Cursor.cs" />
     <Compile Include="Core\Radar.cs" />
     <Compile Include="Core\SkillMenuComponent.cs" />
+    <Compile Include="FishSchool\AlignBehavior.cs" />
+    <Compile Include="FishSchool\Animal.cs" />
+    <Compile Include="FishSchool\Behavior.cs" />
+    <Compile Include="FishSchool\Behaviors.cs" />
+    <Compile Include="FishSchool\Bird.cs" />
+    <Compile Include="FishSchool\CohesionBehavior.cs" />
+    <Compile Include="FishSchool\FleeBehavior.cs" />
+    <Compile Include="FishSchool\Flock.cs" />
+    <Compile Include="FishSchool\SchoolOfFish.cs" />
+    <Compile Include="FishSchool\SeparationBehavior.cs" />
     <Compile Include="HerculesBullet.cs" />
     <Compile Include="LevelObjectiveScene.cs" />
     <Compile Include="MiniGameScene.cs" />

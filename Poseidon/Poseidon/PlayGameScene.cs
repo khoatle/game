@@ -6,6 +6,7 @@ using Poseidon.Core;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using Poseidon.FishSchool;
 
 
 namespace Poseidon
@@ -126,6 +127,9 @@ namespace Poseidon
         float timeNextBubble = 200.0f;
         float timeNextSeaBedBubble = 3000.0f;
 
+        // School of fish
+        SchoolOfFish schoolOfFish;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -165,6 +169,7 @@ namespace Poseidon
             alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
+            schoolOfFish = new SchoolOfFish(Content);
 
             this.Load();
         }
@@ -829,6 +834,9 @@ namespace Poseidon
 
                     //cursor update
                     cursor.Update(gameTime);
+
+                    //update the school of fish
+                    //schoolOfFish.Update(gameTime);
                 }
 
                 prevGameState = currentGameState;
@@ -1106,13 +1114,18 @@ namespace Poseidon
             //GraphicsDevice.RasterizerState = rs;
             //tank.DrawBoundingSphere(gameCamera.ViewMatrix,
             //    gameCamera.ProjectionMatrix, boundingSphere);
+
+            // draw bubbles
             foreach (Bubble bubble in bubbles)
             {
                 bubble.Draw(spriteBatch);
             }
-            //rs = new RasterizerState();
-            //rs.FillMode = FillMode.Solid;
-            //GraphicsDevice.RasterizerState = rs;
+
+            //draw schools of fish
+            spriteBatch.Begin();
+            //schoolOfFish.Draw(timming, spriteBatch);
+            spriteBatch.End();
+
             graphics.GraphicsDevice.SetRenderTarget(null);
             SceneTexture = renderTarget;
             // Render the scene with Edge Detection, using the render target from last frame.

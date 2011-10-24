@@ -35,7 +35,7 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// texture drawn to represent this animal
         /// </summary>
-        protected Texture2D texture;
+        public Texture2D texture;
         /// <summary>
         /// tint color to draw the texture with
         /// </summary>

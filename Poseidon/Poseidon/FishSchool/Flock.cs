@@ -22,7 +22,7 @@ namespace Poseidon.FishSchool
     /// This class manages all the fishes in the flock and handles 
     /// their update and draw
     /// </summary>
-    class Flock
+    public class Flock
     {
         #region Constants
         //Number of FLock members
@@ -44,7 +44,7 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// List of Flock Members
         /// </summary>
-        List<Fish> flock;
+        public List<Fish> flock;
 
         /// <summary>
         /// Parameters flock members use to move and think
@@ -75,24 +75,24 @@ namespace Poseidon.FishSchool
         /// <param name="screenWidth">Width of the screen</param>
         /// <param name="screenHeight">Height of the screen</param>
         /// <param name="flockParameters">Behavior of the flock</param>
-        public Flock(Texture2D tex, int screenWidth, int screenHeight,
-            AIParameters flockParameters)
+        public Flock(Texture2D tex, int gameMaxX, int gameMaxZ,
+            AIParameters flockParameters, ContentManager content, int minX, int maxX, int minZ, int maxZ)
         {
-            boundryWidth = screenWidth;
-            boundryHeight = screenHeight;
+            boundryWidth = gameMaxX;
+            boundryHeight = gameMaxZ;
 
             fishTexture = tex;
 
             flock = new List<Fish>();
             flockParams = flockParameters;
 
-            ResetFlock();
+            ResetFlock(content, minX, maxX, minZ, maxZ);
         }
         #endregion
 
         #region Update and Draw
         /// <summary>
-        /// Update each flock member, Each fish want to swin with or flee from everything
+        /// Update each flock member, Each fish want to swim with or flee from everything
         /// it sees depending on what type it is
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
@@ -150,7 +150,7 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// Clear the current flock if it exists and randomly generate a new one
         /// </summary>
-        public void ResetFlock()
+        public void ResetFlock(ContentManager content, int minX, int maxX, int minZ, int maxZ)
         {
             flock.Clear();
             flock.Capacity = flockSize;
@@ -164,12 +164,14 @@ namespace Poseidon.FishSchool
 
             for (int i = 0; i < flockSize; i++)
             {
-                xValue = random.Next(100, boundryWidth - 200);
-                zValue = random.Next(100, boundryHeight - 200);
-                if (random.Next(100) % 2 == 0)
-                    xValue *= -1;
-                if (random.Next(100) % 2 == 0)
-                    zValue *= -1;
+                //xValue = random.Next(80, boundryWidth - 100);
+                //zValue = random.Next(80, boundryHeight - 100);
+                xValue = random.Next(minX, maxX);
+                zValue = random.Next(minZ, maxZ);
+                //if (random.Next(100) % 2 == 0)
+                //    xValue *= -1;
+                //if (random.Next(100) % 2 == 0)
+                //    zValue *= -1;
                 //give the fishes some chance to get close to eachother from the beginning
                 //tempLoc = new Vector3((float)
                 //    random.Next(-boundryWidth + 200, boundryWidth - 200), 0, (float)random.Next(-boundryHeight + 200, boundryHeight - 200));
@@ -178,6 +180,8 @@ namespace Poseidon.FishSchool
                 //tempDir = new Vector3(0, 0, 0);
                 tempDir.Normalize();
 
+                //if (random.Next(2) == 0) fishTexture = content.Load<Texture2D>("Image/smallfish1");
+                //else fishTexture = content.Load<Texture2D>("Image/smallfish2-1");
                 tempFish = new Fish(fishTexture, tempDir, tempLoc,
                     boundryWidth, boundryHeight);
                 flock.Add(tempFish);

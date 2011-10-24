@@ -21,7 +21,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon.FishSchool
 {
-    class Fish : Animal
+    public class Fish : Animal
     {
         #region Fields
 

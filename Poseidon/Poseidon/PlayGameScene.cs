@@ -128,7 +128,8 @@ namespace Poseidon
         float timeNextSeaBedBubble = 3000.0f;
 
         // School of fish
-        SchoolOfFish schoolOfFish;
+        SchoolOfFish schoolOfFish1;
+        SchoolOfFish schoolOfFish2;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -169,8 +170,10 @@ namespace Poseidon
             alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
-            schoolOfFish = new SchoolOfFish(Content);
-
+            schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+                100, GameConstants.MainGameMaxRangeZ - 250);
+            schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+                -GameConstants.MainGameMaxRangeZ + 250, -100);
             this.Load();
         }
 
@@ -299,7 +302,10 @@ namespace Poseidon
             roundTimer = roundTime;
             currentSentence = 0;
             currentGameState = GameState.PlayingCutScene;
-            schoolOfFish = new SchoolOfFish(Content);
+            schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+                100, GameConstants.MainGameMaxRangeZ - 250);
+            schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+                -GameConstants.MainGameMaxRangeZ + 250, -100);
             InitializeGameField(Content);
         }
 
@@ -836,7 +842,8 @@ namespace Poseidon
                     cursor.Update(gameTime);
 
                     //update the school of fish
-                    schoolOfFish.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish1.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish2.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
                 }
 
                 prevGameState = currentGameState;
@@ -1123,7 +1130,8 @@ namespace Poseidon
 
             //draw schools of fish
             spriteBatch.Begin();
-            schoolOfFish.Draw(timming, spriteBatch);
+            schoolOfFish1.Draw(timming, spriteBatch);
+            schoolOfFish2.Draw(timming, spriteBatch);
             spriteBatch.End();
 
             graphics.GraphicsDevice.SetRenderTarget(null);
@@ -1209,7 +1217,7 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1+= "0";
             str1 += roundTimer.Seconds;
-            str1 += "\n Active skill " + Tank.activeSkillID;
+            //str1 += "\n Active skill " + Tank.activeSkillID;
             //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
             //str1 += "\n Level: " + Tank.level;
             //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
@@ -1230,11 +1238,14 @@ namespace Poseidon
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
             //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
             //str2 += "Type " + tank.GetType().Name.ToString();
-            if (bubbles.Count > 0)
-            {
-                str2 += "Bubbles " + bubbles.Count + " Scale " + bubbles[0].scale + " Time last " + bubbles[0].timeLast;
-                //str2 += "\nBub pos " + bubbles[0].bubblePos;
-            }
+            //if (bubbles.Count > 0)
+            //{
+            //    str2 += "Bubbles " + bubbles.Count + " Scale " + bubbles[0].scale + " Time last " + bubbles[0].timeLast;
+            //    //str2 += "\nBub pos " + bubbles[0].bubblePos;
+            //}
+            str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
+            str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
+            //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)

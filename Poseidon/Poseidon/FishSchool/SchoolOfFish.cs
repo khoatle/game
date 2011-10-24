@@ -61,18 +61,27 @@ namespace Poseidon.FishSchool
         //bool aiParameterUpdate = false;
         Texture2D fishTexture;
 
-        Flock flock;
+        public Flock flock;
 
         AIParameters flockParams;
 
-        public SchoolOfFish(ContentManager Content)
+        ContentManager content;
+        int minValueX, minValueZ, maxValueX, maxValueZ, gameMaxX, gameMaxZ;
+        public SchoolOfFish(ContentManager Content, string fishTextureName, int minX, int maxX, int minZ, int maxZ)
         {
             flock = null;
             //cat = null;
 
             flockParams = new AIParameters();
             ResetAIParams();
-            fishTexture = Content.Load<Texture2D>("Image/smallfish");
+            this.content = Content;
+            fishTexture = Content.Load<Texture2D>(fishTextureName);
+            this.gameMaxX = GameConstants.MainGameMaxRangeX;
+            this.gameMaxZ = GameConstants.MainGameMaxRangeZ;
+            minValueX = minX;
+            minValueZ = minZ;
+            maxValueX = maxX;
+            maxValueZ = maxZ;
         }
 
         public void Update(GameTime gameTime, Tank tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
@@ -83,7 +92,7 @@ namespace Poseidon.FishSchool
             }
             else
             {
-                SpawnFlock();
+                SpawnFlock(gameMaxX, gameMaxZ, minValueX, maxValueX, minValueZ, maxValueZ);
             }
         }
         public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
@@ -97,12 +106,11 @@ namespace Poseidon.FishSchool
         /// Create the fish flock
         /// </summary>
         /// <param name="theNum"></param>
-        protected void SpawnFlock()
+        protected void SpawnFlock(int gameMaxX, int gameMaxZ, int minValueX, int maxValueX, int minValueZ, int maxValueZ)
         {
             if (flock == null)
             {
-                flock = new Flock(fishTexture, GameConstants.MainGameMaxRangeX,
-                                  GameConstants.MainGameMaxRangeZ, flockParams);
+                flock = new Flock(fishTexture, gameMaxX, gameMaxZ, flockParams, content, minValueX, maxValueX, minValueZ, maxValueZ);
             }
         }
         /// <summary>

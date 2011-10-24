@@ -22,9 +22,9 @@ namespace Poseidon.FishSchool
         // no type
         Generic,
         // flies around and reacts
-        Bird,
+        Fish,
         // controled by teh thumbstick, birds flee from it
-        Cat
+        AllOtherObjects
     }
     /// <summary>
     /// base class for moveable, drawable critters onscreen

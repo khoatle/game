@@ -59,7 +59,7 @@ namespace Poseidon.FishSchool
 
         // Do we need to update AI parameers this Update
         //bool aiParameterUpdate = false;
-        Texture2D birdTexture;
+        Texture2D fishTexture;
 
         Flock flock;
 
@@ -72,14 +72,14 @@ namespace Poseidon.FishSchool
 
             flockParams = new AIParameters();
             ResetAIParams();
-            birdTexture = Content.Load<Texture2D>("Image/smallfish");
+            fishTexture = Content.Load<Texture2D>("Image/smallfish");
         }
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Tank tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
         {
             if (flock != null)
             {
-                flock.Update(gameTime);//, cat);
+                flock.Update(gameTime, tank, enemies, enemyAmount, fishes, fishAmount);//, cat);
             }
             else
             {
@@ -94,14 +94,14 @@ namespace Poseidon.FishSchool
             }
         }
         /// <summary>
-        /// Create the bird flock
+        /// Create the fish flock
         /// </summary>
         /// <param name="theNum"></param>
         protected void SpawnFlock()
         {
             if (flock == null)
             {
-                flock = new Flock(birdTexture, GameConstants.MainGameMaxRangeX,
+                flock = new Flock(fishTexture, GameConstants.MainGameMaxRangeX,
                                   GameConstants.MainGameMaxRangeZ, flockParams);
             }
         }

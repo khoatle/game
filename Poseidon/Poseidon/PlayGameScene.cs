@@ -836,7 +836,7 @@ namespace Poseidon
                     cursor.Update(gameTime);
 
                     //update the school of fish
-                    schoolOfFish.Update(gameTime);
+                    schoolOfFish.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
                 }
 
                 prevGameState = currentGameState;

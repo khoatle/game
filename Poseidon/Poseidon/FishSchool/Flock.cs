@@ -19,7 +19,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Poseidon.FishSchool
 {
     /// <summary>
-    /// This class manages all the birds in the flock and handles 
+    /// This class manages all the fishes in the flock and handles 
     /// their update and draw
     /// </summary>
     class Flock
@@ -31,7 +31,7 @@ namespace Poseidon.FishSchool
 
         #region Fields
 
-        //birds that fly out of the boundry(screen) will wrap around to 
+        //fishes that swim out of the boundry(screen) will wrap around to 
         //the other side
         int boundryWidth;
         int boundryHeight;
@@ -39,12 +39,12 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// Tecture used to draw the Flock
         /// </summary>
-        Texture2D birdTexture;
+        Texture2D fishTexture;
 
         /// <summary>
         /// List of Flock Members
         /// </summary>
-        List<Bird> flock;
+        List<Fish> flock;
 
         /// <summary>
         /// Parameters flock members use to move and think
@@ -71,7 +71,7 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// Setup the flock boundaries and generate individual members of the flock
         /// </summary>
-        /// <param name="tex"> The texture to be used by the birds</param>
+        /// <param name="tex"> The texture to be used by the fishes</param>
         /// <param name="screenWidth">Width of the screen</param>
         /// <param name="screenHeight">Height of the screen</param>
         /// <param name="flockParameters">Behavior of the flock</param>
@@ -81,9 +81,9 @@ namespace Poseidon.FishSchool
             boundryWidth = screenWidth;
             boundryHeight = screenHeight;
 
-            birdTexture = tex;
+            fishTexture = tex;
 
-            flock = new List<Bird>();
+            flock = new List<Fish>();
             flockParams = flockParameters;
 
             ResetFlock();
@@ -92,30 +92,38 @@ namespace Poseidon.FishSchool
 
         #region Update and Draw
         /// <summary>
-        /// Update each flock member, Each bird want to fly with or flee from everything
+        /// Update each flock member, Each fish want to swin with or flee from everything
         /// it sees depending on what type it is
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="cat"></param>
-        public void Update(GameTime gameTime)//, Cat cat)
+        public void Update(GameTime gameTime, Tank tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
         {
-            foreach (Bird thisBird in flock)
+            foreach (Fish thisFish in flock)
             {
-                thisBird.ResetThink();
+                thisFish.ResetThink();
 
-                foreach (Bird otherBird in flock)
+                foreach (Fish otherFish in flock)
                 {
                     //this check is so we don't try to fly to ourself!
-                    if (thisBird != otherBird)
+                    if (thisFish != otherFish)
                     {
-                        thisBird.ReactTo(otherBird, ref flockParams);
+                        thisFish.ReactTo(otherFish, ref flockParams);
                     }
                 }
 
-                //Look for the cat
-                //thisBird.ReactTo(cat, ref flockParams);
-
-                thisBird.Update(gameTime, ref flockParams);
+                //Look for the main character
+                thisFish.ReactToMainCharacter(tank, ref flockParams);
+                //React to enemies and other big fishes
+                for (int i = 0; i < enemyAmount; i++)
+                {
+                    thisFish.ReactToSwimmingObject(enemies[i], ref flockParams);
+                }
+                for (int i = 0; i < fishAmount; i++)
+                {
+                    thisFish.ReactToSwimmingObject(fishes[i], ref flockParams);
+                }
+                thisFish.Update(gameTime, ref flockParams);
             }
         }
 
@@ -127,11 +135,11 @@ namespace Poseidon.FishSchool
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
             //BoundingSphere boundingSphere;
-            foreach (Bird theBird in flock)
+            foreach (Fish theFish in flock)
             {
                 //boundingSphere = new BoundingSphere(theBird.Location, 1.0f);
                 //if (PlayGameScene.frustum.Intersects(boundingSphere))
-                    theBird.Draw(spriteBatch, gameTime);
+                    theFish.Draw(spriteBatch, gameTime);
             }
         }
 
@@ -147,7 +155,7 @@ namespace Poseidon.FishSchool
             flock.Clear();
             flock.Capacity = flockSize;
 
-            Bird tempBird;
+            Fish tempFish;
             Vector3 tempDir;
             Vector3 tempLoc;
 
@@ -170,9 +178,9 @@ namespace Poseidon.FishSchool
                 //tempDir = new Vector3(0, 0, 0);
                 tempDir.Normalize();
 
-                tempBird = new Bird(birdTexture, tempDir, tempLoc,
+                tempFish = new Fish(fishTexture, tempDir, tempLoc,
                     boundryWidth, boundryHeight);
-                flock.Add(tempBird);
+                flock.Add(tempFish);
             }
         }
         #endregion

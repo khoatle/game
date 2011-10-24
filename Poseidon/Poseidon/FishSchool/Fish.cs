@@ -1,6 +1,6 @@
 ﻿#region File Description
 //-----------------------------------------------------------------------------
-// Bird.cs
+// Fish.cs
 //
 // Microsoft XNA Community Game Platform
 // Copyright (C) Microsoft Corporation. All rights reserved.
@@ -21,7 +21,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon.FishSchool
 {
-    class Bird : Animal
+    class Fish : Animal
     {
         #region Fields
 
@@ -33,7 +33,7 @@ namespace Poseidon.FishSchool
         //Vector3 loc3D;
         //Vector3 dir3D;
         #endregion
-
+        FleeBehavior fleeReaction;
         #region Initialization
         /// <summary>
         /// Bird constructor
@@ -42,7 +42,7 @@ namespace Poseidon.FishSchool
         /// <param name="dir">movement direction</param>
         /// <param name="loc">spawn location</param>
         /// <param name="screenSize">screen size</param>
-        public Bird(Texture2D tex, Vector3 dir, Vector3 loc,
+        public Fish(Texture2D tex, Vector3 dir, Vector3 loc,
             int screenWidth, int screenHeight)
             : base(tex, screenWidth, screenHeight)
         {
@@ -56,7 +56,7 @@ namespace Poseidon.FishSchool
             moveSpeed = 30.0f;// 125.0f;
             fleeing = false;
             random = new Random((int)loc.X + (int)loc.Z);
-            animaltype = AnimalType.Bird;
+            animaltype = AnimalType.Fish;
             BuildBehaviors();
         }
         #endregion
@@ -64,7 +64,7 @@ namespace Poseidon.FishSchool
         #region Update and Draw
 
         /// <summary>
-        /// update bird position, wrapping around the screen edges
+        /// update fish position, wrapping around the screen edges
         /// </summary>
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime, ref AIParameters aiParams)
@@ -99,32 +99,13 @@ namespace Poseidon.FishSchool
                 Vector3 moveAmount = direction * moveSpeed * elapsedTime;
                 location = location + moveAmount;
 
-                //wrap bird to the other side of the map if needed
-                //if ( location.X < 0.0f)
-                //{
-                //    location.X = boundryWidth + location.X;
-                //}
-                //else if (location.X > boundryWidth)
-                //{
-                //    location.X = location.X - boundryWidth;
-                //}
                 if (Math.Abs(location.X) > boundryWidth + 200) location.X = -location.X;
-                //location.Z += direction.Z * moveSpeed * elapsedTime;
                 if (Math.Abs(location.Z) > boundryHeight + 200) location.Z = -location.Z;
-                //location.Y += direction.Y * moveSpeed * elapsedTime;
-                //if (location.Y < 0.0f)
-                //{
-                //    location.Y = boundryHeight + location.Y;
-                //}
-                //else if (location.Y > boundryHeight)
-                //{
-                //    location.Y = location.Y - boundryHeight;
-                //}
             }
         }
 
         /// <summary>
-        /// Draw the bird, tinting it if it's currently fleeing
+        /// Draw the fish, tinting it if it's currently fleeing
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="gameTime"></param>
@@ -164,22 +145,20 @@ namespace Poseidon.FishSchool
         #region Methods
 
         /// <summary>
-        /// Instantiates all the behaviors that this Bird knows about
+        /// Instantiates all the behaviors that this fish knows about
         /// </summary>
         public void BuildBehaviors()
         {
-            //Behaviors catReactions = new Behaviors();
-            //catReactions.Add(new FleeBehavior(this));
-            //behaviors.Add(AnimalType.Cat, catReactions);
+            fleeReaction = new FleeBehavior(this);
 
-            Behaviors birdReactions = new Behaviors();
-            birdReactions.Add(new AlignBehavior(this));
-            birdReactions.Add(new CohesionBehavior(this));
-            birdReactions.Add(new SeparationBehavior(this));
-            behaviors.Add(AnimalType.Bird, birdReactions);
+            Behaviors fishReactions = new Behaviors();
+            fishReactions.Add(new AlignBehavior(this));
+            fishReactions.Add(new CohesionBehavior(this));
+            fishReactions.Add(new SeparationBehavior(this));
+            behaviors.Add(AnimalType.Fish, fishReactions);
         }
         /// <summary>
-        /// Setup the bird to figure out it's new movement direction
+        /// Setup the fish to figure out it's new movement direction
         /// </summary>
         /// <param name="AIparams">flock AI parameters</param>
         public void ResetThink()
@@ -209,7 +188,7 @@ namespace Poseidon.FishSchool
             float dX = Math.Abs(destLocation.X - srcLocation.X);
             float dZ = Math.Abs(destLocation.Z - srcLocation.Z);
 
-            // now see if the distance between birds is closer if going off one
+            // now see if the distance between fishes is closer if going off one
             // side of the map and onto the other.
             if (Math.Abs(boundryWidth - destLocation.X + srcLocation.X) < dX)
             {
@@ -266,6 +245,60 @@ namespace Poseidon.FishSchool
                             aiNumSeen++;
                         }
                     }
+                }
+            }
+        }
+        public void ReactToMainCharacter(Tank tank, ref AIParameters AIparams)
+        {
+            if (tank != null)
+            {
+                //setting the the reactionLocation and reactionDistance here is
+                //an optimization, many of the possible reactions use the distance
+                //and location of theAnimal, so we might as well figure them out
+                //only once !
+                Vector3 otherLocation = tank.Position;
+                ClosestLocation(ref location, ref otherLocation,
+                    out reactionLocation);
+                reactionDistance = Vector3.Distance(location, reactionLocation);
+
+                //we only react if theAnimal is close enough that we can see it
+                if (reactionDistance < AIparams.DetectionDistance)
+                {
+                    fleeReaction.Update(tank, AIparams);
+
+                    if (fleeReaction.Reacted)
+                    {
+                        aiNewDir += fleeReaction.Reaction;
+                        aiNumSeen++;
+                    }
+
+                }
+            }
+        }
+        public void ReactToSwimmingObject(SwimmingObject swimmingObject, ref AIParameters AIparams)
+        {
+            if (swimmingObject != null)
+            {
+                //setting the the reactionLocation and reactionDistance here is
+                //an optimization, many of the possible reactions use the distance
+                //and location of theAnimal, so we might as well figure them out
+                //only once !
+                Vector3 otherLocation = swimmingObject.Position;
+                ClosestLocation(ref location, ref otherLocation,
+                    out reactionLocation);
+                reactionDistance = Vector3.Distance(location, reactionLocation);
+
+                //we only react if theAnimal is close enough that we can see it
+                if (reactionDistance < AIparams.DetectionDistance)
+                {
+                    fleeReaction.Update(swimmingObject, AIparams);
+
+                    if (fleeReaction.Reacted)
+                    {
+                        aiNewDir += fleeReaction.Reaction;
+                        aiNumSeen++;
+                    }
+
                 }
             }
         }

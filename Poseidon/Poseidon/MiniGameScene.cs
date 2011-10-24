@@ -26,7 +26,7 @@ namespace Poseidon
         bool doubleClicked = false;
         bool clicked = false;
         double clickTimer = 0;
-        Cursor cursor;
+        //Cursor cursor;
         // Audio
         protected AudioLibrary audio;
         // Spritebatch

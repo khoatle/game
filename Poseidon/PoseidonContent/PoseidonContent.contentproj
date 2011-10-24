@@ -946,13 +946,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish.tga">
-      <Name>smallfish</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\Paintings\painting1.jpg">
       <Name>painting1</Name>
       <Importer>TextureImporter</Importer>
@@ -970,6 +963,13 @@
     </Compile>
     <Compile Include="Image\Paintings\painting4.jpg">
       <Name>painting4</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\smallfish.png">
+      <Name>smallfish</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

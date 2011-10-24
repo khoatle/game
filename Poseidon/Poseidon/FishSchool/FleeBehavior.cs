@@ -31,12 +31,12 @@ namespace Poseidon.FishSchool
         {
             base.ResetReaction();
 
-            Vector2 dangerDirection = Vector2.Zero;
+            Vector3 dangerDirection = Vector3.Zero;
 
             //Vector2.Dot will return a negative result in this case if the 
             //otherAnimal is behind the animal, in that case we don’t have to 
             //worry about it because we’re already moving away from it.
-            if (Vector2.Dot(
+            if (Vector3.Dot(
                 Animal.Location, Animal.ReactionLocation) >= -(Math.PI / 2))
             {
                 //set the animal to fleeing so that it flashes red
@@ -44,7 +44,7 @@ namespace Poseidon.FishSchool
                 reacted = true;
 
                 dangerDirection = Animal.Location - Animal.ReactionLocation;
-                Vector2.Normalize(ref dangerDirection, out dangerDirection);
+                Vector3.Normalize(ref dangerDirection, out dangerDirection);
                 
                 reaction = (aiParams.PerDangerWeight * dangerDirection);
             }

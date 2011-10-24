@@ -26,12 +26,12 @@ namespace Poseidon.FishSchool
         #region Fields
 
         protected Random random;
-        Vector2 aiNewDir;
+        Vector3 aiNewDir;
         int aiNumSeen;
         
         //location and direction in 3D world
-        Vector3 loc3D;
-        Vector3 dir3D;
+        //Vector3 loc3D;
+        //Vector3 dir3D;
         #endregion
 
         #region Initialization
@@ -42,20 +42,20 @@ namespace Poseidon.FishSchool
         /// <param name="dir">movement direction</param>
         /// <param name="loc">spawn location</param>
         /// <param name="screenSize">screen size</param>
-        public Bird(Texture2D tex, Vector2 dir, Vector2 loc,
+        public Bird(Texture2D tex, Vector3 dir, Vector3 loc,
             int screenWidth, int screenHeight)
             : base(tex, screenWidth, screenHeight)
         {
             direction = dir;
             direction.Normalize();
-            dir3D = new Vector3(direction.X, 0, direction.Y);
+            //dir3D = new Vector3(direction.X, 0, direction.Y);
 
             location = loc;
-            loc3D = new Vector3(loc.X, 0, loc.Y);
+            //loc3D = new Vector3(loc.X, 0, loc.Y);
 
-            moveSpeed = 125.0f;
+            moveSpeed = 30.0f;// 125.0f;
             fleeing = false;
-            random = new Random((int)loc.X + (int)loc.Y);
+            random = new Random((int)loc.X + (int)loc.Z);
             animaltype = AnimalType.Bird;
             BuildBehaviors();
         }
@@ -70,11 +70,12 @@ namespace Poseidon.FishSchool
         public void Update(GameTime gameTime, ref AIParameters aiParams)
         {
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
-            Vector2 randomDir = Vector2.Zero;
+            Vector3 randomDir = Vector3.Zero;
 
             randomDir.X = (float)random.NextDouble() - 0.5f;
-            randomDir.Y = (float)random.NextDouble() - 0.5f;
-            Vector2.Normalize(ref randomDir, out randomDir);
+            randomDir.Y = 0;
+            randomDir.Z = (float)random.NextDouble() - 0.5f;
+            Vector3.Normalize(ref randomDir, out randomDir);
 
             if (aiNumSeen > 0)
             {
@@ -88,35 +89,37 @@ namespace Poseidon.FishSchool
             }
 
             aiNewDir += (randomDir * aiParams.MoveInRandomDirectionInfluence);
-            Vector2.Normalize(ref aiNewDir, out aiNewDir);
+            Vector3.Normalize(ref aiNewDir, out aiNewDir);
             aiNewDir = ChangeDirection(direction, aiNewDir,
                 aiParams.MaxTurnRadians * elapsedTime);
             direction = aiNewDir;
 
             if (direction.LengthSquared() > .01f)
             {
-                Vector2 moveAmount = direction * moveSpeed * elapsedTime;
+                Vector3 moveAmount = direction * moveSpeed * elapsedTime;
                 location = location + moveAmount;
 
-                //wrap bird to the other side of the screen if needed
-                if (location.X < 0.0f)
-                {
-                    location.X = boundryWidth + location.X;
-                }
-                else if (location.X > boundryWidth)
-                {
-                    location.X = location.X - boundryWidth;
-                }
-
-                location.Y += direction.Y * moveSpeed * elapsedTime;
-                if (location.Y < 0.0f)
-                {
-                    location.Y = boundryHeight + location.Y;
-                }
-                else if (location.Y > boundryHeight)
-                {
-                    location.Y = location.Y - boundryHeight;
-                }
+                //wrap bird to the other side of the map if needed
+                //if ( location.X < 0.0f)
+                //{
+                //    location.X = boundryWidth + location.X;
+                //}
+                //else if (location.X > boundryWidth)
+                //{
+                //    location.X = location.X - boundryWidth;
+                //}
+                if (Math.Abs(location.X) > boundryWidth + 200) location.X = -location.X;
+                //location.Z += direction.Z * moveSpeed * elapsedTime;
+                if (Math.Abs(location.Z) > boundryHeight + 200) location.Z = -location.Z;
+                //location.Y += direction.Y * moveSpeed * elapsedTime;
+                //if (location.Y < 0.0f)
+                //{
+                //    location.Y = boundryHeight + location.Y;
+                //}
+                //else if (location.Y > boundryHeight)
+                //{
+                //    location.Y = location.Y - boundryHeight;
+                //}
             }
         }
 
@@ -129,7 +132,7 @@ namespace Poseidon.FishSchool
         {
             Color tintColor = color;
             float rotation = 0.0f;
-            rotation = (float)Math.Atan2(direction.Y, direction.X);
+            rotation = (float)Math.Atan2(direction.Z, direction.X);
 
             // if the entity is highlighted, we want to make it pulse with a red tint.
             if (fleeing)
@@ -147,14 +150,13 @@ namespace Poseidon.FishSchool
                 tintColor = new Color(Vector4.Lerp(
                     Color.Red.ToVector4(), Color.White.ToVector4(), t));
             }
-            Vector3 screenPos = PlayGameScene.GraphicDevice.Viewport.Project(loc3D, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
+            Vector3 screenPos = PlayGameScene.GraphicDevice.Viewport.Project(location, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
             Vector2 loc2D = new Vector2(screenPos.X, screenPos.Y);
             // Draw the animal, centered around its position, and using the 
-            //orientation and tint color.
-
+            //orientation and tint color
             //spriteBatch.Draw(texture, location, null, tintColor,
             //    rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
-            spriteBatch.Draw(texture, loc2D, null, tintColor,
+            spriteBatch.Draw(texture, loc2D, null, Color.White,
                 rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
         }
         #endregion
@@ -166,9 +168,9 @@ namespace Poseidon.FishSchool
         /// </summary>
         public void BuildBehaviors()
         {
-            Behaviors catReactions = new Behaviors();
-            catReactions.Add(new FleeBehavior(this));
-            behaviors.Add(AnimalType.Cat, catReactions);
+            //Behaviors catReactions = new Behaviors();
+            //catReactions.Add(new FleeBehavior(this));
+            //behaviors.Add(AnimalType.Cat, catReactions);
 
             Behaviors birdReactions = new Behaviors();
             birdReactions.Add(new AlignBehavior(this));
@@ -183,10 +185,10 @@ namespace Poseidon.FishSchool
         public void ResetThink()
         {
             Fleeing = false;
-            aiNewDir = Vector2.Zero;
+            aiNewDir = Vector3.Zero;
             aiNumSeen = 0;
             reactionDistance = 0f;
-            reactionLocation = Vector2.Zero;
+            reactionLocation = Vector3.Zero;
         }
 
         /// <summary>
@@ -198,14 +200,14 @@ namespace Poseidon.FishSchool
         /// <param name="srcLocation">screen location of src</param>
         /// <param name="destLocation">screen location of dest</param>
         /// <param name="outVector">relative location of dest to src</param>
-        private void ClosestLocation(ref Vector2 srcLocation,
-            ref Vector2 destLocation, out Vector2 outLocation)
+        private void ClosestLocation(ref Vector3 srcLocation,
+            ref Vector3 destLocation, out Vector3 outLocation)
         {
-            outLocation = new Vector2();
+            outLocation = new Vector3();
             float x = destLocation.X;
-            float y = destLocation.Y;
+            float z = destLocation.Z;
             float dX = Math.Abs(destLocation.X - srcLocation.X);
-            float dY = Math.Abs(destLocation.Y - srcLocation.Y);
+            float dZ = Math.Abs(destLocation.Z - srcLocation.Z);
 
             // now see if the distance between birds is closer if going off one
             // side of the map and onto the other.
@@ -220,18 +222,18 @@ namespace Poseidon.FishSchool
                 x = destLocation.X + boundryWidth;
             }
 
-            if (Math.Abs(boundryHeight - destLocation.Y + srcLocation.Y) < dY)
+            if (Math.Abs(boundryHeight - destLocation.Z + srcLocation.Z) < dZ)
             {
-                dY = boundryHeight - destLocation.Y + srcLocation.Y;
-                y = destLocation.Y - boundryHeight;
+                dZ = boundryHeight - destLocation.Y + srcLocation.Y;
+                z = destLocation.Y - boundryHeight;
             }
-            if (Math.Abs(boundryHeight - srcLocation.Y + destLocation.Y) < dY)
+            if (Math.Abs(boundryHeight - srcLocation.Z + destLocation.Z) < dZ)
             {
-                dY = boundryHeight - srcLocation.Y + destLocation.Y;
-                y = destLocation.Y + boundryHeight;
+                dZ = boundryHeight - srcLocation.Y + destLocation.Y;
+                z = destLocation.Y + boundryHeight;
             }
             outLocation.X = x;
-            outLocation.Y = y;
+            outLocation.Z = z;
         }
 
         /// <summary>
@@ -246,10 +248,10 @@ namespace Poseidon.FishSchool
                 //an optimization, many of the possible reactions use the distance
                 //and location of theAnimal, so we might as well figure them out
                 //only once !
-                Vector2 otherLocation = animal.Location;
+                Vector3 otherLocation = animal.Location;
                 ClosestLocation(ref location, ref otherLocation,
                     out reactionLocation);
-                reactionDistance = Vector2.Distance(location, reactionLocation);
+                reactionDistance = Vector3.Distance(location, reactionLocation);
 
                 //we only react if theAnimal is close enough that we can see it
                 if (reactionDistance < AIparams.DetectionDistance)
@@ -275,14 +277,14 @@ namespace Poseidon.FishSchool
         /// <param name="newDir">desired movement direction</param>
         /// <param name="maxTurnRadians">max turn in radians</param>
         /// <returns></returns>
-        private static Vector2 ChangeDirection(
-            Vector2 oldDir, Vector2 newDir, float maxTurnRadians)
+        private static Vector3 ChangeDirection(
+            Vector3 oldDir, Vector3 newDir, float maxTurnRadians)
         {
-            float oldAngle = (float)Math.Atan2(oldDir.Y, oldDir.X);
-            float desiredAngle = (float)Math.Atan2(newDir.Y, newDir.X);
+            float oldAngle = (float)Math.Atan2(oldDir.Z, oldDir.X);
+            float desiredAngle = (float)Math.Atan2(newDir.Z, newDir.X);
             float newAngle = MathHelper.Clamp(desiredAngle, WrapAngle(
                     oldAngle - maxTurnRadians), WrapAngle(oldAngle + maxTurnRadians));
-            return new Vector2((float)Math.Cos(newAngle), (float)Math.Sin(newAngle));
+            return new Vector3((float)Math.Cos(newAngle), 0, (float)Math.Sin(newAngle));
         }
         /// <summary>
         /// clamps the angle in radians between -Pi and Pi.

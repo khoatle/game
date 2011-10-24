@@ -38,11 +38,11 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// Store the behavior reaction here.
         /// </summary>
-        public Vector2 Reaction
+        public Vector3 Reaction
         {
             get { return reaction; }
         }
-        protected Vector2 reaction;
+        protected Vector3 reaction;
 
         /// <summary>
         /// Store if the behavior has reaction results here.
@@ -76,7 +76,7 @@ namespace Poseidon.FishSchool
         protected void ResetReaction()
         {
             reacted = false;
-            reaction = Vector2.Zero;
+            reaction = Vector3.Zero;
         }
         #endregion
     }

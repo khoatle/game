@@ -48,17 +48,17 @@ namespace Poseidon.FishSchool
     public class SchoolOfFish
     {
         // Default value for the AI parameters
-        const float detectionDefault = 70.0f;
-        const float separationDefault = 50.0f;
+        const float detectionDefault = 15.0f;//70.0f;
+        const float separationDefault = 10.0f;//50.0f;
         const float moveInOldDirInfluenceDefault = 1.0f;
-        const float moveInFlockDirInfluenceDefault = 1.0f;
+        const float moveInFlockDirInfluenceDefault = 1.0f;//1.0f;
         const float moveInRandomDirInfluenceDefault = 0.05f;
-        const float maxTurnRadiansDefault = 6.0f;
+        const float maxTurnRadiansDefault = 6.0f;//6.0f;
         const float perMemberWeightDefault = 1.0f;
         const float perDangerWeightDefault = 50.0f;
 
         // Do we need to update AI parameers this Update
-        bool aiParameterUpdate = false;
+        //bool aiParameterUpdate = false;
         Texture2D birdTexture;
 
         Flock flock;

@@ -41,7 +41,7 @@ namespace Poseidon.FishSchool
         {
             base.ResetReaction();
 
-            Vector2 pullDirection = Vector2.Zero;
+            Vector3 pullDirection = Vector3.Zero;
             float weight = aiParams.PerMemberWeight;
 
             //if the otherAnimal is too close we dont' want to fly any
@@ -54,7 +54,7 @@ namespace Poseidon.FishSchool
                 //weigh it based on how close the otherAnimal is relative to the 
                 //AIParameters.separationDistance.
                 pullDirection = -(Animal.Location - Animal.ReactionLocation);
-                Vector2.Normalize(ref pullDirection, out pullDirection);
+                Vector3.Normalize(ref pullDirection, out pullDirection);
 
                 weight *= (float)Math.Pow((double)
                     (Animal.ReactionDistance - aiParams.SeparationDistance) /

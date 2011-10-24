@@ -41,7 +41,7 @@ namespace Poseidon.FishSchool
         {
             base.ResetReaction();
 
-            Vector2 pushDirection = Vector2.Zero;
+            Vector3 pushDirection = Vector3.Zero;
             float weight = aiParams.PerMemberWeight;
 
             if (Animal.ReactionDistance > 0.0f && 
@@ -52,7 +52,7 @@ namespace Poseidon.FishSchool
                 //that reaction based on how close it is vs. our separationDistance
 
                 pushDirection = Animal.Location - Animal.ReactionLocation;
-                Vector2.Normalize(ref pushDirection, out pushDirection);
+                Vector3.Normalize(ref pushDirection, out pushDirection);
 
                 //push away
                 weight *= (1 - 

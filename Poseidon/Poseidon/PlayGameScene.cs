@@ -90,7 +90,7 @@ namespace Poseidon
         Rectangle levelObjectiveIconRectangle;
 
         // Current game level
-        public int currentLevel = 0;
+        public static int currentLevel = 0;
 
         // Cutscene
         CutSceneDialog cutSceneDialog;
@@ -299,7 +299,7 @@ namespace Poseidon
             roundTimer = roundTime;
             currentSentence = 0;
             currentGameState = GameState.PlayingCutScene;
-
+            schoolOfFish = new SchoolOfFish(Content);
             InitializeGameField(Content);
         }
 
@@ -836,7 +836,7 @@ namespace Poseidon
                     cursor.Update(gameTime);
 
                     //update the school of fish
-                    //schoolOfFish.Update(gameTime);
+                    schoolOfFish.Update(gameTime);
                 }
 
                 prevGameState = currentGameState;
@@ -1123,7 +1123,7 @@ namespace Poseidon
 
             //draw schools of fish
             spriteBatch.Begin();
-            //schoolOfFish.Draw(timming, spriteBatch);
+            schoolOfFish.Draw(timming, spriteBatch);
             spriteBatch.End();
 
             graphics.GraphicsDevice.SetRenderTarget(null);

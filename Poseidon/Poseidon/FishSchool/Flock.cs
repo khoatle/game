@@ -26,7 +26,7 @@ namespace Poseidon.FishSchool
     {
         #region Constants
         //Number of FLock members
-        const int flockSize = 40;
+        int flockSize = GameConstants.FishInSchool[PlayGameScene.currentLevel];
         #endregion
 
         #region Fields
@@ -126,9 +126,12 @@ namespace Poseidon.FishSchool
         /// <param name="gameTime"></param>
         public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
         {
+            //BoundingSphere boundingSphere;
             foreach (Bird theBird in flock)
             {
-                theBird.Draw(spriteBatch, gameTime);
+                //boundingSphere = new BoundingSphere(theBird.Location, 1.0f);
+                //if (PlayGameScene.frustum.Intersects(boundingSphere))
+                    theBird.Draw(spriteBatch, gameTime);
             }
         }
 
@@ -145,17 +148,26 @@ namespace Poseidon.FishSchool
             flock.Capacity = flockSize;
 
             Bird tempBird;
-            Vector2 tempDir;
-            Vector2 tempLoc;
+            Vector3 tempDir;
+            Vector3 tempLoc;
 
             Random random = new Random();
+            int xValue, zValue;
 
             for (int i = 0; i < flockSize; i++)
             {
-                tempLoc = new Vector2((float)
-                    random.Next(-boundryWidth, boundryWidth), (float)random.Next(-boundryHeight, boundryHeight));
-                tempDir = new Vector2((float)
-                    random.NextDouble() - 0.5f, (float)random.NextDouble() - 0.5f);
+                xValue = random.Next(100, boundryWidth - 200);
+                zValue = random.Next(100, boundryHeight - 200);
+                if (random.Next(100) % 2 == 0)
+                    xValue *= -1;
+                if (random.Next(100) % 2 == 0)
+                    zValue *= -1;
+                //give the fishes some chance to get close to eachother from the beginning
+                //tempLoc = new Vector3((float)
+                //    random.Next(-boundryWidth + 200, boundryWidth - 200), 0, (float)random.Next(-boundryHeight + 200, boundryHeight - 200));
+                tempLoc = new Vector3((float)xValue, 0, (float)zValue);
+                tempDir = new Vector3((float)random.NextDouble() - 0.5f, 0, (float)random.NextDouble() - 0.5f);
+                //tempDir = new Vector3(0, 0, 0);
                 tempDir.Normalize();
 
                 tempBird = new Bird(birdTexture, tempDir, tempLoc,

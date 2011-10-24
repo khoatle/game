@@ -81,14 +81,14 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// Reaction location
         /// </summary>
-        public Vector2 ReactionLocation
+        public Vector3 ReactionLocation
         {
             get
             {
                 return reactionLocation;
             }
         }
-        protected Vector2 reactionLocation;
+        protected Vector3 reactionLocation;
 
         public bool Fleeing
         {
@@ -124,19 +124,19 @@ namespace Poseidon.FishSchool
         /// <summary>
         /// Direction the animal is moving in
         /// </summary>
-        public Vector2 Direction
+        public Vector3 Direction
         {
             get
             {
                 return direction;
             }
         }
-        protected Vector2 direction;
+        protected Vector3 direction;
 
         /// <summary>
         /// Location on screen
         /// </summary>
-        public Vector2 Location
+        public Vector3 Location
         {
             get
             {
@@ -147,7 +147,7 @@ namespace Poseidon.FishSchool
                 location = value;
             }
         }
-        protected Vector2 location;
+        protected Vector3 location;
 
         #endregion
 
@@ -190,8 +190,8 @@ namespace Poseidon.FishSchool
         {
             float rotation = (float)Math.Atan2(direction.Y, direction.X);
 
-            spriteBatch.Draw(texture, location, null, color,
-                rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
+            //spriteBatch.Draw(texture, location, null, color,
+            //    rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
         }
         #endregion
     }

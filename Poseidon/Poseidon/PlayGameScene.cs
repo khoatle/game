@@ -130,6 +130,7 @@ namespace Poseidon
         // School of fish
         SchoolOfFish schoolOfFish1;
         SchoolOfFish schoolOfFish2;
+        SchoolOfFish schoolOfFish3;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -174,6 +175,8 @@ namespace Poseidon
                 100, GameConstants.MainGameMaxRangeZ - 250);
             schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
+            schoolOfFish3 = new SchoolOfFish(Content, "Image/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+                100, GameConstants.MainGameMaxRangeZ - 250);
             this.Load();
         }
 
@@ -306,6 +309,8 @@ namespace Poseidon
                 100, GameConstants.MainGameMaxRangeZ - 250);
             schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
+            schoolOfFish3 = new SchoolOfFish(Content, "Image/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+                100, GameConstants.MainGameMaxRangeZ - 250);
             InitializeGameField(Content);
         }
 
@@ -844,6 +849,7 @@ namespace Poseidon
                     //update the school of fish
                     schoolOfFish1.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish2.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish3.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
                 }
 
                 prevGameState = currentGameState;
@@ -1132,6 +1138,7 @@ namespace Poseidon
             spriteBatch.Begin();
             schoolOfFish1.Draw(timming, spriteBatch);
             schoolOfFish2.Draw(timming, spriteBatch);
+            schoolOfFish3.Draw(timming, spriteBatch);
             spriteBatch.End();
 
             graphics.GraphicsDevice.SetRenderTarget(null);

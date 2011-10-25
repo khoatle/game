@@ -107,7 +107,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AudioLibrary.cs" />
+    <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="BaseEnemy.cs" />
     <Compile Include="Bubble.cs" />
     <Compile Include="CastSkill.cs" />
@@ -129,9 +129,10 @@
     <Compile Include="FishSchool\SeparationBehavior.cs" />
     <Compile Include="HerculesBullet.cs" />
     <Compile Include="LevelObjectiveScene.cs" />
-    <Compile Include="MiniGameScene.cs" />
+    <Compile Include="MiniGames\QuizzGameScene.cs" />
+    <Compile Include="MiniGames\TypingGameScene.cs" />
     <Compile Include="OceanPaintings.cs" />
-    <Compile Include="QuizzesLibrary.cs" />
+    <Compile Include="MiniGames\QuizzesLibrary.cs" />
     <Compile Include="Tank.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="CursorManager.cs" />

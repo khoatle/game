@@ -12,6 +12,8 @@ using Microsoft.Xna.Framework.Net;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
+using Poseidon.MiniGames;
+
 namespace Poseidon
 {
     public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel }
@@ -48,9 +50,11 @@ namespace Poseidon
         // For the Level Objective
         LevelObjectiveScene levelObjectiveScene;
         protected Texture2D LevelObjectiveBackgroundTexture;
-        // For the mini game
-        MiniGameScene miniGameScene;
-        protected Texture2D miniGameBackgroundTexture;
+        // For the mini games
+        QuizzGameScene quizzGameScene;
+        protected Texture2D quizzGameBackgroundTexture;
+        TypingGameScene typeGameScene;
+        protected Texture2D typeGameBackgroundTexture;
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
@@ -151,7 +155,8 @@ namespace Poseidon
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
-            miniGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
+            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/backgroundTypeGame");
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 
@@ -173,10 +178,13 @@ namespace Poseidon
                 largeFont, LevelObjectiveBackgroundTexture, Content, playGameScene);
             Components.Add(levelObjectiveScene);
 
-            // Create minigame scene
-            miniGameScene = new MiniGameScene(this, smallFont,
-                largeFont, miniGameBackgroundTexture, Content);
-            Components.Add(miniGameScene);
+            // Create minigame scenes
+            quizzGameScene = new QuizzGameScene(this, smallFont,
+                largeFont, quizzGameBackgroundTexture, Content);
+            Components.Add(quizzGameScene);
+            typeGameScene = new TypingGameScene(this, smallFont,
+                largeFont, typeGameBackgroundTexture, Content);
+            Components.Add(typeGameScene);
             // Start the game in the start Scene
             startScene.Show();
             activeScene = startScene;
@@ -278,15 +286,27 @@ namespace Poseidon
             {
                 HandleLevelObjectiveInput();
             }
-            else if (activeScene == miniGameScene)
+            else if (activeScene == quizzGameScene)
             {
-                HandleMiniGameInput();
+                HandleQuizzGameInput();
+            }
+            else if (activeScene == typeGameScene)
+            {
+                HandleTypeGameInput();
             }
         }
 
-        public void HandleMiniGameInput()
+        public void HandleQuizzGameInput()
         {
-            if (miniGameScene.questionAnswered >= 4 || enterPressed)
+            if (quizzGameScene.questionAnswered >= 4 || enterPressed)
+            {
+                playGameScene.currentGameState = GameState.ToNextLevel;
+                ShowScene(playGameScene);
+            }
+        }
+        public void HandleTypeGameInput()
+        {
+            if (enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -369,7 +389,10 @@ namespace Poseidon
             }
             if (playGameScene.currentGameState == GameState.ToMiniGame)
             {
-                ShowScene(miniGameScene);
+                Random rand = new Random();
+                //if (rand.Next(2) == 0) ShowScene(quizzGameScene);
+                //else
+                    ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()

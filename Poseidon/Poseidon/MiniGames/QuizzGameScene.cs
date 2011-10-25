@@ -11,12 +11,12 @@ using Microsoft.Xna.Framework.Input;
 
 #endregion
 
-namespace Poseidon
+namespace Poseidon.MiniGames
 {
     /// <summary>
     /// This is a game component that implements the Game Start Scene.
     /// </summary>
-    public class MiniGameScene : GameScene
+    public class QuizzGameScene : GameScene
     {
         // For mouse inputs
         MouseState currentMouseState = new MouseState();
@@ -45,7 +45,7 @@ namespace Poseidon
         bool displayRightWrongAnswer = false;
         /// <summary>
         /// Default Constructor
-        public MiniGameScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
+        public QuizzGameScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
                            Texture2D background, ContentManager Content)
             : base(game)
         {

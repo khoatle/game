@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Media;
 
-namespace Poseidon
+namespace Poseidon.Core
 {
     public class AudioLibrary
     {

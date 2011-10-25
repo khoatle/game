@@ -323,6 +323,7 @@ namespace Poseidon
             {
                 //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
+                ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
             }
 
@@ -336,6 +337,7 @@ namespace Poseidon
             {
                 //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
+                ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
             }
             if (skillPressed)
@@ -370,6 +372,9 @@ namespace Poseidon
                 && !CursorManager.MouseOnFish(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
                 && GetInShipWreck())
             {
+                //disable camera shaking or else we will get a shake 
+                //right after getting out of a shipwreck
+                PlayGameScene.gameCamera.shaking = false;
                 //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
                 //shipWreckScene.Load();

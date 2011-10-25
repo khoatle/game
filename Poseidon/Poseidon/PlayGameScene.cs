@@ -171,6 +171,7 @@ namespace Poseidon
             alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
+
             schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
             schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
@@ -548,7 +549,7 @@ namespace Poseidon
                                 Tank.firstUse[0] = false;
                                 Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explosion.Play();
-                                CastSkill.UseHerculesBow(tank, Content, myBullet);
+                                CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                                 tank.reachDestination = true;
                             }
@@ -562,6 +563,7 @@ namespace Poseidon
                                 Tank.firstUse[1] = false;
                                 Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
+                                gameCamera.Shake(25f, .4f);
                                 CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
@@ -701,9 +703,9 @@ namespace Poseidon
                     if (timeNextSeaBedBubble <= 0)
                     {
                         Vector3 bubblePos = tank.Position;
-                        bubblePos.X += random.Next(-100, 100);
+                        bubblePos.X += random.Next(-50, 50);
                         //bubblePos.Y = 0;
-                        bubblePos.Z += random.Next(-100, 100);
+                        bubblePos.Z += random.Next(-50, 50);
                         for (int i = 0; i < 7; i++)
                         {
                             Bubble aBubble = new Bubble();
@@ -729,7 +731,7 @@ namespace Poseidon
                         else if (random.Next(100) >= 95) aBubble.bubble3DPos.X -= 0.5f;
                         if (random.Next(100) >= 95) aBubble.bubble3DPos.Z += 0.5f;
                         else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
-                        aBubble.Update();
+                        aBubble.Update(GraphicDevice, gameCamera);
                     }
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
@@ -1131,7 +1133,7 @@ namespace Poseidon
             // draw bubbles
             foreach (Bubble bubble in bubbles)
             {
-                bubble.Draw(spriteBatch);
+                bubble.Draw(spriteBatch, 1.0f);
             }
 
             //draw schools of fish
@@ -1372,7 +1374,7 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
-        private void RestoreGraphicConfig()
+        public static void RestoreGraphicConfig()
         {
             // Change back the config changed by spriteBatch
             GraphicDevice.BlendState = BlendState.Opaque;

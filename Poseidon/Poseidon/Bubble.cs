@@ -30,19 +30,19 @@ namespace Poseidon
             else if (random.Next(3) == 1) bubble3DPos.Z -= 2;
             this.startingScale = startingScale;
         }
-        public void Update()
+        public void Update(GraphicsDevice graphicDevice, Camera gameCamera)
         {
-            Vector3 screenPos = PlayGameScene.GraphicDevice.Viewport.Project(bubble3DPos, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
+            Vector3 screenPos = graphicDevice.Viewport.Project(bubble3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
             bubble2DPos.X = screenPos.X;
             bubble2DPos.Y = screenPos.Y;
             timeLast -= (float)PlayGameScene.timming.ElapsedGameTime.TotalMilliseconds;
             if (timeLast >= 0)
                 scale = startingScale * (2000.0f / timeLast);
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, float scaleUp)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, Color.White, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, Color.White, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * scaleUp, SpriteEffects.None, 0);
             spriteBatch.End();
         }
     }

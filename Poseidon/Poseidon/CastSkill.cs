@@ -15,11 +15,11 @@ namespace Poseidon
 {
     public class CastSkill
     {
-        public static void UseHerculesBow(Tank tank, ContentManager Content, List<DamageBullet> myBullets)
+        public static void UseHerculesBow(Tank tank, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameScene inGameScene)
         {
             float healthiness = (float)Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
             System.Diagnostics.Debug.WriteLine(healthiness);
-            HerculesBullet d = new HerculesBullet();
+            HerculesBullet d = new HerculesBullet(Content, spriteBatch, inGameScene);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
             Vector3 movement = Vector3.Zero;
@@ -51,7 +51,6 @@ namespace Poseidon
                     }
                 }       
             }
-            PlayGameScene.gameCamera.Shake(25f, .4f);
         }
 
         public static void useHypnotise(BaseEnemy enemy) {

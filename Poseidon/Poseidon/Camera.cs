@@ -15,7 +15,7 @@ namespace Poseidon
         public Matrix ViewMatrix { get; set; }
         public Matrix ProjectionMatrix { get; set; }
         // Are we shaking?
-        private bool shaking;
+        public bool shaking;
 
         // The maximum magnitude of our shake offset
         private float shakeMagnitude;

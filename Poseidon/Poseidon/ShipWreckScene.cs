@@ -14,7 +14,7 @@ namespace Poseidon
     /// </summary>
     public partial class ShipWreckScene : GameScene {
         GraphicsDeviceManager graphics;
-        GraphicsDevice GraphicDevice;
+        public static GraphicsDevice GraphicDevice;
         ContentManager Content;
 
         private Texture2D HealthBar;
@@ -35,7 +35,7 @@ namespace Poseidon
         SpriteFont statsFont;
         SpriteFont menuSmall;
         GameObject ground;
-        Camera gameCamera;
+        public static Camera gameCamera;
         
         GameObject boundingSphere;
 
@@ -99,12 +99,17 @@ namespace Poseidon
         bool showPainting = false;
         int paintingToShow = 0;
 
+        // Bubbles over characters
+        List<Bubble> bubbles;
+        float timeNextBubble = 200.0f;
+        //float timeNextSeaBedBubble = 3000.0f;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
             this.graphics = graphics;
             this.Content = Content;
-            this.GraphicDevice = GraphicsDevice;
+            GraphicDevice = GraphicsDevice;
             this.spriteBatch = spriteBatch;
             this.pausePosition = pausePosition;
             this.pauseRect = pauseRect;
@@ -136,6 +141,8 @@ namespace Poseidon
             
             //for paintings inside treasure chests
             oceanPaintings = new OceanPaintings(Content);
+
+            bubbles = new List<Bubble>();
 
             this.Load();
         }
@@ -405,7 +412,7 @@ namespace Poseidon
                             Tank.firstUse[0] = false;
                             Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
-                            CastSkill.UseHerculesBow(tank, Content, myBullet);
+                            CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             tank.reachDestination = true;
                         }
@@ -419,6 +426,7 @@ namespace Poseidon
                             Tank.firstUse[1] = false;
                             Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                             audio.Explosion.Play();
+                            gameCamera.Shake(25f, .4f);
                             CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
@@ -510,6 +518,41 @@ namespace Poseidon
                 }
                 //if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                 tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, null, gameTime, pointIntersect);
+                //add 1 bubble over tank and each enemy
+                timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+                if (timeNextBubble <= 0)
+                {
+                    Bubble bubble = new Bubble();
+                    bubble.LoadContent(Content, tank.Position, false, 0.025f);
+                    bubbles.Add(bubble);
+                    for (int i = 0; i < enemiesAmount; i++)
+                    {
+                        if (enemies[i].BoundingSphere.Intersects(frustum))
+                        {
+                            Bubble aBubble = new Bubble();
+                            aBubble.LoadContent(Content, enemies[i].Position, false, 0.025f);
+                            bubbles.Add(aBubble);
+                        }
+                    }
+
+                    timeNextBubble = 200.0f;
+                }
+                for (int i = 0; i < bubbles.Count; i++)
+                {
+                    if (bubbles[i].timeLast <= 0)
+                        bubbles.RemoveAt(i--);
+                    else if (bubbles[i].scale >= 0.06)
+                        bubbles.RemoveAt(i--);
+                }
+
+                foreach (Bubble aBubble in bubbles)
+                {
+                    if (random.Next(100) >= 95) aBubble.bubble3DPos.X += 0.5f;
+                    else if (random.Next(100) >= 95) aBubble.bubble3DPos.X -= 0.5f;
+                    if (random.Next(100) >= 95) aBubble.bubble3DPos.Z += 0.5f;
+                    else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
+                    aBubble.Update(GraphicDevice, gameCamera);
+                }
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
@@ -755,15 +798,19 @@ namespace Poseidon
             }
 
 
-                //fuelCarrier.Draw(gameCamera.ViewMatrix, 
-                //    gameCamera.ProjectionMatrix);
-                tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            //fuelCarrier.Draw(gameCamera.ViewMatrix, 
+            //    gameCamera.ProjectionMatrix);
+            tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //RasterizerState rs = new RasterizerState();
             //rs.FillMode = FillMode.WireFrame;
             //GraphicsDevice.RasterizerState = rs;
             //tank.DrawBoundingSphere(gameCamera.ViewMatrix,
             //    gameCamera.ProjectionMatrix, boundingSphere);
-
+            // draw bubbles
+            foreach (Bubble bubble in bubbles)
+            {
+                bubble.Draw(spriteBatch, 1.5f);
+            }
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;
@@ -933,7 +980,7 @@ namespace Poseidon
             else
                 return false;
         }
-        private void RestoreGraphicConfig()
+        public static void RestoreGraphicConfig()
         {
             // Change back the config changed by spriteBatch
             GraphicDevice.BlendState = BlendState.Opaque;

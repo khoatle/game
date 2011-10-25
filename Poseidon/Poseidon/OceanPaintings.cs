@@ -66,6 +66,16 @@ namespace Poseidon
             painting.painting = content.Load<Texture2D>("Image/Paintings/painting10");
             painting.caption = "Coral reef in 1902 .... so beautiful, if only our ancester had protected it...";
             paintings.Add(painting);
+
+            painting = new Painting();
+            painting.painting = content.Load<Texture2D>("Image/Paintings/painting11");
+            painting.caption = "Coral reef in 1902 .... so beautiful, if only our ancester had protected it...";
+            paintings.Add(painting);
+
+            painting = new Painting();
+            painting.painting = content.Load<Texture2D>("Image/Paintings/painting12");
+            painting.caption = "Coral reef in 1902 .... so beautiful, if only our ancester had protected it...";
+            paintings.Add(painting);
         }
     }
 }

@@ -154,6 +154,6 @@ namespace Poseidon {
 
         //Health update of fish based on environment
         public const int healthChangeValue = 1; // health point
-        public const double healthChangeInterval = 4; // seconds
+        public const double startHealthChangeInterval = 6; // Must be  greater than 5
     }
 }

@@ -556,7 +556,7 @@ namespace Poseidon
             int barX = game.Window.ClientBounds.Right - 50;
             int barY = game.Window.ClientBounds.Center.Y-Bar.Height/2;
             string type = "ENVIRONMENT";
-            Color typeColor = Color.Blue;
+            Color typeColor = Color.Red;
             int barWidth = Bar.Width/2;
             double healthiness = (double)currentEnvironment / maxEnvironemnt;
             //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);

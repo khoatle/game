@@ -18,10 +18,12 @@ namespace Poseidon {
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
         double lastHealthUpdateTime;
+        double healthChangeInterval;
 
         public Fish() : base() {
             experienceReward = 2;
             lastHealthUpdateTime = 0;
+            healthChangeInterval = GameConstants.startHealthChangeInterval;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -119,19 +121,27 @@ namespace Poseidon {
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
 
-            if (gameTime.TotalGameTime.TotalSeconds - lastHealthUpdateTime > GameConstants.healthChangeInterval)
+
+
+            if (gameTime.TotalGameTime.TotalSeconds - lastHealthUpdateTime > healthChangeInterval)
             {
-                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > 0.5)
+                double env_health = (double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint;
+                double env_deviation = 0;
+                if ( env_health > 0.5)
                 {
                     if (this.health >= this.maxHealth)
                         this.maxHealth += GameConstants.healthChangeValue;
                     this.health += GameConstants.healthChangeValue;
+                    env_deviation = env_health - 0.5;
                 }
-                else
+                else if (env_health < 0.5)
                 {
                     this.health -= GameConstants.healthChangeValue;
+                    env_deviation = 0.5 - env_health;
                 }
                 lastHealthUpdateTime = gameTime.TotalGameTime.TotalSeconds;
+                healthChangeInterval = GameConstants.startHealthChangeInterval - env_deviation*10;
+                System.Diagnostics.Debug.WriteLine(healthChangeInterval);
             }
 
         }

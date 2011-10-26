@@ -1,13 +1,16 @@
 ﻿#region Using Statements
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Media;
-using Poseidon.Core;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.GamerServices;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
+using Microsoft.Xna.Framework.Media;
 
 #endregion
 
@@ -18,70 +21,37 @@ namespace Poseidon.MiniGames
     /// </summary>
     public class TypingGameScene : GameScene
     {
-        // For mouse inputs
-        MouseState currentMouseState = new MouseState();
-        MouseState lastMouseState = new MouseState();
-        KeyboardState lastKeyboardState = new KeyboardState();
-        KeyboardState currentKeyboardState = new KeyboardState();
-        bool doubleClicked = false;
-        bool clicked = false;
-        double clickTimer = 0;
-        //Cursor cursor;
-        // Audio
-        protected AudioLibrary audio;
-        // Spritebatch
-        protected SpriteBatch spriteBatch = null;
-        ContentManager Content;
-        Game game;
-        SpriteFont statsFont;
-        SpriteFont menuLarge;
-
-        Random random = new Random();
-        QuizzesLibrary quizzesLibrary;
-        int questionID;
-        public int questionAnswered = 0;
-        int selectedChoice;
-
-        bool displayRightWrongAnswer = false;
+        SpriteBatch spriteBatch;
+        RectangleBox typingBox;
+        RectangleBox displayBox;
+        private bool isMatching;
+        private Texture2D boxBackground;
+        private ContentManager content;
+        private SpriteFont font;
+        public bool isWin = false;
         /// <summary>
         /// Default Constructor
-        public TypingGameScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                           Texture2D background, ContentManager Content)
-            : base(game)
-        {
-
-
-            this.Content = Content;
-            Components.Add(new ImageComponent(game, background,
-                                            ImageComponent.DrawMode.Stretch));
-
-            // Get the current spritebatch
-            spriteBatch = (SpriteBatch)Game.Services.GetService(
-                                            typeof(SpriteBatch));
-
-            // Get the audio library
-            audio = (AudioLibrary)
-                Game.Services.GetService(typeof(AudioLibrary));
-
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            menuLarge = Content.Load<SpriteFont>("Fonts/menuLarge");
-
-            this.game = game;
-
-            quizzesLibrary = new QuizzesLibrary();
-            questionID = random.Next(quizzesLibrary.quizzesList.Count);
-
-            cursor = new Cursor(game, spriteBatch);
-            Components.Add(cursor);
+        public TypingGameScene(Game game, SpriteFont font, Texture2D background, ContentManager Content)
+            : base(game) {
+                content = Content;
+                displayBox = new Textbox(10, 10, 780, 350,
+                    "Dream of the Red Chamber, composed by Cao Xueqin, " +
+                    "is one of China's Four Great Classical Novels.");
+                typingBox = new WritingBox(10, 400, 780, 40);
+                isMatching = true;
+                boxBackground = background;
+                this.font = font;
+                // Get the current spritebatch
+                spriteBatch = (SpriteBatch)Game.Services.GetService(
+                                                typeof(SpriteBatch));
+                LoadContent();
         }
-
 
         /// <summary>
         /// Show the start scene
         /// </summary>
         public override void Show()
         {
-            audio.NewMeteor.Play();
             base.Show();
         }
 
@@ -90,80 +60,61 @@ namespace Poseidon.MiniGames
         /// </summary>
         public override void Hide()
         {
-            MediaPlayer.Stop();
             base.Hide();
         }
-        public void CheckClick(GameTime gameTime)
-        {
-            lastMouseState = currentMouseState;
-            currentMouseState = Mouse.GetState();
-            clickTimer += gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (lastMouseState.LeftButton == ButtonState.Pressed
-                && currentMouseState.LeftButton == ButtonState.Released)
-            {
 
-                if (clicked && (clickTimer < GameConstants.clickTimerDelay))
-                {
-                    doubleClicked = true;
-                    clicked = false;
-                }
-                else
-                {
-                    doubleClicked = false;
-                    clicked = true;
-                }
-                clickTimer = 0;
-            }
+        protected override void LoadContent()
+        {
+            // TODO: use this.Content to load your game content here
+            ((WritingBox)typingBox).loadContent(boxBackground, font);
+            ((Textbox)displayBox).loadContent(boxBackground, font);
+            base.LoadContent();
         }
+
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            List<string> words = ((Textbox)displayBox).getWords();
 
-            // dictates right/wrong answer
-            // move to the next question
-            // Reset the world for a new game
-            if (displayRightWrongAnswer)
+            // TODO: Add your update logic here 
+
+            WritingBox typingBar = (WritingBox)typingBox;
+            Textbox display = (Textbox)displayBox;
+            if (display.getMarkupIndex() >= words.Count) {
+                isWin = true;
+                return;
+            }
+            if (words[display.getMarkupIndex()].Equals("\n"))
             {
-                CheckClick(gameTime);
-                if (clicked)
-                {
-                    questionID = random.Next(quizzesLibrary.quizzesList.Count);
-                    clicked = false;
-                    if (questionAnswered < 4) questionAnswered++;
-                    displayRightWrongAnswer = false;
-                }
+                display.incrementMarkUpIndex();
+                return;
+            }
+            int i = words[display.getMarkupIndex()].IndexOf(typingBar.getText());
+            if (i < 0 || i >= words[display.getMarkupIndex()].Length)
+            {
+                isMatching = false;
+                typingBox.update(gameTime);
             }
             else
             {
-                selectedChoice = -1;
-                lastKeyboardState = currentKeyboardState;
-                currentKeyboardState = Keyboard.GetState();
-                if (lastKeyboardState.IsKeyDown(Keys.A) &&
-                    currentKeyboardState.IsKeyUp(Keys.A))
+                isMatching = true;
+                KeyboardState currentState = Keyboard.GetState();
+                if (currentState.IsKeyDown(Keys.Space) || currentState.IsKeyDown(Keys.Enter))
                 {
-                    selectedChoice = 0;
+                    if (words[display.getMarkupIndex()].Equals(typingBar.getText().TrimEnd()))
+                    {
+                        typingBar.setText("");
+                        ((Textbox)displayBox).incrementMarkUpIndex();
+                    }
                 }
-                if (lastKeyboardState.IsKeyDown(Keys.B) &&
-                    currentKeyboardState.IsKeyUp(Keys.B))
+                else
                 {
-                    selectedChoice = 1;
+                    typingBox.update(gameTime);
                 }
-                if (lastKeyboardState.IsKeyDown(Keys.B) &&
-                    currentKeyboardState.IsKeyUp(Keys.B))
-                {
-                    selectedChoice = 2;
-                }
-                if (lastKeyboardState.IsKeyDown(Keys.B) &&
-                    currentKeyboardState.IsKeyUp(Keys.B))
-                {
-                    selectedChoice = 3;
-                }
-                if (selectedChoice != -1) displayRightWrongAnswer = true;
             }
-            base.Update(gameTime);
         }
 
         /// <summary>
@@ -172,28 +123,18 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
-            // Draw question and choices
-            spriteBatch.Begin();
-            base.Draw(gameTime);
-            // draw the question
-            spriteBatch.DrawString(menuLarge, "This is typing game \n" + quizzesLibrary.quizzesList[questionID].question, new Vector2(100, 200), Color.Yellow);
-            // draw 4 answers
-            spriteBatch.DrawString(menuLarge, "A. " + quizzesLibrary.quizzesList[questionID].options[0], new Vector2(100, 400), Color.Yellow);
-            spriteBatch.DrawString(menuLarge, "B. " + quizzesLibrary.quizzesList[questionID].options[1], new Vector2(100, 500), Color.Yellow);
-            spriteBatch.DrawString(menuLarge, "C. " + quizzesLibrary.quizzesList[questionID].options[2], new Vector2(100, 600), Color.Yellow);
-            spriteBatch.DrawString(menuLarge, "D. " + quizzesLibrary.quizzesList[questionID].options[3], new Vector2(100, 700), Color.Yellow);
-            if (displayRightWrongAnswer)
+            //GraphicsDevice.Clear(Color.CornflowerBlue);
+            // TODO: Add your drawing code here
+            if (isMatching)
             {
-                if (selectedChoice != quizzesLibrary.quizzesList[questionID].answerID)
-                {
-                    spriteBatch.DrawString(menuLarge, "Wrong, stupid motherfucker!", new Vector2(400, 400), Color.Yellow);
-                }
-                else
-                {
-                    spriteBatch.DrawString(menuLarge, "Right, smart motherfucker!", new Vector2(400, 400), Color.Yellow);
-                }
+                ((WritingBox)typingBox).draw(spriteBatch, Color.White);
             }
-            spriteBatch.End();
+            else
+            {
+                ((WritingBox)typingBox).draw(spriteBatch, Color.Red);
+            }
+            displayBox.draw(spriteBatch);
+            base.Draw(gameTime);
         }
     }
 }

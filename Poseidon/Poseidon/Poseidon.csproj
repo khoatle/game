@@ -130,7 +130,10 @@
     <Compile Include="HerculesBullet.cs" />
     <Compile Include="LevelObjectiveScene.cs" />
     <Compile Include="MiniGames\QuizzGameScene.cs" />
+    <Compile Include="MiniGames\RectangleBox.cs" />
+    <Compile Include="MiniGames\Textbox.cs" />
     <Compile Include="MiniGames\TypingGameScene.cs" />
+    <Compile Include="MiniGames\WritingBox.cs" />
     <Compile Include="OceanPaintings.cs" />
     <Compile Include="MiniGames\QuizzesLibrary.cs" />
     <Compile Include="Tank.cs" />

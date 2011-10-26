@@ -151,5 +151,9 @@ namespace Poseidon {
         public const float FogStart = 10;
         public const float FogEnd = 600;//350;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
+
+        //Health update of fish based on environment
+        public const int healthChangeValue = 1; // health point
+        public const double healthChangeInterval = 4; // seconds
     }
 }

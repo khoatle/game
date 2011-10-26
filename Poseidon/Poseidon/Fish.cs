@@ -17,9 +17,11 @@ namespace Poseidon {
         ClipPlayer clipPlayer;
         Matrix fishMatrix;
         Quaternion qRotation = Quaternion.Identity;
+        double lastHealthUpdateTime;
 
         public Fish() : base() {
             experienceReward = 2;
+            lastHealthUpdateTime = 0;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -116,6 +118,22 @@ namespace Poseidon {
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
+
+            if (gameTime.TotalGameTime.TotalSeconds - lastHealthUpdateTime > GameConstants.healthChangeInterval)
+            {
+                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > 0.5)
+                {
+                    if (this.health >= this.maxHealth)
+                        this.maxHealth += GameConstants.healthChangeValue;
+                    this.health += GameConstants.healthChangeValue;
+                }
+                else
+                {
+                    this.health -= GameConstants.healthChangeValue;
+                }
+                lastHealthUpdateTime = gameTime.TotalGameTime.TotalSeconds;
+            }
+
         }
 
         public new void Draw(Matrix view, Matrix projection)

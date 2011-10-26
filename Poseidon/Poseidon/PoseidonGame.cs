@@ -298,7 +298,7 @@ namespace Poseidon
 
         public void HandleQuizzGameInput()
         {
-            if (quizzGameScene.questionAnswered >= 4 || enterPressed)
+            if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);

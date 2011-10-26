@@ -117,8 +117,8 @@ namespace Poseidon {
         public const int numBulletTypes = 2;
 
         //radar
-        public const float RadarScreenRadius = 75.0f;
-        public const float RadarRange = 500.0f;
+        public const float RadarScreenRadius = 85.0f;
+        public const float RadarRange = 300.0f;
 
         //milisecond delay for double click
         public const double clickTimerDelay = 250;

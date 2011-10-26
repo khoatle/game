@@ -298,7 +298,7 @@ namespace Poseidon
 
         public void HandleQuizzGameInput()
         {
-            if (quizzGameScene.questionAnswered >= 4 || enterPressed)
+            if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -395,9 +395,10 @@ namespace Poseidon
             if (playGameScene.currentGameState == GameState.ToMiniGame)
             {
                 Random rand = new Random();
-                if (rand.Next(2) == 0) ShowScene(quizzGameScene);
-                else
-                    ShowScene(typeGameScene);
+                //if (rand.Next(2) == 0)
+                    ShowScene(quizzGameScene);
+                //else
+                //    ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()

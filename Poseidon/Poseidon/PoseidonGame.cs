@@ -41,7 +41,7 @@ namespace Poseidon
         protected GameScene activeScene;
         protected GameScene prevScene;
         // For the Start scene
-        private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge;
+        private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge, typeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
         // For the Skill board
@@ -147,6 +147,7 @@ namespace Poseidon
             startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
+            typeFont = Content.Load<SpriteFont>("Fonts/font");
             startBackgroundTexture = Content.Load<Texture2D>("Image/startbackground");
             startElementsTexture = Content.Load<Texture2D>("Image/startSceneElements");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,
@@ -156,7 +157,7 @@ namespace Poseidon
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/backgroundTypeGame");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/solidred");
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 
@@ -182,8 +183,7 @@ namespace Poseidon
             quizzGameScene = new QuizzGameScene(this, smallFont,
                 largeFont, quizzGameBackgroundTexture, Content);
             Components.Add(quizzGameScene);
-            typeGameScene = new TypingGameScene(this, smallFont,
-                largeFont, typeGameBackgroundTexture, Content);
+            typeGameScene = new TypingGameScene(this, typeFont, typeGameBackgroundTexture, Content);
             Components.Add(typeGameScene);
             // Start the game in the start Scene
             startScene.Show();
@@ -306,7 +306,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (enterPressed)
+            if (typeGameScene.isWin)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);

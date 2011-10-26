@@ -534,7 +534,7 @@ namespace Poseidon
                 new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
                 Color.Transparent);
             //Draw the current health level based on the current Health
-            Color healthColor = Color.Tan;
+            Color healthColor = Color.LawnGreen;
             if (healthiness < 0.2)
                 healthColor = Color.DarkRed;
             else if (healthiness < 0.5)

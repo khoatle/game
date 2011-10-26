@@ -306,7 +306,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isWin)
+            if (typeGameScene.isWin || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -395,8 +395,8 @@ namespace Poseidon
             if (playGameScene.currentGameState == GameState.ToMiniGame)
             {
                 Random rand = new Random();
-                //if (rand.Next(2) == 0) ShowScene(quizzGameScene);
-                //else
+                if (rand.Next(2) == 0) ShowScene(quizzGameScene);
+                else
                     ShowScene(typeGameScene);
             }
         }

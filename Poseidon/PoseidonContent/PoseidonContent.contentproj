@@ -228,18 +228,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\blackDotLarge.png">
+    <Compile Include="Image\RadarTextures\blackDotLarge.png">
       <Name>blackDotLarge</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\redDotSmall.png">
-      <Name>redDotSmall</Name>
+    <Compile Include="Image\RadarTextures\enemyDot.png">
+      <Name>enemyDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\yellowDotSmall.png">
-      <Name>yellowDotSmall</Name>
+    <Compile Include="Image\RadarTextures\fishDot.png">
+      <Name>fishDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -484,8 +484,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\bossicon.png">
-      <Name>bossicon</Name>
+    <Compile Include="Image\RadarTextures\bossDot.png">
+      <Name>bossDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1054,6 +1054,13 @@
   <ItemGroup>
     <Compile Include="Image\solidred.png">
       <Name>solidred</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\RadarTextures\playerDot.png">
+      <Name>playerDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

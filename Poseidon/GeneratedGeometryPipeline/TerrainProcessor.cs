@@ -128,8 +128,8 @@ namespace GeneratedGeometryPipeline
                 terrainTextureFilename = "sea-stone2.jpg";
             else
                 terrainTextureFilename = "blue.jpg";
-            terrainTextureFilename = "TerrainTextures/SeaBedTerrain2.jpg"; //1024 x 1024 , scale = 45.0f
-            terrainTextureFilename = "TerrainTextures/SeaBedTerrain1.jpg"; //1024 x 1024 , scale = 40.0f
+            terrainTextureFilename = "TerrainTextures/SeaBedTerrain2.jpg"; //1024 x 1024 , scale = 38.0f
+            //terrainTextureFilename = "TerrainTextures/SeaBedTerrain1.jpg"; //1024 x 1024 , scale = 38.0f
         }
 
         /// <summary>

@@ -387,7 +387,7 @@ namespace Poseidon
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                     case 2:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
                         break;
                     case 3:
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
@@ -399,7 +399,7 @@ namespace Poseidon
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                 }
-                //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+                //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
             }
             AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 

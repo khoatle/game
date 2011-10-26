@@ -30,7 +30,7 @@ namespace GeneratedGeometryPipeline
         #region Properties
 
 
-        private float terrainScale = 45f;
+        private float terrainScale = 38.0f;
         [DisplayName("Terrain Scale")]
         [DefaultValue(30f)]
         [Description("Scale of the the terrain geometry width and length.")]
@@ -128,7 +128,8 @@ namespace GeneratedGeometryPipeline
                 terrainTextureFilename = "sea-stone2.jpg";
             else
                 terrainTextureFilename = "blue.jpg";
-            terrainTextureFilename = "SeaBed1.png";
+            terrainTextureFilename = "TerrainTextures/SeaBedTerrain2.jpg"; //1024 x 1024 , scale = 45.0f
+            terrainTextureFilename = "TerrainTextures/SeaBedTerrain1.jpg"; //1024 x 1024 , scale = 40.0f
         }
 
         /// <summary>

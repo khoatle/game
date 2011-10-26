@@ -332,17 +332,20 @@ namespace Poseidon
             switch (currentLevel)
             {
                 // learn 1st skill in level 2 and so on
-                case 1:
+                case 3:
+                    relicType = 3;
+                    break;
+                case 6:
                     relicType = 0;
                     break;
-                case 3:
+                case 7:
                     relicType = 1;
                     break;
-                case 5:
+                case 8:
                     relicType = 2;
                     break;
-                case 7:
-                    relicType = 3;
+                case 9:
+                    relicType = 4;
                     break;
             }
             for (int index = 0; index < GameConstants.NumberShipWreck[currentLevel]; index++)
@@ -378,29 +381,29 @@ namespace Poseidon
                 switch (random_model)
                 {
                     case 0:
-                        trashes[index].LoadContent(Content,"Models/oilspill1", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel1", orientation);
                         break;
                     case 1:
-                        trashes[index].LoadContent(Content, "Models/oilspill2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                     case 2:
-                        trashes[index].LoadContent(Content, "Models/oilspill3", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                     case 3:
-                        trashes[index].LoadContent(Content, "Models/trashGroup1", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                     case 4:
-                        trashes[index].LoadContent(Content, "Models/trashGroup2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                     case 5:
-                        trashes[index].LoadContent(Content, "Models/trashGroup3", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
                         break;
                 }
-                //trashes[index].LoadContent(Content, "Models/trashGroup4", orientation);
+                //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
             }
-            AddingObjects.placeTrash(trashes, enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
+            AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
-                GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight); 
+                GameConstants.MainGameMaxRangeZ, currentLevel, true, GameConstants.MainGameFloatHeight, heightMapInfo); 
 
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
@@ -1097,11 +1100,23 @@ namespace Poseidon
                 }
             }
             // Drawing trash
+            BoundingSphere trashRealSphere;
             foreach (Trash trash in trashes)
             {
-                if (!trash.Retrieved && trash.BoundingSphere.Intersects(frustum))
+                trashRealSphere = trash.BoundingSphere;
+                trashRealSphere.Center.Y = trash.Position.Y;
+                if (!trash.Retrieved && trashRealSphere.Intersects(frustum))
                 {
                     trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    RasterizerState rs = new RasterizerState();
+                    rs.FillMode = FillMode.WireFrame;
+                    GraphicDevice.RasterizerState = rs;
+                    trash.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        gameCamera.ProjectionMatrix, boundingSphere);
+
+                    rs = new RasterizerState();
+                    rs.FillMode = FillMode.Solid;
+                    GraphicDevice.RasterizerState = rs;
                 }
             }
             //Draw each static object

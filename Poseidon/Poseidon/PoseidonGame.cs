@@ -134,7 +134,7 @@ namespace Poseidon
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
-            radar = new Radar(Content, "Image/redDotSmall", "Image/yellowDotSmall", "Image/blackDotLarge", "Image/bossicon", radarCenter);
+            radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
 
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");

@@ -228,18 +228,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\blackDotLarge.png">
+    <Compile Include="Image\RadarTextures\blackDotLarge.png">
       <Name>blackDotLarge</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\redDotSmall.png">
-      <Name>redDotSmall</Name>
+    <Compile Include="Image\RadarTextures\enemyDot.png">
+      <Name>enemyDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\yellowDotSmall.png">
-      <Name>yellowDotSmall</Name>
+    <Compile Include="Image\RadarTextures\fishDot.png">
+      <Name>fishDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -484,8 +484,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\bossicon.png">
-      <Name>bossicon</Name>
+    <Compile Include="Image\RadarTextures\bossDot.png">
+      <Name>bossDot</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -592,48 +592,6 @@
       <Name>openChest</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\oilspill1.fbx">
-      <Name>oilspill1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\oilspill2.fbx">
-      <Name>oilspill2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\oilspill3.fbx">
-      <Name>oilspill3</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\trashGroup1.fbx">
-      <Name>trashGroup1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\trashGroup2.fbx">
-      <Name>trashGroup2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\trashGroup3.fbx">
-      <Name>trashGroup3</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1056,6 +1014,37 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\Paintings\painting11.jpg">
+      <Name>painting11</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\Paintings\painting12.jpg">
+      <Name>painting12</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Image\TerrainTextures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\TrashModels\trashModel1.fbx">
+      <Name>trashModel1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\TrashModels\trashModel2.fbx">
+      <Name>trashModel2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Fonts\font.spritefont">
       <Name>font</Name>
       <Importer>FontDescriptionImporter</Importer>
@@ -1065,6 +1054,20 @@
   <ItemGroup>
     <Compile Include="Image\solidred.png">
       <Name>solidred</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\RadarTextures\playerDot.png">
+      <Name>playerDot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\RadarTextures\compass.png">
+      <Name>compass</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

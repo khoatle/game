@@ -17,9 +17,9 @@ namespace Poseidon
 
         public float orientation;
 
-        public float heightChange = 0.5f;
-        public float currentChange = 0.0f;
-        public bool floatUp;
+        //public float heightChange = 0.5f;
+        //public float currentChange = 0.0f;
+        //public bool floatUp;
         public Trash()
             : base()
         {
@@ -40,19 +40,20 @@ namespace Poseidon
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             this.orientation = orientation;
-            if (orientation > 50) floatUp = true;
-            else floatUp = false;
+            //if (orientation > 50) floatUp = true;
+            //else floatUp = false;
         }
         public void Update(GameTime gameTime)
         {
-            if (currentChange >= heightChange)
-            {
-                currentChange = 0.0f;
-                floatUp = !floatUp;
-            }
-            currentChange += 0.025f;
-            if (floatUp) Position.Y += currentChange;
-            else Position.Y -= currentChange;
+            //for floating trash
+            //if (currentChange >= heightChange)
+            //{
+            //    currentChange = 0.0f;
+            //    floatUp = !floatUp;
+            //}
+            //currentChange += 0.025f;
+            //if (floatUp) Position.Y += currentChange;
+            //else Position.Y -= currentChange;
         }
         public void Draw(Matrix view, Matrix projection)
         {

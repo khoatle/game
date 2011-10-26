@@ -56,15 +56,15 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        //public static int[] NumberTrash =           { 100,  50,  50,   0,  50,  50,  50,   0  };
-        public static int[] NumberTrash =           { 0, 0, 0, 0, 0, 0, 0, 0 };
-        public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,  10  };
-        public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,  10  };
-        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,   0  };
-        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   0  };
-        public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   1  };
-        public static int[] NumberShipWreck =       {   0,   5,   5,   0,   0,   5,   5,   0  };
-        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,   0  };
+        //public static int[] NumberTrash =           { 100,  50,  50,   0,  50,  50,  50, 50,  50,  0  };
+        public static int[] NumberTrash =           { 0, 50, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,  40,  45,  10  };
+        public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,  50,  45,  10  };
+        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0  };
+        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   5,   6,   0  };
+        public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1  };
+        public static int[] NumberShipWreck =       {   0,   5,   5,   0,   0,   5,   5,   5,   5,   0  };
+        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0  };
         //number of enemy and fish for ship wreck
         public const int ShipNumberShootingEnemies = 5;
         public const int ShipNumberCombatEnemies = 5;
@@ -149,7 +149,7 @@ namespace Poseidon {
 
         //const for the fog effect
         public const float FogStart = 10;
-        public const float FogEnd = 350;
-        public static Color FogColor = Color.CornflowerBlue;
+        public const float FogEnd = 500;//350;
+        public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
     }
 }

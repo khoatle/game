@@ -333,7 +333,7 @@ namespace Poseidon
         }
 
         public static void placeTrash(
-            List<Trash> trashes, int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+            List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             foreach (Trash trash in trashes)
@@ -342,7 +342,7 @@ namespace Poseidon
                 //    fish, shipWrecks);
                 trash.Position.X= random.Next(minX, maxX);
                 trash.Position.Z = random.Next(minZ, maxZ);
-                trash.Position.Y = GameConstants.TrashFloatHeight;
+                trash.Position.Y = heightMapInfo.GetHeight(new Vector3(trash.Position.X, 0, trash.Position.Z));//GameConstants.TrashFloatHeight;
                 tempCenter = trash.BoundingSphere.Center;
                 tempCenter.X = trash.Position.X;
                 tempCenter.Y = floatHeight;

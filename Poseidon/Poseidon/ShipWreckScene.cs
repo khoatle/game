@@ -456,6 +456,26 @@ namespace Poseidon
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
                     }
+                    // Hypnotise skill
+                    if (Tank.activeSkillID == 4)
+                    {
+                        BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+
+                        if (enemy == null)
+                        {
+                            return;
+                        }
+
+                        if (Tank.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
+                        {
+                            Tank.firstUse[4] = false;
+
+                            enemy.setHypnotise();
+
+                            Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
+                            Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                        }
+                    }
                     pointIntersect = Vector3.Zero;
                 }
                 //if the user holds down Ctrl button

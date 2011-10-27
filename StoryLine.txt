@@ -19,6 +19,9 @@ Sound
 poison: health reduce over time -- khoa
 type game -- khoa
 
+retexture diver:
+- orange suit, blue other things
+- red suit, metallic other things
 GamePlay:
 
 Script:

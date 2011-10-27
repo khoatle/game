@@ -3,8 +3,6 @@
 SUMMARY of New Ideas:
 
 Drop trash -- less
-environment bar: sea animals health degrade gradually when env is polluted -- top
-found an old painting/photo of sea - educational value. -- less
 antient shark fossil found, recreate the shark to be a friend and fight for you. - very less
 education session in a class room, 2d picture, answer questions, more correct answer gain exp, 
 	easier level, other bonus ( last level - special skill ).make user to type like typeracer. mini game. -- top

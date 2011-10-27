@@ -623,6 +623,24 @@ namespace Poseidon
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 11), heightFromTop - 1), typeColor);
         }
 
+        public static string wrapLine(string input_line, int width, SpriteFont font)
+        {
+            String line = String.Empty;
+            String returnString = String.Empty;
+            String[] wordArray = input_line.Split(' ');
+
+            foreach (String word in wordArray)
+            {
+                if (font.MeasureString(line + word).Length() > width)
+                {
+                    returnString = returnString + line + '\n';
+                    line = String.Empty;
+                }
+                line = line + word + ' ';
+            }
+            return returnString + line;
+        }
+
 
     }
 }

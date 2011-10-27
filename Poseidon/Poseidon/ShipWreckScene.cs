@@ -901,21 +901,8 @@ namespace Poseidon
             spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
                 Color.Orange);
 
-            String line = String.Empty;
-            String returnString = String.Empty;
-            String[] wordArray = oceanPaintings.paintings[paintingToShow].tip.Split(' ');
-
-            foreach (String word in wordArray)
-            {
-                if (paintingFont.MeasureString(line + word).Length() > GraphicDevice.Viewport.TitleSafeArea.Width)
-                {
-                    returnString = returnString + line + '\n';
-                    line = String.Empty;
-                }
-                line = line + word + ' ';
-            }
-
-            spriteBatch.DrawString(paintingFont, returnString + line,
+            String line = AddingObjects.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width, paintingFont);
+            spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), Color.Orange);
 
         }

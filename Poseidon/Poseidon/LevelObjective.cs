@@ -18,7 +18,7 @@ namespace Poseidon
                 //Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).
                 //if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
                 //real obj above, below is just for easier testing
-                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
+                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.95)
                     return true;
 
             }

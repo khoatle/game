@@ -41,7 +41,7 @@ namespace Poseidon {
         public const int PlayerStartingHP = 1000;
 
         //Environment Const
-        public const int PlayerStartingEnv = 300;
+        public const int PlayerStartingEnv = 700;// 300;
         public const int MaxEnv = 1000;
         public const int envLossForFishDeath = 5;
         public const int envLossPerTrashAdd = 10;

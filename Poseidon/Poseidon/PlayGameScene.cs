@@ -757,7 +757,7 @@ namespace Poseidon
                         {
                             audio.PowerShow.Play();
                             Tank.currentExperiencePts += Plant.experienceReward;
-                            Tank.currentEnvPoint += Plant.environmentReward;
+                            Tank.currentEnvPoint += GameConstants.envGainForDropSeed;
                         }
                     }
 
@@ -1284,6 +1284,7 @@ namespace Poseidon
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
 
             //Display Environment Bar
+            if (Tank.currentEnvPoint > Tank.maxEnvPoint) Tank.currentEnvPoint = Tank.maxEnvPoint;
             AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, Tank.currentEnvPoint, Tank.maxEnvPoint);
 
             //Display Level/Experience Bar

@@ -41,8 +41,17 @@ namespace Poseidon {
         public const int PlayerStartingHP = 1000;
 
         //Environment Const
-        public const int PlayerStartingEnv = 500;
+        public const int PlayerStartingEnv = 300;
         public const int MaxEnv = 1000;
+        public const int envLossForFishDeath = 5;
+        public const int envLossPerTrashAdd = 10;
+        public const int envGainForTrashClean = 10;
+        public const int envGainForHealingFish = 1;
+        public const int envGainForDropSeed = 10;
+        //Health update of fish based on environment
+        public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds
+        public const int healthChangeValue = 1; // health point change per interval
+
 
         // Bullet const
         public const int DefaultBulletDamage = 10;
@@ -57,7 +66,7 @@ namespace Poseidon {
         //general
         //number of trash, enemy and fish per level for main game
         //public static int[] NumberTrash =           { 100,  50,  50,   0,  50,  50,  50, 50,  50,  0  };
-        public static int[] NumberTrash =           { 0, 50, 0, 0, 0, 0, 0, 0, 0, 0 };
+        public static int[] NumberTrash =           { 50, 50, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,  40,  45,  10  };
         public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,  50,  45,  10  };
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0  };
@@ -152,8 +161,6 @@ namespace Poseidon {
         public const float FogEnd = 430;//350;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
 
-        //Health update of fish based on environment
-        public const int healthChangeValue = 1; // health point
-        public const double startHealthChangeInterval = 6; // Must be  greater than 5
+
     }
 }

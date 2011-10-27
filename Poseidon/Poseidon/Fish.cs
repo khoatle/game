@@ -23,7 +23,7 @@ namespace Poseidon {
         public Fish() : base() {
             experienceReward = 2;
             lastHealthUpdateTime = 0;
-            healthChangeInterval = GameConstants.startHealthChangeInterval;
+            healthChangeInterval = GameConstants.maxHealthChangeInterval;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -140,8 +140,8 @@ namespace Poseidon {
                     env_deviation = 0.5 - env_health;
                 }
                 lastHealthUpdateTime = gameTime.TotalGameTime.TotalSeconds;
-                healthChangeInterval = GameConstants.startHealthChangeInterval - env_deviation*10;
-                System.Diagnostics.Debug.WriteLine(healthChangeInterval);
+                healthChangeInterval = GameConstants.maxHealthChangeInterval - env_deviation*10;
+                //System.Diagnostics.Debug.WriteLine(healthChangeInterval);
             }
 
         }

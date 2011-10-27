@@ -39,6 +39,11 @@ namespace Poseidon
                         objs[k] = objs[k+1];
                     }
                     objs[--size] = null;
+
+                    if (objs[i] is Fish)
+                    {
+                        Tank.currentEnvPoint -= GameConstants.envLossForFishDeath;
+                    }
                 }
             }
         }
@@ -216,9 +221,11 @@ namespace Poseidon
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
                     if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
-                        if (barriers[j].health < GameConstants.DefaultEnemyHP) {
+                        if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
                             barriers[j].health += GameConstants.HealingAmount;
+                            if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
                             Tank.currentExperiencePts += barriers[j].experienceReward;
+                            Tank.currentEnvPoint += GameConstants.envGainForHealingFish;
                         }
                         bullets.RemoveAt(i--);
                         break;

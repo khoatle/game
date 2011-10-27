@@ -11,7 +11,6 @@ namespace Poseidon
     public class Trash : GameObject
     {
         public int experienceReward;
-        public int environmentReward;
 
         public bool Retrieved { get; set; }
 
@@ -25,7 +24,6 @@ namespace Poseidon
         {
             Retrieved = false;
             experienceReward = 10;
-            environmentReward = 10;
         }
 
         public void LoadContent(ContentManager content, string modelname, float orientation)

@@ -130,7 +130,7 @@ namespace Poseidon
         public static int currentExperiencePts, lsCurrentExperiencePts;
         public static int nextLevelExperience, lsNextLevelExperience;
         private static int increaseBy, lsIncreaseBy;
-        public static int level, lsLevel;
+        public static int level, lsLevel; // experience level
         public static int unassignedPts, lsUnassignedPts;
 
         // Tank moving bound
@@ -375,6 +375,9 @@ namespace Poseidon
             currentHitPoint = maxHitPoint;
             firstPlant = true;
             prevPlantTime = 0;
+            if(PlayGameScene.currentLevel>0)
+                currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
+            if (currentEnvPoint < 0) currentEnvPoint = 0;
         }
 
  
@@ -601,7 +604,7 @@ namespace Poseidon
                 {
                     trash.Retrieved = true;
                     currentExperiencePts += trash.experienceReward;
-                    currentEnvPoint += trash.environmentReward;
+                    currentEnvPoint += GameConstants.envGainForTrashClean;
                     RetrievedSound.Play();
                 }
             }

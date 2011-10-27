@@ -527,6 +527,7 @@ namespace Poseidon
             int barY = heightFromTop;
             int barHeight = 22;
             double healthiness = (double)currentHealth/maxHealth;
+
             //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
             //Draw the negative space for the health bar
             spriteBatch.Draw(HealthBar,

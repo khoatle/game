@@ -865,6 +865,11 @@ namespace Poseidon
                         (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
+                        //the player should always lose in level 9
+                        if (currentLevel == 9)
+                        {
+                            currentLevel++;
+                        }
                         //always reset the level when losing
                         ResetGame(gameTime, aspectRatio);
                     }

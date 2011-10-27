@@ -43,6 +43,65 @@ namespace Poseidon
                     return true;
                 }
             }
+            if (currentLevel == 4)
+            {
+                //Level Obj: save at least 50% of sharks in 3 mins
+                //Level 4 is full of sharks so only need to check total number of fishes
+                if (roundTimer <= TimeSpan.Zero && (fishAmount / GameConstants.NumberFish[currentLevel] >= 0.5))
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 5)
+            {
+                //Level Obj: Find the relic in 3 months.
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[0] == true)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 6)
+            {
+                //Level Obj: Find the relic in 3 months.
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[1] == true)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 7)
+            {
+                //Level Obj: Find the relic in 3 months.
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[2] == true)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 8)
+            {
+                //Level Obj: Find the relic in 3 months.
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[4] == true)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 9)
+            {
+                //Level Obj: Defeat the Terminator
+                //well, if you really can
+                if (isBossKilled)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 10)
+            {
+                //Level Obj: Defeat the Terminator
+                //after gaining the Trident power from Poseidon
+                if (isBossKilled)
+                {
+                    return true;
+                }
+            }
             return false;
         }
         public bool CheckLoseCondition()
@@ -66,6 +125,52 @@ namespace Poseidon
                 }
             }
             if (currentLevel == 3)
+            {
+                if (roundTimer <= TimeSpan.Zero)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 4)
+            {
+                if (fishAmount / GameConstants.NumberFish[currentLevel] < 0.5) return true;
+            }
+            if (currentLevel == 5)
+            {
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[0] == false)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 6)
+            {
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[1] == false)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 7)
+            {
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[2] == false)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 8)
+            {
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[4] == false)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 9)
+            {
+                if (roundTimer <= TimeSpan.Zero)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 10)
             {
                 if (roundTimer <= TimeSpan.Zero)
                 {

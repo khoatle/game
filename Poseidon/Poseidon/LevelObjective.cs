@@ -14,33 +14,64 @@ namespace Poseidon
         {
             if (currentLevel == 0)
             {
-                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8) return true;
-                // kill all enemies to win this level
-                //if (enemiesAmount == 0) return true;
-                //if (isBossKilled) return true;
+                //Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                    return true;
+                
             }
             if (currentLevel == 1)
             {
-                // save atleast 10 fish to win this level
-                if (roundTimer <= TimeSpan.Zero && fishAmount >= 10)
+                //Level Obj: Save at least 80% of fish during 3 min ( 90 days ).
+                if (roundTimer <= TimeSpan.Zero && (fishAmount/GameConstants.NumberFish[currentLevel] >= 0.8))
                 {
                     return true;
                 }
             }
-
+            if (currentLevel == 2)
+            {
+                //Level Obj: Find the relic in 3 months.
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[3] == true)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 3)
+            {
+                //Level Obj: Defeat the mutant shark
+                if (isBossKilled)
+                {
+                    return true;
+                }
+            }
             return false;
         }
         public bool CheckLoseCondition()
         {
+            //Always lose when the environment is completely destroyed
             if (Tank.currentEnvPoint <= 0)
                 return true;
             if (currentLevel == 0)
             {
-                if (roundTimer < TimeSpan.Zero) return true;
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8)) 
+                    return true;
             }
             if (currentLevel == 1)
             {
-                if (fishAmount < 10) return true;
+                if (fishAmount / GameConstants.NumberFish[currentLevel] < 0.8) return true;
+            }
+            if (currentLevel == 2)
+            {
+                if (roundTimer <= TimeSpan.Zero && Tank.skills[3] == false)
+                {
+                    return true;
+                }
+            }
+            if (currentLevel == 3)
+            {
+                if (roundTimer <= TimeSpan.Zero)
+                {
+                    return true;
+                }
             }
             return false;
         }

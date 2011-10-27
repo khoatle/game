@@ -17,41 +17,42 @@ namespace Poseidon.MiniGames
         public QuizzesLibrary()
         {
             Quizz quizz = new Quizz();
-            quizz.question = "Who tastes the best among the below?";
-            quizz.options[0] = "Hien";
-            quizz.options[1] = "Deb";
-            quizz.options[2] = "Khoa";
-            quizz.options[3] = "Sushil";
-            quizz.answerID = 0;
-            quizzesList.Add(quizz);
-
-
-            quizz = new Quizz();
-            quizz.question = "Are you a gay?";
-            quizz.options[0] = "Yes";
-            quizz.options[1] = "Probably";
-            quizz.options[2] = "Certainly";
-            quizz.options[3] = "85%";
+            quizz.question = "Which is the ocean friendly way to wash your car?";
+            quizz.options[0] = "Wash it on open street";
+            quizz.options[1] = "Let the detergent run off the street";
+            quizz.options[2] = "Use a commercial car wash";
+            quizz.options[3] = "Drive it through the bayou";
             quizz.answerID = 2;
             quizzesList.Add(quizz);
 
             quizz = new Quizz();
-            quizz.question = "Which fish looks the best among the below?";
-            quizz.options[0] = "Shark";
-            quizz.options[1] = "Sting Ray";
-            quizz.options[2] = "Mutant Shark";
-            quizz.options[3] = "Terminator";
-            quizz.answerID = 2;
+            quizz.question = "Why should you pick up after your pet?";
+            quizz.options[0] = "The germs get into the ocean and harm sea creatures";
+            quizz.options[1] = "The locality smells bad";
+            quizz.options[2] = "Someone might walk over it";
+            quizz.options[3] = "All of the above";
+            quizz.answerID = 3;
             quizzesList.Add(quizz);
 
             quizz = new Quizz();
-            quizz.question = "Should we eat humans?";
-            quizz.options[0] = "Hell ya!";
-            quizz.options[1] = "Let's do it!";
-            quizz.options[2] = "Why not?";
-            quizz.options[3] = "We should";
+            quizz.question = "Plastic bags does not hurt the ocean.";
+            quizz.options[0] = "True";
+            quizz.options[1] = "It kills 100,000 marine animals each year";
+            quizz.options[2] = "It's food for the fishes";
+            quizz.options[3] = "It disolves in water";
             quizz.answerID = 2;
             quizzesList.Add(quizz);
+
+            //quizz = new Quizz();
+            //quizz.question = "Should we eat humans?";
+            //quizz.options[0] = "Hell ya!";
+            //quizz.options[1] = "Let's do it!";
+            //quizz.options[2] = "Why not?";
+            //quizz.options[3] = "We should";
+            //quizz.answerID = 2;
+            //quizzesList.Add(quizz);
+
+
         }
     }
 }

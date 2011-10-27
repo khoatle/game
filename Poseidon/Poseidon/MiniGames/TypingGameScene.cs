@@ -31,7 +31,7 @@ namespace Poseidon.MiniGames
         public bool isWin = false;
         /// <summary>
         /// Default Constructor
-        public TypingGameScene(Game game, SpriteFont font, Texture2D background, ContentManager Content)
+        public TypingGameScene(Game game, SpriteFont font, Texture2D boxBackground, Texture2D theme, ContentManager Content)
             : base(game) {
                 content = Content;
                 displayBox = new Textbox(10, 10, 780, 350,
@@ -39,7 +39,9 @@ namespace Poseidon.MiniGames
                     "is one of China's Four Great Classical Novels.");
                 typingBox = new WritingBox(10, 400, 780, 40);
                 isMatching = true;
-                boxBackground = background;
+                this.boxBackground = boxBackground;
+                Components.Add(new ImageComponent(game, theme,
+                                ImageComponent.DrawMode.Stretch));
                 this.font = font;
                 // Get the current spritebatch
                 spriteBatch = (SpriteBatch)Game.Services.GetService(
@@ -125,6 +127,9 @@ namespace Poseidon.MiniGames
         {
             //GraphicsDevice.Clear(Color.CornflowerBlue);
             // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            base.Draw(gameTime);
+            spriteBatch.End();
             if (isMatching)
             {
                 ((WritingBox)typingBox).draw(spriteBatch, Color.White);
@@ -134,7 +139,7 @@ namespace Poseidon.MiniGames
                 ((WritingBox)typingBox).draw(spriteBatch, Color.Red);
             }
             displayBox.draw(spriteBatch);
-            base.Draw(gameTime);
+            
         }
     }
 }

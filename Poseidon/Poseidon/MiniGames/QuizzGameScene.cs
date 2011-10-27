@@ -54,8 +54,6 @@ namespace Poseidon.MiniGames
                            Texture2D background, ContentManager Content)
             : base(game)
         {
-            
-            
             this.Content = Content;
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));

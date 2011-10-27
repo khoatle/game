@@ -164,6 +164,9 @@ namespace Poseidon {
         //so that it is easier to aim
         public const float EasyAimScale = 1.5f;
 
+        //environment threshold for having key to treasure chest
+        public const float EnvThresholdForKey = 0.4f;
+
 
     }
 }

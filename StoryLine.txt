@@ -22,6 +22,11 @@ type game -- khoa
 retexture diver:
 - orange suit, blue other things
 - red suit, metallic other things
+
+For making game's trailer:
+- 1st use Adobe's Premiere: capturing game's footage & integrate subtitles
+- 2d use Adobe's AfterEffects: cool effects & transitions
+
 GamePlay:
 
 Script:

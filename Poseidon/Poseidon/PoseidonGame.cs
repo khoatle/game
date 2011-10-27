@@ -418,7 +418,8 @@ namespace Poseidon
                     )
                 {            
                     // no re-explore a ship wreck
-                    playGameScene.shipWrecks[curWreck].accessed = true;
+                    // no, let the user re-explore now because he would miss a relic -> lose
+                    //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
                     return true;

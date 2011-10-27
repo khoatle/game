@@ -132,6 +132,11 @@ namespace Poseidon
         SchoolOfFish schoolOfFish2;
         SchoolOfFish schoolOfFish3;
 
+        // the fishes have helped the player to find the treasure chest key!
+        // only show once
+        bool showFoundKey = false;
+        bool firstShow = true;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -332,19 +337,19 @@ namespace Poseidon
             switch (currentLevel)
             {
                 // learn 1st skill in level 2 and so on
-                case 3:
+                case 2:
                     relicType = 3;
                     break;
-                case 6:
+                case 5:
                     relicType = 0;
                     break;
-                case 7:
+                case 6:
                     relicType = 1;
                     break;
-                case 8:
+                case 7:
                     relicType = 2;
                     break;
-                case 9:
+                case 8:
                     relicType = 4;
                     break;
             }
@@ -479,6 +484,7 @@ namespace Poseidon
                 //    //this.Exit();
                 CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
 
+                
                 if (currentGameState == GameState.PlayingCutScene)
                 {
                     // Next sentence when the user press Enter
@@ -498,6 +504,25 @@ namespace Poseidon
                 }
                 if ((currentGameState == GameState.Running))
                 {
+                    //if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
+                    //real one above, below is just for testing
+                    if (currentLevel == 0 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
+                    {
+                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > GameConstants.EnvThresholdForKey)
+                            showFoundKey = true;
+                    }
+                    if (showFoundKey && firstShow)
+                    {
+                        // return to game if enter pressed
+                        if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                            (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                            currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                        {
+                            showFoundKey = false;
+                            firstShow = false;
+                        }
+                        return;
+                    }
                     Vector3 pointIntersect = Vector3.Zero;
                     bool mouseOnLivingObject = CursorManager.MouseOnEnemy(cursor, gameCamera, enemies, enemiesAmount) || CursorManager.MouseOnFish(cursor, gameCamera, fish, fishAmount);
                     //if the user holds down Shift button
@@ -892,7 +917,11 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
 
-            //base.Draw(gameTime);
+            if (showFoundKey && firstShow)
+            {
+                DrawFoundKey();
+                return;
+            }
             if (paused)
             {
                 // Draw the "pause" text
@@ -921,6 +950,12 @@ namespace Poseidon
             }
             base.Draw(gameTime);
 
+        }
+        private void DrawFoundKey()
+        {
+            spriteBatch.Begin();
+            spriteBatch.DrawString(statsFont, "The fishes have helped you to find the hidden key to treasure chests in return for your help", new Vector2(0, 0), Color.White);
+            spriteBatch.End();
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.

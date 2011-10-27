@@ -644,7 +644,7 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < 0.8)
+                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < GameConstants.EnvThresholdForKey)
                         {
                             showNoKey = true;
                         }
@@ -666,9 +666,22 @@ namespace Poseidon
                             {
                                 // player found a God's relic
                                 // unlock a skill
-                                Tank.skills[chest.skillID] = true;
-                                Tank.activeSkillID = chest.skillID;
-                                foundRelic = true;
+                                // do not unlock if the player has already found it before
+                                // because re-exploreing ship is enabled now
+                                if (Tank.skills[chest.skillID] == false)
+                                {
+                                    Tank.skills[chest.skillID] = true;
+                                    Tank.activeSkillID = chest.skillID;
+                                    foundRelic = true;
+                                }
+                                else
+                                {
+                                    // give the player some experience as reward
+                                    Tank.currentExperiencePts += 20;
+                                    // show a random painting
+                                    paintingToShow = random.Next(oceanPaintings.paintings.Count);
+                                    showPainting = true;
+                                }
                             }
                         }
                         doubleClicked = false;

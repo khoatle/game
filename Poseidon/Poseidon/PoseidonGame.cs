@@ -301,6 +301,9 @@ namespace Poseidon
             if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
+                //each right answer give 5% environment boost
+                Tank.currentEnvPoint += quizzGameScene.numRightAnswer * 5;
+                if (Tank.currentEnvPoint >= Tank.maxEnvPoint) Tank.currentEnvPoint = Tank.maxEnvPoint;
                 ShowScene(playGameScene);
             }
         }

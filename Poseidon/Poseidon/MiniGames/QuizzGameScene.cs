@@ -41,6 +41,7 @@ namespace Poseidon.MiniGames
         int questionID;
         public int questionAnswered = 0;
         int selectedChoice;
+        public int numRightAnswer = 0;
 
         bool displayRightWrongAnswer = false;
 
@@ -104,6 +105,8 @@ namespace Poseidon.MiniGames
         public override void Show()
         {
             audio.NewMeteor.Play();
+            questionAnswered = 0;
+            numRightAnswer = 0;
             base.Show();
         }
 
@@ -256,6 +259,7 @@ namespace Poseidon.MiniGames
                 }
                 else
                 {
+                    numRightAnswer++;
                     spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
                 }
             }

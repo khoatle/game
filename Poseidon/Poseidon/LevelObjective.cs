@@ -14,15 +14,23 @@ namespace Poseidon
         {
             if (currentLevel == 0)
             {
+//<<<<<<< HEAD
+//                // kill all enemies to win this level
+//                if (enemiesAmount == 0) return true;
+//                if (isBossKilled) return true;
+//=======
                 //Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).
-                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                //if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                //real obj above, below is just for easier testing
+                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
                     return true;
 
+//>>>>>>> f49ef1902773f1f14ac5170017a5a6c3d59cd41d
             }
             if (currentLevel == 1)
             {
-                //Level Obj: Save at least 80% of fish during 3 min ( 90 days ).
-                if (roundTimer <= TimeSpan.Zero && (fishAmount/GameConstants.NumberFish[currentLevel] >= 0.8))
+                //Level Obj: Save at least 50% of fish during 3 min ( 90 days ).
+                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount/(double)GameConstants.NumberFish[currentLevel] >= 0.5))
                 {
                     return true;
                 }
@@ -47,7 +55,7 @@ namespace Poseidon
             {
                 //Level Obj: save at least 50% of sharks in 3 mins
                 //Level 4 is full of sharks so only need to check total number of fishes
-                if (roundTimer <= TimeSpan.Zero && (fishAmount / GameConstants.NumberFish[currentLevel] >= 0.5))
+                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= 0.5))
                 {
                     return true;
                 }
@@ -108,6 +116,7 @@ namespace Poseidon
         {
             //Always lose when the environment is completely destroyed
             if (Tank.currentEnvPoint <= 0)   return true;
+//>>>>>>> f49ef1902773f1f14ac5170017a5a6c3d59cd41d
             if (currentLevel == 0)
             {
                 if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint <= 0.8)) 
@@ -115,7 +124,7 @@ namespace Poseidon
             }
             if (currentLevel == 1)
             {
-                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.8) return true;
+                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.5) return true;
             }
             if (currentLevel == 2)
             {
@@ -133,7 +142,7 @@ namespace Poseidon
             }
             if (currentLevel == 4)
             {
-                if (fishAmount / GameConstants.NumberFish[currentLevel] < 0.5) return true;
+                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.5) return true;
             }
             if (currentLevel == 5)
             {

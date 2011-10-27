@@ -25,10 +25,18 @@ namespace Poseidon.MiniGames
 
         private KeyboardState currentKeyboardState;
         private KeyboardState lastKeyboardState;
+        private float timeTillRapidDelete;
+        private bool beginRapidDelete;
+        private float timeBetweenDelete;
+        private TimeSpan prevDelete;
 
         public WritingBox(int X, int Y, int recWidth, int recHeight)
             : base(X, Y, recWidth, recHeight) {
                 text = "";
+                timeBetweenDelete = 0.04f;
+                timeTillRapidDelete = 0.5f;
+                beginRapidDelete = false;
+                prevDelete = new TimeSpan();
         }
 
         public void loadContent(Texture2D background, SpriteFont font)
@@ -52,13 +60,41 @@ namespace Poseidon.MiniGames
             base.update(gameTime);
             currentKeyboardState = Keyboard.GetState();
 
-            foreach (Keys key in keysToCheck) { 
+            if (currentKeyboardState.IsKeyDown(Keys.Back)) {
+                handleDelete(gameTime.TotalGameTime);
+                return;
+            }
+            beginRapidDelete = false;
+            prevDelete = new TimeSpan();
+            foreach (Keys key in keysToCheck) {
                 if (CheckKey(key)) {
                     addKeyToText(key);
                     break;
                 }
             }
             lastKeyboardState = currentKeyboardState;
+        }
+
+        private void handleDelete(TimeSpan deleteTime) {
+            if (text.Length != 0) {
+                if (beginRapidDelete)
+                {
+                    if (deleteTime.TotalSeconds - prevDelete.TotalSeconds >= timeBetweenDelete)
+                    {
+                        text = text.Remove(text.Length - 1);
+                        prevDelete = deleteTime;
+                    }
+                }
+                else {
+                    if (prevDelete.TotalSeconds == 0) {
+                        prevDelete = deleteTime;
+                        text = text.Remove(text.Length - 1);
+                    }
+                    else if (deleteTime.TotalSeconds - prevDelete.TotalSeconds >= timeTillRapidDelete) {
+                        beginRapidDelete = true;
+                    }
+                }
+            }
         }
 
         public string getText() {
@@ -172,13 +208,12 @@ namespace Poseidon.MiniGames
                 case Keys.OemQuotes:
                     newChar += '\'';
                     break;
-                case Keys.Back:
-                    if (text.Length != 0)
-                        text = text.Remove(text.Length - 1);
-                    return;
             }
             if (currentKeyboardState.IsKeyDown(Keys.RightShift) ||
-                currentKeyboardState.IsKeyDown(Keys.LeftShift)){
+                currentKeyboardState.IsKeyDown(Keys.LeftShift) ||
+                lastKeyboardState.IsKeyDown(Keys.RightShift) ||
+                lastKeyboardState.IsKeyDown(Keys.LeftShift))
+            {
                     if (Char.IsLetter(newChar[0])) {
                         newChar = newChar.ToUpper();
                     }

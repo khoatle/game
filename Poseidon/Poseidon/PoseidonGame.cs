@@ -55,6 +55,7 @@ namespace Poseidon
         protected Texture2D quizzGameBackgroundTexture;
         TypingGameScene typeGameScene;
         protected Texture2D typeGameBackgroundTexture;
+        protected Texture2D boxBackground;
         // Audio Stuff
         private AudioLibrary audio;
         PlayGameScene playGameScene;
@@ -157,7 +158,9 @@ namespace Poseidon
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/solidred");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
+            boxBackground = Content.Load<Texture2D>("Image/solidred");
+
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 
@@ -183,7 +186,7 @@ namespace Poseidon
             quizzGameScene = new QuizzGameScene(this, smallFont,
                 largeFont, quizzGameBackgroundTexture, Content);
             Components.Add(quizzGameScene);
-            typeGameScene = new TypingGameScene(this, typeFont, typeGameBackgroundTexture, Content);
+            typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
             Components.Add(typeGameScene);
             // Start the game in the start Scene
             startScene.Show();
@@ -301,12 +304,15 @@ namespace Poseidon
             if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
+                //each right answer give 5% environment boost
+                Tank.currentEnvPoint += quizzGameScene.numRightAnswer * 5;
+                if (Tank.currentEnvPoint >= Tank.maxEnvPoint) Tank.currentEnvPoint = Tank.maxEnvPoint;
                 ShowScene(playGameScene);
             }
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isWin || enterPressed)
+            if (typeGameScene.isWin)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -396,9 +402,9 @@ namespace Poseidon
             {
                 Random rand = new Random();
                 //if (rand.Next(2) == 0)
-                    ShowScene(quizzGameScene);
+                  //  ShowScene(quizzGameScene);
                 //else
-                //    ShowScene(typeGameScene);
+                    ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()

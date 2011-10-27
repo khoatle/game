@@ -565,7 +565,7 @@ namespace Poseidon
             int barX = game.Window.ClientBounds.Right - 50;
             int barY = game.Window.ClientBounds.Center.Y-Bar.Height/2;
             string type = "ENVIRONMENT";
-            Color typeColor = Color.Red;
+            Color typeColor = Color.Black;
             int barWidth = Bar.Width/2;
             double healthiness = (double)currentEnvironment / maxEnvironemnt;
             //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
@@ -575,11 +575,13 @@ namespace Poseidon
                 new Rectangle(barWidth+1, 0, barWidth, Bar.Height),
                 Color.Transparent);
             //Draw the current health level based on the current Health
-            Color healthColor = Color.LawnGreen;
+            Color healthColor = Color.Gold;
             if (healthiness < 0.2)
-                healthColor = Color.Red;
+                healthColor = Color.DarkRed;
             else if (healthiness < 0.5)
-                healthColor = Color.Green;
+                healthColor = Color.Red;
+            else if (healthiness < 0.8)
+                healthColor = Color.LawnGreen;
             spriteBatch.Draw(Bar,
                 new Rectangle(barX, barY + (Bar.Height - (int)(Bar.Height * healthiness)), barWidth, (int)(Bar.Height * healthiness)),
                 new Rectangle(barWidth+1, 0, barWidth, Bar.Height),

@@ -33,8 +33,8 @@ namespace Poseidon.MiniGames
         protected SpriteBatch spriteBatch = null;
         ContentManager Content;
         Game game;
-        SpriteFont statsFont;
-        SpriteFont menuLarge;
+        //SpriteFont statsFont;
+        SpriteFont quizFont;
 
         Random random = new Random();
         QuizzesLibrary quizzesLibrary;
@@ -71,8 +71,8 @@ namespace Poseidon.MiniGames
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            menuLarge = Content.Load<SpriteFont>("Fonts/menuLarge");
+            //statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            quizFont = Content.Load<SpriteFont>("Fonts/quiz");
 
             buttonTexture = Content.Load<Texture2D>("Image/quizButton");
             selectedButtonTexture = Content.Load<Texture2D>("Image/quizButtonSelected");
@@ -88,10 +88,10 @@ namespace Poseidon.MiniGames
             positionC = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+200);
             positionD = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+300);
             positionAns = new Vector2 (PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.X, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom - 50);
-            rectA = new Rectangle((int)positionA.X, (int)positionA.Y-5, 60, 60);
-            rectB = new Rectangle((int)positionB.X, (int)positionB.Y-5, 60, 60);
-            rectC = new Rectangle((int)positionC.X, (int)positionC.Y-5, 60, 60);
-            rectD = new Rectangle((int)positionD.X, (int)positionD.Y-5, 60, 60);
+            rectA = new Rectangle((int)positionA.X, (int)positionA.Y, 60, 60);
+            rectB = new Rectangle((int)positionB.X, (int)positionB.Y, 60, 60);
+            rectC = new Rectangle((int)positionC.X, (int)positionC.Y, 60, 60);
+            rectD = new Rectangle((int)positionD.X, (int)positionD.Y, 60, 60);
 
             cursor = new Cursor(game, spriteBatch);
             //Components.Add(cursor);
@@ -222,23 +222,23 @@ namespace Poseidon.MiniGames
             base.Draw(gameTime);
             // draw the question
             Color color = Color.Lime;
-            spriteBatch.DrawString(menuLarge, quizzesLibrary.quizzesList[questionID].question, positionQs, color);
+            spriteBatch.DrawString(quizFont, quizzesLibrary.quizzesList[questionID].question, positionQs, color);
             //draw 4 buttons
             spriteBatch.Draw(buttonTexture, rectA, Color.White);
             spriteBatch.Draw(buttonTexture, rectB, Color.White);
             spriteBatch.Draw(buttonTexture, rectC, Color.White);
             spriteBatch.Draw(buttonTexture, rectD, Color.White);
             // draw 4 answers
-            spriteBatch.DrawString(menuLarge, " A  " + quizzesLibrary.quizzesList[questionID].options[0], positionA, color);
-            spriteBatch.DrawString(menuLarge, " B  " + quizzesLibrary.quizzesList[questionID].options[1], positionB , color);
-            spriteBatch.DrawString(menuLarge, " C  " + quizzesLibrary.quizzesList[questionID].options[2], positionC , color);
-            spriteBatch.DrawString(menuLarge, " D  " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color);
+            spriteBatch.DrawString(quizFont, " A  " + quizzesLibrary.quizzesList[questionID].options[0], positionA, color);
+            spriteBatch.DrawString(quizFont, " B  " + quizzesLibrary.quizzesList[questionID].options[1], positionB , color);
+            spriteBatch.DrawString(quizFont, " C  " + quizzesLibrary.quizzesList[questionID].options[2], positionC , color);
+            spriteBatch.DrawString(quizFont, " D  " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color);
             if (displayRightWrongAnswer)
             {
                 switch(selectedChoice)
                 {
                     case 0:
-                        spriteBatch.Draw(selectedButtonTexture, rectA, Color.White);
+                        spriteBatch.Draw(selectedButtonTexture, rectA, Color.DodgerBlue);
                         break;
                     case 1:
                         spriteBatch.Draw(selectedButtonTexture, rectB, Color.Yellow);
@@ -252,11 +252,11 @@ namespace Poseidon.MiniGames
                 }
                 if (selectedChoice != quizzesLibrary.quizzesList[questionID].answerID)
                 {
-                    spriteBatch.DrawString(menuLarge, "WRONG", positionAns, color);
+                    spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
                 }
                 else
                 {
-                    spriteBatch.DrawString(menuLarge, "CORRECT", positionAns, color);
+                    spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
                 }
             }
             cursor.Draw(gameTime);

@@ -15,7 +15,7 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 //Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).
-                //if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
                     return true;
 
             }
@@ -48,8 +48,7 @@ namespace Poseidon
         public bool CheckLoseCondition()
         {
             //Always lose when the environment is completely destroyed
-            if (Tank.currentEnvPoint <= 0)
-                return true;
+            if (Tank.currentEnvPoint <= 0)   return true;
             if (currentLevel == 0)
             {
                 if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint <= 0.8)) 
@@ -57,7 +56,7 @@ namespace Poseidon
             }
             if (currentLevel == 1)
             {
-                if (fishAmount / GameConstants.NumberFish[currentLevel] < 0.8) return true;
+                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.8) return true;
             }
             if (currentLevel == 2)
             {

@@ -16,8 +16,8 @@ namespace Poseidon
             {
                 if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8) return true;
                 // kill all enemies to win this level
-                //if (enemiesAmount == 0) return true;
-                //if (isBossKilled) return true;
+                if (enemiesAmount == 0) return true; // JUST for testing
+                //if (isBossKilled) return true; 
             }
             if (currentLevel == 1)
             {

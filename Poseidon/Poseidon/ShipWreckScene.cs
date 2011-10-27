@@ -33,6 +33,7 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
+        SpriteFont paintingFont;
         SpriteFont menuSmall;
         GameObject ground;
         public static Camera gameCamera;
@@ -151,6 +152,7 @@ namespace Poseidon
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            paintingFont = Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -862,7 +864,27 @@ namespace Poseidon
         {
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
-            spriteBatch.DrawString(statsFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(0, 0), Color.White);
+            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(0, 0), Color.Navy);
+            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
+                Color.Orange);
+
+            String line = String.Empty;
+            String returnString = String.Empty;
+            String[] wordArray = oceanPaintings.paintings[paintingToShow].tip.Split(' ');
+
+            foreach (String word in wordArray)
+            {
+                if (paintingFont.MeasureString(line + word).Length() > GraphicDevice.Viewport.TitleSafeArea.Width)
+                {
+                    returnString = returnString + line + '\n';
+                    line = String.Empty;
+                }
+                line = line + word + ' ';
+            }
+
+            spriteBatch.DrawString(paintingFont, returnString + line,
+                new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), Color.Orange);
+
         }
         private void DrawFoundRelicScene(int skillID)
         {

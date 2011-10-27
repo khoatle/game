@@ -41,8 +41,17 @@ namespace Poseidon
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             isBigBoss = true;
             random = new Random();
-            health = 1000;
-            maxHealth = 1000;
+            //Terminator is undefeatable before the last level
+            if (PlayGameScene.currentLevel == 10)
+            {
+                health = 5000;
+                maxHealth = 5000;
+            }
+            else
+            {
+                health = 1000000;
+                maxHealth = 1000000;
+            }
             perceptionRadius = GameConstants.BossPerceptionRadius;
             experienceReward = 400; //3000
         }

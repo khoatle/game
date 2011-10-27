@@ -88,7 +88,12 @@ namespace Poseidon
                 fishAmount = GameConstants.NumberFish[currentLevel];
             else fishAmount = GameConstants.ShipNumberFish;
             Random random = new Random();
-            int type = random.Next(9);
+            int type;
+            //Level 4 is shark only
+            if (currentLevel == 4)
+                type = random.Next(6, 9);
+            else type = random.Next(9);
+
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
                 if (type == 0)
@@ -104,10 +109,10 @@ namespace Poseidon
                     fish[i].Name = "dolphin";
                 }
                 else if (type == 2)
-                {
-                    fish[i].LoadContent(Content, "Models/normalshark");
+                {           
+                    fish[i].LoadContent(Content, "Models/manetee");
                     fish[i].Load(1, 24, 24);
-                    fish[i].Name = "shark";
+                    fish[i].Name = "manetee";
                 }
                 else if (type == 3)
                 {
@@ -123,21 +128,22 @@ namespace Poseidon
                 }
                 else if (type == 5)
                 {
-                    fish[i].LoadContent(Content, "Models/leopardshark");
-                    fish[i].Load(1, 24, 24);
-                    fish[i].Name = "leopard shark";
-                }
-                else if (type == 6)
-                {
-                    fish[i].LoadContent(Content, "Models/manetee");
-                    fish[i].Load(1, 24, 24);
-                    fish[i].Name = "manetee";
-                }
-                else if (type == 7)
-                {
+                    
                     fish[i].LoadContent(Content, "Models/seal");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "seal";
+                }
+                else if (type == 6)
+                {
+                    fish[i].LoadContent(Content, "Models/normalshark");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "shark";
+                }
+                else if (type == 7)
+                {
+                    fish[i].LoadContent(Content, "Models/leopardshark");
+                    fish[i].Load(1, 24, 24);
+                    fish[i].Name = "leopard shark";
                 }
                 else if (type == 8)
                 {
@@ -148,7 +154,9 @@ namespace Poseidon
                 //fish[i].LoadContent(Content, "Models/orca");
                 //fish[i].Load(1, 24, 24);
                 //fish[i].Name = "hammer shark";
-                type = random.Next(9);
+                if (currentLevel == 4)
+                    type = random.Next(6, 9);
+                else type = random.Next(9);
             }
         }
 

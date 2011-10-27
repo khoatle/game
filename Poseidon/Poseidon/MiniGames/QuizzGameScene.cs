@@ -33,20 +33,24 @@ namespace Poseidon.MiniGames
         protected SpriteBatch spriteBatch = null;
         ContentManager Content;
         Game game;
-        SpriteFont statsFont;
-        SpriteFont menuLarge;
+        //SpriteFont statsFont;
+        SpriteFont quizFont;
 
         Random random = new Random();
         QuizzesLibrary quizzesLibrary;
         int questionID;
         public int questionAnswered = 0;
         int selectedChoice;
+        public int numRightAnswer = 0;
 
         bool displayRightWrongAnswer = false;
 
-        Vector2 positionA, positionB, positionC, positionD;
+        Vector2 positionA, positionB, positionC, positionD, positionAns, positionQs;
         Rectangle rectA, rectB, rectC, rectD;
         Vector2 clickPosition;
+
+        Texture2D buttonTexture;
+        Texture2D selectedButtonTexture;
 
         /// <summary>
         /// Default Constructor
@@ -66,25 +70,30 @@ namespace Poseidon.MiniGames
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            menuLarge = Content.Load<SpriteFont>("Fonts/menuLarge");
+            //statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            quizFont = Content.Load<SpriteFont>("Fonts/quiz");
+
+            buttonTexture = Content.Load<Texture2D>("Image/quizButton");
+            selectedButtonTexture = Content.Load<Texture2D>("Image/quizButtonSelected");
 
             this.game = game;
 
             quizzesLibrary = new QuizzesLibrary();
             questionID = random.Next(quizzesLibrary.quizzesList.Count);
 
-            positionA = new Vector2(100, 400);
-            positionB = new Vector2(100, 500);
-            positionC = new Vector2(100, 600);
-            positionD = new Vector2(100, 700);
-            rectA = new Rectangle((int)positionA.X, (int)positionA.Y, 300, 50);
-            rectB = new Rectangle((int)positionB.X, (int)positionB.Y, 300, 50);
-            rectC = new Rectangle((int)positionC.X, (int)positionC.Y, 300, 50);
-            rectD = new Rectangle((int)positionD.X, (int)positionD.Y, 300, 50);
+            positionQs = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 300, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Top+100);
+            positionA = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y);
+            positionB = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+100);
+            positionC = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+200);
+            positionD = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+300);
+            positionAns = new Vector2 (PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.X, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom - 50);
+            rectA = new Rectangle((int)positionA.X, (int)positionA.Y, 60, 60);
+            rectB = new Rectangle((int)positionB.X, (int)positionB.Y, 60, 60);
+            rectC = new Rectangle((int)positionC.X, (int)positionC.Y, 60, 60);
+            rectD = new Rectangle((int)positionD.X, (int)positionD.Y, 60, 60);
 
             cursor = new Cursor(game, spriteBatch);
-            Components.Add(cursor);
+            //Components.Add(cursor);
         }
 
 
@@ -94,6 +103,8 @@ namespace Poseidon.MiniGames
         public override void Show()
         {
             audio.NewMeteor.Play();
+            questionAnswered = 0;
+            numRightAnswer = 0;
             base.Show();
         }
 
@@ -139,6 +150,7 @@ namespace Poseidon.MiniGames
             // dictates right/wrong answer
             // move to the next question
             // Reset the world for a new game
+            cursor.Update(gameTime);
             CheckClick(gameTime);
             if (displayRightWrongAnswer)
             {
@@ -161,6 +173,7 @@ namespace Poseidon.MiniGames
                     (clicked && rectA.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                     )
                 {
+                    audio.ChangeBullet.Play();
                     selectedChoice = 0;
                     clicked = false;
                 }
@@ -170,6 +183,7 @@ namespace Poseidon.MiniGames
                     (clicked && rectB.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                     )
                 {
+                    audio.ChangeBullet.Play();
                     selectedChoice = 1;
                     clicked = false;
                 }
@@ -179,6 +193,7 @@ namespace Poseidon.MiniGames
                     (clicked && rectC.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                     )
                 {
+                    audio.ChangeBullet.Play();
                     selectedChoice = 2;
                     clicked = false;
                 }
@@ -188,6 +203,7 @@ namespace Poseidon.MiniGames
                     (clicked && rectD.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                     )
                 {
+                    audio.ChangeBullet.Play();
                     selectedChoice = 3;
                     clicked = false;
                 }
@@ -206,24 +222,46 @@ namespace Poseidon.MiniGames
             spriteBatch.Begin();
             base.Draw(gameTime);
             // draw the question
-            Color color = Color.DarkGoldenrod;
-            spriteBatch.DrawString(menuLarge, quizzesLibrary.quizzesList[questionID].question, new Vector2(100, 200), color);
+            Color color = Color.Lime;
+            spriteBatch.DrawString(quizFont, quizzesLibrary.quizzesList[questionID].question, positionQs, color);
+            //draw 4 buttons
+            spriteBatch.Draw(buttonTexture, rectA, Color.White);
+            spriteBatch.Draw(buttonTexture, rectB, Color.White);
+            spriteBatch.Draw(buttonTexture, rectC, Color.White);
+            spriteBatch.Draw(buttonTexture, rectD, Color.White);
             // draw 4 answers
-            spriteBatch.DrawString(menuLarge, "A. " + quizzesLibrary.quizzesList[questionID].options[0], positionA, color);
-            spriteBatch.DrawString(menuLarge, "B. " + quizzesLibrary.quizzesList[questionID].options[1], positionB , color);
-            spriteBatch.DrawString(menuLarge, "C. " + quizzesLibrary.quizzesList[questionID].options[2], positionC , color);
-            spriteBatch.DrawString(menuLarge, "D. " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color);
+            spriteBatch.DrawString(quizFont, " A  " + quizzesLibrary.quizzesList[questionID].options[0], positionA, color);
+            spriteBatch.DrawString(quizFont, " B  " + quizzesLibrary.quizzesList[questionID].options[1], positionB , color);
+            spriteBatch.DrawString(quizFont, " C  " + quizzesLibrary.quizzesList[questionID].options[2], positionC , color);
+            spriteBatch.DrawString(quizFont, " D  " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color);
             if (displayRightWrongAnswer)
             {
+                switch(selectedChoice)
+                {
+                    case 0:
+                        spriteBatch.Draw(selectedButtonTexture, rectA, Color.DodgerBlue);
+                        break;
+                    case 1:
+                        spriteBatch.Draw(selectedButtonTexture, rectB, Color.Yellow);
+                        break;
+                    case 2:
+                        spriteBatch.Draw(selectedButtonTexture, rectC, Color.Red);
+                        break;
+                    case 3:
+                        spriteBatch.Draw(selectedButtonTexture, rectD, Color.LawnGreen);
+                        break;
+                }
                 if (selectedChoice != quizzesLibrary.quizzesList[questionID].answerID)
                 {
-                    spriteBatch.DrawString(menuLarge, "Wrong, stupid motherfucker!", new Vector2(400, 400), color);
+                    spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
                 }
                 else
                 {
-                    spriteBatch.DrawString(menuLarge, "Right, smart motherfucker!", new Vector2(400, 400), color);
+                    numRightAnswer++;
+                    spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
                 }
             }
+            cursor.Draw(gameTime);
             spriteBatch.End();
         }
     }

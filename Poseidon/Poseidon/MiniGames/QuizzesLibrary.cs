@@ -17,7 +17,7 @@ namespace Poseidon.MiniGames
         public QuizzesLibrary()
         {
             Quizz quizz = new Quizz();
-            quizz.question = "Who are you?";
+            quizz.question = "Who tastes the best among the below?";
             quizz.options[0] = "Hien";
             quizz.options[1] = "Deb";
             quizz.options[2] = "Khoa";
@@ -36,7 +36,7 @@ namespace Poseidon.MiniGames
             quizzesList.Add(quizz);
 
             quizz = new Quizz();
-            quizz.question = "Which fish tastes the best among the below?";
+            quizz.question = "Which fish looks the best among the below?";
             quizz.options[0] = "Shark";
             quizz.options[1] = "Sting Ray";
             quizz.options[2] = "Mutant Shark";
@@ -45,7 +45,7 @@ namespace Poseidon.MiniGames
             quizzesList.Add(quizz);
 
             quizz = new Quizz();
-            quizz.question = "Should we eat fish?";
+            quizz.question = "Should we eat humans?";
             quizz.options[0] = "Hell ya!";
             quizz.options[1] = "Let's do it!";
             quizz.options[2] = "Why not?";

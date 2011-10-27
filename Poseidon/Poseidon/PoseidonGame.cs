@@ -312,7 +312,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isWin)
+            if (typeGameScene.isWin || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);

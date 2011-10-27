@@ -72,7 +72,7 @@ namespace Poseidon {
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   5,   6,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
-        public static int[] NumberShipWreck =       {   0,   5,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
+        public static int[] NumberShipWreck =       {   10,   5,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         //number of enemy and fish for ship wreck
         public const int ShipNumberShootingEnemies = 5;
@@ -160,6 +160,9 @@ namespace Poseidon {
         public const float FogStart = 10;
         public const float FogEnd = 430;//350;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
+
+        //so that it is easier to aim
+        public const float EasyAimScale = 1.5f;
 
 
     }

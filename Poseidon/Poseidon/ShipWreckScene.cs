@@ -98,7 +98,7 @@ namespace Poseidon
         OceanPaintings oceanPaintings;
         bool showPainting = false;
         int paintingToShow = 0;
-
+        bool showNoKey = false;
         // Bubbles over characters
         List<Bubble> bubbles;
         float timeNextBubble = 200.0f;
@@ -215,8 +215,8 @@ namespace Poseidon
         {
             paused = false;
             //initialize random shipwreck terrain
-            Random random = new Random();
-            int random_terrain = random.Next(5);
+            //Random random = new Random();
+            //int random_terrain = random.Next(5);
             //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
             //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
@@ -226,6 +226,7 @@ namespace Poseidon
             tank.Position.Y = GameConstants.ShipWreckFloatHeight;
             tank.ForwardDirection = 0f;
             MediaPlayer.Play(audio.BackMusic);
+            showNoKey = false;
             InitializeShipField(Content);
             base.Show();
         }
@@ -350,6 +351,17 @@ namespace Poseidon
                     currentGamePadState.Buttons.Start == ButtonState.Pressed)
                 {
                     showPainting = false;
+                }
+                return;
+            }
+            if (showNoKey)
+            {
+                // return to game if enter pressed
+                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                {
+                    showNoKey = false;
                 }
                 return;
             }
@@ -628,26 +640,36 @@ namespace Poseidon
                     if (CharacterNearChest(chest.BoundingSphere) && CursorManager.MouseOnChest(cursor, chest.BoundingSphere, chest.Position, gameCamera)
                         && chest.opened == false && doubleClicked)
                     {
-                        chest.opened = true;
-                        audio.OpenChest.Play();
-                        chest.Model = Content.Load<Model>("Models/chest");
-                        if (chest.skillID == -1)
+                        //fishes are not going to give u the key for treasure chest
+                        //when they are not pleased because of polluted environment
+                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < 0.8)
                         {
-                            // give the player some experience as reward
-                            Tank.currentExperiencePts += 20;
-                            // show a random painting
-                            paintingToShow = random.Next(oceanPaintings.paintings.Count);
-                            showPainting = true;
-                            
+                            showNoKey = true;
                         }
-                        else 
+                        else
                         {
-                            // player found a God's relic
-                            // unlock a skill
-                            Tank.skills[chest.skillID] = true;
-                            Tank.activeSkillID = chest.skillID;
-                            foundRelic = true;
+                            chest.opened = true;
+                            audio.OpenChest.Play();
+                            chest.Model = Content.Load<Model>("Models/chest");
+                            if (chest.skillID == -1)
+                            {
+                                // give the player some experience as reward
+                                Tank.currentExperiencePts += 20;
+                                // show a random painting
+                                paintingToShow = random.Next(oceanPaintings.paintings.Count);
+                                showPainting = true;
+
+                            }
+                            else
+                            {
+                                // player found a God's relic
+                                // unlock a skill
+                                Tank.skills[chest.skillID] = true;
+                                Tank.activeSkillID = chest.skillID;
+                                foundRelic = true;
+                            }
                         }
+                        doubleClicked = false;
                     }
                 }
 
@@ -734,6 +756,13 @@ namespace Poseidon
             {
                 spriteBatch.Begin();
                 DrawPainting();
+                spriteBatch.End();
+                return;
+            }
+            if (showNoKey)
+            {
+                spriteBatch.Begin();
+                DrawNoKey();
                 spriteBatch.End();
                 return;
             }
@@ -857,6 +886,10 @@ namespace Poseidon
             cursor.Draw(gameTime);
             spriteBatch.End();
             
+        }
+        private void DrawNoKey()
+        {
+            spriteBatch.DrawString(statsFont, "You have not had the key to treasure chests yet, try to help the fish 1st so that they will help you find the key in return", new Vector2(0, 0), Color.White);
         }
         private void DrawPainting()
         {

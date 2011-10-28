@@ -245,7 +245,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\shootcursor.png">
+    <Compile Include="Image\CursorTextures\shootcursor.png">
       <Name>shootcursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -847,14 +847,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Starfish-cursor.png">
+    <Compile Include="Image\CursorTextures\Starfish-cursor.png">
       <Name>Starfish-cursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\fishcursor.png">
+    <Compile Include="Image\CursorTextures\fishcursor.png">
       <Name>fishcursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

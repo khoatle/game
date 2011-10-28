@@ -1271,16 +1271,19 @@ namespace Poseidon
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
+            int days;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
-            if (roundTimer.Minutes < 10)
-                str1 += "0";
-            str1 += roundTimer.Minutes + ":";
-            if (roundTimer.Seconds < 10)
-                str1+= "0";
-            str1 += roundTimer.Seconds;
+            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
+            str1 += days;
+            //if (roundTimer.Minutes < 10)
+            //    str1 += "0";
+            //str1 += roundTimer.Minutes + ":";
+            //if (roundTimer.Seconds < 10)
+            //    str1+= "0";
+            //str1 += roundTimer.Seconds;
             //str1 += "\n Active skill " + Tank.activeSkillID;
             //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
             //str1 += "\n Level: " + Tank.level;

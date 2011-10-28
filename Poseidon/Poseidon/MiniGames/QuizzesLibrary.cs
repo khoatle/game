@@ -27,8 +27,8 @@ namespace Poseidon.MiniGames
 
             quizz = new Quizz();
             quizz.question = "Why should you pick up after your pet?";
-            quizz.options[0] = "The germs get into the ocean and harm sea creatures";
-            quizz.options[1] = "The locality smells bad";
+            quizz.options[0] = "The germs can get into the ocean and harm sea creatures";
+            quizz.options[1] = "It might spread disease";
             quizz.options[2] = "Someone might walk over it";
             quizz.options[3] = "All of the above";
             quizz.answerID = 3;

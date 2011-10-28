@@ -88,7 +88,8 @@ namespace Poseidon {
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
         public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(120);
-        public const string StrTimeRemaining = "Time Remaining: ";
+        public const string StrTimeRemaining = "Days Remaining: ";
+        public const int DaysPerSecond = 2;
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
         public const string StrGameLost = "Game Lost !";

@@ -84,7 +84,7 @@ namespace Poseidon.MiniGames
             quizzesLibrary = new QuizzesLibrary();
             questionID = random.Next(quizzesLibrary.quizzesList.Count);
 
-            positionQs = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 300, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Top+60);
+            positionQs = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 300, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Top+105);
             positionA = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y);
             positionB = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+100);
             positionC = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+200);
@@ -227,8 +227,8 @@ namespace Poseidon.MiniGames
             base.Draw(gameTime);
             // draw the question
             Color color = Color.Lime;
-            string question = AddingObjects.wrapLine(quizzesLibrary.quizzesList[questionID].question, 750 , quizFont);
-            spriteBatch.DrawString(quizFont, question, positionQs, color);
+            string question = AddingObjects.wrapLine(quizzesLibrary.quizzesList[questionID].question, 850 , quizFont);
+            spriteBatch.DrawString(quizFont, question, positionQs, Color.Red);
             //draw 4 buttons
             spriteBatch.Draw(buttonTexture, rectA, Color.White);
             spriteBatch.Draw(buttonTexture, rectB, Color.White);

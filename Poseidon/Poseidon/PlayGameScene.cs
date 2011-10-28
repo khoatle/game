@@ -23,6 +23,7 @@ namespace Poseidon
         
         private Texture2D HealthBar;
         private Texture2D EnvironmentBar;
+        private Texture2D foundKeyScreen;
 
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
@@ -230,6 +231,8 @@ namespace Poseidon
             }
 
             levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+
+            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -958,7 +961,8 @@ namespace Poseidon
         private void DrawFoundKey()
         {
             spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, "The fishes have helped you to find the hidden key to treasure chests in return for your help", new Vector2(0, 0), Color.White);
+            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - 480, GraphicDevice.Viewport.TitleSafeArea.Center.Y-343, 960, 686), Color.White);
+            spriteBatch.DrawString(fishTalkFont, "The fishes have helped you to find the hidden key to treasure chests in return for your help", new Vector2(0, 0), Color.White);
             spriteBatch.End();
         }
         /// <summary>

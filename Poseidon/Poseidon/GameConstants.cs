@@ -150,8 +150,9 @@ namespace Poseidon {
         public const float ThorPushFactor = 10;
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
-        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal", "Image/AphroBelt" };
-        public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
+        public static string[] iconNames = { "Image/SkillIcons/Bow", "Image/SkillIcons/Hammer", "Image/SkillIcons/armor", 
+                                               "Image/SkillIcons/sandal", "Image/SkillIcons/AphroBelt" };
+        public static string[] bulletNames = { "Image/BulletIcons/damageBullet", "Image/BulletIcons/healthBullet" };
         public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;
 

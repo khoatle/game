@@ -177,11 +177,11 @@ namespace Poseidon
 
             bubbles = new List<Bubble>();
 
-            schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+            schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
-            schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
-            schoolOfFish3 = new SchoolOfFish(Content, "Image/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
             this.Load();
         }
@@ -200,7 +200,7 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
@@ -277,7 +277,7 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
@@ -311,11 +311,11 @@ namespace Poseidon
             roundTimer = roundTime;
             currentSentence = 0;
             currentGameState = GameState.PlayingCutScene;
-            schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+            schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
-            schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
-            schoolOfFish3 = new SchoolOfFish(Content, "Image/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
             InitializeGameField(Content);
         }
@@ -1148,15 +1148,15 @@ namespace Poseidon
                 if (!trash.Retrieved && trashRealSphere.Intersects(frustum))
                 {
                     trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    trash.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //trash.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
             //Draw each static object

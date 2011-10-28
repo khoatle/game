@@ -38,6 +38,7 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
+        SpriteFont fishTalkFont;
         SpriteFont menuSmall;
         GameObject ground;
         public static Camera gameCamera;
@@ -189,6 +190,7 @@ namespace Poseidon
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -1273,16 +1275,19 @@ namespace Poseidon
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
+            int days;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
-            if (roundTimer.Minutes < 10)
-                str1 += "0";
-            str1 += roundTimer.Minutes + ":";
-            if (roundTimer.Seconds < 10)
-                str1+= "0";
-            str1 += roundTimer.Seconds;
+            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
+            str1 += days;
+            //if (roundTimer.Minutes < 10)
+            //    str1 += "0";
+            //str1 += roundTimer.Minutes + ":";
+            //if (roundTimer.Seconds < 10)
+            //    str1+= "0";
+            //str1 += roundTimer.Seconds;
             //str1 += "\n Active skill " + Tank.activeSkillID;
             //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
             //str1 += "\n Level: " + Tank.level;
@@ -1315,7 +1320,25 @@ namespace Poseidon
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
+            {
                 AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPointedAt.health, fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                string line;
+                line ="'";
+                if (fishPointedAt.health < 20)
+                {
+                    line += "SAVE ME!!!";
+                }
+                else if (fishPointedAt.health < 60)
+                {
+                    line += AddingObjects.wrapLine(fishPointedAt.sad_talk, HealthBar.Width+20, fishTalkFont);
+                }
+                else
+                {
+                    line += AddingObjects.wrapLine(fishPointedAt.happy_talk, HealthBar.Width+20, fishTalkFont);
+                }
+                line += "'";
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width/2 - HealthBar.Width/2, 32), Color.Yellow);
+            }
 
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);

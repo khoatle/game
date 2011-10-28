@@ -46,11 +46,12 @@ namespace Poseidon.MiniGames
         bool displayRightWrongAnswer = false;
 
         Vector2 positionA, positionB, positionC, positionD, positionAns, positionQs;
-        Rectangle rectA, rectB, rectC, rectD;
+        Rectangle rectA, rectB, rectC, rectD, nextButtonRect;
         Vector2 clickPosition;
 
         Texture2D buttonTexture;
         Texture2D selectedButtonTexture;
+        Texture2D nextButtonTexture;
 
         /// <summary>
         /// Default Constructor
@@ -73,6 +74,8 @@ namespace Poseidon.MiniGames
             //statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             quizFont = Content.Load<SpriteFont>("Fonts/quiz");
 
+
+            nextButtonTexture = Content.Load<Texture2D>("Image/Miscellaneous/NextButton");
             buttonTexture = Content.Load<Texture2D>("Image/Miscellaneous/quizButton");
             selectedButtonTexture = Content.Load<Texture2D>("Image/Miscellaneous/quizButtonSelected");
 
@@ -81,7 +84,7 @@ namespace Poseidon.MiniGames
             quizzesLibrary = new QuizzesLibrary();
             questionID = random.Next(quizzesLibrary.quizzesList.Count);
 
-            positionQs = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 300, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Top+100);
+            positionQs = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 300, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Top+60);
             positionA = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y);
             positionB = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+100);
             positionC = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+200);
@@ -91,6 +94,7 @@ namespace Poseidon.MiniGames
             rectB = new Rectangle((int)positionB.X, (int)positionB.Y, 60, 60);
             rectC = new Rectangle((int)positionC.X, (int)positionC.Y, 60, 60);
             rectD = new Rectangle((int)positionD.X, (int)positionD.Y, 60, 60);
+            nextButtonRect = new Rectangle(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Right - 220, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom - 100, 200, 80);
 
             cursor = new Cursor(game, spriteBatch);
             //Components.Add(cursor);
@@ -154,7 +158,7 @@ namespace Poseidon.MiniGames
             CheckClick(gameTime);
             if (displayRightWrongAnswer)
             {
-                if (clicked)
+                if (clicked && nextButtonRect.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                 {
                     questionID = random.Next(quizzesLibrary.quizzesList.Count);
                     clicked = false;
@@ -247,7 +251,7 @@ namespace Poseidon.MiniGames
                 {
                     numRightAnswer++;
                     spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
-                    ansButtonColor = Color.LawnGreen;
+                    ansButtonColor = Color.Yellow;
                 }
                 switch (selectedChoice)
                 {
@@ -264,6 +268,7 @@ namespace Poseidon.MiniGames
                         spriteBatch.Draw(selectedButtonTexture, rectD, ansButtonColor);
                         break;
                 }
+                spriteBatch.Draw(nextButtonTexture, nextButtonRect, Color.White);
             }
             cursor.Draw(gameTime);
             spriteBatch.End();

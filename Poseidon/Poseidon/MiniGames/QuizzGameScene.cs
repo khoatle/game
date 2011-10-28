@@ -223,7 +223,8 @@ namespace Poseidon.MiniGames
             base.Draw(gameTime);
             // draw the question
             Color color = Color.Lime;
-            spriteBatch.DrawString(quizFont, quizzesLibrary.quizzesList[questionID].question, positionQs, color);
+            string question = AddingObjects.wrapLine(quizzesLibrary.quizzesList[questionID].question, 750 , quizFont);
+            spriteBatch.DrawString(quizFont, question, positionQs, color);
             //draw 4 buttons
             spriteBatch.Draw(buttonTexture, rectA, Color.White);
             spriteBatch.Draw(buttonTexture, rectB, Color.White);
@@ -236,29 +237,32 @@ namespace Poseidon.MiniGames
             spriteBatch.DrawString(quizFont, " D  " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color);
             if (displayRightWrongAnswer)
             {
-                switch(selectedChoice)
-                {
-                    case 0:
-                        spriteBatch.Draw(selectedButtonTexture, rectA, Color.DodgerBlue);
-                        break;
-                    case 1:
-                        spriteBatch.Draw(selectedButtonTexture, rectB, Color.Yellow);
-                        break;
-                    case 2:
-                        spriteBatch.Draw(selectedButtonTexture, rectC, Color.Red);
-                        break;
-                    case 3:
-                        spriteBatch.Draw(selectedButtonTexture, rectD, Color.LawnGreen);
-                        break;
-                }
+                Color ansButtonColor;
                 if (selectedChoice != quizzesLibrary.quizzesList[questionID].answerID)
                 {
                     spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
+                    ansButtonColor = Color.Red;
                 }
                 else
                 {
                     numRightAnswer++;
                     spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
+                    ansButtonColor = Color.LawnGreen;
+                }
+                switch (selectedChoice)
+                {
+                    case 0:
+                        spriteBatch.Draw(selectedButtonTexture, rectA, ansButtonColor);
+                        break;
+                    case 1:
+                        spriteBatch.Draw(selectedButtonTexture, rectB, ansButtonColor);
+                        break;
+                    case 2:
+                        spriteBatch.Draw(selectedButtonTexture, rectC, ansButtonColor);
+                        break;
+                    case 3:
+                        spriteBatch.Draw(selectedButtonTexture, rectD, ansButtonColor);
+                        break;
                 }
             }
             cursor.Draw(gameTime);

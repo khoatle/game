@@ -163,8 +163,8 @@ namespace Poseidon
             //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
-            ground.Model = Content.Load<Model>("Models/shipwreckscene");
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+            ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene");
+            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
             //heightMapInfo = ground.Model.Tag as HeightMapInfo;
             //if (heightMapInfo == null)
             //{
@@ -200,7 +200,7 @@ namespace Poseidon
             tank.Load(Content);
 
             //Load healthbar
-            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
@@ -279,13 +279,13 @@ namespace Poseidon
                 switch (randomObject)
                 {
                     case 0:
-                        staticObjects[index].LoadContent(Content, "Models/barrel");
+                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/barrel");
                         break;
                     case 1:
-                        staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/barrelstack");
                         break;
                     case 2:
-                        staticObjects[index].LoadContent(Content, "Models/boxstack");
+                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/boxstack");
                         break;
                 }
                 //staticObjects[index].LoadContent(Content, "Models/boxstack");
@@ -644,7 +644,7 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < 0.8)
+                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < GameConstants.EnvThresholdForKey)
                         {
                             showNoKey = true;
                         }
@@ -652,7 +652,7 @@ namespace Poseidon
                         {
                             chest.opened = true;
                             audio.OpenChest.Play();
-                            chest.Model = Content.Load<Model>("Models/chest");
+                            chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -666,9 +666,22 @@ namespace Poseidon
                             {
                                 // player found a God's relic
                                 // unlock a skill
-                                Tank.skills[chest.skillID] = true;
-                                Tank.activeSkillID = chest.skillID;
-                                foundRelic = true;
+                                // do not unlock if the player has already found it before
+                                // because re-exploreing ship is enabled now
+                                if (Tank.skills[chest.skillID] == false)
+                                {
+                                    Tank.skills[chest.skillID] = true;
+                                    Tank.activeSkillID = chest.skillID;
+                                    foundRelic = true;
+                                }
+                                else
+                                {
+                                    // give the player some experience as reward
+                                    Tank.currentExperiencePts += 20;
+                                    // show a random painting
+                                    paintingToShow = random.Next(oceanPaintings.paintings.Count);
+                                    showPainting = true;
+                                }
                             }
                         }
                         doubleClicked = false;
@@ -901,21 +914,8 @@ namespace Poseidon
             spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
                 Color.Orange);
 
-            String line = String.Empty;
-            String returnString = String.Empty;
-            String[] wordArray = oceanPaintings.paintings[paintingToShow].tip.Split(' ');
-
-            foreach (String word in wordArray)
-            {
-                if (paintingFont.MeasureString(line + word).Length() > GraphicDevice.Viewport.TitleSafeArea.Width)
-                {
-                    returnString = returnString + line + '\n';
-                    line = String.Empty;
-                }
-                line = line + word + ' ';
-            }
-
-            spriteBatch.DrawString(paintingFont, returnString + line,
+            String line = AddingObjects.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width, paintingFont);
+            spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), Color.Orange);
 
         }

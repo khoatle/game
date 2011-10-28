@@ -76,60 +76,9 @@ namespace GeneratedGeometryPipeline
 
         private void SetTerrainTextureFilename(string terrain_name)
         {
-            if (terrain_name.Contains("wood-terrain0"))
-                terrainTextureFilename = "wood-cool.jpg";
-            else if (terrain_name.Contains("wood-terrain1"))
-                terrainTextureFilename = "wood-clean.jpg";
-            else if (terrain_name.Contains("wood-terrain2"))
-                terrainTextureFilename = "wood-dark.jpg";
-            else if (terrain_name.Contains("wood-terrain3"))
-                terrainTextureFilename = "wood-rock.png";
-            else if (terrain_name.Contains("wood-terrain4"))
-                terrainTextureFilename = "wood-thin.jpg";
-            else if (terrain_name.Contains("terrain10"))
-                terrainTextureFilename = "stone_texture.png";
-            else if (terrain_name.Contains("terrain11"))
-                terrainTextureFilename = "Emerald.jpg";
-            else if (terrain_name.Contains("terrain12"))
-                terrainTextureFilename = "grass.jpg";
-            else if (terrain_name.Contains("terrain13"))
-                terrainTextureFilename = "gravel.jpg";
-            else if (terrain_name.Contains("terrain14"))
-                terrainTextureFilename = "blue.jpg";
-            else if (terrain_name.Contains("terrain15"))
-                terrainTextureFilename = "Seabed.bmp";
-            else if (terrain_name.Contains("terrain16"))
-                terrainTextureFilename = "coral_reef5.bmp";
-            else if (terrain_name.Contains("terrain17"))
-                terrainTextureFilename = "roof.jpg";
-            else if (terrain_name.Contains("terrain18"))
-                terrainTextureFilename = "mine8fy.jpg";
-            else if (terrain_name.Contains("terrain19"))
-                terrainTextureFilename = "rocks.bmp";
-            else if (terrain_name.Contains("terrain0"))
-                terrainTextureFilename = "rockmoss.jpg";
-            else if (terrain_name.Contains("terrain1"))
-                terrainTextureFilename = "Sand_Dirty.png";
-            else if (terrain_name.Contains("terrain2"))
-                terrainTextureFilename = "granite_or_fruit.jpg";
-            else if (terrain_name.Contains("terrain3"))
-                terrainTextureFilename = "coral_reef4.jpg";
-            else if (terrain_name.Contains("terrain4"))
-                terrainTextureFilename = "sea_dark.jpg";
-            else if (terrain_name.Contains("terrain5"))
-                terrainTextureFilename = "sea-stone.jpg";
-            else if (terrain_name.Contains("terrain6"))
-                terrainTextureFilename = "shards.jpg";
-            else if (terrain_name.Contains("terrain7"))
-                terrainTextureFilename = "mars-rock.jpg";
-            else if (terrain_name.Contains("terrain8"))
-                terrainTextureFilename = "sand-cool.jpg";
-            else if (terrain_name.Contains("terrain9"))
-                terrainTextureFilename = "sea-stone2.jpg";
-            else
-                terrainTextureFilename = "blue.jpg";
-            terrainTextureFilename = "TerrainTextures/SeaBedTerrain2.jpg"; //1024 x 1024 , scale = 38.0f
-            //terrainTextureFilename = "TerrainTextures/SeaBedTerrain1.jpg"; //1024 x 1024 , scale = 38.0f
+            Random random = new Random();
+            int id = random.Next(6) + 1;
+            terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain" + id + ".jpg";       
         }
 
         /// <summary>
@@ -172,8 +121,8 @@ namespace GeneratedGeometryPipeline
             material.SpecularColor = new Vector3(.4f, .4f, .4f);
 
             string directory = Path.GetDirectoryName(input.Identity.SourceFilename);
-            string texture = Path.Combine(directory, terrainTextureFilename);
-
+            string texture = Path.Combine("", terrainTextureFilename);
+            //directory
             material.Texture = new ExternalReference<TextureContent>(texture);
 
             builder.SetMaterial(material);

@@ -45,7 +45,7 @@ namespace Poseidon
             painting = new Painting();
             painting.painting = content.Load<Texture2D>("Image/Paintings/painting5");
             painting.caption = "Painting of coral reef (dated 1853)";
-            painting.tip = "According to Greenpeace, about 10 million tons of plastic ends up in the ocean annually; much of it has collected in a spiral in the north Pacific. The “garbage vortex” is the size of Texas, and it’s not getting any smaller.";
+            painting.tip = "According to Greenpeace, about 10 million tons of plastic ends up in the ocean annually; much of it has collected in a spiral in the north Pacific. The 'garbage vortex' is the size of Texas, and it’s not getting any smaller.";
             paintings.Add(painting);
 
             painting = new Painting();

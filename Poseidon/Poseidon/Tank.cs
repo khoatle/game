@@ -197,7 +197,7 @@ namespace Poseidon
             strength = lsStrength = 1.0f;
             speed = lsSpeed = 1.0f;
             shootingRate = lsShootingRate = 1.0f;
-            bulletType = 0;
+            bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
             currentHitPoint = lsCurrentHitPoint = GameConstants.PlayerStartingHP;
             maxEnvPoint = GameConstants.MaxEnv;
@@ -246,7 +246,7 @@ namespace Poseidon
         public void Load(ContentManager content)
         {
             // Load the tank model from the ContentManager.
-            tankModel = content.Load<Model>("Models/tank");
+            tankModel = content.Load<Model>("Models/MainCharacter/tank");
             Model = tankModel;
             // Look up shortcut references to the bones we are going to animate.
             leftBackWheelBone = tankModel.Bones["l_back_wheel_geo"];
@@ -287,7 +287,7 @@ namespace Poseidon
 
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
-            RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
+            RetrievedSound = content.Load<SoundEffect>("Sounds/SoundEffects/laserFire");
 
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++)

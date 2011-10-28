@@ -88,7 +88,8 @@ namespace Poseidon {
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
         public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(120);
-        public const string StrTimeRemaining = "Time Remaining: ";
+        public const string StrTimeRemaining = "Days Remaining: ";
+        public const int DaysPerSecond = 2;
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
         public const string StrGameLost = "Game Lost !";
@@ -149,8 +150,9 @@ namespace Poseidon {
         public const float ThorPushFactor = 10;
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
-        public static string[] iconNames = { "Image/Bow", "Image/Hammer", "Image/armor", "Image/sandal", "Image/AphroBelt" };
-        public static string[] bulletNames = { "Image/damageBullet", "Image/healthBullet" };
+        public static string[] iconNames = { "Image/SkillIcons/Bow", "Image/SkillIcons/Hammer", "Image/SkillIcons/armor", 
+                                               "Image/SkillIcons/sandal", "Image/SkillIcons/AphroBelt" };
+        public static string[] bulletNames = { "Image/BulletIcons/damageBullet", "Image/BulletIcons/healthBullet" };
         public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;
 
@@ -163,6 +165,9 @@ namespace Poseidon {
 
         //so that it is easier to aim
         public const float EasyAimScale = 1.5f;
+
+        //environment threshold for having key to treasure chest
+        public const float EnvThresholdForKey = 0.4f;
 
 
     }

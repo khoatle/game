@@ -45,7 +45,7 @@ namespace Poseidon
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
         // For the Skill board
-        SkillScene skillScene;
+        AttributeBoard skillScene;
         protected Texture2D SkillBackgroundTexture;
         // For the Level Objective
         LevelObjectiveScene levelObjectiveScene;
@@ -130,16 +130,16 @@ namespace Poseidon
             Services.AddService(typeof(AudioLibrary), audio);
 
             //For general game control
-            actionTexture = Content.Load<Texture2D>("Image/rockrainenhanced");
-            stunnedTexture = Content.Load<Texture2D>("Image/dizzy-icon");
+            actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
+            stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
             radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
 
             //For the Help scene
-            helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
-            helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
+            helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");
+            helpForegroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpForeground");
             helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture, spriteBatch);
             Components.Add(helpScene);
 
@@ -149,17 +149,17 @@ namespace Poseidon
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
-            startBackgroundTexture = Content.Load<Texture2D>("Image/startbackground");
-            startElementsTexture = Content.Load<Texture2D>("Image/startSceneElements");
+            startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
-            SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
-            LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
-            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            boxBackground = Content.Load<Texture2D>("Image/solidred");
+            SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
+            LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
+            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom1");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom2");
+            boxBackground = Content.Load<Texture2D>("Image/Miscellaneous/solidred");
 
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
@@ -173,7 +173,7 @@ namespace Poseidon
             Components.Add(shipWreckScene);
 
             // Create the Skill board
-            skillScene = new SkillScene(this, smallFont, largeFont,
+            skillScene = new AttributeBoard(this, smallFont, largeFont,
                 SkillBackgroundTexture, Content);
             Components.Add(skillScene);
 
@@ -402,9 +402,9 @@ namespace Poseidon
             {
                 Random rand = new Random();
                 //if (rand.Next(2) == 0)
-                  //  ShowScene(quizzGameScene);
+                    ShowScene(quizzGameScene);
                 //else
-                    ShowScene(typeGameScene);
+                   // ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()
@@ -418,7 +418,8 @@ namespace Poseidon
                     )
                 {            
                     // no re-explore a ship wreck
-                    playGameScene.shipWrecks[curWreck].accessed = true;
+                    // no, let the user re-explore now because he would miss a relic -> lose
+                    //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
                     return true;

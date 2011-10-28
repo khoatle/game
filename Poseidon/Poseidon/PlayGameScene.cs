@@ -23,6 +23,7 @@ namespace Poseidon
         
         private Texture2D HealthBar;
         private Texture2D EnvironmentBar;
+        private Texture2D foundKeyScreen;
 
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
@@ -38,6 +39,7 @@ namespace Poseidon
         Random random;
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
+        SpriteFont fishTalkFont;
         SpriteFont menuSmall;
         GameObject ground;
         public static Camera gameCamera;
@@ -48,7 +50,6 @@ namespace Poseidon
         GameState prevGameState;
         GameObject boundingSphere;
 
-        FuelCarrier fuelCarrier;
         public List<ShipWreck> shipWrecks;
 
         public List<DamageBullet> myBullet;
@@ -132,6 +133,11 @@ namespace Poseidon
         SchoolOfFish schoolOfFish2;
         SchoolOfFish schoolOfFish3;
 
+        // the fishes have helped the player to find the treasure chest key!
+        // only show once
+        bool showFoundKey = false;
+        bool firstShow = true;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -172,11 +178,11 @@ namespace Poseidon
 
             bubbles = new List<Bubble>();
 
-            schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+            schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
-            schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
-            schoolOfFish3 = new SchoolOfFish(Content, "Image/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
             this.Load();
         }
@@ -185,6 +191,7 @@ namespace Poseidon
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -195,12 +202,12 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
 
             heightMapInfo = ground.Model.Tag as HeightMapInfo;
             if (heightMapInfo == null)
@@ -223,14 +230,14 @@ namespace Poseidon
                 bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
 
-            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/LevelObjectiveIcon");
+            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+
+            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
 
             //Initialize the game field
             InitializeGameField(Content);
 
-            //Initialize fuel carrier
-            fuelCarrier = new FuelCarrier();
-            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+            
 
             plants = new List<Plant>();
             fruits = new List<Fruit>();
@@ -241,8 +248,8 @@ namespace Poseidon
             roundTimer = roundTime;
 
             //Load healthbar
-            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
-            EnvironmentBar = Content.Load<Texture2D>("Image/EnvironmentBar");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
+            EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
@@ -272,7 +279,7 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
@@ -306,11 +313,11 @@ namespace Poseidon
             roundTimer = roundTime;
             currentSentence = 0;
             currentGameState = GameState.PlayingCutScene;
-            schoolOfFish1 = new SchoolOfFish(Content, "Image/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+            schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
-            schoolOfFish2 = new SchoolOfFish(Content, "Image/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
-            schoolOfFish3 = new SchoolOfFish(Content, "Image/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
             InitializeGameField(Content);
         }
@@ -332,19 +339,19 @@ namespace Poseidon
             switch (currentLevel)
             {
                 // learn 1st skill in level 2 and so on
-                case 3:
+                case 2:
                     relicType = 3;
                     break;
-                case 6:
+                case 5:
                     relicType = 0;
                     break;
-                case 7:
+                case 6:
                     relicType = 1;
                     break;
-                case 8:
+                case 7:
                     relicType = 2;
                     break;
-                case 9:
+                case 8:
                     relicType = 4;
                     break;
             }
@@ -479,6 +486,7 @@ namespace Poseidon
                 //    //this.Exit();
                 CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
 
+                
                 if (currentGameState == GameState.PlayingCutScene)
                 {
                     // Next sentence when the user press Enter
@@ -498,6 +506,25 @@ namespace Poseidon
                 }
                 if ((currentGameState == GameState.Running))
                 {
+                    //if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
+                    //real one above, below is just for testing
+                    if (currentLevel == 0 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
+                    {
+                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > GameConstants.EnvThresholdForKey)
+                            showFoundKey = true;
+                    }
+                    if (showFoundKey && firstShow)
+                    {
+                        // return to game if enter pressed
+                        if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                            (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
+                            currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                        {
+                            showFoundKey = false;
+                            firstShow = false;
+                        }
+                        return;
+                    }
                     Vector3 pointIntersect = Vector3.Zero;
                     bool mouseOnLivingObject = CursorManager.MouseOnEnemy(cursor, gameCamera, enemies, enemiesAmount) || CursorManager.MouseOnFish(cursor, gameCamera, fish, fishAmount);
                     //if the user holds down Shift button
@@ -508,9 +535,14 @@ namespace Poseidon
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
                                 && currentKeyboardState.IsKeyUp(Keys.L)) || (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)))
                         {
-                            Tank.bulletType++;
-                            if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
-                            audio.ChangeBullet.Play();
+                            //at level 0, player is only able to heal
+                            if (currentLevel != 0)
+                            {
+                                Tank.bulletType++;
+                                if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
+                                audio.ChangeBullet.Play();
+                            }
+                              
                         }
                         // changing active skill
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
@@ -892,7 +924,11 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
 
-            //base.Draw(gameTime);
+            if (showFoundKey && firstShow)
+            {
+                DrawFoundKey();
+                return;
+            }
             if (paused)
             {
                 // Draw the "pause" text
@@ -921,6 +957,13 @@ namespace Poseidon
             }
             base.Draw(gameTime);
 
+        }
+        private void DrawFoundKey()
+        {
+            spriteBatch.Begin();
+            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - 480, GraphicDevice.Viewport.TitleSafeArea.Center.Y-343, 960, 686), Color.White);
+            spriteBatch.DrawString(fishTalkFont, "The fishes have helped you to find the hidden key to treasure chests in return for your help", new Vector2(0, 0), Color.White);
+            spriteBatch.End();
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.
@@ -1113,15 +1156,15 @@ namespace Poseidon
                 if (!trash.Retrieved && trashRealSphere.Intersects(frustum))
                 {
                     trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    trash.DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //trash.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
             //Draw each static object
@@ -1236,16 +1279,19 @@ namespace Poseidon
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
+            int days;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
-            if (roundTimer.Minutes < 10)
-                str1 += "0";
-            str1 += roundTimer.Minutes + ":";
-            if (roundTimer.Seconds < 10)
-                str1+= "0";
-            str1 += roundTimer.Seconds;
+            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
+            str1 += days;
+            //if (roundTimer.Minutes < 10)
+            //    str1 += "0";
+            //str1 += roundTimer.Minutes + ":";
+            //if (roundTimer.Seconds < 10)
+            //    str1+= "0";
+            //str1 += roundTimer.Seconds;
             //str1 += "\n Active skill " + Tank.activeSkillID;
             //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
             //str1 += "\n Level: " + Tank.level;
@@ -1278,7 +1324,25 @@ namespace Poseidon
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
+            {
                 AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPointedAt.health, fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                string line;
+                line ="'";
+                if (fishPointedAt.health < 20)
+                {
+                    line += "SAVE ME!!!";
+                }
+                else if (fishPointedAt.health < 60)
+                {
+                    line += AddingObjects.wrapLine(fishPointedAt.sad_talk, HealthBar.Width+20, fishTalkFont);
+                }
+                else
+                {
+                    line += AddingObjects.wrapLine(fishPointedAt.happy_talk, HealthBar.Width+20, fishTalkFont);
+                }
+                line += "'";
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width/2 - HealthBar.Width/2, 32), Color.Yellow);
+            }
 
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);

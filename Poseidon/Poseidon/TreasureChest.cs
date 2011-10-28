@@ -22,7 +22,7 @@ namespace Poseidon
         {
 
             this.type = type;
-            Model = content.Load<Model>("Models/chest-closed");
+            Model = content.Load<Model>("Models/ShipWreckModels/chest-closed");
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 

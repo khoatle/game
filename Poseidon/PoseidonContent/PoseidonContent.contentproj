@@ -197,7 +197,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\terrain0.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain0.bmp">
       <Name>terrain0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
@@ -259,101 +259,101 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\terrain2.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain2.bmp">
       <Name>terrain2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\terrain1.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain1.bmp">
       <Name>terrain1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\terrain10.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain10.bmp">
       <Name>terrain10</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain11.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain11.bmp">
       <Name>terrain11</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain12.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain12.bmp">
       <Name>terrain12</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain13.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain13.bmp">
       <Name>terrain13</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain14.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain14.bmp">
       <Name>terrain14</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain15.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain15.bmp">
       <Name>terrain15</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain16.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain16.bmp">
       <Name>terrain16</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain17.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain17.bmp">
       <Name>terrain17</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain18.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain18.bmp">
       <Name>terrain18</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain19.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain19.bmp">
       <Name>terrain19</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain3.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain3.bmp">
       <Name>terrain3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain4.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain4.bmp">
       <Name>terrain4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain5.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain5.bmp">
       <Name>terrain5</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain6.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain6.bmp">
       <Name>terrain6</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain7.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain7.bmp">
       <Name>terrain7</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain8.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain8.bmp">
       <Name>terrain8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain9.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain9.bmp">
       <Name>terrain9</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>

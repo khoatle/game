@@ -200,7 +200,7 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
@@ -277,7 +277,7 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 

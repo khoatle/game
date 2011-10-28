@@ -287,7 +287,7 @@ namespace Poseidon
 
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
-            RetrievedSound = content.Load<SoundEffect>("sound/laserFire");
+            RetrievedSound = content.Load<SoundEffect>("Sounds/SoundEffects/laserFire");
 
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++)

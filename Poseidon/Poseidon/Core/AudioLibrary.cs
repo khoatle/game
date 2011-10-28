@@ -93,21 +93,21 @@ namespace Poseidon.Core
 
         public void LoadContent(ContentManager Content)
         {
-            explosion = Content.Load<SoundEffect>("Sound/SoundEffects/explosion");
-            newMeteor = Content.Load<SoundEffect>("Sound/SoundEffects/newmeteor");
-            backMusic = Content.Load<Song>("Sound/BackgroundMusics/backMusic");
-            startMusic = Content.Load<Song>("Sound/BackgroundMusics/startMusic");
-            menuBack = Content.Load<SoundEffect>("Sound/SoundEffects/menu_back");
-            menuSelect = Content.Load<SoundEffect>("Sound/SoundEffects/menu_select3");
-            menuScroll = Content.Load<SoundEffect>("Sound/SoundEffects/menu_scroll");
-            powerShow = Content.Load<SoundEffect>("Sound/SoundEffects/powershow");
-            powerGet = Content.Load<SoundEffect>("Sound/SoundEffects/powerget");
-            shooting = Content.Load<SoundEffect>("Sound/SoundEffects/laserFire");
-            explo1 = Content.Load<SoundEffect>("SoundSoundEffects//Explo1");
-            changeBullet = Content.Load<SoundEffect>("Sound/SoundEffects/equip");
-            miniGunWindUp = Content.Load<SoundEffect>("Sound/SoundEffects/MiinigunWindup#1");
-            openChest = Content.Load<SoundEffect>("Sound/SoundEffects/openChest");
-            bubble = Content.Load<SoundEffect>("Sound/SoundEffects/bubble");
+            explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
+            newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");
+            backMusic = Content.Load<Song>("Sounds/BackgroundMusics/backMusic");
+            startMusic = Content.Load<Song>("Sounds/BackgroundMusics/startMusic");
+            menuBack = Content.Load<SoundEffect>("Sounds/SoundEffects/menu_back");
+            menuSelect = Content.Load<SoundEffect>("Sounds/SoundEffects/menu_select3");
+            menuScroll = Content.Load<SoundEffect>("Sounds/SoundEffects/menu_scroll");
+            powerShow = Content.Load<SoundEffect>("Sounds/SoundEffects/powershow");
+            powerGet = Content.Load<SoundEffect>("Sounds/SoundEffects/powerget");
+            shooting = Content.Load<SoundEffect>("Sounds/SoundEffects/laserFire");
+            explo1 = Content.Load<SoundEffect>("Sounds/SoundEffects//Explo1");
+            changeBullet = Content.Load<SoundEffect>("Sounds/SoundEffects/equip");
+            miniGunWindUp = Content.Load<SoundEffect>("Sounds/SoundEffects/MiinigunWindup#1");
+            openChest = Content.Load<SoundEffect>("Sounds/SoundEffects/openChest");
+            bubble = Content.Load<SoundEffect>("Sounds/SoundEffects/bubble");
         }
     }
 }

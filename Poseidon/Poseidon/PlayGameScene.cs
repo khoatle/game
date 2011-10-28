@@ -530,9 +530,14 @@ namespace Poseidon
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
                                 && currentKeyboardState.IsKeyUp(Keys.L)) || (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)))
                         {
-                            Tank.bulletType++;
-                            if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
-                            audio.ChangeBullet.Play();
+                            //at level 0, player is only able to heal
+                            if (currentLevel != 0)
+                            {
+                                Tank.bulletType++;
+                                if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
+                                audio.ChangeBullet.Play();
+                            }
+                              
                         }
                         // changing active skill
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)

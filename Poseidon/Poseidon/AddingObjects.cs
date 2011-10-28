@@ -101,30 +101,40 @@ namespace Poseidon
                     fish[i].LoadContent(Content, "Models/turtle");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "turtle";
+                    fish[i].happy_talk = "We are reptiles from much before the Jurassic age. Oh, I cry not for sorrow, just to get the salt out.";
+                    fish[i].sad_talk = "I need to go to the beach to lay eggs. Can you ask the humans not to kill me?";  
                 }
                 else if (type == 1)
                 {
                     fish[i].LoadContent(Content, "Models/dolphin");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "dolphin";
+                    fish[i].happy_talk = "We remind you to play, play, play, for you will find great power in play.";
+                    fish[i].sad_talk = "Though we try to be friends with humans, they always hurt us with their pollution, propellers and what not!";
                 }
                 else if (type == 2)
                 {           
                     fish[i].LoadContent(Content, "Models/manetee");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "manetee";
+                    fish[i].happy_talk = "Do not call me sea-cow. Do I look that fat?";
+                    fish[i].sad_talk = "I am a vegeterian. Why are they killing me?";
                 }
                 else if (type == 3)
                 {
                     fish[i].LoadContent(Content, "Models/stingray");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "sting ray";
+                    fish[i].happy_talk = "I can't see you as my eyes are on top. But I can sense a bot with my electro-receptors.";
+                    fish[i].sad_talk = "I will teach you to sting, if you promise to sting everyone who eat bbq sting-ray.";
                 }
                 else if (type == 4)
                 {
                     fish[i].LoadContent(Content, "Models/orca");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "orca";
+                    fish[i].happy_talk = "Move away, you little bot, here comes the killer whale.";
+                    fish[i].sad_talk = "I lost my way. I can't hear my friends due to the noise from the oil-rig.";
                 }
                 else if (type == 5)
                 {
@@ -132,24 +142,32 @@ namespace Poseidon
                     fish[i].LoadContent(Content, "Models/seal");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "seal";
+                    fish[i].happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
+                    fish[i].sad_talk = "We need the arctic ice. Stop global warming.";
                 }
                 else if (type == 6)
                 {
                     fish[i].LoadContent(Content, "Models/normalshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "shark";
+                    fish[i].happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
+                    fish[i].sad_talk = "Humans kill over 30 million sharks every year. We are the oldest fish, spare us.";
                 }
                 else if (type == 7)
                 {
                     fish[i].LoadContent(Content, "Models/leopardshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "leopard shark";
+                    fish[i].happy_talk = "No, I am not racist and I date all kinds of shark, not you, dear bot.";
+                    fish[i].sad_talk = "We never eat humans. Why do they hurt us?";
                 }
                 else if (type == 8)
                 {
                     fish[i].LoadContent(Content, "Models/hammershark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "hammer shark";
+                    fish[i].happy_talk = "I have 360 degree binocular vision. I can detect an electrical signal of half a billionth of a volt. What superpower you brag about?";
+                    fish[i].sad_talk = "Why do humans like our fins so much. Does 'delicacy' mean genocide?";
                 }
                 //fish[i].LoadContent(Content, "Models/orca");
                 //fish[i].Load(1, 24, 24);

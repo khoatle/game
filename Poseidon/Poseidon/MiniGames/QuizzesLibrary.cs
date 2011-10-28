@@ -61,7 +61,86 @@ namespace Poseidon.MiniGames
             quizz.answerID = 3;
             quizzesList.Add(quizz);
 
+            quizz = new Quizz();
+            quizz.question = "Who have 360 degree binocular vision and can detect an electrical signal of half a billionth of a volt?";
+            quizz.options[0] = "Humans";
+            quizz.options[1] = "Dogs";
+            quizz.options[2] = "Tigers";
+            quizz.options[3] = "Hammerhead Shark";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
 
+            quizz = new Quizz();
+            quizz.question = "What is the main threat to extinction of hammerhead sharks?";
+            quizz.options[0] = "Excessive fishing for their fins";
+            quizz.options[1] = "They are eaten by tilapia";
+            quizz.options[2] = "The commit suicide";
+            quizz.options[3] = "They hammer each other";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which shark often swim with other sharks, but you can easily spot it?";
+            quizz.options[0] = "Tiger shark";
+            quizz.options[1] = "Angel shark";
+            quizz.options[2] = "Leopard shark";
+            quizz.options[3] = "Goblin shark";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "How many sharks on an average are hunted every year?";
+            quizz.options[0] = "About 100";
+            quizz.options[1] = "None";
+            quizz.options[2] = "Over 30 million";
+            quizz.options[3] = "About 1000";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "How does global warming effect the seals?";
+            quizz.options[0] = "They'll be happy if the arctics get warmer";
+            quizz.options[1] = "They need the arctic ice for their habitat";
+            quizz.options[2] = "They'll migrate to colder places";
+            quizz.options[3] = "We can keep them in the aquarium";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What is the common name for orca?";
+            quizz.options[0] = "Ocra";
+            quizz.options[1] = "Killer whale";
+            quizz.options[2] = "Tiger whale";
+            quizz.options[3] = "Cute whale";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "I have electro-receptors, my eyes are on top, and I can sting real bad. Who am I?";
+            quizz.options[0] = "Cat";
+            quizz.options[1] = "Monkey";
+            quizz.options[2] = "Dinosaur";
+            quizz.options[3] = "Sting ray";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What is manetee commonly known as?";
+            quizz.options[0] = "Sea Buffalo";
+            quizz.options[1] = "Sea Cow";
+            quizz.options[2] = "Sea Ox";
+            quizz.options[3] = "Sea Bull";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Who drink salt water and cry to get rid of the salt?";
+            quizz.options[0] = "Turtles";
+            quizz.options[1] = "Girls";
+            quizz.options[2] = "Babies";
+            quizz.options[3] = "None of the above";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
         }
     }
 }

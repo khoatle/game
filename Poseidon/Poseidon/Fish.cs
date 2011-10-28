@@ -19,6 +19,8 @@ namespace Poseidon {
         Quaternion qRotation = Quaternion.Identity;
         double lastHealthUpdateTime;
         double healthChangeInterval;
+        public string happy_talk;
+        public string sad_talk;
 
         public Fish() : base() {
             experienceReward = 2;

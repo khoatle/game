@@ -228,7 +228,7 @@ namespace Poseidon
                 bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
 
-            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/LevelObjectiveIcon");
+            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -246,8 +246,8 @@ namespace Poseidon
             roundTimer = roundTime;
 
             //Load healthbar
-            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
-            EnvironmentBar = Content.Load<Texture2D>("Image/EnvironmentBar");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
+            EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");

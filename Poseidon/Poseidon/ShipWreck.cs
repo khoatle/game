@@ -25,13 +25,13 @@ namespace Poseidon
             switch (type)
             {
                 case 0:
-                    Model = content.Load<Model>("Models/shipwreck2");
+                    Model = content.Load<Model>("Models/ShipWreckModels/shipwreck2");
                     break;
                 case 1:
-                    Model = content.Load<Model>("Models/shipwreck3");
+                    Model = content.Load<Model>("Models/ShipWreckModels/shipwreck3");
                     break;
                 case 2:
-                    Model = content.Load<Model>("Models/shipwreck4");
+                    Model = content.Load<Model>("Models/ShipWreckModels/shipwreck4");
                     break;
             }
             

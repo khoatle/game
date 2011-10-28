@@ -163,7 +163,7 @@ namespace Poseidon
             //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
-            ground.Model = Content.Load<Model>("Models/shipwreckscene");
+            ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene");
             boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
             //heightMapInfo = ground.Model.Tag as HeightMapInfo;
             //if (heightMapInfo == null)
@@ -200,7 +200,7 @@ namespace Poseidon
             tank.Load(Content);
 
             //Load healthbar
-            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
@@ -279,13 +279,13 @@ namespace Poseidon
                 switch (randomObject)
                 {
                     case 0:
-                        staticObjects[index].LoadContent(Content, "Models/barrel");
+                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/barrel");
                         break;
                     case 1:
-                        staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/barrelstack");
                         break;
                     case 2:
-                        staticObjects[index].LoadContent(Content, "Models/boxstack");
+                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/boxstack");
                         break;
                 }
                 //staticObjects[index].LoadContent(Content, "Models/boxstack");

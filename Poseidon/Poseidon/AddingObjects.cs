@@ -98,56 +98,56 @@ namespace Poseidon
                 fish[i] = new Fish();
                 if (type == 0)
                 {
-                    fish[i].LoadContent(Content, "Models/turtle");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/turtle");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "turtle";
                 }
                 else if (type == 1)
                 {
-                    fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphin");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "dolphin";
                 }
                 else if (type == 2)
-                {           
-                    fish[i].LoadContent(Content, "Models/manetee");
+                {
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/manetee");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "manetee";
                 }
                 else if (type == 3)
                 {
-                    fish[i].LoadContent(Content, "Models/stingray");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/stingray");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "sting ray";
                 }
                 else if (type == 4)
                 {
-                    fish[i].LoadContent(Content, "Models/orca");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/orca");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "orca";
                 }
                 else if (type == 5)
                 {
-                    
-                    fish[i].LoadContent(Content, "Models/seal");
+
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/seal");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "seal";
                 }
                 else if (type == 6)
                 {
-                    fish[i].LoadContent(Content, "Models/normalshark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "shark";
                 }
                 else if (type == 7)
                 {
-                    fish[i].LoadContent(Content, "Models/leopardshark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "leopard shark";
                 }
                 else if (type == 8)
                 {
-                    fish[i].LoadContent(Content, "Models/hammershark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/hammershark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "hammer shark";
                 }

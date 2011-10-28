@@ -45,7 +45,7 @@ namespace Poseidon
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
         // For the Skill board
-        SkillScene skillScene;
+        AttributeBoard skillScene;
         protected Texture2D SkillBackgroundTexture;
         // For the Level Objective
         LevelObjectiveScene levelObjectiveScene;
@@ -155,7 +155,7 @@ namespace Poseidon
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
-            SkillBackgroundTexture = Content.Load<Texture2D>("Image/SkillBackground");
+            SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
             typeGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
@@ -173,7 +173,7 @@ namespace Poseidon
             Components.Add(shipWreckScene);
 
             // Create the Skill board
-            skillScene = new SkillScene(this, smallFont, largeFont,
+            skillScene = new AttributeBoard(this, smallFont, largeFont,
                 SkillBackgroundTexture, Content);
             Components.Add(skillScene);
 

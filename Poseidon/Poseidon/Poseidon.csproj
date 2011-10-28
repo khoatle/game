@@ -167,7 +167,7 @@
     <Compile Include="ShipWreck.cs" />
     <Compile Include="ShipWreckScene.cs" />
     <Compile Include="ShootingEnemy.cs" />
-    <Compile Include="SkillScene.cs" />
+    <Compile Include="AttributeBoard.cs" />
     <Compile Include="StaticObject.cs" />
     <Compile Include="StartScene.cs" />
     <Compile Include="Terminator.cs" />

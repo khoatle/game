@@ -360,35 +360,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\wood-terrain0.bmp">
-      <Name>wood-terrain0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\wood-terrain1.bmp">
-      <Name>wood-terrain1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\wood-terrain2.bmp">
-      <Name>wood-terrain2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\wood-terrain3.bmp">
-      <Name>wood-terrain3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\wood-terrain4.bmp">
-      <Name>wood-terrain4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\starfish.fbx">
       <Name>starfish</Name>
       <Importer>FbxImporter</Importer>
@@ -602,36 +573,36 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\armor.png">
+    <Compile Include="Image\SkillIcons\armor.png">
       <Name>armor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\Bow.png">
+    <Compile Include="Image\SkillIcons\Bow.png">
       <Name>Bow</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\Hammer.png">
+    <Compile Include="Image\SkillIcons\Hammer.png">
       <Name>Hammer</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\sandal.png">
+    <Compile Include="Image\SkillIcons\sandal.png">
       <Name>sandal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\damageBullet.png">
+    <Compile Include="Image\BulletIcons\damageBullet.png">
       <Name>damageBullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\healthBullet.png">
+    <Compile Include="Image\BulletIcons\healthBullet.png">
       <Name>healthBullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -652,7 +623,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\UnassignedPtsBar.png">
+    <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBar.png">
       <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -708,36 +679,36 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SkillBackground.bmp">
+    <Compile Include="Image\AttributeBoardTextures\SkillBackground.bmp">
       <Name>SkillBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\hit_point.png">
+    <Compile Include="Image\AttributeBoardTextures\hit_point.png">
       <Name>hit_point</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\shooting_rate.jpg">
+    <Compile Include="Image\AttributeBoardTextures\shooting_rate.jpg">
       <Name>shooting_rate</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\speed.jpg">
+    <Compile Include="Image\AttributeBoardTextures\speed.jpg">
       <Name>speed</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\strength.jpg">
+    <Compile Include="Image\AttributeBoardTextures\strength.jpg">
       <Name>strength</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\done.png">
+    <Compile Include="Image\AttributeBoardTextures\done.png">
       <Name>done</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -770,7 +741,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\AphroBelt.png">
+    <Compile Include="Image\SkillIcons\AphroBelt.png">
       <Name>AphroBelt</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -919,35 +890,35 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish.png">
       <Name>smallfish</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish1.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish1.png">
       <Name>smallfish1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish2.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish2.png">
       <Name>smallfish2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish2-1.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish2-1.png">
       <Name>smallfish2-1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish3.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish3.png">
       <Name>smallfish3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

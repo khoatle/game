@@ -42,13 +42,13 @@ namespace Poseidon
                 {
                     enemies[i] = new ShootingEnemy();
                     enemies[i].Name = "Shooting Enemy";
-                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver");
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_green_ly");
                     enemies[i].Load(1, 25, 24);
                 }
                 else if (i < numShootingEnemies + numCombatEnemies){
                     enemies[i] = new CombatEnemy();
                     enemies[i].Name = "Combat Enemy";
-                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_knife");
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_knife_orange_yellow");
                     enemies[i].Load(1, 30, 24);// 31 60 for attack
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark)
@@ -61,7 +61,7 @@ namespace Poseidon
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
                 {
                     Terminator terminator = new Terminator();
-                    terminator.LoadContent(Content, "Models/EnemyModels/diver");
+                    terminator.LoadContent(Content, "Models/EnemyModels/diver_green_ly");
                     if (currentLevel == 4) terminator.Name = "???";
                     else terminator.Name = "terminator";
                     terminator.Load();

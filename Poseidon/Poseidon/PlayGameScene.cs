@@ -1028,7 +1028,7 @@ namespace Poseidon
         private void DrawGameplayScreen()
         {
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
-            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
+            graphics.GraphicsDevice.Clear(Color.Black);
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);

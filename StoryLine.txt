@@ -13,7 +13,6 @@ information bar: click on a fish to display information. --less
 
 TODO:
 Win/lost scene & win/lost musics
-environment bar -- deb
 level obective , Deb-- display them.
 Sound 
 poison: health reduce over time -- khoa

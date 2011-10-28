@@ -42,26 +42,26 @@ namespace Poseidon
                 {
                     enemies[i] = new ShootingEnemy();
                     enemies[i].Name = "Shooting Enemy";
-                    enemies[i].LoadContent(Content, "Models/diver");
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver");
                     enemies[i].Load(1, 25, 24);
                 }
                 else if (i < numShootingEnemies + numCombatEnemies){
                     enemies[i] = new CombatEnemy();
                     enemies[i].Name = "Combat Enemy";
-                    enemies[i].LoadContent(Content, "Models/diver_knife");
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_knife");
                     enemies[i].Load(1, 30, 24);// 31 60 for attack
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark)
                 {
                     MutantShark mutantShark = new MutantShark();
-                    mutantShark.LoadContent(Content, "Models/mutantSharkVer2");
+                    mutantShark.LoadContent(Content, "Models/EnemyModels/mutantSharkVer2");
                     mutantShark.Name = "mutant shark";
                     enemies[i] = mutantShark;
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
                 {
                     Terminator terminator = new Terminator();
-                    terminator.LoadContent(Content, "Models/diver");
+                    terminator.LoadContent(Content, "Models/EnemyModels/diver");
                     if (currentLevel == 4) terminator.Name = "???";
                     else terminator.Name = "terminator";
                     terminator.Load();
@@ -254,7 +254,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
  
             h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
-            h.loadContent(Content, "Models/healBullet");
+            h.loadContent(Content, "Models/BulletModels/healBullet");
             healthBullet.Add(h);
         }
 
@@ -267,7 +267,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
-            d.loadContent(Content, "Models/damageBullet");
+            d.loadContent(Content, "Models/BulletModels/damageBullet");
             myBullet.Add(d);
         }
 
@@ -293,9 +293,9 @@ namespace Poseidon
             newBullet.initialize(obj.Position, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
             {
-                newBullet.loadContent(PlayGameScene.Content, "Models/bossBullet");
+                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");
             }
-            else newBullet.loadContent(PlayGameScene.Content, "Models/normalbullet");
+            else newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
             bullets.Add(newBullet);         
         }
 
@@ -317,7 +317,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
-            newBullet.loadContent(PlayGameScene.Content, "Models/chasingBullet");
+            newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
         }
 

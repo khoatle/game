@@ -48,7 +48,6 @@ namespace Poseidon
         GameState prevGameState;
         GameObject boundingSphere;
 
-        FuelCarrier fuelCarrier;
         public List<ShipWreck> shipWrecks;
 
         public List<DamageBullet> myBullet;
@@ -205,7 +204,7 @@ namespace Poseidon
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
 
             heightMapInfo = ground.Model.Tag as HeightMapInfo;
             if (heightMapInfo == null)
@@ -233,9 +232,7 @@ namespace Poseidon
             //Initialize the game field
             InitializeGameField(Content);
 
-            //Initialize fuel carrier
-            fuelCarrier = new FuelCarrier();
-            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+            
 
             plants = new List<Plant>();
             fruits = new List<Fruit>();

@@ -41,42 +41,7 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Models\cube10uR.x">
-      <Name>cube10uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\cylinder10uR.x">
-      <Name>cylinder10uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\fuelcarrier.x">
-      <Name>fuelcarrier</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.1</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\fuelcell.x">
-      <Name>fuelcell</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\ground.x">
-      <Name>ground</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\pyramid10uR.x">
-      <Name>pyramid10uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\sphere1uR.x">
+    <Compile Include="Models\Miscellaneous\sphere1uR.x">
       <Name>sphere1uR</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -90,7 +55,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\tank.fbx">
+    <Compile Include="Models\MainCharacter\tank.fbx">
       <Name>tank</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -98,7 +63,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\laserFire.wav">
+    <Compile Include="Sounds\SoundEffects\laserFire.wav">
       <Name>laserFire</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
@@ -117,47 +82,47 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\backmusic.mp3">
+    <Compile Include="Sounds\BackgroundMusics\backmusic.mp3">
       <Name>backmusic</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\explosion.wav">
+    <Compile Include="Sounds\SoundEffects\explosion.wav">
       <Name>explosion</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\menu_back.wav">
+    <Compile Include="Sounds\SoundEffects\menu_back.wav">
       <Name>menu_back</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\menu_scroll.wav">
+    <Compile Include="Sounds\SoundEffects\menu_scroll.wav">
       <Name>menu_scroll</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\menu_select3.wav">
+    <Compile Include="Sounds\SoundEffects\menu_select3.wav">
       <Name>menu_select3</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\newmeteor.wav">
+    <Compile Include="Sounds\SoundEffects\newmeteor.wav">
       <Name>newmeteor</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\powerget.wav">
+    <Compile Include="Sounds\SoundEffects\powerget.wav">
       <Name>powerget</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\powershow.wav">
+    <Compile Include="Sounds\SoundEffects\powershow.wav">
       <Name>powershow</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\startmusic.mp3">
+    <Compile Include="Sounds\BackgroundMusics\startmusic.mp3">
       <Name>startmusic</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
@@ -203,13 +168,6 @@
       <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
       <Name>SkinnedModelPipeline</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\fish_fbxascii.fbx">
-      <Name>fish_fbxascii</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\RadarTextures\blackDotLarge.png">
@@ -337,14 +295,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\starfish.fbx">
-      <Name>starfish</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\SeaAnimalModels\turtle.fbx">
       <Name>turtle</Name>
       <Importer>FbxImporter</Importer>
@@ -352,24 +302,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\chest.fbx">
+    <Compile Include="Models\ShipWreckModels\chest.fbx">
       <Name>chest</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\fish2.fbx">
-      <Name>fish2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\shark.fbx">
-      <Name>shark</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -380,14 +316,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\squirrel.fbx">
-      <Name>squirrel</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\red-fruit.fbx">
+    <Compile Include="Models\PlantAndFruitModels\red-fruit.fbx">
       <Name>red-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -395,7 +324,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\blue-fruit.fbx">
+    <Compile Include="Models\PlantAndFruitModels\blue-fruit.fbx">
       <Name>blue-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -403,7 +332,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\green-fruit.fbx">
+    <Compile Include="Models\PlantAndFruitModels\green-fruit.fbx">
       <Name>green-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -411,14 +340,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\Explo1.wav">
+    <Compile Include="Sounds\SoundEffects\Explo1.wav">
       <Name>Explo1</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\equip.wav">
+    <Compile Include="Sounds\SoundEffects\equip.wav">
       <Name>equip</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
@@ -432,24 +361,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\MiinigunWindup#1.wav">
+    <Compile Include="Sounds\SoundEffects\MiinigunWindup#1.wav">
       <Name>MiinigunWindup#1</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\bossBullet1.fbx">
-      <Name>bossBullet1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\shark2.fbx">
-      <Name>shark2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -465,13 +380,6 @@
       <Name>HealthBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\coral1.fbx">
-      <Name>coral1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -522,21 +430,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\chest-closed.fbx">
+    <Compile Include="Models\ShipWreckModels\chest-closed.fbx">
       <Name>chest-closed</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\openChest.wav">
+    <Compile Include="Sounds\SoundEffects\openChest.wav">
       <Name>openChest</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\plant1.fbx">
+    <Compile Include="Models\PlantAndFruitModels\plant1.fbx">
       <Name>plant1</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -692,13 +600,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\diver.fbx">
+    <Compile Include="Models\EnemyModels\diver.fbx">
       <Name>diver</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\mutantshark.fbx">
-      <Name>mutantshark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
@@ -711,28 +614,28 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\normalbullet.fbx">
+    <Compile Include="Models\BulletModels\normalbullet.fbx">
       <Name>normalbullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\healBullet.fbx">
+    <Compile Include="Models\BulletModels\healBullet.fbx">
       <Name>healBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\damageBullet.fbx">
+    <Compile Include="Models\BulletModels\damageBullet.fbx">
       <Name>damageBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\bossBullet.fbx">
+    <Compile Include="Models\BulletModels\bossBullet.fbx">
       <Name>bossBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -740,14 +643,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\chasingBullet.fbx">
+    <Compile Include="Models\BulletModels\chasingBullet.fbx">
       <Name>chasingBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\mutantSharkVer2.fbx">
+    <Compile Include="Models\EnemyModels\mutantSharkVer2.fbx">
       <Name>mutantSharkVer2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
@@ -768,14 +671,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\bubble.wav">
+    <Compile Include="Sounds\SoundEffects\bubble.wav">
       <Name>bubble</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\diver_knife.fbx">
+    <Compile Include="Models\EnemyModels\diver_knife.fbx">
       <Name>diver_knife</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
@@ -824,7 +727,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\herculesBullet.fbx">
+    <Compile Include="Models\BulletModels\herculesBullet.fbx">
       <Name>herculesBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>

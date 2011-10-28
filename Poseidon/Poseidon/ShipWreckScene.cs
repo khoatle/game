@@ -164,7 +164,7 @@ namespace Poseidon
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
             ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene");
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
             //heightMapInfo = ground.Model.Tag as HeightMapInfo;
             //if (heightMapInfo == null)
             //{
@@ -652,7 +652,7 @@ namespace Poseidon
                         {
                             chest.opened = true;
                             audio.OpenChest.Play();
-                            chest.Model = Content.Load<Model>("Models/chest");
+                            chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward

@@ -157,8 +157,8 @@ namespace Poseidon
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
-            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom");
-            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom");
+            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom1");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom2");
             boxBackground = Content.Load<Texture2D>("Image/Miscellaneous/solidred");
 
             // Loading the cutscenes

@@ -903,13 +903,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\classroom.jpg">
-      <Name>classroom</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\Miscellaneous\quizButton.png">
       <Name>quizButton</Name>
       <Importer>TextureImporter</Importer>
@@ -948,6 +941,20 @@
   <ItemGroup>
     <Compile Include="Image\Miscellaneous\NextButton.png">
       <Name>NextButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\classroom1.jpg">
+      <Name>classroom1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\classroom2.jpg">
+      <Name>classroom2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

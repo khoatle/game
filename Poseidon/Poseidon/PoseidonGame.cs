@@ -130,16 +130,16 @@ namespace Poseidon
             Services.AddService(typeof(AudioLibrary), audio);
 
             //For general game control
-            actionTexture = Content.Load<Texture2D>("Image/rockrainenhanced");
-            stunnedTexture = Content.Load<Texture2D>("Image/dizzy-icon");
+            actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
+            stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
             radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
 
             //For the Help scene
-            helpBackgroundTexture = Content.Load<Texture2D>("Image/helpbackground");
-            helpForegroundTexture = Content.Load<Texture2D>("Image/helpForeground");
+            helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");
+            helpForegroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpForeground");
             helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture, spriteBatch);
             Components.Add(helpScene);
 
@@ -149,17 +149,17 @@ namespace Poseidon
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
-            startBackgroundTexture = Content.Load<Texture2D>("Image/startbackground");
-            startElementsTexture = Content.Load<Texture2D>("Image/startSceneElements");
+            startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
-            LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
-            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            boxBackground = Content.Load<Texture2D>("Image/solidred");
+            LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
+            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom");
+            boxBackground = Content.Load<Texture2D>("Image/Miscellaneous/solidred");
 
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();

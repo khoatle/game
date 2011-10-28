@@ -42,26 +42,26 @@ namespace Poseidon
                 {
                     enemies[i] = new ShootingEnemy();
                     enemies[i].Name = "Shooting Enemy";
-                    enemies[i].LoadContent(Content, "Models/diver");
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver");
                     enemies[i].Load(1, 25, 24);
                 }
                 else if (i < numShootingEnemies + numCombatEnemies){
                     enemies[i] = new CombatEnemy();
                     enemies[i].Name = "Combat Enemy";
-                    enemies[i].LoadContent(Content, "Models/diver_knife");
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_knife");
                     enemies[i].Load(1, 30, 24);// 31 60 for attack
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark)
                 {
                     MutantShark mutantShark = new MutantShark();
-                    mutantShark.LoadContent(Content, "Models/mutantSharkVer2");
+                    mutantShark.LoadContent(Content, "Models/EnemyModels/mutantSharkVer2");
                     mutantShark.Name = "mutant shark";
                     enemies[i] = mutantShark;
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
                 {
                     Terminator terminator = new Terminator();
-                    terminator.LoadContent(Content, "Models/diver");
+                    terminator.LoadContent(Content, "Models/EnemyModels/diver");
                     if (currentLevel == 4) terminator.Name = "???";
                     else terminator.Name = "terminator";
                     terminator.Load();
@@ -98,7 +98,7 @@ namespace Poseidon
                 fish[i] = new Fish();
                 if (type == 0)
                 {
-                    fish[i].LoadContent(Content, "Models/turtle");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/turtle");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "turtle";
                     fish[i].happy_talk = "We are reptiles from much before the Jurassic age. Oh, I cry not for sorrow, just to get the salt out.";
@@ -106,15 +106,15 @@ namespace Poseidon
                 }
                 else if (type == 1)
                 {
-                    fish[i].LoadContent(Content, "Models/dolphin");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphin");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "dolphin";
                     fish[i].happy_talk = "We remind you to play, play, play, for you will find great power in play.";
                     fish[i].sad_talk = "Though we try to be friends with humans, they always hurt us with their pollution, propellers and what not!";
                 }
                 else if (type == 2)
-                {           
-                    fish[i].LoadContent(Content, "Models/manetee");
+                {
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/manetee");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "manetee";
                     fish[i].happy_talk = "Do not call me sea-cow. Do I look that fat?";
@@ -122,7 +122,7 @@ namespace Poseidon
                 }
                 else if (type == 3)
                 {
-                    fish[i].LoadContent(Content, "Models/stingray");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/stingray");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "sting ray";
                     fish[i].happy_talk = "I can't see you as my eyes are on top. But I can sense a bot with my electro-receptors.";
@@ -130,7 +130,7 @@ namespace Poseidon
                 }
                 else if (type == 4)
                 {
-                    fish[i].LoadContent(Content, "Models/orca");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/orca");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "orca";
                     fish[i].happy_talk = "Move away, you little bot, here comes the killer whale.";
@@ -138,8 +138,8 @@ namespace Poseidon
                 }
                 else if (type == 5)
                 {
-                    
-                    fish[i].LoadContent(Content, "Models/seal");
+
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/seal");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "seal";
                     fish[i].happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
@@ -147,7 +147,7 @@ namespace Poseidon
                 }
                 else if (type == 6)
                 {
-                    fish[i].LoadContent(Content, "Models/normalshark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "shark";
                     fish[i].happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
@@ -155,7 +155,7 @@ namespace Poseidon
                 }
                 else if (type == 7)
                 {
-                    fish[i].LoadContent(Content, "Models/leopardshark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardshark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "leopard shark";
                     fish[i].happy_talk = "No, I am not racist and I date all kinds of shark, not you, dear bot.";
@@ -163,7 +163,7 @@ namespace Poseidon
                 }
                 else if (type == 8)
                 {
-                    fish[i].LoadContent(Content, "Models/hammershark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/hammershark");
                     fish[i].Load(1, 24, 24);
                     fish[i].Name = "hammer shark";
                     fish[i].happy_talk = "I have 360 degree binocular vision. I can detect an electrical signal of half a billionth of a volt. What superpower you brag about?";
@@ -272,7 +272,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
  
             h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
-            h.loadContent(Content, "Models/healBullet");
+            h.loadContent(Content, "Models/BulletModels/healBullet");
             healthBullet.Add(h);
         }
 
@@ -285,7 +285,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
-            d.loadContent(Content, "Models/damageBullet");
+            d.loadContent(Content, "Models/BulletModels/damageBullet");
             myBullet.Add(d);
         }
 
@@ -311,9 +311,9 @@ namespace Poseidon
             newBullet.initialize(obj.Position, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
             {
-                newBullet.loadContent(PlayGameScene.Content, "Models/bossBullet");
+                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");
             }
-            else newBullet.loadContent(PlayGameScene.Content, "Models/normalbullet");
+            else newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
             bullets.Add(newBullet);         
         }
 
@@ -335,7 +335,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
-            newBullet.loadContent(PlayGameScene.Content, "Models/chasingBullet");
+            newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
         }
 

@@ -20,7 +20,7 @@ namespace Poseidon
         public HerculesBullet(ContentManager content, SpriteBatch spriteBatch, GameScene inGameScene)
             : base()
         {
-            energyBallTexture = content.Load<Texture2D>("Image/energyBall-red");
+            energyBallTexture = content.Load<Texture2D>("Image/Miscellaneous/energyBall-red");
             this.spriteBatch = spriteBatch;
             this.inGameScene = inGameScene;
         }

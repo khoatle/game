@@ -74,9 +74,10 @@ namespace Poseidon.MiniGames
             //statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             quizFont = Content.Load<SpriteFont>("Fonts/quiz");
 
-            buttonTexture = Content.Load<Texture2D>("Image/quizButton");
-            selectedButtonTexture = Content.Load<Texture2D>("Image/quizButtonSelected");
-            nextButtonTexture = Content.Load<Texture2D>("Image/NextButton");
+
+            nextButtonTexture = Content.Load<Texture2D>("Image/Miscellaneous/NextButton");
+            buttonTexture = Content.Load<Texture2D>("Image/Miscellaneous/quizButton");
+            selectedButtonTexture = Content.Load<Texture2D>("Image/Miscellaneous/quizButtonSelected");
 
             this.game = game;
 

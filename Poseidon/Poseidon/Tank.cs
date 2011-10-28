@@ -246,7 +246,7 @@ namespace Poseidon
         public void Load(ContentManager content)
         {
             // Load the tank model from the ContentManager.
-            tankModel = content.Load<Model>("Models/tank");
+            tankModel = content.Load<Model>("Models/MainCharacter/tank");
             Model = tankModel;
             // Look up shortcut references to the bones we are going to animate.
             leftBackWheelBone = tankModel.Bones["l_back_wheel_geo"];

@@ -49,7 +49,6 @@ namespace Poseidon
         GameState prevGameState;
         GameObject boundingSphere;
 
-        FuelCarrier fuelCarrier;
         public List<ShipWreck> shipWrecks;
 
         public List<DamageBullet> myBullet;
@@ -207,7 +206,7 @@ namespace Poseidon
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
-            boundingSphere.Model = Content.Load<Model>("Models/sphere1uR");
+            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
 
             heightMapInfo = ground.Model.Tag as HeightMapInfo;
             if (heightMapInfo == null)
@@ -230,14 +229,12 @@ namespace Poseidon
                 bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
 
-            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/LevelObjectiveIcon");
+            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
 
             //Initialize the game field
             InitializeGameField(Content);
 
-            //Initialize fuel carrier
-            fuelCarrier = new FuelCarrier();
-            fuelCarrier.LoadContent(Content, "Models/fuelcarrier");
+            
 
             plants = new List<Plant>();
             fruits = new List<Fruit>();
@@ -248,8 +245,8 @@ namespace Poseidon
             roundTimer = roundTime;
 
             //Load healthbar
-            HealthBar = Content.Load<Texture2D>("Image/HealthBar");
-            EnvironmentBar = Content.Load<Texture2D>("Image/EnvironmentBar");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
+            EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");

@@ -22,7 +22,7 @@ namespace Poseidon
         public void LoadContent(ContentManager Content, Vector3 position, bool fromSeaBed, float startingScale)
         {
             random = new Random();
-            bubbleTexture = Content.Load<Texture2D>("Image/bubbleBlue");
+            bubbleTexture = Content.Load<Texture2D>("Image/Miscellaneous/bubbleBlue");
             bubble3DPos = position;
             if (random.Next(3) == 2) bubble3DPos.X += 2;
             else if (random.Next(3) == 1) bubble3DPos.X -= 2;

@@ -15,7 +15,7 @@ namespace Poseidon
             if (currentLevel == 0)
             {
 //<<<<<<< HEAD
-//                // kill all enemies to win this level
+                // kill all enemies to win this level
 //                if (enemiesAmount == 0) return true;
 //                if (isBossKilled) return true;
 //=======
@@ -116,7 +116,7 @@ namespace Poseidon
         {
             //Always lose when the environment is completely destroyed
             if (Tank.currentEnvPoint <= 0)   return true;
-//>>>>>>> f49ef1902773f1f14ac5170017a5a6c3d59cd41d
+
             if (currentLevel == 0)
             {
                 if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint <= 0.8)) 

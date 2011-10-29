@@ -10,11 +10,14 @@ namespace Poseidon.MiniGames
 {
     class RectangleBox {
         private Rectangle box;
-        protected int posX;
-        protected int posY;
-        protected int width;
-        protected int height;
+        public int posX;
+        public int posY;
+        public int width;
+        public int height;
         private Texture2D background;
+
+        public RectangleBox() { 
+        }
 
         public RectangleBox(int X, int Y, int recWidth, int recHeight) {
             posX = X;

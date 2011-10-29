@@ -159,7 +159,7 @@ namespace Poseidon
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
             typeGameBackgroundTexture = Content.Load<Texture2D>("Image/classroom");
-            boxBackground = Content.Load<Texture2D>("Image/solidred");
+            boxBackground = Content.Load<Texture2D>("Image/backgroundTypeGame");
 
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();

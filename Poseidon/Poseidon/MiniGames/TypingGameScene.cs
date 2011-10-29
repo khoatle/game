@@ -154,13 +154,18 @@ namespace Poseidon.MiniGames
             {
                 string drawThis = "" + (int)(timeInterval - elapsedSeconds + 0.5);
                 spriteBatch.Draw(boxBackground, new Vector2(startBox.posX, startBox.posY), Color.White);
-                spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
-
+ 
                 if (timeInterval - elapsedSeconds >= 6)
                 {
+                    drawThis = "Wait: " + drawThis; 
+                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
+
                     spriteBatch.Draw(trafficLightRed, new Vector2(10, 10), Color.White);
                 }
                 else {
+                    drawThis = "Ready: " + drawThis;
+                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
+
                     spriteBatch.Draw(trafficLightYellow, new Vector2(10, 10), Color.White);
                 }
             }

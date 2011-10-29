@@ -40,9 +40,14 @@ namespace Poseidon {
             scaledSphere = BoundingSphere;
 
             float scale = 1.0f;
-            if (Name.Contains("dolphin") || Name.Contains("turtle")) scale = 0.5f;
-            if (Name.Contains("manetee")) scale = 0.6f;
-            if (Name.Contains("seal")) scale = 1.1f;
+            if (Name.Contains("turtle")) scale = 0.4f;
+            if (Name.Contains("dolphin")) scale = 0.25f;
+            if (Name.Contains("manetee")) scale = 0.4f;
+            if (Name.Contains("sting ray")) scale = 0.5f;
+            if (Name.Contains("orca")) scale = 0.5f;
+            if (Name.Contains("seal")) scale = 0.5f;
+            if (Name.Contains("shark")) scale = 0.5f;
+
             scaledSphere.Radius *= scale;
 
             BoundingSphere =

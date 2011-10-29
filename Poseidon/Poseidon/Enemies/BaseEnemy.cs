@@ -65,7 +65,10 @@ namespace Poseidon
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.1f;
+            float scale = 1.0f;
+            if (Name.Contains("Shooting Enemy")) scale = 0.05f;
+            if (Name.Contains("Combat Enemy")) scale = 0.06f;
+            scaledSphere.Radius *= scale;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             //isBigBoss = true;
@@ -130,13 +133,16 @@ namespace Poseidon
                     && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))
             {
                 Position = futurePosition;
-                BoundingSphere.Center = Position;
+                //BoundingSphere.Center = Position;
+                BoundingSphere.Center.X += speed * headingDirection.X;
+                BoundingSphere.Center.Z += speed * headingDirection.Z;
             }
         }
 
         public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
         }
-
+        public virtual void ChangeBoundingSphere()
+        { }
         public override void Draw(Matrix view, Matrix projection)
         {
             bones = clipPlayer.GetSkinTransforms();
@@ -242,8 +248,8 @@ namespace Poseidon
                     BoundingSphere updatedSphere;
                     updatedSphere = BoundingSphere;
 
-                    updatedSphere.Center.X = Position.X;
-                    updatedSphere.Center.Z = Position.Z;
+                    updatedSphere.Center.X += headingDirection.X;//Position.X;
+                    updatedSphere.Center.Z += headingDirection.Z;// Position.Z;
                     BoundingSphere = new BoundingSphere(updatedSphere.Center,
                         updatedSphere.Radius);
 

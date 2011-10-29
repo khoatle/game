@@ -13,12 +13,6 @@ namespace Poseidon
     class MutantShark : CombatEnemy
     {
 
-        //Matrix[] bones;
-        //SkinningData skd;
-        //ClipPlayer clipPlayer;
-        //Matrix fishMatrix;
-        //Quaternion qRotation = Quaternion.Identity;
-
         public MutantShark() : base() {
         }
 
@@ -32,7 +26,7 @@ namespace Poseidon
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            //scaledSphere.Radius *= 1.5f;
+            scaledSphere.Radius *= 0.6f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
@@ -44,12 +38,6 @@ namespace Poseidon
             BarrierType = modelName;
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
-
-            BoundingSphere scaledSphere;
-            scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.3f;
-            BoundingSphere =
-                new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             isBigBoss = true;
             health = 1000;
             maxHealth = 1000;
@@ -57,8 +45,13 @@ namespace Poseidon
             experienceReward = 200; //1000
             this.Load(1,24,24);
         }
+        public override void ChangeBoundingSphere()
+        {
+            //BoundingSphere.Center += new Vector3(20,0,0);
+        }
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
         {
+
             // if clip player has been initialized, update it
             if (clipPlayer != null)
             {
@@ -160,47 +153,5 @@ namespace Poseidon
                 }
             }
         }
-        // Go straight
-        protected override void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
-        {
-            
-            Vector3 futurePosition = Position + speed * headingDirection;
-            if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
-                    && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))
-            {
-                Position = futurePosition;
-                BoundingSphere.Center = Position;
-            }
-
-        }
-        //public override void Draw(Matrix view, Matrix projection)
-        //{
-        //    if (clipPlayer == null)
-        //    {
-        //        // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
-        //        base.Draw(view, projection);
-        //        return;
-        //    }
-
-        //    bones = clipPlayer.GetSkinTransforms();
-
-        //    foreach (ModelMesh mesh in Model.Meshes)
-        //    {
-        //        foreach (SkinnedEffect effect in mesh.Effects)
-        //        {
-        //            effect.SetBoneTransforms(bones);
-        //            effect.View = view;
-        //            effect.Projection = projection;
-
-        //            effect.FogEnabled = true;
-        //            effect.FogStart = GameConstants.FogStart;
-        //            effect.FogEnd = GameConstants.FogEnd;
-        //            effect.FogColor = GameConstants.FogColor.ToVector3();
-        //        }
-        //        mesh.Draw();
-        //    }
-
-        //}
-
     }
 }

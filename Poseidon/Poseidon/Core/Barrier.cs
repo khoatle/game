@@ -44,7 +44,7 @@ namespace Poseidon
             BoundingSphere = CalculateBoundingSphere();
 
             BoundingSphere scaledSphere;
-            scaledSphere = BoundingSphere;
+            scaledSphere = BoundingSphere;        
             scaledSphere.Radius *= GameConstants.BarrierBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);

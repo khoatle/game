@@ -909,7 +909,7 @@ namespace Poseidon
         {
             string message = "You have not had the key to treasure chests yet, try to help the fish first so that they will help you find the key in return";
             message = AddingObjects.wrapLine(message, 800, paintingFont);
-            spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.White);
+            spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.SandyBrown);
             spriteBatch.DrawString(paintingFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X - 400, 20), Color.DarkRed);
         }
         private void DrawPainting()

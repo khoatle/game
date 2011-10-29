@@ -858,6 +858,7 @@
       <Name>font</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -946,6 +947,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\backgroundTypeGame.jpg">
+      <Name>backgroundTypeGame</Name>
+    </Compile>
     <Compile Include="Image\SceneTextures\keyfound.jpg">
       <Name>keyfound</Name>
       <Importer>TextureImporter</Importer>
@@ -964,6 +968,23 @@
       <Name>diver_knife_orange_yellow</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\traffic_green.jpg">
+      <Name>traffic_green</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\traffic_red.jpg">
+      <Name>traffic_red</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\traffic_yellow.jpg">
+      <Name>traffic_yellow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

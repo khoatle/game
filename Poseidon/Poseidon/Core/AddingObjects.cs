@@ -512,6 +512,7 @@ namespace Poseidon
             }
             return false;
         }
+
         public static void PlaceStaticObjects(List<StaticObject> staticObjects, List<ShipWreck> shipWrecks, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
             Vector3 tempCenter;
@@ -530,6 +531,7 @@ namespace Poseidon
                     staticObject.BoundingSphere.Radius);
             }
         }
+
         public static void PlaceStaticObjectsOnShipFloor(List<StaticObject> staticObjects, List<TreasureChest> treasureChests, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
             Vector3 tempCenter;

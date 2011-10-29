@@ -155,6 +155,7 @@ namespace Poseidon
                 startBackgroundTexture, startElementsTexture);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
+
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom1");
@@ -402,9 +403,9 @@ namespace Poseidon
             {
                 Random rand = new Random();
                 //if (rand.Next(2) == 0)
-                    ShowScene(quizzGameScene);
+                    //ShowScene(quizzGameScene);
                 //else
-                   // ShowScene(typeGameScene);
+                    ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()

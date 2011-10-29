@@ -70,6 +70,7 @@ namespace Poseidon
         protected Texture2D actionTexture;
         protected Texture2D stunnedTexture;
         protected Texture2D gameObjectiveIconTexture;
+        protected Texture2D noKeyScreen;
         // He died inside the ship wreck?
         public bool returnToMain;
         // has artifact?
@@ -201,6 +202,8 @@ namespace Poseidon
 
             //Load healthbar
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
+
+            noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/no_key");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
@@ -904,7 +907,10 @@ namespace Poseidon
         }
         private void DrawNoKey()
         {
-            spriteBatch.DrawString(statsFont, "You have not had the key to treasure chests yet, try to help the fish 1st so that they will help you find the key in return", new Vector2(0, 0), Color.White);
+            string message = "You have not had the key to treasure chests yet, try to help the fish first so that they will help you find the key in return";
+            message = AddingObjects.wrapLine(message, 800, paintingFont);
+            spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.White);
+            spriteBatch.DrawString(paintingFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X - 400, 20), Color.DarkRed);
         }
         private void DrawPainting()
         {

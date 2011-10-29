@@ -40,6 +40,7 @@ namespace Poseidon
         SpriteBatch spriteBatch;
         SpriteFont statsFont;
         SpriteFont fishTalkFont;
+        SpriteFont keyFoundFont;
         SpriteFont menuSmall;
         GameObject ground;
         public static Camera gameCamera;
@@ -192,6 +193,7 @@ namespace Poseidon
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            keyFoundFont = Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -960,9 +962,11 @@ namespace Poseidon
         }
         private void DrawFoundKey()
         {
+            string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help!!";
+            message = AddingObjects.wrapLine(message, 800, keyFoundFont);
             spriteBatch.Begin();
-            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - 480, GraphicDevice.Viewport.TitleSafeArea.Center.Y-343, 960, 686), Color.White);
-            spriteBatch.DrawString(fishTalkFont, "The fishes have helped you to find the hidden key to treasure chests in return for your help", new Vector2(0, 0), Color.White);
+            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreen.Width/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreen.Height/2, foundKeyScreen.Width, foundKeyScreen.Height), Color.White);
+            spriteBatch.DrawString(keyFoundFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X-400, 20), Color.DarkRed);
             spriteBatch.End();
         }
         /// <summary>

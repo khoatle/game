@@ -18,7 +18,6 @@ namespace Poseidon
         public static void UseHerculesBow(Tank tank, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameScene inGameScene)
         {
             float healthiness = (float)Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
-            System.Diagnostics.Debug.WriteLine(healthiness);
             HerculesBullet d = new HerculesBullet(Content, spriteBatch, inGameScene);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);

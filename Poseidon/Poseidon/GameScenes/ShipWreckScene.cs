@@ -161,7 +161,6 @@ namespace Poseidon
             //Random random = new Random();
             //int random_terrain = random.Next(5);
             //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
-            //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
             ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene");
@@ -223,7 +222,6 @@ namespace Poseidon
             //Random random = new Random();
             //int random_terrain = random.Next(5);
             //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
-            //System.Diagnostics.Debug.WriteLine(wood_terrain_name);
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
             //reset position for the tank
@@ -919,13 +917,13 @@ namespace Poseidon
         {
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
-            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(0, 0), Color.Navy);
+            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(0, 0), oceanPaintings.paintings[paintingToShow].color);
             spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
-                Color.Orange);
+                oceanPaintings.paintings[paintingToShow].color);
 
             String line = AddingObjects.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width, paintingFont);
             spriteBatch.DrawString(paintingFont, line,
-                new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), Color.Orange);
+                new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
         }
         private void DrawFoundRelicScene(int skillID)

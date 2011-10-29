@@ -558,7 +558,6 @@ namespace Poseidon
             int barHeight = 22;
             double healthiness = (double)currentHealth/maxHealth;
 
-            //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
             //Draw the negative space for the health bar
             spriteBatch.Draw(HealthBar,
                 new Rectangle(barX, barY, HealthBar.Width, barHeight),
@@ -590,7 +589,6 @@ namespace Poseidon
             Color typeColor = Color.Black;
             int barWidth = Bar.Width/2;
             double healthiness = (double)currentEnvironment / maxEnvironemnt;
-            //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
             //Draw the negative space for the health bar
             spriteBatch.Draw(Bar,
                 new Rectangle(barX, barY, barWidth, Bar.Height),
@@ -626,7 +624,6 @@ namespace Poseidon
             int barHeight = 22;
             double experience = (double)currentExperience / nextLevelExp;
             type += " " + level.ToString();
-            //System.Diagnostics.Debug.WriteLine(currentHealth+","+maxHealth);
             //Draw the negative space for the health bar
             spriteBatch.Draw(LevelBar,
                 new Rectangle(barX, barY, LevelBar.Width, barHeight),

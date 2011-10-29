@@ -44,6 +44,7 @@ namespace Poseidon.MiniGames
         public int numRightAnswer = 0;
 
         bool displayRightWrongAnswer = false;
+        bool rightAnswer = false;
 
         Vector2 positionA, positionB, positionC, positionD, positionAns, positionQs;
         Rectangle rectA, rectB, rectC, rectD, nextButtonRect;
@@ -164,6 +165,7 @@ namespace Poseidon.MiniGames
                     clicked = false;
                     if (questionAnswered < 4) questionAnswered++;
                     displayRightWrongAnswer = false;
+                    rightAnswer = false;
                 }
             }
             else
@@ -211,7 +213,15 @@ namespace Poseidon.MiniGames
                     selectedChoice = 3;
                     clicked = false;
                 }
-                if (selectedChoice != -1) displayRightWrongAnswer = true;
+                if (selectedChoice != -1)
+                {
+                    displayRightWrongAnswer = true;
+                    if (selectedChoice == quizzesLibrary.quizzesList[questionID].answerID)
+                    {
+                        rightAnswer = true;
+                        numRightAnswer++;
+                    }
+                }
             }
             base.Update(gameTime);
         }
@@ -242,16 +252,15 @@ namespace Poseidon.MiniGames
             if (displayRightWrongAnswer)
             {
                 Color ansButtonColor;
-                if (selectedChoice != quizzesLibrary.quizzesList[questionID].answerID)
+                if (rightAnswer)
                 {
-                    spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
-                    ansButtonColor = Color.Red;
+                    spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
+                    ansButtonColor = Color.Yellow;
                 }
                 else
                 {
-                    numRightAnswer++;
-                    spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
-                    ansButtonColor = Color.Yellow;
+                    spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
+                    ansButtonColor = Color.Red;
                 }
                 switch (selectedChoice)
                 {

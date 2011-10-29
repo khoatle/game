@@ -205,7 +205,6 @@ namespace Poseidon
             Random random = new Random();
             int random_level = random.Next(20);
             string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
-            //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
@@ -275,6 +274,10 @@ namespace Poseidon
         {
             isBossKilled = false;
 
+            //User must find the key at every level
+            firstShow = true;
+            showFoundKey = false;
+
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
@@ -282,7 +285,6 @@ namespace Poseidon
             Random random = new Random();
             int random_level = random.Next(20);
             string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
-            //System.Diagnostics.Debug.WriteLine(terrain_name);
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);

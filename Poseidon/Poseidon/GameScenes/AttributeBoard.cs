@@ -246,7 +246,6 @@ namespace Poseidon
                     BackupColor = Color.DarkOrange;
                     break;
             }
-            //System.Diagnostics.Debug.WriteLine(currentUnassignedPts+","+maxUnassignedPts);
             //Draw the negative space for the UnassignedPts bar
             spriteBatch.Draw(UnassignedPtsBar,
                 new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),

@@ -588,6 +588,11 @@ namespace Poseidon
                             fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             fireRateUp = 2.0f;
                         }
+                        else if (fruits[curCell].powerType == 4)
+                        {
+                            currentHitPoint += 100;
+                            if (currentHitPoint > maxHitPoint) currentHitPoint = maxHitPoint;
+                        }
                         RetrievedSound.Play();
                     }
                 }

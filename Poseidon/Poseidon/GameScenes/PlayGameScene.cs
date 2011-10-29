@@ -802,7 +802,7 @@ namespace Poseidon
                     {
                         if (plant.timeForFruit == true)
                         {
-                            int powerType = random.Next(3) + 1;
+                            int powerType = random.Next(4) + 1;
                             Fruit fruit = new Fruit(powerType);
                             fruits.Add(fruit);
                             fruit.LoadContent(Content, plant.Position);
@@ -1069,15 +1069,15 @@ namespace Poseidon
                         spriteBatch.End();
                         RestoreGraphicConfig();
                     }
-                    RasterizerState rs = new RasterizerState();
-                    rs.FillMode = FillMode.WireFrame;
-                    GraphicDevice.RasterizerState = rs;
-                    enemies[i].DrawBoundingSphere(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix, boundingSphere);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //enemies[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    rs = new RasterizerState();
-                    rs.FillMode = FillMode.Solid;
-                    GraphicDevice.RasterizerState = rs;
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
                 }
             }
 

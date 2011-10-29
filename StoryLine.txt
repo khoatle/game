@@ -13,11 +13,18 @@ information bar: click on a fish to display information. --less
 
 TODO:
 Win/lost scene & win/lost musics
-environment bar -- deb
-level obective -- hien on putting obj, Deb-- display them.
+level obective , Deb-- display them.
 Sound 
 poison: health reduce over time -- khoa
 type game -- khoa
+
+retexture diver:
+- orange suit, blue other things
+- red suit, metallic other things
+
+For making game's trailer:
+- 1st use Adobe's Premiere: capturing game's footage & integrate subtitles
+- 2d use Adobe's AfterEffects: cool effects & transitions
 
 GamePlay:
 
@@ -114,3 +121,13 @@ level Obj: Kill the terminator.
 
 Last Cut scene: Savior of the sea. 
 
+
+
+Video Plan:
+Real Pictures of polluted sea -- 5 sec
+How severe environment in year xxxx - 5-10s
+Cyborg sent and bad guys prevent him
+Helped by Poseidon (sample cut scenes ) - 10-20 s
+Actual fighting scene with music with skills and effects = 60s
+Talk everything about the game. - 2-3 mins
+Coming soon..

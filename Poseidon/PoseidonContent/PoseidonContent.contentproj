@@ -36,42 +36,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\cube10uR.x">
-      <Name>cube10uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
+    <Compile Include="Image\Miscellaneous\actionTextures.png">
+      <Name>actionTextures</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Models\cylinder10uR.x">
-      <Name>cylinder10uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\fuelcarrier.x">
-      <Name>fuelcarrier</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.1</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\fuelcell.x">
-      <Name>fuelcell</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.03</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\ground.x">
-      <Name>ground</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\pyramid10uR.x">
-      <Name>pyramid10uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-    <Compile Include="Models\sphere1uR.x">
+    <Compile Include="Models\Miscellaneous\sphere1uR.x">
       <Name>sphere1uR</Name>
       <Importer>XImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -85,7 +55,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\tank.fbx">
+    <Compile Include="Models\MainCharacter\tank.fbx">
       <Name>tank</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -93,66 +63,66 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\laserFire.wav">
+    <Compile Include="Sounds\SoundEffects\laserFire.wav">
       <Name>laserFire</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\helpbackground.jpg">
+    <Compile Include="Image\SceneTextures\helpbackground.jpg">
       <Name>helpbackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\helpforeground.jpg">
+    <Compile Include="Image\SceneTextures\helpforeground.jpg">
       <Name>helpforeground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\backmusic.mp3">
+    <Compile Include="Sounds\BackgroundMusics\backmusic.mp3">
       <Name>backmusic</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\explosion.wav">
+    <Compile Include="Sounds\SoundEffects\explosion.wav">
       <Name>explosion</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\menu_back.wav">
+    <Compile Include="Sounds\SoundEffects\menu_back.wav">
       <Name>menu_back</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\menu_scroll.wav">
+    <Compile Include="Sounds\SoundEffects\menu_scroll.wav">
       <Name>menu_scroll</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\menu_select3.wav">
+    <Compile Include="Sounds\SoundEffects\menu_select3.wav">
       <Name>menu_select3</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\newmeteor.wav">
+    <Compile Include="Sounds\SoundEffects\newmeteor.wav">
       <Name>newmeteor</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\powerget.wav">
+    <Compile Include="Sounds\SoundEffects\powerget.wav">
       <Name>powerget</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\powershow.wav">
+    <Compile Include="Sounds\SoundEffects\powershow.wav">
       <Name>powershow</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
-    <Compile Include="Sound\startmusic.mp3">
+    <Compile Include="Sounds\BackgroundMusics\startmusic.mp3">
       <Name>startmusic</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
@@ -171,33 +141,19 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\startbackground.jpg">
+    <Compile Include="Image\SceneTextures\startbackground.jpg">
       <Name>startbackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\startSceneElements.png">
+    <Compile Include="Image\SceneTextures\startSceneElements.png">
       <Name>startSceneElements</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\rockrainenhanced.png">
-      <Name>rockrainenhanced</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\Sea Monster.png">
-      <Name>Sea Monster</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\terrain0.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain0.bmp">
       <Name>terrain0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
@@ -212,20 +168,6 @@
       <Project>{4636C7E1-B845-4B83-B96D-64A11B8A4515}</Project>
       <Name>SkinnedModelPipeline</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\cursor.png">
-      <Name>cursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\fish_fbxascii.fbx">
-      <Name>fish_fbxascii</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\RadarTextures\blackDotLarge.png">
@@ -245,201 +187,136 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\shootcursor.png">
+    <Compile Include="Image\CursorTextures\shootcursor.png">
       <Name>shootcursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\stunned.png">
-      <Name>stunned</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\terrain2.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain2.bmp">
       <Name>terrain2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\terrain1.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain1.bmp">
       <Name>terrain1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\terrain10.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain10.bmp">
       <Name>terrain10</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain11.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain11.bmp">
       <Name>terrain11</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain12.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain12.bmp">
       <Name>terrain12</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain13.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain13.bmp">
       <Name>terrain13</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain14.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain14.bmp">
       <Name>terrain14</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain15.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain15.bmp">
       <Name>terrain15</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain16.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain16.bmp">
       <Name>terrain16</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain17.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain17.bmp">
       <Name>terrain17</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain18.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain18.bmp">
       <Name>terrain18</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain19.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain19.bmp">
       <Name>terrain19</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain3.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain3.bmp">
       <Name>terrain3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain4.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain4.bmp">
       <Name>terrain4</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain5.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain5.bmp">
       <Name>terrain5</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain6.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain6.bmp">
       <Name>terrain6</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain7.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain7.bmp">
       <Name>terrain7</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain8.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain8.bmp">
       <Name>terrain8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\terrain9.bmp">
+    <Compile Include="Image\TerrainHeightMaps\terrain9.bmp">
       <Name>terrain9</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\wood-terrain0.bmp">
-      <Name>wood-terrain0</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\wood-terrain1.bmp">
-      <Name>wood-terrain1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\wood-terrain2.bmp">
-      <Name>wood-terrain2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\wood-terrain3.bmp">
-      <Name>wood-terrain3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\wood-terrain4.bmp">
-      <Name>wood-terrain4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\starfish.fbx">
-      <Name>starfish</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.3</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\turtle.fbx">
+    <Compile Include="Models\SeaAnimalModels\turtle.fbx">
       <Name>turtle</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\chest.fbx">
+    <Compile Include="Models\ShipWreckModels\chest.fbx">
       <Name>chest</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\fish2.fbx">
-      <Name>fish2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\shark.fbx">
-      <Name>shark</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\orca.fbx">
+    <Compile Include="Models\SeaAnimalModels\orca.fbx">
       <Name>orca</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\squirrel.fbx">
-      <Name>squirrel</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\red-fruit.fbx">
+    <Compile Include="Models\PlantAndFruitModels\red-fruit.fbx">
       <Name>red-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -447,7 +324,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\blue-fruit.fbx">
+    <Compile Include="Models\PlantAndFruitModels\blue-fruit.fbx">
       <Name>blue-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -455,7 +332,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\green-fruit.fbx">
+    <Compile Include="Models\PlantAndFruitModels\green-fruit.fbx">
       <Name>green-fruit</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -463,21 +340,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\orca1.fbx">
-      <Name>orca1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sound\Explo1.wav">
+    <Compile Include="Sounds\SoundEffects\Explo1.wav">
       <Name>Explo1</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\equip.wav">
+    <Compile Include="Sounds\SoundEffects\equip.wav">
       <Name>equip</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
@@ -491,28 +361,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\MiinigunWindup#1.wav">
+    <Compile Include="Sounds\SoundEffects\MiinigunWindup#1.wav">
       <Name>MiinigunWindup#1</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\bossBullet1.fbx">
-      <Name>bossBullet1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\shark2.fbx">
-      <Name>shark2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\shipwreckscene.fbx">
+    <Compile Include="Models\ShipWreckModels\shipwreckscene.fbx">
       <Name>shipwreckscene</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -520,28 +376,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\HealthBar.png">
+    <Compile Include="Image\Miscellaneous\HealthBar.png">
       <Name>HealthBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\coral1.fbx">
-      <Name>coral1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\shipwreck2.fbx">
+    <Compile Include="Models\ShipWreckModels\shipwreck2.fbx">
       <Name>shipwreck2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\shipwreck3.fbx">
+    <Compile Include="Models\ShipWreckModels\shipwreck3.fbx">
       <Name>shipwreck3</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -549,7 +398,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\shipwreck4.fbx">
+    <Compile Include="Models\ShipWreckModels\shipwreck4.fbx">
       <Name>shipwreck4</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -557,7 +406,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\barrel.fbx">
+    <Compile Include="Models\ShipWreckModels\barrel.fbx">
       <Name>barrel</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -565,7 +414,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\barrelstack.fbx">
+    <Compile Include="Models\ShipWreckModels\barrelstack.fbx">
       <Name>barrelstack</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -573,7 +422,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\boxstack.fbx">
+    <Compile Include="Models\ShipWreckModels\boxstack.fbx">
       <Name>boxstack</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -581,113 +430,113 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\chest-closed.fbx">
+    <Compile Include="Models\ShipWreckModels\chest-closed.fbx">
       <Name>chest-closed</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\openChest.wav">
+    <Compile Include="Sounds\SoundEffects\openChest.wav">
       <Name>openChest</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\plant1.fbx">
+    <Compile Include="Models\PlantAndFruitModels\plant1.fbx">
       <Name>plant1</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\armor.png">
+    <Compile Include="Image\SkillIcons\armor.png">
       <Name>armor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\Bow.png">
+    <Compile Include="Image\SkillIcons\Bow.png">
       <Name>Bow</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\Hammer.png">
+    <Compile Include="Image\SkillIcons\Hammer.png">
       <Name>Hammer</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\sandal.png">
+    <Compile Include="Image\SkillIcons\sandal.png">
       <Name>sandal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\damageBullet.png">
+    <Compile Include="Image\BulletIcons\damageBullet.png">
       <Name>damageBullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\healthBullet.png">
+    <Compile Include="Image\BulletIcons\healthBullet.png">
       <Name>healthBullet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\leopardshark.fbx">
+    <Compile Include="Models\SeaAnimalModels\leopardshark.fbx">
       <Name>leopardshark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\normalshark.fbx">
+    <Compile Include="Models\SeaAnimalModels\normalshark.fbx">
       <Name>normalshark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\UnassignedPtsBar.png">
+    <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBar.png">
       <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\dolphin.fbx">
+    <Compile Include="Models\SeaAnimalModels\dolphin.fbx">
       <Name>dolphin</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\stingray.fbx">
+    <Compile Include="Models\SeaAnimalModels\stingray.fbx">
       <Name>stingray</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\manetee.fbx">
+    <Compile Include="Models\SeaAnimalModels\manetee.fbx">
       <Name>manetee</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\seal.fbx">
+    <Compile Include="Models\SeaAnimalModels\seal.fbx">
       <Name>seal</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\hammershark.fbx">
+    <Compile Include="Models\SeaAnimalModels\hammershark.fbx">
       <Name>hammershark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
@@ -701,104 +550,85 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\LevelObjectiveBackground.png">
+    <Compile Include="Image\SceneTextures\LevelObjectiveBackground.png">
       <Name>LevelObjectiveBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SkillBackground.bmp">
+    <Compile Include="Image\AttributeBoardTextures\SkillBackground.bmp">
       <Name>SkillBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\hit_point.png">
+    <Compile Include="Image\AttributeBoardTextures\hit_point.png">
       <Name>hit_point</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\shooting_rate.jpg">
+    <Compile Include="Image\AttributeBoardTextures\shooting_rate.jpg">
       <Name>shooting_rate</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\speed.jpg">
+    <Compile Include="Image\AttributeBoardTextures\speed.jpg">
       <Name>speed</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\strength.jpg">
+    <Compile Include="Image\AttributeBoardTextures\strength.jpg">
       <Name>strength</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\done.png">
+    <Compile Include="Image\AttributeBoardTextures\done.png">
       <Name>done</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\LevelObjectiveIcon.png">
+    <Compile Include="Image\Miscellaneous\LevelObjectiveIcon.png">
       <Name>LevelObjectiveIcon</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\diver.fbx">
-      <Name>diver</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\mutantshark.fbx">
-      <Name>mutantshark</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\confuse.jpg">
-      <Name>confuse</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\AphroBelt.png">
+    <Compile Include="Image\SkillIcons\AphroBelt.png">
       <Name>AphroBelt</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\normalbullet.fbx">
+    <Compile Include="Models\BulletModels\normalbullet.fbx">
       <Name>normalbullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\healBullet.fbx">
+    <Compile Include="Models\BulletModels\healBullet.fbx">
       <Name>healBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\damageBullet.fbx">
+    <Compile Include="Models\BulletModels\damageBullet.fbx">
       <Name>damageBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\bossBullet.fbx">
+    <Compile Include="Models\BulletModels\bossBullet.fbx">
       <Name>bossBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -806,45 +636,38 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\chasingBullet.fbx">
+    <Compile Include="Models\BulletModels\chasingBullet.fbx">
       <Name>chasingBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\mutantSharkVer2.fbx">
+    <Compile Include="Models\EnemyModels\mutantSharkVer2.fbx">
       <Name>mutantSharkVer2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\bubble.png">
+    <Compile Include="Image\Miscellaneous\bubble.png">
       <Name>bubble</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\bubbleBlue.png">
+    <Compile Include="Image\Miscellaneous\bubbleBlue.png">
       <Name>bubbleBlue</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sound\bubble.wav">
+    <Compile Include="Sounds\SoundEffects\bubble.wav">
       <Name>bubble</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\diver_knife.fbx">
-      <Name>diver_knife</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -862,35 +685,35 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\dizzy-icon.png">
+    <Compile Include="Image\Miscellaneous\dizzy-icon.png">
       <Name>dizzy-icon</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\EnvironmentBar.png">
+    <Compile Include="Image\Miscellaneous\EnvironmentBar.png">
       <Name>EnvironmentBar</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Starfish-cursor.png">
+    <Compile Include="Image\CursorTextures\Starfish-cursor.png">
       <Name>Starfish-cursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\fishcursor.png">
+    <Compile Include="Image\CursorTextures\fishcursor.png">
       <Name>fishcursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\herculesBullet.fbx">
+    <Compile Include="Models\BulletModels\herculesBullet.fbx">
       <Name>herculesBullet</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -919,49 +742,49 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish.png">
       <Name>smallfish</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish1.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish1.png">
       <Name>smallfish1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish2.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish2.png">
       <Name>smallfish2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish2-1.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish2-1.png">
       <Name>smallfish2-1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\smallfish3.png">
+    <Compile Include="Image\FishSchoolTextures\smallfish3.png">
       <Name>smallfish3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\energyball.png">
+    <Compile Include="Image\Miscellaneous\energyball.png">
       <Name>energyball</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\energyball-red.png">
+    <Compile Include="Image\Miscellaneous\energyball-red.png">
       <Name>energyball-red</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1039,7 +862,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\solidred.png">
+    <Compile Include="Image\Miscellaneous\solidred.png">
       <Name>solidred</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1067,21 +890,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\classroom.jpg">
-      <Name>classroom</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\quizButton.png">
+    <Compile Include="Image\Miscellaneous\quizButton.png">
       <Name>quizButton</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\quizButtonSelected.png">
+    <Compile Include="Image\Miscellaneous\quizButtonSelected.png">
       <Name>quizButtonSelected</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1092,6 +908,66 @@
       <Name>quiz</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\painting.spritefont">
+      <Name>painting</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\fishTalk.spritefont">
+      <Name>fishTalk</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Miscellaneous\NextButton.png">
+      <Name>NextButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\classroom1.jpg">
+      <Name>classroom1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\classroom2.jpg">
+      <Name>classroom2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\backgroundTypeGame.jpg">
+      <Name>backgroundTypeGame</Name>
+    </Compile>
+    <Compile Include="Image\SceneTextures\keyfound.jpg">
+      <Name>keyfound</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\EnemyModels\diver_green_ly.fbx">
+      <Name>diver_green_ly</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\EnemyModels\diver_knife_orange_yellow.fbx">
+      <Name>diver_knife_orange_yellow</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1107,13 +983,6 @@
     </Compile>
     <Compile Include="Image\traffic_yellow.jpg">
       <Name>traffic_yellow</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\backgroundTypeGame.jpg">
-      <Name>backgroundTypeGame</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

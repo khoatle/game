@@ -62,9 +62,9 @@ namespace Poseidon
         // also, we need to create a SpriteBatch.
         protected override void LoadContent()
         {
-            normalCursorTexture = Game.Content.Load<Texture2D>("Image/Starfish-cursor");
-            shootingCursorTexture = Game.Content.Load<Texture2D>("Image/shootcursor");
-            onFishCursorTexture = Game.Content.Load<Texture2D>("Image/fishcursor");
+            normalCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
+            shootingCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
+            onFishCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/fishcursor");
 
             cursorTexture = normalCursorTexture;
             textureCenter = new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2);

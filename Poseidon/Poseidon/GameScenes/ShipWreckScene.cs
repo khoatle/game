@@ -656,6 +656,9 @@ namespace Poseidon
                             chest.opened = true;
                             audio.OpenChest.Play();
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
+                            //this is just for testing
+                            //should be removed
+                            chest.skillID = 1;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward

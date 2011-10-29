@@ -146,7 +146,7 @@
     <Compile Include="Core\ImageComponent.cs" />
     <Compile Include="Core\GameScene.cs" />
     <Compile Include="Core\InputManager.cs" />
-    <Compile Include="GameScenes\LevelObjective.cs" />
+    <Compile Include="Core\LevelObjective.cs" />
     <Compile Include="Enemies\MutantShark.cs" />
     <Compile Include="Miscellaneous\Plant.cs" />
     <Compile Include="GameScenes\PlayGameScene.cs" />

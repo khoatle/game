@@ -862,7 +862,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\solidred.png">
+    <Compile Include="Image\MinigameTextures\solidred.png">
       <Name>solidred</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -890,14 +890,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\quizButton.png">
+    <Compile Include="Image\MinigameTextures\quizButton.png">
       <Name>quizButton</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\quizButtonSelected.png">
+    <Compile Include="Image\MinigameTextures\quizButtonSelected.png">
       <Name>quizButtonSelected</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -926,7 +926,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\NextButton.png">
+    <Compile Include="Image\MinigameTextures\NextButton.png">
       <Name>NextButton</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -947,9 +947,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\backgroundTypeGame.jpg">
-      <Name>backgroundTypeGame</Name>
-    </Compile>
     <Compile Include="Image\SceneTextures\keyfound.jpg">
       <Name>keyfound</Name>
       <Importer>TextureImporter</Importer>
@@ -971,17 +968,17 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\traffic_green.jpg">
+    <Compile Include="Image\MinigameTextures\traffic_green.jpg">
       <Name>traffic_green</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\traffic_red.jpg">
+    <Compile Include="Image\MinigameTextures\traffic_red.jpg">
       <Name>traffic_red</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\traffic_yellow.jpg">
+    <Compile Include="Image\MinigameTextures\traffic_yellow.jpg">
       <Name>traffic_yellow</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

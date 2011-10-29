@@ -87,9 +87,9 @@ namespace Poseidon.MiniGames
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            trafficLightRed = content.Load<Texture2D>("Image/traffic_red");
-            trafficLightYellow = content.Load<Texture2D>("Image/traffic_yellow");
-            trafficLightGreen = content.Load<Texture2D>("Image/traffic_green");
+            trafficLightRed = content.Load<Texture2D>("Image/MinigameTextures/traffic_red");
+            trafficLightYellow = content.Load<Texture2D>("Image/MinigameTextures/traffic_yellow");
+            trafficLightGreen = content.Load<Texture2D>("Image/MinigameTextures/traffic_green");
             ((WritingBox)typingBox).loadContent(boxBackground, font);
             ((Textbox)displayBox).loadContent(boxBackground, font);
             startBox = new RectangleBox(trafficLightGreen.Width + 10, 10, 100, 200);

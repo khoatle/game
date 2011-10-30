@@ -160,7 +160,7 @@ namespace Poseidon
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom1");
             typeGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom2");
-            boxBackground = Content.Load<Texture2D>("Image/MinigameTextures/solidred");
+            boxBackground = Content.Load<Texture2D>("Image/MinigameTextures/whiteskin");
 
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
@@ -313,7 +313,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isWin || enterPressed)
+            if (typeGameScene.isWin)// || enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -402,9 +402,9 @@ namespace Poseidon
             if (playGameScene.currentGameState == GameState.ToMiniGame)
             {
                 Random rand = new Random();
-                if (rand.Next(2) == 0)
-                    ShowScene(quizzGameScene);
-                else
+                //if (rand.Next(2) == 0)
+                //    ShowScene(quizzGameScene);
+                //else
                     ShowScene(typeGameScene);
             }
         }

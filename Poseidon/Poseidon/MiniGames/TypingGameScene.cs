@@ -52,10 +52,10 @@ namespace Poseidon.MiniGames
                     width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
                     height = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height;
 
-                displayBox = new Textbox(topLeftX + 10, height/3, 1400, 350,
+                displayBox = new Textbox(topLeftX + 10, height - 240, width - 20, 200,
                     "Dream of the Red Chamber, composed by Cao Xueqin, " +
                     "is one of China's Four Great Classical Novels.");
-                typingBox = new WritingBox(topLeftX + 10, downLeftY - 200, 1400, 40);
+                typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
 
                 isMatching = true;
                 this.boxBackground = boxBackground;
@@ -87,9 +87,9 @@ namespace Poseidon.MiniGames
         protected override void LoadContent()
         {
             // TODO: use this.Content to load your game content here
-            trafficLightRed = content.Load<Texture2D>("Image/MinigameTextures/traffic_red");
-            trafficLightYellow = content.Load<Texture2D>("Image/MinigameTextures/traffic_yellow");
-            trafficLightGreen = content.Load<Texture2D>("Image/MinigameTextures/traffic_green");
+            trafficLightRed = content.Load<Texture2D>("Image/MinigameTextures/redlight");
+            trafficLightYellow = content.Load<Texture2D>("Image/MinigameTextures/yellowlight");
+            trafficLightGreen = content.Load<Texture2D>("Image/MinigameTextures/greenlight");
             ((WritingBox)typingBox).loadContent(boxBackground, font);
             ((Textbox)displayBox).loadContent(boxBackground, font);
             startBox = new RectangleBox(trafficLightGreen.Width + 10, 10, 100, 200);
@@ -181,7 +181,7 @@ namespace Poseidon.MiniGames
             }
 
             spriteBatch.End();
-            
+            displayBox.draw(spriteBatch);
             if (isMatching)
             {
                 ((WritingBox)typingBox).draw(spriteBatch, Color.Black);
@@ -190,7 +190,7 @@ namespace Poseidon.MiniGames
             {
                 ((WritingBox)typingBox).draw(spriteBatch, Color.Red);
             }
-            displayBox.draw(spriteBatch);
+            
             
         }
     }

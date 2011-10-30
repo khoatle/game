@@ -40,6 +40,7 @@ namespace Poseidon
         public Rectangle doneIconRectangle;
         private int centerX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.X;
         private int centerY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y + 50;
+        Random random = new Random();
         /// <summary>
         /// Default Constructor
          public AttributeBoard(Game game, SpriteFont smallFont, SpriteFont largeFont,
@@ -88,7 +89,7 @@ namespace Poseidon
         /// </summary>
         public override void Hide()
         {
-            MediaPlayer.Stop();
+            //MediaPlayer.Stop();
             base.Hide();
         }
 
@@ -100,6 +101,18 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            // play the boss fight music for certain levels
+            if (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 10)
+            {
+                if (MediaPlayer.State.Equals(MediaState.Stopped))
+                {
+                    MediaPlayer.Play(audio.bossMusics[random.Next(GameConstants.NumBossBackgroundMusics)]);
+                }
+            }
+            else if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
+            }
             cursor.Update(gameTime);
             base.Update(gameTime);
         }

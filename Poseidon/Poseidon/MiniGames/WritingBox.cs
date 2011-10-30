@@ -29,7 +29,6 @@ namespace Poseidon.MiniGames
         private bool beginRapidDelete;
         private float timeBetweenDelete;
         private TimeSpan prevDelete;
-        private bool shiftPressed;
 
         public WritingBox(int X, int Y, int recWidth, int recHeight)
             : base(X, Y, recWidth, recHeight) {

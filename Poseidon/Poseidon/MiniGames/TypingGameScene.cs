@@ -176,9 +176,6 @@ namespace Poseidon.MiniGames
 
             if (isWin) {
                 float tmp = (rewardingTime >= 0) ? rewardingTime : 0;
-                Rectangle result = new Rectangle(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width/2, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height/2,
-                            400, 300);
-                spriteBatch.Draw(boxBackground, result, Color.White);
                 spriteBatch.End();
                 return;
             }

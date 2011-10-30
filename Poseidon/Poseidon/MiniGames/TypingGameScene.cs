@@ -52,10 +52,10 @@ namespace Poseidon.MiniGames
                     width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
                     height = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height;
 
-                displayBox = new Textbox(topLeftX + 10, height/3, 1400, 350,
+                displayBox = new Textbox(topLeftX + 10, height/3, width/3, 350,
                     "Dream of the Red Chamber, composed by Cao Xueqin, " +
-                    "is one of China's Four Great Classical Novels.");
-                typingBox = new WritingBox(topLeftX + 10, downLeftY - 200, 1400, 40);
+                    "is one of China's Four Great Classical Novels. asd asd asd asd asd asd asd");
+                typingBox = new WritingBox(topLeftX + 10, downLeftY - 200, width - 20, 40);
 
                 isMatching = true;
                 this.boxBackground = boxBackground;

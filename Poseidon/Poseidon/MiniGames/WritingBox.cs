@@ -12,16 +12,6 @@ namespace Poseidon.MiniGames
         private string text;
         private SpriteFont font;
 
-        Keys[] keysToCheck = new Keys[] { 
-            Keys.A, Keys.B, Keys.C, Keys.D, Keys.E,
-            Keys.F, Keys.G, Keys.H, Keys.I, Keys.J,
-            Keys.K, Keys.L, Keys.M, Keys.N, Keys.O,
-            Keys.P, Keys.Q, Keys.R, Keys.S, Keys.T,
-            Keys.U, Keys.V, Keys.W, Keys.X, Keys.Y,
-            Keys.Z, Keys.Back, Keys.Space, Keys.OemComma,
-            Keys.OemPeriod, Keys.OemQuestion, Keys.OemSemicolon,
-            Keys.OemQuotes
-        };
 
         private KeyboardState currentKeyboardState;
         private KeyboardState lastKeyboardState;
@@ -68,10 +58,9 @@ namespace Poseidon.MiniGames
 
             beginRapidDelete = false;
             prevDelete = new TimeSpan();
-            char key;
-            if (TryConvertKeyboardInput(currentKeyboardState, lastKeyboardState, out key)) {
-                text += key;
-            }
+            string inputString = TryConvertKeyboardInput(currentKeyboardState, lastKeyboardState);
+            text += inputString;
+
             lastKeyboardState = currentKeyboardState;
         }
 
@@ -105,80 +94,85 @@ namespace Poseidon.MiniGames
             text = newText;
         }
 
-        private static bool TryConvertKeyboardInput(KeyboardState keyboard, KeyboardState oldKeyboard, out char key) {
+        private static string TryConvertKeyboardInput(KeyboardState keyboard, KeyboardState oldKeyboard) {
             Keys[] keys = keyboard.GetPressedKeys();
+            string returnString = "";
             bool shift = keyboard.IsKeyDown(Keys.LeftShift) || keyboard.IsKeyDown(Keys.RightShift);
 
-            if (keys.Length > 0 && !oldKeyboard.IsKeyDown(keys[0]))
-            {
-                switch (keys[0])
-                {
-                    case Keys.A: if (shift) { key = 'A'; } else { key = 'a'; } return true;
-                    case Keys.B: if (shift) { key = 'B'; } else { key = 'b'; } return true;
-                    case Keys.C: if (shift) { key = 'C'; } else { key = 'c'; } return true;
-                    case Keys.D: if (shift) { key = 'D'; } else { key = 'd'; } return true;
-                    case Keys.E: if (shift) { key = 'E'; } else { key = 'e'; } return true;
-                    case Keys.F: if (shift) { key = 'F'; } else { key = 'f'; } return true;
-                    case Keys.G: if (shift) { key = 'G'; } else { key = 'g'; } return true;
-                    case Keys.H: if (shift) { key = 'H'; } else { key = 'h'; } return true;
-                    case Keys.I: if (shift) { key = 'I'; } else { key = 'i'; } return true;
-                    case Keys.J: if (shift) { key = 'J'; } else { key = 'j'; } return true;
-                    case Keys.K: if (shift) { key = 'K'; } else { key = 'k'; } return true;
-                    case Keys.L: if (shift) { key = 'L'; } else { key = 'l'; } return true;
-                    case Keys.M: if (shift) { key = 'M'; } else { key = 'm'; } return true;
-                    case Keys.N: if (shift) { key = 'N'; } else { key = 'n'; } return true;
-                    case Keys.O: if (shift) { key = 'O'; } else { key = 'o'; } return true;
-                    case Keys.P: if (shift) { key = 'P'; } else { key = 'p'; } return true;
-                    case Keys.Q: if (shift) { key = 'Q'; } else { key = 'q'; } return true;
-                    case Keys.R: if (shift) { key = 'R'; } else { key = 'r'; } return true;
-                    case Keys.S: if (shift) { key = 'S'; } else { key = 's'; } return true;
-                    case Keys.T: if (shift) { key = 'T'; } else { key = 't'; } return true;
-                    case Keys.U: if (shift) { key = 'U'; } else { key = 'u'; } return true;
-                    case Keys.V: if (shift) { key = 'V'; } else { key = 'v'; } return true;
-                    case Keys.W: if (shift) { key = 'W'; } else { key = 'w'; } return true;
-                    case Keys.X: if (shift) { key = 'X'; } else { key = 'x'; } return true;
-                    case Keys.Y: if (shift) { key = 'Y'; } else { key = 'y'; } return true;
-                    case Keys.Z: if (shift) { key = 'Z'; } else { key = 'z'; } return true;
+            for (int i = 0; i < keys.Length; i++) {
+                if (!oldKeyboard.IsKeyDown(keys[i])) {
+                    switch (keys[i])
+                    {
+                        //Alphabet keys
+                        case Keys.A: if (shift) { returnString += 'A'; } else { returnString += 'a'; } break;
+                        case Keys.B: if (shift) { returnString += 'B'; } else { returnString += 'b'; } break;
+                        case Keys.C: if (shift) { returnString += 'C'; } else { returnString += 'c'; } break;
+                        case Keys.D: if (shift) { returnString += 'D'; } else { returnString += 'd'; } break;
+                        case Keys.E: if (shift) { returnString += 'E'; } else { returnString += 'e'; } break;
+                        case Keys.F: if (shift) { returnString += 'F'; } else { returnString += 'f'; } break;
+                        case Keys.G: if (shift) { returnString += 'G'; } else { returnString += 'g'; } break;
+                        case Keys.H: if (shift) { returnString += 'H'; } else { returnString += 'h'; } break;
+                        case Keys.I: if (shift) { returnString += 'I'; } else { returnString += 'i'; } break;
+                        case Keys.J: if (shift) { returnString += 'J'; } else { returnString += 'j'; } break;
+                        case Keys.K: if (shift) { returnString += 'K'; } else { returnString += 'k'; } break;
+                        case Keys.L: if (shift) { returnString += 'L'; } else { returnString += 'l'; } break;
+                        case Keys.M: if (shift) { returnString += 'M'; } else { returnString += 'm'; } break;
+                        case Keys.N: if (shift) { returnString += 'N'; } else { returnString += 'n'; } break;
+                        case Keys.O: if (shift) { returnString += 'O'; } else { returnString += 'o'; } break;
+                        case Keys.P: if (shift) { returnString += 'P'; } else { returnString += 'p'; } break;
+                        case Keys.Q: if (shift) { returnString += 'Q'; } else { returnString += 'q'; } break;
+                        case Keys.R: if (shift) { returnString += 'R'; } else { returnString += 'r'; } break;
+                        case Keys.S: if (shift) { returnString += 'S'; } else { returnString += 's'; } break;
+                        case Keys.T: if (shift) { returnString += 'T'; } else { returnString += 't'; } break;
+                        case Keys.U: if (shift) { returnString += 'U'; } else { returnString += 'u'; } break;
+                        case Keys.V: if (shift) { returnString += 'V'; } else { returnString += 'v'; } break;
+                        case Keys.W: if (shift) { returnString += 'W'; } else { returnString += 'w'; } break;
+                        case Keys.X: if (shift) { returnString += 'X'; } else { returnString += 'x'; } break;
+                        case Keys.Y: if (shift) { returnString += 'Y'; } else { returnString += 'y'; } break;
+                        case Keys.Z: if (shift) { returnString += 'Z'; } else { returnString += 'z'; } break;
+ 
+                        //Decimal keys
+                        case Keys.D0: if (shift) { returnString += ')'; } else { returnString += '0'; } break;
+                        case Keys.D1: if (shift) { returnString += '!'; } else { returnString += '1'; } break;
+                        case Keys.D2: if (shift) { returnString += '@'; } else { returnString += '2'; } break;
+                        case Keys.D3: if (shift) { returnString += '#'; } else { returnString += '3'; } break;
+                        case Keys.D4: if (shift) { returnString += '$'; } else { returnString += '4'; } break;
+                        case Keys.D5: if (shift) { returnString += '%'; } else { returnString += '5'; } break;
+                        case Keys.D6: if (shift) { returnString += '^'; } else { returnString += '6'; } break;
+                        case Keys.D7: if (shift) { returnString += '&'; } else { returnString += '7'; } break;
+                        case Keys.D8: if (shift) { returnString += '*'; } else { returnString += '8'; } break;
+                        case Keys.D9: if (shift) { returnString += '('; } else { returnString += '9'; } break;
 
-                    case Keys.D0: if (shift) { key = ')'; } else { key = '0'; } return true;
-                    case Keys.D1: if (shift) { key = '!'; } else { key = '1'; } return true;
-                    case Keys.D2: if (shift) { key = '@'; } else { key = '2'; } return true;
-                    case Keys.D3: if (shift) { key = '#'; } else { key = '3'; } return true;
-                    case Keys.D4: if (shift) { key = '$'; } else { key = '4'; } return true;
-                    case Keys.D5: if (shift) { key = '%'; } else { key = '5'; } return true;
-                    case Keys.D6: if (shift) { key = '^'; } else { key = '6'; } return true;
-                    case Keys.D7: if (shift) { key = '&'; } else { key = '7'; } return true;
-                    case Keys.D8: if (shift) { key = '*'; } else { key = '8'; } return true;
-                    case Keys.D9: if (shift) { key = '('; } else { key = '9'; } return true;
+                        //Decimal numpad keys
+                        case Keys.NumPad0: returnString += '0'; break;
+                        case Keys.NumPad1: returnString += '1'; break;
+                        case Keys.NumPad2: returnString += '2'; break;
+                        case Keys.NumPad3: returnString += '3'; break;
+                        case Keys.NumPad4: returnString += '4'; break;
+                        case Keys.NumPad5: returnString += '5'; break;
+                        case Keys.NumPad6: returnString += '6'; break;
+                        case Keys.NumPad7: returnString += '7'; break;
+                        case Keys.NumPad8: returnString += '8'; break;
+                        case Keys.NumPad9: returnString += '9'; break;
 
-                    case Keys.NumPad0: key = '0'; return true;
-                    case Keys.NumPad1: key = '1'; return true;
-                    case Keys.NumPad2: key = '2'; return true;
-                    case Keys.NumPad3: key = '3'; return true;
-                    case Keys.NumPad4: key = '4'; return true;
-                    case Keys.NumPad5: key = '5'; return true;
-                    case Keys.NumPad6: key = '6'; return true;
-                    case Keys.NumPad7: key = '7'; return true;
-                    case Keys.NumPad8: key = '8'; return true;
-                    case Keys.NumPad9: key = '9'; return true;
-
-                    case Keys.OemTilde: if (shift) { key = '~'; } else { key = '`'; } return true;
-                    case Keys.OemSemicolon: if (shift) { key = ':'; } else { key = ';'; } return true;
-                    case Keys.OemQuotes: if (shift) { key = '"'; } else { key = '\''; } return true;
-                    case Keys.OemQuestion: if (shift) { key = '?'; } else { key = '/'; } return true;
-                    case Keys.OemPlus: if (shift) { key = '+'; } else { key = '='; } return true;
-                    case Keys.OemPipe: if (shift) { key = '|'; } else { key = '\\'; } return true;
-                    case Keys.OemPeriod: if (shift) { key = '>'; } else { key = '.'; } return true;
-                    case Keys.OemOpenBrackets: if (shift) { key = '{'; } else { key = '['; } return true;
-                    case Keys.OemCloseBrackets: if (shift) { key = '}'; } else { key = ']'; } return true;
-                    case Keys.OemMinus: if (shift) { key = '_'; } else { key = '-'; } return true;
-                    case Keys.OemComma: if (shift) { key = '<'; } else { key = ','; } return true;
-                    case Keys.Space: key = ' '; return true;
+                        //Special keys
+                        case Keys.OemTilde: if (shift) { returnString += '~'; } else { returnString += '`'; } break;
+                        case Keys.OemSemicolon: if (shift) { returnString += ':'; } else { returnString += ';'; } break;
+                        case Keys.OemQuotes: if (shift) { returnString += '"'; } else { returnString += '\''; } break;
+                        case Keys.OemQuestion: if (shift) { returnString += '?'; } else { returnString += '/'; } break;
+                        case Keys.OemPlus: if (shift) { returnString += '+'; } else { returnString += '='; } break;
+                        case Keys.OemPipe: if (shift) { returnString += '|'; } else { returnString += '\\'; } break;
+                        case Keys.OemPeriod: if (shift) { returnString += '>'; } else { returnString += '.'; } break;
+                        case Keys.OemOpenBrackets: if (shift) { returnString += '{'; } else { returnString += '['; } break;
+                        case Keys.OemCloseBrackets: if (shift) { returnString += '}'; } else { returnString += ']'; } break;
+                        case Keys.OemMinus: if (shift) { returnString += '_'; } else { returnString += '-'; } break;
+                        case Keys.OemComma: if (shift) { returnString += '<'; } else { returnString += ','; } break;
+                        case Keys.Space: returnString += ' '; break;
+                    }
                 }
             }
 
-            key = (char)0;
-            return false;
+            return returnString;
         }
 
         private bool CheckKey(Keys key) {

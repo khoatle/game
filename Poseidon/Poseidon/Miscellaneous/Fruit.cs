@@ -17,6 +17,7 @@ namespace Poseidon
         //1: speed
         //2: power
         //3: fire rate
+        //4: health point
         public int powerType;
 
         public Fruit(int powerType)
@@ -34,6 +35,9 @@ namespace Poseidon
                 Model = content.Load<Model>("Models/PlantAndFruitModels/red-fruit");
             else if (this.powerType == 3)
                 Model = content.Load<Model>("Models/PlantAndFruitModels/blue-fruit");
+            else if (this.powerType == 4)
+                Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
+            
             Position = plantPosition;
             Position.Y = GameConstants.MainGameFloatHeight;
             BoundingSphere = CalculateBoundingSphere();

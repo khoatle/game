@@ -37,7 +37,6 @@ namespace Poseidon.MiniGames
                 timeTillRapidDelete = 0.5f;
                 beginRapidDelete = false;
                 prevDelete = new TimeSpan();
-                shiftPressed = false;
         }
 
         public void loadContent(Texture2D background, SpriteFont font)

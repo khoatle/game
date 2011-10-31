@@ -228,7 +228,7 @@ namespace Poseidon
             tank.Position = Vector3.Zero;
             tank.Position.Y = GameConstants.ShipWreckFloatHeight;
             tank.ForwardDirection = 0f;
-            MediaPlayer.Play(audio.BackMusic);
+            //MediaPlayer.Play(audio.BackMusic);
             showNoKey = false;
             InitializeShipField(Content);
             base.Show();
@@ -301,7 +301,7 @@ namespace Poseidon
         public override void Hide()
         {
             // Stop the background music
-            MediaPlayer.Stop();
+            //MediaPlayer.Stop();
             // Stop the rumble
             //rumblePad.Stop(PlayerIndex.One);
             //rumblePad.Stop(PlayerIndex.Two);
@@ -329,6 +329,10 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
+            if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
+            }
             float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
             lastKeyboardState = currentKeyboardState;
             //lastMouseState = currentMouseState;

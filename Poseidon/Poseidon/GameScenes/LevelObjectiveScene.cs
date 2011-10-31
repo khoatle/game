@@ -26,6 +26,7 @@ namespace Poseidon
         SpriteFont statsFont;
         SpriteFont menuLarge;
         private PlayGameScene playgamescene;
+        Random random = new Random();
         /// <summary>
         /// Default Constructor
         public LevelObjectiveScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
@@ -69,7 +70,7 @@ namespace Poseidon
         /// </summary>
         public override void Hide()
         {
-            MediaPlayer.Stop();
+            //MediaPlayer.Stop();
             base.Hide();
         }
 
@@ -79,6 +80,18 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            // play the boss fight music for certain levels
+            if (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 10)
+            {
+                if (MediaPlayer.State.Equals(MediaState.Stopped))
+                {
+                    MediaPlayer.Play(audio.bossMusics[random.Next(GameConstants.NumBossBackgroundMusics)]);
+                }
+            }
+            else if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
+            }
             base.Update(gameTime);
         }
 

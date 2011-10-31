@@ -169,7 +169,10 @@ namespace Poseidon {
 
         //environment threshold for having key to treasure chest
         public const float EnvThresholdForKey = 0.4f;
-
+        
+        //for playing background musics
+        public const int NumNormalBackgroundMusics = 3;
+        public const int NumBossBackgroundMusics = 1;
 
     }
 }

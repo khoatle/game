@@ -82,6 +82,9 @@ namespace Poseidon
         // Radar for the game
         Radar radar;
 
+        //for continously playing random background musics
+        Random rand = new Random();
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -367,6 +370,7 @@ namespace Poseidon
             }
             if (backPressed)
             {
+                MediaPlayer.Stop();
                 ShowScene(startScene);
             }
             if (skillPressed)
@@ -440,6 +444,7 @@ namespace Poseidon
                 switch (startScene.SelectedMenuIndex)
                 {
                     case 0:
+                        MediaPlayer.Stop();
                         ShowScene(playGameScene);
                         break;
                     case 1:

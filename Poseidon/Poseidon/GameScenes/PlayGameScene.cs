@@ -265,7 +265,7 @@ namespace Poseidon
         public override void Show()
         {
             paused = false;
-            MediaPlayer.Play(audio.BackMusic);
+            //MediaPlayer.Play(audio.BackMusic);
             //PlaceFuelCellsAndBarriers();
             base.Show();
         }
@@ -446,7 +446,7 @@ namespace Poseidon
         public override void Hide()
         {
             // Stop the background music
-            MediaPlayer.Stop();
+            //MediaPlayer.Stop();
             // Stop the rumble
             //rumblePad.Stop(PlayerIndex.One);
             //rumblePad.Stop(PlayerIndex.Two);
@@ -474,6 +474,18 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
+            // play the boss fight music for certain levels
+            if (currentLevel == 3 || currentLevel == 10)
+            {
+                if (MediaPlayer.State.Equals(MediaState.Stopped))
+                {
+                    MediaPlayer.Play(audio.bossMusics[random.Next(GameConstants.NumBossBackgroundMusics)]);
+                }
+            }
+            else if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
+            }
             if (!paused)
             {
                 timming = gameTime;

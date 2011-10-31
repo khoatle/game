@@ -32,7 +32,9 @@ namespace Poseidon
         //protected Vector2 enhancedPosition;
         //protected bool showEnhanced;
         //protected TimeSpan elapsedTime = TimeSpan.Zero;
-
+        
+        //for continously playing random background musics
+        Random rand= new Random();
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -62,6 +64,8 @@ namespace Poseidon
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
+
+            
         }
 
         /// <summary>
@@ -93,7 +97,7 @@ namespace Poseidon
         /// </summary>
         public override void Hide()
         {
-            MediaPlayer.Stop();
+            //MediaPlayer.Stop();
             base.Hide();
         }
 
@@ -111,6 +115,11 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                
+                MediaPlayer.Play(audio.backgroundMusics[rand.Next(GameConstants.NumNormalBackgroundMusics)]);
+            }
             if (!menu.Visible)
             {
                 if (rainPosition.X >= (Game.Window.ClientBounds.Width - 595) / 2)
@@ -126,8 +135,8 @@ namespace Poseidon
                 {
                     menu.Visible = true;
                     menu.Enabled = true;
-
-                    MediaPlayer.Play(audio.StartMusic);
+                    //Random rand = new Random();
+                    //MediaPlayer.Play(audio.backgroundMusics[rand.Next(GameConstants.NumNormalBackgroundMusics)]);
 //#if XBOX360
 //                    enhancedPosition = new Vector2((rainPosition.X + 
 //                    rainRect.Width - enhancedRect.Width / 2), rainPosition.Y);

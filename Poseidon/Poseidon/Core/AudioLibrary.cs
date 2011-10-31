@@ -21,6 +21,8 @@ namespace Poseidon.Core
         private SoundEffect bubble;
         private Song backMusic;
         private Song startMusic;
+        public Song[] backgroundMusics;
+        public Song[] bossMusics;
 
         public SoundEffect Explosion
         {
@@ -93,6 +95,12 @@ namespace Poseidon.Core
 
         public void LoadContent(ContentManager Content)
         {
+            backgroundMusics = new Song[GameConstants.NumNormalBackgroundMusics];
+            bossMusics = new Song[GameConstants.NumBossBackgroundMusics];
+            backgroundMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground1");
+            backgroundMusics[1] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground2");
+            backgroundMusics[2] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground3");
+            bossMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/bossBackground1");
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");
             backMusic = Content.Load<Song>("Sounds/BackgroundMusics/backMusic");

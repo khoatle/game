@@ -57,6 +57,7 @@ namespace Poseidon.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+
             // Update the child GameComponents
             for (int i = 0; i < components.Count; i++)
             {

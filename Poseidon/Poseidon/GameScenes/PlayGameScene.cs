@@ -386,7 +386,7 @@ namespace Poseidon
             trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
             for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
             {
-                random_model = random.Next(6);
+                random_model = random.Next(5);
                 orientation = random.Next(100);
                 trashes.Add(new Trash());
                 switch (random_model)
@@ -401,16 +401,13 @@ namespace Poseidon
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
                         break;
                     case 3:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
                         break;
                     case 4:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
-                        break;
-                    case 5:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
                         break;
                 }
-                //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
+               //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
             }
             AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
@@ -945,14 +942,7 @@ namespace Poseidon
                 DrawFoundKey();
                 return;
             }
-            if (paused)
-            {
-                // Draw the "pause" text
-                spriteBatch.Begin();
-                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
-                    Color.White);
-                spriteBatch.End();
-            }
+            
             switch (currentGameState)
             {
                 case GameState.PlayingCutScene:
@@ -972,6 +962,14 @@ namespace Poseidon
                     break;
             }
             base.Draw(gameTime);
+            if (paused)
+            {
+                // Draw the "pause" text
+                spriteBatch.Begin();
+                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
+                    Color.White);
+                spriteBatch.End();
+            }
 
         }
         private void DrawFoundKey()

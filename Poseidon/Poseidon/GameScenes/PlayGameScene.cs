@@ -139,6 +139,9 @@ namespace Poseidon
         bool showFoundKey = false;
         bool firstShow = true;
 
+        //for drawing winning or losing scenes
+        Texture2D winningTexture, losingTexture;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -185,6 +188,10 @@ namespace Poseidon
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
             schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
+
+            //loading winning, losing textures
+            winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
+            losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
             this.Load();
         }
 
@@ -499,7 +506,6 @@ namespace Poseidon
                 //    //this.Exit();
                 CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
 
-                
                 if (currentGameState == GameState.PlayingCutScene)
                 {
                     // Next sentence when the user press Enter
@@ -955,10 +961,10 @@ namespace Poseidon
                     DrawGameplayScreen();
                     break;
                 case GameState.Won:
-                    DrawWinOrLossScreen(GameConstants.StrGameWon);
+                    DrawWinOrLossScreen();
                     break;
                 case GameState.Lost:
-                    DrawWinOrLossScreen(GameConstants.StrGameLost);
+                    DrawWinOrLossScreen();
                     break;
             }
             base.Draw(gameTime);
@@ -1008,36 +1014,12 @@ namespace Poseidon
             }
         }
 
-        private void DrawWinOrLossScreen(string gameResult)
+        private void DrawWinOrLossScreen()
         {
             spriteBatch.Begin();
-            float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
-                GraphicDevice.Viewport.Height);
-            Vector2 strCenter;
-
-            xOffsetText = yOffsetText = 0;
-            Vector2 strResult = statsFont.MeasureString(gameResult);
-            Vector2 strPlayAgainSize =
-                statsFont.MeasureString(GameConstants.StrPlayAgain);
-            Vector2 strPosition;
-            strCenter = new Vector2(strResult.X / 2, strResult.Y / 2);
-
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y);
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.DrawString(statsFont, gameResult,
-                strPosition, Color.Red);
-
-            strCenter =
-                new Vector2(strPlayAgainSize.X / 2, strPlayAgainSize.Y / 2);
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y) +
-                (float)statsFont.LineSpacing;
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
-                strPosition, Color.AntiqueWhite);
+            if (currentGameState == GameState.Won)
+                spriteBatch.Draw(winningTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+            else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
             spriteBatch.End();
         }
 

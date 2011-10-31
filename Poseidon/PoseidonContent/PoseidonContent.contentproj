@@ -934,14 +934,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\classroom1.jpg">
+    <Compile Include="Image\MinigameTextures\classroom1.jpg">
       <Name>classroom1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\classroom2.jpg">
+    <Compile Include="Image\MinigameTextures\classroom2.jpg">
       <Name>classroom2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1043,6 +1043,30 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>2.5</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\GameOver.png">
+      <Name>GameOver</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SceneTextures\LevelWin.png">
+      <Name>LevelWin</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\MinigameTextures\QuizGameIntro.png">
+      <Name>QuizGameIntro</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\MinigameTextures\TypeGameIntro.png">
+      <Name>TypeGameIntro</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

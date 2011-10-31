@@ -161,8 +161,8 @@ namespace Poseidon
 
             SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
-            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom1");
-            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/classroom2");
+            quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom1");
+            typeGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom2");
             boxBackground = Content.Load<Texture2D>("Image/MinigameTextures/whiteskin");
 
             // Loading the cutscenes
@@ -316,7 +316,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isOver)// || enterPressed)
+            if (typeGameScene.isOver && enterPressed)
             {
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);

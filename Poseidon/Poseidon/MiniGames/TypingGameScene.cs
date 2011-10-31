@@ -21,6 +21,7 @@ namespace Poseidon.MiniGames
     /// </summary>
     public class TypingGameScene : GameScene
     {
+        Game game;
         SpriteBatch spriteBatch;
         RectangleBox typingBox;
         RectangleBox displayBox;
@@ -37,11 +38,19 @@ namespace Poseidon.MiniGames
         public float elapsedSeconds;
         public float timeInterval;
         public float timeBetweenUpdates;
+        KeyboardState lastKeyboardState = new KeyboardState();
+        KeyboardState currentKeyboardState = new KeyboardState();
+        //introducing game rule and stuff
+        bool introducing = false;
+        Texture2D introductionTexture;
 
+        //for displaying game prize
+        int expAwarded = 0;
         /// <summary>
         /// Default Constructor
         public TypingGameScene(Game game, SpriteFont font, Texture2D boxBackground, Texture2D theme, ContentManager Content)
             : base(game) {
+                this.game = game;
                 content = Content;
                 timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
                 timeInterval = 10f;
@@ -72,6 +81,8 @@ namespace Poseidon.MiniGames
         /// </summary>
         public override void Show()
         {
+            introducing = true;
+            isOver = false;
             base.Show();
         }
 
@@ -89,6 +100,7 @@ namespace Poseidon.MiniGames
             trafficLightRed = content.Load<Texture2D>("Image/MinigameTextures/redlight");
             trafficLightYellow = content.Load<Texture2D>("Image/MinigameTextures/yellowlight");
             trafficLightGreen = content.Load<Texture2D>("Image/MinigameTextures/greenlight");
+            introductionTexture = content.Load<Texture2D>("Image/MinigameTextures/TypeGameIntro");
             ((WritingBox)typingBox).loadContent(boxBackground, font);
             ((Textbox)displayBox).loadContent(boxBackground, font);
             startBox = new RectangleBox(trafficLightGreen.Width + 10, 10, 100, 200);
@@ -101,6 +113,18 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (isOver) return;
+            if (introducing)
+            {
+                lastKeyboardState = currentKeyboardState;
+                currentKeyboardState = Keyboard.GetState();
+                if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        currentKeyboardState.IsKeyUp(Keys.Enter))
+                {
+                    introducing = false;
+                }
+                return;
+            }
             List<string> words = ((Textbox)displayBox).getWords();
             elapsedSeconds += timeBetweenUpdates;
             if (elapsedSeconds < timeInterval)
@@ -113,16 +137,16 @@ namespace Poseidon.MiniGames
                 isOver = true;
 
                 if (elapsedSeconds > 30) {
-                    Tank.currentExperiencePts += 100;
+                    expAwarded = 100;
                 }
                 else if (elapsedSeconds > 10)
                 {
-                    Tank.currentExperiencePts += 300;
+                    expAwarded += 300;
                 }
                 else {
-                    Tank.currentExperiencePts += 500;
+                    expAwarded += 500;
                 }
-
+                Tank.currentExperiencePts += expAwarded;
                 return;
             }
 
@@ -161,6 +185,22 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
+            if (introducing)
+            {
+                spriteBatch.Begin();
+                spriteBatch.Draw(introductionTexture, game.GraphicsDevice.Viewport.TitleSafeArea, Color.White);
+                spriteBatch.End();
+                return;
+            }
+            if (isOver)
+            {
+                spriteBatch.Begin();
+                base.Draw(gameTime);
+                spriteBatch.DrawString(font, "You gain " + expAwarded + " experience from the written test!", new Vector2(trafficLightRed.Width + 10, 10), Color.Red);
+                spriteBatch.End();
+
+                return;
+            }
             //GraphicsDevice.Clear(Color.CornflowerBlue);
             // TODO: Add your drawing code here
             spriteBatch.Begin();

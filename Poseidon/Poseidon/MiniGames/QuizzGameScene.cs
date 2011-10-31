@@ -53,7 +53,9 @@ namespace Poseidon.MiniGames
         Texture2D buttonTexture;
         Texture2D selectedButtonTexture;
         Texture2D nextButtonTexture;
-
+        //introducing game rule and stuff
+        bool introducing = false;
+        Texture2D introductionTexture;
         /// <summary>
         /// Default Constructor
         public QuizzGameScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
@@ -79,6 +81,7 @@ namespace Poseidon.MiniGames
             nextButtonTexture = Content.Load<Texture2D>("Image/MinigameTextures/NextButton");
             buttonTexture = Content.Load<Texture2D>("Image/MinigameTextures/quizButton");
             selectedButtonTexture = Content.Load<Texture2D>("Image/MinigameTextures/quizButtonSelected");
+            introductionTexture = Content.Load<Texture2D>("Image/MinigameTextures/QuizGameIntro");
 
             this.game = game;
 
@@ -110,6 +113,7 @@ namespace Poseidon.MiniGames
             audio.NewMeteor.Play();
             questionAnswered = 0;
             numRightAnswer = 0;
+            introducing = true;
             base.Show();
         }
 
@@ -151,7 +155,16 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-
+            lastKeyboardState = currentKeyboardState;
+            currentKeyboardState = Keyboard.GetState();
+            if (introducing)
+            {
+                if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        currentKeyboardState.IsKeyUp(Keys.Enter))
+                {
+                    introducing = false;
+                }
+            }
             // dictates right/wrong answer
             // move to the next question
             // Reset the world for a new game
@@ -171,8 +184,6 @@ namespace Poseidon.MiniGames
             else
             {
                 selectedChoice = -1;
-                lastKeyboardState = currentKeyboardState;
-                currentKeyboardState = Keyboard.GetState();
                 if ((lastKeyboardState.IsKeyDown(Keys.A) &&
                     currentKeyboardState.IsKeyUp(Keys.A))
                     ||
@@ -232,6 +243,13 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
+            if (introducing)
+            {
+                spriteBatch.Begin();
+                spriteBatch.Draw(introductionTexture, game.GraphicsDevice.Viewport.TitleSafeArea, Color.White);
+                spriteBatch.End();
+                return;
+            }
             // Draw question and choices
             spriteBatch.Begin();
             base.Draw(gameTime);

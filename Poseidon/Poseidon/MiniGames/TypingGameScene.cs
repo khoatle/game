@@ -32,11 +32,11 @@ namespace Poseidon.MiniGames
         private Texture2D trafficLightGreen;
         private ContentManager content;
         private SpriteFont font;
-        public bool isWin = false;
+        public bool isOver = false;
+        public float maxTime = 60;
         public float elapsedSeconds;
         public float timeInterval;
         public float timeBetweenUpdates;
-        public float rewardingTime;
 
         /// <summary>
         /// Default Constructor
@@ -46,7 +46,6 @@ namespace Poseidon.MiniGames
                 timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
                 timeInterval = 10f;
                 elapsedSeconds = 0;
-                rewardingTime = 20;
                 int topLeftX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left,
                     downLeftY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom,
                     width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
@@ -108,11 +107,28 @@ namespace Poseidon.MiniGames
                 return;
 
             // TODO: Add your update logic here 
-            rewardingTime -= timeBetweenUpdates;
             WritingBox typingBar = (WritingBox)typingBox;
             Textbox display = (Textbox)displayBox;
             if (display.getMarkupIndex() >= words.Count) {
-                isWin = true;
+                isOver = true;
+
+                if (elapsedSeconds > 30) {
+                    Tank.currentExperiencePts += 100;
+                }
+                else if (elapsedSeconds > 10)
+                {
+                    Tank.currentExperiencePts += 300;
+                }
+                else {
+                    Tank.currentExperiencePts += 500;
+                }
+
+                return;
+            }
+
+            if (elapsedSeconds > maxTime) {
+
+                isOver = true;
                 return;
             }
 
@@ -172,10 +188,10 @@ namespace Poseidon.MiniGames
             }
             else {
                 spriteBatch.Draw(trafficLightGreen, new Vector2(10, 10), Color.White);
+                spriteBatch.DrawString(font, "Remaining time: " + (int)(maxTime - elapsedSeconds), new Vector2(10, 10 + font.LineSpacing), Color.Black);
             }
 
-            if (isWin) {
-                float tmp = (rewardingTime >= 0) ? rewardingTime : 0;
+            if (isOver) {
                 spriteBatch.End();
                 return;
             }
@@ -190,8 +206,6 @@ namespace Poseidon.MiniGames
             {
                 ((WritingBox)typingBox).draw(spriteBatch, Color.Red);
             }
-            
-            
         }
     }
 }

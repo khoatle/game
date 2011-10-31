@@ -842,7 +842,7 @@
       <Name>trashModel1</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -850,7 +850,7 @@
       <Name>trashModel2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -887,6 +887,7 @@
       <Name>trashModel3</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1031,6 +1032,14 @@
   <ItemGroup>
     <Compile Include="Models\TrashModels\trashModel5.fbx">
       <Name>trashModel5</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\TrashModels\trashModel4.fbx">
+      <Name>trashModel4</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>2.5</ProcessorParameters_Scale>

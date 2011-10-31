@@ -401,13 +401,13 @@ namespace Poseidon
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
                         break;
                     case 3:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
                         break;
                     case 4:
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
                         break;
                 }
-               //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
+               //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
             }
             AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 

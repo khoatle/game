@@ -337,6 +337,8 @@ namespace Poseidon
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
             newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
+            if (shooter.BoundingSphere.Intersects(PlayGameScene.frustum))
+                PlayGameScene.audio.chasingBulletSound.Play();
         }
 
         public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)

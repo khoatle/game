@@ -869,11 +869,11 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true);
                     Collision.updateProjectileHitTank(tank, enemyBullet);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false);
 
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
                     Collision.deleteSmallerThanZero(fish, ref fishAmount);

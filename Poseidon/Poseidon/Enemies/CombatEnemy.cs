@@ -156,10 +156,15 @@ namespace Poseidon
                         clipPlayer.switchRange(31, 60);
                     if (currentHuntingTarget.GetType().Name.Equals("Tank")) {
                         //((Tank)currentHuntingTarget).currentHitPoint -= damage;
+                        PlayGameScene.audio.botYell.Play();
                         Tank.currentHitPoint -= damage;
                     }
                     if (currentHuntingTarget is SwimmingObject) {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
+                        if (currentHuntingTarget.BoundingSphere.Intersects(PlayGameScene.frustum))
+                        {
+                            PlayGameScene.audio.animalYell.Play();
+                        }
                     }
                     prevFire = PlayGameScene.timming.TotalGameTime;
 

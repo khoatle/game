@@ -69,17 +69,6 @@ namespace Poseidon
                 }
             }
             
-            //Terminator terminator = new Terminator();
-            //terminator.LoadContent(Content, "Models/squirrel");
-            //terminator.Name = "terminator";
-            //terminator.Load();
-            //enemies[enemiesAmount - 2] = terminator;
-
-            //Terminator hunter = new Terminator();
-            //hunter.LoadContent(Content, "Models/diver");
-            //hunter.Name = "Whale Hunter";
-            //hunter.Load(1, 25, 24);
-            //enemies[enemiesAmount - 3] = hunter;
         }
 
         public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, bool mainGame)
@@ -275,6 +264,7 @@ namespace Poseidon
  
             h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
             h.loadContent(Content, "Models/BulletModels/healBullet");
+            PlayGameScene.audio.botNormalShot.Play();
             healthBullet.Add(h);
         }
 
@@ -288,6 +278,7 @@ namespace Poseidon
             
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
+            PlayGameScene.audio.botNormalShot.Play();
             myBullet.Add(d);
         }
 
@@ -314,8 +305,15 @@ namespace Poseidon
             if (type == 1)
             {
                 newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");
+                if (obj.BoundingSphere.Intersects(PlayGameScene.frustum))
+                    PlayGameScene.audio.bossShot.Play();
             }
-            else newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
+            else
+            {
+                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
+                if (obj.BoundingSphere.Intersects(PlayGameScene.frustum))
+                    PlayGameScene.audio.enemyShot.Play();
+            }
             bullets.Add(newBullet);         
         }
 

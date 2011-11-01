@@ -27,6 +27,7 @@ namespace Poseidon
 
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * healthiness, Tank.strengthUp);
             d.loadContent(Content, "Models/BulletModels/herculesBullet");
+            PlayGameScene.audio.herculesShot.Play();
             myBullets.Add(d);
         }
         public static void UseThorHammer(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount)

@@ -162,6 +162,9 @@ namespace Poseidon
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
                     }
                     prevFire = PlayGameScene.timming.TotalGameTime;
+
+                    if (this.BoundingSphere.Intersects(PlayGameScene.frustum))
+                        PlayGameScene.audio.slashSound.Play();
                 }
             }
         }

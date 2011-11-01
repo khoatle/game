@@ -6,6 +6,24 @@ namespace Poseidon.Core
 {
     public class AudioLibrary
     {
+        public Song[] backgroundMusics;
+        public Song[] bossMusics;
+        public SoundEffect botNormalShot;
+        public SoundEffect herculesShot;
+        public SoundEffect hermesSound;
+        public SoundEffect hipnotizeSound;
+        private SoundEffect openChest;
+        private SoundEffect changeBullet;
+        public SoundEffect armorSound;
+        public SoundEffect enemyShot;
+        public SoundEffect bossShot;
+        public SoundEffect slashSound;
+        public SoundEffect biteSound;
+        public SoundEffect roarSound;
+        public SoundEffect plantSound;
+        public SoundEffect retrieveSound;
+        public SoundEffect bossLaugh;
+
         private SoundEffect explosion;
         private SoundEffect newMeteor;
         private SoundEffect menuBack;
@@ -15,14 +33,12 @@ namespace Poseidon.Core
         private SoundEffect powerShow;
         private SoundEffect shooting;
         private SoundEffect explo1;
-        private SoundEffect changeBullet;
+        
         private SoundEffect miniGunWindUp;
-        private SoundEffect openChest;
+        
         private SoundEffect bubble;
         private Song backMusic;
         private Song startMusic;
-        public Song[] backgroundMusics;
-        public Song[] bossMusics;
 
         public SoundEffect Explosion
         {
@@ -101,6 +117,22 @@ namespace Poseidon.Core
             backgroundMusics[1] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground2");
             backgroundMusics[2] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground3");
             bossMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/bossBackground1");
+            botNormalShot = Content.Load<SoundEffect>("Sounds/SoundEffects/hydrobotNormalShot");
+            herculesShot = Content.Load<SoundEffect>("Sounds/SoundEffects/herculesShot");
+            hermesSound = Content.Load<SoundEffect>("Sounds/SoundEffects/hermesSound");
+            hipnotizeSound = Content.Load<SoundEffect>("Sounds/SoundEffects/hipnotized");
+            openChest = Content.Load<SoundEffect>("Sounds/SoundEffects/openChest");
+            changeBullet = Content.Load<SoundEffect>("Sounds/SoundEffects/equip");
+            armorSound = Content.Load<SoundEffect>("Sounds/SoundEffects/armorSound");
+            enemyShot = Content.Load<SoundEffect>("Sounds/SoundEffects/enemyShot");
+            bossShot = Content.Load<SoundEffect>("Sounds/SoundEffects/bossShot");
+            slashSound = Content.Load<SoundEffect>("Sounds/SoundEffects/slashSound");
+            biteSound = Content.Load<SoundEffect>("Sounds/SoundEffects/biteSound");
+            roarSound = Content.Load<SoundEffect>("Sounds/SoundEffects/roarSound");
+            plantSound = Content.Load<SoundEffect>("Sounds/SoundEffects/plantingSound");
+            retrieveSound = Content.Load<SoundEffect>("Sounds/SoundEffects/retrievingSound");
+            bossLaugh = Content.Load<SoundEffect>("Sounds/SoundEffects/bossLaugh");
+
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");
             backMusic = Content.Load<Song>("Sounds/BackgroundMusics/backMusic");
@@ -111,10 +143,8 @@ namespace Poseidon.Core
             powerShow = Content.Load<SoundEffect>("Sounds/SoundEffects/powershow");
             powerGet = Content.Load<SoundEffect>("Sounds/SoundEffects/powerget");
             shooting = Content.Load<SoundEffect>("Sounds/SoundEffects/laserFire");
-            explo1 = Content.Load<SoundEffect>("Sounds/SoundEffects//Explo1");
-            changeBullet = Content.Load<SoundEffect>("Sounds/SoundEffects/equip");
-            miniGunWindUp = Content.Load<SoundEffect>("Sounds/SoundEffects/MiinigunWindup#1");
-            openChest = Content.Load<SoundEffect>("Sounds/SoundEffects/openChest");
+            explo1 = Content.Load<SoundEffect>("Sounds/SoundEffects//Explo1");           
+            miniGunWindUp = Content.Load<SoundEffect>("Sounds/SoundEffects/MiinigunWindup#1");           
             bubble = Content.Load<SoundEffect>("Sounds/SoundEffects/bubble");
         }
     }

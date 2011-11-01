@@ -131,3 +131,7 @@ Helped by Poseidon (sample cut scenes ) - 10-20 s
 Actual fighting scene with music with skills and effects = 60s
 Talk everything about the game. - 2-3 mins
 Coming soon..
+
+Sound work left:
+mini game
+win/lose game

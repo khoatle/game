@@ -430,7 +430,7 @@ namespace Poseidon
                         {
                             Tank.firstUse[0] = false;
                             Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
-                            audio.Explosion.Play();
+                            //audio.Explosion.Play();
                             CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             tank.reachDestination = true;
@@ -457,7 +457,7 @@ namespace Poseidon
                         {
                             Tank.firstUse[2] = false;
                             Tank.invincibleMode = true;
-                            audio.NewMeteor.Play();
+                            audio.armorSound.Play();
                             Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
@@ -469,7 +469,7 @@ namespace Poseidon
                         if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || Tank.firstUse[3] == true)
                         {
                             Tank.firstUse[3] = false;
-                            audio.NewMeteor.Play();
+                            audio.hermesSound.Play();
                             Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.supersonicMode = true;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
@@ -493,6 +493,7 @@ namespace Poseidon
 
                             Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                            audio.hipnotizeSound.Play();
                         }
                     }
                     pointIntersect = Vector3.Zero;
@@ -508,7 +509,7 @@ namespace Poseidon
                         if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
                         {
                             prevFireTime = gameTime.TotalGameTime;
-                            audio.Shooting.Play();
+                            //audio.Shooting.Play();
                             if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                         }
@@ -536,7 +537,7 @@ namespace Poseidon
                         {
                             tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                             prevFireTime = gameTime.TotalGameTime;
-                            audio.Shooting.Play();
+                            //audio.Shooting.Play();
                             if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             //so the tank will not move
@@ -602,7 +603,7 @@ namespace Poseidon
                         )
                 {
                     prevFireTime = gameTime.TotalGameTime;
-                    audio.Shooting.Play();
+                    //audio.Shooting.Play();
                     if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                     else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                 }
@@ -962,15 +963,17 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Left + 225;
+            //xOffsetText = rectSafeArea.Left + 325;
+            xOffsetText = rectSafeArea.Center.X - 150 - 64;
             yOffsetText = rectSafeArea.Bottom - 80;
 
-            Vector2 bulletIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 bulletIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
             //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
             spriteBatch.Draw(bulletTypeTextures[Tank.bulletType], destRectangle, Color.White);
         }
+
         // Draw the currently selected skill/spell
         private void DrawActiveSkill()
         {
@@ -980,16 +983,19 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 300;
+            //xOffsetText = rectSafeArea.Right - 400;
+            xOffsetText = rectSafeArea.Center.X + 150;
             yOffsetText = rectSafeArea.Bottom - 100;
 
-            Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 skillIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
             spriteBatch.Draw(skillTextures[Tank.activeSkillID], destRectangle, Color.White);
+
         }
+
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;

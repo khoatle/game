@@ -602,7 +602,7 @@ namespace Poseidon
                             {
                                 Tank.firstUse[0] = false;
                                 Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
-                                audio.Explosion.Play();
+                                //audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                                 tank.reachDestination = true;
@@ -629,7 +629,7 @@ namespace Poseidon
                             {
                                 Tank.firstUse[2] = false;
                                 Tank.invincibleMode = true;
-                                audio.NewMeteor.Play();
+                                audio.armorSound.Play();
                                 Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
@@ -641,7 +641,7 @@ namespace Poseidon
                             if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || Tank.firstUse[3] == true)
                             {
                                 Tank.firstUse[3] = false;
-                                audio.NewMeteor.Play();
+                                audio.hermesSound.Play();
                                 Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.supersonicMode = true;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
@@ -666,6 +666,7 @@ namespace Poseidon
 
                                 Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                                audio.hipnotizeSound.Play();
                             }
                         }
 
@@ -683,7 +684,7 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
                             {
                                 prevFireTime = gameTime.TotalGameTime;
-                                audio.Shooting.Play();
+                                //audio.Shooting.Play();
                                 if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             }
@@ -711,7 +712,7 @@ namespace Poseidon
                             {
                                 tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                                 prevFireTime = gameTime.TotalGameTime;
-                                audio.Shooting.Play();
+                                //audio.Shooting.Play();
                                 if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                                 //so the tank will not move
@@ -795,7 +796,7 @@ namespace Poseidon
                     //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
                     {
                         prevFireTime = gameTime.TotalGameTime;
-                        audio.Shooting.Play();
+                        //audio.Shooting.Play();
                         if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                         else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                     }
@@ -806,7 +807,7 @@ namespace Poseidon
                     {
                         if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects, gameTime))
                         {
-                            audio.PowerShow.Play();
+                            audio.plantSound.Play();
                             Tank.currentExperiencePts += Plant.experienceReward;
                             Tank.currentEnvPoint += GameConstants.envGainForDropSeed;
                         }
@@ -1316,9 +1317,10 @@ namespace Poseidon
             //    str2 += "Bubbles " + bubbles.Count + " Scale " + bubbles[0].scale + " Time last " + bubbles[0].timeLast;
             //    //str2 += "\nBub pos " + bubbles[0].bubblePos;
             //}
-            str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
-            str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
+            //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
+            //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
+            str2 += "\nFish amount " + fishAmount + " Percentage fish left" + (double)fishAmount / (double)GameConstants.NumberFish[currentLevel];
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)

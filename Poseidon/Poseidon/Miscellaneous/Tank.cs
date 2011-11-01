@@ -111,7 +111,7 @@ namespace Poseidon
 
         //Sphere for interacting with trashs and fruits
         public BoundingSphere Trash_Fruit_BoundingSphere;
-        SoundEffect RetrievedSound;
+        //SoundEffect RetrievedSound;
         //temporary power-up for the cyborg
         //int tempPower;
         public static float speedUp;
@@ -281,7 +281,7 @@ namespace Poseidon
 
             //Trash_Fruit_BoundingSphere =
             //    new BoundingSphere(scaledSphere.Center, 10);
-            RetrievedSound = content.Load<SoundEffect>("Sounds/SoundEffects/laserFire");
+            //RetrievedSound = content.Load<SoundEffect>("Sounds/SoundEffects/retrievingSound");
 
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
@@ -295,12 +295,12 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            //activeSkillID = 0;
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
+            activeSkillID = 0;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = true;
+            skills[3] = true;
+            skills[4] = true;
 
             firstPlant = true;
             prevPlantTime = 0;
@@ -593,7 +593,8 @@ namespace Poseidon
                             currentHitPoint += 100;
                             if (currentHitPoint > maxHitPoint) currentHitPoint = maxHitPoint;
                         }
-                        RetrievedSound.Play();
+                        //RetrievedSound.Play();
+                        PlayGameScene.audio.retrieveSound.Play();
                     }
                 }
             }
@@ -604,7 +605,8 @@ namespace Poseidon
                     trash.Retrieved = true;
                     currentExperiencePts += trash.experienceReward;
                     currentEnvPoint += GameConstants.envGainForTrashClean;
-                    RetrievedSound.Play();
+                    PlayGameScene.audio.retrieveSound.Play();
+                    //RetrievedSound.Play();
                 }
             }
             return;

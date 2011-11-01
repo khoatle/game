@@ -557,8 +557,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\AttributeBoardTextures\SkillBackground.bmp">
-      <Name>SkillBackground</Name>
+    <Compile Include="Image\AttributeBoardTextures\AttributeBackground.bmp">
+      <Name>AttributeBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1065,6 +1065,13 @@
     </Compile>
     <Compile Include="Image\MinigameTextures\TypeGameIntro.png">
       <Name>TypeGameIntro</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\skillFoundBackground.png">
+      <Name>skillFoundBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

@@ -71,6 +71,7 @@ namespace Poseidon
         protected Texture2D stunnedTexture;
         protected Texture2D gameObjectiveIconTexture;
         protected Texture2D noKeyScreen;
+        protected Texture2D skillFoundScreen;
         // He died inside the ship wreck?
         public bool returnToMain;
         // has artifact?
@@ -203,6 +204,8 @@ namespace Poseidon
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
 
             noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/no_key");
+
+            skillFoundScreen = Content.Load<Texture2D>("Image/SceneTextures/skillFoundBackground");
 
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
@@ -660,7 +663,8 @@ namespace Poseidon
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             //this is just for testing
                             //should be removed
-                            chest.skillID = 1;
+                            //skillID = 4;
+                            //chest.skillID = 1;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -930,29 +934,53 @@ namespace Poseidon
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
         }
-        private void DrawFoundRelicScene(int skillID)
+        private void DrawFoundRelicScene(int skill_id)
         {
             float xOffsetText, yOffsetText;
-            string str1 = "You have found relic " + skillID;
+            string skill_name = " " ;
+            switch (skill_id)
+            {
+                case 0:
+                    skill_name = "Hercules' bow. A mighty bow whose arrows are sure dealers of death, for they had been dipped in the blood of the great dragon of Lerna. Aim well, for it eats up your strength too. Press 1 to select and right click to use.";
+                    break;
+                case 1:
+                    skill_name = "Mjolnir, the mighty hammer of Thor. It is one of the most fearsome weapons capable of destroying everyone around you if you are strong. But if you're weak, it is will hardly dent an armour. Press 2 to select it and right click to use it.";
+                    break;
+                case 2:
+                    skill_name = "Achilles' armor. It is enchanted and can not be pierced. Press 3 to select and right click to use.";
+                    break;
+                case 3:
+                    skill_name = "Hermes' Winged sandal. Made of imperishable gold, they fly as swift as any bird and impair anyone in its way. Press 4 to select and right click to use.";
+                    break;
+                case 4:
+                    skill_name = "Aphrodite's belt. It will bewilder and hypnotize the enemy to turn against each other. Press 5 to select and right click to use.";
+                    break;
+            }
+            string str1 = "You have discovered the " + skill_name;
+
             Rectangle rectSafeArea;
-            //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            str1 = AddingObjects.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
 
             xOffsetText = rectSafeArea.X;
             yOffsetText = rectSafeArea.Y;
 
-            Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strSize = statsFont.MeasureString(str1);
             Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top + 50;
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText+10);
+
+            spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - noKeyScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
+
+            spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Goldenrod);
+            xOffsetText = rectSafeArea.Center.X - (skillTextures[skill_id].Width/2);
+            yOffsetText = rectSafeArea.Center.Y - (skillTextures[skill_id].Height/2);
 
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            spriteBatch.Draw(skillTextures[Tank.activeSkillID], skillIconPosition, Color.White);
+            spriteBatch.Draw(skillTextures[skill_id], skillIconPosition, Color.White);
         }
+
         // Draw the currently selected bullet type
         private void DrawBulletType()
         {
@@ -1041,7 +1069,7 @@ namespace Poseidon
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.GreenYellow);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
 
             //Calculate str1 position

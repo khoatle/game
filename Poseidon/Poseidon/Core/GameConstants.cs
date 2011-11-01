@@ -72,7 +72,7 @@ namespace Poseidon {
         public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,  40,  45,  10,  10  };
         public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,  50,  45,  10,  10  };
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   5,   6,   0,   0  };
+        public static int[] NumberMutantShark =     {   5,   0,   0,   1,   2,   3,   4,   5,   6,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {  10,   5,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };

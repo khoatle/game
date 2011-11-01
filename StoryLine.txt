@@ -131,9 +131,3 @@ Helped by Poseidon (sample cut scenes ) - 10-20 s
 Actual fighting scene with music with skills and effects = 60s
 Talk everything about the game. - 2-3 mins
 Coming soon..
-
-Sound work left:
-fish hurted, hunter die,boss die, hunter pushed, bot hurted
-
-Programming work:
-Have/lost key 

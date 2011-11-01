@@ -26,6 +26,13 @@ namespace Poseidon.Core
         public SoundEffect bossLaugh;
         public SoundEffect gameOver;
         public SoundEffect gameWon;
+        public SoundEffect bodyHit;
+        public SoundEffect animalYell;
+        public SoundEffect animalHappy;
+        public SoundEffect hunterYell;
+        public SoundEffect botYell;
+        public SoundEffect mutantSharkYell;
+        public SoundEffect chasingBulletSound;
 
 
         private SoundEffect explosion;
@@ -141,7 +148,13 @@ namespace Poseidon.Core
             bossLaugh = Content.Load<SoundEffect>("Sounds/SoundEffects/bossLaugh");
             gameOver = Content.Load<SoundEffect>("Sounds/SoundEffects/gameOver");
             gameWon = Content.Load<SoundEffect>("Sounds/SoundEffects/gameWon");
-
+            bodyHit = Content.Load<SoundEffect>("Sounds/SoundEffects/bodyHitSound");
+            animalYell = Content.Load<SoundEffect>("Sounds/SoundEffects/animalYell");
+            animalHappy = Content.Load<SoundEffect>("Sounds/SoundEffects/animalHappy");
+            hunterYell = Content.Load<SoundEffect>("Sounds/SoundEffects/hunterYell");
+            botYell = Content.Load<SoundEffect>("Sounds/SoundEffects/botYell");
+            mutantSharkYell = Content.Load<SoundEffect>("Sounds/SoundEffects/mutantsharkYell");
+            chasingBulletSound = Content.Load<SoundEffect>("Sounds/SoundEffects/chasingBulletSound");
 
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");

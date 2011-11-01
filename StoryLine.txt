@@ -133,5 +133,7 @@ Talk everything about the game. - 2-3 mins
 Coming soon..
 
 Sound work left:
-mini game
-win/lose game
+fish hurted, hunter die,boss die, hunter pushed, bot hurted
+
+Programming work:
+Have/lost key 

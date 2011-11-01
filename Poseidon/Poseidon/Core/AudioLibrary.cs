@@ -8,6 +8,7 @@ namespace Poseidon.Core
     {
         public Song[] backgroundMusics;
         public Song[] bossMusics;
+        public Song[] minigameMusics;
         public SoundEffect botNormalShot;
         public SoundEffect herculesShot;
         public SoundEffect hermesSound;
@@ -23,6 +24,9 @@ namespace Poseidon.Core
         public SoundEffect plantSound;
         public SoundEffect retrieveSound;
         public SoundEffect bossLaugh;
+        public SoundEffect gameOver;
+        public SoundEffect gameWon;
+
 
         private SoundEffect explosion;
         private SoundEffect newMeteor;
@@ -113,10 +117,13 @@ namespace Poseidon.Core
         {
             backgroundMusics = new Song[GameConstants.NumNormalBackgroundMusics];
             bossMusics = new Song[GameConstants.NumBossBackgroundMusics];
+            minigameMusics = new Song[GameConstants.NumMinigameBackgroundMusics];
             backgroundMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground1");
             backgroundMusics[1] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground2");
             backgroundMusics[2] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground3");
+            backgroundMusics[3] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground4");
             bossMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/bossBackground1");
+            minigameMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/minigameBackground");
             botNormalShot = Content.Load<SoundEffect>("Sounds/SoundEffects/hydrobotNormalShot");
             herculesShot = Content.Load<SoundEffect>("Sounds/SoundEffects/herculesShot");
             hermesSound = Content.Load<SoundEffect>("Sounds/SoundEffects/hermesSound");
@@ -132,6 +139,9 @@ namespace Poseidon.Core
             plantSound = Content.Load<SoundEffect>("Sounds/SoundEffects/plantingSound");
             retrieveSound = Content.Load<SoundEffect>("Sounds/SoundEffects/retrievingSound");
             bossLaugh = Content.Load<SoundEffect>("Sounds/SoundEffects/bossLaugh");
+            gameOver = Content.Load<SoundEffect>("Sounds/SoundEffects/gameOver");
+            gameWon = Content.Load<SoundEffect>("Sounds/SoundEffects/gameWon");
+
 
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");

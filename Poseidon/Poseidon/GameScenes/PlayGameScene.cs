@@ -138,6 +138,7 @@ namespace Poseidon
         // only show once
         bool showFoundKey = false;
         bool firstShow = true;
+        public static bool hadkey = false;
 
         //for drawing winning or losing scenes
         Texture2D winningTexture, losingTexture;
@@ -284,7 +285,7 @@ namespace Poseidon
             //User must find the key at every level
             firstShow = true;
             showFoundKey = false;
-
+            hadkey = false;
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
@@ -530,7 +531,10 @@ namespace Poseidon
                     if (currentLevel == 0 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
                         if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > GameConstants.EnvThresholdForKey)
+                        {
                             showFoundKey = true;
+                            hadkey = true;
+                        }
                     }
                     if (showFoundKey && firstShow)
                     {
@@ -891,12 +895,23 @@ namespace Poseidon
                     }
 
                     //Checking win/lost condition for this level
-                    if (Tank.currentHitPoint <= 0) { currentGameState = GameState.Lost; }
+                    if (Tank.currentHitPoint <= 0) 
+                    { 
+                        currentGameState = GameState.Lost;
+                        audio.gameOver.Play();
+                    }
 
                     roundTimer -= gameTime.ElapsedGameTime;
-                    if (CheckWinCondition()) currentGameState = GameState.Won;
-                    if (CheckLoseCondition()) currentGameState = GameState.Lost;
-
+                    if (CheckWinCondition())
+                    {
+                        currentGameState = GameState.Won;
+                        audio.gameWon.Play();
+                    }
+                    if (CheckLoseCondition())
+                    {
+                        currentGameState = GameState.Lost;
+                        audio.gameOver.Play();
+                    }
                     //for the shader
                     m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
 

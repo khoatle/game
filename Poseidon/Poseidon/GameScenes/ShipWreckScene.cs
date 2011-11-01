@@ -233,6 +233,7 @@ namespace Poseidon
             tank.ForwardDirection = 0f;
             //MediaPlayer.Play(audio.BackMusic);
             showNoKey = false;
+            showPainting = false;
             InitializeShipField(Content);
             base.Show();
         }
@@ -653,7 +654,7 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < GameConstants.EnvThresholdForKey)
+                        if (!PlayGameScene.hadkey)
                         {
                             showNoKey = true;
                         }
@@ -664,8 +665,8 @@ namespace Poseidon
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             //this is just for testing
                             //should be removed
-                            //skillID = 4;
-                            //chest.skillID = 1;
+                            skillID = 4;
+                            chest.skillID = 4;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -773,13 +774,7 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
-            if (foundRelic)
-            {
-                spriteBatch.Begin();
-                DrawFoundRelicScene(skillID);
-                spriteBatch.End();
-                return;
-            }
+            
             if (showPainting)
             {
                 spriteBatch.Begin();
@@ -913,6 +908,14 @@ namespace Poseidon
             if (Tank.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);
             spriteBatch.End();
+            if (foundRelic)
+            {
+                spriteBatch.Begin();
+                DrawFoundRelicScene(skillID);
+                spriteBatch.End();
+                RestoreGraphicConfig();
+                //return;
+            }
             
         }
         private void DrawNoKey()
@@ -970,7 +973,7 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText+10);
 
-            spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - noKeyScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
+            //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
 
             spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Goldenrod);
             xOffsetText = rectSafeArea.Center.X - (skillTextures[skill_id].Width/2);

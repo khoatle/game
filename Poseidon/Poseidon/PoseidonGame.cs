@@ -335,6 +335,7 @@ namespace Poseidon
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
+                
             }
 
             // User pauses the game
@@ -349,6 +350,7 @@ namespace Poseidon
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
+                doubleClicked = false;
             }
             if (AttributePressed)
             {
@@ -406,10 +408,10 @@ namespace Poseidon
             if (playGameScene.currentGameState == GameState.ToMiniGame)
             {
                 Random rand = new Random();
-                //if (rand.Next(2) == 0)
+                if (rand.Next(2) == 0)
                     ShowScene(quizzGameScene);
-                //else
-                //    ShowScene(typeGameScene);
+                else
+                    ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()

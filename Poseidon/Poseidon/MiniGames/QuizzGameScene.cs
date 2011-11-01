@@ -114,6 +114,7 @@ namespace Poseidon.MiniGames
             questionAnswered = 0;
             numRightAnswer = 0;
             introducing = true;
+            MediaPlayer.Stop();
             base.Show();
         }
 
@@ -155,6 +156,10 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(audio.minigameMusics[random.Next(GameConstants.NumMinigameBackgroundMusics)]);
+            }
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
             if (introducing)

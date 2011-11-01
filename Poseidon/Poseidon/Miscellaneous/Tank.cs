@@ -295,12 +295,12 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            activeSkillID = 0;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
+            //activeSkillID = 0;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
             firstPlant = true;
             prevPlantTime = 0;
@@ -598,15 +598,18 @@ namespace Poseidon
                     }
                 }
             }
-            foreach (Trash trash in trashes)
+            if (trashes != null)
             {
-                if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                foreach (Trash trash in trashes)
                 {
-                    trash.Retrieved = true;
-                    currentExperiencePts += trash.experienceReward;
-                    currentEnvPoint += GameConstants.envGainForTrashClean;
-                    PlayGameScene.audio.retrieveSound.Play();
-                    //RetrievedSound.Play();
+                    if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                    {
+                        trash.Retrieved = true;
+                        currentExperiencePts += trash.experienceReward;
+                        currentEnvPoint += GameConstants.envGainForTrashClean;
+                        PlayGameScene.audio.retrieveSound.Play();
+                        //RetrievedSound.Play();
+                    }
                 }
             }
             return;

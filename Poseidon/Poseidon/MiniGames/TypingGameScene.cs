@@ -43,7 +43,9 @@ namespace Poseidon.MiniGames
         //introducing game rule and stuff
         bool introducing = false;
         Texture2D introductionTexture;
-
+        // Audio
+        protected AudioLibrary audio;
+        Random random = new Random();
         //for displaying game prize
         int expAwarded = 0;
         /// <summary>
@@ -73,6 +75,9 @@ namespace Poseidon.MiniGames
                 // Get the current spritebatch
                 spriteBatch = (SpriteBatch)Game.Services.GetService(
                                                 typeof(SpriteBatch));
+                // Get the audio library
+                audio = (AudioLibrary)
+                    Game.Services.GetService(typeof(AudioLibrary));
                 LoadContent();
         }
 
@@ -83,6 +88,7 @@ namespace Poseidon.MiniGames
         {
             introducing = true;
             isOver = false;
+            MediaPlayer.Stop();
             base.Show();
         }
 
@@ -91,6 +97,7 @@ namespace Poseidon.MiniGames
         /// </summary>
         public override void Hide()
         {
+            MediaPlayer.Stop();
             base.Hide();
         }
 
@@ -113,6 +120,10 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(audio.minigameMusics[random.Next(GameConstants.NumMinigameBackgroundMusics)]);
+            }
             if (isOver) return;
             if (introducing)
             {

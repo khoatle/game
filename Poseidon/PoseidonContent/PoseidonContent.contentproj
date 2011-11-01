@@ -557,8 +557,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\AttributeBoardTextures\SkillBackground.bmp">
-      <Name>SkillBackground</Name>
+    <Compile Include="Image\AttributeBoardTextures\AttributeBackground.bmp">
+      <Name>AttributeBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -1158,6 +1158,13 @@
       <Name>bossLaugh</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\skillFoundBackground.png">
+      <Name>skillFoundBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

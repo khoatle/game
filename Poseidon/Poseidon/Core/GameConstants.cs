@@ -52,7 +52,8 @@ namespace Poseidon {
         //Health update of fish based on environment
         public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds
         public const int healthChangeValue = 1; // health point change per interval
-
+        //environment threshold for having key to treasure chest
+        public const float EnvThresholdForKey = 0.4f;
 
         // Bullet const
         public const int DefaultBulletDamage = 10;
@@ -154,7 +155,6 @@ namespace Poseidon {
         public static string[] iconNames = { "Image/SkillIcons/Bow", "Image/SkillIcons/Hammer", "Image/SkillIcons/armor", 
                                                "Image/SkillIcons/sandal", "Image/SkillIcons/AphroBelt" };
         public static string[] bulletNames = { "Image/BulletIcons/damageBullet", "Image/BulletIcons/healthBullet" };
-        public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;
 
         public const float coolDownForPlant = 5;
@@ -166,13 +166,13 @@ namespace Poseidon {
 
         //so that it is easier to aim
         public const float EasyAimScale = 1.5f;
-
-        //environment threshold for having key to treasure chest
-        public const float EnvThresholdForKey = 0.4f;
         
         //for playing background musics
         public const int NumNormalBackgroundMusics = 3;
         public const int NumBossBackgroundMusics = 1;
+
+        //attributes
+        public static int gainAttributeCost = 1;
 
     }
 }

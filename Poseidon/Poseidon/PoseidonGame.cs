@@ -44,9 +44,9 @@ namespace Poseidon
         private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge, typeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture;
         StartScene startScene;
-        // For the Skill board
-        AttributeBoard skillScene;
-        protected Texture2D SkillBackgroundTexture;
+        // For the Attribute board
+        AttributeBoard AttributeScene;
+        protected Texture2D AttributeBackgroundTexture;
         // For the Level Objective
         LevelObjectiveScene levelObjectiveScene;
         protected Texture2D LevelObjectiveBackgroundTexture;
@@ -70,7 +70,7 @@ namespace Poseidon
         bool pPressed;
         bool backPressed;
         bool zPressed;
-        bool skillPressed;
+        bool AttributePressed;
         bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
@@ -159,7 +159,7 @@ namespace Poseidon
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
-            SkillBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/SkillBackground");
+            AttributeBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/AttributeBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom1");
             typeGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom2");
@@ -176,10 +176,10 @@ namespace Poseidon
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
             Components.Add(shipWreckScene);
 
-            // Create the Skill board
-            skillScene = new AttributeBoard(this, smallFont, largeFont,
-                SkillBackgroundTexture, Content);
-            Components.Add(skillScene);
+            // Create the Attribute board
+            AttributeScene = new AttributeBoard(this, smallFont, largeFont,
+                AttributeBackgroundTexture, Content);
+            Components.Add(AttributeScene);
 
             // Create level objective scene
             levelObjectiveScene = new LevelObjectiveScene(this, smallFont,
@@ -248,7 +248,7 @@ namespace Poseidon
                 (keyboardState.IsKeyUp(Keys.Z)));
             backPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
                 (keyboardState.IsKeyUp(Keys.Escape)));
-            skillPressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
+            AttributePressed = (lastKeyboardState.IsKeyDown(Keys.I) &&
                 (keyboardState.IsKeyUp(Keys.I)));
             EscPressed = (lastKeyboardState.IsKeyDown(Keys.Escape) &&
                 (keyboardState.IsKeyUp(Keys.Escape)));
@@ -279,10 +279,10 @@ namespace Poseidon
             {
                 HandleActionInput();
             }
-            // Handle Skill scene input
-            else if (activeScene == skillScene)
+            // Handle Attribute scene input
+            else if (activeScene == AttributeScene)
             {
-                HandleSkillSceneInput();
+                HandleAttributeSceneInput();
             }
             // Handle ship wreck scene input
             else if (activeScene == shipWreckScene)
@@ -350,10 +350,10 @@ namespace Poseidon
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
             }
-            if (skillPressed)
+            if (AttributePressed)
             {
                 prevScene = shipWreckScene;
-                ShowScene(skillScene);
+                ShowScene(AttributeScene);
             }
         }
         /// <summary>
@@ -373,10 +373,10 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (skillPressed)
+            if (AttributePressed)
             {
                 prevScene = playGameScene;
-                ShowScene(skillScene);
+                ShowScene(AttributeScene);
             }
             if (doubleClicked 
                 && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
@@ -457,58 +457,58 @@ namespace Poseidon
             }
         }
         /// <summary>
-        /// Handle buttons and keyboard in SkillScene
+        /// Handle buttons and keyboard in Attribute Scene
         /// </summary>
-        private void HandleSkillSceneInput()
+        private void HandleAttributeSceneInput()
         {
-            if (skillScene.speedIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
+            if (AttributeScene.speedIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
                     Tank.speed += 0.1f;
-                    Tank.unassignedPts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
-            if (skillScene.hitpointIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
+            if (AttributeScene.hitpointIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
                     Tank.currentHitPoint += 10;
                     if (Tank.currentHitPoint > Tank.maxHitPoint)
                         Tank.maxHitPoint = Tank.currentHitPoint;
-                    Tank.unassignedPts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
-            if (skillScene.shootrateIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
+            if (AttributeScene.shootrateIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
                     Tank.shootingRate += 0.1f;
-                    Tank.unassignedPts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
-            if (skillScene.bulletStrengthIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
+            if (AttributeScene.bulletStrengthIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
 
-                if (Tank.unassignedPts >= GameConstants.gainSkillCost)
+                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
                     Tank.strength += 0.1f;
-                    Tank.unassignedPts -= GameConstants.gainSkillCost;
+                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
-            if ((skillScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1,1))
+            if ((AttributeScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1,1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
                 || EscPressed )

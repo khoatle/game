@@ -60,7 +60,7 @@ namespace Poseidon
             painting.painting = content.Load<Texture2D>("Image/Paintings/painting6");
             painting.caption = "Painting of coral reef (dated 1867)";
             painting.tip = "Air pollution contributes to water pollution and increases acidity in oceans and lakes. You can reduce your output by avoiding aerosols and driving less, for starters.";
-            painting.color = Color.DarkRed;
+            painting.color = Color.Gold;
             paintings.Add(painting);
 
             painting = new Painting();

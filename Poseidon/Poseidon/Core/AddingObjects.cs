@@ -631,7 +631,7 @@ namespace Poseidon
             spriteBatch.Draw(LevelBar,
                 new Rectangle(barX, barY, (int)(LevelBar.Width * experience), barHeight),
                 new Rectangle(0, barHeight + 1, LevelBar.Width, barHeight),
-                Color.DarkSlateBlue);
+                Color.Aqua);
             //Draw the box around the health bar
             spriteBatch.Draw(LevelBar,
                 new Rectangle(barX, barY, LevelBar.Width, barHeight),

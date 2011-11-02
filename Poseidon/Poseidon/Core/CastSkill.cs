@@ -27,6 +27,7 @@ namespace Poseidon
 
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * healthiness, Tank.strengthUp);
             d.loadContent(Content, "Models/BulletModels/herculesBullet");
+            PlayGameScene.audio.herculesShot.Play();
             myBullets.Add(d);
         }
         public static void UseThorHammer(GameTime gameTime, Tank tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount)
@@ -39,15 +40,15 @@ namespace Poseidon
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
                     enemies[i].health -= (int) (GameConstants.ThorDamage * healthiness * Tank.strength);
                     PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
-                    if (enemies[i].health <= 0)
-                    {
-                        if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
-                        for (int k = i + 1; k < enemiesAmount; k++) {
-                            enemies[k - 1] = enemies[k];
-                        }
-                        enemies[--enemiesAmount] = null;
-                        i--;
-                    }
+                    //if (enemies[i].health <= 0)
+                    //{
+                    //    if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
+                    //    for (int k = i + 1; k < enemiesAmount; k++) {
+                    //        enemies[k - 1] = enemies[k];
+                    //    }
+                    //    enemies[--enemiesAmount] = null;
+                    //    i--;
+                    //}
                 }       
             }
         }
@@ -87,6 +88,7 @@ namespace Poseidon
             {
                 if (tank.BoundingSphere.Intersects(enemies[i].BoundingSphere))
                 {
+                    PlayGameScene.audio.bodyHit.Play();
                     float healthiness = (float)Tank.currentHitPoint / (float)GameConstants.PlayerStartingHP;
                     Vector3 oldPosition = enemies[i].Position;
                     Vector3 pushVector = enemies[i].Position - tank.Position;
@@ -105,16 +107,16 @@ namespace Poseidon
                     }
                     enemies[i].health -= (int)(GameConstants.HermesDamage * healthiness * Tank.strength);
                     audio.Shooting.Play();
-                    if (enemies[i].health <= 0)
-                    {
-                        if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
-                        for (int k = i + 1; k < enemiesAmount; k++)
-                        {
-                            enemies[k - 1] = enemies[k];
-                        }
-                        enemies[--enemiesAmount] = null;
-                        i--;
-                    }
+                    //if (enemies[i].health <= 0)
+                    //{
+                    //    if (enemies[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
+                    //    for (int k = i + 1; k < enemiesAmount; k++)
+                    //    {
+                    //        enemies[k - 1] = enemies[k];
+                    //    }
+                    //    enemies[--enemiesAmount] = null;
+                    //    i--;
+                    //}
                 }
             }
         }

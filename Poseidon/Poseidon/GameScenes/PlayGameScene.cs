@@ -138,6 +138,10 @@ namespace Poseidon
         // only show once
         bool showFoundKey = false;
         bool firstShow = true;
+        public static bool hadkey = false;
+
+        //for drawing winning or losing scenes
+        Texture2D winningTexture, losingTexture;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -185,6 +189,10 @@ namespace Poseidon
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
             schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
+
+            //loading winning, losing textures
+            winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
+            losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
             this.Load();
         }
 
@@ -277,7 +285,7 @@ namespace Poseidon
             //User must find the key at every level
             firstShow = true;
             showFoundKey = false;
-
+            hadkey = false;
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
@@ -386,7 +394,7 @@ namespace Poseidon
             trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
             for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
             {
-                random_model = random.Next(6);
+                random_model = random.Next(5);
                 orientation = random.Next(100);
                 trashes.Add(new Trash());
                 switch (random_model)
@@ -401,16 +409,13 @@ namespace Poseidon
                         trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
                         break;
                     case 3:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
                         break;
                     case 4:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
-                        break;
-                    case 5:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
                         break;
                 }
-                //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
+               //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
             }
             AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
@@ -502,7 +507,6 @@ namespace Poseidon
                 //    //this.Exit();
                 CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
 
-                
                 if (currentGameState == GameState.PlayingCutScene)
                 {
                     // Next sentence when the user press Enter
@@ -527,7 +531,10 @@ namespace Poseidon
                     if (currentLevel == 0 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
                         if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > GameConstants.EnvThresholdForKey)
+                        {
                             showFoundKey = true;
+                            hadkey = true;
+                        }
                     }
                     if (showFoundKey && firstShow)
                     {
@@ -599,7 +606,7 @@ namespace Poseidon
                             {
                                 Tank.firstUse[0] = false;
                                 Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
-                                audio.Explosion.Play();
+                                //audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                                 tank.reachDestination = true;
@@ -626,7 +633,7 @@ namespace Poseidon
                             {
                                 Tank.firstUse[2] = false;
                                 Tank.invincibleMode = true;
-                                audio.NewMeteor.Play();
+                                audio.armorSound.Play();
                                 Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             }
@@ -638,7 +645,7 @@ namespace Poseidon
                             if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || Tank.firstUse[3] == true)
                             {
                                 Tank.firstUse[3] = false;
-                                audio.NewMeteor.Play();
+                                audio.hermesSound.Play();
                                 Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.supersonicMode = true;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
@@ -663,6 +670,7 @@ namespace Poseidon
 
                                 Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                                audio.hipnotizeSound.Play();
                             }
                         }
 
@@ -680,7 +688,7 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
                             {
                                 prevFireTime = gameTime.TotalGameTime;
-                                audio.Shooting.Play();
+                                //audio.Shooting.Play();
                                 if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             }
@@ -708,7 +716,7 @@ namespace Poseidon
                             {
                                 tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                                 prevFireTime = gameTime.TotalGameTime;
-                                audio.Shooting.Play();
+                                //audio.Shooting.Play();
                                 if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                                 //so the tank will not move
@@ -792,7 +800,7 @@ namespace Poseidon
                     //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
                     {
                         prevFireTime = gameTime.TotalGameTime;
-                        audio.Shooting.Play();
+                        //audio.Shooting.Play();
                         if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                         else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                     }
@@ -803,7 +811,7 @@ namespace Poseidon
                     {
                         if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects, gameTime))
                         {
-                            audio.PowerShow.Play();
+                            audio.plantSound.Play();
                             Tank.currentExperiencePts += Plant.experienceReward;
                             Tank.currentEnvPoint += GameConstants.envGainForDropSeed;
                         }
@@ -861,11 +869,11 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true);
                     Collision.updateProjectileHitTank(tank, enemyBullet);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false);
 
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
                     Collision.deleteSmallerThanZero(fish, ref fishAmount);
@@ -887,12 +895,23 @@ namespace Poseidon
                     }
 
                     //Checking win/lost condition for this level
-                    if (Tank.currentHitPoint <= 0) { currentGameState = GameState.Lost; }
+                    if (Tank.currentHitPoint <= 0) 
+                    { 
+                        currentGameState = GameState.Lost;
+                        audio.gameOver.Play();
+                    }
 
                     roundTimer -= gameTime.ElapsedGameTime;
-                    if (CheckWinCondition()) currentGameState = GameState.Won;
-                    if (CheckLoseCondition()) currentGameState = GameState.Lost;
-
+                    if (CheckWinCondition())
+                    {
+                        currentGameState = GameState.Won;
+                        audio.gameWon.Play();
+                    }
+                    if (CheckLoseCondition())
+                    {
+                        currentGameState = GameState.Lost;
+                        audio.gameOver.Play();
+                    }
                     //for the shader
                     m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
 
@@ -945,14 +964,7 @@ namespace Poseidon
                 DrawFoundKey();
                 return;
             }
-            if (paused)
-            {
-                // Draw the "pause" text
-                spriteBatch.Begin();
-                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
-                    Color.White);
-                spriteBatch.End();
-            }
+            
             switch (currentGameState)
             {
                 case GameState.PlayingCutScene:
@@ -965,13 +977,21 @@ namespace Poseidon
                     DrawGameplayScreen();
                     break;
                 case GameState.Won:
-                    DrawWinOrLossScreen(GameConstants.StrGameWon);
+                    DrawWinOrLossScreen();
                     break;
                 case GameState.Lost:
-                    DrawWinOrLossScreen(GameConstants.StrGameLost);
+                    DrawWinOrLossScreen();
                     break;
             }
             base.Draw(gameTime);
+            if (paused)
+            {
+                // Draw the "pause" text
+                spriteBatch.Begin();
+                spriteBatch.Draw(actionTexture, pausePosition, pauseRect,
+                    Color.White);
+                spriteBatch.End();
+            }
 
         }
         private void DrawFoundKey()
@@ -1010,36 +1030,12 @@ namespace Poseidon
             }
         }
 
-        private void DrawWinOrLossScreen(string gameResult)
+        private void DrawWinOrLossScreen()
         {
             spriteBatch.Begin();
-            float xOffsetText, yOffsetText;
-            Vector2 viewportSize = new Vector2(GraphicDevice.Viewport.Width,
-                GraphicDevice.Viewport.Height);
-            Vector2 strCenter;
-
-            xOffsetText = yOffsetText = 0;
-            Vector2 strResult = statsFont.MeasureString(gameResult);
-            Vector2 strPlayAgainSize =
-                statsFont.MeasureString(GameConstants.StrPlayAgain);
-            Vector2 strPosition;
-            strCenter = new Vector2(strResult.X / 2, strResult.Y / 2);
-
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y);
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-
-            spriteBatch.DrawString(statsFont, gameResult,
-                strPosition, Color.Red);
-
-            strCenter =
-                new Vector2(strPlayAgainSize.X / 2, strPlayAgainSize.Y / 2);
-            yOffsetText = (viewportSize.Y / 2 - strCenter.Y) +
-                (float)statsFont.LineSpacing;
-            xOffsetText = (viewportSize.X / 2 - strCenter.X);
-            strPosition = new Vector2((int)xOffsetText, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, GameConstants.StrPlayAgain,
-                strPosition, Color.AntiqueWhite);
+            if (currentGameState == GameState.Won)
+                spriteBatch.Draw(winningTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+            else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
             spriteBatch.End();
         }
 
@@ -1336,8 +1332,10 @@ namespace Poseidon
             //    //str2 += "\nBub pos " + bubbles[0].bubblePos;
             //}
             str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
+            //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
             //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
+            str2 += "\nFish amount " + fishAmount + " Percentage fish left" + (double)fishAmount / (double)GameConstants.NumberFish[currentLevel];
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
@@ -1374,7 +1372,7 @@ namespace Poseidon
             AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, Tank.currentEnvPoint, Tank.maxEnvPoint);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.GreenYellow);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.Brown);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

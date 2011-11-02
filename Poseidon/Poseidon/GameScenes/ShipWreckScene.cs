@@ -71,6 +71,7 @@ namespace Poseidon
         protected Texture2D stunnedTexture;
         protected Texture2D gameObjectiveIconTexture;
         protected Texture2D noKeyScreen;
+        protected Texture2D skillFoundScreen;
         // He died inside the ship wreck?
         public bool returnToMain;
         // has artifact?
@@ -204,6 +205,8 @@ namespace Poseidon
 
             noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/no_key");
 
+            skillFoundScreen = Content.Load<Texture2D>("Image/SceneTextures/skillFoundBackground");
+
             // Load and compile our Shader into our Effect instance.
             effectPost = Content.Load<Effect>("Shaders/PostProcess");
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
@@ -230,6 +233,7 @@ namespace Poseidon
             tank.ForwardDirection = 0f;
             //MediaPlayer.Play(audio.BackMusic);
             showNoKey = false;
+            showPainting = false;
             InitializeShipField(Content);
             base.Show();
         }
@@ -430,7 +434,7 @@ namespace Poseidon
                         {
                             Tank.firstUse[0] = false;
                             Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
-                            audio.Explosion.Play();
+                            //audio.Explosion.Play();
                             CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                             tank.reachDestination = true;
@@ -457,7 +461,7 @@ namespace Poseidon
                         {
                             Tank.firstUse[2] = false;
                             Tank.invincibleMode = true;
-                            audio.NewMeteor.Play();
+                            audio.armorSound.Play();
                             Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
                         }
@@ -469,7 +473,7 @@ namespace Poseidon
                         if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || Tank.firstUse[3] == true)
                         {
                             Tank.firstUse[3] = false;
-                            audio.NewMeteor.Play();
+                            audio.hermesSound.Play();
                             Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.supersonicMode = true;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
@@ -493,6 +497,7 @@ namespace Poseidon
 
                             Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                            audio.hipnotizeSound.Play();
                         }
                     }
                     pointIntersect = Vector3.Zero;
@@ -508,7 +513,7 @@ namespace Poseidon
                         if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
                         {
                             prevFireTime = gameTime.TotalGameTime;
-                            audio.Shooting.Play();
+                            //audio.Shooting.Play();
                             if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                         }
@@ -536,7 +541,7 @@ namespace Poseidon
                         {
                             tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
                             prevFireTime = gameTime.TotalGameTime;
-                            audio.Shooting.Play();
+                            //audio.Shooting.Play();
                             if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             //so the tank will not move
@@ -602,7 +607,7 @@ namespace Poseidon
                         )
                 {
                     prevFireTime = gameTime.TotalGameTime;
-                    audio.Shooting.Play();
+                    //audio.Shooting.Play();
                     if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                     else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                 }
@@ -624,9 +629,9 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true);
                 Collision.updateProjectileHitTank(tank, enemyBullet);
 
                 Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
@@ -649,7 +654,7 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint < GameConstants.EnvThresholdForKey)
+                        if (!PlayGameScene.hadkey)
                         {
                             showNoKey = true;
                         }
@@ -660,7 +665,8 @@ namespace Poseidon
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             //this is just for testing
                             //should be removed
-                            chest.skillID = 1;
+                            skillID = 4;
+                            chest.skillID = 4;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -768,13 +774,7 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
-            if (foundRelic)
-            {
-                spriteBatch.Begin();
-                DrawFoundRelicScene(skillID);
-                spriteBatch.End();
-                return;
-            }
+            
             if (showPainting)
             {
                 spriteBatch.Begin();
@@ -908,6 +908,14 @@ namespace Poseidon
             if (Tank.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);
             spriteBatch.End();
+            if (foundRelic)
+            {
+                spriteBatch.Begin();
+                DrawFoundRelicScene(skillID);
+                spriteBatch.End();
+                RestoreGraphicConfig();
+                //return;
+            }
             
         }
         private void DrawNoKey()
@@ -930,29 +938,53 @@ namespace Poseidon
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
         }
-        private void DrawFoundRelicScene(int skillID)
+        private void DrawFoundRelicScene(int skill_id)
         {
             float xOffsetText, yOffsetText;
-            string str1 = "You have found relic " + skillID;
+            string skill_name = " " ;
+            switch (skill_id)
+            {
+                case 0:
+                    skill_name = "Hercules' bow. A mighty bow whose arrows are sure dealers of death, for they had been dipped in the blood of the great dragon of Lerna. Aim well, for it eats up your strength too. Press 1 to select and right click to use.";
+                    break;
+                case 1:
+                    skill_name = "Mjolnir, the mighty hammer of Thor. It is one of the most fearsome weapons capable of destroying everyone around you if you are strong. But if you're weak, it is will hardly dent an armour. Press 2 to select it and right click to use it.";
+                    break;
+                case 2:
+                    skill_name = "Achilles' armor. It is enchanted and can not be pierced. Press 3 to select and right click to use.";
+                    break;
+                case 3:
+                    skill_name = "Hermes' Winged sandal. Made of imperishable gold, they fly as swift as any bird and impair anyone in its way. Press 4 to select and right click to use.";
+                    break;
+                case 4:
+                    skill_name = "Aphrodite's belt. It will bewilder and hypnotize the enemy to turn against each other. Press 5 to select and right click to use.";
+                    break;
+            }
+            string str1 = "You have discovered the " + skill_name;
+
             Rectangle rectSafeArea;
-            //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            str1 = AddingObjects.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
 
             xOffsetText = rectSafeArea.X;
             yOffsetText = rectSafeArea.Y;
 
-            Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strSize = statsFont.MeasureString(str1);
             Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
-            xOffsetText = rectSafeArea.Right - 100;
-            yOffsetText = rectSafeArea.Top + 50;
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText+20);
+
+            //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
+
+            spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Silver);
+            xOffsetText = rectSafeArea.Center.X - (skillTextures[skill_id].Width/2);
+            yOffsetText = rectSafeArea.Center.Y - (skillTextures[skill_id].Height/2);
 
             Vector2 skillIconPosition =
                 new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            spriteBatch.Draw(skillTextures[Tank.activeSkillID], skillIconPosition, Color.White);
+            spriteBatch.Draw(skillTextures[skill_id], skillIconPosition, Color.White);
         }
+
         // Draw the currently selected bullet type
         private void DrawBulletType()
         {
@@ -962,15 +994,17 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Left + 225;
+            //xOffsetText = rectSafeArea.Left + 325;
+            xOffsetText = rectSafeArea.Center.X - 150 - 64;
             yOffsetText = rectSafeArea.Bottom - 80;
 
-            Vector2 bulletIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 bulletIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
             //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
             spriteBatch.Draw(bulletTypeTextures[Tank.bulletType], destRectangle, Color.White);
         }
+
         // Draw the currently selected skill/spell
         private void DrawActiveSkill()
         {
@@ -980,16 +1014,19 @@ namespace Poseidon
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.Right - 300;
+            //xOffsetText = rectSafeArea.Right - 400;
+            xOffsetText = rectSafeArea.Center.X + 150;
             yOffsetText = rectSafeArea.Bottom - 100;
 
-            Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Vector2 skillIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
             spriteBatch.Draw(skillTextures[Tank.activeSkillID], destRectangle, Color.White);
+
         }
+
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
@@ -1041,7 +1078,7 @@ namespace Poseidon
             AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.GreenYellow);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
 
             //Calculate str1 position

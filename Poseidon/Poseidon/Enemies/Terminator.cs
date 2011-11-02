@@ -22,7 +22,7 @@ namespace Poseidon
         bool enragedMode = false;
         bool crazyMode = false;
         double timeEnrageLast = 3;
-
+        protected double timeLastLaugh = 0;
         Random random;
         int powerupsType;
 
@@ -98,7 +98,11 @@ namespace Poseidon
 
         public void RapidFire(List<DamageBullet> bullets)
         {
-
+            if (this.BoundingSphere.Intersects(PlayGameScene.frustum) && PlayGameScene.timming.TotalGameTime.TotalSeconds - timeLastLaugh > 10)
+            {
+                PlayGameScene.audio.bossLaugh.Play();
+                timeLastLaugh = PlayGameScene.timming.TotalGameTime.TotalSeconds;
+            }
             if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
             {
                 float originalForwardDir = ForwardDirection;
@@ -107,8 +111,7 @@ namespace Poseidon
                 ForwardDirection -= MathHelper.PiOver4 / 2;
                 AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1);
                 ForwardDirection = originalForwardDir;
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1);
-                PlayGameScene.audio.Shooting.Play();
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets,1);
                 prevFire = PlayGameScene.timming.TotalGameTime;
 
             }
@@ -116,11 +119,14 @@ namespace Poseidon
 
         public void RapidFire2(List<DamageBullet> bullets)
         {
-
-            if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3)
+            if (this.BoundingSphere.Intersects(PlayGameScene.frustum) && PlayGameScene.timming.TotalGameTime.TotalSeconds - timeLastLaugh > 10)
             {
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1);
-                PlayGameScene.audio.Shooting.Play();
+                PlayGameScene.audio.bossLaugh.Play();
+                timeLastLaugh = PlayGameScene.timming.TotalGameTime.TotalSeconds;
+            }
+            if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire/3)
+            {
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets,1);
                 prevFire = PlayGameScene.timming.TotalGameTime;
 
             }
@@ -173,7 +179,7 @@ namespace Poseidon
                         enragedMode = true;
                     else if (powerupsType == 1)
                         crazyMode = true;
-                    PlayGameScene.audio.MinigunWindUp.Play();
+                    //PlayGameScene.audio.MinigunWindUp.Play();
                     timePrevPowerUsed = PlayGameScene.timming.TotalGameTime.TotalSeconds;
                 }
                 else if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)

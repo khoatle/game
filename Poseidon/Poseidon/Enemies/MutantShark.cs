@@ -12,10 +12,9 @@ namespace Poseidon
 {
     class MutantShark : CombatEnemy
     {
-
-        public MutantShark()
-            : base()
-        {
+        protected double timeLastRoar = 0; 
+        Random rand = new Random();
+        public MutantShark() : base() {
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)
@@ -118,6 +117,15 @@ namespace Poseidon
                     clipPlayer.switchRange(1, 24);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
+            if (!configBits[3] && this.BoundingSphere.Intersects(PlayGameScene.frustum))
+            {
+                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - timeLastRoar > 10)
+                    if (rand.Next(100) >= 95)
+                    {
+                        timeLastRoar = PlayGameScene.timming.TotalGameTime.TotalSeconds;
+                        Roar();
+                    }
+            }
             if (configBits[3] == true)
             {
                 startChasingTime = PlayGameScene.timming.TotalGameTime;
@@ -144,16 +152,28 @@ namespace Poseidon
                     if (currentHuntingTarget.GetType().Name.Equals("Tank"))
                     {
                         //((Tank)currentHuntingTarget).currentHitPoint -= damage;
+                        PlayGameScene.audio.botYell.Play();
                         Tank.currentHitPoint -= damage;
                     }
                     if (currentHuntingTarget.GetType().Name.Equals("SwimmingObject"))
                     {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
+                        if (currentHuntingTarget.BoundingSphere.Intersects(PlayGameScene.frustum))
+                        {
+                            PlayGameScene.audio.animalYell.Play();
+                        }
                     }
                     prevFire = PlayGameScene.timming.TotalGameTime;
 
+                    if (this.BoundingSphere.Intersects(PlayGameScene.frustum))
+                        PlayGameScene.audio.biteSound.Play();
                 }
             }
+        }
+        protected void Roar()
+        {
+            PlayGameScene.audio.roarSound.Play();
+            PlayGameScene.gameCamera.Shake(10f, 1.9f);
         }
     }
 }

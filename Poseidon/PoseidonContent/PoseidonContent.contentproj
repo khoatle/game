@@ -557,8 +557,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\AttributeBoardTextures\SkillBackground.bmp">
-      <Name>SkillBackground</Name>
+    <Compile Include="Image\AttributeBoardTextures\AttributeBackground.bmp">
+      <Name>AttributeBackground</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -842,7 +842,7 @@
       <Name>trashModel1</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -850,7 +850,7 @@
       <Name>trashModel2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -887,6 +887,7 @@
       <Name>trashModel3</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -933,14 +934,14 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\classroom1.jpg">
+    <Compile Include="Image\MinigameTextures\classroom1.jpg">
       <Name>classroom1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\classroom2.jpg">
+    <Compile Include="Image\MinigameTextures\classroom2.jpg">
       <Name>classroom2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1026,6 +1027,221 @@
       <Name>normalBackground3</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\TrashModels\trashModel5.fbx">
+      <Name>trashModel5</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\TrashModels\trashModel4.fbx">
+      <Name>trashModel4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>2.5</ProcessorParameters_Scale>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\GameOver.png">
+      <Name>GameOver</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SceneTextures\LevelWin.png">
+      <Name>LevelWin</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\MinigameTextures\QuizGameIntro.png">
+      <Name>QuizGameIntro</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\MinigameTextures\TypeGameIntro.png">
+      <Name>TypeGameIntro</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\herculesShot.mp3">
+      <Name>herculesShot</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\hermesSound.mp3">
+      <Name>hermesSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\hipnotized.wav">
+      <Name>hipnotized</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\armorSound.mp3">
+      <Name>armorSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\enemyShot.mp3">
+      <Name>enemyShot</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\bossShot.mp3">
+      <Name>bossShot</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\slashSound.wav">
+      <Name>slashSound</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\biteSound.mp3">
+      <Name>biteSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\roarSound.mp3">
+      <Name>roarSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\plantingSound.mp3">
+      <Name>plantingSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\retrievingSound.wav">
+      <Name>retrievingSound</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\bossLaugh.wav">
+      <Name>bossLaugh</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\skillFoundBackground.png">
+      <Name>skillFoundBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\BackgroundMusics\normalBackground4.mp3">
+      <Name>normalBackground4</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\gameOver.wav">
+      <Name>gameOver</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\gameWon.wav">
+      <Name>gameWon</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\BackgroundMusics\minigameBackground.MP3">
+      <Name>minigameBackground</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\bodyHitSound.wav">
+      <Name>bodyHitSound</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\animalYell.wav">
+      <Name>animalYell</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\animalHappy.wav">
+      <Name>animalHappy</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\hydrobotNormalShot.wav">
+      <Name>hydrobotNormalShot</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\hunterYell.mp3">
+      <Name>hunterYell</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\botYell.mp3">
+      <Name>botYell</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\mutantsharkYell.mp3">
+      <Name>mutantsharkYell</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\chasingBulletSound.mp3">
+      <Name>chasingBulletSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

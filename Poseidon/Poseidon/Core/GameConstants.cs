@@ -48,11 +48,12 @@ namespace Poseidon {
         public const int envGainForTrashClean = 10;
         public const int envGainForHealingFish = 1;
         public const int envGainForDropSeed = 10;
-        public const int envGainForCorrectQuizAnswer = 5;
+        public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
         public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds
         public const int healthChangeValue = 1; // health point change per interval
-
+        //environment threshold for having key to treasure chest
+        public const float EnvThresholdForKey = 0.4f;
 
         // Bullet const
         public const int DefaultBulletDamage = 10;
@@ -70,8 +71,8 @@ namespace Poseidon {
         public static int[] NumberTrash =           { 50, 50, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static int[] NumberShootingEnemies = {   0,  15,  20,   0,  25,  30,  35,  40,  45,  10,  10  };
         public static int[] NumberCombatEnemies =   {   0,  15,  20,   0,  25,  30,  35,  50,  45,  10,  10  };
-        public static int[] NumberFish =            {   50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   2,   3,   4,   5,   6,   0,   0  };
+        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
+        public static int[] NumberMutantShark =     {   5,   0,   0,   1,   2,   3,   4,   5,   6,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {  10,   5,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
@@ -154,7 +155,6 @@ namespace Poseidon {
         public static string[] iconNames = { "Image/SkillIcons/Bow", "Image/SkillIcons/Hammer", "Image/SkillIcons/armor", 
                                                "Image/SkillIcons/sandal", "Image/SkillIcons/AphroBelt" };
         public static string[] bulletNames = { "Image/BulletIcons/damageBullet", "Image/BulletIcons/healthBullet" };
-        public static int gainSkillCost = 1;
         public static int skillHealthLoss = 10;
 
         public const float coolDownForPlant = 5;
@@ -166,13 +166,14 @@ namespace Poseidon {
 
         //so that it is easier to aim
         public const float EasyAimScale = 1.5f;
-
-        //environment threshold for having key to treasure chest
-        public const float EnvThresholdForKey = 0.4f;
         
         //for playing background musics
-        public const int NumNormalBackgroundMusics = 3;
+        public const int NumNormalBackgroundMusics = 4;
         public const int NumBossBackgroundMusics = 1;
+        public const int NumMinigameBackgroundMusics = 1;
+
+        //attributes
+        public static int gainAttributeCost = 1;
 
     }
 }

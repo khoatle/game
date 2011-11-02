@@ -98,6 +98,8 @@ namespace Poseidon
         public override void Hide()
         {
             //MediaPlayer.Stop();
+            string[] items = { "Resume Game", "Help", "Quit" };
+            menu.SetMenuItems(items);
             base.Hide();
         }
 

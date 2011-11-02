@@ -1217,13 +1217,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\SoundEffects\hunterYell.mp3">
-      <Name>hunterYell</Name>
-      <Importer>Mp3Importer</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Sounds\SoundEffects\botYell.mp3">
       <Name>botYell</Name>
       <Importer>Mp3Importer</Importer>
@@ -1240,6 +1233,20 @@
   <ItemGroup>
     <Compile Include="Sounds\SoundEffects\chasingBulletSound.mp3">
       <Name>chasingBulletSound</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\hunterYell.mp3">
+      <Name>hunterYell</Name>
+      <Importer>Mp3Importer</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\terminatorYell.mp3">
+      <Name>terminatorYell</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

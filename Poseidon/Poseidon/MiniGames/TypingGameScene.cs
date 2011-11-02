@@ -52,33 +52,31 @@ namespace Poseidon.MiniGames
         /// Default Constructor
         public TypingGameScene(Game game, SpriteFont font, Texture2D boxBackground, Texture2D theme, ContentManager Content)
             : base(game) {
-                this.game = game;
-                content = Content;
-                timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
-                timeInterval = 10f;
-                elapsedSeconds = 0;
-                int topLeftX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left,
-                    downLeftY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom,
-                    width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
-                    height = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height;
+            this.game = game;
+            content = Content;
+            timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
+            timeInterval = 10f;
+            elapsedSeconds = 0;
+            int topLeftX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left,
+                downLeftY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom,
+                width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
+                height = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height;
+            ParagraphLibrary paragraphLib = new ParagraphLibrary();
+            displayBox = new Textbox(topLeftX + 10, height - 240, width - 20, 200, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
 
-                displayBox = new Textbox(topLeftX + 10, height - 240, width - 20, 200,
-                    "Dream of the Red Chamber, composed by Cao Xueqin, " +
-                    "is one of China's Four Great Classical Novels.");
-                typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
-
-                isMatching = true;
-                this.boxBackground = boxBackground;
-                Components.Add(new ImageComponent(game, theme,
-                                ImageComponent.DrawMode.Stretch));
-                this.font = font;
-                // Get the current spritebatch
-                spriteBatch = (SpriteBatch)Game.Services.GetService(
-                                                typeof(SpriteBatch));
-                // Get the audio library
-                audio = (AudioLibrary)
-                    Game.Services.GetService(typeof(AudioLibrary));
-                LoadContent();
+            isMatching = true;
+            this.boxBackground = boxBackground;
+            Components.Add(new ImageComponent(game, theme,
+                            ImageComponent.DrawMode.Stretch));
+            this.font = font;
+            // Get the current spritebatch
+            spriteBatch = (SpriteBatch)Game.Services.GetService(
+                                            typeof(SpriteBatch));
+            // Get the audio library
+            audio = (AudioLibrary)
+                Game.Services.GetService(typeof(AudioLibrary));
+            LoadContent();
         }
 
         /// <summary>

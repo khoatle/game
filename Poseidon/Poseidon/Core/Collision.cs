@@ -43,7 +43,7 @@ namespace Poseidon
                             if (objs[i] is MutantShark)
                                 PlayGameScene.audio.mutantSharkYell.Play();
                             else if (objs[i] is Terminator)
-                                PlayGameScene.audio.hunterYell.Play();
+                                PlayGameScene.audio.terminatorYell.Play();
                         }
                     }
 

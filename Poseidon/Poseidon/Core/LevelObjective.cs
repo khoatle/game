@@ -15,7 +15,7 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 // this is just for instantly testing minigames
-                //if (enemiesAmount == 0) return true;
+                if (enemiesAmount == 0) return true;
                 //if (isBossKilled) return true;
 
                 //Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).

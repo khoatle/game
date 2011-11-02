@@ -665,8 +665,8 @@ namespace Poseidon
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             //this is just for testing
                             //should be removed
-                            skillID = 4;
-                            chest.skillID = 4;
+                            //skillID = 4;
+                            //chest.skillID = 4;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -1037,23 +1037,23 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1 += "0";
             str1 += roundTimer.Seconds;
-            string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
+            //string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
 
             //str1 += (roundTimer.Seconds).ToString();
 
-            Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
-            Vector3 mouseDif = pointIntersect - tank.Position;
-            float distanceFomTank = mouseDif.Length();
+            //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
+            //Vector3 mouseDif = pointIntersect - tank.Position;
+            //float distanceFomTank = mouseDif.Length();
             //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
             //str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
-            float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-            str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
-            Vector3 posDif = tank.pointToMoveTo - tank.Position;
-            float distanceToDest = posDif.Length();
+            //float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
+            //str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
+            //Vector3 posDif = tank.pointToMoveTo - tank.Position;
+            //float distanceToDest = posDif.Length();
             //str2 += "\nDistance= " + distanceToDest;
-            str2 += "\nTank Position " + tank.Position;
+            //str2 += "\nTank Position " + tank.Position;
             //str2 += "\nEnemy Position " + enemies[0].Position;
             //str2 += "\nEnemy amount " + enemies.Length;
             //str2 += "\nFish Position " + fish[0].Position;
@@ -1061,7 +1061,7 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Tank Health " + Tank.currentHitPoint;
+            //str2 += "\n Tank Health " + Tank.currentHitPoint;
             //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Display Fish Health
@@ -1092,8 +1092,8 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
             spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
-            strPosition.Y += strSize.Y;
-            spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
+            //strPosition.Y += strSize.Y;
+            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 
         }
         public bool CharacterNearChest(BoundingSphere chestSphere)

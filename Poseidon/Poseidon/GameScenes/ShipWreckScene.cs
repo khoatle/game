@@ -971,11 +971,11 @@ namespace Poseidon
 
             //Vector2 strSize = statsFont.MeasureString(str1);
             Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText+10);
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText+20);
 
             //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
 
-            spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Goldenrod);
+            spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Silver);
             xOffsetText = rectSafeArea.Center.X - (skillTextures[skill_id].Width/2);
             yOffsetText = rectSafeArea.Center.Y - (skillTextures[skill_id].Height/2);
 

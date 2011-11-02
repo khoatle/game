@@ -48,7 +48,7 @@ namespace Poseidon {
         public const int envGainForTrashClean = 10;
         public const int envGainForHealingFish = 1;
         public const int envGainForDropSeed = 10;
-        public const int envGainForCorrectQuizAnswer = 5;
+        public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
         public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds
         public const int healthChangeValue = 1; // health point change per interval

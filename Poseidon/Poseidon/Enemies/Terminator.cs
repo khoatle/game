@@ -25,7 +25,7 @@ namespace Poseidon
         protected double timeLastLaugh = 0;
         Random random;
         int powerupsType;
-        
+
         public override void Load(int clipStart, int clipEnd, int fps)
         {
             skd = Model.Tag as SkinningData;
@@ -61,7 +61,8 @@ namespace Poseidon
             Load(99, 124, 60);
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
+        {
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
                             ForwardDirection);
@@ -75,7 +76,7 @@ namespace Poseidon
                 configAction(perceptionID);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
             }
-            
+
         }
         //public override void Draw(Matrix view, Matrix projection)
         //{
@@ -106,9 +107,9 @@ namespace Poseidon
             {
                 float originalForwardDir = ForwardDirection;
                 ForwardDirection += MathHelper.PiOver4 / 4;
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets,1);
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1);
                 ForwardDirection -= MathHelper.PiOver4 / 2;
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets,1);
+                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1);
                 ForwardDirection = originalForwardDir;
                 AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets,1);
                 prevFire = PlayGameScene.timming.TotalGameTime;
@@ -143,7 +144,7 @@ namespace Poseidon
             }
             if (configBits[2] == true)
             {
-                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank); 
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
             if (configBits[3] == true)
             {
@@ -160,7 +161,7 @@ namespace Poseidon
                 if (enragedMode == true)
                 {
                     RapidFire(bullets);
-                    
+
                     if (PlayGameScene.timming.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
                         enragedMode = false;
                 }
@@ -183,10 +184,10 @@ namespace Poseidon
                 }
                 else if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
-                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets,1);
+                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1);
                     prevFire = PlayGameScene.timming.TotalGameTime;
                 }
             }
-        } 
+        }
     }
 }

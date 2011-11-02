@@ -230,7 +230,7 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            activeSkillID = lsActiveSkillID = 0;
+            //activeSkillID = lsActiveSkillID = 0;
             lsSkills = skills;
         }
 

@@ -178,25 +178,18 @@ namespace Poseidon
                 achieved_status = "Terminator is still alive.";
             }
 
-            //spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X, 20), Color.Black);
-
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
 
-            level_objective = AddingObjects.wrapLine(level_objective, objectiveBoxRect.Width-30, levelObjFont);
-            achieved_status = AddingObjects.wrapLine(achieved_status, achievedBoxRect.Width-30, levelObjFont);
+            level_objective = AddingObjects.wrapLine(level_objective, objectiveBoxRect.Width-60, levelObjFont);
+            achieved_status = AddingObjects.wrapLine(achieved_status, achievedBoxRect.Width-60, levelObjFont);
 
-            objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 20, objectiveBoxRect.Top+80);
-            achievedStringPostion = new Vector2(achievedBoxRect.Left + 20, achievedBoxRect.Top+80);
+            objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
+            achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);
 
             spriteBatch.DrawString(levelObjFont, level_objective, objectiveStringPosition, Color.Blue);
 
             spriteBatch.DrawString(levelObjFont, achieved_status, achievedStringPostion, Color.Blue);
 
-                //AddingObjects.DrawUnassignedPtsBar(UnassignedPtsBar, game, spriteBatch, statsFont, Tank.unassignedPts, (game.Window.ClientBounds.Height / 2) - 50, "UNASSIGNED POINTS", Color.DarkBlue);
-            //spriteBatch.DrawString(levelObjFont, "LEVEL1:\nYou Need to kill all enemies or the big boss", new Vector2(100, 200), Color.Black);
-            //spriteBatch.DrawString(levelObjFont, playgamescene.enemiesAmount.ToString()+" enemies left", new Vector2(100, 400), Color.Black);
-            //spriteBatch.DrawString(levelObjFont, Tank.shootingRate.ToString("F1"), new Vector2(210, game.Window.ClientBounds.Height - 320), Color.Black);
-            //spriteBatch.DrawString(levelObjFont, Tank.strength.ToString("F1"), new Vector2(game.Window.ClientBounds.Width - 270, game.Window.ClientBounds.Height - 260), Color.Black);
             spriteBatch.End();
         }
     }

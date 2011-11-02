@@ -371,7 +371,7 @@ namespace Poseidon
             prevPlantTime = 0;
             if(PlayGameScene.currentLevel>0)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
-            if (currentEnvPoint < 0) currentEnvPoint = 0;
+            if (currentEnvPoint < 100) currentEnvPoint = 100; // Player must have at least 10% env at start.
         }
 
  

@@ -70,9 +70,9 @@ namespace Poseidon {
         public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         //public static int[] NumberTrash =           { 50, 50, 0, 0, 0, 0, 0, 0, 0, 0 };
         public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
-        public static int[] NumberCombatEnemies =   {  30,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
+        public static int[] NumberCombatEnemies =   {  0,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static int[] NumberMutantShark =     {   10,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
+        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {   0,   0,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
@@ -89,9 +89,9 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(120);
+        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(120); 
         public const string StrTimeRemaining = "Days Remaining: ";
-        public const int DaysPerSecond = 2;
+        public const int DaysPerSecond = 4; // 120 = 30 days
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
         public const string StrGameLost = "Game Lost !";

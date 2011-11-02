@@ -13,7 +13,9 @@ namespace Poseidon
     class MutantShark : CombatEnemy
     {
 
-        public MutantShark() : base() {
+        public MutantShark()
+            : base()
+        {
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)
@@ -43,7 +45,7 @@ namespace Poseidon
             maxHealth = 1000;
             perceptionRadius = GameConstants.BossPerceptionRadius;
             experienceReward = 200; //1000
-            this.Load(1,24,24);
+            this.Load(1, 24, 24);
         }
         public override void ChangeBoundingSphere()
         {
@@ -91,7 +93,7 @@ namespace Poseidon
                 configAction(perceptionID);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
             }
-        
+
         }
         // Execute the actions
         protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank)

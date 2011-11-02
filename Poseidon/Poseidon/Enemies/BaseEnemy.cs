@@ -93,13 +93,15 @@ namespace Poseidon
             experienceReward = 20;
         }
 
-        public void setHypnotise() {
+        public void setHypnotise()
+        {
             isHypnotise = true;
             currentHuntingTarget = null;
             startHypnotiseTime = PlayGameScene.timming.TotalGameTime;
         }
 
-        public void wearOutHypnotise() {
+        public void wearOutHypnotise()
+        {
             isHypnotise = false;
             currentHuntingTarget = null;
         }
@@ -128,18 +130,74 @@ namespace Poseidon
         // Go straight
         protected virtual void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
         {
-            Vector3 futurePosition = Position + speed * headingDirection;
-            if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
-                    && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))
-            {
-                Position = futurePosition;
-                //BoundingSphere.Center = Position;
-                BoundingSphere.Center.X += speed * headingDirection.X;
-                BoundingSphere.Center.Z += speed * headingDirection.Z;
+            //Vector3 futurePosition = Position + speed * headingDirection;
+            //if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
+            //        && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))
+            //{
+            //    Position = futurePosition;
+            //    //BoundingSphere.Center = Position;
+            //    BoundingSphere.Center.X += speed * headingDirection.X;
+            //    BoundingSphere.Center.Z += speed * headingDirection.Z;
+            //}
+            float pullDistance = Vector3.Distance(currentHuntingTarget.Position, Position);
+
+            if (pullDistance > (BoundingSphere.Radius + currentHuntingTarget.BoundingSphere.Radius)*1.25f) {
+                Vector3 pull = (currentHuntingTarget.Position - Position) * (1 / pullDistance);
+                Vector3 totalPush = Vector3.Zero;
+
+                int contenders = 0;
+                for (int i = 0; i < enemiesAmount; i++) {
+                    if (enemies[i] != this)
+                    {
+                        Vector3 push = Position - enemies[i].Position;
+
+                        float distance = (Vector3.Distance(Position, enemies[i].Position)) - enemies[i].BoundingSphere.Radius;
+                        if (distance < BoundingSphere.Radius*3) {
+                            contenders++;
+                            if (distance < 0.0001f) // prevent divide by 0 
+                            {
+                                distance = 0.0001f;
+                            }
+                            float weight = 1 / distance;
+                            totalPush += push * weight;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < fishAmount; i++)
+                {
+                    if (fishes[i] != currentHuntingTarget)
+                    {
+                        Vector3 push = Position - fishes[i].Position;
+
+                        float distance = (Vector3.Distance(Position, fishes[i].Position) - fishes[i].BoundingSphere.Radius) - BoundingSphere.Radius;
+                        if (distance < BoundingSphere.Radius * 3)
+                        {
+                            contenders++;
+                            if (distance < 0.0001f) // prevent divide by 0 
+                            {
+                                distance = 0.0001f;
+                            }
+                            float weight = 1 / distance;
+                            totalPush += push * weight;
+                        }
+                    }
+                }
+
+                pull *= Math.Max(1, 4 * contenders);
+                pull += totalPush;
+                pull.Normalize();
+
+                Position += (pull * speed);
+                BoundingSphere.Center.X += (pull*speed).X;
+                BoundingSphere.Center.Z += (pull * speed).Z;
+
+                ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
             }
         }
 
-        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
+        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
+        {
         }
         public virtual void ChangeBoundingSphere()
         { }
@@ -233,7 +291,8 @@ namespace Poseidon
             float prevForwardDir = ForwardDirection;
             Vector3 prevFuturePosition = futurePosition;
             // try upto 10 times to change direction is there is collision
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 4; i++)
+            {
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 headingDirection = Vector3.Transform(movement, orientationMatrix);
@@ -255,7 +314,9 @@ namespace Poseidon
 
                     stucked = false;
                     break;
-                } else {
+                }
+                else
+                {
                     stucked = true;
                     futurePosition = prevFuturePosition;
                 }

@@ -8,7 +8,8 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    public class CombatEnemy : BaseEnemy {
+    public class CombatEnemy : BaseEnemy
+    {
         private BoundingSphere futureBoundingSphere;
 
         // Percept ID:
@@ -20,18 +21,21 @@ namespace Poseidon
         // Move bits:
         // 1st bit: randomWalk
         // 2nd bit: standstill
-        // 3rd bit: move straight
+        // 3rd bit: chasing
         // 4th bit: is striking
-        public CombatEnemy() : base() {
-            perceptID = new int[] {0,1,2,3};
-            configBits = new bool[] {false, false, false, false};
-            speed = (float)(GameConstants.EnemySpeed*1.5);
+        public CombatEnemy()
+            : base()
+        {
+            perceptID = new int[] { 0, 1, 2, 3 };
+            configBits = new bool[] { false, false, false, false };
+            speed = (float)(GameConstants.EnemySpeed * 1.5);
             damage = GameConstants.DefaultEnemyDamage * 3;
             perceptionRadius *= 2;
             isHypnotise = false;
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets) {
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
+        {
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
                             ForwardDirection);
@@ -47,33 +51,43 @@ namespace Poseidon
                 return;
             }
 
-            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast) {
+            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast)
+            {
                 wearOutHypnotise();
             }
-            if (!isHypnotise) {
+            if (!isHypnotise)
+            {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
                 configAction(perceptionID);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
             }
-            else {
+            else
+            {
                 int perceptionID = perceptAndLock(tank, enemyList, enemySize);
                 configAction(perceptionID);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
             }
         }
 
-        protected int perceptAndLock(Tank tank, SwimmingObject[] enemyList, int enemySize) {
-            if (!isHypnotise && Vector3.Distance(Position, tank.Position) < perceptionRadius) {
+        protected int perceptAndLock(Tank tank, SwimmingObject[] enemyList, int enemySize)
+        {
+            if (!isHypnotise && Vector3.Distance(Position, tank.Position) < perceptionRadius)
+            {
                 currentHuntingTarget = tank;
                 return perceptID[1];
-            } else {
-                if (currentHuntingTarget != null 
-                        && Vector3.Distance(Position, currentHuntingTarget.Position) < perceptionRadius) {
-                    return perceptID[2];      
+            }
+            else
+            {
+                if (currentHuntingTarget != null
+                        && Vector3.Distance(Position, currentHuntingTarget.Position) < perceptionRadius)
+                {
+                    return perceptID[2];
                 }
 
-                for (int i = 0; i < enemySize; i++) {
-                    if (this != enemyList[i] && Vector3.Distance(Position, enemyList[i].Position) < perceptionRadius) { 
+                for (int i = 0; i < enemySize; i++)
+                {
+                    if (this != enemyList[i] && Vector3.Distance(Position, enemyList[i].Position) < perceptionRadius)
+                    {
                         currentHuntingTarget = enemyList[i];
                         return perceptID[3];
                     }
@@ -82,20 +96,27 @@ namespace Poseidon
             }
         }
 
-        protected void configAction(int perception) {
-            if (perception == perceptID[0]) {
-                if (currentHuntingTarget != null && clearMind() == false) {
+        protected void configAction(int perception)
+        {
+            if (perception == perceptID[0])
+            {
+                if (currentHuntingTarget != null && clearMind() == false)
+                {
                     configBits[0] = false;
                     configBits[1] = false;
                     configBits[2] = true;
                     configBits[3] = false;
-                } else {
+                }
+                else
+                {
                     configBits[0] = true;
                     configBits[1] = false;
                     configBits[2] = false;
                     configBits[3] = false;
                 }
-            } else if (perception == perceptID[1] || perception == perceptID[2] || perception == perceptID[3]) {
+            }
+            else if (perception == perceptID[1] || perception == perceptID[2] || perception == perceptID[3])
+            {
                 configBits[0] = false;
                 configBits[2] = true;
 
@@ -106,36 +127,44 @@ namespace Poseidon
             }
         }
 
-        protected void calculateFutureBoundingSphere() {
+        protected void calculateFutureBoundingSphere()
+        {
             Vector3 futurePosition = Position + speed * headingDirection;
             futureBoundingSphere = new BoundingSphere(futurePosition, BoundingSphere.Radius);
         }
 
         // Execute the actions
-        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank) {
-            if (configBits[0] == true) {
+        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank)
+        {
+            if (configBits[0] == true)
+            {
                 // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 30) && !configBits[3])
                     clipPlayer.switchRange(1, 30);
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
                 return;
             }
-            if (currentHuntingTarget != null) { 
+            if (currentHuntingTarget != null)
+            {
                 calculateHeadingDirection();
                 calculateFutureBoundingSphere();
             }
-            if (configBits[2] == true) {
+            if (configBits[2] == true)
+            {
                 // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 30) && !configBits[3])
                     clipPlayer.switchRange(1, 30);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
-            if (configBits[3] == true) {
+            if (configBits[3] == true)
+            {
                 startChasingTime = PlayGameScene.timming.TotalGameTime;
 
-                if (currentHuntingTarget.GetType().Name.Equals("Fish")) {
+                if (currentHuntingTarget.GetType().Name.Equals("Fish"))
+                {
                     Fish tmp = (Fish)currentHuntingTarget;
-                    if (tmp.health <= 0) {
+                    if (tmp.health <= 0)
+                    {
                         currentHuntingTarget = null;
                         return;
                     }
@@ -151,14 +180,17 @@ namespace Poseidon
                     }
                 }
 
-                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire) {
+                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                {
                     if (!clipPlayer.inRange(31, 60))
                         clipPlayer.switchRange(31, 60);
-                    if (currentHuntingTarget.GetType().Name.Equals("Tank")) {
+                    if (currentHuntingTarget.GetType().Name.Equals("Tank"))
+                    {
                         //((Tank)currentHuntingTarget).currentHitPoint -= damage;
                         Tank.currentHitPoint -= damage;
                     }
-                    if (currentHuntingTarget is SwimmingObject) {
+                    if (currentHuntingTarget is SwimmingObject)
+                    {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
                     }
                     prevFire = PlayGameScene.timming.TotalGameTime;

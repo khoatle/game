@@ -1229,7 +1229,6 @@ namespace Poseidon
             // Render the scene with Edge Detection, using the render target from last frame.
             graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
-
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             {
                 // Apply the post process shader
@@ -1337,7 +1336,7 @@ namespace Poseidon
             //    //str2 += "\nBub pos " + bubbles[0].bubblePos;
             //}
             str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
-            str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
+            //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);

@@ -81,7 +81,7 @@ namespace Poseidon
             {
                 sphere = fish[i].BoundingSphere;
                 sphere.Radius *= GameConstants.EasyAimScale;
-                if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                if (RayIntersectsBoundingSphere(cursorRay, sphere))
                 {
                     cursor.SetOnFishMouseImage();
                     return true;
@@ -99,7 +99,7 @@ namespace Poseidon
             {
                 sphere = fish[i].BoundingSphere;
                 sphere.Radius *= GameConstants.EasyAimScale;
-                if (RayIntersectsBoundingSphere(cursorRay, fish[i].BoundingSphere))
+                if (RayIntersectsBoundingSphere(cursorRay, sphere))
                 {
                     return fish[i];
                 }

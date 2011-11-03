@@ -17,9 +17,11 @@ namespace Poseidon {
         public const float ViewAngle = 45.0f;
 
         //ship constants
+        public const float MainCharVelocity = 0.5f;
         public const float Velocity = 0.75f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
+        //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
         public const int ShipWreckMinRangeX = 20;
@@ -45,9 +47,9 @@ namespace Poseidon {
         public const int MaxEnv = 1000;
         public const int envLossForFishDeath = 5;
         public const int envLossPerTrashAdd = 10;
-        public const int envGainForTrashClean = 10;
-        public const int envGainForHealingFish = 1;
-        public const int envGainForDropSeed = 10;
+        public const int envGainForTrashClean = 20;
+        public const int envGainForHealingFish = 5;
+        public const int envGainForDropSeed = 20;
         public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
         public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds
@@ -59,11 +61,13 @@ namespace Poseidon {
         public const int DefaultBulletDamage = 10;
         public const int DefaultEnemyDamage = 5;
 
-        public const float EnemySpeed = 0.5f;
+        // Enemy configuration
+        public const float EnemyShootingRate = 1.0f;
+        public const float EnemySpeed = 0.3f;
         public const float EnemyShootingDistance = 15f;
         public const float EnemyPerceptionRadius = 30f;
         public const float BossPerceptionRadius = 100f;
-        public const float FishSpeed = 0.5f;
+        public const float FishSpeed = 0.45f;
 
         //general
         //number of trash, enemy and fish per level for main game
@@ -164,8 +168,9 @@ namespace Poseidon {
         public const float FogEnd = 430;//350;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
 
-        //so that it is easier to aim
-        public const float EasyAimScale = 1.5f;
+        //so that it is easier to aim and hit
+        public const float EasyAimScale = 2.0f;
+        public const float EasyHitScale = 1.5f;
         
         //for playing background musics
         public const int NumNormalBackgroundMusics = 4;

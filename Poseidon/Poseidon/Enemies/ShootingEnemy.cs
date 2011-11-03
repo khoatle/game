@@ -22,6 +22,7 @@ namespace Poseidon
             configBits = new bool[] { false, false, false, false };
             shortDistance = GameConstants.EnemyShootingDistance;
             isHypnotise = false;
+            timeBetweenFire = GameConstants.EnemyShootingRate;
         }
 
         // Return the perceptID correspondingly

@@ -532,7 +532,7 @@ namespace Poseidon
             else wheelRotationValue = 0;
             //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speedl = Vector3.Transform(movement, orientationMatrix);
-            speedl *= GameConstants.Velocity * speedUp * speed;
+            speedl *= GameConstants.MainCharVelocity * speedUp * speed;
             if (supersonicMode == true) speedl *= 5;
             futurePosition = Position + speedl;
             steerRotationValue = turnAmount;

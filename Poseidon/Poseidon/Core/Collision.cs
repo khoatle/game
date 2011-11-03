@@ -211,9 +211,13 @@ namespace Poseidon
         /// PROJECTILES FUNCTION
         /// </summary>
         public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit) {
+            BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
-                    if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                    sphere = barriers[j].BoundingSphere;
+                    sphere.Radius *= GameConstants.EasyHitScale;
+                    if (bullets[i].BoundingSphere.Intersects(sphere))
+                    {
                         if (soundWhenHit && barriers[j].BoundingSphere.Intersects(PlayGameScene.frustum))
                             PlayGameScene.audio.animalYell.Play();
                         if (barriers[j] is BaseEnemy) {
@@ -232,9 +236,13 @@ namespace Poseidon
 
         // It has "BUG" at "EnemyHP", I know it.
         public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size) {
+            BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
-                    if (bullets[i].BoundingSphere.Intersects(barriers[j].BoundingSphere)) {
+                    sphere = barriers[j].BoundingSphere;
+                    sphere.Radius *= GameConstants.EasyHitScale;
+                    if (bullets[i].BoundingSphere.Intersects(sphere))
+                    {
                         if (barriers[j].BoundingSphere.Intersects(PlayGameScene.frustum))
                             PlayGameScene.audio.animalHappy.Play();
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {

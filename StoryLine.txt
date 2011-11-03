@@ -135,3 +135,4 @@ Coming soon..
 
 Deb: fix level time, add level tips
 mutant shark moving problem
+atttribute board

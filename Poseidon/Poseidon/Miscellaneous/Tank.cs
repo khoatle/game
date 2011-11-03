@@ -196,7 +196,7 @@ namespace Poseidon
             // Original attribute
             strength = lsStrength = 1.0f;
             speed = lsSpeed = 1.0f;
-            shootingRate = lsShootingRate = 1.0f;
+            shootingRate = lsShootingRate = GameConstants.MainCharShootingSpeed;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
             currentHitPoint = lsCurrentHitPoint = GameConstants.PlayerStartingHP;
@@ -230,7 +230,7 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            activeSkillID = lsActiveSkillID = 0;
+            //activeSkillID = lsActiveSkillID = 0;
             lsSkills = skills;
         }
 
@@ -295,12 +295,12 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            activeSkillID = 0;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
+            //activeSkillID = 0;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
             firstPlant = true;
             prevPlantTime = 0;
@@ -371,7 +371,7 @@ namespace Poseidon
             prevPlantTime = 0;
             if(PlayGameScene.currentLevel>0)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
-            if (currentEnvPoint < 0) currentEnvPoint = 0;
+            if (currentEnvPoint < 100) currentEnvPoint = 100; // Player must have at least 10% env at start.
         }
 
  
@@ -532,7 +532,7 @@ namespace Poseidon
             else wheelRotationValue = 0;
             //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speedl = Vector3.Transform(movement, orientationMatrix);
-            speedl *= GameConstants.Velocity * speedUp * speed;
+            speedl *= GameConstants.MainCharVelocity * speedUp * speed;
             if (supersonicMode == true) speedl *= 5;
             futurePosition = Position + speedl;
             steerRotationValue = turnAmount;

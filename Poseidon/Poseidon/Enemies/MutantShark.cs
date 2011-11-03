@@ -15,6 +15,13 @@ namespace Poseidon
         protected double timeLastRoar = 0; 
         Random rand = new Random();
         public MutantShark() : base() {
+            speed = (float)(GameConstants.EnemySpeed * 1.2);
+            damage = GameConstants.DefaultEnemyDamage * 5;
+            isBigBoss = true;
+            health = 1000;
+            maxHealth = 1000;
+            perceptionRadius = GameConstants.BossPerceptionRadius;
+            experienceReward = 200; //1000
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)
@@ -38,11 +45,6 @@ namespace Poseidon
             BarrierType = modelName;
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
-            isBigBoss = true;
-            health = 1000;
-            maxHealth = 1000;
-            perceptionRadius = GameConstants.BossPerceptionRadius;
-            experienceReward = 200; //1000
             this.Load(1, 24, 24);
         }
 
@@ -50,8 +52,12 @@ namespace Poseidon
         {
             //BoundingSphere.Center += new Vector3(20,0,0);
         }
+<<<<<<< HEAD
         
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
+=======
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+>>>>>>> 8a8ef046ef1d3560bc08f6cd7ed8c87152bdc732
         {
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -64,7 +70,7 @@ namespace Poseidon
                 enemyMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
-                clipPlayer.update(PlayGameScene.timming.ElapsedGameTime, true, enemyMatrix);
+                clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
             }
             //if stunned, switch to idle anim
             //for mutant shark, idle = swimming normally
@@ -74,7 +80,7 @@ namespace Poseidon
                     clipPlayer.switchRange(1, 24);
                 return;
             }
-            if (isHypnotise && PlayGameScene.timming.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast)
+            if (isHypnotise && gameTime.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast)
             {
                 wearOutHypnotise();
             }
@@ -82,18 +88,18 @@ namespace Poseidon
             if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
-                configAction(perceptionID);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+                configAction(perceptionID, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
             }
             else
             {
                 int perceptionID = perceptAndLock(tank, enemyList, enemySize);
-                configAction(perceptionID);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank);
+                configAction(perceptionID, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
             }
         }
         // Execute the actions
-        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank)
+        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             if (configBits[0] == true)
             {
@@ -115,18 +121,18 @@ namespace Poseidon
                     clipPlayer.switchRange(1, 24);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
             }
-            if (!configBits[3] && this.BoundingSphere.Intersects(PlayGameScene.frustum))
+            if (!configBits[3] && this.BoundingSphere.Intersects(cameraFrustum))
             {
-                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - timeLastRoar > 10)
+                if (gameTime.TotalGameTime.TotalSeconds - timeLastRoar > 10)
                     if (rand.Next(100) >= 95)
                     {
-                        timeLastRoar = PlayGameScene.timming.TotalGameTime.TotalSeconds;
+                        timeLastRoar = gameTime.TotalGameTime.TotalSeconds;
                         Roar();
                     }
             }
             if (configBits[3] == true)
             {
-                startChasingTime = PlayGameScene.timming.TotalGameTime;
+                startChasingTime = gameTime.TotalGameTime;
 
                 if (currentHuntingTarget.GetType().Name.Equals("Fish"))
                 {
@@ -138,7 +144,7 @@ namespace Poseidon
                     }
                 }
 
-                if (PlayGameScene.timming.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
                     //if attack and swim both at the same time or not
                     //just use attacking anim
@@ -150,26 +156,32 @@ namespace Poseidon
                     if (currentHuntingTarget.GetType().Name.Equals("Tank"))
                     {
                         //((Tank)currentHuntingTarget).currentHitPoint -= damage;
-                        PlayGameScene.audio.botYell.Play();
+                        PoseidonGame.audio.botYell.Play();
                         Tank.currentHitPoint -= damage;
                     }
                     if (currentHuntingTarget.GetType().Name.Equals("SwimmingObject"))
                     {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
-                        if (currentHuntingTarget.BoundingSphere.Intersects(PlayGameScene.frustum))
+                        if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
-                            PlayGameScene.audio.animalYell.Play();
+                            PoseidonGame.audio.animalYell.Play();
                         }
                     }
-                    prevFire = PlayGameScene.timming.TotalGameTime;
+                    prevFire = gameTime.TotalGameTime;
 
-                    if (this.BoundingSphere.Intersects(PlayGameScene.frustum))
-                        PlayGameScene.audio.biteSound.Play();
+                    if (this.BoundingSphere.Intersects(cameraFrustum))
+                        PoseidonGame.audio.biteSound.Play();
                 }
             }
         }
+<<<<<<< HEAD
         protected void Roar() {
             PlayGameScene.audio.roarSound.Play();
+=======
+        protected void Roar()
+        {
+            PoseidonGame.audio.roarSound.Play();
+>>>>>>> 8a8ef046ef1d3560bc08f6cd7ed8c87152bdc732
             PlayGameScene.gameCamera.Shake(10f, 1.9f);
         }
     }

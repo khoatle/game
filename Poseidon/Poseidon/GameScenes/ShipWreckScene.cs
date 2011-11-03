@@ -268,6 +268,8 @@ namespace Poseidon
                 else treasureChests[index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }
+            enemiesAmount = 0;
+            enemies = new BaseEnemy[GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
                 GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
@@ -493,7 +495,7 @@ namespace Poseidon
                         {
                             Tank.firstUse[4] = false;
 
-                            enemy.setHypnotise();
+                            enemy.setHypnotise(gameTime);
 
                             Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss;
@@ -517,6 +519,7 @@ namespace Poseidon
                             if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                         }
+                        tank.reachDestination = true;
                     }
                     pointIntersect = Vector3.Zero;
                 }
@@ -595,7 +598,7 @@ namespace Poseidon
                     else if (random.Next(100) >= 95) aBubble.bubble3DPos.X -= 0.5f;
                     if (random.Next(100) >= 95) aBubble.bubble3DPos.Z += 0.5f;
                     else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
-                    aBubble.Update(GraphicDevice, gameCamera);
+                    aBubble.Update(GraphicDevice, gameCamera, gameTime);
                 }
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
@@ -629,13 +632,14 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false);
-                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
+                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
                 Collision.updateProjectileHitTank(tank, enemyBullet);
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
 
-                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
-                Collision.deleteSmallerThanZero(fish, ref fishAmount);
+                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
+                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
@@ -644,7 +648,7 @@ namespace Poseidon
                         if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets);
+                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets, frustum, gameTime);
                 }
 
                 foreach (TreasureChest chest in treasureChests)
@@ -665,8 +669,8 @@ namespace Poseidon
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
                             //this is just for testing
                             //should be removed
-                            skillID = 4;
-                            chest.skillID = 4;
+                            //skillID = 4;
+                            //chest.skillID = 4;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -1037,23 +1041,23 @@ namespace Poseidon
             if (roundTimer.Seconds < 10)
                 str1 += "0";
             str1 += roundTimer.Seconds;
-            string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
+            //string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
 
             //str1 += (roundTimer.Seconds).ToString();
 
-            Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
-            Vector3 mouseDif = pointIntersect - tank.Position;
-            float distanceFomTank = mouseDif.Length();
+            //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
+            //Vector3 mouseDif = pointIntersect - tank.Position;
+            //float distanceFomTank = mouseDif.Length();
             //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
             //str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
-            float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-            str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
-            Vector3 posDif = tank.pointToMoveTo - tank.Position;
-            float distanceToDest = posDif.Length();
+            //float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
+            //str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
+            //Vector3 posDif = tank.pointToMoveTo - tank.Position;
+            //float distanceToDest = posDif.Length();
             //str2 += "\nDistance= " + distanceToDest;
-            str2 += "\nTank Position " + tank.Position;
+            //str2 += "\nTank Position " + tank.Position;
             //str2 += "\nEnemy Position " + enemies[0].Position;
             //str2 += "\nEnemy amount " + enemies.Length;
             //str2 += "\nFish Position " + fish[0].Position;
@@ -1061,7 +1065,7 @@ namespace Poseidon
             //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
             //str2 += "\nEnemy FW " + enemies[0].ForwardDirection;
             //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            str2 += "\n Tank Health " + Tank.currentHitPoint;
+            //str2 += "\n Tank Health " + Tank.currentHitPoint;
             //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Display Fish Health
@@ -1092,8 +1096,8 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
             spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
-            strPosition.Y += strSize.Y;
-            spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
+            //strPosition.Y += strSize.Y;
+            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 
         }
         public bool CharacterNearChest(BoundingSphere chestSphere)

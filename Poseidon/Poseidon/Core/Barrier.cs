@@ -25,7 +25,7 @@ namespace Poseidon
         // is this enemy a big boss
         // in order to know whether the big boss is killed
         // and the level is won
-        public bool isBigBoss;
+        public bool isBigBoss = false;
 
         public SwimmingObject()
             : base()

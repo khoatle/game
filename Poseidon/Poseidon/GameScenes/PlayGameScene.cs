@@ -19,7 +19,7 @@ namespace Poseidon
         public static GraphicsDeviceManager graphics;
         public static GraphicsDevice GraphicDevice;
         public static ContentManager Content;
-        public static GameTime timming;
+        //public static GameTime timming;
         
         private Texture2D HealthBar;
         private Texture2D EnvironmentBar;
@@ -104,7 +104,7 @@ namespace Poseidon
         Radar radar;
 
         // Frustum of the camera
-        public static BoundingFrustum frustum;
+        public BoundingFrustum frustum;
 
         // For mouse inputs
         bool doubleClicked = false;
@@ -493,7 +493,7 @@ namespace Poseidon
             }
             if (!paused)
             {
-                timming = gameTime;
+                //timming = gameTime;
                 float aspectRatio = graphics.GraphicsDevice.Viewport.AspectRatio;
                 lastKeyboardState = currentKeyboardState;
                 //lastMouseState = currentMouseState;
@@ -526,9 +526,7 @@ namespace Poseidon
                 }
                 if ((currentGameState == GameState.Running))
                 {
-                    //if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
-                    //real one above, below is just for testing
-                    if (currentLevel == 0 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
+                    if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
                         if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > GameConstants.EnvThresholdForKey)
                         {
@@ -666,7 +664,7 @@ namespace Poseidon
                             {
                                 Tank.firstUse[4] = false;
 
-                                enemy.setHypnotise();
+                                enemy.setHypnotise(gameTime);
 
                                 Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                                 Tank.currentHitPoint -= GameConstants.skillHealthLoss;
@@ -692,6 +690,7 @@ namespace Poseidon
                                 if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                                 else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                             }
+                            tank.reachDestination = true;
                         }
                         pointIntersect = Vector3.Zero;
                     }
@@ -746,7 +745,7 @@ namespace Poseidon
                         bubbles.Add(bubble);
                         for (int i = 0; i < enemiesAmount; i++)
                         {
-                            if (enemies[i].BoundingSphere.Intersects(frustum))
+                            if (enemies[i].BoundingSphere.Intersects(frustum) && !(enemies[i] is MutantShark))
                             {
                                 Bubble aBubble = new Bubble();
                                 aBubble.LoadContent(Content, enemies[i].Position, false, 0.025f);
@@ -790,7 +789,7 @@ namespace Poseidon
                         else if (random.Next(100) >= 95) aBubble.bubble3DPos.X -= 0.5f;
                         if (random.Next(100) >= 95) aBubble.bubble3DPos.Z += 0.5f;
                         else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
-                        aBubble.Update(GraphicDevice, gameCamera);
+                        aBubble.Update(GraphicDevice, gameCamera, gameTime);
                     }
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
@@ -869,14 +868,14 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false);
-                    Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
+                    Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
                     Collision.updateProjectileHitTank(tank, enemyBullet);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -886,7 +885,7 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets);
+                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets, frustum, gameTime);
                     }
 
                     for (int i = 0; i < fishAmount; i++)
@@ -974,7 +973,7 @@ namespace Poseidon
                     break;
                 case GameState.Running:
                     RestoreGraphicConfig();
-                    DrawGameplayScreen();
+                    DrawGameplayScreen(gameTime);
                     break;
                 case GameState.Won:
                     DrawWinOrLossScreen();
@@ -1039,7 +1038,7 @@ namespace Poseidon
             spriteBatch.End();
         }
 
-        private void DrawGameplayScreen()
+        private void DrawGameplayScreen(GameTime gameTime)
         {
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
@@ -1215,9 +1214,9 @@ namespace Poseidon
 
             //draw schools of fish
             spriteBatch.Begin();
-            schoolOfFish1.Draw(timming, spriteBatch);
-            schoolOfFish2.Draw(timming, spriteBatch);
-            schoolOfFish3.Draw(timming, spriteBatch);
+            schoolOfFish1.Draw(gameTime, spriteBatch);
+            schoolOfFish2.Draw(gameTime, spriteBatch);
+            schoolOfFish3.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
             graphics.GraphicsDevice.SetRenderTarget(null);
@@ -1242,7 +1241,7 @@ namespace Poseidon
             DrawRadar();
             if (Tank.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
-            cursor.Draw(timming);
+            cursor.Draw(gameTime);
             spriteBatch.End();
         }
 

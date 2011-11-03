@@ -57,7 +57,7 @@ namespace Poseidon
         protected Texture2D typeGameBackgroundTexture;
         protected Texture2D boxBackground;
         // Audio Stuff
-        private AudioLibrary audio;
+        public static AudioLibrary audio;
         PlayGameScene playGameScene;
         ShipWreckScene shipWreckScene;
         // Game is paused?
@@ -408,9 +408,9 @@ namespace Poseidon
             if (playGameScene.currentGameState == GameState.ToMiniGame)
             {
                 Random rand = new Random();
-                if (rand.Next(2) == 0)
-                    ShowScene(quizzGameScene);
-                else
+                //if (rand.Next(2) == 0)
+                //    ShowScene(quizzGameScene);
+                //else
                     ShowScene(typeGameScene);
             }
         }
@@ -522,7 +522,7 @@ namespace Poseidon
 
         private void HandleLevelObjectiveInput()
         {
-            if (EscPressed)
+            if (EscPressed || enterPressed)
                 ShowScene(prevScene);
         }
 

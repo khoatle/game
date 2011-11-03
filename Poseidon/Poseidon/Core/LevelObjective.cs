@@ -15,26 +15,26 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 // this is just for instantly testing minigames
-                //if (enemiesAmount == 0) return true;
+                if (enemiesAmount == 0) return true;
                 //if (isBossKilled) return true;
 
 
-                //Level Obj: you need increase the env bar to 80% within 3 min ( 90 days).
-                //if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                //Level Obj: you need increase the env bar to 80% within 4 min ( 30 days).
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
                 //real obj above, below is just for easier testing
-                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
+                //if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
                     return true;
 
             }
-            if (currentLevel == 1)
+            else if (currentLevel == 1)
             {
-                //Level Obj: Save at least 50% of fish during 3 min ( 90 days ).
+                //Level Obj: Save at least 50% of fish during 4 min ( 30 days ).
                 if (roundTimer <= TimeSpan.Zero && ((double)fishAmount/(double)GameConstants.NumberFish[currentLevel] >= 0.5))
                 {
                     return true;
                 }
             }
-            if (currentLevel == 2)
+            else if (currentLevel == 2)
             {
                 //Level Obj: Find the relic in 3 months.
                 if (roundTimer <= TimeSpan.Zero && Tank.skills[3] == true)
@@ -42,7 +42,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 3)
+            else if (currentLevel == 3)
             {
                 //Level Obj: Defeat the mutant shark
                 if (isBossKilled)
@@ -50,7 +50,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 4)
+            else if (currentLevel == 4)
             {
                 //Level Obj: save at least 50% of sharks in 3 mins
                 //Level 4 is full of sharks so only need to check total number of fishes
@@ -59,7 +59,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 5)
+            else if (currentLevel == 5)
             {
                 //Level Obj: Find the relic in 3 months.
                 if (roundTimer <= TimeSpan.Zero && Tank.skills[0] == true)
@@ -67,7 +67,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 6)
+            else if (currentLevel == 6)
             {
                 //Level Obj: Find the relic in 3 months.
                 if (roundTimer <= TimeSpan.Zero && Tank.skills[1] == true)
@@ -75,7 +75,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 7)
+            else if (currentLevel == 7)
             {
                 //Level Obj: Find the relic in 3 months.
                 if (roundTimer <= TimeSpan.Zero && Tank.skills[2] == true)
@@ -83,7 +83,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 8)
+            else if (currentLevel == 8)
             {
                 //Level Obj: Find the relic in 3 months.
                 if (roundTimer <= TimeSpan.Zero && Tank.skills[4] == true)
@@ -91,7 +91,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 9)
+            else if (currentLevel == 9)
             {
                 //Level Obj: Defeat the Terminator
                 //well, if you really can
@@ -100,7 +100,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            if (currentLevel == 10)
+            else if (currentLevel == 10)
             {
                 //Level Obj: Defeat the Terminator
                 //after gaining the Trident power from Poseidon

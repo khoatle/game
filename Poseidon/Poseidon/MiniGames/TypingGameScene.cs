@@ -35,7 +35,7 @@ namespace Poseidon.MiniGames
         private SpriteFont font;
         public bool isOver = false;
         public float maxTime = 60;
-        public float elapsedSeconds;
+        public TimeSpan elapsedSeconds;
         public float timeInterval;
         public float timeBetweenUpdates;
         KeyboardState lastKeyboardState = new KeyboardState();
@@ -48,37 +48,37 @@ namespace Poseidon.MiniGames
         Random random = new Random();
         //for displaying game prize
         int expAwarded = 0;
+        int topLeftX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left,
+            downLeftY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom,
+            width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
+            height = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height;
+        ParagraphLibrary paragraphLib = new ParagraphLibrary();
         /// <summary>
         /// Default Constructor
         public TypingGameScene(Game game, SpriteFont font, Texture2D boxBackground, Texture2D theme, ContentManager Content)
             : base(game) {
-                this.game = game;
-                content = Content;
-                timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
-                timeInterval = 10f;
-                elapsedSeconds = 0;
-                int topLeftX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left,
-                    downLeftY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom,
-                    width = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Width,
-                    height = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Height;
+            this.game = game;
+            content = Content;
+            //timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
+            timeInterval = 6f;
+            elapsedSeconds = TimeSpan.FromSeconds(0);
+            
+            
+            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
 
-                displayBox = new Textbox(topLeftX + 10, height - 240, width - 20, 200,
-                    "Dream of the Red Chamber, composed by Cao Xueqin, " +
-                    "is one of China's Four Great Classical Novels.");
-                typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
-
-                isMatching = true;
-                this.boxBackground = boxBackground;
-                Components.Add(new ImageComponent(game, theme,
-                                ImageComponent.DrawMode.Stretch));
-                this.font = font;
-                // Get the current spritebatch
-                spriteBatch = (SpriteBatch)Game.Services.GetService(
-                                                typeof(SpriteBatch));
-                // Get the audio library
-                audio = (AudioLibrary)
-                    Game.Services.GetService(typeof(AudioLibrary));
-                LoadContent();
+            isMatching = true;
+            this.boxBackground = boxBackground;
+            Components.Add(new ImageComponent(game, theme,
+                            ImageComponent.DrawMode.Stretch));
+            this.font = font;
+            // Get the current spritebatch
+            spriteBatch = (SpriteBatch)Game.Services.GetService(
+                                            typeof(SpriteBatch));
+            // Get the audio library
+            audio = (AudioLibrary)
+                Game.Services.GetService(typeof(AudioLibrary));
+            LoadContent();
         }
 
         /// <summary>
@@ -86,9 +86,12 @@ namespace Poseidon.MiniGames
         /// </summary>
         public override void Show()
         {
+            MediaPlayer.Stop();
             introducing = true;
             isOver = false;
-            MediaPlayer.Stop();
+            isMatching = true;
+            elapsedSeconds = TimeSpan.FromSeconds(0);
+            expAwarded = 0;
             base.Show();
         }
 
@@ -98,6 +101,10 @@ namespace Poseidon.MiniGames
         public override void Hide()
         {
             MediaPlayer.Stop();
+            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
+            ((WritingBox)typingBox).loadContent(boxBackground, font);
+            ((Textbox)displayBox).loadContent(boxBackground, font);
             base.Hide();
         }
 
@@ -137,8 +144,8 @@ namespace Poseidon.MiniGames
                 return;
             }
             List<string> words = ((Textbox)displayBox).getWords();
-            elapsedSeconds += timeBetweenUpdates;
-            if (elapsedSeconds < timeInterval)
+            elapsedSeconds += gameTime.ElapsedGameTime;
+            if (elapsedSeconds.TotalSeconds < timeInterval)
                 return;
 
             // TODO: Add your update logic here 
@@ -147,10 +154,11 @@ namespace Poseidon.MiniGames
             if (display.getMarkupIndex() >= words.Count) {
                 isOver = true;
 
-                if (elapsedSeconds > 30) {
+                if (elapsedSeconds.TotalSeconds > 50)
+                {
                     expAwarded = 100;
                 }
-                else if (elapsedSeconds > 10)
+                else if (elapsedSeconds.TotalSeconds > 30)
                 {
                     expAwarded += 300;
                 }
@@ -161,7 +169,8 @@ namespace Poseidon.MiniGames
                 return;
             }
 
-            if (elapsedSeconds > maxTime) {
+            if (elapsedSeconds.TotalSeconds > maxTime)
+            {
 
                 isOver = true;
                 return;
@@ -218,28 +227,31 @@ namespace Poseidon.MiniGames
             base.Draw(gameTime);
 
 
-            if (elapsedSeconds <= timeInterval)
+            if (elapsedSeconds.TotalSeconds <= timeInterval)
             {
-                string drawThis = "" + (int)(timeInterval - elapsedSeconds + 0.5);
-                spriteBatch.Draw(boxBackground, new Vector2(startBox.posX, startBox.posY), Color.White);
- 
-                if (timeInterval - elapsedSeconds >= 6)
-                {
-                    drawThis = "Wait: " + drawThis; 
-                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
+                string drawThis = "" + (int)(timeInterval - elapsedSeconds.TotalSeconds + 0.5);
+                //spriteBatch.Draw(boxBackground, new Vector2(startBox.posX, startBox.posY), Color.White);
 
-                    spriteBatch.Draw(trafficLightRed, new Vector2(10, 10), Color.White);
+                if (timeInterval - elapsedSeconds.TotalSeconds >= 4)
+                {
+                    drawThis = "Wait: " + drawThis;
+                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(drawThis).X, 10), Color.DarkRed);
+
+                    //spriteBatch.Draw(trafficLightRed, new Vector2(10, 10), Color.White);
+                    spriteBatch.Draw(trafficLightRed, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X + 50, 10), Color.White);
                 }
                 else {
                     drawThis = "Ready: " + drawThis;
-                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
+                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(drawThis).X, 10), Color.DarkRed);
 
-                    spriteBatch.Draw(trafficLightYellow, new Vector2(10, 10), Color.White);
+                    spriteBatch.Draw(trafficLightYellow, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X + 50, 10), Color.White);
                 }
             }
             else {
-                spriteBatch.Draw(trafficLightGreen, new Vector2(10, 10), Color.White);
-                spriteBatch.DrawString(font, "Remaining time: " + (int)(maxTime - elapsedSeconds), new Vector2(10, 10 + font.LineSpacing), Color.Black);
+                string str = "Remaining time: ";
+                //spriteBatch.Draw(trafficLightGreen, new Vector2(10, 10), Color.White);
+                spriteBatch.Draw(trafficLightGreen, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X+50, 10), Color.White);
+                spriteBatch.DrawString(font, str + (int)(maxTime - elapsedSeconds.TotalSeconds), new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(str).X, 10), Color.Red);
             }
 
             if (isOver) {

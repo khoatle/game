@@ -187,7 +187,7 @@ namespace Poseidon
                 tempCenter.Z = enemies[i].Position.Z;
                 enemies[i].BoundingSphere =
                     new BoundingSphere(tempCenter, enemies[i].BoundingSphere.Radius);
-                enemies[i].ChangeBoundingSphere();
+                //enemies[i].ChangeBoundingSphere();
             }
         }
 

@@ -15,6 +15,13 @@ namespace Poseidon
         protected double timeLastRoar = 0; 
         Random rand = new Random();
         public MutantShark() : base() {
+            speed = (float)(GameConstants.EnemySpeed * 1.2);
+            damage = GameConstants.DefaultEnemyDamage * 5;
+            isBigBoss = true;
+            health = 1000;
+            maxHealth = 1000;
+            perceptionRadius = GameConstants.BossPerceptionRadius;
+            experienceReward = 200; //1000
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)
@@ -39,11 +46,6 @@ namespace Poseidon
             BarrierType = modelName;
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
-            isBigBoss = true;
-            health = 1000;
-            maxHealth = 1000;
-            perceptionRadius = GameConstants.BossPerceptionRadius;
-            experienceReward = 200; //1000
             this.Load(1, 24, 24);
         }
         public override void ChangeBoundingSphere()

@@ -16,11 +16,12 @@ namespace Poseidon {
         public const float FarClip = 1000.0f;
         public const float ViewAngle = 45.0f;
 
-        //ship constants
+        //main character constants
         public const float MainCharVelocity = 0.5f;
         public const float Velocity = 0.75f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
+        public const float MainCharShootingSpeed = 0.7f;
         //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -40,7 +41,7 @@ namespace Poseidon {
         // HP const
         public const int DefaultEnemyHP = 100;
         public const int FishHP = 50;
-        public const int PlayerStartingHP = 1000;
+        public const int PlayerStartingHP = 500;
 
         //Environment Const
         public const int PlayerStartingEnv = 300;

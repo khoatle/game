@@ -409,9 +409,9 @@ namespace Poseidon
             {
                 Random rand = new Random();
                 //if (rand.Next(2) == 0)
-                    ShowScene(quizzGameScene);
+                //    ShowScene(quizzGameScene);
                 //else
-                //    ShowScene(typeGameScene);
+                    ShowScene(typeGameScene);
             }
         }
         public bool GetInShipWreck()

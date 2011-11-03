@@ -26,19 +26,12 @@ namespace Poseidon
         Random random;
         int powerupsType;
 
-        public override void Load(int clipStart, int clipEnd, int fps)
+        public Terminator()
+            : base()
         {
-            skd = Model.Tag as SkinningData;
-            clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
-            AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
-            clipPlayer.play(clip, clipStart, clipEnd, true);
-            enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
-                               Matrix.CreateTranslation(Position);
-            BoundingSphere scaledSphere;
-            scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.08f;
-            BoundingSphere =
-                new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            speed = (float)(GameConstants.EnemySpeed * 1.2);
+            damage = GameConstants.DefaultEnemyDamage * 5;
+            timeBetweenFire = 0.3f;
             isBigBoss = true;
             random = new Random();
             //Terminator is undefeatable before the last level
@@ -54,6 +47,22 @@ namespace Poseidon
             }
             perceptionRadius = GameConstants.BossPerceptionRadius;
             experienceReward = 400; //3000
+        }
+
+        public override void Load(int clipStart, int clipEnd, int fps)
+        {
+            skd = Model.Tag as SkinningData;
+            clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
+            AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
+            clipPlayer.play(clip, clipStart, clipEnd, true);
+            enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                               Matrix.CreateTranslation(Position);
+            BoundingSphere scaledSphere;
+            scaledSphere = BoundingSphere;
+            scaledSphere.Radius *= 0.08f;
+            BoundingSphere =
+                new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+            
         }
 
         public void Load()
@@ -107,11 +116,11 @@ namespace Poseidon
             {
                 float originalForwardDir = ForwardDirection;
                 ForwardDirection += MathHelper.PiOver4 / 4;
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
                 ForwardDirection -= MathHelper.PiOver4 / 2;
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
                 ForwardDirection = originalForwardDir;
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
                 prevFire = gameTime.TotalGameTime;
 
             }
@@ -126,7 +135,7 @@ namespace Poseidon
             }
             if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3)
             {
-                AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
                 prevFire = gameTime.TotalGameTime;
 
             }
@@ -184,7 +193,7 @@ namespace Poseidon
                 }
                 else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
-                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 1, cameraFrustum);
+                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
                     prevFire = gameTime.TotalGameTime;
                 }
             }

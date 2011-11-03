@@ -132,4 +132,6 @@ Actual fighting scene with music with skills and effects = 60s
 Talk everything about the game. - 2-3 mins
 Coming soon..
 
-fix boss
+
+Deb: fix level time, add level tips
+mutant shark moving problem

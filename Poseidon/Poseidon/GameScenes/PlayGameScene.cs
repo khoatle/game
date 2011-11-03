@@ -745,7 +745,7 @@ namespace Poseidon
                         bubbles.Add(bubble);
                         for (int i = 0; i < enemiesAmount; i++)
                         {
-                            if (enemies[i].BoundingSphere.Intersects(frustum))
+                            if (enemies[i].BoundingSphere.Intersects(frustum) && !(enemies[i] is MutantShark))
                             {
                                 Bubble aBubble = new Bubble();
                                 aBubble.LoadContent(Content, enemies[i].Position, false, 0.025f);

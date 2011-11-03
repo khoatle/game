@@ -196,7 +196,7 @@ namespace Poseidon
             // Original attribute
             strength = lsStrength = 1.0f;
             speed = lsSpeed = 1.0f;
-            shootingRate = lsShootingRate = 1.0f;
+            shootingRate = lsShootingRate = GameConstants.MainCharShootingSpeed;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
             currentHitPoint = lsCurrentHitPoint = GameConstants.PlayerStartingHP;

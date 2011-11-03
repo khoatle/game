@@ -219,7 +219,7 @@ namespace Poseidon.MiniGames
             if (elapsedSeconds <= timeInterval)
             {
                 string drawThis = "" + (int)(timeInterval - elapsedSeconds + 0.5);
-                spriteBatch.Draw(boxBackground, new Vector2(startBox.posX, startBox.posY), Color.White);
+                //spriteBatch.Draw(boxBackground, new Vector2(startBox.posX, startBox.posY), Color.White);
  
                 if (timeInterval - elapsedSeconds >= 6)
                 {

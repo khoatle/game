@@ -15,14 +15,14 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 // this is just for instantly testing minigames
-                //if (enemiesAmount == 0) return true;
+                if (enemiesAmount == 0) return true;
                 //if (isBossKilled) return true;
 
 
                 //Level Obj: you need increase the env bar to 80% within 4 min ( 30 days).
-                //if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
                 //real obj above, below is just for easier testing
-                if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
+                //if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
                     return true;
 
             }

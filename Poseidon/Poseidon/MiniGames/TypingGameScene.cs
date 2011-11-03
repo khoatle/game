@@ -223,21 +223,24 @@ namespace Poseidon.MiniGames
  
                 if (timeInterval - elapsedSeconds >= 6)
                 {
-                    drawThis = "Wait: " + drawThis; 
-                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
+                    drawThis = "Wait: " + drawThis;
+                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(drawThis).X, 10), Color.DarkRed);
 
-                    spriteBatch.Draw(trafficLightRed, new Vector2(10, 10), Color.White);
+                    //spriteBatch.Draw(trafficLightRed, new Vector2(10, 10), Color.White);
+                    spriteBatch.Draw(trafficLightRed, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X + 50, 10), Color.White);
                 }
                 else {
                     drawThis = "Ready: " + drawThis;
-                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(trafficLightRed.Width + 10, 10), Color.Yellow);
+                    spriteBatch.DrawString(font, "" + drawThis, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(drawThis).X, 10), Color.DarkRed);
 
-                    spriteBatch.Draw(trafficLightYellow, new Vector2(10, 10), Color.White);
+                    spriteBatch.Draw(trafficLightYellow, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X + 50, 10), Color.White);
                 }
             }
             else {
-                spriteBatch.Draw(trafficLightGreen, new Vector2(10, 10), Color.White);
-                spriteBatch.DrawString(font, "Remaining time: " + (int)(maxTime - elapsedSeconds), new Vector2(10, 10 + font.LineSpacing), Color.Black);
+                string str = "Remaining time: ";
+                //spriteBatch.Draw(trafficLightGreen, new Vector2(10, 10), Color.White);
+                spriteBatch.Draw(trafficLightGreen, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X+50, 10), Color.White);
+                spriteBatch.DrawString(font, str + (int)(maxTime - elapsedSeconds), new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(str).X, 10), Color.Red);
             }
 
             if (isOver) {

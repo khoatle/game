@@ -522,7 +522,7 @@ namespace Poseidon
 
         private void HandleLevelObjectiveInput()
         {
-            if (EscPressed)
+            if (EscPressed || enterPressed)
                 ShowScene(prevScene);
         }
 

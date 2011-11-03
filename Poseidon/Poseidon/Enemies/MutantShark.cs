@@ -37,7 +37,6 @@ namespace Poseidon
             scaledSphere.Radius *= 0.6f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
-
         }
 
         public override void LoadContent(ContentManager content, string modelName)
@@ -48,17 +47,16 @@ namespace Poseidon
             BoundingSphere = CalculateBoundingSphere();
             this.Load(1, 24, 24);
         }
+
         public override void ChangeBoundingSphere()
         {
             //BoundingSphere.Center += new Vector3(20,0,0);
         }
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
-
             // if clip player has been initialized, update it
             if (clipPlayer != null)
             {
-
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
@@ -94,7 +92,6 @@ namespace Poseidon
                 configAction(perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
             }
-
         }
         // Execute the actions
         protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank, BoundingFrustum cameraFrustum, GameTime gameTime)
@@ -172,6 +169,7 @@ namespace Poseidon
                 }
             }
         }
+
         protected void Roar()
         {
             PoseidonGame.audio.roarSound.Play();

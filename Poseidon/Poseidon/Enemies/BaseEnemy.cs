@@ -140,19 +140,23 @@ namespace Poseidon
             //    BoundingSphere.Center.Z += speed * headingDirection.Z;
             //}
             float pullDistance = Vector3.Distance(currentHuntingTarget.Position, Position);
+            float timeFactor = (currentHuntingTarget.GetType().Name.Equals("CombatEnemy"))? 1.25f:1f;
 
-            if (pullDistance > (BoundingSphere.Radius + currentHuntingTarget.BoundingSphere.Radius)*1.25f) {
+            if (pullDistance > (BoundingSphere.Radius + currentHuntingTarget.BoundingSphere.Radius) * timeFactor)
+            {
                 Vector3 pull = (currentHuntingTarget.Position - Position) * (1 / pullDistance);
                 Vector3 totalPush = Vector3.Zero;
 
                 int contenders = 0;
-                for (int i = 0; i < enemiesAmount; i++) {
+                for (int i = 0; i < enemiesAmount; i++)
+                {
                     if (enemies[i] != this)
                     {
                         Vector3 push = Position - enemies[i].Position;
 
                         float distance = (Vector3.Distance(Position, enemies[i].Position)) - enemies[i].BoundingSphere.Radius;
-                        if (distance < BoundingSphere.Radius*3) {
+                        if (distance < BoundingSphere.Radius * 3)
+                        {
                             contenders++;
                             if (distance < 0.0001f) // prevent divide by 0 
                             {
@@ -189,7 +193,7 @@ namespace Poseidon
                 pull.Normalize();
 
                 Position += (pull * speed);
-                BoundingSphere.Center.X += (pull*speed).X;
+                BoundingSphere.Center.X += (pull * speed).X;
                 BoundingSphere.Center.Z += (pull * speed).Z;
 
                 ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);

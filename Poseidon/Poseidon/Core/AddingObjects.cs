@@ -264,7 +264,7 @@ namespace Poseidon
  
             h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
             h.loadContent(Content, "Models/BulletModels/healBullet");
-            PlayGameScene.audio.botNormalShot.Play();
+            PoseidonGame.audio.botNormalShot.Play();
             healthBullet.Add(h);
         }
 
@@ -278,11 +278,11 @@ namespace Poseidon
             
             d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
-            PlayGameScene.audio.botNormalShot.Play();
+            PoseidonGame.audio.botNormalShot.Play();
             myBullet.Add(d);
         }
 
-        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type) {
+        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum) {
             Tank tmp1;
             SwimmingObject tmp2;
             Matrix orientationMatrix;
@@ -305,19 +305,19 @@ namespace Poseidon
             if (type == 1)
             {
                 newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");
-                if (obj.BoundingSphere.Intersects(PlayGameScene.frustum))
-                    PlayGameScene.audio.bossShot.Play();
+                if (obj.BoundingSphere.Intersects(cameraFrustum))
+                    PoseidonGame.audio.bossShot.Play();
             }
             else
             {
                 newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
-                if (obj.BoundingSphere.Intersects(PlayGameScene.frustum))
-                    PlayGameScene.audio.enemyShot.Play();
+                if (obj.BoundingSphere.Intersects(cameraFrustum))
+                    PoseidonGame.audio.enemyShot.Play();
             }
             bullets.Add(newBullet);         
         }
 
-        public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets) {
+        public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets, BoundingFrustum cameraFrustum) {
             Tank tmp1;
             SwimmingObject tmp2;
             Matrix orientationMatrix;
@@ -337,8 +337,8 @@ namespace Poseidon
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
             newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
-            if (shooter.BoundingSphere.Intersects(PlayGameScene.frustum))
-                PlayGameScene.audio.chasingBulletSound.Play();
+            if (shooter.BoundingSphere.Intersects(cameraFrustum))
+                PoseidonGame.audio.chasingBulletSound.Play();
         }
 
         public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)

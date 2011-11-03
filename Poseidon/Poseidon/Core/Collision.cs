@@ -26,7 +26,7 @@ namespace Poseidon
                 Math.Abs(futurePosition.Z) > MaxRangeZ;
         }
 
-        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size) {
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum) {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
@@ -35,15 +35,15 @@ namespace Poseidon
                         Tank.currentExperiencePts += objs[i].experienceReward;
                         if (!objs[i].isBigBoss)
                         {
-                            if (objs[i].BoundingSphere.Intersects(PlayGameScene.frustum))
-                                PlayGameScene.audio.hunterYell.Play();
+                            if (objs[i].BoundingSphere.Intersects(cameraFrustum))
+                                PoseidonGame.audio.hunterYell.Play();
                         }
                         else
                         {
                             if (objs[i] is MutantShark)
-                                PlayGameScene.audio.mutantSharkYell.Play();
+                                PoseidonGame.audio.mutantSharkYell.Play();
                             else if (objs[i] is Terminator)
-                                PlayGameScene.audio.terminatorYell.Play();
+                                PoseidonGame.audio.terminatorYell.Play();
                         }
                     }
 
@@ -210,7 +210,7 @@ namespace Poseidon
         /// <summary>
         /// PROJECTILES FUNCTION
         /// </summary>
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit) {
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -218,13 +218,13 @@ namespace Poseidon
                     sphere.Radius *= GameConstants.EasyHitScale;
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
-                        if (soundWhenHit && barriers[j].BoundingSphere.Intersects(PlayGameScene.frustum))
-                            PlayGameScene.audio.animalYell.Play();
-                        if (barriers[j] is BaseEnemy) {
-                            if (((BaseEnemy)barriers[j]).isHypnotise) {
-                                return;
-                            }
-                        }
+                        if (soundWhenHit && barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                            PoseidonGame.audio.animalYell.Play();
+                        //if (barriers[j] is BaseEnemy) {
+                        //    if (((BaseEnemy)barriers[j]).isHypnotise) {
+                        //        return;
+                        //    }
+                        //}
 
                         barriers[j].health -= bullets[i].damage;
                         bullets.RemoveAt(i--);
@@ -235,7 +235,7 @@ namespace Poseidon
         }
 
         // It has "BUG" at "EnemyHP", I know it.
-        public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size) {
+        public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size, BoundingFrustum cameraFrustum) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -243,8 +243,8 @@ namespace Poseidon
                     sphere.Radius *= GameConstants.EasyHitScale;
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
-                        if (barriers[j].BoundingSphere.Intersects(PlayGameScene.frustum))
-                            PlayGameScene.audio.animalHappy.Play();
+                        if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                            PoseidonGame.audio.animalHappy.Play();
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
                             barriers[j].health += GameConstants.HealingAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
@@ -263,7 +263,7 @@ namespace Poseidon
                 if (enemyBullets[i].BoundingSphere.Intersects(tank.BoundingSphere)) {
                     if (!Tank.invincibleMode) Tank.currentHitPoint -= enemyBullets[i].damage;
                     enemyBullets.RemoveAt(i);
-                    PlayGameScene.audio.botYell.Play();
+                    PoseidonGame.audio.botYell.Play();
                 }
                 else { i++;  }
             }

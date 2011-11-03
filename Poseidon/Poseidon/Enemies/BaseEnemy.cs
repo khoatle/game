@@ -93,11 +93,11 @@ namespace Poseidon
             experienceReward = 20;
         }
 
-        public void setHypnotise()
+        public void setHypnotise(GameTime gameTime)
         {
             isHypnotise = true;
             currentHuntingTarget = null;
-            startHypnotiseTime = PlayGameScene.timming.TotalGameTime;
+            startHypnotiseTime = gameTime.TotalGameTime;
         }
 
         public void wearOutHypnotise()
@@ -107,13 +107,13 @@ namespace Poseidon
         }
 
         // Is it the time to forget about old target?
-        protected bool clearMind()
+        protected bool clearMind(GameTime gameTime)
         {
             if (startChasingTime.TotalSeconds == 0 ||
-                PlayGameScene.timming.TotalGameTime.TotalSeconds - startChasingTime.TotalSeconds > giveupTime.TotalSeconds)
+                gameTime.TotalGameTime.TotalSeconds - startChasingTime.TotalSeconds > giveupTime.TotalSeconds)
             {
                 currentHuntingTarget = null;
-                startChasingTime = PlayGameScene.timming.TotalGameTime;
+                startChasingTime = gameTime.TotalGameTime;
                 return true;
             }
             return false;
@@ -196,7 +196,7 @@ namespace Poseidon
             }
         }
 
-        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
+        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
         }
         public virtual void ChangeBoundingSphere()

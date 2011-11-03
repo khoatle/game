@@ -53,8 +53,8 @@ namespace Poseidon
             }
         }
 
-        public static void useHypnotise(BaseEnemy enemy) {
-            enemy.setHypnotise();
+        public static void useHypnotise(BaseEnemy enemy, GameTime gameTime) {
+            enemy.setHypnotise(gameTime);
         } 
 
         // enemy is inside the stun area of Thor's Hammer

@@ -30,12 +30,12 @@ namespace Poseidon
             else if (random.Next(3) == 1) bubble3DPos.Z -= 2;
             this.startingScale = startingScale;
         }
-        public void Update(GraphicsDevice graphicDevice, Camera gameCamera)
+        public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
             Vector3 screenPos = graphicDevice.Viewport.Project(bubble3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
             bubble2DPos.X = screenPos.X;
             bubble2DPos.Y = screenPos.Y;
-            timeLast -= (float)PlayGameScene.timming.ElapsedGameTime.TotalMilliseconds;
+            timeLast -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             if (timeLast >= 0)
                 scale = startingScale * (2000.0f / timeLast);
         }

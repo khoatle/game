@@ -64,7 +64,7 @@ namespace Poseidon.MiniGames
             elapsedSeconds = TimeSpan.FromSeconds(0);
             
             
-            displayBox = new Textbox(topLeftX + 10, height - 240, width - 20, 200, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
             typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
 
             isMatching = true;
@@ -101,7 +101,7 @@ namespace Poseidon.MiniGames
         public override void Hide()
         {
             MediaPlayer.Stop();
-            displayBox = new Textbox(topLeftX + 10, height - 240, width - 20, 200, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
             typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
             ((WritingBox)typingBox).loadContent(boxBackground, font);
             ((Textbox)displayBox).loadContent(boxBackground, font);
@@ -154,11 +154,11 @@ namespace Poseidon.MiniGames
             if (display.getMarkupIndex() >= words.Count) {
                 isOver = true;
 
-                if (elapsedSeconds.TotalSeconds > 30)
+                if (elapsedSeconds.TotalSeconds > 50)
                 {
                     expAwarded = 100;
                 }
-                else if (elapsedSeconds.TotalSeconds > 20)
+                else if (elapsedSeconds.TotalSeconds > 30)
                 {
                     expAwarded += 300;
                 }

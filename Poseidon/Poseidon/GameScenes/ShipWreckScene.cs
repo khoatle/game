@@ -268,6 +268,8 @@ namespace Poseidon
                 else treasureChests[index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }
+            enemiesAmount = 0;
+            enemies = new BaseEnemy[GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
                 GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
@@ -493,7 +495,7 @@ namespace Poseidon
                         {
                             Tank.firstUse[4] = false;
 
-                            enemy.setHypnotise();
+                            enemy.setHypnotise(gameTime);
 
                             Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                             Tank.currentHitPoint -= GameConstants.skillHealthLoss;
@@ -517,6 +519,7 @@ namespace Poseidon
                             if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
                             else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
                         }
+                        tank.reachDestination = true;
                     }
                     pointIntersect = Vector3.Zero;
                 }
@@ -595,7 +598,7 @@ namespace Poseidon
                     else if (random.Next(100) >= 95) aBubble.bubble3DPos.X -= 0.5f;
                     if (random.Next(100) >= 95) aBubble.bubble3DPos.Z += 0.5f;
                     else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
-                    aBubble.Update(GraphicDevice, gameCamera);
+                    aBubble.Update(GraphicDevice, gameCamera, gameTime);
                 }
                 // Are we shooting?
                 if ((!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
@@ -629,13 +632,14 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false);
-                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
+                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
                 Collision.updateProjectileHitTank(tank, enemyBullet);
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
 
-                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount);
-                Collision.deleteSmallerThanZero(fish, ref fishAmount);
+                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
+                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
@@ -644,7 +648,7 @@ namespace Poseidon
                         if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets);
+                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets, frustum, gameTime);
                 }
 
                 foreach (TreasureChest chest in treasureChests)

@@ -361,13 +361,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\SoundEffects\MiinigunWindup#1.wav">
-      <Name>MiinigunWindup#1</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\ShipWreckModels\shipwreckscene.fbx">
       <Name>shipwreckscene</Name>
       <Importer>FbxImporter</Importer>

@@ -46,8 +46,6 @@ namespace Poseidon.Core
         private SoundEffect shooting;
         private SoundEffect explo1;
         
-        private SoundEffect miniGunWindUp;
-        
         private SoundEffect bubble;
         private Song backMusic;
         private Song startMusic;
@@ -98,10 +96,6 @@ namespace Poseidon.Core
         public SoundEffect ChangeBullet
         {
             get { return changeBullet; }
-        }
-        public SoundEffect MinigunWindUp
-        {
-            get { return miniGunWindUp; }
         }
         public SoundEffect OpenChest
         {
@@ -168,8 +162,7 @@ namespace Poseidon.Core
             powerShow = Content.Load<SoundEffect>("Sounds/SoundEffects/powershow");
             powerGet = Content.Load<SoundEffect>("Sounds/SoundEffects/powerget");
             shooting = Content.Load<SoundEffect>("Sounds/SoundEffects/laserFire");
-            explo1 = Content.Load<SoundEffect>("Sounds/SoundEffects//Explo1");           
-            miniGunWindUp = Content.Load<SoundEffect>("Sounds/SoundEffects/MiinigunWindup#1");           
+            explo1 = Content.Load<SoundEffect>("Sounds/SoundEffects//Explo1");                    
             bubble = Content.Load<SoundEffect>("Sounds/SoundEffects/bubble");
         }
     }

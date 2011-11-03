@@ -52,12 +52,7 @@ namespace Poseidon
         {
             //BoundingSphere.Center += new Vector3(20,0,0);
         }
-<<<<<<< HEAD
-        
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets)
-=======
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
->>>>>>> 8a8ef046ef1d3560bc08f6cd7ed8c87152bdc732
         {
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -174,14 +169,10 @@ namespace Poseidon
                 }
             }
         }
-<<<<<<< HEAD
-        protected void Roar() {
-            PlayGameScene.audio.roarSound.Play();
-=======
+
         protected void Roar()
         {
             PoseidonGame.audio.roarSound.Play();
->>>>>>> 8a8ef046ef1d3560bc08f6cd7ed8c87152bdc732
             PlayGameScene.gameCamera.Shake(10f, 1.9f);
         }
     }

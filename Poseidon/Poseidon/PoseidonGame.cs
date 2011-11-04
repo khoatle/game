@@ -353,11 +353,13 @@ namespace Poseidon
                 ShowScene(playGameScene);
                 doubleClicked = false;
             }
-            if (AttributePressed)
-            {
-                prevScene = shipWreckScene;
-                ShowScene(AttributeScene);
-            }
+            //do not let the player to open the attribute board in shipwreck now
+            //because it will reset the shipwreck
+            //if (AttributePressed)
+            //{
+            //    prevScene = shipWreckScene;
+            //    ShowScene(AttributeScene);
+            //}
         }
         /// <summary>
         /// Handle update for the main game

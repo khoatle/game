@@ -125,14 +125,14 @@ namespace Poseidon
                     achieved_status = "Now the environment bar is " + env_percent.ToString() + "%.";
                 else
                     achieved_status = "You achieved the target. Keep cleaning the environment for next level.";
-                tip += "Press x to drop seeds, z to eat fruits and collect trash.";
+                tip += "The environment status at the end of a level will affect the next level"; 
             }
             else if (currentLevel == 1)
             {
                 double fish_percent = ((double)playgamescene.fishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100;
                 level_objective = "Save at least 50% of the sea creatures within 30 days.";
                 achieved_status = "There are " + fish_percent.ToString() + "% sea creatures remaining.";
-                tip += "The environment status at the end of a level will affect the next level";
+                tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
             }
             else if (currentLevel == 2)
             {
@@ -151,19 +151,19 @@ namespace Poseidon
                 double shark_percent = ((double)playgamescene.fishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100;
                 level_objective = "Save at least 50% of the sharks within 30 days.";
                 achieved_status = "There are " + shark_percent.ToString() + "% sharks remaining.";
-                tip += "Don't just shoot the enemies, heal the shark too.";
+                tip += "Fight smart, do not let the enemy touch you.";
             }
             else if (currentLevel == 5)
             {
                 level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
-                tip += "Use your experience points (press I).";
+                tip += "Fruits can help the battle a lot."; 
             }
             else if (currentLevel == 6)
             {
                 level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
-                tip += "Read the writing on the paintings. They help you in the quiz.";
+                tip += "Remember to use your experience points (press I)."; 
             }
             else if (currentLevel == 7)
             {
@@ -175,13 +175,13 @@ namespace Poseidon
             {
                 level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
-                tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
+                tip += "Read the writing on the paintings. They help you in the quiz.";
             }
             else if (currentLevel == 9)
             {
                 level_objective = "Defeat the Terminator.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
-                tip += "Fruits can help the battle a lot.";
+                tip += "Use your skills effeciently since they reduce your health.";
             }
             else if (currentLevel == 10)
             {

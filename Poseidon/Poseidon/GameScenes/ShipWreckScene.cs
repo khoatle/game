@@ -695,7 +695,7 @@ namespace Poseidon
                                 else
                                 {
                                     // give the player some experience as reward
-                                    Tank.currentExperiencePts += 20;
+                                    Tank.currentExperiencePts += GameConstants.ExpPainting;
                                     // show a random painting
                                     paintingToShow = random.Next(oceanPaintings.paintings.Count);
                                     showPainting = true;

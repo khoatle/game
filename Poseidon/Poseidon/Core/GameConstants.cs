@@ -23,6 +23,10 @@ namespace Poseidon {
         public const float TurnSpeed = 0.025f;
         public const float MainCharShootingSpeed = 0.7f;
         public const int MainCharLevelOneExp = 400;
+
+        //experience reward
+        public const int ExpPainting = 35;
+        public const int ExpHealingFish = 8;
         //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -47,7 +51,7 @@ namespace Poseidon {
         //Environment Const
         public const int PlayerStartingEnv = 300;
         public const int MaxEnv = 1000;
-        public const int envLossForFishDeath = 5;
+        public const int envLossForFishDeath = 20;
         public const int envLossPerTrashAdd = 10;
         public const int envGainForTrashClean = 20;
         public const int envGainForHealingFish = 5;

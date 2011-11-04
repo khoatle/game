@@ -132,13 +132,13 @@ namespace Poseidon
                 double fish_percent = ((double)playgamescene.fishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100;
                 level_objective = "Save at least 50% of the sea creatures within 30 days.";
                 achieved_status = "There are " + fish_percent.ToString() + "% sea creatures remaining.";
-                tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
+                tip += "The environment status at the end of a level will affect the next level";
             }
             else if (currentLevel == 2)
             {
                 level_objective = "Find the relic in 30 days.";
                 achieved_status = "Relic not found.";
-                tip += "Cleaning the environment makes the fish happy.";
+                tip += "Cleaning the environment and helping the fish make the fish happy.";
             }
             else if (currentLevel == 3)
             {
@@ -175,13 +175,13 @@ namespace Poseidon
             {
                 level_objective = "Find the relic in 30 days.";
                 achieved_status = "Relic not found.";
-                tip += "Remember to drop seeds.";
+                tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
             }
             else if (currentLevel == 9)
             {
                 level_objective = "Defeat the Terminator.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
-                tip += "Aim well when you use the bow. Change the skills frequently.";
+                tip += "Fruits can help the battle a lot.";
             }
             else if (currentLevel == 10)
             {

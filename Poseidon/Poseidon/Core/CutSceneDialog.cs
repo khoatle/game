@@ -28,7 +28,7 @@ namespace Poseidon
         {
             // For scene 0
             List<Sentence> cutScene = new List<Sentence>();
-            Sentence sentence = new Sentence(0, "Hi");
+            Sentence sentence = new Sentence(0, "Sample cutscene that introduces the storyline. To be completed in future.");
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Who are you?");
             cutScene.Add(sentence);

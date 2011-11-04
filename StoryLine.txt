@@ -132,7 +132,5 @@ Actual fighting scene with music with skills and effects = 60s
 Talk everything about the game. - 2-3 mins
 Coming soon..
 
-
-Deb: fix level time, add level tips
 3 hunter doing helicopter stuff
 atttribute board with real bot's stuffs

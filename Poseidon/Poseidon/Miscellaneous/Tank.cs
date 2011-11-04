@@ -194,8 +194,8 @@ namespace Poseidon
         public Tank(int MaxRangeX, int MaxRangeZ, float floatHeight)
         {
             // Original attribute
-            strength = lsStrength = 1.0f;
-            speed = lsSpeed = 1.0f;
+            strength = lsStrength = GameConstants.MainCharStrength;
+            speed = lsSpeed = GameConstants.BasicStartSpeed;
             shootingRate = lsShootingRate = GameConstants.MainCharShootingSpeed;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;

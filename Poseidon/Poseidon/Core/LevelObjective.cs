@@ -20,7 +20,7 @@ namespace Poseidon
 
 
                 //Level Obj: you need increase the env bar to 80% within 4 min ( 30 days).
-                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.8))
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= GameConstants.LevelObjective[currentLevel]))
                 //real obj above, below is just for easier testing
                 //if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
                     return true;
@@ -29,7 +29,7 @@ namespace Poseidon
             else if (currentLevel == 1)
             {
                 //Level Obj: Save at least 50% of fish during 4 min ( 30 days ).
-                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount/(double)GameConstants.NumberFish[currentLevel] >= 0.75))
+                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= GameConstants.LevelObjective[currentLevel]))
                 {
                     return true;
                 }
@@ -54,7 +54,7 @@ namespace Poseidon
             {
                 //Level Obj: save at least 50% of sharks in 3 mins
                 //Level 4 is full of sharks so only need to check total number of fishes
-                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= 0.5))
+                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= GameConstants.LevelObjective[currentLevel]))
                 {
                     return true;
                 }
@@ -118,12 +118,12 @@ namespace Poseidon
 
             if (currentLevel == 0)
             {
-                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint <= 0.8)) 
+                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint <= GameConstants.LevelObjective[currentLevel])) 
                     return true;
             }
             if (currentLevel == 1)
             {
-                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.75) return true;
+                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < GameConstants.LevelObjective[currentLevel]) return true;
             }
             if (currentLevel == 2)
             {

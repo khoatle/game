@@ -31,8 +31,7 @@ namespace Poseidon
         Random random = new Random();
         /// <summary>
         /// Default Constructor
-        public LevelObjectiveScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                           Texture2D background, ContentManager Content, PlayGameScene playgamescene)
+        public LevelObjectiveScene(Game game, Texture2D background, ContentManager Content, PlayGameScene playgamescene)
             : base(game)
         {
             this.Content = Content;
@@ -120,8 +119,9 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 double env_percent = (double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint * 100;
-                level_objective = "Increase the environment bar to 80% within 30 days.";
-                if (env_percent < 80)
+                double target_percent = GameConstants.LevelObjective[currentLevel]*100;
+                level_objective = "Increase the environment bar to " + target_percent.ToString() + "% within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (env_percent < target_percent)
                     achieved_status = "Now the environment bar is " + env_percent.ToString() + "%.";
                 else
                     achieved_status = "You achieved the target. Keep cleaning the environment for next level.";
@@ -130,70 +130,112 @@ namespace Poseidon
             else if (currentLevel == 1)
             {
                 double fish_percent = ((double)playgamescene.fishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100;
-                level_objective = "Save at least 50% of the sea creatures within 30 days.";
+                double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
+                level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "There are " + fish_percent.ToString() + "% sea creatures remaining.";
                 tip += "The environment status at the end of a level will affect the next level";
             }
             else if (currentLevel == 2)
             {
-                level_objective = "Find the relic in 3 months.";
-                achieved_status = "Relic not found.";
-                tip += "Cleaning the environment and helping the fish make the fish happy.";
+                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (Tank.skills[3] == false)
+                {
+                    achieved_status = "Relic not found.";
+                    tip += "Cleaning the environment and helping the fish make the fish happy.";
+                }
+                else
+                {
+                    achieved_status = "You found Hermes' Winged sandal.";
+                    tip += "Don't fly around too much. It is not good for your health.";
+                }
             }
             else if (currentLevel == 3)
             {
-                level_objective = "Destroy the mutant shark.";
+                level_objective = "Destroy the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Mutant shark is still lurking around.";
                 tip += "Don't just flee with the sandal. Make sure you hurt the mutant shark with it.";
             }
             else if (currentLevel == 4)
             {
                 double shark_percent = ((double)playgamescene.fishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100;
-                level_objective = "Save at least 50% of the sharks within 30 days.";
+                double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
+                level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "There are " + shark_percent.ToString() + "% sharks remaining.";
                 tip += "Don't just shoot the enemies, heal the shark too.";
             }
             else if (currentLevel == 5)
             {
-                level_objective = "Find the relic in 3 months.";
-                achieved_status = "Relic not found.";
-                tip += "Use your experience points (press I).";
+                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (Tank.skills[0] == false)
+                {
+                    achieved_status = "Relic not found.";
+                    tip += "Use your experience points (press I).";
+                }
+                else
+                {
+                    achieved_status = "You found the Hercules' bow. Aim well and use it wisely.";
+                    tip += "Remember what the fish says.";
+                }
             }
             else if (currentLevel == 6)
             {
-                level_objective = "Find the relic in 3 months.";
-                achieved_status = "Relic not found.";
-                tip += "Read the writing on the paintings. They help you in the quiz.";
+                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (Tank.skills[1] == false)
+                {
+                    achieved_status = "Relic not found.";
+                    tip += "Read the writing on the paintings. They help you in the quiz.";
+                }
+                else
+                {
+                    achieved_status = "You found Thor's hammer. Use it when surrounded by enemies.";
+                    tip += "The environment status will affect the next level";
+                }
             }
             else if (currentLevel == 7)
             {
-                level_objective = "Find the relic in 3 months.";
-                achieved_status = "Relic not found.";
-                tip += "Listen to the fish talk. They give useful information.";
+                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (Tank.skills[2] == false)
+                {
+                    achieved_status = "Relic not found.";
+                    tip += "Increase speed by eating green fruit or press I";
+                }
+                else
+                {
+                    achieved_status = "You found Achilles' armor. Use it when you feel helpless.";
+                    tip += "Listen to the fish talk. They give useful information.";
+                }
             }
             else if (currentLevel == 8)
             {
-                level_objective = "Find the relic in 3 months.";
-                achieved_status = "Relic not found.";
-                tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
+                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (Tank.skills[4] == false)
+                {
+                    achieved_status = "Relic not found.";
+                    tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
+                }
+                else
+                {
+                    achieved_status = "You found Aphrodite's belt. Use it when there are too many enemies around.";
+                    tip += "Press 1,2,3,4 to switch between skills.";
+                }
             }
             else if (currentLevel == 9)
             {
-                level_objective = "Defeat the Terminator.";
+                level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
                 tip += "Fruits can help the battle a lot.";
             }
             else if (currentLevel == 10)
             {
-                level_objective = "Defeat the Terminator.";
+                level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is still alive.";
                 tip += "Good Luck. You are almost there.";
             }
 
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
 
-            level_objective = AddingObjects.wrapLine(level_objective, objectiveBoxRect.Width-60, levelObjFont);
-            achieved_status = AddingObjects.wrapLine(achieved_status, achievedBoxRect.Width-60, levelObjFont);
+            level_objective = AddingObjects.wrapLine(level_objective, objectiveBoxRect.Width-100, levelObjFont);
+            achieved_status = AddingObjects.wrapLine(achieved_status, achievedBoxRect.Width-100, levelObjFont);
 
             objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
             achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);

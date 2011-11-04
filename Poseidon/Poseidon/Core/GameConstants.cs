@@ -18,11 +18,13 @@ namespace Poseidon {
 
         //main character constants
         public const float MainCharVelocity = 0.5f;
-        public const float Velocity = 0.75f;
+        public const float BasicStartSpeed = 1.0f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
         public const float MainCharShootingSpeed = 0.7f;
         public const int MainCharLevelOneExp = 400;
+        public const float MainCharStrength = 1.0f;
+
         //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -81,6 +83,7 @@ namespace Poseidon {
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {   5,   0,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
+        public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0  };
 
         //number of enemy and fish for ship wreck
         public const int ShipNumberShootingEnemies = 5;
@@ -184,6 +187,10 @@ namespace Poseidon {
 
         //attributes
         public static int gainAttributeCost = 1;
+        public static float gainSpeed = 0.1f;
+        public static float gainShootingRate = 0.1f;
+        public static float gainStrength = 0.1f;
+        public static int gainHitPoint = 20;
 
     }
 }

@@ -58,8 +58,7 @@ namespace Poseidon.MiniGames
         Texture2D introductionTexture;
         /// <summary>
         /// Default Constructor
-        public QuizzGameScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                           Texture2D background, ContentManager Content)
+        public QuizzGameScene(Game game, Texture2D background, ContentManager Content)
             : base(game)
         {
             this.Content = Content;

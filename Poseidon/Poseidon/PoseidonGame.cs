@@ -177,18 +177,15 @@ namespace Poseidon
             Components.Add(shipWreckScene);
 
             // Create the Attribute board
-            AttributeScene = new AttributeBoard(this, smallFont, largeFont,
-                AttributeBackgroundTexture, Content);
+            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
             Components.Add(AttributeScene);
 
             // Create level objective scene
-            levelObjectiveScene = new LevelObjectiveScene(this, smallFont,
-                largeFont, LevelObjectiveBackgroundTexture, Content, playGameScene);
+            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
             Components.Add(levelObjectiveScene);
 
             // Create minigame scenes
-            quizzGameScene = new QuizzGameScene(this, smallFont,
-                largeFont, quizzGameBackgroundTexture, Content);
+            quizzGameScene = new QuizzGameScene(this, quizzGameBackgroundTexture, Content);
             Components.Add(quizzGameScene);
             typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
             Components.Add(typeGameScene);
@@ -471,7 +468,7 @@ namespace Poseidon
                 if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.speed += 0.1f;
+                    Tank.speed += GameConstants.gainSpeed;
                     Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
@@ -482,8 +479,8 @@ namespace Poseidon
                 if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.currentHitPoint += 20;
-                    Tank.maxHitPoint += 20;
+                    Tank.currentHitPoint += GameConstants.gainHitPoint;
+                    Tank.maxHitPoint += GameConstants.gainHitPoint;
                     Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
@@ -494,7 +491,7 @@ namespace Poseidon
                 if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.shootingRate += 0.1f;
+                    Tank.shootingRate += GameConstants.gainShootingRate;
                     Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
@@ -506,14 +503,14 @@ namespace Poseidon
                 if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.strength += 0.1f;
+                    Tank.strength += GameConstants.gainStrength;
                     Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
             if ((AttributeScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1,1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
-                || EscPressed )
+                || EscPressed || enterPressed)
             {
                 ShowScene(prevScene);
             }

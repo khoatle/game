@@ -133,4 +133,4 @@ Talk everything about the game. - 2-3 mins
 Coming soon..
 
 3 hunter doing helicopter stuff
-atttribute board with real bot's stuffs
+atttribute board with real bot's stuffs, display number of points assigned

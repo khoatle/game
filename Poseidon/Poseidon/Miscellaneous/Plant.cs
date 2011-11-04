@@ -53,7 +53,7 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             //Matrix translateMatrix = Matrix.CreateScale(1.0f,growth,1.0f) * Matrix.CreateTranslation(Position);
-            Matrix translateMatrix = Matrix.CreateScale(growth/4, growth, growth/4) * Matrix.CreateTranslation(Position);
+            Matrix translateMatrix = Matrix.CreateScale(growth/2.7f, growth*2.0f, growth/2.7f) * Matrix.CreateTranslation(Position);
             Matrix worldMatrix = translateMatrix;
                         
             foreach (ModelMesh mesh in Model.Meshes)

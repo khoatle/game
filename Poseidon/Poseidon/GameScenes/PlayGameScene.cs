@@ -280,6 +280,8 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            roundTime = GameConstants.RoundTime[currentLevel];
+            roundTimer = roundTime;
             isBossKilled = false;
 
             //User must find the key at every level
@@ -322,7 +324,7 @@ namespace Poseidon
 
             retrievedFruits = 0;
             startTime = gameTime.TotalGameTime;
-            roundTimer = roundTime;
+            
             currentSentence = 0;
             currentGameState = GameState.PlayingCutScene;
             schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,

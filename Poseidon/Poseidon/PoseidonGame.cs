@@ -343,7 +343,7 @@ namespace Poseidon
             if (pPressed)
             {
                 audio.MenuBack.Play();
-                playGameScene.Paused = !playGameScene.Paused;
+                shipWreckScene.Paused = !shipWreckScene.Paused;
             }
             if (backPressed)
             {
@@ -483,8 +483,7 @@ namespace Poseidon
                 {
                     audio.MenuSelect.Play();
                     Tank.currentHitPoint += 20;
-                    if (Tank.currentHitPoint > Tank.maxHitPoint)
-                        Tank.maxHitPoint = Tank.currentHitPoint;
+                    Tank.maxHitPoint += 20;
                     Tank.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }

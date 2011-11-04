@@ -22,6 +22,7 @@ namespace Poseidon {
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
         public const float MainCharShootingSpeed = 0.7f;
+        public const int MainCharLevelOneExp = 400;
         //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -78,7 +79,7 @@ namespace Poseidon {
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
-        public static int[] NumberShipWreck =       {   10,   0,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
+        public static int[] NumberShipWreck =       {   5,   0,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
 
         //number of enemy and fish for ship wreck
@@ -130,7 +131,7 @@ namespace Poseidon {
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
         public const float TrashBoundingSphereFactor = 0.9f;
-        public const float FruitGrowth = 5.0f;
+        public const float FruitGrowth = 2.5f;
 
         //skills
         public const int numberOfSkills = 5;

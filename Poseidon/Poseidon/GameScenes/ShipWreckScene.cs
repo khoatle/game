@@ -734,6 +734,12 @@ namespace Poseidon
             if (returnToMain) return;
 
             base.Draw(gameTime);
+            
+
+            // Change back the config changed by spriteBatch
+            RestoreGraphicConfig();
+
+            DrawGameplayScreen(gameTime);
             if (paused)
             {
                 // Draw the "pause" text
@@ -742,12 +748,6 @@ namespace Poseidon
                     Color.White);
                 spriteBatch.End();
             }
-
-            // Change back the config changed by spriteBatch
-            RestoreGraphicConfig();
-
-            DrawGameplayScreen(gameTime);
-
         }
         /// <summary>
         /// Draws the game terrain, a simple blue grid.

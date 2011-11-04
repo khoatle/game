@@ -34,7 +34,7 @@ namespace Poseidon.MiniGames
         private ContentManager content;
         private SpriteFont font;
         public bool isOver = false;
-        public float maxTime = 60;
+        public float maxTime = 90;
         public TimeSpan elapsedSeconds;
         public float timeInterval;
         public float timeBetweenUpdates;
@@ -154,11 +154,11 @@ namespace Poseidon.MiniGames
             if (display.getMarkupIndex() >= words.Count) {
                 isOver = true;
 
-                if (elapsedSeconds.TotalSeconds > 50)
+                if (elapsedSeconds.TotalSeconds > 80)
                 {
                     expAwarded = 50;
                 }
-                else if (elapsedSeconds.TotalSeconds > 30)
+                else if (elapsedSeconds.TotalSeconds > 50)
                 {
                     expAwarded += 100;
                 }

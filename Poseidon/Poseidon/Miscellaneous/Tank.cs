@@ -220,7 +220,7 @@ namespace Poseidon
             this.MaxRangeZ = MaxRangeZ;
 
             currentExperiencePts = lsCurrentExperiencePts = 0;
-            nextLevelExperience = lsNextLevelExperience = 100;
+            nextLevelExperience = lsNextLevelExperience = GameConstants.MainCharLevelOneExp;
             increaseBy = lsIncreaseBy = 100;
             level = lsLevel = 1;
             unassignedPts = lsUnassignedPts = 0;
@@ -400,7 +400,7 @@ namespace Poseidon
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo)
         {
             if (currentExperiencePts >= nextLevelExperience) {
-                increaseBy = (int)(increaseBy * 1.5);
+                increaseBy = (int)(increaseBy * 1.25);
                 //nextLevelExperience += increaseBy;
                 currentExperiencePts -= nextLevelExperience;
                 nextLevelExperience = increaseBy;

@@ -156,14 +156,14 @@ namespace Poseidon.MiniGames
 
                 if (elapsedSeconds.TotalSeconds > 50)
                 {
-                    expAwarded = 100;
+                    expAwarded = 50;
                 }
                 else if (elapsedSeconds.TotalSeconds > 30)
                 {
-                    expAwarded += 300;
+                    expAwarded += 100;
                 }
                 else {
-                    expAwarded += 500;
+                    expAwarded += 200;
                 }
                 Tank.currentExperiencePts += expAwarded;
                 return;

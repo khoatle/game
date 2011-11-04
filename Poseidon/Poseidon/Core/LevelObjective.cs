@@ -15,7 +15,7 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 // this is just for instantly testing minigames
-                if (enemiesAmount == 0) return true;
+                //if (enemiesAmount == 0) return true;
                 //if (isBossKilled) return true;
 
 
@@ -29,7 +29,7 @@ namespace Poseidon
             else if (currentLevel == 1)
             {
                 //Level Obj: Save at least 50% of fish during 4 min ( 30 days ).
-                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount/(double)GameConstants.NumberFish[currentLevel] >= 0.5))
+                if (roundTimer <= TimeSpan.Zero && ((double)fishAmount/(double)GameConstants.NumberFish[currentLevel] >= 0.75))
                 {
                     return true;
                 }
@@ -123,7 +123,7 @@ namespace Poseidon
             }
             if (currentLevel == 1)
             {
-                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.5) return true;
+                if ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] < 0.75) return true;
             }
             if (currentLevel == 2)
             {

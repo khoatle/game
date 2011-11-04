@@ -409,6 +409,7 @@ namespace Poseidon
                 //currentHitPoint = maxHitPoint;
                 unassignedPts += 5;
                 level++;
+                PoseidonGame.audio.levelUpSound.Play();
             }
 
             Vector3 futurePosition = Position;

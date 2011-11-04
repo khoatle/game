@@ -795,7 +795,7 @@ namespace Poseidon
             }
 
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
-            graphics.GraphicsDevice.Clear(Color.DarkSlateBlue);
+            graphics.GraphicsDevice.Clear(Color.Black);
             
             DrawTerrain(ground.Model);
             // Updating camera's frustum

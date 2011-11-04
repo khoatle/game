@@ -134,5 +134,5 @@ Coming soon..
 
 
 Deb: fix level time, add level tips
-mutant shark moving problem
-atttribute board
+3 hunter doing helicopter stuff
+atttribute board with real bot's stuffs

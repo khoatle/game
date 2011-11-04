@@ -1034,13 +1034,16 @@ namespace Poseidon
         private void DrawStats()
         {
             float xOffsetText, yOffsetText;
+            int days;
             string str1 = GameConstants.StrTimeRemaining;
-            if (roundTimer.Minutes < 10)
-                str1 += "0";
-            str1 += roundTimer.Minutes + ":";
-            if (roundTimer.Seconds < 10)
-                str1 += "0";
-            str1 += roundTimer.Seconds;
+            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
+            str1 += days.ToString();
+            //if (roundTimer.Minutes < 10)
+            //    str1 += "0";
+            //str1 += roundTimer.Minutes + ":";
+            //if (roundTimer.Seconds < 10)
+            //    str1 += "0";
+            //str1 += roundTimer.Seconds;
             //string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;

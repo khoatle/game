@@ -157,7 +157,7 @@ namespace Poseidon
             this.cutSceneDialog = cutSceneDialog;
             this.radar = radar;
             this.stunnedTexture = stunnedTexture;
-            roundTime = GameConstants.RoundTime;
+            roundTime = GameConstants.RoundTime[currentLevel];
             random = new Random();
             ground = new GameObject();
             gameCamera = new Camera(GameConstants.MainCamHeight);
@@ -1297,7 +1297,7 @@ namespace Poseidon
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
-            str1 += days;
+            str1 += days.ToString();
             //if (roundTimer.Minutes < 10)
             //    str1 += "0";
             //str1 += roundTimer.Minutes + ":";

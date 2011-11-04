@@ -25,6 +25,10 @@ namespace Poseidon {
         public const int MainCharLevelOneExp = 400;
         public const float MainCharStrength = 1.0f;
 
+
+        //experience reward
+        public const int ExpPainting = 35;
+        public const int ExpHealingFish = 8;
         //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -49,7 +53,7 @@ namespace Poseidon {
         //Environment Const
         public const int PlayerStartingEnv = 300;
         public const int MaxEnv = 1000;
-        public const int envLossForFishDeath = 5;
+        public const int envLossForFishDeath = 20;
         public const int envLossPerTrashAdd = 10;
         public const int envGainForTrashClean = 20;
         public const int envGainForHealingFish = 5;
@@ -81,7 +85,7 @@ namespace Poseidon {
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
-        public static int[] NumberShipWreck =       {   5,   0,   5,   0,   0,   5,   5,   5,   5,   0,   0  };
+        public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0  };
 

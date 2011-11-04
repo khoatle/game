@@ -90,7 +90,7 @@ namespace Poseidon
             health = GameConstants.DefaultEnemyHP;
             speed = GameConstants.EnemySpeed;
             damage = GameConstants.DefaultEnemyDamage;
-            experienceReward = 20;
+            experienceReward = 60;
         }
 
         public void setHypnotise(GameTime gameTime)

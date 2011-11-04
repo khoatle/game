@@ -37,8 +37,8 @@ namespace Poseidon
             //Terminator is undefeatable before the last level
             if (PlayGameScene.currentLevel == 10)
             {
-                health = 5000;
-                maxHealth = 5000;
+                health = 10000;
+                maxHealth = 10000;
             }
             else
             {
@@ -46,7 +46,7 @@ namespace Poseidon
                 maxHealth = 1000000;
             }
             perceptionRadius = GameConstants.BossPerceptionRadius;
-            experienceReward = 400; //3000
+            experienceReward = 3000;
         }
 
         public override void Load(int clipStart, int clipEnd, int fps)

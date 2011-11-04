@@ -136,7 +136,7 @@ namespace Poseidon
             }
             else if (currentLevel == 2)
             {
-                level_objective = "Find the relic in 30 days.";
+                level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
                 tip += "Cleaning the environment and helping the fish make the fish happy.";
             }
@@ -155,25 +155,25 @@ namespace Poseidon
             }
             else if (currentLevel == 5)
             {
-                level_objective = "Find the relic in 30 days.";
+                level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
                 tip += "Use your experience points (press I).";
             }
             else if (currentLevel == 6)
             {
-                level_objective = "Find the relic in 30 days.";
+                level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
                 tip += "Read the writing on the paintings. They help you in the quiz.";
             }
             else if (currentLevel == 7)
             {
-                level_objective = "Find the relic in 30 days.";
+                level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
                 tip += "Listen to the fish talk. They give useful information.";
             }
             else if (currentLevel == 8)
             {
-                level_objective = "Find the relic in 30 days.";
+                level_objective = "Find the relic in 3 months.";
                 achieved_status = "Relic not found.";
                 tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
             }

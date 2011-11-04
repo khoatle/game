@@ -94,7 +94,10 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan RoundTime = TimeSpan.FromSeconds(120); 
+        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
+                                                       TimeSpan.FromSeconds(120),  TimeSpan.FromSeconds(120),  TimeSpan.FromSeconds(360),
+                                                       TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
+                                                       TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
         public const string StrCellsFound = "Fuel Cells Retrieved: ";

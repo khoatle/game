@@ -519,7 +519,10 @@ namespace Poseidon
                         currentSentence++;
                         // End of cutscene for this level
                         if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count)
+                        {
                             currentGameState = GameState.Running;
+                            if (currentLevel == 11) currentGameState = GameState.GameComplete;
+                        }
                     }
                 }
                 if (currentGameState == GameState.ToNextLevel)
@@ -954,7 +957,10 @@ namespace Poseidon
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
                         currentLevel++;
-                        currentGameState = GameState.ToMiniGame;
+                        if (currentLevel < 10)
+                            currentGameState = GameState.ToMiniGame;
+                        //play the last cutscene if the game has been completed
+                        else currentGameState = GameState.PlayingCutScene;
                         //ResetGame(gameTime, aspectRatio);
                     }
                 }

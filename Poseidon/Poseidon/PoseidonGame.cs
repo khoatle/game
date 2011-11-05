@@ -16,7 +16,7 @@ using Poseidon.MiniGames;
 
 namespace Poseidon
 {
-    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel }
+    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete }
 
     /// <summary>
     /// This is the main type for your game
@@ -412,6 +412,10 @@ namespace Poseidon
                     ShowScene(quizzGameScene);
                 else
                     ShowScene(typeGameScene);
+            }
+            if (playGameScene.currentGameState == GameState.GameComplete)
+            {
+                this.Exit();
             }
         }
         public bool GetInShipWreck()

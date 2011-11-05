@@ -132,13 +132,12 @@ Actual fighting scene with music with skills and effects = 60s
 Talk everything about the game. - 2-3 mins
 Coming soon..
 
+Bugs and work left:
+
 3 hunter doing helicopter stuff
 atttribute board with real bot's stuffs
 bullet damage proportional to travelling distance
-no relic in 6th level!
-less fog
 stuck on a mutant shark when he is next to boundary
 odd number of attr points?
 mutant shark biting not hurting fish and fish stuck on its mouth
 terminator does not recover from hipnotize
-last level exit

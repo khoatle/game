@@ -216,6 +216,8 @@ namespace Poseidon
                 for (int j = 0; j < size; j++) {
                     sphere = barriers[j].BoundingSphere;
                     sphere.Radius *= GameConstants.EasyHitScale;
+                    //because Mutant Shark's easy hit sphere is too large
+                    if (barriers[j] is MutantShark) sphere.Radius *= 0.8f;
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
                         if (soundWhenHit && barriers[j].BoundingSphere.Intersects(cameraFrustum))

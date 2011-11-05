@@ -14,6 +14,7 @@ namespace Poseidon.Core
         private Texture2D BigBossDotImage;
         private Texture2D FishDotImage;
         private Texture2D RadarImage;
+        private Texture2D ShipwreckDotImage;
 
         // Local coords of the radar image's center, used to offset image when being drawn
         private Vector2 RadarImageCenter;
@@ -35,15 +36,48 @@ namespace Poseidon.Core
             BigBossDotImage = Content.Load<Texture2D>(bigBossDotPath);
             FishDotImage = Content.Load<Texture2D>(fishDotPath);
             RadarImage = Content.Load<Texture2D>(radarImagePath);
+            ShipwreckDotImage = Content.Load<Texture2D>("Image/RadarTextures/shipwreckDot");
             this.RadarCenterPos = radarCenter;
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<StaticObject> staticObjects)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / ((RadarImage.Height) * 0.5f), SpriteEffects.None, 0.0f);
             //new Color(100, 100, 100, 150)
+            // display shipwreck on the map
+            foreach (ShipWreck shipWreck in shipWrecks)
+            {
+                if (shipWreck.seen)
+                {
+                    Vector2 diffVect = new Vector2(shipWreck.Position.X - playerPos.X, shipWreck.Position.Z - playerPos.Z);
+                    float distance = diffVect.LengthSquared();
+
+                    // Check if enemy is within RadarRange
+                    //if (distance < RadarRangeSquared)
+                    //{
+                    if (distance > RadarRangeSquared)
+                        diffVect *= RadarRange / diffVect.Length();
+                    // Scale the distance from world coords to radar coords
+                    diffVect *= RadarScreenRadius / RadarRange;
+
+                    // We rotate each point on the radar so that the player is always facing UP on the radar
+                    //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                    // Offset coords from radar's center
+                    diffVect = -diffVect;
+                    diffVect += RadarCenterPos;
+
+                    // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                    // at lower elevations have smaller dots.
+                    float scaleHeight = 1.0f + ((shipWreck.Position.Y - playerPos.Y) / 200.0f);
+
+                    // Draw enemy dot on radar
+                    spriteBatch.Draw(ShipwreckDotImage, diffVect, null, Color.White, 0.0f, new Vector2(ShipwreckDotImage.Width / 2, ShipwreckDotImage.Height / 2), scaleHeight * 0.8f, SpriteEffects.None, 0.0f);
+                    //}
+                }
+            }
             // If enemy is in range
             for (int i = 0; i < enemyAmount; i++)
             {
@@ -100,37 +134,11 @@ namespace Poseidon.Core
                     spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
                 }
             }
-            // If static objs is in range
-            //foreach (StaticObject staticObject in staticObjects)
-            //{
-            //    Vector2 diffVect = new Vector2(staticObject.Position.X - playerPos.X, staticObject.Position.Z - playerPos.Z);
-            //    float distance = diffVect.LengthSquared();
-
-            //    // Check if enemy is within RadarRange
-            //    if (distance < RadarRangeSquared)
-            //    {
-            //        // Scale the distance from world coords to radar coords
-            //        diffVect *= RadarScreenRadius / RadarRange;
-
-            //        // We rotate each point on the radar so that the player is always facing UP on the radar
-            //        //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
-
-            //        // Offset coords from radar's center
-            //        diffVect = -diffVect;
-            //        diffVect += RadarCenterPos;
-
-            //        // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
-            //        // at lower elevations have smaller dots.
-            //        float scaleHeight = 1.0f + ((staticObject.Position.Y - playerPos.Y) / 200.0f);
-
-            //        // Draw enemy dot on radar
-            //        //spriteBatch.Draw(PlayerDotImage, diffVect, null, Color.White, 0.0f, new Vector2(0.0f, 0.0f), scaleHeight, SpriteEffects.None, 0.0f);
-            //    }
-            //}
+            
 
             // Draw player's dot last
             //spriteBatch.Draw(PlayerDotImage, RadarCenterPos, Color.White);
-            spriteBatch.Draw(PlayerDotImage, RadarCenterPos, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width/2, PlayerDotImage.Height/2), 1.0f, SpriteEffects.None, 0.0f); 
+            spriteBatch.Draw(PlayerDotImage, RadarCenterPos, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width / 2, PlayerDotImage.Height / 2), 1.0f, SpriteEffects.None, 0.0f); 
         }
     }
 }

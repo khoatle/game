@@ -850,6 +850,11 @@ namespace Poseidon
                     {
                         trash.Update(gameTime);
                     }
+                    foreach (ShipWreck shipWreck in shipWrecks)
+                    {
+                        if (shipWreck.BoundingSphere.Intersects(frustum) && shipWreck.seen == false)
+                            shipWreck.seen = true;
+                    }
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
@@ -1249,7 +1254,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, fish, fishAmount, staticObjects);
+            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)

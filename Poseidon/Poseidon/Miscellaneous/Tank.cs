@@ -311,7 +311,7 @@ namespace Poseidon
             strength = lsStrength;
             speed = lsSpeed;
             shootingRate = lsShootingRate;
-            bulletType = 0;
+            bulletType = 1;
             maxHitPoint = lsMaxHitPoint;
             currentHitPoint = lsCurrentExperiencePts;
             currentEnvPoint = lsCurrentEnvPoint;

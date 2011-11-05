@@ -64,7 +64,7 @@ namespace Poseidon
                     terminator.LoadContent(Content, "Models/EnemyModels/diver_green_ly");
                     if (currentLevel == 4) terminator.Name = "???";
                     else terminator.Name = "terminator";
-                    terminator.Load();
+                    terminator.Load(1, 25, 24);
                     enemies[i] = terminator;
                 }
             }

@@ -18,6 +18,8 @@ namespace Poseidon
         public bool accessed;
         // special skill's ID that this ship wreck will have in one of its chests
         public int skillID = 0;
+        // has the player found this shipwreck once?
+        public bool seen = false;
         public void LoadContent(ContentManager content, int type, int skillID, float orientation)
         {
             

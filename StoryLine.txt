@@ -1,4 +1,4 @@
-19-oct Meeting:
+
 
 SUMMARY of New Ideas:
 
@@ -141,3 +141,4 @@ stuck on a mutant shark when he is next to boundary
 odd number of attr points?
 mutant shark biting not hurting fish and fish stuck on its mouth
 terminator does not recover from hipnotize
+Armour does not work for the mutant shark

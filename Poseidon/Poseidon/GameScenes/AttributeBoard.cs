@@ -130,10 +130,10 @@ namespace Poseidon
             DrawBulletStrengthIcon();
             DrawDoneIcon();
             DrawUnassignedPtsBar(Tank.unassignedPts, centerY-15, "UNASSIGNED POINTS", Color.DarkBlue);
-            int print_speed = (int)((Tank.speed - GameConstants.BasicStartSpeed) / GameConstants.gainSpeed);
-            int print_hitpoint = (int)((Tank.maxHitPoint - GameConstants.PlayerStartingHP) / GameConstants.gainHitPoint);
-            int print_shootingRate = (int)((Tank.shootingRate - GameConstants.MainCharShootingSpeed) / GameConstants.gainShootingRate);
-            int print_strength = (int)((Tank.strength - GameConstants.MainCharStrength) / GameConstants.gainStrength);
+            int print_speed = (int)Math.Round((Tank.speed - GameConstants.BasicStartSpeed) / GameConstants.gainSpeed);
+            int print_hitpoint = (int)Math.Round((Tank.maxHitPoint - GameConstants.PlayerStartingHP) / (double)GameConstants.gainHitPoint);
+            int print_shootingRate = (int)Math.Round((Tank.shootingRate - GameConstants.MainCharShootingSpeed) / GameConstants.gainShootingRate);
+            int print_strength = (int)Math.Round((Tank.strength - GameConstants.MainCharStrength) / GameConstants.gainStrength);
             spriteBatch.DrawString(menuLarge, print_speed.ToString("F0"), new Vector2(speedIconRectangle.Center.X- menuLarge.MeasureString(print_speed.ToString()).X/2 ,speedIconRectangle.Center.Y), Color.Black);
             spriteBatch.DrawString(menuLarge, print_hitpoint.ToString("F0"), new Vector2(hitpointIconRectangle.Center.X - menuLarge.MeasureString(print_hitpoint.ToString()).X / 2, hitpointIconRectangle.Center.Y), Color.Black);
             spriteBatch.DrawString(menuLarge, print_shootingRate.ToString("F0"), new Vector2(shootrateIconRectangle.Center.X - menuLarge.MeasureString(print_shootingRate.ToString()).X / 2, shootrateIconRectangle.Center.Y), Color.Black);

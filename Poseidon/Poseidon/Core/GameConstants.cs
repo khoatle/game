@@ -155,11 +155,11 @@ namespace Poseidon {
         public const float shootingRange = 70.0f;
 
         //skills specifications
-        public const float coolDownForHerculesBow = 5;
-        public const float coolDownForArchillesArmor = 5;
-        public const float coolDownForThorHammer = 5;
-        public const float coolDownForHermesSandle = 5;
-        public const float coolDownForHypnotise = 5;
+        public const float coolDownForHerculesBow = 10;
+        public const float coolDownForArchillesArmor = 10;
+        public const float coolDownForThorHammer = 10;
+        public const float coolDownForHermesSandle = 10;
+        public const float coolDownForHypnotise = 10;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
         public const float timeHypnotiseLast = 10;

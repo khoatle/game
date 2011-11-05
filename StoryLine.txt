@@ -135,3 +135,4 @@ Coming soon..
 3 hunter doing helicopter stuff
 atttribute board with real bot's stuffs
 bullet damage proportional to travelling distance
+no relic in 6th level!

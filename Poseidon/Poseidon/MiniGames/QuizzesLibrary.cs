@@ -74,7 +74,7 @@ namespace Poseidon.MiniGames
             quizz.question = "What is the main threat to extinction of hammerhead sharks?";
             quizz.options[0] = "Excessive fishing for their fins";
             quizz.options[1] = "They are eaten by tilapia";
-            quizz.options[2] = "The commit suicide";
+            quizz.options[2] = "They commit suicide";
             quizz.options[3] = "They hammer each other";
             quizz.answerID = 0;
             quizzesList.Add(quizz);

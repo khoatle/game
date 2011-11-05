@@ -85,7 +85,7 @@ namespace Poseidon {
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
-        public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0  };
+        public static int[] NumberShipWreck =       {   10,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0  };
 
@@ -125,7 +125,7 @@ namespace Poseidon {
         public const float MainCamHeight = 200;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 20;
-        public const float ShipCamHeight = 120;
+        public const float ShipCamHeight = 150;
         
         
         //bounding sphere scaling factors
@@ -177,7 +177,7 @@ namespace Poseidon {
 
         //const for the fog effect
         public const float FogStart = 10;
-        public const float FogEnd = 430;//350;
+        public const float FogEnd = 500;//350;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
 
         //so that it is easier to aim and hit

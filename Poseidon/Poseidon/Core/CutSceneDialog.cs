@@ -49,61 +49,66 @@ namespace Poseidon
 
             //For scene 2
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 2");
+            sentence = new Sentence(0, "This is cutscene for level 2");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
 
             //For scene 3
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 3");
+            sentence = new Sentence(0, "This is cutscene for level 3");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
 
             //For scene 4
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 4");
+            sentence = new Sentence(0, "This is cutscene for level 4");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
 
             //For scene 5
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 5");
+            sentence = new Sentence(0, "This is cutscene for level 5");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 6
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 6");
+            sentence = new Sentence(0, "This is cutscene for level 6");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 7
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 7");
+            sentence = new Sentence(0, "This is cutscene for level 7");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 8
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 8");
+            sentence = new Sentence(0, "This is cutscene for level 8");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 9
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 9");
+            sentence = new Sentence(0, "This is cutscene for level 9");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 10
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "This is level 10");
+            sentence = new Sentence(0, "This is cutscene for level 10");
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
+            //For scene 11
+            cutScene = new List<Sentence>();
+            sentence = new Sentence(0, "You have completed the game!");
+            cutScene.Add(sentence);
+            cutScenes.Add(cutScene);
 
         }
     }

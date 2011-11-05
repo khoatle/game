@@ -146,7 +146,7 @@ namespace Poseidon
                 else
                 {
                     achieved_status = "You found Hermes' Winged sandal.";
-                    tip += "Don't fly around too much. It is not good for your health.";
+                    tip += "Hermes's Winged sandal is really useful when you want to get away.";
                 }
             }
             else if (currentLevel == 3)
@@ -161,7 +161,7 @@ namespace Poseidon
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
                 level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "There are " + shark_percent.ToString() + "% sharks remaining.";
-                tip += "Fight smart, do not let the enemy touch you.";
+                tip += "Use your experience points (press I)."; 
             }
             else if (currentLevel == 5)
             {
@@ -169,12 +169,12 @@ namespace Poseidon
                 if (Tank.skills[0] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Use your experience points (press I).";
+                    tip += "Fruits can help a lot in battle.";
                 }
                 else
                 {
                     achieved_status = "You found the Hercules' bow. Aim well and use it wisely.";
-                    tip += "Remember what the fish says.";
+                    tip += "Hercules's bow hurts a single enemy a lot.";
                 }
             }
             else if (currentLevel == 6)
@@ -188,7 +188,7 @@ namespace Poseidon
                 else
                 {
                     achieved_status = "You found Thor's hammer. Use it when surrounded by enemies.";
-                    tip += "The environment status will affect the next level";
+                    tip += "Thor's hammer stuns and pushes enemies away.";
                 }
             }
             else if (currentLevel == 7)
@@ -197,12 +197,12 @@ namespace Poseidon
                 if (Tank.skills[2] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Increase speed by eating green fruit or press I";
+                    tip += "Fight smart, do not let the enemy touch you.";
                 }
                 else
                 {
                     achieved_status = "You found Achilles' armor. Use it when you feel helpless.";
-                    tip += "Listen to the fish talk. They give useful information.";
+                    tip += "Achilles' armor makes you invincible for 5 seconds.";
                 }
             }
             else if (currentLevel == 8)
@@ -211,12 +211,12 @@ namespace Poseidon
                 if (Tank.skills[4] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
+                    tip += "Remember what the fish says, for these would be used in the minigames.";
                 }
                 else
                 {
                     achieved_status = "You found Aphrodite's belt. Use it when there are too many enemies around.";
-                    tip += "Press 1,2,3,4 to switch between skills.";
+                    tip += "Aphrodite's belt makes enemies turn against each other.";
                 }
             }
             else if (currentLevel == 9)

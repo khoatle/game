@@ -140,7 +140,7 @@ namespace Poseidon.Core
             roarSound = Content.Load<SoundEffect>("Sounds/SoundEffects/roarSound");
             plantSound = Content.Load<SoundEffect>("Sounds/SoundEffects/plantingSound");
             retrieveSound = Content.Load<SoundEffect>("Sounds/SoundEffects/retrievingSound");
-            bossLaugh = Content.Load<SoundEffect>("Sounds/SoundEffects/bossLaugh3");
+            bossLaugh = Content.Load<SoundEffect>("Sounds/SoundEffects/bossLaugh");
             gameOver = Content.Load<SoundEffect>("Sounds/SoundEffects/gameOver");
             gameWon = Content.Load<SoundEffect>("Sounds/SoundEffects/gameWon");
             bodyHit = Content.Load<SoundEffect>("Sounds/SoundEffects/bodyHitSound");

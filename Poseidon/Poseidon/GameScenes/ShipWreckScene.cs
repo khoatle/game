@@ -264,7 +264,7 @@ namespace Poseidon
             {
                 treasureChests.Add(new TreasureChest());
                 //put a God's relic inside a chest!
-                if (index == 0 && skillID != 0) treasureChests[index].LoadContent(Content, randomType, skillID);
+                if (index == 0 && skillID != -1) treasureChests[index].LoadContent(Content, randomType, skillID);
                 else treasureChests[index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }

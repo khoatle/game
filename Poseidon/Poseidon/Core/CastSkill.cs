@@ -25,7 +25,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 10 * healthiness, Tank.strengthUp);
+            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength * 20 * healthiness, Tank.strengthUp);
             d.loadContent(Content, "Models/BulletModels/herculesBullet");
             PlayGameScene.audio.herculesShot.Play();
             myBullets.Add(d);

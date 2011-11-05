@@ -1140,13 +1140,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\SoundEffects\bossLaugh.wav">
-      <Name>bossLaugh</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\SceneTextures\skillFoundBackground.png">
       <Name>skillFoundBackground</Name>
       <Importer>TextureImporter</Importer>
@@ -1280,15 +1273,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\SoundEffects\bossLaugh2.wav">
-      <Name>bossLaugh2</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\SoundEffects\bossLaugh3.wav">
-      <Name>bossLaugh3</Name>
+    <Compile Include="Sounds\SoundEffects\bossLaugh.wav">
+      <Name>bossLaugh</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>

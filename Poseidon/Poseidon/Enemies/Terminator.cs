@@ -79,11 +79,25 @@ namespace Poseidon
                                 Matrix.CreateFromQuaternion(qRotation) *
                                 Matrix.CreateTranslation(Position);
             clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
-            if (!stunned)
+            // do not delete this
+            if (stunned) return;
+
+            if (isHypnotise && gameTime.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast)
+            {
+                wearOutHypnotise();
+            }
+
+            if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(tank, fishList, fishSize);
                 configAction(perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
+            }
+            else
+            {
+                int perceptionID = perceptAndLock(tank, enemyList, enemySize);
+                configAction(perceptionID, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, tank, cameraFrustum, gameTime);
             }
 
         }

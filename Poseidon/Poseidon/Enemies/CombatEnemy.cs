@@ -185,9 +185,11 @@ namespace Poseidon
                         clipPlayer.switchRange(31, 60);
                     if (currentHuntingTarget.GetType().Name.Equals("Tank"))
                     {
-                        //((Tank)currentHuntingTarget).currentHitPoint -= damage;
-                        PoseidonGame.audio.botYell.Play();
-                        Tank.currentHitPoint -= damage;
+                        if (!Tank.invincibleMode)
+                        {
+                            Tank.currentHitPoint -= damage;
+                            PoseidonGame.audio.botYell.Play();
+                        }
                     }
                     if (currentHuntingTarget is SwimmingObject)
                     {

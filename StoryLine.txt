@@ -138,7 +138,5 @@ Bugs and work left:
 atttribute board with real bot's stuffs
 bullet damage proportional to travelling distance
 stuck on a mutant shark when he is next to boundary
-odd number of attr points?
 mutant shark biting not hurting fish and fish stuck on its mouth
-terminator does not recover from hipnotize
-Armour does not work for the mutant shark
+hipnotized enemy bullet hitting it self

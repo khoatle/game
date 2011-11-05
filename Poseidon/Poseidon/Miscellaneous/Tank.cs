@@ -294,12 +294,12 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            //activeSkillID = 0;
+            activeSkillID = 4;
             //skills[0] = true;
             //skills[1] = true;
             //skills[2] = true;
             //skills[3] = true;
-            //skills[4] = true;
+            skills[4] = true;
 
             firstPlant = true;
             prevPlantTime = 0;

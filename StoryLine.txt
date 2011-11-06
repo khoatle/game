@@ -133,10 +133,10 @@ Talk everything about the game. - 2-3 mins
 Coming soon..
 
 Bugs and work left:
-
-3 hunter doing helicopter stuff
 atttribute board with real bot's stuffs
 bullet damage proportional to travelling distance
-stuck on a mutant shark when he is next to boundary
-mutant shark biting not hurting fish and fish stuck on its mouth
-hipnotized enemy bullet hitting it self
+3 hunters doing helicopter stuff (low priority - Khoa)
+stuck on a mutant shark when he is next to boundary (low priority - Deb)
+mutant shark biting not hurting fish and fish stuck on its mouth (high priority - Deb)
+hynotize skill needs to be test/fix for bosses (high priority - Khoa)
+Mutant shark poisonous bite & Terminator chasing bullet (high priority - Khoa)

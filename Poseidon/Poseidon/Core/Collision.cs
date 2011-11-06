@@ -222,11 +222,13 @@ namespace Poseidon
                     {
                         if (soundWhenHit && barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalYell.Play();
-                        //if (barriers[j] is BaseEnemy) {
-                        //    if (((BaseEnemy)barriers[j]).isHypnotise) {
-                        //        return;
-                        //    }
-                        //}
+                        if (barriers[j] is BaseEnemy)
+                        {
+                            if (((BaseEnemy)barriers[j]).isHypnotise)
+                            {
+                                return;
+                            }
+                        }
 
                         barriers[j].health -= bullets[i].damage;
                         bullets.RemoveAt(i--);

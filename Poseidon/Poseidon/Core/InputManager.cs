@@ -11,20 +11,20 @@ namespace Poseidon
 {
     public static class InputManager
     {
-        public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, Tank tank)
+        public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, HydroBot tank)
         {
-            if (currentKeyboardState.IsKeyDown(Keys.D1) && Tank.skills[0]) Tank.activeSkillID = 0;
-            if (currentKeyboardState.IsKeyDown(Keys.D2) && Tank.skills[1]) Tank.activeSkillID = 1;
-            if (currentKeyboardState.IsKeyDown(Keys.D3) && Tank.skills[2]) Tank.activeSkillID = 2;
-            if (currentKeyboardState.IsKeyDown(Keys.D4) && Tank.skills[3]) Tank.activeSkillID = 3;
-            if (currentKeyboardState.IsKeyDown(Keys.D5) && Tank.skills[4]) Tank.activeSkillID = 4;
+            if (currentKeyboardState.IsKeyDown(Keys.D1) && HydroBot.skills[0]) HydroBot.activeSkillID = 0;
+            if (currentKeyboardState.IsKeyDown(Keys.D2) && HydroBot.skills[1]) HydroBot.activeSkillID = 1;
+            if (currentKeyboardState.IsKeyDown(Keys.D3) && HydroBot.skills[2]) HydroBot.activeSkillID = 2;
+            if (currentKeyboardState.IsKeyDown(Keys.D4) && HydroBot.skills[3]) HydroBot.activeSkillID = 3;
+            if (currentKeyboardState.IsKeyDown(Keys.D5) && HydroBot.skills[4]) HydroBot.activeSkillID = 4;
             if (lastKeyboardState.IsKeyDown(Keys.Space) && currentKeyboardState.IsKeyUp(Keys.Space))
             {
                 // level 0, can only heal
                 if (PlayGameScene.currentLevel != 0)
                 {
-                    Tank.bulletType++;
-                    if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
+                    HydroBot.bulletType++;
+                    if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;
                     PlayGameScene.audio.ChangeBullet.Play();
                 }
             }

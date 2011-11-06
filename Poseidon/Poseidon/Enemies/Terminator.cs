@@ -70,7 +70,7 @@ namespace Poseidon
             Load(99, 124, 60);
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
@@ -89,15 +89,15 @@ namespace Poseidon
 
             if (!isHypnotise)
             {
-                int perceptionID = perceptAndLock(tank, fishList, fishSize);
+                int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
             }
             else
             {
-                int perceptionID = perceptAndLock(tank, enemyList, enemySize);
+                int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, tank, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, hydroBot, cameraFrustum, gameTime);
             }
 
         }
@@ -154,11 +154,11 @@ namespace Poseidon
 
             }
         }
-        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank, BoundingFrustum cameraFrustum, GameTime gameTime)
+        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             if (configBits[0] == true)
             {
-                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot);
                 return;
             }
             if (currentHuntingTarget != null)
@@ -167,7 +167,7 @@ namespace Poseidon
             }
             if (configBits[2] == true)
             {
-                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, hydroBot);
             }
             if (configBits[3] == true)
             {

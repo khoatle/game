@@ -84,7 +84,7 @@ namespace Poseidon.FishSchool
             maxValueZ = maxZ;
         }
 
-        public void Update(GameTime gameTime, Tank tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
+        public void Update(GameTime gameTime, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
         {
             if (flock != null)
             {

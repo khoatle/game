@@ -32,7 +32,7 @@ namespace Poseidon
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
 
                     if (objs[i] is BaseEnemy) {
-                        Tank.currentExperiencePts += objs[i].experienceReward;
+                        HydroBot.currentExperiencePts += objs[i].experienceReward;
                         if (!objs[i].isBigBoss)
                         {
                             if (objs[i].BoundingSphere.Intersects(cameraFrustum))
@@ -54,7 +54,7 @@ namespace Poseidon
 
                     if (objs[i] is Fish)
                     {
-                        Tank.currentEnvPoint -= GameConstants.envLossForFishDeath;
+                        HydroBot.currentEnvPoint -= GameConstants.envLossForFishDeath;
                     }
                 }
             }
@@ -119,12 +119,12 @@ namespace Poseidon
         /// <summary>
         /// BARRIERS FUNCTIONS
         /// </summary>
-        public static bool isBarriersValidMove(SwimmingObject obj, Vector3 futurePosition, SwimmingObject[] objects, int size, Tank tank) {
+        public static bool isBarriersValidMove(SwimmingObject obj, Vector3 futurePosition, SwimmingObject[] objects, int size, HydroBot hydroBot) {
             BoundingSphere futureBoundingSphere = obj.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            if (isOutOfMap(futurePosition, tank.MaxRangeX, tank.MaxRangeZ)) {
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ)) {
                 return false;
             }
 
@@ -132,7 +132,7 @@ namespace Poseidon
                 return false;
             }
 
-            if (isBarrierVsTankCollision(futureBoundingSphere, tank)) {
+            if (isBarrierVsBotCollision(futureBoundingSphere, hydroBot)) {
                 return false;
             }
             return true;
@@ -153,48 +153,48 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isBarrierVsTankCollision(BoundingSphere vehicleBoundingSphere, Tank tank)
+        private static bool isBarrierVsBotCollision(BoundingSphere vehicleBoundingSphere, HydroBot hydroBot)
         {
-            if (vehicleBoundingSphere.Intersects(tank.BoundingSphere))
+            if (vehicleBoundingSphere.Intersects(hydroBot.BoundingSphere))
                 return true;
             return false;
         }
         // End--------------------------------------------------------------
 
         /// <summary>
-        /// TANK COLLISION
+        /// BOT COLLISION
         /// </summary>
-        public static bool isTankValidMove(Tank tank, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount)
+        public static bool isBotValidMove(HydroBot hydroBot, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount)
         {
-            BoundingSphere futureBoundingSphere = tank.BoundingSphere;
+            BoundingSphere futureBoundingSphere = hydroBot.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
             //Don't allow off-terrain driving
-            if (isOutOfMap(futurePosition, tank.MaxRangeX, tank.MaxRangeZ))
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ))
             {
                 return false;
             }
             //in supersonice mode, you knock and you stun the enemies
-            if (Tank.supersonicMode == true)
+            if (HydroBot.supersonicMode == true)
             {
-                if (isTankVsBarrierCollision(futureBoundingSphere, fish, fishAmount))
+                if (isBotVsBarrierCollision(futureBoundingSphere, fish, fishAmount))
                     return false;
                 return true;
             }
             //else don't allow driving through an enemy
-            if (isTankVsBarrierCollision(futureBoundingSphere, enemies, enemiesAmount))
+            if (isBotVsBarrierCollision(futureBoundingSphere, enemies, enemiesAmount))
             {
                 return false;
             }
-            if (isTankVsBarrierCollision(futureBoundingSphere, fish, fishAmount)) {
+            if (isBotVsBarrierCollision(futureBoundingSphere, fish, fishAmount)) {
                 return false;
             }
             return true;
         }
 
         // Helper
-        private static bool isTankVsBarrierCollision(BoundingSphere boundingSphere, SwimmingObject[] barrier, int size)
+        private static bool isBotVsBarrierCollision(BoundingSphere boundingSphere, SwimmingObject[] barrier, int size)
         {
             for (int i = 0; i < size; i++)
             {
@@ -252,8 +252,8 @@ namespace Poseidon
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
                             barriers[j].health += GameConstants.HealingAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
-                            Tank.currentExperiencePts += barriers[j].experienceReward;
-                            Tank.currentEnvPoint += GameConstants.envGainForHealingFish;
+                            HydroBot.currentExperiencePts += barriers[j].experienceReward;
+                            HydroBot.currentEnvPoint += GameConstants.envGainForHealingFish;
                         }
                         bullets.RemoveAt(i--);
                         break;
@@ -262,18 +262,22 @@ namespace Poseidon
             }
         }
 
-        public static void updateProjectileHitTank(Tank tank, List<DamageBullet> enemyBullets) {
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets) {
             for (int i = 0; i < enemyBullets.Count; ) {
-                if (enemyBullets[i].BoundingSphere.Intersects(tank.BoundingSphere)) {
-                    if (!Tank.invincibleMode) Tank.currentHitPoint -= enemyBullets[i].damage;
+                if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
+                    if (!HydroBot.invincibleMode)
+                    {
+                        HydroBot.currentHitPoint -= enemyBullets[i].damage;
+                        PoseidonGame.audio.botYell.Play();
+                    }
                     enemyBullets.RemoveAt(i);
-                    PoseidonGame.audio.botYell.Play();
+                    
                 }
                 else { i++;  }
             }
         }
 
-        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> healBullets, List<DamageBullet> tankBullets, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBulleys, BoundingFrustum frustum)
+        public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> healBullets, List<DamageBullet> botBullets, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBulleys, BoundingFrustum frustum)
         {
             for (int i = 0; i < healBullets.Count; ) {
                 if (isOutOfMap(healBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(healBullets[i].BoundingSphere, frustum)) {
@@ -284,10 +288,10 @@ namespace Poseidon
                 }
             }
 
-            for (int i = 0; i < tankBullets.Count; ) {
-                if (isOutOfMap(tankBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(tankBullets[i].BoundingSphere, frustum))
+            for (int i = 0; i < botBullets.Count; ) {
+                if (isOutOfMap(botBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(botBullets[i].BoundingSphere, frustum))
                 {
-                    tankBullets.RemoveAt(i);
+                    botBullets.RemoveAt(i);
                 }
                 else {
                     i++;

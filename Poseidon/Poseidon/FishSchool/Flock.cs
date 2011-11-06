@@ -97,7 +97,7 @@ namespace Poseidon.FishSchool
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="cat"></param>
-        public void Update(GameTime gameTime, Tank tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
+        public void Update(GameTime gameTime, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
         {
             foreach (Fish thisFish in flock)
             {

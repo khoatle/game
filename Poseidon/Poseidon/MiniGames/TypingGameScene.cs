@@ -165,7 +165,7 @@ namespace Poseidon.MiniGames
                 else {
                     expAwarded += 200;
                 }
-                Tank.currentExperiencePts += expAwarded;
+                HydroBot.currentExperiencePts += expAwarded;
                 return;
             }
 

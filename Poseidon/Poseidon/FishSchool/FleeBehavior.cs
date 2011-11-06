@@ -49,7 +49,7 @@ namespace Poseidon.FishSchool
                 reaction = (aiParams.PerDangerWeight * dangerDirection);
             }
         }
-        public override void Update(Tank tank, AIParameters aiParams)
+        public override void Update(HydroBot tank, AIParameters aiParams)
         {
             base.ResetReaction();
 

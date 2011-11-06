@@ -118,7 +118,7 @@ namespace Poseidon
 
             if (currentLevel == 0)
             {
-                double env_percent = (double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint * 100;
+                double env_percent = (double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100;
                 double target_percent = GameConstants.LevelObjective[currentLevel]*100;
                 level_objective = "Increase the environment bar to " + target_percent.ToString() + "% within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 if (env_percent < target_percent)
@@ -138,7 +138,7 @@ namespace Poseidon
             else if (currentLevel == 2)
             {
                 level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                if (Tank.skills[3] == false)
+                if (HydroBot.skills[3] == false)
                 {
                     achieved_status = "Relic not found.";
                     tip += "Cleaning the environment and helping the fish make the fish happy.";
@@ -166,7 +166,7 @@ namespace Poseidon
             else if (currentLevel == 5)
             {
                 level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                if (Tank.skills[0] == false)
+                if (HydroBot.skills[0] == false)
                 {
                     achieved_status = "Relic not found.";
                     tip += "Fruits can help a lot in battle.";
@@ -180,7 +180,7 @@ namespace Poseidon
             else if (currentLevel == 6)
             {
                 level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                if (Tank.skills[1] == false)
+                if (HydroBot.skills[1] == false)
                 {
                     achieved_status = "Relic not found.";
                     tip += "Read the writing on the paintings. They help you in the quiz.";
@@ -194,7 +194,7 @@ namespace Poseidon
             else if (currentLevel == 7)
             {
                 level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                if (Tank.skills[2] == false)
+                if (HydroBot.skills[2] == false)
                 {
                     achieved_status = "Relic not found.";
                     tip += "Fight smart, do not let the enemy touch you.";
@@ -208,7 +208,7 @@ namespace Poseidon
             else if (currentLevel == 8)
             {
                 level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                if (Tank.skills[4] == false)
+                if (HydroBot.skills[4] == false)
                 {
                     achieved_status = "Relic not found.";
                     tip += "Remember what the fish says, for these would be used in the minigames.";

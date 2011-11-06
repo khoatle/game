@@ -69,7 +69,7 @@ namespace Poseidon.FishSchool
         /// <param name="otherAnimal">the Animal to react to</param>
         /// <param name="aiParams">the Behaviors' parameters</param>
         public abstract void Update(Animal otherAnimal, AIParameters aiParams);
-        public virtual void Update(Tank tank, AIParameters aiParams)
+        public virtual void Update(HydroBot tank, AIParameters aiParams)
         {
         }
         public virtual void Update(SwimmingObject swimmingObject, AIParameters aiParams)

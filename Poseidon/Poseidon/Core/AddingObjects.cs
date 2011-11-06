@@ -255,39 +255,39 @@ namespace Poseidon
                 else chest.orientation = MathHelper.PiOver2;
             }
         }
-        public static void placeHealingBullet(Tank tank, ContentManager Content, List<HealthBullet> healthBullet) {
+        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet) {
             HealthBullet h = new HealthBullet();
-            Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
+            Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
  
-            h.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
+            h.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
             h.loadContent(Content, "Models/BulletModels/healBullet");
             PoseidonGame.audio.botNormalShot.Play();
             healthBullet.Add(h);
         }
 
-        public static void placeTankDamageBullet(Tank tank, ContentManager Content, List<DamageBullet> myBullet) {
+        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet) {
             DamageBullet d = new DamageBullet();
 
-            Matrix orientationMatrix = Matrix.CreateRotationY(tank.ForwardDirection);
+            Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
-            d.initialize(tank.Position, shootingDirection, GameConstants.BulletSpeed, Tank.strength, Tank.strengthUp);
+            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
             PoseidonGame.audio.botNormalShot.Play();
             myBullet.Add(d);
         }
 
         public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum) {
-            Tank tmp1;
+            HydroBot tmp1;
             SwimmingObject tmp2;
             Matrix orientationMatrix;
-            if (obj.GetType().Name.Equals("Tank")) {
-                tmp1 = (Tank)obj;
+            if (obj.GetType().Name.Equals("HydroBot")) {
+                tmp1 = (HydroBot)obj;
                 orientationMatrix = Matrix.CreateRotationY(tmp1.ForwardDirection);
             }
             else {
@@ -318,11 +318,11 @@ namespace Poseidon
         }
 
         public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets, BoundingFrustum cameraFrustum) {
-            Tank tmp1;
+            HydroBot tmp1;
             SwimmingObject tmp2;
             Matrix orientationMatrix;
-            if (shooter.GetType().Name.Equals("Tank")) {
-                tmp1 = (Tank)shooter;
+            if (shooter.GetType().Name.Equals("HydroBot")) {
+                tmp1 = (HydroBot)shooter;
                 orientationMatrix = Matrix.CreateRotationY(tmp1.ForwardDirection);
             } else {
                 tmp2 = (SwimmingObject)shooter;
@@ -341,19 +341,19 @@ namespace Poseidon
                 PoseidonGame.audio.chasingBulletSound.Play();
         }
 
-        public static bool placePlant(Tank tank, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)
+        public static bool placePlant(HydroBot hydroBot, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)
         {
-            if ((gameTime.TotalGameTime.TotalSeconds - Tank.prevPlantTime > GameConstants.coolDownForPlant) || Tank.firstPlant == true)
+            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.prevPlantTime > GameConstants.coolDownForPlant) || HydroBot.firstPlant == true)
             {
                 Plant p = new Plant();
-                Vector3 possiblePosition = tank.Position;
-                possiblePosition.Y = heightMapInfo.GetHeight(tank.Position);
+                Vector3 possiblePosition = hydroBot.Position;
+                possiblePosition.Y = heightMapInfo.GetHeight(hydroBot.Position);
                 p.LoadContent(Content, possiblePosition, roundTimer.TotalSeconds);
                 if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects))
                 {
                     plants.Add(p);
-                    Tank.firstPlant = false;
-                    Tank.prevPlantTime = gameTime.TotalGameTime.TotalSeconds;
+                    HydroBot.firstPlant = false;
+                    HydroBot.prevPlantTime = gameTime.TotalGameTime.TotalSeconds;
                     return true;
                 }
             }

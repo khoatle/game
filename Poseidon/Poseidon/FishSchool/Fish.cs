@@ -248,7 +248,7 @@ namespace Poseidon.FishSchool
                 }
             }
         }
-        public void ReactToMainCharacter(Tank tank, ref AIParameters AIparams)
+        public void ReactToMainCharacter(HydroBot tank, ref AIParameters AIparams)
         {
             if (tank != null)
             {

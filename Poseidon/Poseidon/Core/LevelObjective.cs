@@ -20,7 +20,7 @@ namespace Poseidon
 
 
                 //Level Obj: you need increase the env bar to 80% within 4 min ( 30 days).
-                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= GameConstants.LevelObjective[currentLevel]))
+                if (roundTimer <= TimeSpan.Zero && ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint >= GameConstants.LevelObjective[currentLevel]))
                 //real obj above, below is just for easier testing
                 //if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
                     return true;
@@ -37,7 +37,7 @@ namespace Poseidon
             else if (currentLevel == 2)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[3] == true)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[3] == true)
                 {
                     return true;
                 }
@@ -62,7 +62,7 @@ namespace Poseidon
             else if (currentLevel == 5)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[0] == true)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[0] == true)
                 {
                     return true;
                 }
@@ -70,7 +70,7 @@ namespace Poseidon
             else if (currentLevel == 6)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[1] == true)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[1] == true)
                 {
                     return true;
                 }
@@ -78,7 +78,7 @@ namespace Poseidon
             else if (currentLevel == 7)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[2] == true)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[2] == true)
                 {
                     return true;
                 }
@@ -86,7 +86,7 @@ namespace Poseidon
             else if (currentLevel == 8)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[4] == true)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[4] == true)
                 {
                     return true;
                 }
@@ -114,11 +114,11 @@ namespace Poseidon
         public bool CheckLoseCondition()
         {
             //Always lose when the environment is completely destroyed
-            if (Tank.currentEnvPoint <= 0)   return true;
+            if (HydroBot.currentEnvPoint <= 0)   return true;
 
             if (currentLevel == 0)
             {
-                if (roundTimer <= TimeSpan.Zero && ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint <= GameConstants.LevelObjective[currentLevel])) 
+                if (roundTimer <= TimeSpan.Zero && ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint <= GameConstants.LevelObjective[currentLevel])) 
                     return true;
             }
             if (currentLevel == 1)
@@ -127,7 +127,7 @@ namespace Poseidon
             }
             if (currentLevel == 2)
             {
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[3] == false)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[3] == false)
                 {
                     return true;
                 }
@@ -145,28 +145,28 @@ namespace Poseidon
             }
             if (currentLevel == 5)
             {
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[0] == false)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[0] == false)
                 {
                     return true;
                 }
             }
             if (currentLevel == 6)
             {
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[1] == false)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[1] == false)
                 {
                     return true;
                 }
             }
             if (currentLevel == 7)
             {
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[2] == false)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[2] == false)
                 {
                     return true;
                 }
             }
             if (currentLevel == 8)
             {
-                if (roundTimer <= TimeSpan.Zero && Tank.skills[4] == false)
+                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[4] == false)
                 {
                     return true;
                 }

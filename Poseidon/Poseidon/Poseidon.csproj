@@ -150,7 +150,7 @@
     <Compile Include="MiniGames\WritingBox.cs" />
     <Compile Include="ShipWrecks\OceanPaintings.cs" />
     <Compile Include="MiniGames\QuizzesLibrary.cs" />
-    <Compile Include="Miscellaneous\Tank.cs" />
+    <Compile Include="Miscellaneous\HydroBot.cs" />
     <Compile Include="Core\TextMenuComponent.cs" />
     <Compile Include="Core\CursorManager.cs" />
     <Compile Include="Core\CutSceneDialog.cs" />

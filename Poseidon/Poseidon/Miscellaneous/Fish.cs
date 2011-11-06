@@ -54,7 +54,7 @@ namespace Poseidon {
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
 
-        public void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullet) {
+        public void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet) {
             Vector3 futurePosition = Position;
             //int barrier_move
             Random random = new Random();
@@ -132,7 +132,7 @@ namespace Poseidon {
 
             if (gameTime.TotalGameTime.TotalSeconds - lastHealthUpdateTime > healthChangeInterval)
             {
-                double env_health = (double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint;
+                double env_health = (double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint;
                 double env_deviation = 0;
                 if ( env_health > 0.5)
                 {

@@ -80,8 +80,8 @@ namespace Poseidon {
         //general
         //number of trash, enemy and fish per level for main game
         public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
-        public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
+        public static int[] NumberShootingEnemies = {   10,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
+        public static int[] NumberCombatEnemies =   {   10,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
         public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
@@ -132,7 +132,7 @@ namespace Poseidon {
         public const float FuelCarrierBoundingSphereFactor = .8f;
         public const float FuelCellBoundingSphereFactor = .5f;
         public const float BarrierBoundingSphereFactor = 0.7f;
-        public const float TankBoundingSphereFactor = .9f;
+        public const float TankBoundingSphereFactor = 0.06f;
         public const float ShipWreckBoundingSphereFactor = 1.0f;
         public const float PlantBoundingSphereFactor = 0.2f;
         public const float FruitBoundingSphereFactor = 0.9f;

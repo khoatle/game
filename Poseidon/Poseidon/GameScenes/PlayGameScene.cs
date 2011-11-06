@@ -46,8 +46,8 @@ namespace Poseidon
         public static Camera gameCamera;
         public GameState currentGameState = GameState.PlayingCutScene;
         // In order to know we are resetting the level winning or losing
-        // winning: keep the current tank
-        // losing: reset our tank to the tank at the beginning of the level
+        // winning: keep the current bot
+        // losing: reset our bot to the bot at the beginning of the level
         GameState prevGameState;
         GameObject boundingSphere;
 
@@ -70,10 +70,10 @@ namespace Poseidon
         public int fishAmount = 0;
 
         // The main character for this level
-        public Tank tank;
+        public HydroBot hydroBot;
         // The main character at the beginning of this level
         // Used for restarting the level
-        //Tank prevTank;
+        //bot prevbot;
         private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
@@ -162,8 +162,8 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera(GameConstants.MainCamHeight);
             boundingSphere = new GameObject();
-            tank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
-            //prevTank = new Tank(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
+            hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
+            
             fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
@@ -251,7 +251,7 @@ namespace Poseidon
             plants = new List<Plant>();
             fruits = new List<Fruit>();
 
-            tank.Load(Content);
+            hydroBot.Load(Content);
 
             //prevTank.Load(Content);
             roundTimer = roundTime;
@@ -300,18 +300,18 @@ namespace Poseidon
             ground.Model = Content.Load<Model>(terrain_name);
 
             // If we are resetting the level losing the game
-            // Reset our tank to the one at the beginning of the lost level
+            // Reset our bot to the one at the beginning of the lost level
             //if (prevGameState == GameState.Lost) tank.CopyAttribute(prevTank);
             //else prevTank.CopyAttribute(tank);
 
             if (prevGameState == GameState.Lost)
-                tank.ResetToLevelStart();
+                hydroBot.ResetToLevelStart();
             else
-                tank.SetLevelStartValues();
+                hydroBot.SetLevelStartValues();
 
-            tank.Reset();
-            gameCamera.Update(tank.ForwardDirection,
-                tank.Position, aspectRatio, gameTime);
+            hydroBot.Reset();
+            gameCamera.Update(hydroBot.ForwardDirection,
+                hydroBot.Position, aspectRatio, gameTime);
 
             
 
@@ -533,7 +533,7 @@ namespace Poseidon
                 {
                     if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
-                        if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint > GameConstants.EnvThresholdForKey)
+                        if ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint > GameConstants.EnvThresholdForKey)
                         {
                             showFoundKey = true;
                             hadkey = true;
@@ -564,8 +564,8 @@ namespace Poseidon
                             //at level 0, player is only able to heal
                             if (currentLevel != 0)
                             {
-                                Tank.bulletType++;
-                                if (Tank.bulletType == GameConstants.numBulletTypes) Tank.bulletType = 0;
+                                HydroBot.bulletType++;
+                                if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;
                                 audio.ChangeBullet.Play();
                             }
                               
@@ -574,14 +574,14 @@ namespace Poseidon
                         if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
                                 && currentKeyboardState.IsKeyUp(Keys.K)) || (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)))
                         {
-                            if (Tank.activeSkillID != -1)
+                            if (HydroBot.activeSkillID != -1)
                             {
-                                Tank.activeSkillID++;
-                                if (Tank.activeSkillID == GameConstants.numberOfSkills) Tank.activeSkillID = 0;
-                                while (Tank.skills[Tank.activeSkillID] == false)
+                                HydroBot.activeSkillID++;
+                                if (HydroBot.activeSkillID == GameConstants.numberOfSkills) HydroBot.activeSkillID = 0;
+                                while (HydroBot.skills[HydroBot.activeSkillID] == false)
                                 {
-                                    Tank.activeSkillID++;
-                                    if (Tank.activeSkillID == GameConstants.numberOfSkills) Tank.activeSkillID = 0;
+                                    HydroBot.activeSkillID++;
+                                    if (HydroBot.activeSkillID == GameConstants.numberOfSkills) HydroBot.activeSkillID = 0;
                                 }
                             }
                         }
@@ -599,64 +599,72 @@ namespace Poseidon
                     {
 
                         // Hercules' Bow!!!
-                        if (Tank.activeSkillID == 0 && mouseOnLivingObject)
+                        if (HydroBot.activeSkillID == 0 && mouseOnLivingObject)
                         {
                             pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                            tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
+                            hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                             //if the skill has cooled down
                             //or this is the 1st time the user uses it
-                            if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || Tank.firstUse[0] == true)
+                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || HydroBot.firstUse[0] == true)
                             {
-                                Tank.firstUse[0] = false;
-                                Tank.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.firstUse[0] = false;
+                                HydroBot.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
                                 //audio.Explosion.Play();
-                                CastSkill.UseHerculesBow(tank, Content, spriteBatch, myBullet, this);
-                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
-                                tank.reachDestination = true;
+                                CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, this);
+                                HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                hydroBot.reachDestination = true;
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
 
                         }
                         //Thor's Hammer!!!
-                        if (Tank.activeSkillID == 1)
+                        if (HydroBot.activeSkillID == 1)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || Tank.firstUse[1] == true)
+                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || HydroBot.firstUse[1] == true)
                             {
-                                Tank.firstUse[1] = false;
-                                Tank.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.firstUse[1] = false;
+                                HydroBot.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
                                 gameCamera.Shake(25f, .4f);
-                                CastSkill.UseThorHammer(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount);
-                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount);
+                                HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
                         }
                         // Achilles' Armor!!!
-                        if (Tank.activeSkillID == 2)
+                        if (HydroBot.activeSkillID == 2)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || Tank.firstUse[2] == true)
+                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || HydroBot.firstUse[2] == true)
                             {
-                                Tank.firstUse[2] = false;
-                                Tank.invincibleMode = true;
+                                HydroBot.firstUse[2] = false;
+                                HydroBot.invincibleMode = true;
                                 audio.armorSound.Play();
-                                Tank.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
-                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                HydroBot.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
                         }
 
                         //Hermes' Winged Sandal!!!
-                        if (Tank.activeSkillID == 3)
+                        if (HydroBot.activeSkillID == 3)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || Tank.firstUse[3] == true)
+                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || HydroBot.firstUse[3] == true)
                             {
-                                Tank.firstUse[3] = false;
+                                HydroBot.firstUse[3] = false;
                                 audio.hermesSound.Play();
-                                Tank.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
-                                Tank.supersonicMode = true;
-                                Tank.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                HydroBot.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.supersonicMode = true;
+                                HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
                         }
 
                         // Hypnotise skill
-                        if (Tank.activeSkillID == 4)
+                        if (HydroBot.activeSkillID == 4)
                         {
                             BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
 
@@ -665,15 +673,17 @@ namespace Poseidon
                                 return;
                             }
 
-                            if (Tank.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - Tank.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
+                            if (HydroBot.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
                             {
-                                Tank.firstUse[4] = false;
+                                HydroBot.firstUse[4] = false;
 
                                 enemy.setHypnotise(gameTime);
 
-                                Tank.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
-                                Tank.currentHitPoint -= GameConstants.skillHealthLoss;
+                                HydroBot.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.currentHitPoint -= GameConstants.skillHealthLoss;
                                 audio.hipnotizeSound.Play();
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
                         }
 
@@ -687,15 +697,17 @@ namespace Poseidon
                         if (currentMouseState.LeftButton == ButtonState.Pressed)
                         {
                             pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                            tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
+                            hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
+                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                             {
                                 prevFireTime = gameTime.TotalGameTime;
                                 //audio.Shooting.Play();
-                                if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
-                                else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
+                                if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
+                                else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
-                            tank.reachDestination = true;
+                            hydroBot.reachDestination = true;
                         }
                         pointIntersect = Vector3.Zero;
                     }
@@ -704,49 +716,54 @@ namespace Poseidon
                     else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                        if (!hydroBot.clipPlayer.inRange(1, 30))
+                            hydroBot.clipPlayer.switchRange(1, 30);
                     }
                     else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                         //if it is out of shooting range then just move there
-                        if (!CursorManager.InShootingRange(tank, cursor, gameCamera, GameConstants.MainGameFloatHeight))
+                        if (!CursorManager.InShootingRange(hydroBot, cursor, gameCamera, GameConstants.MainGameFloatHeight))
                         {
-
+                            if (!hydroBot.clipPlayer.inRange(1, 30))
+                                hydroBot.clipPlayer.switchRange(1, 30);
                         }
                         else
                         {
                             //if the enemy is in the shooting range then shoot it w/o moving to it
-                            if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
+                            if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                             {
-                                tank.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, tank.Position);
+                                hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                                 prevFireTime = gameTime.TotalGameTime;
                                 //audio.Shooting.Play();
-                                if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
-                                else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
-                                //so the tank will not move
+                                if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
+                                else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
+                                //so the bot will not move
                                 pointIntersect = Vector3.Zero;
-                                tank.reachDestination = true;
+                                hydroBot.reachDestination = true;
+                                if (!hydroBot.clipPlayer.inRange(61, 90))
+                                    hydroBot.clipPlayer.switchRange(61, 90);
                             }
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
                     }
                     //let the user change active skill/bullet too when he presses on number
                     //this is better for fast action
-                    InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, tank);
+                    InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, hydroBot);
 
-                    if (Tank.supersonicMode == true)
+                    if (HydroBot.supersonicMode == true)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                        CastSkill.KnockOutEnemies(gameTime, tank, enemies, ref enemiesAmount, fish, fishAmount, audio);
+                        CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-                    tank.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
-                    //add 1 bubble over tank and each enemy
+                    hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
+                    //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (timeNextBubble <= 0)
                     {
                         Bubble bubble = new Bubble();
-                        bubble.LoadContent(Content, tank.Position, false, 0.025f);
+                        bubble.LoadContent(Content, hydroBot.Position, false, 0.025f);
                         bubbles.Add(bubble);
                         for (int i = 0; i < enemiesAmount; i++)
                         {
@@ -765,7 +782,7 @@ namespace Poseidon
                     timeNextSeaBedBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (timeNextSeaBedBubble <= 0)
                     {
-                        Vector3 bubblePos = tank.Position;
+                        Vector3 bubblePos = hydroBot.Position;
                         bubblePos.X += random.Next(-50, 50);
                         //bubblePos.Y = 0;
                         bubblePos.Z += random.Next(-50, 50);
@@ -799,25 +816,27 @@ namespace Poseidon
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
-                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (Tank.shootingRate * Tank.fireRateUp))
+                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                     //||
                     //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
                     {
                         prevFireTime = gameTime.TotalGameTime;
                         //audio.Shooting.Play();
-                        if (Tank.bulletType == 0) { AddingObjects.placeTankDamageBullet(tank, Content, myBullet); }
-                        else if (Tank.bulletType == 1) { AddingObjects.placeHealingBullet(tank, Content, healthBullet); }
+                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
+                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
+                        if (!hydroBot.clipPlayer.inRange(61, 90))
+                            hydroBot.clipPlayer.switchRange(61, 90);
                     }
 
 
                     //Are we planting trees?
                     if ((lastKeyboardState.IsKeyDown(Keys.X) && (currentKeyboardState.IsKeyUp(Keys.X))))
                     {
-                        if (AddingObjects.placePlant(tank, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects, gameTime))
+                        if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects, gameTime))
                         {
                             audio.plantSound.Play();
-                            Tank.currentExperiencePts += Plant.experienceReward;
-                            Tank.currentEnvPoint += GameConstants.envGainForDropSeed;
+                            HydroBot.currentExperiencePts += Plant.experienceReward;
+                            HydroBot.currentEnvPoint += GameConstants.envGainForDropSeed;
                         }
                     }
 
@@ -835,14 +854,14 @@ namespace Poseidon
                         }
                     }
 
-                    gameCamera.Update(tank.ForwardDirection, tank.Position, aspectRatio, gameTime);
+                    gameCamera.Update(hydroBot.ForwardDirection, hydroBot.Position, aspectRatio, gameTime);
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
                     retrievedFruits = 0;
                     foreach (Fruit fruit in fruits)
                     {
-                        fruit.Update(currentKeyboardState, tank.BoundingSphere, tank.Trash_Fruit_BoundingSphere);
+                        fruit.Update(currentKeyboardState, hydroBot.BoundingSphere, hydroBot.Trash_Fruit_BoundingSphere);
                         if (fruit.Retrieved)
                         {
                             retrievedFruits++;
@@ -877,11 +896,11 @@ namespace Poseidon
                     {
                         alliesBullets[i].update();
                     }
-                    Collision.updateBulletOutOfBound(tank.MaxRangeX, tank.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
+                    Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
-                    Collision.updateProjectileHitTank(tank, enemyBullet);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
 
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
@@ -895,16 +914,16 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet, alliesBullets, frustum, gameTime);
+                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime);
                     }
 
                     for (int i = 0; i < fishAmount; i++)
                     {
-                        fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), tank, enemyBullet);
+                        fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
                     }
 
                     //Checking win/lost condition for this level
-                    if (Tank.currentHitPoint <= 0) 
+                    if (HydroBot.currentHitPoint <= 0) 
                     { 
                         currentGameState = GameState.Lost;
                         audio.gameOver.Play();
@@ -928,9 +947,9 @@ namespace Poseidon
                     cursor.Update(gameTime);
 
                     //update the school of fish
-                    schoolOfFish1.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
-                    schoolOfFish2.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
-                    schoolOfFish3.Update(gameTime, tank, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                 }
 
                 prevGameState = currentGameState;
@@ -1212,13 +1231,16 @@ namespace Poseidon
             }
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
-            tank.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //RasterizerState rs = new RasterizerState();
             //rs.FillMode = FillMode.WireFrame;
-            //GraphicsDevice.RasterizerState = rs;
-            //tank.DrawBoundingSphere(gameCamera.ViewMatrix,
+            //GraphicDevice.RasterizerState = rs;
+            //hydroBot.DrawBoundingSphere(gameCamera.ViewMatrix,
             //    gameCamera.ProjectionMatrix, boundingSphere);
 
+            //rs = new RasterizerState();
+            //rs.FillMode = FillMode.Solid;
+            //GraphicDevice.RasterizerState = rs;
             // draw bubbles
             foreach (Bubble bubble in bubbles)
             {
@@ -1252,7 +1274,7 @@ namespace Poseidon
             DrawBulletType();
             //DrawHeight();
             DrawRadar();
-            if (Tank.activeSkillID != -1) DrawActiveSkill();
+            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
             cursor.Draw(gameTime);
             spriteBatch.End();
@@ -1260,12 +1282,12 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, tank.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)
         {
-            if (tank.BoundingSphere.Intersects(shipSphere))
+            if (hydroBot.BoundingSphere.Intersects(shipSphere))
                 return true;
             else
                 return false;
@@ -1377,14 +1399,14 @@ namespace Poseidon
                 AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, Tank.currentHitPoint, Tank.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentHitPoint, HydroBot.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
 
             //Display Environment Bar
-            if (Tank.currentEnvPoint > Tank.maxEnvPoint) Tank.currentEnvPoint = Tank.maxEnvPoint;
-            AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, Tank.currentEnvPoint, Tank.maxEnvPoint);
+            if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
+            AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, Tank.currentExperiencePts, Tank.nextLevelExperience, Tank.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.Brown);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.Brown);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -1418,7 +1440,7 @@ namespace Poseidon
             //    new Vector2((int)xOffsetText, (int)yOffsetText);
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
             //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
-            spriteBatch.Draw(bulletTypeTextures[Tank.bulletType], destRectangle, Color.White);
+            spriteBatch.Draw(bulletTypeTextures[HydroBot.bulletType], destRectangle, Color.White);
         }
 
         // Draw the currently selected skill/spell
@@ -1439,7 +1461,7 @@ namespace Poseidon
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
-            spriteBatch.Draw(skillTextures[Tank.activeSkillID], destRectangle, Color.White);
+            spriteBatch.Draw(skillTextures[HydroBot.activeSkillID], destRectangle, Color.White);
             
         }
 

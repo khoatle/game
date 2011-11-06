@@ -52,7 +52,7 @@ namespace Poseidon
         {
             //BoundingSphere.Center += new Vector3(20,0,0);
         }
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -82,26 +82,26 @@ namespace Poseidon
 
             if (!isHypnotise)
             {
-                int perceptionID = perceptAndLock(tank, fishList, fishSize);
+                int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
             }
             else
             {
-                int perceptionID = perceptAndLock(tank, enemyList, enemySize);
+                int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, tank, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
             }
         }
         // Execute the actions
-        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, Tank tank, BoundingFrustum cameraFrustum, GameTime gameTime)
+        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             if (configBits[0] == true)
             {
                 // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 24) && !configBits[3])
                     clipPlayer.switchRange(1, 24);
-                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, tank);
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot);
                 return;
             }
             if (currentHuntingTarget != null)
@@ -114,7 +114,7 @@ namespace Poseidon
                 // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 24) && !configBits[3])
                     clipPlayer.switchRange(1, 24);
-                goStraight(enemies, enemiesAmount, fishes, fishAmount, tank);
+                goStraight(enemies, enemiesAmount, fishes, fishAmount, hydroBot);
             }
             if (!configBits[3] && this.BoundingSphere.Intersects(cameraFrustum))
             {
@@ -148,11 +148,11 @@ namespace Poseidon
                     //if (!clipPlayer.inRange(60, 83))
                     //    clipPlayer.switchRange(60, 83);
 
-                    if (currentHuntingTarget.GetType().Name.Equals("Tank"))
+                    if (currentHuntingTarget.GetType().Name.Equals("HydroBot"))
                     {
-                        if (!Tank.invincibleMode)
+                        if (!HydroBot.invincibleMode)
                         {
-                            Tank.currentHitPoint -= damage;
+                            HydroBot.currentHitPoint -= damage;
                             PoseidonGame.audio.botYell.Play();
                         }
                     }

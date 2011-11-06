@@ -93,7 +93,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -305,9 +305,9 @@ namespace Poseidon
             if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
             {
                 //each right answer give 5% environment boost
-                Tank.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
-                if (Tank.currentEnvPoint >= Tank.maxEnvPoint) Tank.currentEnvPoint = Tank.maxEnvPoint;
-                Tank.currentExperiencePts += quizzGameScene.numRightAnswer * 20;
+                HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
+                if (HydroBot.currentEnvPoint >= HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
+                HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 20;
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
             }
@@ -471,34 +471,34 @@ namespace Poseidon
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
+                if (HydroBot.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.speed += GameConstants.gainSpeed;
-                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
+                    HydroBot.speed += GameConstants.gainSpeed;
+                    HydroBot.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
             if (AttributeScene.hitpointIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
+                if (HydroBot.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.currentHitPoint += GameConstants.gainHitPoint;
-                    Tank.maxHitPoint += GameConstants.gainHitPoint;
-                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
+                    HydroBot.currentHitPoint += GameConstants.gainHitPoint;
+                    HydroBot.maxHitPoint += GameConstants.gainHitPoint;
+                    HydroBot.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
             if (AttributeScene.shootrateIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
-                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
+                if (HydroBot.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.shootingRate += GameConstants.gainShootingRate;
-                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
+                    HydroBot.shootingRate += GameConstants.gainShootingRate;
+                    HydroBot.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
             if (AttributeScene.bulletStrengthIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1))
@@ -506,11 +506,11 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
             {
 
-                if (Tank.unassignedPts >= GameConstants.gainAttributeCost)
+                if (HydroBot.unassignedPts >= GameConstants.gainAttributeCost)
                 {
                     audio.MenuSelect.Play();
-                    Tank.strength += GameConstants.gainStrength;
-                    Tank.unassignedPts -= GameConstants.gainAttributeCost;
+                    HydroBot.strength += GameConstants.gainStrength;
+                    HydroBot.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
             if ((AttributeScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1,1))

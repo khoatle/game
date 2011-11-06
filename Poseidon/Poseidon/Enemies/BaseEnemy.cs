@@ -22,7 +22,7 @@ namespace Poseidon
 
         // Percept ID:
         // 0 = nothing detected
-        // 1 = tank detected - 1st priory
+        // 1 = hydrobot detected - 1st priory
         // 2 = last target is still in range - 2nd priory
         // 3 = a fish is detected - 3rd priory
         public int[] perceptID;
@@ -122,17 +122,17 @@ namespace Poseidon
         // Calculate the facing vector
         protected void calculateHeadingDirection()
         {
-            ForwardDirection = Tank.CalculateAngle(currentHuntingTarget.Position, Position);
+            ForwardDirection = HydroBot.CalculateAngle(currentHuntingTarget.Position, Position);
             headingDirection = currentHuntingTarget.Position - Position;
             headingDirection.Normalize();
         }
 
         // Go straight
-        protected virtual void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
+        protected virtual void goStraight(SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {
             //Vector3 futurePosition = Position + speed * headingDirection;
-            //if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
-            //        && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))
+            //if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
+            //        && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
             //{
             //    Position = futurePosition;
             //    //BoundingSphere.Center = Position;
@@ -200,7 +200,7 @@ namespace Poseidon
             }
         }
 
-        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, Tank tank, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
         }
         public virtual void ChangeBoundingSphere()
@@ -268,7 +268,7 @@ namespace Poseidon
         }
 
         // Go randomly is default move
-        protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, Tank tank)
+        protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {
             Vector3 futurePosition = Position;
             //int barrier_move
@@ -303,8 +303,8 @@ namespace Poseidon
                 headingDirection *= GameConstants.EnemySpeed;
                 futurePosition = Position + headingDirection;
 
-                if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, tank)
-                    && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, tank))
+                if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
+                    && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
                 {
                     Position = futurePosition;
 

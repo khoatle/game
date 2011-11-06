@@ -156,9 +156,17 @@ namespace Poseidon
                             PoseidonGame.audio.botYell.Play();
                         }
                     }
-                    if (currentHuntingTarget.GetType().Name.Equals("Fish"))
+                    //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
+                    //{
+                    //    ((Fish)currentHuntingTarget).health -= damage;
+                    //    if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
+                    //    {
+                    //        PoseidonGame.audio.animalYell.Play();
+                    //    }
+                    //}
+                    if (currentHuntingTarget is SwimmingObject)
                     {
-                        ((Fish)currentHuntingTarget).health -= damage;
+                        ((SwimmingObject)currentHuntingTarget).health -= damage;
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
                             PoseidonGame.audio.animalYell.Play();

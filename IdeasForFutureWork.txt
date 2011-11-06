@@ -1,6 +1,6 @@
 Do not try hard to do what other game corporations has done before.
 
 + Treasure chests has fossil fragments, enough fragments -> jig saw game, successful -> get a strong sea animal to fight on your side. Can have multiple pets, they can die, can be heal by hydrobot.
-+ Encouraging to heal fish & make fighting more interesting: Heal fish -> fill up a bar, bar filled -> able to do a special move, the things able to do should be dynamic so it will not be linear and boring over time, after doing special move -> bar empty again.
++ Encouraging to heal fish & make fighting more interesting: Heal fish -> fill up a bar, bar filled -> able to do a special move, the things able to do should be dynamic so it will not be linear and boring over time, after doing special move -> bar empty again. Special move or just chance to increase the skill power (but still have to do some educational activity)
 + Do combos?
 + More types of enemy with cool ability: diver with chain harpoon, you got hit,chained and drag away, got to press a button repeatedly to get freed.

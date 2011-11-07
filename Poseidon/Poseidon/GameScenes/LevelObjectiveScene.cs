@@ -223,7 +223,7 @@ namespace Poseidon
             {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
-                tip += "Use your skills effeciently since they reduce your health.";
+                tip += "Shift+RightClick can also be used to switch skills.";
             }
             else if (currentLevel == 10)
             {

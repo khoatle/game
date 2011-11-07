@@ -30,7 +30,7 @@ namespace Poseidon.MiniGames
             paragraph = new Paragraph("Ocean litter has many sources, from boats and oil rigs on the water to picnickers, fisherman, and beachgoers along the shore. Cigarettes, buckets, gloves, rugs, tires, shoes, diapers, you can find it all down there.");
             paragraphLib.Add(paragraph);
 
-            paragraph = new Paragraph("It takes just a minute for an item to be carelessly discarded or blown by the wind into the ocean, but it can take many years for that item to completely decompose. A glass bottle will never decompose, while plastic bottle may takes 450 years.");
+            paragraph = new Paragraph("It takes just a minute for an item to be carelessly discarded or blown by the wind into the ocean, but it can take many years for that item to completely decompose. A glass bottle will never decompose, while plastic bottle may take 450 years.");
             paragraphLib.Add(paragraph);
 
             paragraph = new Paragraph("Because I want to help the ocean, I pledge to do these things: conserve water, reduce waste, dispose trash properly, be considerate to ocean wildlife and do community service to clean up beaches and rivers. I will also tell my friends to do the same.");

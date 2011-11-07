@@ -47,7 +47,7 @@ namespace Poseidon {
 
         // HP const
         public const int DefaultEnemyHP = 100;
-        public const int FishHP = 50;
+        //public const int FishHP = 50;
         public const int PlayerStartingHP = 500;
 
         //Environment Const

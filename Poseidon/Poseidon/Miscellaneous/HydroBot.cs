@@ -116,7 +116,8 @@ namespace Poseidon
             strengthUp = 1.0f;
             fireRateUp = 1.0f;
 
-            skills = lsSkills = new bool[GameConstants.numberOfSkills];
+            skills = new bool[GameConstants.numberOfSkills];
+            lsSkills = new bool[GameConstants.numberOfSkills];
             skillPrevUsed = new double[GameConstants.numberOfSkills];
             firstUse = new bool[GameConstants.numberOfSkills];
 
@@ -137,7 +138,6 @@ namespace Poseidon
             //just for testing
             //should be removed
             //activeSkillID = lsActiveSkillID = 0;
-            lsSkills = skills;
         }
 
         /// <summary>
@@ -207,7 +207,7 @@ namespace Poseidon
             maxHitPoint = lsMaxHitPoint;
             currentHitPoint = lsCurrentExperiencePts;
             currentEnvPoint = lsCurrentEnvPoint;
-            skills = lsSkills;
+            lsSkills.CopyTo(skills, 0);
             activeSkillID = lsActiveSkillID;
 
             currentExperiencePts = lsCurrentExperiencePts;
@@ -226,7 +226,8 @@ namespace Poseidon
             lsMaxHitPoint = maxHitPoint;
             lsCurrentHitPoint = currentHitPoint;
 
-            lsSkills = skills;
+            skills.CopyTo(lsSkills, 0);
+
             lsActiveSkillID = activeSkillID;
 
             lsCurrentExperiencePts = currentExperiencePts;

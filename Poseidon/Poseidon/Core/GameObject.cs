@@ -55,25 +55,25 @@ namespace Poseidon
             return mergedSphere;
         }
 
-        internal void DrawBoundingSphere(Matrix view, Matrix projection,
-            GameObject boundingSphereModel)
-        {
-            Matrix scaleMatrix = Matrix.CreateScale(BoundingSphere.Radius);
-            Matrix translateMatrix =
-                Matrix.CreateTranslation(BoundingSphere.Center);
-            Matrix worldMatrix = scaleMatrix * translateMatrix;
+        //internal void DrawBoundingSphere(Matrix view, Matrix projection,
+        //    GameObject boundingSphereModel)
+        //{
+        //    Matrix scaleMatrix = Matrix.CreateScale(BoundingSphere.Radius);
+        //    Matrix translateMatrix =
+        //        Matrix.CreateTranslation(BoundingSphere.Center);
+        //    Matrix worldMatrix = scaleMatrix * translateMatrix;
 
-            foreach (ModelMesh mesh in boundingSphereModel.Model.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.World = worldMatrix ;
-                    effect.View = view;
-                    effect.Projection = projection;
-                }
-                mesh.Draw();
-            }
-        }
+        //    foreach (ModelMesh mesh in boundingSphereModel.Model.Meshes)
+        //    {
+        //        foreach (BasicEffect effect in mesh.Effects)
+        //        {
+        //            effect.World = worldMatrix ;
+        //            effect.View = view;
+        //            effect.Projection = projection;
+        //        }
+        //        mesh.Draw();
+        //    }
+        //}
     }
 
 }

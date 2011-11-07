@@ -141,6 +141,7 @@ namespace Poseidon
             //}
             float pullDistance = Vector3.Distance(currentHuntingTarget.Position, Position);
             float timeFactor = (currentHuntingTarget.GetType().Name.Equals("CombatEnemy"))? 1.25f:1f;
+            Vector3 futurePosition;
 
             if (pullDistance > (BoundingSphere.Radius + currentHuntingTarget.BoundingSphere.Radius) * timeFactor)
             {
@@ -192,11 +193,17 @@ namespace Poseidon
                 pull += totalPush;
                 pull.Normalize();
 
-                Position += (pull * speed);
-                BoundingSphere.Center.X += (pull * speed).X;
-                BoundingSphere.Center.Z += (pull * speed).Z;
+                futurePosition = Position + (pull * speed);
 
-                ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
+                if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
+                        && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
+                {
+                    Position = futurePosition;
+                    BoundingSphere.Center.X += (pull * speed).X;
+                    BoundingSphere.Center.Z += (pull * speed).Z;
+                    ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
+                }
+
             }
         }
 

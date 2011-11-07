@@ -147,7 +147,10 @@ namespace Poseidon
                     continue;
                 if (futureBoundingSphere.Intersects(
                     objs[curBarrier].BoundingSphere))
+                {
+                    //System.Diagnostics.Debug.WriteLine("I am "+enemy.Name+" stuck with "+ objs[curBarrier].Name);
                     return true;
+                }
             }
             return false;
         }

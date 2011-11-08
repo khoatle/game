@@ -197,7 +197,7 @@ namespace Poseidon
         }
 
         // Helper
-        private static bool isBotVsBarrierCollision(BoundingSphere boundingSphere, SwimmingObject[] barrier, int size)
+        public static bool isBotVsBarrierCollision(BoundingSphere boundingSphere, SwimmingObject[] barrier, int size)
         {
             for (int i = 0; i < size; i++)
             {

@@ -98,6 +98,7 @@ namespace Poseidon
         public int MaxRangeX;
         public int MaxRangeZ;
 
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight)
         {
             // Original attribute
@@ -319,7 +320,11 @@ namespace Poseidon
             {
                 if (gameTime.TotalGameTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
                 {
-                    supersonicMode = false;
+                    // To prevent bot landing on an enemy after using the sandal
+                    if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
+                    {
+                        supersonicMode = false;
+                    }
                 }
             }
             float turnAmount = 0;

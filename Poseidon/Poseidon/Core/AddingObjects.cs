@@ -61,10 +61,10 @@ namespace Poseidon
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
                 {
                     Terminator terminator = new Terminator();
-                    terminator.LoadContent(Content, "Models/EnemyModels/diver_green_ly");
+                    terminator.LoadContent(Content, "Models/EnemyModels/terminator");
                     if (currentLevel == 4) terminator.Name = "???";
                     else terminator.Name = "terminator";
-                    terminator.Load(1, 25, 24);
+                    terminator.Load(1, 30, 24);
                     enemies[i] = terminator;
                 }
             }
@@ -282,7 +282,7 @@ namespace Poseidon
             myBullet.Add(d);
         }
 
-        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum) {
+        public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum, float offsetFactor) {
             HydroBot tmp1;
             SwimmingObject tmp2;
             Matrix orientationMatrix;
@@ -301,7 +301,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            newBullet.initialize(obj.Position, shootingDirection, GameConstants.BulletSpeed, damage);
+            newBullet.initialize(obj.Position + shootingDirection * offsetFactor, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
             {
                 newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");

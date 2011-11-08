@@ -67,7 +67,7 @@ namespace Poseidon
 
         public void Load()
         {
-            Load(99, 124, 60);
+            Load(1, 30, 24);
         }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
@@ -130,11 +130,11 @@ namespace Poseidon
             {
                 float originalForwardDir = ForwardDirection;
                 ForwardDirection += MathHelper.PiOver4 / 4;
-                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 ForwardDirection -= MathHelper.PiOver4 / 2;
-                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 ForwardDirection = originalForwardDir;
-                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = gameTime.TotalGameTime;
 
             }
@@ -149,7 +149,7 @@ namespace Poseidon
             }
             if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3)
             {
-                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
+                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = gameTime.TotalGameTime;
 
             }
@@ -207,7 +207,7 @@ namespace Poseidon
                 }
                 else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
-                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum);
+                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                     prevFire = gameTime.TotalGameTime;
                 }
             }

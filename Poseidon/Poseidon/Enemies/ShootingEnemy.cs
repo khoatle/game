@@ -135,7 +135,7 @@ namespace Poseidon
 
                 if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
-                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 0, cameraFrustum);
+                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 0, cameraFrustum, 0);
                     prevFire = gameTime.TotalGameTime;
                 }
             }

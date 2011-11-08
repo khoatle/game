@@ -141,6 +141,177 @@ namespace Poseidon.MiniGames
             quizz.options[3] = "None of the above";
             quizz.answerID = 0;
             quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Algae is vanishing due to ocean warming. It is good or bad?";
+            quizz.options[0] = "Good, because they are ugly.";
+            quizz.options[1] = "Good, because they are dirt.";
+            quizz.options[2] = "Good, because there's plenty in my backyard.";
+            quizz.options[3] = "Bad, it produces food for marine life by photosynthesis.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Why are corals important?";
+            quizz.options[0] = "They are leading source of ocean's food and livelihood.";
+            quizz.options[1] = "They are good tourist attraction.";
+            quizz.options[2] = "They make good jewelry.";
+            quizz.options[3] = "They are completely useless.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Why is our planet called the 'blue planet'?";
+            quizz.options[0] = "Blue is a popular shirt color.";
+            quizz.options[1] = "The sky is blue.";
+            quizz.options[2] = "70% of our planet is covered with water.";
+            quizz.options[3] = "It is called the red planet.";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which of the following causes global warming?";
+            quizz.options[0] = "Burning of fossil fuels.";
+            quizz.options[1] = "Deforestation.";
+            quizz.options[2] = " Methane emissions from animals and agriculture.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which of the following is caused by global warming?";
+            quizz.options[0] = "Dissapearance of coral reefs.";
+            quizz.options[1] = "Widespread extinction of species.";
+            quizz.options[2] = "More killer storms.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Why is Maldives called the sinking nation?";
+            quizz.options[0] = "Scuba diving is very popular there.";
+            quizz.options[1] = "It may submerge under water very soon.";
+            quizz.options[2] = "Their officials have underwater meetings.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Why is it good to eat less sea food?";
+            quizz.options[0] = "It will reduce over-expoitation of sea-animals.";
+            quizz.options[1] = "Eat more chicken.";
+            quizz.options[2] = "Sea food stinks.";
+            quizz.options[3] = "They don't have protein.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which of these activities harm the ocean?";
+            quizz.options[0] = "Oil Drilling.";
+            quizz.options[1] = "Swimming.";
+            quizz.options[2] = "Surfing.";
+            quizz.options[3] = "Rafting.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "If the Earth's ocean suddenly dried up, what might be the primary impact on the humans?";
+            quizz.options[0] = "The Earth's food supply would increase.";
+            quizz.options[1] = "The Ocean floor would be mined for gold.";
+            quizz.options[2] = "The fresh water supply would dwindle.";
+            quizz.options[3] = "The ocean floor could be used as farmland.";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which area of ocean has experienced maximum habitat loss?";
+            quizz.options[0] = "Coasts.";
+            quizz.options[1] = "Deep Sea.";
+            quizz.options[2] = "Surface.";
+            quizz.options[3] = "None.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Baby seahorses hatch and develop in a pouch on their _____'s body. Fill in the blank?";
+            quizz.options[0] = "Mother.";
+            quizz.options[1] = "Sister.";
+            quizz.options[2] = "Boyfriend.";
+            quizz.options[3] = "Father.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Flying fish ____. Fill in the blank?";
+            quizz.options[0] = "Swim faster than other fish.";
+            quizz.options[1] = "glide.";
+            quizz.options[2] = "fly with the kites.";
+            quizz.options[3] = "There's no such thing.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+            
+            quizz = new Quizz();
+            quizz.question = "Where would you most likely find a sting ray?";
+            quizz.options[0] = "On the tree.";
+            quizz.options[1] = "In the beach.";
+            quizz.options[2] = "On the ocean floor.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID =2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What fish has rodlike growths with a fleshy tip on its head?";
+            quizz.options[0] = "Anglerfish.";
+            quizz.options[1] = "Redeye Salmon.";
+            quizz.options[2] = "Hammer Shark.";
+            quizz.options[3] = "Red Snapper";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What fish has whisker-like barbels on it's face?";
+            quizz.options[0] = "Anglerfish.";
+            quizz.options[1] = "Catfish.";
+            quizz.options[2] = "Sardine.";
+            quizz.options[3] = "Snapper.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Dolphins breathe through their _____?";
+            quizz.options[0] = "Fins.";
+            quizz.options[1] = "Skin.";
+            quizz.options[2] = "Lungs.";
+            quizz.options[3] = "Nose.";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "The starfish generally have 5 identical members which are what?";
+            quizz.options[0] = "Arms.";
+            quizz.options[1] = "Legs.";
+            quizz.options[2] = "Nose.";
+            quizz.options[3] = "Eyes.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Shark is an excellent swimmer. What happens when it isn't swimming?";
+            quizz.options[0] = "It flies.";
+            quizz.options[1] = "It floats.";
+            quizz.options[2] = "It glides.";
+            quizz.options[3] = "It sinks to the bottom.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "A sea porcupine is difficult for another animal to eat because of its sharp what?";
+            quizz.options[0] = "Teeth.";
+            quizz.options[1] = "Spines.";
+            quizz.options[2] = "Arms.";
+            quizz.options[3] = "Hairs.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
         }
     }
 }

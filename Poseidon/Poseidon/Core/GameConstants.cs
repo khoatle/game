@@ -33,10 +33,10 @@ namespace Poseidon {
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
         public const int ShipWreckMinRangeX = 20;
-        public const int ShipWreckMinRangeZ = 20;
+        public const int ShipWreckMinRangeZ = 10;
         public const int MainGameMaxRangeX = 500;
         public const int MainGameMaxRangeZ = 500;
-        public const int ShipWreckMaxRangeX = 30; //changing this will mess up the shiwreck width.
+        public const int ShipWreckMaxRangeX = 28;
         public const int ShipWreckMaxRangeZ = 800;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;

@@ -300,7 +300,6 @@ namespace Poseidon
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-
             newBullet.initialize(obj.Position + shootingDirection * offsetFactor, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
             {
@@ -314,7 +313,7 @@ namespace Poseidon
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.enemyShot.Play();
             }
-            bullets.Add(newBullet);         
+            bullets.Add(newBullet);
         }
 
         public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets, BoundingFrustum cameraFrustum) {
@@ -675,6 +674,9 @@ namespace Poseidon
             return returnString + line;
         }
 
-
+        private static Vector3 PerpendicularVector(Vector3 directionVector)
+        {
+            return new Vector3(-directionVector.Z, directionVector.Y, directionVector.X);
+        }
     }
 }

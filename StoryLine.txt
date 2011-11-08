@@ -133,6 +133,12 @@ Talk everything about the game. - 2-3 mins
 Coming soon..
 
 Bugs and work left:
+trash only on top half of the map
+animation for bot inside shipwreck
+treasure chest too large
+30 millions shark killed per year?
+error when game completed
+
 atttribute board with real bot's stuffs
 bullet damage proportional to travelling distance
 enemy turn to bot when being shot by bot

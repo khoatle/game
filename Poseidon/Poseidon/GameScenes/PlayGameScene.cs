@@ -979,7 +979,11 @@ namespace Poseidon
                         if (currentLevel < 10)
                             currentGameState = GameState.ToMiniGame;
                         //play the last cutscene if the game has been completed
-                        else currentGameState = GameState.PlayingCutScene;
+                        else
+                        {
+                            currentGameState = GameState.PlayingCutScene;
+                            currentSentence = 0;
+                        }
                         //ResetGame(gameTime, aspectRatio);
                     }
                 }

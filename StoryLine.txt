@@ -133,10 +133,15 @@ Talk everything about the game. - 2-3 mins
 Coming soon..
 
 Bugs and work left:
+trash only on top half of the map
+animation for bot inside shipwreck
+treasure chest too large
+30 millions shark killed per year?
+error when game completed
+
 atttribute board with real bot's stuffs
 bullet damage proportional to travelling distance
-3 hunters doing helicopter stuff (low priority - Khoa)
+enemy turn to bot when being shot by bot
 stuck on a mutant shark when he is next to boundary (low priority - Deb)
-mutant shark biting not hurting fish and fish stuck on its mouth (high priority - Deb)
 hynotize skill needs to be test/fix for bosses (high priority - Khoa)
 Mutant shark poisonous bite & Terminator chasing bullet (high priority - Khoa)

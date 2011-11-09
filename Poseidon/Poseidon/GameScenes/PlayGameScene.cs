@@ -1373,7 +1373,7 @@ namespace Poseidon
             //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
             //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
-            //str2 += "\nFish amount " + fishAmount + " Percentage fish left" + (double)fishAmount / (double)GameConstants.NumberFish[currentLevel];
+            str2 += "\n" + trashes[0].fogEndValue;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)

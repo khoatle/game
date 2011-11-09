@@ -31,7 +31,7 @@ namespace Poseidon
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
-            textAlpha = (byte)Math.Max(textAlpha - 1, 0);
+            textAlpha = (byte)Math.Max(textAlpha - 1, 0); // Adjust to make text fade away faster
             Vector3 screenPos = graphicDevice.Viewport.Project(point3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
             point2DPos.X = screenPos.X;
             point2DPos.Y = screenPos.Y;

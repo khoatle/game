@@ -621,6 +621,13 @@ namespace Poseidon
                                 //audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, this);
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                PlayGameScene.points.Add(point);
+
                                 hydroBot.reachDestination = true;
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
@@ -638,6 +645,13 @@ namespace Poseidon
                                 gameCamera.Shake(25f, .4f);
                                 CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount);
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                PlayGameScene.points.Add(point);
+
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
@@ -652,6 +666,13 @@ namespace Poseidon
                                 audio.armorSound.Play();
                                 HydroBot.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                PlayGameScene.points.Add(point);
+
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
@@ -667,6 +688,13 @@ namespace Poseidon
                                 HydroBot.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 HydroBot.supersonicMode = true;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                PlayGameScene.points.Add(point);
+
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
@@ -690,6 +718,13 @@ namespace Poseidon
 
                                 HydroBot.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss;
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                PlayGameScene.points.Add(point);
+
                                 audio.hipnotizeSound.Play();
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
@@ -766,7 +801,7 @@ namespace Poseidon
                         CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-                    hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
+                    hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect,1);
                     //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (timeNextBubble <= 0)
@@ -941,7 +976,7 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime);
+                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, 1);
                     }
 
                     for (int i = 0; i < fishAmount; i++)
@@ -1410,7 +1445,7 @@ namespace Poseidon
             //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
             //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
-            str2 += "\n" + trashes[0].fogEndValue;
+            //str2 += "\n" + trashes[0].fogEndValue;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)

@@ -33,7 +33,8 @@ namespace Poseidon
             isHypnotise = false;
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+        /* scene : 1=playgamescene, 2=shipwreckscene */
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
         {
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
@@ -58,13 +59,13 @@ namespace Poseidon
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
         }
 
@@ -132,8 +133,8 @@ namespace Poseidon
             futureBoundingSphere = new BoundingSphere(futurePosition, BoundingSphere.Radius);
         }
 
-        // Execute the actions
-        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime)
+        // Execute the actions .. scene -> 1=playgamescene, 2=shipwreckscene
+        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
         {
             if (configBits[0] == true)
             {
@@ -188,6 +189,15 @@ namespace Poseidon
                         if (!HydroBot.invincibleMode)
                         {
                             HydroBot.currentHitPoint -= damage;
+                            
+                            Point point = new Point();
+                            String point_string = "-" + damage.ToString() + "HP";
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                            if (scene == 2)
+                                ShipWreckScene.points.Add(point);
+                            else
+                                PlayGameScene.points.Add(point);
+
                             PoseidonGame.audio.botYell.Play();
                         }
                     }

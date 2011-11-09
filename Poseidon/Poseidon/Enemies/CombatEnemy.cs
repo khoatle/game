@@ -192,7 +192,7 @@ namespace Poseidon
                             
                             Point point = new Point();
                             String point_string = "-" + damage.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                             if (scene == 2)
                                 ShipWreckScene.points.Add(point);
                             else

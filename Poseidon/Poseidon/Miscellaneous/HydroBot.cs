@@ -297,6 +297,13 @@ namespace Poseidon
                 }
                 else {
                     isPoissoned = false;
+                    Point point = new Point();
+                    String point_string = "Poison Free";
+                    point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
+                    if (scene == 2)
+                        ShipWreckScene.points.Add(point);
+                    else
+                        PlayGameScene.points.Add(point);
                 }
             }
 

@@ -155,21 +155,20 @@ namespace Poseidon
                         if (!HydroBot.invincibleMode) {
                             HydroBot.currentHitPoint -= damage;
 
-                            Point point = new Point();
-                            String point_string = "-" + damage.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
-                            if (scene == 2)
-                                ShipWreckScene.points.Add(point);
-                            else
-                                PlayGameScene.points.Add(point);
-
                             PoseidonGame.audio.botYell.Play();
-
 
                             HydroBot.isPoissoned = true;
                             HydroBot.healthBeforePoisson = HydroBot.currentHitPoint;
 
                             PoseidonGame.audio.botYell.Play();
+
+                            Point point = new Point();
+                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                            if (scene == 2)
+                                ShipWreckScene.points.Add(point);
+                            else
+                                PlayGameScene.points.Add(point);
                         }
                     }
                     //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
@@ -189,7 +188,7 @@ namespace Poseidon
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
                             Point point = new Point();
-                            String point_string = "-" + damage.ToString() + "HP";
+                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
                             point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Red);
                             if (scene == 2)
                                 ShipWreckScene.points.Add(point);

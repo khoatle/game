@@ -294,7 +294,7 @@ namespace Poseidon
                             Point point = new Point();
                             String point_string = "+" + GameConstants.envGainForHealingFish.ToString() + "ENV\n+"+barriers[j].experienceReward.ToString()+"EXP";
                             point.LoadContent(PlayGameScene.Content, point_string , barriers[j].Position, Color.LawnGreen);
-                            PlayGameScene.points.Add(point);
+                            PlayGameScene.points.Add(point); // fish is only in playgame scene
                         }
                         bullets.RemoveAt(i--);
                         break;
@@ -314,7 +314,7 @@ namespace Poseidon
 
                         Point point = new Point();
                         String point_string = "-" + enemyBullets[i].damage.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                        point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                         if (scene == 2)
                             ShipWreckScene.points.Add(point);
                         else

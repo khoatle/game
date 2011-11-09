@@ -30,7 +30,7 @@ namespace Poseidon
             PlayGameScene.audio.herculesShot.Play();
             myBullets.Add(d);
         }
-        public static void UseThorHammer(GameTime gameTime, HydroBot tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount)
+        public static void UseThorHammer(GameTime gameTime, HydroBot tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, int scene) // scene 1:playgame, 2:shipwreck
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -38,7 +38,8 @@ namespace Poseidon
                     float healthiness = (float) HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                    enemies[i].health -= (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength);
+                    int healthloss = (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength);
+                    enemies[i].health -= healthloss;
                     PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
                     //if (enemies[i].health <= 0)
                     //{
@@ -49,6 +50,14 @@ namespace Poseidon
                     //    enemies[--enemiesAmount] = null;
                     //    i--;
                     //}
+
+                    Point point = new Point();
+                    String point_string = "-" + healthloss.ToString() + "HP";
+                    point.LoadContent(PlayGameScene.Content, point_string, enemies[i].Position, Color.DarkRed);
+                    if (scene == 2)
+                        ShipWreckScene.points.Add(point);
+                    else
+                        PlayGameScene.points.Add(point);
                 }       
             }
         }
@@ -82,7 +91,7 @@ namespace Poseidon
             }
         }
         //Knock out any enemy that you crash into
-        public static void KnockOutEnemies(GameTime gameTime, HydroBot tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, AudioLibrary audio)
+        public static void KnockOutEnemies(GameTime gameTime, HydroBot tank, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, AudioLibrary audio, int scene) //scene 1:playgame, 2:shipwreck
         {
             for (int i = 0; i < enemiesAmount; i++)
             {
@@ -105,7 +114,8 @@ namespace Poseidon
                         enemies[i].Position = oldPosition;
                         enemies[i].BoundingSphere.Center = oldPosition;
                     }
-                    enemies[i].health -= (int)(GameConstants.HermesDamage * healthiness * HydroBot.strength);
+                    int healthloss = (int)(GameConstants.HermesDamage * healthiness * HydroBot.strength);
+                    enemies[i].health -= healthloss;
                     audio.Shooting.Play();
                     //if (enemies[i].health <= 0)
                     //{
@@ -117,6 +127,13 @@ namespace Poseidon
                     //    enemies[--enemiesAmount] = null;
                     //    i--;
                     //}
+                    Point point = new Point();
+                    String point_string = "-" + healthloss.ToString() + "HP";
+                    point.LoadContent(PlayGameScene.Content, point_string, enemies[i].Position, Color.DarkRed);
+                    if (scene == 2)
+                        ShipWreckScene.points.Add(point);
+                    else
+                        PlayGameScene.points.Add(point);
                 }
             }
         }

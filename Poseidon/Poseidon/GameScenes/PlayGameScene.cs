@@ -625,7 +625,7 @@ namespace Poseidon
                                 //display HP loss
                                 Point point = new Point();
                                 String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                                 PlayGameScene.points.Add(point);
 
                                 hydroBot.reachDestination = true;
@@ -643,13 +643,13 @@ namespace Poseidon
                                 HydroBot.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
                                 gameCamera.Shake(25f, .4f);
-                                CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount);
+                                CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, 1);
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
 
                                 //display HP loss
                                 Point point = new Point();
                                 String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                                 PlayGameScene.points.Add(point);
 
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
@@ -670,7 +670,7 @@ namespace Poseidon
                                 //display HP loss
                                 Point point = new Point();
                                 String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                                 PlayGameScene.points.Add(point);
 
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
@@ -692,7 +692,7 @@ namespace Poseidon
                                 //display HP loss
                                 Point point = new Point();
                                 String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                                 PlayGameScene.points.Add(point);
 
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
@@ -722,7 +722,7 @@ namespace Poseidon
                                 //display HP loss
                                 Point point = new Point();
                                 String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.White);
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
                                 PlayGameScene.points.Add(point);
 
                                 audio.hipnotizeSound.Play();
@@ -798,7 +798,7 @@ namespace Poseidon
                     if (HydroBot.supersonicMode == true)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                        CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio);
+                        CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio, 1);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
                     hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect,1);

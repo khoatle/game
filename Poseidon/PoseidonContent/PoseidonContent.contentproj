@@ -1302,28 +1302,28 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Cutscenes\botNormal.jpg">
+    <Compile Include="Image\Cutscenes\botNormal.png">
       <Name>botNormal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Cutscenes\botBox.jpg">
-      <Name>botBox</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\Cutscenes\poseidonNormal.jpg">
+    <Compile Include="Image\Cutscenes\poseidonNormal.png">
       <Name>poseidonNormal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Cutscenes\otherPersonBox.jpg">
+    <Compile Include="Image\Cutscenes\botBox.png">
+      <Name>botBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Cutscenes\otherPersonBox.png">
       <Name>otherPersonBox</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>

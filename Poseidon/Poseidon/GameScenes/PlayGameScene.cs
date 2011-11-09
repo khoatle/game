@@ -94,11 +94,6 @@ namespace Poseidon
         // Current game level
         public static int currentLevel = 0;
 
-        // Cutscene
-        CutSceneDialog cutSceneDialog;
-        // Which sentence in the dialog is being printed
-        int currentSentence = 0;
-
         HeightMapInfo heightMapInfo;
 
         Radar radar;
@@ -144,9 +139,13 @@ namespace Poseidon
         Texture2D winningTexture, losingTexture;
 
         //for drawing cutscenes
-        Texture2D backgroundTexture;
         Texture2D botFace;
         Texture2D otherPersonFace;
+        Texture2D talkingBox;
+        // Cutscene
+        CutSceneDialog cutSceneDialog;
+        // Which sentence in the dialog is being printed
+        int currentSentence = 0;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -1508,20 +1507,15 @@ namespace Poseidon
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             
             //draw face of the last speaker
-            if (currentSentence > 0)
+            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3)
             {
-                if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 3) ;
 
-                else if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
                     spriteBatch.Draw(botFace,
-                        new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
-                            GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
-                            botFace.Width, botFace.Height), Color.White);
+                        new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 else
                     spriteBatch.Draw(otherPersonFace,
-                        new Rectangle(0,
-                            GraphicDevice.Viewport.TitleSafeArea.Height - otherPersonFace.Height,
-                            otherPersonFace.Width, otherPersonFace.Height), Color.White);
+                        new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             }
 
             //draw face of the current speaker
@@ -1536,15 +1530,19 @@ namespace Poseidon
                 // other ifs here
 
                 //draw face
+                //spriteBatch.Draw(botFace,
+                //    new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
+                //        GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
+                //        botFace.Width, botFace.Height), Color.White);
                 spriteBatch.Draw(botFace,
-                    new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
-                        GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
-                        botFace.Width, botFace.Height), Color.White);
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw talking box
-
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/botBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
                 spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
-                    new Vector2(10, GraphicDevice.Viewport.TitleSafeArea.Height - 40), Color.White);
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Poseidon speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
@@ -1558,21 +1556,21 @@ namespace Poseidon
 
                 //draw face
                 spriteBatch.Draw(otherPersonFace,
-                        new Rectangle(0,
-                            GraphicDevice.Viewport.TitleSafeArea.Height - otherPersonFace.Height,
-                            otherPersonFace.Width, otherPersonFace.Height), Color.White);
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw talking box
-
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
                 spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
-                    new Vector2(10, GraphicDevice.Viewport.TitleSafeArea.Height - 40), Color.White);
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
             {
                 //draw what is said
                 spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
-                    new Vector2(10, GraphicDevice.Viewport.TitleSafeArea.Height - 40), Color.White);
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //float xOffsetText, yOffsetText;
             //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;

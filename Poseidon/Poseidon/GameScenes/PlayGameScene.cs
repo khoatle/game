@@ -143,6 +143,11 @@ namespace Poseidon
         //for drawing winning or losing scenes
         Texture2D winningTexture, losingTexture;
 
+        //for drawing cutscenes
+        Texture2D backgroundTexture;
+        Texture2D botFace;
+        Texture2D otherPersonFace;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -193,6 +198,7 @@ namespace Poseidon
             //loading winning, losing textures
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
+
             this.Load();
         }
 
@@ -1497,19 +1503,90 @@ namespace Poseidon
 
         private void DrawCutScene()
         {
-            float xOffsetText, yOffsetText;
-            string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
-            Rectangle rectSafeArea;
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            //draw the background 1st
+            spriteBatch.Draw(Content.Load<Texture2D>(cutSceneDialog.cutScenes[currentLevel][currentSentence].backgroundName),
+                new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+            
+            //draw face of the last speaker
+            if (currentSentence > 0)
+            {
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 3) ;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+                else if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
+                    spriteBatch.Draw(botFace,
+                        new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
+                            GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
+                            botFace.Width, botFace.Height), Color.White);
+                else
+                    spriteBatch.Draw(otherPersonFace,
+                        new Rectangle(0,
+                            GraphicDevice.Viewport.TitleSafeArea.Height - otherPersonFace.Height,
+                            otherPersonFace.Width, otherPersonFace.Height), Color.White);
+            }
 
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            //draw face of the current speaker
+            //bot speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 0)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    botFace = Content.Load<Texture2D>("Image/Cutscenes/botNormal");
+                }
+                // other ifs here
+
+                //draw face
+                spriteBatch.Draw(botFace,
+                    new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
+                        GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
+                        botFace.Width, botFace.Height), Color.White);
+                //draw talking box
+
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(10, GraphicDevice.Viewport.TitleSafeArea.Height - 40), Color.White);
+            }
+            //Poseidon speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/poseidonNormal");
+                }
+                // other ifs here
+
+                //draw face
+                spriteBatch.Draw(otherPersonFace,
+                        new Rectangle(0,
+                            GraphicDevice.Viewport.TitleSafeArea.Height - otherPersonFace.Height,
+                            otherPersonFace.Width, otherPersonFace.Height), Color.White);
+                //draw talking box
+
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(10, GraphicDevice.Viewport.TitleSafeArea.Height - 40), Color.White);
+            }
+            //Narrator speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
+            {
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(10, GraphicDevice.Viewport.TitleSafeArea.Height - 40), Color.White);
+            }
+            //float xOffsetText, yOffsetText;
+            //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
+            //Rectangle rectSafeArea;
+            ////Calculate str1 position
+            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            //xOffsetText = rectSafeArea.X;
+            //yOffsetText = rectSafeArea.Y;
+
+            //Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strPosition =
+            //    new Vector2((int)xOffsetText + 10, (int)yOffsetText);
+            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
         public static void RestoreGraphicConfig()

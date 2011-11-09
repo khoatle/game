@@ -94,11 +94,6 @@ namespace Poseidon
         // Current game level
         public static int currentLevel = 0;
 
-        // Cutscene
-        CutSceneDialog cutSceneDialog;
-        // Which sentence in the dialog is being printed
-        int currentSentence = 0;
-
         HeightMapInfo heightMapInfo;
 
         Radar radar;
@@ -145,6 +140,15 @@ namespace Poseidon
 
         //for drawing winning or losing scenes
         Texture2D winningTexture, losingTexture;
+
+        //for drawing cutscenes
+        Texture2D botFace;
+        Texture2D otherPersonFace;
+        Texture2D talkingBox;
+        // Cutscene
+        CutSceneDialog cutSceneDialog;
+        // Which sentence in the dialog is being printed
+        int currentSentence = 0;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -197,6 +201,7 @@ namespace Poseidon
             //loading winning, losing textures
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
+
             this.Load();
         }
 
@@ -1405,12 +1410,12 @@ namespace Poseidon
             //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
             //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
-            //str2 += "\nFish amount " + fishAmount + " Percentage fish left" + (double)fishAmount / (double)GameConstants.NumberFish[currentLevel];
+            str2 += "\n" + trashes[0].fogEndValue;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPointedAt.health, fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
                 string line;
                 line ="'";
                 if (fishPointedAt.health < 20)
@@ -1432,10 +1437,10 @@ namespace Poseidon
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
             if (enemyPointedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentHitPoint, HydroBot.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
@@ -1529,19 +1534,89 @@ namespace Poseidon
 
         private void DrawCutScene()
         {
-            float xOffsetText, yOffsetText;
-            string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
-            Rectangle rectSafeArea;
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            //draw the background 1st
+            spriteBatch.Draw(Content.Load<Texture2D>(cutSceneDialog.cutScenes[currentLevel][currentSentence].backgroundName),
+                new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+            
+            //draw face of the last speaker
+            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3)
+            {
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
+                    spriteBatch.Draw(botFace,
+                        new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                else
+                    spriteBatch.Draw(otherPersonFace,
+                        new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+            }
 
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            //draw face of the current speaker
+            //bot speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 0)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    botFace = Content.Load<Texture2D>("Image/Cutscenes/botNormal");
+                }
+                // other ifs here
+
+                //draw face
+                //spriteBatch.Draw(botFace,
+                //    new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
+                //        GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
+                //        botFace.Width, botFace.Height), Color.White);
+                spriteBatch.Draw(botFace,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw talking box
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/botBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //Poseidon speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/poseidonNormal");
+                }
+                // other ifs here
+
+                //draw face
+                spriteBatch.Draw(otherPersonFace,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw talking box
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //Narrator speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
+            {
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //float xOffsetText, yOffsetText;
+            //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
+            //Rectangle rectSafeArea;
+            ////Calculate str1 position
+            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            //xOffsetText = rectSafeArea.X;
+            //yOffsetText = rectSafeArea.Y;
+
+            //Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strPosition =
+            //    new Vector2((int)xOffsetText + 10, (int)yOffsetText);
+            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
         public static void RestoreGraphicConfig()

@@ -150,9 +150,11 @@ namespace Poseidon
 
                     if (currentHuntingTarget.GetType().Name.Equals("HydroBot"))
                     {
-                        if (!HydroBot.invincibleMode)
-                        {
+                        if (!HydroBot.invincibleMode) {
                             HydroBot.currentHitPoint -= damage;
+                            HydroBot.isPoissoned = true;
+                            HydroBot.healthBeforePoisson = HydroBot.currentHitPoint;
+
                             PoseidonGame.audio.botYell.Play();
                         }
                     }
@@ -167,6 +169,9 @@ namespace Poseidon
                     if (currentHuntingTarget is SwimmingObject)
                     {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
+                        ((SwimmingObject)currentHuntingTarget).healthBeforePoisson = health;
+                        ((SwimmingObject)currentHuntingTarget).isPoissoned = true;
+                        
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
                             PoseidonGame.audio.animalYell.Play();

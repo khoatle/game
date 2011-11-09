@@ -55,6 +55,15 @@ namespace Poseidon {
         }
 
         public void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet) {
+            if (isPoissoned == true) {
+                if (healthBeforePoisson - health >= maxHPLossFromPoisson) {
+                    health -= 0.1f;
+                }
+                else {
+                    isPoissoned = false;
+                }
+            }
+            
             Vector3 futurePosition = Position;
             //int barrier_move
             Random random = new Random();
@@ -172,6 +181,13 @@ namespace Poseidon {
                     effect.View = view;
                     effect.Projection = projection;
 
+                    if (isPoissoned) {
+                        effect.DiffuseColor = Color.Green.ToVector3();
+                    }
+                    else {
+                        effect.DiffuseColor = Color.White.ToVector3();
+                    }
+
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
@@ -179,7 +195,6 @@ namespace Poseidon {
                 }
                 mesh.Draw();
             }
-
         }
     }
 }

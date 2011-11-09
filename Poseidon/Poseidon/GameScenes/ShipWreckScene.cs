@@ -1136,18 +1136,18 @@ namespace Poseidon
             //Display Fish Health
             Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPontedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPontedAt.health, fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPontedAt.health, (int)fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
 
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
             if (enemyPointedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentHitPoint, HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
 
             //Calculate str1 position

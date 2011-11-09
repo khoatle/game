@@ -15,17 +15,22 @@ namespace Poseidon
         public string BarrierType { get; set; }
         public float ForwardDirection { get; set; }
         public int MaxRange { get; set; }
-        public int health = GameConstants.DefaultEnemyHP;
-        public int maxHealth = GameConstants.DefaultEnemyHP;
+        public float health = GameConstants.DefaultEnemyHP;
+        public float maxHealth = GameConstants.DefaultEnemyHP;
         public string Name = "Swimming Object";
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
+        public float healthBeforePoisson;
+        public float maxHPLossFromPoisson;
+        public float poissonInterval;
         public int experienceReward;
 
         // is this enemy a big boss
         // in order to know whether the big boss is killed
         // and the level is won
         public bool isBigBoss = false;
+
+        public bool isPoissoned;
 
         public SwimmingObject()
             : base()
@@ -34,6 +39,10 @@ namespace Poseidon
             ForwardDirection = 0.0f;
             //MaxRange = GameConstants.MaxRange;
             experienceReward = 20;
+            isPoissoned = false;
+            poissonInterval = 0;
+            maxHPLossFromPoisson = 50;
+            healthBeforePoisson = health;
         }
 
         public virtual void LoadContent(ContentManager content, string modelName)

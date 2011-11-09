@@ -1378,7 +1378,7 @@ namespace Poseidon
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, fishPointedAt.health, fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
                 string line;
                 line ="'";
                 if (fishPointedAt.health < 20)
@@ -1400,10 +1400,10 @@ namespace Poseidon
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
             if (enemyPointedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, enemyPointedAt.health, enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentHitPoint, HydroBot.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
+            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;

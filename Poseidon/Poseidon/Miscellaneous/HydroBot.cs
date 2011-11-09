@@ -26,7 +26,6 @@ namespace Poseidon
     /// </summary>
     public class HydroBot : GameObject
     {
-
         public float ForwardDirection { get; set; }
 
         //For the animation
@@ -41,8 +40,8 @@ namespace Poseidon
         public static float strength, lsStrength;
         public static float speed, lsSpeed;
         public static float shootingRate, lsShootingRate;
-        public static int maxHitPoint, lsMaxHitPoint;
-        public static int currentHitPoint, lsCurrentHitPoint;
+        public static float maxHitPoint, lsMaxHitPoint;
+        public static float currentHitPoint, lsCurrentHitPoint;
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
         // 2 types of bullet
@@ -98,6 +97,10 @@ namespace Poseidon
         public int MaxRangeX;
         public int MaxRangeZ;
 
+        public static bool isPoissoned;
+        public static float healthBeforePoisson;
+        public static float maxHPLossFromPoisson;
+        public static float poissonInterval;
 
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight)
         {
@@ -139,6 +142,11 @@ namespace Poseidon
             //just for testing
             //should be removed
             //activeSkillID = lsActiveSkillID = 0;
+
+            isPoissoned = false;
+            poissonInterval = 0;
+            maxHPLossFromPoisson = 50;
+            healthBeforePoisson = currentHitPoint;
         }
 
         /// <summary>
@@ -185,7 +193,6 @@ namespace Poseidon
             prevPlantTime = 0;
 
             LoadAnimation(1, 30, 24);
-       
         }
 
         public void LoadAnimation(int clipStart, int clipEnd, int fpsRate)
@@ -206,7 +213,7 @@ namespace Poseidon
             shootingRate = lsShootingRate;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint;
-            currentHitPoint = lsCurrentExperiencePts;
+            //currentHitPoint = lsCurrentHitPoint;
             currentEnvPoint = lsCurrentEnvPoint;
             lsSkills.CopyTo(skills, 0);
             activeSkillID = lsActiveSkillID;
@@ -216,6 +223,11 @@ namespace Poseidon
             increaseBy = lsIncreaseBy;
             level = lsLevel;
             unassignedPts = lsUnassignedPts;
+
+            isPoissoned = false;
+            poissonInterval = 0;
+            maxHPLossFromPoisson = 100;
+            healthBeforePoisson = currentHitPoint;
         }
 
         public void SetLevelStartValues()
@@ -270,6 +282,15 @@ namespace Poseidon
 
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo)
         {
+            if (isPoissoned == true) {
+                if (healthBeforePoisson - currentHitPoint <= maxHPLossFromPoisson) {
+                    currentHitPoint -= 0.1f;
+                }
+                else {
+                    isPoissoned = false;
+                }
+            }
+
             if (currentExperiencePts >= nextLevelExperience) {
                 //increaseBy = (int)(increaseBy * 1.25);
                 //nextLevelExperience += increaseBy;
@@ -353,7 +374,6 @@ namespace Poseidon
 
             if (reachDestination == false)// && pointMoveTo != Vector3.Zero)
             {
-                
                 //float difference = WrapAngle(desiredAngle - ForwardDirection);
                 Vector3 posDif = this.pointToMoveTo - Position;
                 float distanceToDest = posDif.Length();
@@ -393,7 +413,6 @@ namespace Poseidon
             
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
-            
             if (keyboardState.IsKeyDown(Keys.W))
             {
                 movement.Z = 1;
@@ -421,7 +440,6 @@ namespace Poseidon
                 //Trash_Fruit_BoundingSphere = new BoundingSphere(updatedSphere.Center,
                 //    20);
             }
-
 
             //Interacting with trashs and fruits
             if (keyboardState.IsKeyDown(Keys.Z))
@@ -518,6 +536,13 @@ namespace Poseidon
                         effect.DiffuseColor = Color.Gold.ToVector3();
                     }
                     else effect.DiffuseColor = Vector3.One;
+
+                    if (isPoissoned == true) {
+                        effect.DiffuseColor = Color.Green.ToVector3();
+                    }
+                    else {
+                        effect.DiffuseColor = Vector3.One;
+                    }
 
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;

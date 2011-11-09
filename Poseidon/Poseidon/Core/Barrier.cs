@@ -41,7 +41,7 @@ namespace Poseidon
             experienceReward = 20;
             isPoissoned = false;
             poissonInterval = 0;
-            maxHPLossFromPoisson = 50;
+            maxHPLossFromPoisson = 100;
             healthBeforePoisson = health;
         }
 

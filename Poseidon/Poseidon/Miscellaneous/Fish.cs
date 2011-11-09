@@ -57,7 +57,7 @@ namespace Poseidon {
         public void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet) {
             if (isPoissoned == true) {
                 if (healthBeforePoisson - health >= maxHPLossFromPoisson) {
-                    health -= 1;
+                    health -= 0.1f;
                 }
                 else {
                     isPoissoned = false;

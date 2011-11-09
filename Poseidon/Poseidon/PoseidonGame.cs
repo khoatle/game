@@ -42,7 +42,7 @@ namespace Poseidon
         protected GameScene prevScene;
         // For the Start scene
         private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge, typeFont;
-        protected Texture2D startBackgroundTexture, startElementsTexture;
+        protected Texture2D startBackgroundTexture, startElementsTexture, teamLogo;
         StartScene startScene;
         // For the Attribute board
         AttributeBoard AttributeScene;
@@ -93,7 +93,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -154,8 +154,9 @@ namespace Poseidon
             typeFont = Content.Load<SpriteFont>("Fonts/font");
             startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
             startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
+            teamLogo = Content.Load<Texture2D>("Image/Miscellaneous/TeamLogo");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,
-                startBackgroundTexture, startElementsTexture);
+                startBackgroundTexture, startElementsTexture, teamLogo);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 

@@ -19,6 +19,7 @@ namespace Poseidon
         // Misc
         protected TextMenuComponent menu;
         protected readonly Texture2D elements;
+        protected readonly Texture2D teamLogo;
         // Audio
         protected AudioLibrary audio;
         // Spritebatch
@@ -44,10 +45,11 @@ namespace Poseidon
         /// <param name="background">Texture for background image</param>
         /// <param name="elements">Texture with the foreground elements</param>
         public StartScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                            Texture2D background, Texture2D elements)
+                            Texture2D background, Texture2D elements, Texture2D teamLogo)
             : base(game)
         {
             this.elements = elements;
+            this.teamLogo = teamLogo;
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Center));
 
@@ -172,9 +174,11 @@ namespace Poseidon
         {
             spriteBatch.Begin();
             base.Draw(gameTime);
-            
+
+            spriteBatch.Draw(teamLogo, new Rectangle(Game.Window.ClientBounds.Right - 250, Game.Window.ClientBounds.Bottom-260, 300, 300), Color.White);
             spriteBatch.Draw(elements, rockPosition, rockRect, Color.White);
             spriteBatch.Draw(elements, rainPosition, rainRect, Color.White);
+            
             //if (showEnhanced)
             //{
             //    spriteBatch.Draw(elements, enhancedPosition, enhancedRect,

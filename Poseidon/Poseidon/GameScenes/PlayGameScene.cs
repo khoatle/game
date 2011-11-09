@@ -129,6 +129,9 @@ namespace Poseidon
         float timeNextBubble = 200.0f;
         float timeNextSeaBedBubble = 3000.0f;
 
+        //Points gained over trash, plant, enemies, fish
+        public static List<Point> points;
+
         // School of fish
         SchoolOfFish schoolOfFish1;
         SchoolOfFish schoolOfFish2;
@@ -182,6 +185,7 @@ namespace Poseidon
             alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
+            points = new List<Point>();
 
             schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
@@ -813,6 +817,19 @@ namespace Poseidon
                         else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
                         aBubble.Update(GraphicDevice, gameCamera, gameTime);
                     }
+
+                    //update points
+                    for ( int i=0; i< points.Count; i++)
+                    {
+                        Point point = points[i];
+                        if (point.toBeRemoved)
+                            points.Remove(point);
+                    }
+                    foreach (Point point in points)
+                    {
+                         point.Update(GraphicDevice, gameCamera, gameTime);
+                    }
+                    
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
@@ -837,6 +854,11 @@ namespace Poseidon
                             audio.plantSound.Play();
                             HydroBot.currentExperiencePts += Plant.experienceReward;
                             HydroBot.currentEnvPoint += GameConstants.envGainForDropSeed;
+
+                            Point point = new Point();
+                            String point_string = "+" + GameConstants.envGainForDropSeed.ToString() + "ENV\n+" + Plant.experienceReward + "EXP";
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                     }
 
@@ -897,14 +919,14 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, 1);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, 1);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, 1);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 1);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 1);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 1);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -1215,6 +1237,10 @@ namespace Poseidon
                     //rs.FillMode = FillMode.Solid;
                     //GraphicDevice.RasterizerState = rs;
                 }
+                else if ( trash.Retrieved && trashRealSphere.Intersects(frustum))
+                {
+                    //trash.DrawFadingPoint(spriteBatch, trashRealSphere);
+                }
             }
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects)
@@ -1249,6 +1275,12 @@ namespace Poseidon
             foreach (Bubble bubble in bubbles)
             {
                 bubble.Draw(spriteBatch, 1.0f);
+            }
+
+            //Draw points gained / lost
+            foreach (Point point in points)
+            {
+                point.Draw(spriteBatch);
             }
 
             //draw schools of fish

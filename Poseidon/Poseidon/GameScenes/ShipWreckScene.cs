@@ -107,6 +107,9 @@ namespace Poseidon
         float timeNextBubble = 200.0f;
         //float timeNextSeaBedBubble = 3000.0f;
 
+        //Points gained
+        public static List<Point> points;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
@@ -146,6 +149,7 @@ namespace Poseidon
             oceanPaintings = new OceanPaintings(Content);
 
             bubbles = new List<Bubble>();
+            points = new List<Point>();
 
             this.Load();
         }
@@ -625,6 +629,19 @@ namespace Poseidon
                     else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
                     aBubble.Update(GraphicDevice, gameCamera, gameTime);
                 }
+                
+                //update points
+                for (int i = 0; i < points.Count; i++)
+                {
+                    Point point = points[i];
+                    if (point.toBeRemoved)
+                        points.Remove(point);
+                }
+                foreach (Point point in points)
+                {
+                    point.Update(GraphicDevice, gameCamera, gameTime);
+                }
+
                 // Are we shooting?
                 if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                     && currentKeyboardState.IsKeyDown(Keys.L)
@@ -658,14 +675,14 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, 2);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
-                Collision.updateProjectileHitBot(hydroBot, enemyBullet);
-                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, 2);
+                Collision.updateProjectileHitBot(hydroBot, enemyBullet, 2);
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 2);
 
-                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
-                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum);
+                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 2);
+                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 2);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
@@ -700,7 +717,13 @@ namespace Poseidon
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
-                                HydroBot.currentExperiencePts += 20;
+                                HydroBot.currentExperiencePts += GameConstants.ExpPainting;
+
+                                Point point = new Point();
+                                String point_string = "+" + GameConstants.ExpPainting + " EXP";
+                                point.LoadContent(PlayGameScene.Content, point_string, chest.Position, Color.LawnGreen);
+                                points.Add(point);
+
                                 // show a random painting
                                 paintingToShow = random.Next(oceanPaintings.paintings.Count);
                                 showPainting = true;
@@ -722,6 +745,12 @@ namespace Poseidon
                                 {
                                     // give the player some experience as reward
                                     HydroBot.currentExperiencePts += GameConstants.ExpPainting;
+
+                                    Point point = new Point();
+                                    String point_string = "+" + GameConstants.ExpPainting + " EXP";
+                                    point.LoadContent(PlayGameScene.Content, point_string, chest.Position, Color.LawnGreen);
+                                    points.Add(point);
+
                                     // show a random painting
                                     paintingToShow = random.Next(oceanPaintings.paintings.Count);
                                     showPainting = true;
@@ -913,6 +942,13 @@ namespace Poseidon
             {
                 bubble.Draw(spriteBatch, 1.5f);
             }
+
+            //Draw points gained / lost
+            foreach (Point point in points)
+            {
+                point.Draw(spriteBatch);
+            }
+
             //rs = new RasterizerState();
             //rs.FillMode = FillMode.Solid;
             //GraphicsDevice.RasterizerState = rs;

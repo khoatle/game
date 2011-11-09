@@ -459,21 +459,46 @@ namespace Poseidon
                         {
                             speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             speedUp = 2.0f;
+
+                            Point point = new Point();
+                            String point_string = "SPEED X 2";
+                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 2)
                         {
                             strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             strengthUp = 2.0f;
+
+                            Point point = new Point();
+                            String point_string = "\nSTRENGTH X 2";
+                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 3)
                         {
                             fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             fireRateUp = 2.0f;
+
+                            Point point = new Point();
+                            String point_string = "\n\nSHOOTING RATE X 2";
+                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 4)
                         {
                             currentHitPoint += 100;
-                            if (currentHitPoint > maxHitPoint) currentHitPoint = maxHitPoint;
+                            if (currentHitPoint > maxHitPoint)
+                            {
+                                currentHitPoint = maxHitPoint;
+                            }
+                            else
+                            {
+                                Point point = new Point();
+                                String point_string = "\n\n\n+100 HEALTH";
+                                point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                                PlayGameScene.points.Add(point);
+                            }
                         }
                         //RetrievedSound.Play();
                         PlayGameScene.audio.retrieveSound.Play();
@@ -491,6 +516,11 @@ namespace Poseidon
                         currentEnvPoint += GameConstants.envGainForTrashClean;
                         PlayGameScene.audio.retrieveSound.Play();
                         //RetrievedSound.Play();
+
+                        Point point = new Point();
+                        String point_string = "+" + GameConstants.envGainForTrashClean.ToString() + "ENV\n+" + trash.experienceReward + "EXP";
+                        point.LoadContent(PlayGameScene.Content, point_string, trash.Position, Color.LawnGreen);
+                        PlayGameScene.points.Add(point);
                     }
                 }
             }

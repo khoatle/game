@@ -16,6 +16,7 @@ namespace Poseidon
 
         public float orientation;
 
+
         //public float heightChange = 0.5f;
         //public float currentChange = 0.0f;
         //public bool floatUp;
@@ -80,6 +81,6 @@ namespace Poseidon
                 }
                 mesh.Draw();
             }
-        }
+        }   
     }
 }

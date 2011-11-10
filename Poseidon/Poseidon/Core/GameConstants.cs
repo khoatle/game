@@ -68,7 +68,8 @@ namespace Poseidon {
         // Bullet const
         public const int DefaultBulletDamage = 10;
         public const int DefaultEnemyDamage = 5;
-        public const int ChasingBulletDamage = 80;
+        public const int ChasingBulletDamage = 0;
+        public const int StopBulletChasing = 3;
 
         // Enemy configuration
         public const float EnemyShootingRate = 1.0f;
@@ -88,7 +89,7 @@ namespace Poseidon {
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0  };
-        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
+        public static int[] FishInSchool =          {  0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0  };
 
         //number of enemy and fish for ship wreck

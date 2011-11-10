@@ -13,6 +13,7 @@ namespace Poseidon
         public GameObject target;
         public bool stopChasing;
         public float forwardDir;
+        public float stopChasingTime;
 
         public ChasingBullet() : base() { }
 
@@ -23,6 +24,7 @@ namespace Poseidon
                 this.unitDirection = target.Position - position;
                 this.unitDirection.Normalize();
                 stopChasing = false;
+                stopChasingTime = GameConstants.StopBulletChasing;
         }
 
         public override void update()
@@ -35,12 +37,17 @@ namespace Poseidon
                     Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
                     shootingDirection.Normalize();
 
-                    unitDirection = (target.Position - Position) + 30*shootingDirection;
+                    stopChasingTime -= 1 / 60;
+
+                    unitDirection = (target.Position - Position) + 20*shootingDirection;
                     unitDirection.Normalize();
+        
                 }
                 else {
-                    if ((new Random()).Next(1000) > 990)
+                    if (stopChasingTime <= 0) {
                         stopChasing = true;
+                        stopChasingTime = GameConstants.StopBulletChasing;
+                    }
                 }
             }
             Position += unitDirection * projectionSpeed;

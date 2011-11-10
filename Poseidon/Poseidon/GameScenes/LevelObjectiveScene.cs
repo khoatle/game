@@ -239,7 +239,9 @@ namespace Poseidon
 
             objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
             achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);
-            tipPosition = new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(tip).X/2 ,  game.Window.ClientBounds.Bottom - 50);
+
+            tip = AddingObjects.wrapLine(tip, game.Window.ClientBounds.Width, levelObjFont);
+            tipPosition = new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(tip).X / 2, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(tip).Y);
 
             spriteBatch.DrawString(levelObjFont, level_objective, objectiveStringPosition, Color.Blue);
 

@@ -141,6 +141,16 @@ namespace Poseidon
                     }
                 }
 
+                if (currentHuntingTarget is BaseEnemy)
+                {
+                    BaseEnemy tmp = (BaseEnemy)currentHuntingTarget;
+                    if (tmp.health <= 0)
+                    {
+                        currentHuntingTarget = null;
+                        return;
+                    }
+                }
+
                 if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
                     //if attack and swim both at the same time or not

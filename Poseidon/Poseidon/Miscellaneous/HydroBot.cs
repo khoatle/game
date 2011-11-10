@@ -177,7 +177,7 @@ namespace Poseidon
                 firstUse[index] = true;
                 skillPrevUsed[index] = 0;
             }
-            activeSkillID = -1;
+            activeSkillID = 1;
             invincibleMode = false;
             supersonicMode = false;
             //just for testing

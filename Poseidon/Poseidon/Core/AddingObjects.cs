@@ -282,6 +282,26 @@ namespace Poseidon
             myBullet.Add(d);
         }
 
+        public static void placeChasingBullet(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum) {
+            if (!target.GetType().Name.Equals("HydroBot")) {
+                return;
+            }
+            
+            Matrix orientationMatrix = Matrix.CreateRotationY(((Terminator)shooter).ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+            
+            ChasingBullet newBullet = new ChasingBullet();
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, 0, target);
+            newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
+            bullets.Add(newBullet);
+            if (shooter.BoundingSphere.Intersects(cameraFrustum)) {
+                PoseidonGame.audio.chasingBulletSound.Play();
+            }
+        }
+
+
         public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum, float offsetFactor) {
             HydroBot tmp1;
             SwimmingObject tmp2;
@@ -314,30 +334,6 @@ namespace Poseidon
                     PoseidonGame.audio.enemyShot.Play();
             }
             bullets.Add(newBullet);
-        }
-
-        public static void placeChasingBullet(GameObject shooter, GameObject target, int damage, List<DamageBullet> bullets, BoundingFrustum cameraFrustum) {
-            HydroBot tmp1;
-            SwimmingObject tmp2;
-            Matrix orientationMatrix;
-            if (shooter.GetType().Name.Equals("HydroBot")) {
-                tmp1 = (HydroBot)shooter;
-                orientationMatrix = Matrix.CreateRotationY(tmp1.ForwardDirection);
-            } else {
-                tmp2 = (SwimmingObject)shooter;
-                orientationMatrix = Matrix.CreateRotationY(tmp2.ForwardDirection);
-            }
-
-            ChasingBullet newBullet = new ChasingBullet();
-
-            Vector3 movement = Vector3.Zero;
-            movement.Z = 1;
-            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, damage, target);
-            newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
-            bullets.Add(newBullet);
-            if (shooter.BoundingSphere.Intersects(cameraFrustum))
-                PoseidonGame.audio.chasingBulletSound.Play();
         }
 
         public static bool placePlant(HydroBot hydroBot, HeightMapInfo heightMapInfo, ContentManager Content, TimeSpan roundTimer, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)

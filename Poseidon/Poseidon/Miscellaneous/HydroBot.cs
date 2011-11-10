@@ -145,7 +145,7 @@ namespace Poseidon
 
             isPoissoned = false;
             poissonInterval = 0;
-            maxHPLossFromPoisson = 50;
+            maxHPLossFromPoisson = 100;
             healthBeforePoisson = currentHitPoint;
         }
 

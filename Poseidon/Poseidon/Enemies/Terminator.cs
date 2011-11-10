@@ -21,6 +21,9 @@ namespace Poseidon
         //this boss will fire 3 bullets at once for 3 seconds
         bool enragedMode = false;
         bool crazyMode = false;
+        bool chasingBulletMode = false;
+        double timeChasingBulletLast = 1;
+
         double timeEnrageLast = 3;
         protected double timeLastLaugh = 0;
         Random random;
@@ -62,7 +65,6 @@ namespace Poseidon
             scaledSphere.Radius *= 0.08f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
-            
         }
 
         public void Load()
@@ -99,8 +101,8 @@ namespace Poseidon
                 configAction(perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, hydroBot, cameraFrustum, gameTime);
             }
-
         }
+
         //public override void Draw(Matrix view, Matrix projection)
         //{
         //    bones = clipPlayer.GetSkinTransforms();
@@ -136,7 +138,6 @@ namespace Poseidon
                 ForwardDirection = originalForwardDir;
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = gameTime.TotalGameTime;
-
             }
         }
 
@@ -151,9 +152,22 @@ namespace Poseidon
             {
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = gameTime.TotalGameTime;
-
             }
         }
+
+        public void ChasingBullet(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime) { 
+            if (this.BoundingSphere.Intersects(cameraFrustum) && gameTime.TotalGameTime.TotalSeconds - timeLastLaugh > 10) {
+                PoseidonGame.audio.bossLaugh.Play();
+                timeLastLaugh = gameTime.TotalGameTime.TotalSeconds;
+            }
+
+            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire * 3)
+            {
+                AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
+                prevFire = gameTime.TotalGameTime;
+            }
+        }
+
         protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             if (configBits[0] == true)
@@ -190,23 +204,33 @@ namespace Poseidon
                 }
                 else if (crazyMode == true)
                 {
-
                     RapidFire2(bullets, cameraFrustum, gameTime);
                     if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
                         crazyMode = false;
                 }
+                else if (chasingBulletMode == true) {
+                    ChasingBullet(bullets, cameraFrustum, gameTime);
+                    if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeChasingBulletLast)
+                        chasingBulletMode = false;
+                }
                 else if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > 10)
                 {
-                    powerupsType = random.Next(2);
+                    powerupsType = random.Next(3);
                     if (powerupsType == 0)
                         enragedMode = true;
                     else if (powerupsType == 1)
                         crazyMode = true;
+                    else if (powerupsType == 2)
+                    {
+                        chasingBulletMode = true;
+                    }
                     //PlayGameScene.audio.MinigunWindUp.Play();
                     timePrevPowerUsed = gameTime.TotalGameTime.TotalSeconds;
                 }
                 else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
+                    //ChasingBullet(bullets, cameraFrustum, gameTime);
+                    //AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
                     AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                     prevFire = gameTime.TotalGameTime;
                 }

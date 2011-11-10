@@ -11,25 +11,38 @@ namespace Poseidon
 {
     public class ChasingBullet : DamageBullet {
         public GameObject target;
-        public float forwardDir;
+        public bool stopChasing;
 
-        public ChasingBullet() : base() { 
+        public ChasingBullet() : base() { }
+
+        public void initialize(Vector3 position, Vector3 headingDirection, float speed, 
+            int damage, GameObject target) {
+                base.initialize(position, headingDirection, speed, damage);
+                this.target = target;
+                this.unitDirection = target.Position - position;
+                this.unitDirection.Normalize();
+                stopChasing = false;
         }
 
-        public void initialize(Vector3 position, Vector3 headingDirection, float speed, int damage, GameObject target) {
-            base.initialize(position, headingDirection, speed);
-            this.damage = damage;
-            this.target = target;
-        }
+        public override void update()
+        {
+            if (target != null && target.GetType().Name.Equals("HydroBot") && !stopChasing) {
+                if (Vector3.Distance(target.Position, Position) > target.BoundingSphere.Radius * 6) {
+                    Matrix orientationMatrix = Matrix.CreateRotationY(((HydroBot)target).ForwardDirection);
+                    Vector3 movement = Vector3.Zero;
+                    movement.Z = 1;
+                    Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+                    shootingDirection.Normalize();
 
-        public override void update() {
-            if (target != null)
-            {
-                unitDirection = target.Position - Position;
-                unitDirection.Normalize();
+                    unitDirection = (target.Position - Position) + 30*shootingDirection;
+                    unitDirection.Normalize();
+                }
+                else {
+                    if ((new Random()).Next(1000) > 990)
+                        stopChasing = true;
+                }
             }
-
-            Position = calculateFuturePosition();
+            Position += unitDirection * projectionSpeed;
             BoundingSphere = new BoundingSphere(Position, BoundingSphere.Radius);
         }
 
@@ -38,12 +51,12 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translationMatrix = Matrix.CreateTranslation(Position);
-            forwardDir += MathHelper.PiOver4/4;
-            Matrix rotationMatrix = Matrix.CreateRotationY(forwardDir);
-            Matrix worldMatrix =  rotationMatrix * translationMatrix;
+            Matrix worldMatrix = translationMatrix;
 
-            foreach (ModelMesh mesh in Model.Meshes) {
-                foreach (BasicEffect effect in mesh.Effects){
+            foreach (ModelMesh mesh in Model.Meshes)
+            {
+                foreach (BasicEffect effect in mesh.Effects)
+                {
                     effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.DiffuseColor = Color.Gold.ToVector3();
                     effect.View = view;

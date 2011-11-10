@@ -120,12 +120,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="Enemies\BaseEnemy.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />
     <Compile Include="Miscellaneous\Bubble.cs" />
     <Compile Include="Core\CastSkill.cs" />
-    <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Enemies\CombatEnemy.cs" />
     <Compile Include="Core\ClipPlayer.cs" />
     <Compile Include="Core\Cursor.cs" />

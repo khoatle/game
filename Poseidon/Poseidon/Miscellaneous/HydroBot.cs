@@ -521,10 +521,15 @@ namespace Poseidon
                         }
                         else if (fruits[curCell].powerType == 4)
                         {
+                            float hitpointAdded = maxHitPoint - currentHitPoint;
                             currentHitPoint += 100;
                             if (currentHitPoint > maxHitPoint)
                             {
                                 currentHitPoint = maxHitPoint;
+                                Point point = new Point();
+                                String point_string = "\n\n\n+"+ (int)hitpointAdded +" HEALTH";
+                                point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                                PlayGameScene.points.Add(point);
                             }
                             else
                             {

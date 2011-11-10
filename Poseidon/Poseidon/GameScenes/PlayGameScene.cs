@@ -284,11 +284,13 @@ namespace Poseidon
             paused = false;
             //MediaPlayer.Play(audio.BackMusic);
             //PlaceFuelCellsAndBarriers();
+            //MediaPlayer.Stop();
             base.Show();
         }
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            MediaPlayer.Stop();
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
             isBossKilled = false;
@@ -493,6 +495,7 @@ namespace Poseidon
             // play the boss fight music for certain levels
             if (currentLevel == 3 || currentLevel == 10)
             {
+
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
                 {
                     MediaPlayer.Play(audio.bossMusics[random.Next(GameConstants.NumBossBackgroundMusics)]);

@@ -286,7 +286,7 @@ namespace Poseidon
                         if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalHappy.Play();
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
-                            barriers[j].health += GameConstants.HealingAmount;
+                            barriers[j].health += bullets[i].healthAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
                             HydroBot.currentExperiencePts += barriers[j].experienceReward;
                             HydroBot.currentEnvPoint += GameConstants.envGainForHealingFish;

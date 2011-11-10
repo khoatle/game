@@ -67,6 +67,10 @@ namespace Poseidon
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
 
+        public void Load()
+        {
+            Load(1, 30, 24);
+        }
 
         public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, int scene) //scene 1:playgame 2:shipwreck
         {
@@ -183,7 +187,7 @@ namespace Poseidon
             {
                 startChasingTime = gameTime.TotalGameTime;
 
-
+                
                 if (currentHuntingTarget is BaseEnemy)
                 {
                     BaseEnemy tmp = (BaseEnemy)currentHuntingTarget;
@@ -220,7 +224,7 @@ namespace Poseidon
                     if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeChasingBulletLast)
                         chasingBulletMode = false;
                 }
-                else if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > 5)
+                else if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > 10)
                 {
                     powerupsType = random.Next(3);
                     if (powerupsType == 0)
@@ -237,8 +241,8 @@ namespace Poseidon
                 else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
                     //ChasingBullet(bullets, cameraFrustum, gameTime);
-                    //AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
-                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
+                    AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
+                    // AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                     prevFire = gameTime.TotalGameTime;
                 }
             }

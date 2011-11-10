@@ -12,6 +12,7 @@ namespace Poseidon
     public class ChasingBullet : DamageBullet {
         public GameObject target;
         public bool stopChasing;
+        public float forwardDir;
 
         public ChasingBullet() : base() { }
 
@@ -51,7 +52,9 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translationMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translationMatrix;
+            forwardDir += MathHelper.PiOver4 / 4;
+            Matrix rotationMatrix = Matrix.CreateRotationY(forwardDir);
+            Matrix worldMatrix = rotationMatrix * translationMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {

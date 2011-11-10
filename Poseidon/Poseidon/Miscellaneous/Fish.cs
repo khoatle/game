@@ -185,7 +185,7 @@ namespace Poseidon {
                         effect.DiffuseColor = Color.Green.ToVector3();
                     }
                     else {
-                        effect.DiffuseColor = Color.Black.ToVector3();
+                        effect.DiffuseColor = Color.White.ToVector3();
                     }
 
                     effect.FogEnabled = true;

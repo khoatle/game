@@ -94,11 +94,6 @@ namespace Poseidon
         // Current game level
         public static int currentLevel = 0;
 
-        // Cutscene
-        CutSceneDialog cutSceneDialog;
-        // Which sentence in the dialog is being printed
-        int currentSentence = 0;
-
         HeightMapInfo heightMapInfo;
 
         Radar radar;
@@ -129,6 +124,9 @@ namespace Poseidon
         float timeNextBubble = 200.0f;
         float timeNextSeaBedBubble = 3000.0f;
 
+        //Points gained over trash, plant, enemies, fish
+        public static List<Point> points;
+
         // School of fish
         SchoolOfFish schoolOfFish1;
         SchoolOfFish schoolOfFish2;
@@ -142,6 +140,15 @@ namespace Poseidon
 
         //for drawing winning or losing scenes
         Texture2D winningTexture, losingTexture;
+
+        //for drawing cutscenes
+        Texture2D botFace;
+        Texture2D otherPersonFace;
+        Texture2D talkingBox;
+        // Cutscene
+        CutSceneDialog cutSceneDialog;
+        // Which sentence in the dialog is being printed
+        int currentSentence = 0;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -182,6 +189,7 @@ namespace Poseidon
             alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
+            points = new List<Point>();
 
             schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
@@ -193,6 +201,7 @@ namespace Poseidon
             //loading winning, losing textures
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
+
             this.Load();
         }
 
@@ -275,11 +284,13 @@ namespace Poseidon
             paused = false;
             //MediaPlayer.Play(audio.BackMusic);
             //PlaceFuelCellsAndBarriers();
+            //MediaPlayer.Stop();
             base.Show();
         }
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            MediaPlayer.Stop();
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
             isBossKilled = false;
@@ -484,6 +495,7 @@ namespace Poseidon
             // play the boss fight music for certain levels
             if (currentLevel == 3 || currentLevel == 10)
             {
+
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
                 {
                     MediaPlayer.Play(audio.bossMusics[random.Next(GameConstants.NumBossBackgroundMusics)]);
@@ -612,6 +624,13 @@ namespace Poseidon
                                 //audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, this);
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                                PlayGameScene.points.Add(point);
+
                                 hydroBot.reachDestination = true;
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
@@ -627,8 +646,15 @@ namespace Poseidon
                                 HydroBot.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
                                 audio.Explo1.Play();
                                 gameCamera.Shake(25f, .4f);
-                                CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount);
+                                CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, 1);
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                                PlayGameScene.points.Add(point);
+
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
@@ -643,6 +669,13 @@ namespace Poseidon
                                 audio.armorSound.Play();
                                 HydroBot.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                                PlayGameScene.points.Add(point);
+
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
@@ -658,6 +691,13 @@ namespace Poseidon
                                 HydroBot.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
                                 HydroBot.supersonicMode = true;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                                PlayGameScene.points.Add(point);
+
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
@@ -681,6 +721,13 @@ namespace Poseidon
 
                                 HydroBot.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss;
+
+                                //display HP loss
+                                Point point = new Point();
+                                String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
+                                point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                                PlayGameScene.points.Add(point);
+
                                 audio.hipnotizeSound.Play();
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
@@ -754,10 +801,10 @@ namespace Poseidon
                     if (HydroBot.supersonicMode == true)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                        CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio);
+                        CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio, 1);
                     }
                     if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-                    hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect);
+                    hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, fruits, trashes, gameTime, pointIntersect,1);
                     //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                     if (timeNextBubble <= 0)
@@ -813,6 +860,19 @@ namespace Poseidon
                         else if (random.Next(100) >= 95) aBubble.bubble3DPos.Z -= 0.5f;
                         aBubble.Update(GraphicDevice, gameCamera, gameTime);
                     }
+
+                    //update points
+                    for ( int i=0; i< points.Count; i++)
+                    {
+                        Point point = points[i];
+                        if (point.toBeRemoved)
+                            points.Remove(point);
+                    }
+                    foreach (Point point in points)
+                    {
+                         point.Update(GraphicDevice, gameCamera, gameTime);
+                    }
+                    
                     // Are we shooting?
                     if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                         && currentKeyboardState.IsKeyDown(Keys.L)
@@ -837,6 +897,11 @@ namespace Poseidon
                             audio.plantSound.Play();
                             HydroBot.currentExperiencePts += Plant.experienceReward;
                             HydroBot.currentEnvPoint += GameConstants.envGainForDropSeed;
+
+                            Point point = new Point();
+                            String point_string = "+" + GameConstants.envGainForDropSeed.ToString() + "ENV\n+" + Plant.experienceReward + "EXP";
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                     }
 
@@ -897,14 +962,14 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, 1);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, 1);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, 1);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 1);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 1);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 1);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -914,7 +979,7 @@ namespace Poseidon
                             if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime);
+                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, 1);
                     }
 
                     for (int i = 0; i < fishAmount; i++)
@@ -1215,6 +1280,10 @@ namespace Poseidon
                     //rs.FillMode = FillMode.Solid;
                     //GraphicDevice.RasterizerState = rs;
                 }
+                else if ( trash.Retrieved && trashRealSphere.Intersects(frustum))
+                {
+                    //trash.DrawFadingPoint(spriteBatch, trashRealSphere);
+                }
             }
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects)
@@ -1249,6 +1318,12 @@ namespace Poseidon
             foreach (Bubble bubble in bubbles)
             {
                 bubble.Draw(spriteBatch, 1.0f);
+            }
+
+            //Draw points gained / lost
+            foreach (Point point in points)
+            {
+                point.Draw(spriteBatch);
             }
 
             //draw schools of fish
@@ -1373,7 +1448,7 @@ namespace Poseidon
             //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
             //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
             //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
-            //str2 += "\nFish amount " + fishAmount + " Percentage fish left" + (double)fishAmount / (double)GameConstants.NumberFish[currentLevel];
+            //str2 += "\n" + trashes[0].fogEndValue;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
@@ -1497,19 +1572,89 @@ namespace Poseidon
 
         private void DrawCutScene()
         {
-            float xOffsetText, yOffsetText;
-            string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
-            Rectangle rectSafeArea;
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            //draw the background 1st
+            spriteBatch.Draw(Content.Load<Texture2D>(cutSceneDialog.cutScenes[currentLevel][currentSentence].backgroundName),
+                new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+            
+            //draw face of the last speaker
+            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3)
+            {
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
+                    spriteBatch.Draw(botFace,
+                        new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                else
+                    spriteBatch.Draw(otherPersonFace,
+                        new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+            }
 
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            //draw face of the current speaker
+            //bot speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 0)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    botFace = Content.Load<Texture2D>("Image/Cutscenes/botNormal");
+                }
+                // other ifs here
+
+                //draw face
+                //spriteBatch.Draw(botFace,
+                //    new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Width - botFace.Width,
+                //        GraphicDevice.Viewport.TitleSafeArea.Height - botFace.Height,
+                //        botFace.Width, botFace.Height), Color.White);
+                spriteBatch.Draw(botFace,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw talking box
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/botBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //Poseidon speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/poseidonNormal");
+                }
+                // other ifs here
+
+                //draw face
+                spriteBatch.Draw(otherPersonFace,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw talking box
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //Narrator speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
+            {
+                //draw what is said
+                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //float xOffsetText, yOffsetText;
+            //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
+            //Rectangle rectSafeArea;
+            ////Calculate str1 position
+            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            //xOffsetText = rectSafeArea.X;
+            //yOffsetText = rectSafeArea.Y;
+
+            //Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strPosition =
+            //    new Vector2((int)xOffsetText + 10, (int)yOffsetText);
+            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
         public static void RestoreGraphicConfig()

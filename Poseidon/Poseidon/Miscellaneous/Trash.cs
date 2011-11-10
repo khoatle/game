@@ -16,6 +16,12 @@ namespace Poseidon
 
         public float orientation;
 
+
+        public float fogEndValue = GameConstants.FogEnd;
+        public float fogEndMaxVal = 1000.0f;
+        public bool increaseFog = true;
+
+
         //public float heightChange = 0.5f;
         //public float currentChange = 0.0f;
         //public bool floatUp;
@@ -52,6 +58,11 @@ namespace Poseidon
             //currentChange += 0.025f;
             //if (floatUp) Position.Y += currentChange;
             //else Position.Y -= currentChange;
+            if (increaseFog)
+                fogEndValue += 2.5f;
+            else fogEndValue -= 2.5f;
+            if (fogEndValue > fogEndMaxVal || fogEndValue < GameConstants.FogEnd)
+                increaseFog = !increaseFog;
         }
         public void Draw(Matrix view, Matrix projection)
         {
@@ -73,13 +84,15 @@ namespace Poseidon
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
 
+                    //effect.DiffuseColor = Color.Green.ToVector3();
+
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = GameConstants.FogEnd;
+                    effect.FogEnd = fogEndValue;// GameConstants.FogEnd;
                     effect.FogColor = GameConstants.FogColor.ToVector3();
                 }
                 mesh.Draw();
             }
-        }
+        }   
     }
 }

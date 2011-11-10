@@ -52,7 +52,9 @@ namespace Poseidon
         {
             //BoundingSphere.Center += new Vector3(20,0,0);
         }
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+
+        /* scene: 1-playgamescene 2-shipwreckscene */
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
         {
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -84,17 +86,17 @@ namespace Poseidon
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
                 configAction(perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
         }
-        // Execute the actions
-        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime)
+        // Execute the actions. ( scene: 1-playgamescene, 2-shipwreckscene)
+        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
         {
             if (configBits[0] == true)
             {
@@ -152,10 +154,21 @@ namespace Poseidon
                     {
                         if (!HydroBot.invincibleMode) {
                             HydroBot.currentHitPoint -= damage;
+
+                            PoseidonGame.audio.botYell.Play();
+
                             HydroBot.isPoissoned = true;
                             HydroBot.healthBeforePoisson = HydroBot.currentHitPoint;
 
                             PoseidonGame.audio.botYell.Play();
+
+                            Point point = new Point();
+                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                            if (scene == 2)
+                                ShipWreckScene.points.Add(point);
+                            else
+                                PlayGameScene.points.Add(point);
                         }
                     }
                     //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
@@ -174,6 +187,13 @@ namespace Poseidon
                         
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
+                            Point point = new Point();
+                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Red);
+                            if (scene == 2)
+                                ShipWreckScene.points.Add(point);
+                            else
+                                PlayGameScene.points.Add(point);
                             PoseidonGame.audio.animalYell.Play();
                         }
                     }

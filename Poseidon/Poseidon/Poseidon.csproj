@@ -148,6 +148,7 @@
     <Compile Include="MiniGames\Textbox.cs" />
     <Compile Include="MiniGames\TypingGameScene.cs" />
     <Compile Include="MiniGames\WritingBox.cs" />
+    <Compile Include="Miscellaneous\Point.cs" />
     <Compile Include="ShipWrecks\OceanPaintings.cs" />
     <Compile Include="MiniGames\QuizzesLibrary.cs" />
     <Compile Include="Miscellaneous\HydroBot.cs" />

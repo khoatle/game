@@ -41,7 +41,7 @@ namespace Poseidon
         public static float speed, lsSpeed;
         public static float shootingRate, lsShootingRate;
         public static float maxHitPoint, lsMaxHitPoint;
-        public static float currentHitPoint, lsCurrentHitPoint;
+        public static float currentHitPoint;//, lsCurrentHitPoint;
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
         // 2 types of bullet
@@ -110,7 +110,7 @@ namespace Poseidon
             shootingRate = lsShootingRate = GameConstants.MainCharShootingSpeed;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
-            currentHitPoint = lsCurrentHitPoint = GameConstants.PlayerStartingHP;
+            currentHitPoint = GameConstants.PlayerStartingHP;
             maxEnvPoint = GameConstants.MaxEnv;
             currentEnvPoint = lsCurrentEnvPoint = GameConstants.PlayerStartingEnv;
             pointToMoveTo = Vector3.Zero;
@@ -224,7 +224,6 @@ namespace Poseidon
             level = lsLevel;
             unassignedPts = lsUnassignedPts;
 
-            isPoissoned = false;
             poissonInterval = 0;
             maxHPLossFromPoisson = 50;
             healthBeforePoisson = currentHitPoint;
@@ -237,7 +236,7 @@ namespace Poseidon
             lsSpeed = speed;
             lsShootingRate = shootingRate;
             lsMaxHitPoint = maxHitPoint;
-            lsCurrentHitPoint = currentHitPoint;
+            //lsCurrentHitPoint = currentHitPoint;
 
             skills.CopyTo(lsSkills, 0);
 
@@ -272,6 +271,7 @@ namespace Poseidon
             speedUpStartTime = 0;
             fireRateUpStartTime = 0;
             currentHitPoint = maxHitPoint;
+            isPoissoned = false;
             firstPlant = true;
             prevPlantTime = 0;
             if(PlayGameScene.currentLevel>0)
@@ -280,14 +280,30 @@ namespace Poseidon
         }
 
 
-        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo)
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo, int scene) //scene- 1playgame 2shipwreck
         {
             if (isPoissoned == true) {
                 if (healthBeforePoisson - currentHitPoint <= maxHPLossFromPoisson) {
                     currentHitPoint -= 0.1f;
+
+                    ////display HP loss
+                    //Point point = new Point();
+                    //String point_string = "-0.1HP(Poison)";
+                    //point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
+                    //if (scene == 2)
+                    //    ShipWreckScene.points.Add(point);
+                    //else
+                    //    PlayGameScene.points.Add(point);
                 }
                 else {
                     isPoissoned = false;
+                    Point point = new Point();
+                    String point_string = "Poison Free";
+                    point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
+                    if (scene == 2)
+                        ShipWreckScene.points.Add(point);
+                    else
+                        PlayGameScene.points.Add(point);
                 }
             }
 
@@ -477,21 +493,51 @@ namespace Poseidon
                         {
                             speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             speedUp = 2.0f;
+
+                            Point point = new Point();
+                            String point_string = "TEMP-SPEED X 2";
+                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 2)
                         {
                             strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             strengthUp = 2.0f;
+
+                            Point point = new Point();
+                            String point_string = "\nTEMP-STRENGTH X 2";
+                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 3)
                         {
                             fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
                             fireRateUp = 2.0f;
+
+                            Point point = new Point();
+                            String point_string = "\n\nTEMP-SHOOTING RATE X 2";
+                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 4)
                         {
+                            float hitpointAdded = maxHitPoint - currentHitPoint;
                             currentHitPoint += 100;
-                            if (currentHitPoint > maxHitPoint) currentHitPoint = maxHitPoint;
+                            if (currentHitPoint > maxHitPoint)
+                            {
+                                currentHitPoint = maxHitPoint;
+                                Point point = new Point();
+                                String point_string = "\n\n\n+"+ (int)hitpointAdded +" HEALTH";
+                                point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                                PlayGameScene.points.Add(point);
+                            }
+                            else
+                            {
+                                Point point = new Point();
+                                String point_string = "\n\n\n+100 HEALTH";
+                                point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
+                                PlayGameScene.points.Add(point);
+                            }
                         }
                         //RetrievedSound.Play();
                         PlayGameScene.audio.retrieveSound.Play();
@@ -509,6 +555,11 @@ namespace Poseidon
                         currentEnvPoint += GameConstants.envGainForTrashClean;
                         PlayGameScene.audio.retrieveSound.Play();
                         //RetrievedSound.Play();
+
+                        Point point = new Point();
+                        String point_string = "+" + GameConstants.envGainForTrashClean.ToString() + "ENV\n+" + trash.experienceReward + "EXP";
+                        point.LoadContent(PlayGameScene.Content, point_string, trash.Position, Color.LawnGreen);
+                        PlayGameScene.points.Add(point);
                     }
                 }
             }

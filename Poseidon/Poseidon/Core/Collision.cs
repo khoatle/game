@@ -26,13 +26,26 @@ namespace Poseidon
                 Math.Abs(futurePosition.Z) > MaxRangeZ;
         }
 
-        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum) {
+        /* scene --> 1-playgamescene, 2-shipwreckscene */
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, int scene) {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
 
                     if (objs[i] is BaseEnemy) {
                         HydroBot.currentExperiencePts += objs[i].experienceReward;
+                        
+                        if (objs[i].BoundingSphere.Intersects(cameraFrustum))
+                        {
+                            Point point = new Point();
+                            String point_string = "+" + objs[i].experienceReward.ToString() + "EXP";
+                            point.LoadContent(PlayGameScene.Content, point_string, objs[i].Position, Color.LawnGreen);
+                            if(scene == 2)
+                                ShipWreckScene.points.Add(point);
+                            else
+                                PlayGameScene.points.Add(point);
+                        }
+
                         if (!objs[i].isBigBoss)
                         {
                             if (objs[i].BoundingSphere.Intersects(cameraFrustum))
@@ -47,15 +60,22 @@ namespace Poseidon
                         }
                     }
 
+                    if (objs[i] is Fish)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossForFishDeath;
+                        if (objs[i].BoundingSphere.Intersects(cameraFrustum))
+                        {
+                            Point point = new Point();
+                            String point_string = "-" + GameConstants.envLossForFishDeath.ToString() + "ENV";
+                            point.LoadContent(PlayGameScene.Content, point_string, objs[i].Position, Color.Red);
+                            PlayGameScene.points.Add(point);
+                        }
+                    }
+
                     for (int k = i; k < size-1; k++) {
                         objs[k] = objs[k+1];
                     }
                     objs[--size] = null;
-
-                    if (objs[i] is Fish)
-                    {
-                        HydroBot.currentEnvPoint -= GameConstants.envLossForFishDeath;
-                    }
                 }
             }
         }
@@ -213,7 +233,8 @@ namespace Poseidon
         /// <summary>
         /// PROJECTILES FUNCTION
         /// </summary>
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum) {
+        /* scene --> 1-playgamescene, 2-shipwreckscene */
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, int scene) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -234,6 +255,18 @@ namespace Poseidon
                         }
 
                         barriers[j].health -= bullets[i].damage;
+
+                        if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                        {
+                            Point point = new Point();
+                            String point_string = "-" + bullets[i].damage.ToString() + "HP";
+                            point.LoadContent(PlayGameScene.Content, point_string, barriers[j].Position, Color.DarkRed);
+                            if (scene == 2)
+                                ShipWreckScene.points.Add(point);
+                            else
+                                PlayGameScene.points.Add(point);
+                        }
+
                         bullets.RemoveAt(i--);
                         break;
                     }
@@ -253,10 +286,15 @@ namespace Poseidon
                         if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalHappy.Play();
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
-                            barriers[j].health += GameConstants.HealingAmount;
+                            barriers[j].health += bullets[i].healthAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
                             HydroBot.currentExperiencePts += barriers[j].experienceReward;
                             HydroBot.currentEnvPoint += GameConstants.envGainForHealingFish;
+
+                            Point point = new Point();
+                            String point_string = "+" + GameConstants.envGainForHealingFish.ToString() + "ENV\n+"+barriers[j].experienceReward.ToString()+"EXP";
+                            point.LoadContent(PlayGameScene.Content, point_string , barriers[j].Position, Color.LawnGreen);
+                            PlayGameScene.points.Add(point); // fish is only in playgame scene
                         }
                         bullets.RemoveAt(i--);
                         break;
@@ -265,13 +303,22 @@ namespace Poseidon
             }
         }
 
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets) {
+        /* scene --> 1-playgamescene, 2-shipwreckscene */
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, int scene) {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
                     if (!HydroBot.invincibleMode)
                     {
                         HydroBot.currentHitPoint -= enemyBullets[i].damage;
                         PoseidonGame.audio.botYell.Play();
+
+                        Point point = new Point();
+                        String point_string = "-" + enemyBullets[i].damage.ToString() + "HP";
+                        point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
+                        if (scene == 2)
+                            ShipWreckScene.points.Add(point);
+                        else
+                            PlayGameScene.points.Add(point);
                     }
                     enemyBullets.RemoveAt(i);
                     

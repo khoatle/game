@@ -241,8 +241,8 @@ namespace Poseidon
                 else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
                     //ChasingBullet(bullets, cameraFrustum, gameTime);
-                    AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
-                    // AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
+                    // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
+                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                     prevFire = gameTime.TotalGameTime;
                 }
             }

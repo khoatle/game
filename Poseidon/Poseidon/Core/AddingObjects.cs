@@ -64,7 +64,7 @@ namespace Poseidon
                     terminator.LoadContent(Content, "Models/EnemyModels/terminator");
                     if (currentLevel == 4) terminator.Name = "???";
                     else terminator.Name = "terminator";
-                    terminator.Load(1, 30, 24);
+                    terminator.Load(31, 60, 24);
                     enemies[i] = terminator;
                 }
             }
@@ -293,7 +293,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             ChasingBullet newBullet = new ChasingBullet();
-            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, 0, target);
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target);
             newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
             if (shooter.BoundingSphere.Intersects(cameraFrustum)) {

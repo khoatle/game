@@ -586,9 +586,7 @@ namespace Poseidon
                     {
                         effect.DiffuseColor = Color.Gold.ToVector3();
                     }
-                    else effect.DiffuseColor = Vector3.One;
-
-                    if (isPoissoned == true) {
+                    else if (isPoissoned == true) {
                         effect.DiffuseColor = Color.Green.ToVector3();
                     }
                     else {

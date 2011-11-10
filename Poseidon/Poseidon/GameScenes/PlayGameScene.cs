@@ -1611,8 +1611,8 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Poseidon speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
@@ -1632,14 +1632,16 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text,
                     new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
             {
                 //draw what is said
-                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text,
                     new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //float xOffsetText, yOffsetText;

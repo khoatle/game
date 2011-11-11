@@ -162,7 +162,7 @@ namespace Poseidon
 
                     if (currentHuntingTarget.GetType().Name.Equals("HydroBot"))
                     {
-                        if (!HydroBot.invincibleMode) {
+                        if (!(HydroBot.invincibleMode || HydroBot.supersonicMode) ){
                             HydroBot.currentHitPoint -= damage;
 
                             PoseidonGame.audio.botYell.Play();

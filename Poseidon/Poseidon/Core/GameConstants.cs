@@ -30,7 +30,7 @@ namespace Poseidon {
 
         //experience reward
         public const int ExpPainting = 35;
-        public const int ExpHealingFish = 8;
+        public const int BasicExpHealingFish = 8;
         //game scenes constants
         public const int MainGameMinRangeX = 20;
         public const int MainGameMinRangeZ = 20;
@@ -45,10 +45,11 @@ namespace Poseidon {
 
         // bullet consts
         public const float BulletSpeed = 2.0f;
-        public const int HealingAmount = 5;
+        public const int HealingAmount = 10;
                          
         // HP const
         public const int DefaultEnemyHP = 100;
+        public const int DefaultFishHP = 100;
         //public const int FishHP = 50;
         
 
@@ -56,10 +57,10 @@ namespace Poseidon {
         public const int PlayerStartingEnv = 300;
         public const int MaxEnv = 1000;
         public const int EachLevelMinEnv = 200;
-        public const int envLossForFishDeath = 20;
+        public const int envLossForFishDeath = 15;
         public const int envLossPerTrashAdd = 10;
         public const int envGainForTrashClean = 20;
-        public const int envGainForHealingFish = 5;
+        public const int BasicEnvGainForHealingFish = 5;
         public const int envGainForDropSeed = 20;
         public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
@@ -71,7 +72,7 @@ namespace Poseidon {
         // Bullet const
         public const int DefaultBulletDamage = 10;
         public const int DefaultEnemyDamage = 5;
-        public const int ChasingBulletDamage = 0;
+        public const int ChasingBulletDamage = 80;
         public const int StopBulletChasing = 3;
 
         // Enemy configuration

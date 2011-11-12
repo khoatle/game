@@ -33,12 +33,12 @@ namespace Poseidon
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
 
                     if (objs[i] is BaseEnemy) {
-                        HydroBot.currentExperiencePts += objs[i].experienceReward;
+                        HydroBot.currentExperiencePts += objs[i].basicExperienceReward;
                         
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))
                         {
                             Point point = new Point();
-                            String point_string = "+" + objs[i].experienceReward.ToString() + "EXP";
+                            String point_string = "+" + objs[i].basicExperienceReward.ToString() + "EXP";
                             point.LoadContent(PlayGameScene.Content, point_string, objs[i].Position, Color.LawnGreen);
                             if(scene == 2)
                                 ShipWreckScene.points.Add(point);
@@ -290,14 +290,19 @@ namespace Poseidon
                     {
                         if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalHappy.Play();
+
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
                             barriers[j].health += bullets[i].healthAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
-                            HydroBot.currentExperiencePts += barriers[j].experienceReward;
-                            HydroBot.currentEnvPoint += GameConstants.envGainForHealingFish;
+
+                            int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * barriers[j].basicExperienceReward);
+                            int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
+
+                            HydroBot.currentExperiencePts += barriers[j].basicExperienceReward;
+                            HydroBot.currentEnvPoint += GameConstants.BasicEnvGainForHealingFish;
 
                             Point point = new Point();
-                            String point_string = "+" + GameConstants.envGainForHealingFish.ToString() + "ENV\n+"+barriers[j].experienceReward.ToString()+"EXP";
+                            String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
                             point.LoadContent(PlayGameScene.Content, point_string , barriers[j].Position, Color.LawnGreen);
                             PlayGameScene.points.Add(point); // fish is only in playgame scene
                         }

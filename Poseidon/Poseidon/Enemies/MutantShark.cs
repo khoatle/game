@@ -21,7 +21,7 @@ namespace Poseidon
             health = 4000;
             maxHealth = 4000;
             perceptionRadius = GameConstants.BossPerceptionRadius;
-            experienceReward = 600;
+            basicExperienceReward = 600;
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)

@@ -168,7 +168,7 @@ namespace Poseidon
                             PoseidonGame.audio.botYell.Play();
 
                             HydroBot.isPoissoned = true;
-                            HydroBot.healthBeforePoisson = HydroBot.currentHitPoint;
+                            HydroBot.accumulatedHealthLossFromPoisson = 0;
 
                             PoseidonGame.audio.botYell.Play();
 
@@ -192,14 +192,14 @@ namespace Poseidon
                     if (currentHuntingTarget is SwimmingObject)
                     {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
-                        ((SwimmingObject)currentHuntingTarget).healthBeforePoisson = health;
+                        ((SwimmingObject)currentHuntingTarget).accumulatedHealthLossFromPoison = 0;
                         ((SwimmingObject)currentHuntingTarget).isPoissoned = true;
                         
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
                             Point point = new Point();
                             String point_string = "-" + damage.ToString() + "HP (POISONED)";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Red);
+                            point.LoadContent(PlayGameScene.Content, point_string, currentHuntingTarget.Position, Color.Red);
                             if (scene == 2)
                                 ShipWreckScene.points.Add(point);
                             else

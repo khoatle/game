@@ -48,7 +48,11 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "People call me Poseidon.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "The sea is in grave danger. I am glad you are here.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Thank you for saving my life.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "The sea is in grave danger. I am glad you are here.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "I want to help. I have the power to clean the ocean and heal the sea animals!", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             //sentence = new Sentence(1, "Can you clean the environment to " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             sentence = new Sentence(1, "Can you clean the environment within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
@@ -59,9 +63,9 @@ namespace Poseidon
             cutScene = new List<Sentence>();
             sentence = new Sentence(0, "That was easy. The sea is clean now. The sea animals are happy too.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "They keep dropping more trash. Moreover, there are divers killing the sea creatures. I give you the power to teleport them to me.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "They keep dropping more trash. I will send you near the coast of COSTA RICA. There are many divers killing the sea creatures. Use these special bullets which will teleport them to me.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Teleportation by shooting. Wow, that's exciting.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Teleportation! Wow, that's exciting. Thank you so much. I will not disappoint you.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Save at least " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);

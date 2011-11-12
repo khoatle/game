@@ -20,7 +20,7 @@ namespace Poseidon
         public string Name = "Swimming Object";
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
-        public float healthBeforePoisson;
+        public float accumulatedHealthLossFromPoison;
         public float maxHPLossFromPoisson;
         public float poissonInterval;
         public int experienceReward;
@@ -41,8 +41,8 @@ namespace Poseidon
             experienceReward = 20;
             isPoissoned = false;
             poissonInterval = 0;
-            maxHPLossFromPoisson = 100;
-            healthBeforePoisson = health;
+            maxHPLossFromPoisson = 50;
+            accumulatedHealthLossFromPoison = 0;
         }
 
         public virtual void LoadContent(ContentManager content, string modelName)

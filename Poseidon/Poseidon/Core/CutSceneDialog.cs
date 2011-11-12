@@ -42,7 +42,7 @@ namespace Poseidon
             int currentLevel = PlayGameScene.currentLevel;
             // For scene 0
             List<Sentence> cutScene = new List<Sentence>();
-            Sentence sentence = new Sentence(3, "Sample cutscene that introduces the storyline. To be completed in future.", "Image/Cutscenes/backgroundDialog", 0);
+            Sentence sentence = new Sentence(3, "Sample cutscene that introduces the storyline. To be completed in future.", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Who are you?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);

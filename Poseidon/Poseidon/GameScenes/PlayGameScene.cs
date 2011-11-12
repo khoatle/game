@@ -290,6 +290,7 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            cursor.targetToLock = null;
             MediaPlayer.Stop();
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
@@ -754,11 +755,11 @@ namespace Poseidon
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
-                            hydroBot.reachDestination = true;
+                            //hydroBot.reachDestination = true;
                         }
                         pointIntersect = Vector3.Zero;
+                        hydroBot.reachDestination = true;
                     }
-
                     //if the user clicks or holds mouse's left button
                     else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                     {
@@ -766,6 +767,7 @@ namespace Poseidon
                         if (!hydroBot.clipPlayer.inRange(1, 30))
                             hydroBot.clipPlayer.switchRange(1, 30);
                     }
+                   
                     else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
@@ -794,6 +796,66 @@ namespace Poseidon
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
                     }
+
+                    //if the user holds down Caps Lock button
+                    //lock the target inside shooting range
+                    if (currentKeyboardState.IsKeyUp(Keys.CapsLock) && lastKeyboardState.IsKeyDown(Keys.CapsLock))
+                    {
+                        if (cursor.targetToLock == null)
+                        {
+
+                            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+                            if (fishPointedAt != null && cursor.targetToLock == null)
+                            {
+                                cursor.targetToLock = fishPointedAt;
+                            }
+                            else
+                            {
+                                BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+                                if (enemyPointedAt != null && cursor.targetToLock == null)
+                                    cursor.targetToLock = enemyPointedAt;
+                            }             
+                        }
+                        else cursor.targetToLock = null;
+                        //if (cursor.targetToLock != null)
+                        //{
+                        //    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                        //    hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
+                        //    if (CursorManager.InShootingRange(hydroBot, cursor, gameCamera, GameConstants.MainGameFloatHeight))
+                        //    {
+                        //        if (currentMouseState.LeftButton == ButtonState.Pressed)
+                        //        {
+                        //            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                        //            hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
+                        //            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                        //            {
+                        //                prevFireTime = gameTime.TotalGameTime;
+                        //                //audio.Shooting.Play();
+                        //                if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
+                        //                else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
+                        //                if (!hydroBot.clipPlayer.inRange(61, 90))
+                        //                    hydroBot.clipPlayer.switchRange(61, 90);
+                        //            }
+                        //            //hydroBot.reachDestination = true;
+                        //        }
+                        //        pointIntersect = Vector3.Zero;
+                        //        hydroBot.reachDestination = true;
+                        //    }
+                        //    else
+                        //    {
+                        //        if (!hydroBot.clipPlayer.inRange(1, 30))
+                        //            hydroBot.clipPlayer.switchRange(1, 30);
+                        //    }
+                        //}
+                    }
+                    // if the user releases Caps Lock
+                    // disable locking
+                    //else if (currentKeyboardState.IsKeyUp(Keys.CapsLock) && lastKeyboardState.IsKeyDown(Keys.CapsLock))
+                    //{
+                    //    cursor.targetToLock = null;
+                    //    hydroBot.reachDestination = true;
+                    //}
+                    
                     //let the user change active skill/bullet too when he presses on number
                     //this is better for fast action
                     InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, hydroBot);
@@ -1009,7 +1071,7 @@ namespace Poseidon
                     m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
 
                     //cursor update
-                    cursor.Update(gameTime);
+                    cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
                     //update the school of fish
                     schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
@@ -1642,7 +1704,7 @@ namespace Poseidon
                 //draw what is said
                 string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width, menuSmall);
                 spriteBatch.DrawString(menuSmall, text,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Red);
             }
             //float xOffsetText, yOffsetText;
             //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;

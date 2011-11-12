@@ -37,7 +37,7 @@ namespace Poseidon.MiniGames
                     nextDrawPosition.Y += font.LineSpacing;
                 }
                 else if (i == markupIndex) {
-                    spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Yellow);
+                    spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Crimson);
                     nextDrawPosition.X += font.MeasureString(words[markupIndex] + " ").X;
                 } else {
                     spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Black);

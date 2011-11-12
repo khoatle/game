@@ -46,6 +46,8 @@ namespace Poseidon
             get { return position; }
         }
 
+        public SwimmingObject targetToLock = null;
+
         #endregion
 
         #region Initialization
@@ -83,7 +85,7 @@ namespace Poseidon
 
         #region Update
 
-        public override void Update(GameTime gameTime)
+        public new void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime, BoundingFrustum frustum)
         {
             // We use different input on each platform:
             // On Xbox, we use the GamePad's DPad and left thumbstick to move the cursor around the screen.
@@ -92,7 +94,7 @@ namespace Poseidon
 #if XBOX
             UpdateXboxInput(gameTime);
 #elif WINDOWS
-            UpdateWindowsInput();
+            UpdateWindowsInput(graphicDevice, gameCamera, frustum);
 #elif WINDOWS_PHONE
             UpdateWindowsPhoneInput();
 #endif
@@ -167,11 +169,23 @@ namespace Poseidon
         /// <summary>
         /// Handles input for Windows.
         /// </summary>
-        private void UpdateWindowsInput()
+        private void UpdateWindowsInput(GraphicsDevice graphicDevice, Camera gameCamera, BoundingFrustum frustum)
         {
-            MouseState mouseState = Mouse.GetState();
-            position.X = mouseState.X;
-            position.Y = mouseState.Y;
+            if (targetToLock == null)
+            {
+                MouseState mouseState = Mouse.GetState();
+                position.X = mouseState.X;
+                position.Y = mouseState.Y;
+            }
+            else
+            {
+                Vector3 screenPos = graphicDevice.Viewport.Project(targetToLock.Position, gameCamera.ProjectionMatrix,
+                    gameCamera.ViewMatrix, Matrix.Identity);
+                position.X = screenPos.X;
+                position.Y = screenPos.Y;
+                //release lock if enemy is out of camera frustum
+                if (!targetToLock.BoundingSphere.Intersects(frustum)) targetToLock = null;
+            }
         }
 
         /// <summary>
@@ -196,8 +210,10 @@ namespace Poseidon
 
             // use textureCenter as the origin of the sprite, so that the cursor is 
             // drawn centered around Position.
-            spriteBatch.Draw(cursorTexture, Position, null, Color.White, 0.0f,
-                textureCenter, 1.0f, SpriteEffects.None, 0.0f);
+            //spriteBatch.Draw(cursorTexture, 
+            //    new Vector2( position.X - cursorTexture.Width / 2.0f, position.Y - cursorTexture.Height / 2.0f ),
+            //    null, Color.White, 0.0f, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(cursorTexture, position, null, Color.White, 0, new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2), 1, SpriteEffects.None, 0);
 
             //spriteBatch.End();
         }

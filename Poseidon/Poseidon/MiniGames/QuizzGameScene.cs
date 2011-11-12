@@ -100,6 +100,7 @@ namespace Poseidon.MiniGames
             nextButtonRect = new Rectangle(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Right - 220, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom - 100, 200, 80);
 
             cursor = new Cursor(game, spriteBatch);
+            cursor.targetToLock = null;
             //Components.Add(cursor);
         }
 
@@ -172,7 +173,7 @@ namespace Poseidon.MiniGames
             // dictates right/wrong answer
             // move to the next question
             // Reset the world for a new game
-            cursor.Update(gameTime);
+            cursor.Update(PlayGameScene.GraphicDevice, PlayGameScene.gameCamera, gameTime, null);
             CheckClick(gameTime);
             if (displayRightWrongAnswer)
             {

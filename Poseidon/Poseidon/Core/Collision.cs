@@ -27,7 +27,7 @@ namespace Poseidon
         }
 
         /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, int scene) {
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, int scene, Cursor cursor) {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
@@ -71,10 +71,15 @@ namespace Poseidon
                             PlayGameScene.points.Add(point);
                         }
                     }
-
+                    if (objs[i] == cursor.targetToLock)
+                    {
+                        cursor.targetToLock = null;
+                        objs[i] = null;
+                    }
                     for (int k = i; k < size-1; k++) {
                         objs[k] = objs[k+1];
                     }
+  
                     objs[--size] = null;
                 }
             }

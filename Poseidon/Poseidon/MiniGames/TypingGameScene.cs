@@ -156,14 +156,14 @@ namespace Poseidon.MiniGames
 
                 if (elapsedSeconds.TotalSeconds > 80)
                 {
-                    expAwarded = 50;
+                    expAwarded = 75;
                 }
-                else if (elapsedSeconds.TotalSeconds > 50)
+                else if (elapsedSeconds.TotalSeconds > 60)
                 {
-                    expAwarded += 100;
+                    expAwarded += 150;
                 }
                 else {
-                    expAwarded += 200;
+                    expAwarded += 300;
                 }
                 HydroBot.currentExperiencePts += expAwarded;
                 return;

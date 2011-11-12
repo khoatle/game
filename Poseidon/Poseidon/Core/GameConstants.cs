@@ -17,13 +17,15 @@ namespace Poseidon {
         public const float ViewAngle = 45.0f;
 
         //main character constants
-        public const float MainCharVelocity = 1f;
-        public const float BasicStartSpeed = 0.7f;
+        public const float MainCharVelocity = 0.6f;
+        public const float BasicStartSpeed = 1f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
         public const float MainCharShootingSpeed = 0.7f;
-        public const int MainCharLevelOneExp = 400;
+        public const int MainCharLevelOneExp = 275;
         public const float MainCharStrength = 1.0f;
+        public const int PlayerStartingHP = 250;
+        public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.3f);
 
 
         //experience reward
@@ -48,7 +50,7 @@ namespace Poseidon {
         // HP const
         public const int DefaultEnemyHP = 100;
         //public const int FishHP = 50;
-        public const int PlayerStartingHP = 500;
+        
 
         //Environment Const
         public const int PlayerStartingEnv = 300;
@@ -166,8 +168,8 @@ namespace Poseidon {
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
         public const float timeHypnotiseLast = 10;
-        public const float ThorDamage = 20;
-        public const float ThorRange = 40;
+        public const float ThorDamage = 40;
+        public const float ThorRange = 80;
         public const float ThorPushFactor = 10;
         public const float HermesDamage = 30;
         public const float timeSuperSonicLast = 500;
@@ -194,9 +196,9 @@ namespace Poseidon {
 
         //attributes
         public static int gainAttributeCost = 1;
-        public static float gainSpeed = 0.1f;
-        public static float gainShootingRate = 0.1f;
-        public static float gainStrength = 0.1f;
+        public static float gainSpeed = 0.07f;
+        public static float gainShootingRate = 0.05f;
+        public static float gainStrength = 0.065f;
         public static int gainHitPoint = 20;
 
     }

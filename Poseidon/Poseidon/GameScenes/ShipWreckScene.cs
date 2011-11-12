@@ -56,7 +56,7 @@ namespace Poseidon
         //A tank
         public HydroBot hydroBot;
 
-        private TimeSpan fireTime;
+        //private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
         // For drawing the currently selected skill
@@ -127,7 +127,7 @@ namespace Poseidon
             gameCamera = new Camera(GameConstants.ShipCamHeight);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
-            fireTime = TimeSpan.FromSeconds(0.3f);
+            //fireTime = TimeSpan.FromSeconds(0.3f);
             enemies = new BaseEnemy[GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies];
             fish = new Fish[GameConstants.ShipNumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
@@ -566,7 +566,7 @@ namespace Poseidon
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                         hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
-                        if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                        if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                         {
                             prevFireTime = gameTime.TotalGameTime;
                             //audio.Shooting.Play();
@@ -600,7 +600,7 @@ namespace Poseidon
                     else
                     {
                         //if the enemy is in the shooting range then shoot it w/o moving to it
-                        if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                        if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                         {
                             hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                             prevFireTime = gameTime.TotalGameTime;
@@ -737,7 +737,7 @@ namespace Poseidon
                 // Are we shooting?
                 if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
                     && currentKeyboardState.IsKeyDown(Keys.L)
-                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                 //||
                 //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
                 {
@@ -773,8 +773,8 @@ namespace Poseidon
                 Collision.updateProjectileHitBot(hydroBot, enemyBullet, 2);
                 Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 2);
 
-                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 2);
-                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 2);
+                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 2, cursor);
+                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 2, cursor);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {

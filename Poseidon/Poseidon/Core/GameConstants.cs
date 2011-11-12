@@ -84,16 +84,16 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
-        public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  10,  10  };
+        public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
+        public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
 
-        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,   0,   0  };
-        public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   1,   1  };
-        public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0  };
-        public static int[] FishInSchool =          {   0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
-        public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0  };
+        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
+        public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
+        public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
+        public static int[] FishInSchool =          {   0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
 
         //number of enemy and fish for ship wreck
         public const int ShipNumberShootingEnemies = 5;
@@ -109,9 +109,9 @@ namespace Poseidon {
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
-                                                       TimeSpan.FromSeconds(120),  TimeSpan.FromSeconds(120),  TimeSpan.FromSeconds(360),
+                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
-                                                       TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120)}; 
+                                                       TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
@@ -144,7 +144,7 @@ namespace Poseidon {
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
         public const float TrashBoundingSphereFactor = 0.9f;
-        public const float FruitGrowth = 2.5f;
+        public const float FruitGrowth = 3.5f;
 
         //skills
         public const int numberOfSkills = 5;

@@ -295,7 +295,7 @@ namespace Poseidon
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
             isBossKilled = false;
-            if (currentLevel == 10) HydroBot.bulletType = 1;
+            if (currentLevel == 11) HydroBot.bulletType = 0;
             //User must find the key at every level
             firstShow = true;
             showFoundKey = false;
@@ -494,7 +494,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             // play the boss fight music for certain levels
-            if (currentLevel == 3 || currentLevel == 10)
+            if (currentLevel == 3 || currentLevel == 11)
             {
 
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
@@ -534,7 +534,7 @@ namespace Poseidon
                         if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count)
                         {
                             currentGameState = GameState.Running;
-                            if (currentLevel == 11) currentGameState = GameState.GameComplete;
+                            if (currentLevel == 12) currentGameState = GameState.GameComplete;
                         }
                     }
                 }
@@ -1087,8 +1087,8 @@ namespace Poseidon
                         (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
-                        //the player should always lose in level 9
-                        if (currentLevel == 9)
+                        //the player should always lose in level 10
+                        if (currentLevel == 10)
                         {
                             currentLevel++;
                         }
@@ -1103,7 +1103,7 @@ namespace Poseidon
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
                         currentLevel++;
-                        if (currentLevel < 10)
+                        if (currentLevel < 11)
                             currentGameState = GameState.ToMiniGame;
                         //play the last cutscene if the game has been completed
                         else

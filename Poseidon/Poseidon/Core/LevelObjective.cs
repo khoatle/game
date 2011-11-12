@@ -93,6 +93,14 @@ namespace Poseidon
             }
             else if (currentLevel == 9)
             {
+                //Level Obj: Survive the level
+                if (roundTimer <= TimeSpan.Zero)
+                {
+                    return true;
+                }
+            }
+            else if (currentLevel == 10)
+            {
                 //Level Obj: Defeat the Terminator
                 //well, if you really can
                 if (isBossKilled)
@@ -100,7 +108,7 @@ namespace Poseidon
                     return true;
                 }
             }
-            else if (currentLevel == 10)
+            else if (currentLevel == 11)
             {
                 //Level Obj: Defeat the Terminator
                 //after gaining the Trident power from Poseidon
@@ -173,12 +181,17 @@ namespace Poseidon
             }
             if (currentLevel == 9)
             {
+                //Level Obj: Survive the level
+                
+            }
+            if (currentLevel == 10)
+            {
                 if (roundTimer <= TimeSpan.Zero)
                 {
                     return true;
                 }
             }
-            if (currentLevel == 10)
+            if (currentLevel == 11)
             {
                 if (roundTimer <= TimeSpan.Zero)
                 {

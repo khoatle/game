@@ -315,7 +315,7 @@ namespace Poseidon
                 //increaseBy = (int)(increaseBy * 1.25);
                 //nextLevelExperience += increaseBy;
                 currentExperiencePts -= nextLevelExperience;
-                nextLevelExperience += (int)(nextLevelExperience/4);
+                nextLevelExperience += (int)(nextLevelExperience/5);
                 //strength *= 1.15f;
                 //maxHitPoint = (int)(maxHitPoint * 1.10f);
                 //currentHitPoint = maxHitPoint;
@@ -368,18 +368,18 @@ namespace Poseidon
                     }
                 }
             }
-            float turnAmount = 0;
-            if (keyboardState.IsKeyDown(Keys.A))
-            {
-                turnAmount = 1;
-            }
-            else if (keyboardState.IsKeyDown(Keys.D))
-            {
-                turnAmount = -1;
-            }
-            // Player has speed buff from both temporary powerups and his speed attritubte
+            //float turnAmount = 0;
+            //if (keyboardState.IsKeyDown(Keys.A))
+            //{
+            //    turnAmount = 1;
+            //}
+            //else if (keyboardState.IsKeyDown(Keys.D))
+            //{
+            //    turnAmount = -1;
+            //}
+            //// Player has speed buff from both temporary powerups and his speed attritubte
             
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * speed;
+            //ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * speed;
             //ForwardDirection = WrapAngle(ForwardDirection);
             Vector3 movement = Vector3.Zero;
 
@@ -433,14 +433,14 @@ namespace Poseidon
             
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
-            if (keyboardState.IsKeyDown(Keys.W))
-            {
-                movement.Z = 1;
-            }
-            else if (keyboardState.IsKeyDown(Keys.S))
-            {
-                movement.Z = -1;
-            }
+            //if (keyboardState.IsKeyDown(Keys.W))
+            //{
+            //    movement.Z = 1;
+            //}
+            //else if (keyboardState.IsKeyDown(Keys.S))
+            //{
+            //    movement.Z = -1;
+            //}
             //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speedl = Vector3.Transform(movement, orientationMatrix);
             speedl *= GameConstants.MainCharVelocity * speedUp * speed;

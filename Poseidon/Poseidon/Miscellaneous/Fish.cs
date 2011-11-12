@@ -23,9 +23,10 @@ namespace Poseidon {
         public string sad_talk;
 
         public Fish() : base() {
-            experienceReward = GameConstants.ExpHealingFish;
+            basicExperienceReward = GameConstants.BasicExpHealingFish;
             lastHealthUpdateTime = 0;
             healthChangeInterval = GameConstants.maxHealthChangeInterval;
+            health = GameConstants.DefaultFishHP;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)

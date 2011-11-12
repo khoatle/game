@@ -23,7 +23,7 @@ namespace Poseidon
         public float accumulatedHealthLossFromPoison;
         public float maxHPLossFromPoisson;
         public float poissonInterval;
-        public int experienceReward;
+        public int basicExperienceReward;
 
         // is this enemy a big boss
         // in order to know whether the big boss is killed
@@ -38,7 +38,7 @@ namespace Poseidon
             BarrierType = null;
             ForwardDirection = 0.0f;
             //MaxRange = GameConstants.MaxRange;
-            experienceReward = 20;
+            basicExperienceReward = 20;
             isPoissoned = false;
             poissonInterval = 0;
             maxHPLossFromPoisson = 50;

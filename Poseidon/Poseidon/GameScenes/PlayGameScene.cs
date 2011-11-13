@@ -92,7 +92,7 @@ namespace Poseidon
         Rectangle levelObjectiveIconRectangle;
 
         // Current game level
-        public static int currentLevel = 0;
+        public static int currentLevel = 4;
 
         HeightMapInfo heightMapInfo;
 
@@ -1639,7 +1639,7 @@ namespace Poseidon
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             
             //draw face of the last speaker
-            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3)
+            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3 && cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID != 3)
             {
 
                 if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
@@ -1683,6 +1683,28 @@ namespace Poseidon
                 if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
                 {
                     otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/poseidonNormal");
+                }
+                // other ifs here
+
+                //draw face
+                spriteBatch.Draw(otherPersonFace,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw talking box
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw what is said
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //Terminator speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 2)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/terminatorFace");
                 }
                 // other ifs here
 

@@ -1117,6 +1117,9 @@ namespace Poseidon
                             currentGameState = GameState.PlayingCutScene;
                             currentSentence = 0;
                         }
+                        // no minigame for 1st level
+                        if (currentLevel == 1)
+                            currentGameState = GameState.ToNextLevel;
                         //ResetGame(gameTime, aspectRatio);
                     }
                 }

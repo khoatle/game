@@ -28,7 +28,7 @@ namespace Poseidon
         {
             perceptID = new int[] { 0, 1, 2, 3 };
             configBits = new bool[] { false, false, false, false };
-            damage = GameConstants.DefaultEnemyDamage * 3;
+            damage = GameConstants.CombatEnemeyDamage;
             perceptionRadius *= 2;
             isHypnotise = false;
         }

@@ -91,6 +91,9 @@ namespace Poseidon
         protected Texture2D levelObjectiveIconTexture;
         Rectangle levelObjectiveIconRectangle;
 
+        protected Texture2D tipIconTexture;
+        Rectangle tipIconRectangle;
+
         // Current game level
         public static int currentLevel = 0;
 
@@ -249,6 +252,7 @@ namespace Poseidon
             }
 
             levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            tipIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
 
             foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
 
@@ -295,7 +299,7 @@ namespace Poseidon
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
             isBossKilled = false;
-            if (currentLevel == 11) HydroBot.bulletType = 0;
+            
             //User must find the key at every level
             firstShow = true;
             showFoundKey = false;
@@ -322,6 +326,8 @@ namespace Poseidon
                 hydroBot.SetLevelStartValues();
 
             hydroBot.Reset();
+            if (currentLevel == 11) HydroBot.bulletType = 0;
+
             gameCamera.Update(hydroBot.ForwardDirection,
                 hydroBot.Position, aspectRatio, gameTime);
 
@@ -1111,6 +1117,9 @@ namespace Poseidon
                             currentGameState = GameState.PlayingCutScene;
                             currentSentence = 0;
                         }
+                        // no minigame for 1st level
+                        if (currentLevel == 1)
+                            currentGameState = GameState.ToNextLevel;
                         //ResetGame(gameTime, aspectRatio);
                     }
                 }
@@ -1417,6 +1426,7 @@ namespace Poseidon
             DrawRadar();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
+            DrawTipIcon();
             cursor.Draw(gameTime);
             spriteBatch.End();
         }
@@ -1624,9 +1634,35 @@ namespace Poseidon
 
         }
 
+        //Draw level tip icon
+        private void DrawTipIcon()
+        {
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = levelObjectiveIconRectangle.Center.X - 25;
+            yOffsetText = levelObjectiveIconRectangle.Bottom + 10;
+
+            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, 50, 50);
+
+            spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
+
+        }
+
         public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
         {
             if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+                return true;
+            else
+                return false;
+        }
+
+        public bool mouseOnTipIcon(MouseState lmouseState)
+        {
+            if ( tipIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
                 return true;
             else
                 return false;
@@ -1639,7 +1675,7 @@ namespace Poseidon
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             
             //draw face of the last speaker
-            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3)
+            if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3 && cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID != 3)
             {
 
                 if (cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID == 0)
@@ -1683,6 +1719,28 @@ namespace Poseidon
                 if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
                 {
                     otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/poseidonNormal");
+                }
+                // other ifs here
+
+                //draw face
+                spriteBatch.Draw(otherPersonFace,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw talking box
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                //draw what is said
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+            }
+            //Terminator speaking
+            if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 2)
+            {
+                // load texture for each type of emotion
+                if (cutSceneDialog.cutScenes[currentLevel][currentSentence].emotionType == 0)
+                {
+                    otherPersonFace = Content.Load<Texture2D>("Image/Cutscenes/terminatorFace");
                 }
                 // other ifs here
 

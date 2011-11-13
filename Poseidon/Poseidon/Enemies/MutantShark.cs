@@ -16,12 +16,21 @@ namespace Poseidon
         Random rand = new Random();
         public MutantShark() : base() {
             speed = (float)(GameConstants.EnemySpeed * 1.5);
-            damage = GameConstants.DefaultEnemyDamage * 5;
+            damage = GameConstants.MutantSharkBitingDamage;
             isBigBoss = true;
-            health = 4000;
-            maxHealth = 4000;
+            if (PlayGameScene.currentLevel == 3)
+            {
+                health = 6000;
+                maxHealth = 6000;
+            }
+            else
+            {
+                health = 5000;
+                maxHealth = 5000;
+            }
+
             perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 600;
+            basicExperienceReward = 750;
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)

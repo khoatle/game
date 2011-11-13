@@ -50,6 +50,9 @@ namespace Poseidon
         // For the Level Objective
         LevelObjectiveScene levelObjectiveScene;
         protected Texture2D LevelObjectiveBackgroundTexture;
+        //For the tip Scene
+        TipScene tipScene;
+        protected Texture2D tipBackgroundTexture;
         // For the mini games
         QuizzGameScene quizzGameScene;
         protected Texture2D quizzGameBackgroundTexture;
@@ -93,7 +96,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -162,6 +165,7 @@ namespace Poseidon
 
             AttributeBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/AttributeBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
+            tipBackgroundTexture = LevelObjectiveBackgroundTexture;
             quizzGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom1");
             typeGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom2");
             boxBackground = Content.Load<Texture2D>("Image/MinigameTextures/whiteskin");
@@ -184,6 +188,10 @@ namespace Poseidon
             // Create level objective scene
             levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
             Components.Add(levelObjectiveScene);
+
+            // Create tip scene
+            tipScene = new TipScene(this, tipBackgroundTexture, Content);
+            Components.Add(tipScene);
 
             // Create minigame scenes
             quizzGameScene = new QuizzGameScene(this, quizzGameBackgroundTexture, Content);
@@ -290,6 +298,10 @@ namespace Poseidon
             else if (activeScene == levelObjectiveScene)
             {
                 HandleLevelObjectiveInput();
+            }
+            else if (activeScene == tipScene)
+            {
+                HandleTipInput();
             }
             else if (activeScene == quizzGameScene)
             {
@@ -401,6 +413,13 @@ namespace Poseidon
             {
                 prevScene = playGameScene;
                 ShowScene(levelObjectiveScene);
+            }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && playGameScene.mouseOnTipIcon(currentMouseState))
+            {
+                prevScene = playGameScene;
+                ShowScene(tipScene);
             }
             else
             {
@@ -530,6 +549,11 @@ namespace Poseidon
                 ShowScene(prevScene);
         }
 
+        private void HandleTipInput()
+        {
+            if (EscPressed || enterPressed)
+                ShowScene(prevScene);
+        }
 
         protected void ShowScene(GameScene scene)
         {

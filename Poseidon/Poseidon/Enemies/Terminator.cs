@@ -33,7 +33,7 @@ namespace Poseidon
             : base()
         {
             speed = (float)(GameConstants.EnemySpeed * 1.2);
-            damage = GameConstants.DefaultEnemyDamage * 5;
+            damage = GameConstants.TerminatorShootingDamage;
             timeBetweenFire = 0.3f;
             isBigBoss = true;
             random = new Random();
@@ -128,7 +128,7 @@ namespace Poseidon
                 PoseidonGame.audio.bossLaugh.Play();
                 timeLastLaugh = gameTime.TotalGameTime.TotalSeconds;
             }
-            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
             {
                 float originalForwardDir = ForwardDirection;
                 ForwardDirection += MathHelper.PiOver4 / 4;
@@ -148,7 +148,7 @@ namespace Poseidon
                 PoseidonGame.audio.bossLaugh.Play();
                 timeLastLaugh = gameTime.TotalGameTime.TotalSeconds;
             }
-            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3)
+            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3 && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
             {
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = gameTime.TotalGameTime;
@@ -239,7 +239,7 @@ namespace Poseidon
                     //PlayGameScene.audio.MinigunWindUp.Play();
                     timePrevPowerUsed = gameTime.TotalGameTime.TotalSeconds;
                 }
-                else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
                 {
                     //ChasingBullet(bullets, cameraFrustum, gameTime);
                     // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);

@@ -78,7 +78,7 @@ namespace Poseidon.MiniGames
             paragraph = new Paragraph("Vietnam has already experienced rising sea levels, record temperatures, and unstable rainfall causing unpredictable phases of flood and drought. The rice bowl of Vietnam will be in acute danger.");
             paragraphLib.Add(paragraph);
 
-            paragraph = new Paragraph("The term 'mangrove' refers to a habitat comprised of salt-tolerant plants. Mangrove plants have a tangle of roots which are often exposed above water, leading to the nickname 'walking trees'. Their their leaves can excrete salt.");
+            paragraph = new Paragraph("The term 'mangrove' refers to a habitat comprised of salt-tolerant plants. Mangrove plants have a tangle of roots which are often exposed above water, leading to the nickname 'walking trees'. Their leaves can excrete salt.");
             paragraphLib.Add(paragraph);
 
             paragraph = new Paragraph("While the majority of coral reefs are found in tropical and sub-tropical water within the latitudes of 30 degrees north and 30 degrees south, there are also deep water corals in colder regions.");

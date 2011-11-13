@@ -111,9 +111,9 @@ namespace Poseidon
 
             if (currentLevel == 0)
             {
-                text = "Press 'Z' to clean trash & 'X' to drop seeds. Click on fish to heal them.";
+                text = "Press 'z' to clean trash & 'X' to drop seeds. Click on fish to heal them.";
                 text += "\nPoint on a fish and press 'CapsLock' to lock the curson on it.";
-                text += "\nEnvironement at the end of this level will effect the next level.";
+                text += "\nEnvironement at the end of a level effects the next level.";
             }
             else if (currentLevel == 1)
             {
@@ -123,7 +123,7 @@ namespace Poseidon
             }
             else if (currentLevel == 2)
             {
-                text = "Double click on a ship wreck to get into it.";
+                text = "Double click on a ship wreck to get into it. Press 'esc' to get out.";
                 text += "\nCleaning the environment and healing make the fish happy.";
                 text += "\nDrop seeds near the shipwreck so that you can eat health fruits when you come out of it.";
             }
@@ -148,7 +148,8 @@ namespace Poseidon
             }
             else if (currentLevel == 6)
             {
-                text = "Hercules's bow hurts a single enemy a lot. Read the writing on the paintings. They help you in the quiz.";
+                text = "Hercules's bow hurts a single enemy a lot.";
+                text += "\nRead the writing on the paintings. They help you in the quiz.";
                 text += "\nFruits can help a lot in battle.";
             }
             else if (currentLevel == 7)

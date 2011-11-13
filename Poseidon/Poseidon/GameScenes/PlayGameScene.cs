@@ -95,7 +95,7 @@ namespace Poseidon
         Rectangle tipIconRectangle;
 
         // Current game level
-        public static int currentLevel = 4;
+        public static int currentLevel = 0;
 
         HeightMapInfo heightMapInfo;
 

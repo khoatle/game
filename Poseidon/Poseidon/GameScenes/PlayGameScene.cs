@@ -92,7 +92,7 @@ namespace Poseidon
         Rectangle levelObjectiveIconRectangle;
 
         // Current game level
-        public static int currentLevel = 0;
+        public static int currentLevel = 4;
 
         HeightMapInfo heightMapInfo;
 
@@ -1702,7 +1702,7 @@ namespace Poseidon
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
             {
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width, menuSmall);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text,
                     new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Red);
             }

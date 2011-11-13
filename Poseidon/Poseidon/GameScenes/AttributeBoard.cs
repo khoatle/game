@@ -48,7 +48,7 @@ namespace Poseidon
         {
             this.Content = Content;
             Components.Add(new ImageComponent(game, background,
-                                            ImageComponent.DrawMode.Center));
+                                            ImageComponent.DrawMode.Stretch));
 
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)Game.Services.GetService(
@@ -135,10 +135,10 @@ namespace Poseidon
             int print_hitpoint = (int)Math.Round((HydroBot.maxHitPoint - GameConstants.PlayerStartingHP) / (double)GameConstants.gainHitPoint);
             int print_shootingRate = (int)Math.Round((HydroBot.shootingRate - GameConstants.MainCharShootingSpeed) / GameConstants.gainShootingRate);
             int print_strength = (int)Math.Round((HydroBot.strength - GameConstants.MainCharStrength) / GameConstants.gainStrength);
-            spriteBatch.DrawString(menuLarge, print_speed.ToString("F0"), new Vector2(speedIconRectangle.Center.X- menuLarge.MeasureString(print_speed.ToString()).X/2 ,speedIconRectangle.Center.Y), Color.Black);
-            spriteBatch.DrawString(menuLarge, print_hitpoint.ToString("F0"), new Vector2(hitpointIconRectangle.Center.X - menuLarge.MeasureString(print_hitpoint.ToString()).X / 2, hitpointIconRectangle.Center.Y), Color.Black);
-            spriteBatch.DrawString(menuLarge, print_shootingRate.ToString("F0"), new Vector2(shootrateIconRectangle.Center.X - menuLarge.MeasureString(print_shootingRate.ToString()).X / 2, shootrateIconRectangle.Center.Y), Color.Black);
-            spriteBatch.DrawString(menuLarge, print_strength.ToString("F0"), new Vector2(bulletStrengthIconRectangle.Center.X - menuLarge.MeasureString(print_strength.ToString()).X / 2, bulletStrengthIconRectangle.Center.Y), Color.Black);
+            spriteBatch.DrawString(menuLarge, print_speed.ToString("F0"), new Vector2(speedIconRectangle.Center.X- menuLarge.MeasureString(print_speed.ToString()).X/2 ,speedIconRectangle.Center.Y), Color.White);
+            spriteBatch.DrawString(menuLarge, print_hitpoint.ToString("F0"), new Vector2(hitpointIconRectangle.Center.X - menuLarge.MeasureString(print_hitpoint.ToString()).X / 2, hitpointIconRectangle.Center.Y), Color.White);
+            spriteBatch.DrawString(menuLarge, print_shootingRate.ToString("F0"), new Vector2(shootrateIconRectangle.Center.X - menuLarge.MeasureString(print_shootingRate.ToString()).X / 2, shootrateIconRectangle.Center.Y), Color.White);
+            spriteBatch.DrawString(menuLarge, print_strength.ToString("F0"), new Vector2(bulletStrengthIconRectangle.Center.X - menuLarge.MeasureString(print_strength.ToString()).X / 2, bulletStrengthIconRectangle.Center.Y), Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
         }

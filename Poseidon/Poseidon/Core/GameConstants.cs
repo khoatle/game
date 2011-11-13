@@ -96,7 +96,6 @@ namespace Poseidon {
         public static int[] FishInSchool =          {   0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0  };
         public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0  };
 
-
         //number of enemy and fish for ship wreck
         public const int ShipNumberShootingEnemies = 5;
         public const int ShipNumberCombatEnemies = 5;

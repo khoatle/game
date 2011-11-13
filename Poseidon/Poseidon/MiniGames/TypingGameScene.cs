@@ -217,6 +217,11 @@ namespace Poseidon.MiniGames
                 spriteBatch.Begin();
                 base.Draw(gameTime);
                 spriteBatch.DrawString(font, "You gain " + expAwarded + " experience from the written test!", new Vector2(trafficLightRed.Width + 10, 10), Color.Red);
+
+                string nextText = "Press ENTER to continue";
+                Vector2 nextTextPosition = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - font.MeasureString(nextText).X, game.GraphicsDevice.Viewport.TitleSafeArea.Bottom - font.MeasureString(nextText).Y);
+                spriteBatch.DrawString(font, nextText, nextTextPosition, Color.White);
+
                 spriteBatch.End();
 
                 return;

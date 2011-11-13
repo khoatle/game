@@ -272,6 +272,8 @@ namespace Poseidon
             firstPlant = true;
             prevPlantTime = 0;
             accumulatedHealthLossFromPoisson = 0;
+            PlayGameScene.points.Clear();
+            ShipWreckScene.points.Clear();
             if(PlayGameScene.currentLevel>0)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
             if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;

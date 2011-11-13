@@ -299,7 +299,7 @@ namespace Poseidon
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
             isBossKilled = false;
-            if (currentLevel == 11) HydroBot.bulletType = 0;
+            
             //User must find the key at every level
             firstShow = true;
             showFoundKey = false;
@@ -326,6 +326,8 @@ namespace Poseidon
                 hydroBot.SetLevelStartValues();
 
             hydroBot.Reset();
+            if (currentLevel == 11) HydroBot.bulletType = 0;
+
             gameCamera.Update(hydroBot.ForwardDirection,
                 hydroBot.Position, aspectRatio, gameTime);
 

@@ -167,6 +167,7 @@ namespace Poseidon
                 text = "Aphrodite's belt makes enemies turn against each other.";
                 text += "\nUse all your skills. Press 1-5.";
                 text += "\nShift + RightClick can also be used to switch skills.";
+                text += "\nYou are invincible near your \"base of plants\".";
             }
             else if (currentLevel == 10)
             {

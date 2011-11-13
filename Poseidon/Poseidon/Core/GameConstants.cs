@@ -88,7 +88,7 @@ namespace Poseidon {
         public const float BossPerceptionRadius = 100f;
         public const float FishSpeed = 0.45f;
         public const float EnemeyShootingRange = 50f;
-        public const float TerminatorShootingRange = 80f;
+        public const float TerminatorShootingRange = 110f;
 
         //general
         //number of trash, enemy and fish per level for main game

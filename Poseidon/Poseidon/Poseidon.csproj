@@ -123,6 +123,7 @@
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="Enemies\BaseEnemy.cs" />
+    <Compile Include="GameScenes\TipScene.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />
     <Compile Include="Miscellaneous\Bubble.cs" />
     <Compile Include="Core\CastSkill.cs" />

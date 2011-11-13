@@ -26,7 +26,7 @@ namespace Poseidon
         SpriteFont levelObjFont;
         Texture2D objectiveBox, achievedBox;
         Rectangle objectiveBoxRect, achievedBoxRect;
-        Vector2 objectiveStringPosition, achievedStringPostion, tipPosition;
+        Vector2 objectiveStringPosition, achievedStringPostion;
         private PlayGameScene playgamescene;
         Random random = new Random();
         /// <summary>
@@ -109,7 +109,6 @@ namespace Poseidon
             string level_description = "LEVEL "+ (currentLevel+1).ToString();
             string level_objective="";
             string achieved_status="";
-            string tip = "TIP --> ";
             spriteBatch.Begin();
             base.Draw(gameTime);
 
@@ -125,7 +124,6 @@ namespace Poseidon
                     achieved_status = "Now the environment bar is " + env_percent.ToString() + "%.";
                 else
                     achieved_status = "You achieved the target. Keep cleaning the environment for next level.";
-                tip += "The environment status at the end of a level will affect the next level"; 
             }
             else if (currentLevel == 1)
             {
@@ -133,7 +131,6 @@ namespace Poseidon
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
                 level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "There are " + fish_percent.ToString() + "% sea creatures remaining.";
-                tip += "It is much easier to aim and shoot while you hold 'ctrl'.";
             }
             else if (currentLevel == 2)
             {
@@ -141,19 +138,16 @@ namespace Poseidon
                 if (HydroBot.skills[3] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Cleaning the environment and helping the fish make the fish happy.";
                 }
                 else
                 {
                     achieved_status = "You found Hermes' Winged sandal.";
-                    tip += "Hermes's Winged sandal is really useful when you want to get away.";
                 }
             }
             else if (currentLevel == 3)
             {
                 level_objective = "Destroy the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Mutant shark is still lurking around.";
-                tip += "Don't just flee with the sandal. Make sure you hurt the mutant shark with it.";
             }
             else if (currentLevel == 4)
             {
@@ -161,7 +155,6 @@ namespace Poseidon
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
                 level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "There are " + shark_percent.ToString() + "% sharks remaining.";
-                tip += "Use your experience points (press I)."; 
             }
             else if (currentLevel == 5)
             {
@@ -169,12 +162,10 @@ namespace Poseidon
                 if (HydroBot.skills[0] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Fruits can help a lot in battle.";
                 }
                 else
                 {
                     achieved_status = "You found the Hercules' bow. Aim well and use it wisely.";
-                    tip += "Hercules's bow hurts a single enemy a lot.";
                 }
             }
             else if (currentLevel == 6)
@@ -183,12 +174,10 @@ namespace Poseidon
                 if (HydroBot.skills[1] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Read the writing on the paintings. They help you in the quiz.";
                 }
                 else
                 {
                     achieved_status = "You found Thor's hammer. Use it when surrounded by enemies.";
-                    tip += "Thor's hammer stuns and pushes enemies away.";
                 }
             }
             else if (currentLevel == 7)
@@ -197,12 +186,10 @@ namespace Poseidon
                 if (HydroBot.skills[2] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Fight smart, do not let the enemy touch you.";
                 }
                 else
                 {
                     achieved_status = "You found Achilles' armor. Use it when you feel helpless.";
-                    tip += "Achilles' armor makes you invincible for 5 seconds.";
                 }
             }
             else if (currentLevel == 8)
@@ -211,31 +198,26 @@ namespace Poseidon
                 if (HydroBot.skills[4] == false)
                 {
                     achieved_status = "Relic not found.";
-                    tip += "Remember what the fish says, for these would be used in the minigames.";
                 }
                 else
                 {
                     achieved_status = "You found Aphrodite's belt. Use it when there are too many enemies around.";
-                    tip += "Aphrodite's belt makes enemies turn against each other.";
                 }
             }
             else if (currentLevel == 9)
             {
                 level_objective = "Try to survive.";
                 achieved_status = "You have "+ (HydroBot.currentHitPoint/HydroBot.maxHitPoint*100).ToString()+ "% health remaining.";
-                tip += "Shift + RightClick can also be used to switch skills.";
             }
             else if (currentLevel == 10)
             {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
-                tip += "Shift+RightClick can also be used to switch skills.";
             }
             else if (currentLevel == 11)
             {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is still alive.";
-                tip += "Good Luck. You are almost there.";
             }
 
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
@@ -249,14 +231,10 @@ namespace Poseidon
             objectiveStringPosition = new Vector2(objectiveBoxRect.Center.X - levelObjFont.MeasureString(level_objective).X/2, objectiveBoxRect.Top + 100);
             achievedStringPostion = new Vector2(achievedBoxRect.Center.X - levelObjFont.MeasureString(achieved_status).X / 2, achievedBoxRect.Top + 100);
 
-            //tip = AddingObjects.wrapLine(tip, game.Window.ClientBounds.Width, levelObjFont);
-            //tipPosition = new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(tip).X / 2, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(tip).Y);
-
             spriteBatch.DrawString(levelObjFont, level_objective, objectiveStringPosition, Color.Blue);
 
             spriteBatch.DrawString(levelObjFont, achieved_status, achievedStringPostion, Color.Blue);
 
-            //spriteBatch.DrawString(levelObjFont, tip, tipPosition, Color.Black);
             string nextText = "Press Enter/esc to continue";
             Vector2 nextTextPosition = new Vector2(game.Window.ClientBounds.Right - levelObjFont.MeasureString(nextText).X, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(nextText).Y);
             spriteBatch.DrawString(levelObjFont, nextText, nextTextPosition, Color.Black);

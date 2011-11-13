@@ -91,6 +91,9 @@ namespace Poseidon
         protected Texture2D levelObjectiveIconTexture;
         Rectangle levelObjectiveIconRectangle;
 
+        protected Texture2D tipIconTexture;
+        Rectangle tipIconRectangle;
+
         // Current game level
         public static int currentLevel = 0;
 
@@ -249,6 +252,7 @@ namespace Poseidon
             }
 
             levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            tipIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
 
             foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
 
@@ -1417,6 +1421,7 @@ namespace Poseidon
             DrawRadar();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
+            DrawTipIcon();
             cursor.Draw(gameTime);
             spriteBatch.End();
         }
@@ -1624,9 +1629,35 @@ namespace Poseidon
 
         }
 
+        //Draw level tip icon
+        private void DrawTipIcon()
+        {
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = levelObjectiveIconRectangle.Center.X - 25;
+            yOffsetText = levelObjectiveIconRectangle.Bottom + 10;
+
+            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, 50, 50);
+
+            spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
+
+        }
+
         public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
         {
             if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+                return true;
+            else
+                return false;
+        }
+
+        public bool mouseOnTipIcon(MouseState lmouseState)
+        {
+            if ( tipIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
                 return true;
             else
                 return false;

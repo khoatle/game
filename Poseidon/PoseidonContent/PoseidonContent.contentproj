@@ -1385,8 +1385,29 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\Miscellaneous\tipIcon.png">
+      <Name>tipIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Image\Cutscenes\terminatorFace.png">
       <Name>terminatorFace</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\tip.spritefont">
+      <Name>tip</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Miscellaneous\tipBox.jpg">
+      <Name>tipBox</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

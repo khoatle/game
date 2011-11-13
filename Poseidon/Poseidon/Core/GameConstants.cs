@@ -79,7 +79,7 @@ namespace Poseidon {
         public const float EnemyShootingRate = 1.0f;
         public const float EnemySpeed = 0.3f;
         public const float EnemyShootingDistance = 15f;
-        public const float EnemyPerceptionRadius = 30f;
+        public const float EnemyPerceptionRadius = 50f;
         public const float BossPerceptionRadius = 100f;
         public const float FishSpeed = 0.45f;
 

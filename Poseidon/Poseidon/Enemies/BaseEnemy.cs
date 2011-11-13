@@ -37,7 +37,7 @@ namespace Poseidon
         public double stunnedStartTime;
 
         // Time stampt since the robot starts chasing
-        protected TimeSpan startChasingTime;
+        public TimeSpan startChasingTime;
         public TimeSpan prevFire;
         protected float timeBetweenFire;
 
@@ -54,6 +54,7 @@ namespace Poseidon
 
         public bool isHypnotise;
         protected TimeSpan startHypnotiseTime;
+        public bool justBeingShot = false;
 
         public virtual void Load(int clipStart, int clipEnd, int fps)
         {
@@ -114,6 +115,7 @@ namespace Poseidon
             {
                 currentHuntingTarget = null;
                 startChasingTime = gameTime.TotalGameTime;
+                justBeingShot = false;
                 return true;
             }
             return false;

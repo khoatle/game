@@ -58,13 +58,13 @@ namespace Poseidon
             if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
         }
@@ -79,15 +79,13 @@ namespace Poseidon
             else
             {
                 if (currentHuntingTarget != null
-                        && Vector3.Distance(Position, currentHuntingTarget.Position) < perceptionRadius)
-                {
+                        && Vector3.Distance(Position, currentHuntingTarget.Position) < perceptionRadius) {
                     return perceptID[2];
                 }
 
                 for (int i = 0; i < enemySize; i++)
                 {
-                    if (this != enemyList[i] && Vector3.Distance(Position, enemyList[i].Position) < perceptionRadius)
-                    {
+                    if (this != enemyList[i] && Vector3.Distance(Position, enemyList[i].Position) < perceptionRadius) {
                         currentHuntingTarget = enemyList[i];
                         return perceptID[3];
                     }
@@ -96,8 +94,16 @@ namespace Poseidon
             }
         }
 
-        protected void configAction(int perception, GameTime gameTime)
+        protected void configAction(HydroBot bot, int perception, GameTime gameTime)
         {
+            if (justBeingShot == true) {
+                configBits[0] = false;
+                configBits[1] = false;
+                configBits[2] = true;
+                configBits[3] = false;
+                currentHuntingTarget = bot;
+            }
+
             if (perception == perceptID[0])
             {
                 if (currentHuntingTarget != null && clearMind(gameTime) == false)
@@ -166,6 +172,7 @@ namespace Poseidon
                     if (tmp.health <= 0)
                     {
                         currentHuntingTarget = null;
+                        justBeingShot = false;
                         return;
                     }
                 }
@@ -176,6 +183,7 @@ namespace Poseidon
                     if (tmp.health <= 0)
                     {
                         currentHuntingTarget = null;
+                        justBeingShot = false;
                         return;
                     }
                 }

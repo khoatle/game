@@ -239,7 +239,7 @@ namespace Poseidon
         /// PROJECTILES FUNCTION
         /// </summary>
         /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, int scene) {
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, int scene, GameTime gameTime) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -256,6 +256,10 @@ namespace Poseidon
                             if (((BaseEnemy)barriers[j]).isHypnotise)
                             {
                                 return;
+                            }
+                            else {
+                                ((BaseEnemy)barriers[j]).justBeingShot = true;
+                                ((BaseEnemy)barriers[j]).startChasingTime = gameTime.TotalGameTime;
                             }
                         }
 
@@ -279,7 +283,6 @@ namespace Poseidon
             }
         }
 
-        // It has "BUG" at "EnemyHP", I know it.
         public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size, BoundingFrustum cameraFrustum) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {

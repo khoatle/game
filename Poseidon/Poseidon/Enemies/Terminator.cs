@@ -92,13 +92,13 @@ namespace Poseidon
             if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, hydroBot, cameraFrustum, gameTime);
             }
         }
@@ -187,13 +187,13 @@ namespace Poseidon
             {
                 startChasingTime = gameTime.TotalGameTime;
 
-                
                 if (currentHuntingTarget is BaseEnemy)
                 {
                     BaseEnemy tmp = (BaseEnemy)currentHuntingTarget;
                     if (tmp.health <= 0)
                     {
                         currentHuntingTarget = null;
+                        justBeingShot = false;
                         return;
                     }
                 }
@@ -204,6 +204,7 @@ namespace Poseidon
                     if (tmp.health <= 0)
                     {
                         currentHuntingTarget = null;
+                        justBeingShot = false;
                     }
                 }
                 if (enragedMode == true)

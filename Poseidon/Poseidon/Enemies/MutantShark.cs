@@ -85,13 +85,13 @@ namespace Poseidon
             if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
             }
         }

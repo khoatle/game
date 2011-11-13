@@ -56,8 +56,16 @@ namespace Poseidon
             }
         }
 
-        protected void configAction(int perception, GameTime gameTime)
+        protected void configAction(HydroBot bot, int perception, GameTime gameTime)
         {
+            if (justBeingShot == true) {
+                configBits[0] = false;
+                configBits[1] = false;
+                configBits[2] = true;
+                configBits[3] = false;
+                currentHuntingTarget = bot;
+            }
+
             if (perception == perceptID[0])
             {
                 if (currentHuntingTarget != null && clearMind(gameTime) == false)
@@ -161,13 +169,13 @@ namespace Poseidon
             if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
-                configAction(perceptionID, gameTime);
+                configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, alliesBullets, hydroBot, cameraFrustum, gameTime);
             }
         }

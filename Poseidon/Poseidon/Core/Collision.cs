@@ -252,6 +252,9 @@ namespace Poseidon
                             {
                                 return;
                             }
+                            else {
+                                ((BaseEnemy)barriers[j]).justBeingShot = true;
+                            }
                         }
 
                         barriers[j].health -= bullets[i].damage;
@@ -274,7 +277,6 @@ namespace Poseidon
             }
         }
 
-        // It has "BUG" at "EnemyHP", I know it.
         public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size, BoundingFrustum cameraFrustum) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {

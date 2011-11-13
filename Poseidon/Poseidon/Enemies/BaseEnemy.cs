@@ -54,6 +54,7 @@ namespace Poseidon
 
         public bool isHypnotise;
         protected TimeSpan startHypnotiseTime;
+        public bool justBeingShot = false;
 
         public virtual void Load(int clipStart, int clipEnd, int fps)
         {

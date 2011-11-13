@@ -187,7 +187,7 @@ namespace Poseidon
 
             tipStringPosition = new Vector2(tipBoxRect.Center.X - tipFont.MeasureString(text).X / 2, tipBoxRect.Center.Y - tipFont.MeasureString(text).Y/2);
 
-            spriteBatch.DrawString(tipFont, text, tipStringPosition, Color.LawnGreen);
+            spriteBatch.DrawString(tipFont, text, tipStringPosition, Color.Black);
 
             string nextText = "Press Enter/esc to continue";
             Vector2 nextTextPosition = new Vector2(game.Window.ClientBounds.Right - tipFont.MeasureString(nextText).X, game.Window.ClientBounds.Bottom - tipFont.MeasureString(nextText).Y);

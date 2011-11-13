@@ -37,7 +37,7 @@ namespace Poseidon
         public double stunnedStartTime;
 
         // Time stampt since the robot starts chasing
-        protected TimeSpan startChasingTime;
+        public TimeSpan startChasingTime;
         public TimeSpan prevFire;
         protected float timeBetweenFire;
 
@@ -91,7 +91,7 @@ namespace Poseidon
             health = GameConstants.DefaultEnemyHP;
             speed = GameConstants.EnemySpeed;
             damage = GameConstants.DefaultEnemyDamage;
-            experienceReward = 60;
+            basicExperienceReward = 60;
         }
 
         public void setHypnotise(GameTime gameTime)
@@ -115,6 +115,7 @@ namespace Poseidon
             {
                 currentHuntingTarget = null;
                 startChasingTime = gameTime.TotalGameTime;
+                justBeingShot = false;
                 return true;
             }
             return false;

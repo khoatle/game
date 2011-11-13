@@ -93,7 +93,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -308,7 +308,7 @@ namespace Poseidon
                 //each right answer give 5% environment boost
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
                 if (HydroBot.currentEnvPoint >= HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
-                HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 20;
+                HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 50;
                 playGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
             }

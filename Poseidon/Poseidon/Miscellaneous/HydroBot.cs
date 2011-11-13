@@ -98,7 +98,7 @@ namespace Poseidon
         public int MaxRangeZ;
 
         public static bool isPoissoned;
-        public static float healthBeforePoisson;
+        public static float accumulatedHealthLossFromPoisson;
         public static float maxHPLossFromPoisson;
         public static float poissonInterval;
 
@@ -145,8 +145,8 @@ namespace Poseidon
 
             isPoissoned = false;
             poissonInterval = 0;
-            maxHPLossFromPoisson = 100;
-            healthBeforePoisson = currentHitPoint;
+            maxHPLossFromPoisson = 50;
+            accumulatedHealthLossFromPoisson = 0;
         }
 
         /// <summary>
@@ -177,7 +177,7 @@ namespace Poseidon
                 firstUse[index] = true;
                 skillPrevUsed[index] = 0;
             }
-            activeSkillID = 1;
+
             invincibleMode = false;
             supersonicMode = false;
             //just for testing
@@ -224,9 +224,6 @@ namespace Poseidon
             level = lsLevel;
             unassignedPts = lsUnassignedPts;
 
-            poissonInterval = 0;
-            maxHPLossFromPoisson = 50;
-            healthBeforePoisson = currentHitPoint;
         }
 
         public void SetLevelStartValues()
@@ -274,29 +271,36 @@ namespace Poseidon
             isPoissoned = false;
             firstPlant = true;
             prevPlantTime = 0;
+            accumulatedHealthLossFromPoisson = 0;
             if(PlayGameScene.currentLevel>0)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
-            if (currentEnvPoint < 100) currentEnvPoint = 100; // Player must have at least 10% env at start.
+            if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
         }
 
 
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo, int scene) //scene- 1playgame 2shipwreck
         {
             if (isPoissoned == true) {
-                if (healthBeforePoisson - currentHitPoint <= maxHPLossFromPoisson) {
+                if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
                     currentHitPoint -= 0.1f;
+                    accumulatedHealthLossFromPoisson += 0.1f;
 
                     ////display HP loss
-                    //Point point = new Point();
-                    //String point_string = "-0.1HP(Poison)";
-                    //point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
-                    //if (scene == 2)
-                    //    ShipWreckScene.points.Add(point);
-                    //else
-                    //    PlayGameScene.points.Add(point);
+                    //if (accumulatedHealthLossFromPoisson > 10)
+                    //{
+                    //    Point point = new Point();
+                    //    String point_string = "-10HP";
+                    //    point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
+                    //    if (scene == 2)
+                    //        ShipWreckScene.points.Add(point);
+                    //    else
+                    //        PlayGameScene.points.Add(point);
+                    //}
                 }
                 else {
                     isPoissoned = false;
+                    accumulatedHealthLossFromPoisson = 0;
+
                     Point point = new Point();
                     String point_string = "Poison Free";
                     point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
@@ -311,7 +315,7 @@ namespace Poseidon
                 //increaseBy = (int)(increaseBy * 1.25);
                 //nextLevelExperience += increaseBy;
                 currentExperiencePts -= nextLevelExperience;
-                nextLevelExperience += (int)(nextLevelExperience/4);
+                nextLevelExperience += (int)(nextLevelExperience/5);
                 //strength *= 1.15f;
                 //maxHitPoint = (int)(maxHitPoint * 1.10f);
                 //currentHitPoint = maxHitPoint;
@@ -364,18 +368,18 @@ namespace Poseidon
                     }
                 }
             }
-            float turnAmount = 0;
-            if (keyboardState.IsKeyDown(Keys.A))
-            {
-                turnAmount = 1;
-            }
-            else if (keyboardState.IsKeyDown(Keys.D))
-            {
-                turnAmount = -1;
-            }
-            // Player has speed buff from both temporary powerups and his speed attritubte
+            //float turnAmount = 0;
+            //if (keyboardState.IsKeyDown(Keys.A))
+            //{
+            //    turnAmount = 1;
+            //}
+            //else if (keyboardState.IsKeyDown(Keys.D))
+            //{
+            //    turnAmount = -1;
+            //}
+            //// Player has speed buff from both temporary powerups and his speed attritubte
             
-            ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * speed;
+            //ForwardDirection += turnAmount * GameConstants.TurnSpeed * speedUp * speed;
             //ForwardDirection = WrapAngle(ForwardDirection);
             Vector3 movement = Vector3.Zero;
 
@@ -429,14 +433,14 @@ namespace Poseidon
             
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
 
-            if (keyboardState.IsKeyDown(Keys.W))
-            {
-                movement.Z = 1;
-            }
-            else if (keyboardState.IsKeyDown(Keys.S))
-            {
-                movement.Z = -1;
-            }
+            //if (keyboardState.IsKeyDown(Keys.W))
+            //{
+            //    movement.Z = 1;
+            //}
+            //else if (keyboardState.IsKeyDown(Keys.S))
+            //{
+            //    movement.Z = -1;
+            //}
             //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speedl = Vector3.Transform(movement, orientationMatrix);
             speedl *= GameConstants.MainCharVelocity * speedUp * speed;
@@ -586,9 +590,7 @@ namespace Poseidon
                     {
                         effect.DiffuseColor = Color.Gold.ToVector3();
                     }
-                    else effect.DiffuseColor = Vector3.One;
-
-                    if (isPoissoned == true) {
+                    else if (isPoissoned == true) {
                         effect.DiffuseColor = Color.Green.ToVector3();
                     }
                     else {

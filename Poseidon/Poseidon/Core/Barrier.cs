@@ -20,10 +20,10 @@ namespace Poseidon
         public string Name = "Swimming Object";
         // Is the object stucked and needs to change direction?
         public bool stucked = false;
-        public float healthBeforePoisson;
+        public float accumulatedHealthLossFromPoison;
         public float maxHPLossFromPoisson;
         public float poissonInterval;
-        public int experienceReward;
+        public int basicExperienceReward;
 
         // is this enemy a big boss
         // in order to know whether the big boss is killed
@@ -38,11 +38,11 @@ namespace Poseidon
             BarrierType = null;
             ForwardDirection = 0.0f;
             //MaxRange = GameConstants.MaxRange;
-            experienceReward = 20;
+            basicExperienceReward = 20;
             isPoissoned = false;
             poissonInterval = 0;
-            maxHPLossFromPoisson = 100;
-            healthBeforePoisson = health;
+            maxHPLossFromPoisson = 50;
+            accumulatedHealthLossFromPoison = 0;
         }
 
         public virtual void LoadContent(ContentManager content, string modelName)

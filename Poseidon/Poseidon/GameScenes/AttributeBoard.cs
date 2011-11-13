@@ -60,6 +60,7 @@ namespace Poseidon
 
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
+            cursor.targetToLock = null;
             //Components.Add(cursor);
 
             UnassignedPtsBar = Content.Load<Texture2D>("Image/AttributeBoardTextures/UnassignedPtsBar");
@@ -101,7 +102,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             // play the boss fight music for certain levels
-            if (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 10)
+            if (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 11)
             {
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
                 {
@@ -112,7 +113,7 @@ namespace Poseidon
             {
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
             }
-            cursor.Update(gameTime);
+            cursor.Update(PlayGameScene.GraphicDevice, PlayGameScene.gameCamera, gameTime, null);
             base.Update(gameTime);
         }
 

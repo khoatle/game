@@ -74,7 +74,7 @@ namespace Poseidon
         // The main character at the beginning of this level
         // Used for restarting the level
         //bot prevbot;
-        private TimeSpan fireTime;
+        //private TimeSpan fireTime;
         private TimeSpan prevFireTime;
 
         // Game is paused?
@@ -171,7 +171,7 @@ namespace Poseidon
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
             
-            fireTime = TimeSpan.FromSeconds(0.3f);
+            //fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
@@ -290,11 +290,12 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            cursor.targetToLock = null;
             MediaPlayer.Stop();
             roundTime = GameConstants.RoundTime[currentLevel];
             roundTimer = roundTime;
             isBossKilled = false;
-
+            if (currentLevel == 11) HydroBot.bulletType = 0;
             //User must find the key at every level
             firstShow = true;
             showFoundKey = false;
@@ -493,7 +494,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             // play the boss fight music for certain levels
-            if (currentLevel == 3 || currentLevel == 10)
+            if (currentLevel == 3 || currentLevel == 11)
             {
 
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
@@ -533,7 +534,7 @@ namespace Poseidon
                         if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count)
                         {
                             currentGameState = GameState.Running;
-                            if (currentLevel == 11) currentGameState = GameState.GameComplete;
+                            if (currentLevel == 12) currentGameState = GameState.GameComplete;
                         }
                     }
                 }
@@ -745,7 +746,7 @@ namespace Poseidon
                         {
                             pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                             hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
-                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                             {
                                 prevFireTime = gameTime.TotalGameTime;
                                 //audio.Shooting.Play();
@@ -754,11 +755,11 @@ namespace Poseidon
                                 if (!hydroBot.clipPlayer.inRange(61, 90))
                                     hydroBot.clipPlayer.switchRange(61, 90);
                             }
-                            hydroBot.reachDestination = true;
+                            //hydroBot.reachDestination = true;
                         }
                         pointIntersect = Vector3.Zero;
+                        hydroBot.reachDestination = true;
                     }
-
                     //if the user clicks or holds mouse's left button
                     else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
                     {
@@ -766,6 +767,7 @@ namespace Poseidon
                         if (!hydroBot.clipPlayer.inRange(1, 30))
                             hydroBot.clipPlayer.switchRange(1, 30);
                     }
+                   
                     else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
                     {
                         pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
@@ -778,7 +780,7 @@ namespace Poseidon
                         else
                         {
                             //if the enemy is in the shooting range then shoot it w/o moving to it
-                            if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                            if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                             {
                                 hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                                 prevFireTime = gameTime.TotalGameTime;
@@ -794,6 +796,66 @@ namespace Poseidon
                             if (doubleClicked == true) pointIntersect = Vector3.Zero;
                         }
                     }
+
+                    //if the user holds down Caps Lock button
+                    //lock the target inside shooting range
+                    if (currentKeyboardState.IsKeyUp(Keys.CapsLock) && lastKeyboardState.IsKeyDown(Keys.CapsLock))
+                    {
+                        if (cursor.targetToLock == null)
+                        {
+
+                            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+                            if (fishPointedAt != null && cursor.targetToLock == null)
+                            {
+                                cursor.targetToLock = fishPointedAt;
+                            }
+                            else
+                            {
+                                BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+                                if (enemyPointedAt != null && cursor.targetToLock == null)
+                                    cursor.targetToLock = enemyPointedAt;
+                            }             
+                        }
+                        else cursor.targetToLock = null;
+                        //if (cursor.targetToLock != null)
+                        //{
+                        //    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                        //    hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
+                        //    if (CursorManager.InShootingRange(hydroBot, cursor, gameCamera, GameConstants.MainGameFloatHeight))
+                        //    {
+                        //        if (currentMouseState.LeftButton == ButtonState.Pressed)
+                        //        {
+                        //            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                        //            hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
+                        //            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                        //            {
+                        //                prevFireTime = gameTime.TotalGameTime;
+                        //                //audio.Shooting.Play();
+                        //                if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
+                        //                else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
+                        //                if (!hydroBot.clipPlayer.inRange(61, 90))
+                        //                    hydroBot.clipPlayer.switchRange(61, 90);
+                        //            }
+                        //            //hydroBot.reachDestination = true;
+                        //        }
+                        //        pointIntersect = Vector3.Zero;
+                        //        hydroBot.reachDestination = true;
+                        //    }
+                        //    else
+                        //    {
+                        //        if (!hydroBot.clipPlayer.inRange(1, 30))
+                        //            hydroBot.clipPlayer.switchRange(1, 30);
+                        //    }
+                        //}
+                    }
+                    // if the user releases Caps Lock
+                    // disable locking
+                    //else if (currentKeyboardState.IsKeyUp(Keys.CapsLock) && lastKeyboardState.IsKeyDown(Keys.CapsLock))
+                    //{
+                    //    cursor.targetToLock = null;
+                    //    hydroBot.reachDestination = true;
+                    //}
+                    
                     //let the user change active skill/bullet too when he presses on number
                     //this is better for fast action
                     InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, hydroBot);
@@ -874,19 +936,19 @@ namespace Poseidon
                     }
                     
                     // Are we shooting?
-                    if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
-                        && currentKeyboardState.IsKeyDown(Keys.L)
-                        && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > fireTime.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
-                    //||
-                    //( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
-                    {
-                        prevFireTime = gameTime.TotalGameTime;
-                        //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
-                        if (!hydroBot.clipPlayer.inRange(61, 90))
-                            hydroBot.clipPlayer.switchRange(61, 90);
-                    }
+                    //if (!(lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift))
+                    //    && currentKeyboardState.IsKeyDown(Keys.L)
+                    //    && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                    ////||
+                    ////( (MouseOnEnemy()||MouseOnFish()) && lastMouseState.LeftButton==ButtonState.Pressed && currentMouseState.LeftButton==ButtonState.Released && InShootingRange())
+                    //{
+                    //    prevFireTime = gameTime.TotalGameTime;
+                    //    //audio.Shooting.Play();
+                    //    if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
+                    //    else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
+                    //    if (!hydroBot.clipPlayer.inRange(61, 90))
+                    //        hydroBot.clipPlayer.switchRange(61, 90);
+                    //}
 
 
                     //Are we planting trees?
@@ -962,14 +1024,14 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, 1);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, 1, gameTime);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, 1);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, 1, gameTime);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, 1);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 1);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 1, gameTime);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 1);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 1);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 1, cursor);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 1, cursor);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -1009,7 +1071,7 @@ namespace Poseidon
                     m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
 
                     //cursor update
-                    cursor.Update(gameTime);
+                    cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
                     //update the school of fish
                     schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
@@ -1025,8 +1087,8 @@ namespace Poseidon
                         (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
-                        //the player should always lose in level 9
-                        if (currentLevel == 9)
+                        //the player should always lose in level 10
+                        if (currentLevel == 10)
                         {
                             currentLevel++;
                         }
@@ -1041,7 +1103,7 @@ namespace Poseidon
                         currentGamePadState.Buttons.Start == ButtonState.Pressed)
                     {
                         currentLevel++;
-                        if (currentLevel < 10)
+                        if (currentLevel < 11)
                             currentGameState = GameState.ToMiniGame;
                         //play the last cutscene if the game has been completed
                         else
@@ -1611,8 +1673,8 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Poseidon speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
@@ -1632,15 +1694,17 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text,
                     new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
             {
                 //draw what is said
-                spriteBatch.DrawString(menuSmall, cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width, menuSmall);
+                spriteBatch.DrawString(menuSmall, text,
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Red);
             }
             //float xOffsetText, yOffsetText;
             //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;

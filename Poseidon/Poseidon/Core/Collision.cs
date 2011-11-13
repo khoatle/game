@@ -27,18 +27,18 @@ namespace Poseidon
         }
 
         /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, int scene) {
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, int scene, Cursor cursor) {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
 
                     if (objs[i] is BaseEnemy) {
-                        HydroBot.currentExperiencePts += objs[i].experienceReward;
+                        HydroBot.currentExperiencePts += objs[i].basicExperienceReward;
                         
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))
                         {
                             Point point = new Point();
-                            String point_string = "+" + objs[i].experienceReward.ToString() + "EXP";
+                            String point_string = "+" + objs[i].basicExperienceReward.ToString() + "EXP";
                             point.LoadContent(PlayGameScene.Content, point_string, objs[i].Position, Color.LawnGreen);
                             if(scene == 2)
                                 ShipWreckScene.points.Add(point);
@@ -71,10 +71,15 @@ namespace Poseidon
                             PlayGameScene.points.Add(point);
                         }
                     }
-
+                    if (objs[i] == cursor.targetToLock)
+                    {
+                        cursor.targetToLock = null;
+                        objs[i] = null;
+                    }
                     for (int k = i; k < size-1; k++) {
                         objs[k] = objs[k+1];
                     }
+  
                     objs[--size] = null;
                 }
             }
@@ -234,7 +239,7 @@ namespace Poseidon
         /// PROJECTILES FUNCTION
         /// </summary>
         /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, int scene) {
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, int scene, GameTime gameTime) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -254,6 +259,7 @@ namespace Poseidon
                             }
                             else {
                                 ((BaseEnemy)barriers[j]).justBeingShot = true;
+                                ((BaseEnemy)barriers[j]).startChasingTime = gameTime.TotalGameTime;
                             }
                         }
 
@@ -287,14 +293,19 @@ namespace Poseidon
                     {
                         if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalHappy.Play();
+
                         if (barriers[j].health < GameConstants.DefaultEnemyHP ) {
                             barriers[j].health += bullets[i].healthAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
-                            HydroBot.currentExperiencePts += barriers[j].experienceReward;
-                            HydroBot.currentEnvPoint += GameConstants.envGainForHealingFish;
+
+                            int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * barriers[j].basicExperienceReward);
+                            int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
+
+                            HydroBot.currentExperiencePts += barriers[j].basicExperienceReward;
+                            HydroBot.currentEnvPoint += GameConstants.BasicEnvGainForHealingFish;
 
                             Point point = new Point();
-                            String point_string = "+" + GameConstants.envGainForHealingFish.ToString() + "ENV\n+"+barriers[j].experienceReward.ToString()+"EXP";
+                            String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
                             point.LoadContent(PlayGameScene.Content, point_string , barriers[j].Position, Color.LawnGreen);
                             PlayGameScene.points.Add(point); // fish is only in playgame scene
                         }

@@ -14,12 +14,12 @@ namespace Poseidon
 {
     class CursorManager
     {
-        public static bool InShootingRange(HydroBot tank, Cursor cursor, Camera gameCamera, float planeHeight)
+        public static bool InShootingRange(HydroBot hydroBot, Cursor cursor, Camera gameCamera, float planeHeight)
         {
             Vector3 pointIntersect = IntersectPointWithPlane(cursor, gameCamera, planeHeight);
-            Vector3 mouseDif = pointIntersect - tank.Position;
+            Vector3 mouseDif = pointIntersect - hydroBot.Position;
             float distanceFromTank = mouseDif.Length();
-            if (distanceFromTank < GameConstants.shootingRange)
+            if (distanceFromTank < GameConstants.BotShootingRange)
                 return true;
             else
                 return false;

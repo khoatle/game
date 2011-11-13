@@ -11,7 +11,7 @@ namespace Poseidon
         // Who speaks this sentence
         // 0: cyborg
         // 1: Poseidon
-        // 2: bad guy
+        // 2: terminator
         // 3: narrator (no face displayed, just words)
         public int speakerID;
         public string sentence;
@@ -42,7 +42,16 @@ namespace Poseidon
             int currentLevel = PlayGameScene.currentLevel;
             // For scene 0
             List<Sentence> cutScene = new List<Sentence>();
-            Sentence sentence = new Sentence(3, "Sample cutscene that introduces the storyline. To be completed in future.", "Image/Cutscenes/blackScreen", 0);
+            Sentence sentence;
+            //sentence = new Sentence(3, "Sample cutscene that introduces the storyline. To be completed in future.", "Image/Cutscenes/blackScreen", 0);
+            //cutScene.Add(sentence);
+            sentence = new Sentence(3, "Not every story ends happily ...", "Image/Cutscenes/blackScreen", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "So is the story of our hydrobot ...", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "... Sorry everyone, I could not do it ...", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "The story begins around 2 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Year 2100 ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
@@ -63,7 +72,7 @@ namespace Poseidon
             sentence = new Sentence(3, "With the world's hope resting on his shoulders, the first-ever Hydrobot is deployed to the ocean. ",
                 "Image/Cutscenes/Robot Creation", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "<Level objective can be viewed by clicking on the icon on top right corner of the screen>", "Image/Cutscenes/blackScreen", 0);
+            sentence = new Sentence(3, "His first mission is to improve the polluted sea environment at Gulf of Mexico ", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
            
             cutScenes.Add(cutScene);
@@ -76,9 +85,9 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Hope and death seemed all but certain.", "Image/Cutscenes/Robot Shot", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Luckily he is not alone ...", "Image/Cutscenes/Robot Whirlpool", 0);
+            sentence = new Sentence(3, "Luckily he is not alone ... a whirlpool suddenly appears and takes him away", "Image/Cutscenes/Robot Whirlpool", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Luckily he is not alone ...", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(3, "Luckily he is not alone ... a whirlpool suddenly appears and takes him away", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             //more work needed on this part
             sentence = new Sentence(0, "Wow ... what have just happened? I thought I was going to die there ...", "Image/Cutscenes/backgroundDialog", 0);
@@ -164,6 +173,14 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "They are currently capturing the sharks as we talk. Your mission is to go there and save at least " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% of the sharks during " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
+            sentence = new Sentence(0, "I got it.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(2, "Oh, a little robot, I heard that you have been interfering with our business.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "I am a hydrobot, not a robot, and I will stop you from doing bad things to the ocean!", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(2, "Hm, how confident. A small tip, do not let me catch you, bot.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
 
@@ -229,10 +246,20 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "The Terminator should be close, be careful, do not underestimate his strength.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
+            sentence = new Sentence(2, "You dare to come here? I really underestimated your bravery.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "And do not underestimate my strength too. I will defeat you once and for all. And you will have to come to our class everyday, learning how to save the ocean!", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(2, "Ho ho ho, let's see how well you do.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 11
             cutScene = new List<Sentence>();
+            sentence = new Sentence(2, "Is that all you have got? Be ready to be exterminated now, bot!", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "... Sorry everyone, I could not do it ...", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
             sentence = new Sentence(3, "A whirlpool appears again and saves our Hydrobot right at the moment ... ", "Image/Cutscenes/Robot Whirlpool", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "And Poseidon appears ...", "Image/Cutscenes/Robot Poseidon", 0);
@@ -247,7 +274,10 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Our hope rests on your shoulder, bot.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            //some talking with the Terminator here
+            sentence = new Sentence(2, "Oh you are back, I thought you ran for your life, you weakling.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Let's see who will have to run this time!", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 12

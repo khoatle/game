@@ -23,6 +23,7 @@ namespace Poseidon
             shortDistance = GameConstants.EnemyShootingDistance;
             isHypnotise = false;
             timeBetweenFire = GameConstants.EnemyShootingRate;
+            damage = GameConstants.EnemyShootingDamage;
         }
 
         // Return the perceptID correspondingly
@@ -141,9 +142,9 @@ namespace Poseidon
                     }
                 }
 
-                if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.EnemeyShootingRange)
                 {
-                    AddingObjects.placeEnemyBullet(this, GameConstants.DefaultEnemyDamage, bullets, 0, cameraFrustum, 0);
+                    AddingObjects.placeEnemyBullet(this, damage, bullets, 0, cameraFrustum, 0);
                     prevFire = gameTime.TotalGameTime;
                 }
             }

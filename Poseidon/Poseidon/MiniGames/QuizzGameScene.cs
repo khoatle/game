@@ -179,7 +179,8 @@ namespace Poseidon.MiniGames
             {
                 if (clicked && nextButtonRect.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                 {
-                    questionID = random.Next(quizzesLibrary.quizzesList.Count);
+                    if (questionAnswered < 4)
+                        questionID = random.Next(quizzesLibrary.quizzesList.Count);
                     clicked = false;
                     if (questionAnswered < 4) questionAnswered++;
                     displayRightWrongAnswer = false;

@@ -19,7 +19,12 @@ namespace Poseidon
             if (mainGame)
                 enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
                     + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel];
-            else enemiesAmount = GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies;
+            else
+            {
+                if (PlayGameScene.currentLevel >= 4)
+                    enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
+                else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+            }
             int numShootingEnemies;
             int numCombatEnemies;
             int numMutantShark = 0;
@@ -33,8 +38,16 @@ namespace Poseidon
             }
             else
             {
-                numShootingEnemies = GameConstants.ShipNumberShootingEnemies;
-                numCombatEnemies = GameConstants.ShipNumberCombatEnemies;
+                if (PlayGameScene.currentLevel >= 4)
+                {
+                    numShootingEnemies = GameConstants.ShipHighNumberShootingEnemies;
+                    numCombatEnemies = GameConstants.ShipHighNumberCombatEnemies;
+                }
+                else
+                {
+                    numShootingEnemies = GameConstants.ShipLowNumberShootingEnemies;
+                    numCombatEnemies = GameConstants.ShipLowNumberCombatEnemies;
+                }
             }
             Random rnd = new Random();
             for (int i = 0; i < enemiesAmount; i++) {

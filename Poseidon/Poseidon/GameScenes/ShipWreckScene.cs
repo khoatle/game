@@ -128,7 +128,10 @@ namespace Poseidon
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
             //fireTime = TimeSpan.FromSeconds(0.3f);
-            enemies = new BaseEnemy[GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies];
+            if (PlayGameScene.currentLevel >= 4)
+                enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
+            else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+            enemies = new BaseEnemy[enemiesAmount];
             fish = new Fish[GameConstants.ShipNumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -273,8 +276,10 @@ namespace Poseidon
                 else treasureChests[index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }
-            enemiesAmount = 0;
-            enemies = new BaseEnemy[GameConstants.ShipNumberShootingEnemies + GameConstants.ShipNumberCombatEnemies];
+            if (PlayGameScene.currentLevel >= 4)
+                enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
+            else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+            enemies = new BaseEnemy[enemiesAmount];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
                 GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,

@@ -21,11 +21,12 @@ namespace Poseidon {
         public const float BasicStartSpeed = 1f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
-        public const float MainCharShootingSpeed = 0.7f;
-        public const int MainCharLevelOneExp = 275;
+        public const float MainCharShootingSpeed = 1.0f;
+        public const int MainCharLevelOneExp = 250;
         public const float MainCharStrength = 1.0f;
         public const int PlayerStartingHP = 250;
-        public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.3f);
+        public const float BotShootingRange = 70.0f;
+        public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.6f);
 
 
         //experience reward
@@ -69,9 +70,13 @@ namespace Poseidon {
         //environment threshold for having key to treasure chest
         public const float EnvThresholdForKey = 0.75f;
 
-        // Bullet const
+        // Enemy damage
         public const int DefaultBulletDamage = 10;
-        public const int DefaultEnemyDamage = 5;
+        public const int DefaultEnemyDamage = 10;
+        public const int EnemyShootingDamage = 7;
+        public const int CombatEnemeyDamage = 15;
+        public const int MutantSharkBitingDamage = 25;
+        public const int TerminatorShootingDamage = 25;
         public const int ChasingBulletDamage = 80;
         public const int StopBulletChasing = 3;
 
@@ -79,26 +84,30 @@ namespace Poseidon {
         public const float EnemyShootingRate = 1.0f;
         public const float EnemySpeed = 0.3f;
         public const float EnemyShootingDistance = 15f;
-        public const float EnemyPerceptionRadius = 50f;
+        public const float EnemyPerceptionRadius = 40f;
         public const float BossPerceptionRadius = 100f;
         public const float FishSpeed = 0.45f;
+        public const float EnemeyShootingRange = 50f;
+        public const float TerminatorShootingRange = 80f;
 
         //general
         //number of trash, enemy and fish per level for main game
         public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        public static int[] NumberShootingEnemies = {  10,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
+        public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
         public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-        public static int[] NumberFish =            {   0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        public static int[] NumberMutantShark =     {   5,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
+        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
-        public static int[] FishInSchool =          {   0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
 
 
         //number of enemy and fish for ship wreck
-        public const int ShipNumberShootingEnemies = 5;
-        public const int ShipNumberCombatEnemies = 5;
+        public const int ShipHighNumberShootingEnemies = 5;
+        public const int ShipHighNumberCombatEnemies = 5;
+        public const int ShipLowNumberShootingEnemies = 2;
+        public const int ShipLowNumberCombatEnemies = 2;
         public const int ShipNumberFish = 0;
         public const int NumberChests = 10;
         public const int NumStaticObjectsMain = 0;
@@ -158,8 +167,6 @@ namespace Poseidon {
         //milisecond delay for double click
         public const double clickTimerDelay = 250;
 
-        //shooting range
-        public const float shootingRange = 70.0f;
 
         //skills specifications
         public const float coolDownForHerculesBow = 10;
@@ -198,8 +205,8 @@ namespace Poseidon {
 
         //attributes
         public static int gainAttributeCost = 1;
-        public static float gainSpeed = 0.07f;
-        public static float gainShootingRate = 0.05f;
+        public static float gainSpeed = 0.06f;
+        public static float gainShootingRate = 0.06f;
         public static float gainStrength = 0.065f;
         public static int gainHitPoint = 20;
 

@@ -221,9 +221,9 @@ namespace Poseidon
             }
             else if (currentLevel == 9)
             {
-                level_objective = "Don't die.";
+                level_objective = "Try to survive.";
                 achieved_status = "You have "+ (HydroBot.currentHitPoint/HydroBot.maxHitPoint*100).ToString()+ "% health remaining.";
-                tip += "Shift+RightClick can also be used to switch skills.";
+                tip += "Shift + RightClick can also be used to switch skills.";
             }
             else if (currentLevel == 10)
             {

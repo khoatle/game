@@ -80,21 +80,42 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Luckily he is not alone ...", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Who are you?", "Image/Cutscenes/backgroundDialog", 0);
+            //more work needed on this part
+            sentence = new Sentence(0, "Wow ... what have just happened? I thought I was going to die there ...", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "People call me Poseidon.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "Not yet, the world still needs you, bot.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Thank you for saving my life.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Wow! An old man? In the middle of the sea? Who might you be?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "The sea is in grave danger. I am glad you are here.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "People call me Poseidon, I am the ruler of the sea.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "I want to help. I have the power to clean the ocean and heal the sea animals!", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Wow, Poseidon ... I thought you only exists in the myth. Thank you for saving my life.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "I will send you near the coast of COSTA RICA. There are many divers hunting the sea creatures. I will give you the power to shoot a special bullet, after the hunters are defeated, they will be teleported to me and we will try to educate them.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "It was my pleasure, and besides, as I said ealier, we need you to help us, bot.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "I do not understand, how can a hydrobot like me help you with anything?", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "As you may have already seen, the ocean life is in grave danger. The sea environment is completely polluted because of trash. Sea animals are being hunted by these illegal organization.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "And it was them who tried to exterminate me ...", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Yes, correct. The sea environment is destroyed and my power is weakened ...", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Then why don't you stop them?", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "I can not interfere with human, that has been the rule for centuries and can not be violated ... but you can, and that's why we need your help.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "But why am I chosen?", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "I observed you tried to save the fishes, you have a kind heart and that's why I chose you.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Alright, I got it, so how do we start? I have the power to clean the ocean and heal the sea animals!", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Impressive, but these power will not be enough for you to win this battle. I will give you the power to shoot a special bullet, after the hunters are defeated, they will be teleported to me and we will try to educate them.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Teleportation! Wow, that's exciting. Thank you so much. I will not disappoint you.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "You need to save at least " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
  
@@ -150,7 +171,7 @@ namespace Poseidon
             cutScene = new List<Sentence>();
             sentence = new Sentence(0, "I encountered a very strong human enemy during my mission. Who is he?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "He is known as the Terminator - enemy hired gun. He is very powerful and it is no surprise to me that your current power can not match his." + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "He is known as the Terminator - enemy hired gun. He is very powerful and it is no surprise to me that your current power can not match his.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Then what can I do to defeat him.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
@@ -192,35 +213,52 @@ namespace Poseidon
 
             //For scene 9
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "We have found all the relics!", "Image/Cutscenes/backgroundDialog", 1);
+            sentence = new Sentence(0, "We have found all the relics!", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Yes, the sea is incredible and I am proud of you.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "Congratulations, now you are ready to face the Terminator.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Now, do you think I am capable of protecting the sea on my own?", "Image/Cutscenes/backgroundDialog", 1);
+            sentence = new Sentence(0, "I am very much ready!", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Yes, but I am worried. A new beast is in the sea. I don't know how powerful it is.", "Image/Cutscenes/backgroundDialog", 2);
+            sentence = new Sentence(1, "In order to reach the Terminator, you will first have to break the enemy defense. Be careful, there will be a lot of enemies.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 10
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "I am dying. Forgive me. I can't do this.", "Image/Cutscenes/backgroundDialog", 1);
+            sentence = new Sentence(0, "I have successfully defeat the enemy defense.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Wait, I am sorry I underestimated his strength. I will give you all my strength. Here, take my trident.", "Image/Cutscenes/backgroundDialog", 4);
+            sentence = new Sentence(1, "The Terminator should be close, be careful, do not underestimate his strength.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
             //For scene 11
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "I am dying. Forgive me. I can't do this.", "Image/Cutscenes/backgroundDialog", 1);
+            sentence = new Sentence(3, "A whirlpool appears again and saves our Hydrobot right at the moment ... ", "Image/Cutscenes/Robot Whirlpool", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Wait, I am sorry I underestimated his strength. I will give you all my strength. Here, take my trident.", "Image/Cutscenes/backgroundDialog", 4);
+            sentence = new Sentence(3, "And Poseidon appears ...", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
+            sentence = new Sentence(1, "Are you alright?", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Sorry, I could not do it ... he is still too powerful for me", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "It seems that he is wearing an unbreakable armor. However, my trident has the power the shatter anything. With the help of its power, your bullet should be able penetrate even his armor.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Really? Then bring me back to face him again. This time, I will not lose.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Our hope rests on your shoulder, bot.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            //some talking with the Terminator here
             cutScenes.Add(cutScene);
 
             //For scene 12
             cutScene = new List<Sentence>();
-            sentence = new Sentence(1, "You have saved the sea. All the sea animals will always be grateful to you!", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "I did it! All of the enemies had to flee from this sea.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "You have saved the sea. All the sea animals will always be grateful to you! But remember, the illegal hunting organization is still there and they will continue to destroy the ocean if we do not stop them completely.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "I understand and I will always be ready for new adventures!", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "To be continued ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 

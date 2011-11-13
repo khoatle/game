@@ -38,7 +38,7 @@ namespace Poseidon
             isBigBoss = true;
             random = new Random();
             //Terminator is undefeatable before the last level
-            if (PlayGameScene.currentLevel == 10)
+            if (PlayGameScene.currentLevel == 11)
             {
                 health = 10000;
                 maxHealth = 10000;

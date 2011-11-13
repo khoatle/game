@@ -51,7 +51,7 @@ namespace Poseidon
             this.elements = elements;
             this.teamLogo = teamLogo;
             Components.Add(new ImageComponent(game, background,
-                                            ImageComponent.DrawMode.Center));
+                                            ImageComponent.DrawMode.Stretch));
 
             // Create the Menu
             string[] items = { "Start Game", "Help", "Quit" };

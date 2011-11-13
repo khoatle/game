@@ -221,11 +221,17 @@ namespace Poseidon
             }
             else if (currentLevel == 9)
             {
+                level_objective = "Don't die.";
+                achieved_status = "You have "+ (HydroBot.currentHitPoint/HydroBot.maxHitPoint*100).ToString()+ "% health remaining.";
+                tip += "Shift+RightClick can also be used to switch skills.";
+            }
+            else if (currentLevel == 10)
+            {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
                 tip += "Shift+RightClick can also be used to switch skills.";
             }
-            else if (currentLevel == 10)
+            else if (currentLevel == 11)
             {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
                 achieved_status = "Terminator is still alive.";
@@ -237,20 +243,24 @@ namespace Poseidon
             level_objective = AddingObjects.wrapLine(level_objective, objectiveBoxRect.Width-100, levelObjFont);
             achieved_status = AddingObjects.wrapLine(achieved_status, achievedBoxRect.Width-100, levelObjFont);
 
-            objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
-            achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);
+           // objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
+           // achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);
 
-            tip = AddingObjects.wrapLine(tip, game.Window.ClientBounds.Width, levelObjFont);
-            tipPosition = new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(tip).X / 2, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(tip).Y);
+            objectiveStringPosition = new Vector2(objectiveBoxRect.Center.X - levelObjFont.MeasureString(level_objective).X/2, objectiveBoxRect.Top + 100);
+            achievedStringPostion = new Vector2(achievedBoxRect.Center.X - levelObjFont.MeasureString(achieved_status).X / 2, achievedBoxRect.Top + 100);
+
+            //tip = AddingObjects.wrapLine(tip, game.Window.ClientBounds.Width, levelObjFont);
+            //tipPosition = new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(tip).X / 2, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(tip).Y);
 
             spriteBatch.DrawString(levelObjFont, level_objective, objectiveStringPosition, Color.Blue);
 
             spriteBatch.DrawString(levelObjFont, achieved_status, achievedStringPostion, Color.Blue);
 
-            spriteBatch.DrawString(levelObjFont, tip, tipPosition, Color.Black);
-
-
-
+            //spriteBatch.DrawString(levelObjFont, tip, tipPosition, Color.Black);
+            string nextText = "Press Enter/esc to continue";
+            Vector2 nextTextPosition = new Vector2(game.Window.ClientBounds.Right - levelObjFont.MeasureString(nextText).X, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(nextText).Y);
+            spriteBatch.DrawString(levelObjFont, nextText, nextTextPosition, Color.Black);
+            
             spriteBatch.End();
         }
     }

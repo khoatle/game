@@ -1095,6 +1095,10 @@ namespace Poseidon
             spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
+            string nextText = "Press ENTER to continue";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, oceanPaintings.paintings[paintingToShow].color);
+
         }
         private void DrawFoundRelicScene(int skill_id)
         {
@@ -1141,6 +1145,10 @@ namespace Poseidon
                 new Vector2((int)xOffsetText, (int)yOffsetText);
 
             spriteBatch.Draw(skillTextures[skill_id], skillIconPosition, Color.White);
+
+            string nextText = "Press ENTER to continue";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
         }
 
         // Draw the currently selected bullet type

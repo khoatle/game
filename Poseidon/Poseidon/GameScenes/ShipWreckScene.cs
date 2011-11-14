@@ -345,6 +345,13 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
+            bool chestExitPressed; //to close painting, relic, or no-key
+            chestExitPressed = (lastKeyboardState.IsKeyDown(Keys.LeftAlt) &&
+                    (currentKeyboardState.IsKeyUp(Keys.LeftAlt)));
+            chestExitPressed |= (lastKeyboardState.IsKeyDown(Keys.RightAlt) &&
+                    (currentKeyboardState.IsKeyUp(Keys.RightAlt)));
+            chestExitPressed |= (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                    (currentKeyboardState.IsKeyUp(Keys.Enter)));
             if (MediaPlayer.State.Equals(MediaState.Stopped))
             {
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
@@ -358,9 +365,7 @@ namespace Poseidon
             if (foundRelic)
             {
                 // return to game if enter pressed
-                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                if (chestExitPressed)
                 {
                     foundRelic = false;
                 }
@@ -369,9 +374,7 @@ namespace Poseidon
             if (showPainting)
             {
                 // return to game if enter pressed
-                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                if (chestExitPressed)
                 {
                     showPainting = false;
                 }
@@ -380,9 +383,7 @@ namespace Poseidon
             if (showNoKey)
             {
                 // return to game if enter pressed
-                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                    (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                    currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                if (chestExitPressed)
                 {
                     showNoKey = false;
                 }
@@ -1087,6 +1088,10 @@ namespace Poseidon
             message = AddingObjects.wrapLine(message, 800, paintingFont);
             spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.SandyBrown);
             spriteBatch.DrawString(paintingFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X - 400, 20), Color.White);
+            
+            string nextText = "Press Alt/Enter to continue";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
         }
         private void DrawPainting()
         {
@@ -1100,7 +1105,7 @@ namespace Poseidon
             spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
-            string nextText = "Press ENTER to continue";
+            string nextText = "Press Alt/Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
             spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, oceanPaintings.paintings[paintingToShow].color);
 
@@ -1151,7 +1156,7 @@ namespace Poseidon
 
             spriteBatch.Draw(skillTextures[skill_id], skillIconPosition, Color.White);
 
-            string nextText = "Press ENTER to continue";
+            string nextText = "Press Alt/Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
             spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
         }

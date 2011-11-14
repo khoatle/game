@@ -141,7 +141,11 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            //activeSkillID = lsActiveSkillID = 0;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -284,9 +288,11 @@ namespace Poseidon
         {
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
-                    currentHitPoint -= 0.1f;
+                    if (!invincibleMode) {
+                        currentHitPoint -= 0.1f;
+                    }
                     accumulatedHealthLossFromPoisson += 0.1f;
-
+                    
                     ////display HP loss
                     //if (accumulatedHealthLossFromPoisson > 10)
                     //{

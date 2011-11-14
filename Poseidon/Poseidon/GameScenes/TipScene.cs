@@ -125,10 +125,10 @@ namespace Poseidon
             }
             else if (currentLevel == 2)
             {
-                text = "Double click on a ship wreck to get into it. Press 'esc' to get out.";
+                text = "There are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted.";
+                text += "\n\nDouble click on a ship wreck to get into it. Press 'esc' to get out.";
                 text += "\n\nCleaning the environment and healing make the fish happy.";
                 text += "\n\nDrop seeds near the shipwreck so that you can eat health fruits when you come out of it.";
-                text += "\n\nHolding position by pressing Ctrl makes aiming and shooting much easier.";
             }
             else if (currentLevel == 3)
             {

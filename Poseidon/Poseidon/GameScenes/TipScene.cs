@@ -125,36 +125,37 @@ namespace Poseidon
             {
                 text = "Double click on a ship wreck to get into it. Press 'esc' to get out.";
                 text += "\nCleaning the environment and healing make the fish happy.";
-                text += "\nDrop seeds near the shipwreck so that you can eat health fruits when you come out of it.";
+                text += "\nHolding position by pressing Ctrl makes aiming and shooting much easier.";
             }
             else if (currentLevel == 3)
             {
-                text = "Hermes's Winged sandal is really useful when you want to get away. Don't just flee with the sandal. Make sure you hurt the mutant shark with it.";
+                text = "Hermes's Winged sandal is really useful when you want to get away. But don't just flee with the sandal. Make sure you hurt the mutant shark with it.";
                 text += "\nThe mutant shark is poisonous. Keep distance.";
-                text += "\nDon't forget to use your experience points. Press 'I'.";
+                text += "\nFruits help a lot in battle. Try to grow a lot of plants.";
             }
             else if (currentLevel == 4)
             {
                 text = "Go for the mutant shark first.";
                 text += "\nEvery time a fish dies, the environment goes down.";
-                text += "\nYou lose health every time you use the sandal.";
-                text += "\nThe weaker you are, the weaker is your sandal.";
+                text += "\nYou lose health every time you use a skill.";
+                text += "\nThe lower your health, the weaker your skill.";
             }
             else if (currentLevel == 5)
             {
-                text = "Remember, there are 3 shipwrecks. You need to search fast.";
+                text = "Remember, there are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted";
                 text += "\nRead the writing on the paintings. They help you in the quiz.";
                 text += "\nIt is much easier to aim and shoot while you hold 'ctrl'.";
             }
             else if (currentLevel == 6)
             {
-                text = "Hercules's bow hurts a single enemy a lot.";
-                text += "\nRead the writing on the paintings. They help you in the quiz.";
+                text = "Hercules's bow deals an enormous amount of damage to a single enemy.";
+                text += "\nPay attention to what the fishes are saying. They help you in the quiz.";
                 text += "\nFruits can help a lot in battle.";
             }
             else if (currentLevel == 7)
             {
-                text = "Thor's hammer stuns and pushes enemies away. Fight smart, do not let the enemy touch you.";
+                text = "Thor's hammer stuns and pushes enemies away."; 
+                text += "\nFight smart, do not let the enemy touch you.";
                 text += "\nIt is much easier to aim and shoot while you hold 'ctrl'.";
             }
             else if (currentLevel == 8)
@@ -165,9 +166,9 @@ namespace Poseidon
             else if (currentLevel == 9)
             {
                 text = "Aphrodite's belt makes enemies turn against each other.";
-                text += "\nUse all your skills. Press 1-5.";
+                text += "\nMake use of all of your skills. Press 1-5.";
                 text += "\nShift + RightClick can also be used to switch skills.";
-                text += "\nYou are invincible near your \"base of plants\".";
+                text += "\nA \"base of plants\" can make your boss fight much easier.";
             }
             else if (currentLevel == 10)
             {

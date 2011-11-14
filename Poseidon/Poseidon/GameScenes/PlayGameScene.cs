@@ -713,14 +713,9 @@ namespace Poseidon
                         // Hypnotise skill
                         if (HydroBot.activeSkillID == 4)
                         {
-                            BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+                            BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);        
 
-                            if (enemy == null)
-                            {
-                                return;
-                            }
-
-                            if (HydroBot.firstUse[4] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
+                            if (enemy != null && (HydroBot.firstUse[4] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
                             {
                                 HydroBot.firstUse[4] = false;
 

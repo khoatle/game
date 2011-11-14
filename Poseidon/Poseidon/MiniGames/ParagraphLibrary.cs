@@ -36,7 +36,7 @@ namespace Poseidon.MiniGames
             paragraph = new Paragraph("Because I want to help the ocean, I pledge to do these things: conserve water, reduce waste, dispose trash properly, be considerate to ocean wildlife and do community service to clean up beaches and rivers. I will also tell my friends to do the same.");
             paragraphLib.Add(paragraph);
 
-            paragraph = new Paragraph("There are fewer than 1500 Hawaiian monk seals left in the world. Baby monk seals (called pups) make a mwaa-mwaa sound when calm and a loud gaah when scared. Adults make a bubbling sound when alarmed. If this continues, our children will be eating jellyfish.");
+            paragraph = new Paragraph("There are fewer than 1500 Hawaiian monk seals left in the world. Baby monk seals (called pups) make a mwaa-mwaa sound when calm and a loud gaah when scared. Adults make a bubbling sound when alarmed.");
             paragraphLib.Add(paragraph);
 
             paragraph = new Paragraph("The reality of modern fishing is that the industry is dominated by fishing vessels that far out-match nature's ability to replenish fish.");

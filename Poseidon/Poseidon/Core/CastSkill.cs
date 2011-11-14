@@ -38,7 +38,7 @@ namespace Poseidon
                     float healthiness = (float) HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
                     enemies[i].stunned = true;
                     enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
-                    int healthloss = (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength);
+                    int healthloss = (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength * HydroBot.strengthUp);
                     enemies[i].health -= healthloss;
                     PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
                     //if (enemies[i].health <= 0)
@@ -114,7 +114,7 @@ namespace Poseidon
                         enemies[i].Position = oldPosition;
                         enemies[i].BoundingSphere.Center = oldPosition;
                     }
-                    int healthloss = (int)(GameConstants.HermesDamage * healthiness * HydroBot.strength);
+                    int healthloss = (int)(GameConstants.HermesDamage * healthiness * HydroBot.speed * HydroBot.speedUp);
                     enemies[i].health -= healthloss;
                     audio.Shooting.Play();
                     //if (enemies[i].health <= 0)

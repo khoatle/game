@@ -112,78 +112,88 @@ namespace Poseidon
             if (currentLevel == 0)
             {
                 text = "Press 'z' to clean trash & 'X' to drop seeds. Click on fish to heal them.";
-                text += "\nPoint on a fish and press 'CapsLock' to lock the curson on it.";
-                text += "\nEnvironement at the end of a level effects the next level.";
+                text += "\n\nPoint on a fish and press 'CapsLock' to lock the cursor on it.";
+                text += "\n\nHold 'ctrl' to shoot without moving.";
+                text += "\n\nEnvironment at the end of a level effects the next level.";
             }
             else if (currentLevel == 1)
             {
                 text = "Use 'space bar' to switch between bullets.";
-                text += "\nWhen the environment is polluted, the sea creatures die easily.";
-                text += "\nEvery time your experience levels up, you gain 5 points to increase attributes. Press 'I'.";
+                text += "\n\nHold 'ctrl' to shoot without moving.";
+                text += "\n\nWhen the environment is polluted, the sea creatures die easily.";
+                text += "\n\nEvery time your experience levels up, you gain 5 points to increase attributes. Press 'I'.";
             }
             else if (currentLevel == 2)
             {
-                text = "Double click on a ship wreck to get into it. Press 'esc' to get out.";
-                text += "\nCleaning the environment and healing make the fish happy.";
-                text += "\nHolding position by pressing Ctrl makes aiming and shooting much easier.";
+                text = "There are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted.";
+                text += "\n\nDouble click on a ship wreck to get into it. Press 'esc' to get out.";
+                text += "\n\nCleaning the environment and healing make the fish happy.";
+                text += "\n\nDrop seeds near the shipwreck so that you can eat health fruits when you come out of it.";
             }
             else if (currentLevel == 3)
             {
-                text = "Hermes's Winged sandal is really useful when you want to get away. But don't just flee with the sandal. Make sure you hurt the mutant shark with it.";
-                text += "\nThe mutant shark is poisonous. Keep distance.";
-                text += "\nFruits help a lot in battle. Try to grow a lot of plants.";
+                text = "Hermes's Winged sandal is really useful when you want to get away. Don't just flee with the sandal. Make sure you hurt the mutant shark with it.";
+                text += "\n\nThe mutant shark is poisonous. Keep distance.";
+                text += "\n\nDon't forget to use your experience points. Press 'I'.";
             }
             else if (currentLevel == 4)
             {
                 text = "Go for the mutant shark first.";
-                text += "\nEvery time a fish dies, the environment goes down.";
-                text += "\nYou lose health every time you use a skill.";
-                text += "\nThe lower your health, the weaker your skill.";
+                text += "\n\nEvery time a fish dies, the environment goes down.";
+                text += "\n\nYou lose health every time you use the sandal.";
+                text += "\n\nThe weaker you are, the weaker is your skill.";
             }
             else if (currentLevel == 5)
             {
-                text = "Remember, there are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted";
-                text += "\nRead the writing on the paintings. They help you in the quiz.";
-                text += "\nIt is much easier to aim and shoot while you hold 'ctrl'.";
+                text = "Remember, there are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted.";
+                text += "\n\nRead the writing on the paintings. They help you in the quiz.";
+                text += "\n\nIt is much easier to aim and shoot while you hold 'ctrl'.";
+                text += "\n\nYour skills are linked to your attributes.";
             }
             else if (currentLevel == 6)
             {
                 text = "Hercules's bow deals an enormous amount of damage to a single enemy.";
-                text += "\nPay attention to what the fishes are saying. They help you in the quiz.";
-                text += "\nFruits can help a lot in battle.";
+                text += "\n\nRead the writing on the paintings. They help you in the quiz.";
+                text += "\n\nFruits can help a lot in battle.";
+                text += "\n\nYour skills are linked to your attributes.";
             }
             else if (currentLevel == 7)
             {
-                text = "Thor's hammer stuns and pushes enemies away."; 
-                text += "\nFight smart, do not let the enemy touch you.";
-                text += "\nIt is much easier to aim and shoot while you hold 'ctrl'.";
+                text = "Thor's hammer stuns and pushes enemies away.";
+                text += "\n\nFight smart, do not let the enemy touch you.";
+                text += "\n\nUsing the hammer after you eat a strength fruit, will make it more effective.";
+                text += "\n\nPay attention to what the fishes are saying. They help you in the quiz.";
             }
             else if (currentLevel == 8)
             {
-                text = "Achilles' armor makes you temporarily invincible.";
-                text += "\nRemember what the fish says, for these would be used in the minigames.";
+                text = "Put on the golden armor to be invincible.";
+                text += "\n\nRemember what the fish says, for these would be used in the minigames.";
+                text += "\n\nUse 'capslock' to lock target.";
+                text += "\n\nYour skills are linked to your attributes.";
             }
             else if (currentLevel == 9)
             {
                 text = "Aphrodite's belt makes enemies turn against each other.";
-                text += "\nMake use of all of your skills. Press 1-5.";
-                text += "\nShift + RightClick can also be used to switch skills.";
-                text += "\nA \"base of plants\" can make your boss fight much easier.";
+                text += "\n\nMake use of all your skills. Press 1-5.";
+                text += "\n\nShift + RightClick can also be used to switch skills.";
+                text += "\n\nA \"base of plants\" can make your boss fight much easier.";
             }
             else if (currentLevel == 10)
             {
                 text = "Plant enough trees so that you get the fruits when you need it.";
-                text += "\nRunning in a circular motion can help evade the deadly bullets.";
+                text += "\n\nRemember, your skills are linked to your attributes.";
+                text += "\n\nRunning in a circular motion can help evade the deadly bullets.";
+                text += "\n\nUse all your skills. Press 1-5.";
             }
             else if (currentLevel == 11)
             {
                 text = "There is less chance to get hit by a bullet when you run in a spiral motion.";
-                text += "\nUse all your skills. Press 1-5.";
-                text += "\nRemember to use your experience points.";
-                text += "\nDrop seeds. You need the fruits.";
+                text += "\n\nUse all your skills. Press 1-5.";
+                text += "\n\nRemember to use your experience points.";
+                text += "\n\nDrop seeds. You need the fruits.";
             }
 
-            spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X - tipFont.MeasureString(title).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X - tipFont.MeasureString(title).X, 2), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
 
             text = AddingObjects.wrapLine(text, tipBoxRect.Width - 100, tipFont);
 

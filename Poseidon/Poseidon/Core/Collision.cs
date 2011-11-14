@@ -255,7 +255,7 @@ namespace Poseidon
                         {
                             if (((BaseEnemy)barriers[j]).isHypnotise)
                             {
-                                return;
+                                continue;
                             }
                             else {
                                 ((BaseEnemy)barriers[j]).justBeingShot = true;

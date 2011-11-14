@@ -99,12 +99,14 @@ namespace Poseidon
             isHypnotise = true;
             currentHuntingTarget = null;
             startHypnotiseTime = gameTime.TotalGameTime;
+            justBeingShot = false;
         }
 
         public void wearOutHypnotise()
         {
             isHypnotise = false;
             currentHuntingTarget = null;
+            justBeingShot = false;
         }
 
         // Is it the time to forget about old target?

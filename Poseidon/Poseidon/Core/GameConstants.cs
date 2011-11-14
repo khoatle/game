@@ -17,14 +17,14 @@ namespace Poseidon {
         public const float ViewAngle = 45.0f;
 
         //main character constants
-        public const float MainCharVelocity = 0.6f;
+        public const float MainCharVelocity = 2f;
         public const float BasicStartSpeed = 1f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;
         public const float MainCharShootingSpeed = 1.0f;
         public const int MainCharLevelOneExp = 250;
         public const float MainCharStrength = 1.0f;
-        public const float PlayerStartingHP = 250.0f;
+        public const float PlayerStartingHP = 250f;
         public const float BotShootingRange = 70.0f;
         public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.6f);
 
@@ -81,7 +81,7 @@ namespace Poseidon {
         public const int StopBulletChasing = 3;
 
         // Enemy configuration
-        public const float EnemyShootingRate = 1.0f;
+        public const float EnemyShootingRate = 0.6f;
         public const float EnemySpeed = 0.3f;
         public const float EnemyShootingDistance = 15f;
         public const float EnemyPerceptionRadius = 40f;
@@ -95,7 +95,7 @@ namespace Poseidon {
         public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
         public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberFish =            {   50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };

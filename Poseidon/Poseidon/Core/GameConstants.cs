@@ -17,7 +17,7 @@ namespace Poseidon {
         public const float ViewAngle = 45.0f;
 
         //main character constants
-        public const float MainCharVelocity = 2f;
+        public const float MainCharVelocity = 0.6f;
         public const float BasicStartSpeed = 1f;
         public const float BarrierVelocity = 0.5f;
         public const float TurnSpeed = 0.025f;

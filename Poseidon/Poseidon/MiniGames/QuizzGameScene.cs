@@ -177,7 +177,11 @@ namespace Poseidon.MiniGames
             CheckClick(gameTime);
             if (displayRightWrongAnswer)
             {
-                if (clicked && nextButtonRect.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
+                if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                    currentKeyboardState.IsKeyUp(Keys.Enter))
+                    ||
+                    (clicked && nextButtonRect.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
+                    )
                 {
                     questionAnswered++;
                     if (questionAnswered < 4)
@@ -213,8 +217,8 @@ namespace Poseidon.MiniGames
                     selectedChoice = 1;
                     clicked = false;
                 }
-                if ((lastKeyboardState.IsKeyDown(Keys.B) &&
-                    currentKeyboardState.IsKeyUp(Keys.B))
+                if ((lastKeyboardState.IsKeyDown(Keys.C) &&
+                    currentKeyboardState.IsKeyUp(Keys.C))
                     ||
                     (clicked && rectC.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                     )
@@ -223,8 +227,8 @@ namespace Poseidon.MiniGames
                     selectedChoice = 2;
                     clicked = false;
                 }
-                if ((lastKeyboardState.IsKeyDown(Keys.B) &&
-                    currentKeyboardState.IsKeyUp(Keys.B))
+                if ((lastKeyboardState.IsKeyDown(Keys.D) &&
+                    currentKeyboardState.IsKeyUp(Keys.D))
                     ||
                     (clicked && rectD.Intersects(new Rectangle((int)clickPosition.X, (int)clickPosition.Y, 1, 1)))
                     )

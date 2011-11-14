@@ -720,7 +720,7 @@ namespace Poseidon
                                 return;
                             }
 
-                            if (HydroBot.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
+                            if (HydroBot.firstUse[4] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
                             {
                                 HydroBot.firstUse[4] = false;
 
@@ -1709,7 +1709,7 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Poseidon speaking
@@ -1730,7 +1730,7 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text,
                     new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
@@ -1752,17 +1752,20 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox,
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, talkingBox.Width, menuSmall);
+                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text,
                     new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
             {
+                talkingBox = Content.Load<Texture2D>("Image/Cutscenes/narratorBox");
+                spriteBatch.Draw(talkingBox,
+                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw what is said
                 string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Red);
+                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Black);
             }
             //float xOffsetText, yOffsetText;
             //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;

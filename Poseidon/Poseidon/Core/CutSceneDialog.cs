@@ -79,9 +79,13 @@ namespace Poseidon
 
             // For scene 1
             cutScene = new List<Sentence>();
-            sentence = new Sentence(3, "Unfortunately, during his quest, he encounters illegal poaching.", "Image/Cutscenes/Robot Shot", 0);
+            sentence = new Sentence(3, "Unfortunately, during his quest, he encounters illegal poaching.", "Image/Cutscenes/poaching", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "What is that diver doing?! I have to stop him!", "Image/Cutscenes/poaching", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Caught off guard, the poachers try to silence his mission.", "Image/Cutscenes/Robot Shot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Ugh ...", "Image/Cutscenes/Robot Shot", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Hope and death seemed all but certain.", "Image/Cutscenes/Robot Shot", 0);
             cutScene.Add(sentence);

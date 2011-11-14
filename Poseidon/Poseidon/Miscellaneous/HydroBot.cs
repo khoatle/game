@@ -182,7 +182,7 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            //activeSkillID = 1;
+            //activeSkillID = 4;
             //skills[0] = true;
             //skills[1] = true;
             //skills[2] = true;
@@ -353,7 +353,9 @@ namespace Poseidon
             //worn out effect of certain skills
             if (invincibleMode == true)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast)
+                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+                if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
                 {
                     invincibleMode = false;
                 }

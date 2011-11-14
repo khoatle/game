@@ -24,7 +24,7 @@ namespace Poseidon {
         public const float MainCharShootingSpeed = 1.0f;
         public const int MainCharLevelOneExp = 250;
         public const float MainCharStrength = 1.0f;
-        public const int PlayerStartingHP = 250;
+        public const float PlayerStartingHP = 250.0f;
         public const float BotShootingRange = 70.0f;
         public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.6f);
 

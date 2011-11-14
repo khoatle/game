@@ -139,13 +139,6 @@ namespace Poseidon
             activeSkillID = lsActiveSkillID = -1;
             invincibleMode = false;
             supersonicMode = false;
-            //just for testing
-            //should be removed
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
 
             isPoissoned = false;
             poissonInterval = 0;

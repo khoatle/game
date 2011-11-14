@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Poseidon")]
-[assembly: AssemblyProduct("Poseidon")]
+[assembly: AssemblyTitle("Hydrobot Adventure")]
+[assembly: AssemblyProduct("Hydrobot Adventure")]
 [assembly: AssemblyDescription("")]
-[assembly: AssemblyCompany("Microsoft IT")]
-[assembly: AssemblyCopyright("Copyright © Microsoft IT 2010")]
+[assembly: AssemblyCompany("Eager Beavers")]
+[assembly: AssemblyCopyright("Copyright © Eager Beavers 2011")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

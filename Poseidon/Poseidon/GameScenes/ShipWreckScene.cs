@@ -535,12 +535,7 @@ namespace Poseidon
                     {
                         BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
 
-                        if (enemy == null)
-                        {
-                            return;
-                        }
-
-                        if (HydroBot.firstUse[3] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise)
+                        if (enemy != null && (HydroBot.firstUse[4] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
                         {
                             HydroBot.firstUse[4] = false;
 

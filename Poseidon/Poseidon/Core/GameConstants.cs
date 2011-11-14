@@ -95,7 +95,7 @@ namespace Poseidon {
         public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
         public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-        public static int[] NumberFish =            {   50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
         public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
         public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
@@ -207,7 +207,7 @@ namespace Poseidon {
         public static int gainAttributeCost = 1;
         public static float gainSpeed = 0.06f;
         public static float gainShootingRate = 0.06f;
-        public static float gainStrength = 0.065f;
+        public static float gainStrength = 0.06f;
         public static int gainHitPoint = 20;
 
     }

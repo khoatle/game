@@ -216,7 +216,8 @@ namespace Poseidon
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
-                            PoseidonGame.audio.animalYell.Play();
+                            if (currentHuntingTarget is Fish)
+                                PoseidonGame.audio.animalYell.Play();
                         }
                     }
                     prevFire = gameTime.TotalGameTime;

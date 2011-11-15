@@ -249,7 +249,7 @@ namespace Poseidon
                     if (barriers[j] is MutantShark) sphere.Radius *= 0.7f;
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
-                        if (soundWhenHit && barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                        if (barriers[j] is Fish && barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalYell.Play();
                         if (barriers[j] is BaseEnemy)
                         {

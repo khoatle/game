@@ -320,7 +320,7 @@ namespace Poseidon
             //if (prevGameState == GameState.Lost) tank.CopyAttribute(prevTank);
             //else prevTank.CopyAttribute(tank);
 
-            if (prevGameState == GameState.Lost)
+            if (prevGameState == GameState.Lost && currentLevel < 11)
                 hydroBot.ResetToLevelStart();
             else
                 hydroBot.SetLevelStartValues();

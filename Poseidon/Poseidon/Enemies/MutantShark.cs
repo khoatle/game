@@ -215,7 +215,8 @@ namespace Poseidon
                                 ShipWreckScene.points.Add(point);
                             else
                                 PlayGameScene.points.Add(point);
-                            PoseidonGame.audio.animalYell.Play();
+                            if (currentHuntingTarget is Fish)
+                                PoseidonGame.audio.animalYell.Play();
                         }
                     }
                     prevFire = gameTime.TotalGameTime;

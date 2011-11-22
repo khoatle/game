@@ -17,6 +17,8 @@ using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
 using SkinnedModel;
 using Poseidon.Core;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 #endregion
 
 namespace Poseidon
@@ -24,7 +26,8 @@ namespace Poseidon
     /// <summary>
     /// Helper class for drawing a tank model with animated wheels and turret.
     /// </summary>
-    public class HydroBot : GameObject
+    [Serializable()]    
+    public class HydroBot : GameObject, ISerializable
     {
         public float ForwardDirection { get; set; }
 
@@ -89,7 +92,7 @@ namespace Poseidon
 
         public static int currentExperiencePts, lsCurrentExperiencePts;
         public static int nextLevelExperience, lsNextLevelExperience;
-        private static int increaseBy, lsIncreaseBy;
+        //private static int increaseBy, lsIncreaseBy;
         public static int level, lsLevel; // experience level
         public static int unassignedPts, lsUnassignedPts;
 
@@ -147,6 +150,102 @@ namespace Poseidon
         }
 
         /// <summary>
+        /// Deserialize the saved data from file. Overrides the function in Gameobject.
+        /// This function is invoked from ObjectsToSerialize which is invoked by Deserialize objects.
+        /// </summary>
+        public HydroBot(SerializationInfo info, StreamingContext context)
+        {
+            strength = lsStrength = (float)info.GetValue("strength", typeof(float));
+            speed = lsSpeed = (float)info.GetValue("speed",typeof(float));
+            shootingRate = lsShootingRate = (float)info.GetValue("shootingRate", typeof(float));
+            bulletType = 1;
+            maxHitPoint = lsMaxHitPoint = (float)info.GetValue("maxHitPoint",typeof(float));
+            currentHitPoint = maxHitPoint;
+            currentEnvPoint = lsCurrentEnvPoint = (int)info.GetValue("currentEnvPoint",typeof(int));
+            maxEnvPoint = GameConstants.MaxEnv;
+
+            //deduct the amount of trash dropped
+            currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
+            if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
+
+            skills = new bool[GameConstants.numberOfSkills];
+            lsSkills = new bool[GameConstants.numberOfSkills];
+            skillPrevUsed = new double[GameConstants.numberOfSkills];
+            firstUse = new bool[GameConstants.numberOfSkills];
+            for (int i = 0; i < GameConstants.numberOfSkills; i++)
+            {
+                string Skillname = "skills" + i.ToString();
+                lsSkills[i] = skills[i] = (bool)info.GetValue(Skillname, typeof(bool));
+                //System.Diagnostics.Debug.WriteLine("DESerializing skills:" + skills[i]);
+            }
+            activeSkillID = lsActiveSkillID = (int)info.GetValue("activeSkillID",typeof(int));
+            pointToMoveTo = Vector3.Zero;
+
+            // No buff up at the beginning
+            speedUp = 1.0f;
+            strengthUp = 1.0f;
+            fireRateUp = 1.0f;
+
+            floatHeight = (float)info.GetValue("floatHeight", typeof(float));
+            Position.Y = floatHeight;
+
+            MaxRangeX = (int)info.GetValue("MaxRangeX", typeof(int));
+            MaxRangeZ = (int)info.GetValue("MaxRangeZ", typeof(int));
+
+
+            currentExperiencePts = lsCurrentExperiencePts = (int)info.GetValue("currentExperiencePts",typeof(int));
+            nextLevelExperience = lsNextLevelExperience = (int)info.GetValue("nextLevelExperience",typeof(int));
+            //increaseBy = lsIncreaseBy = (int)info.GetValue("increaseBy",typeof(int));
+            level = lsLevel = (int)info.GetValue("level",typeof(int));
+            unassignedPts = lsUnassignedPts = (int)info.GetValue("unassignedPts",typeof(int));
+
+            invincibleMode = false;
+            supersonicMode = false;
+
+            isPoissoned = false;
+            poissonInterval = 0;
+            maxHPLossFromPoisson = 50;
+            accumulatedHealthLossFromPoisson = 0;
+
+            //Load(PlayGameScene.Content);
+
+            //System.Diagnostics.Debug.WriteLine("CurrentExp:"+currentExperiencePts);
+            //System.Diagnostics.Debug.WriteLine("NextExp:" + nextLevelExperience);
+        }
+
+        /// <summary>
+        /// Serialize the data to save game to file. Invoked by ObjectsToSerialize.GetObjectData
+        /// which is invoked by Serialiser.SerializeObjects
+        /// </summary>
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("strength", strength);
+            info.AddValue("speed", speed);
+            info.AddValue("shootingRate", shootingRate);
+            info.AddValue("maxHitPoint", maxHitPoint);
+            info.AddValue("currentEnvPoint", currentEnvPoint);
+
+            for (int i = 0; i < GameConstants.numberOfSkills; i++)
+            {
+                string Skillname = "skills" + i.ToString();
+                info.AddValue(Skillname, skills[i]);
+                //System.Diagnostics.Debug.WriteLine("Serializing skills:" + skills[i]);
+            }
+            info.AddValue("activeSkillID", activeSkillID);
+
+            info.AddValue("floatHeight", floatHeight);
+            info.AddValue("MaxRangeX", MaxRangeX);
+            info.AddValue("MaxRangeZ", MaxRangeZ);
+
+            info.AddValue("currentExperiencePts", currentExperiencePts);
+            info.AddValue("nextLevelExperience", nextLevelExperience);
+            info.AddValue("level", level);
+            info.AddValue("unassignedPts", unassignedPts);
+            //System.Diagnostics.Debug.WriteLine("Serializiing CurrentExp:" + currentExperiencePts);
+            //System.Diagnostics.Debug.WriteLine("Serializing NextExp:" + nextLevelExperience);
+        }
+
+        /// <summary>
         /// Loads the tank model.
         /// </summary>
         public void Load(ContentManager content)
@@ -170,7 +269,8 @@ namespace Poseidon
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
-                skills[index] = false;
+                if(PlayGameScene.currentLevel==0) //to take care of reload
+                    skills[index] = false;
                 firstUse[index] = true;
                 skillPrevUsed[index] = 0;
             }
@@ -210,14 +310,13 @@ namespace Poseidon
             shootingRate = lsShootingRate;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint;
-            //currentHitPoint = lsCurrentHitPoint;
             currentEnvPoint = lsCurrentEnvPoint;
             lsSkills.CopyTo(skills, 0);
             activeSkillID = lsActiveSkillID;
 
             currentExperiencePts = lsCurrentExperiencePts;
             nextLevelExperience = lsNextLevelExperience;
-            increaseBy = lsIncreaseBy;
+            //increaseBy = lsIncreaseBy;
             level = lsLevel;
             unassignedPts = lsUnassignedPts;
 
@@ -238,7 +337,7 @@ namespace Poseidon
 
             lsCurrentExperiencePts = currentExperiencePts;
             lsNextLevelExperience = nextLevelExperience;
-            lsIncreaseBy = increaseBy;
+            //lsIncreaseBy = increaseBy;
             lsLevel = level;
             lsUnassignedPts = unassignedPts;
             lsCurrentEnvPoint = currentEnvPoint;

@@ -29,6 +29,8 @@ namespace Poseidon
         protected Vector2 rockPosition;
         protected Rectangle rainRect = new Rectangle(90, 169, 620, 126);
         protected Vector2 rainPosition;
+
+        public bool gameStarted = false;
         //protected Rectangle enhancedRect = new Rectangle(8, 304, 375, 144);
         //protected Vector2 enhancedPosition;
         //protected bool showEnhanced;
@@ -54,7 +56,7 @@ namespace Poseidon
                                             ImageComponent.DrawMode.Stretch));
 
             // Create the Menu
-            string[] items = { "Start Game", "Help", "Quit" };
+            string[] items = { "New Game",  "Load Saved Level", "Help", "Quit" };
             menu = new TextMenuComponent(game, smallFont, largeFont);
             menu.SetMenuItems(items);
             Components.Add(menu);
@@ -83,7 +85,7 @@ namespace Poseidon
             rainPosition.Y = 180;
             // Put the menu centered in screen
             menu.Position = new Vector2(Game.Window.ClientBounds.Width/2
-                                          , 370);
+                                          , 280);
 
             // These elements will be visible when the 'Rock Rain' title
             // is done.
@@ -100,8 +102,11 @@ namespace Poseidon
         public override void Hide()
         {
             //MediaPlayer.Stop();
-            string[] items = { "Resume Game", "Help", "Quit" };
-            menu.SetMenuItems(items);
+            if (gameStarted)
+            {
+                string[] items = { "Resume Game", "New Game", "Load Saved Level", "Help", "Quit" };
+                menu.SetMenuItems(items);
+            }
             base.Hide();
         }
 

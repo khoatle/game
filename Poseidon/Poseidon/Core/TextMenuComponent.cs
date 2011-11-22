@@ -198,29 +198,64 @@ namespace Poseidon.Core
         {
             float y = position.Y;
             float x;
-            for (int i = 0; i < menuItems.Count; i++)
+            if (menuItems.Count * regularFont.LineSpacing < Game.Window.ClientBounds.Height)
             {
-                SpriteFont font;
-                Color theColor;
-                //x = position.X - ((menuItems[i].Length*45)/2);
-                if (i == SelectedIndex)
+                for (int i = 0; i < menuItems.Count; i++)
                 {
-                    font = selectedFont;
-                    theColor = selectedColor;
+                    SpriteFont font;
+                    Color theColor;
+                    //x = position.X - ((menuItems[i].Length*45)/2);
+                    if (i == SelectedIndex)
+                    {
+                        font = selectedFont;
+                        theColor = selectedColor;
+                    }
+                    else
+                    {
+                        font = regularFont;
+                        theColor = regularColor;
+                    }
+                    x = position.X - (font.MeasureString(menuItems[i]).X / 2);
+                    // Draw the text shadow
+                    spriteBatch.DrawString(font, menuItems[i],
+                        new Vector2(x + 1, y + 1), Color.Black);
+                    // Draw the text item
+                    spriteBatch.DrawString(font, menuItems[i],
+                        new Vector2(x, y), theColor);
+                    y += font.LineSpacing;
                 }
-                else
+            }
+            else // Need to draw 2 columns
+            {
+                for (int i = 0; i < menuItems.Count; i++)
                 {
-                    font = regularFont;
-                    theColor = regularColor;
+                    SpriteFont font;
+                    Color theColor;
+                    //x = position.X - ((menuItems[i].Length*45)/2);
+                    if (i == SelectedIndex)
+                    {
+                        font = selectedFont;
+                        theColor = selectedColor;
+                    }
+                    else
+                    {
+                        font = regularFont;
+                        theColor = regularColor;
+                    }
+                    if (i < menuItems.Count / 2)
+                        x = position.X - position.X/2 - (font.MeasureString(menuItems[i]).X / 2);
+                    else
+                        x = position.X + position.X/2 - (font.MeasureString(menuItems[i]).X / 2);
+                    // Draw the text shadow
+                    spriteBatch.DrawString(font, menuItems[i],
+                        new Vector2(x + 1, y + 1), Color.Black);
+                    // Draw the text item
+                    spriteBatch.DrawString(font, menuItems[i],
+                        new Vector2(x, y), theColor);
+                    if (i == (int)menuItems.Count / 2)
+                        y = position.Y;
+                    y += font.LineSpacing;
                 }
-                x = position.X - (font.MeasureString(menuItems[i]).X / 2);
-                // Draw the text shadow
-                spriteBatch.DrawString(font, menuItems[i],
-                    new Vector2(x + 1, y + 1), Color.Black);
-                // Draw the text item
-                spriteBatch.DrawString(font, menuItems[i],
-                    new Vector2(x, y), theColor);
-                y += font.LineSpacing;
             }
 
             base.Draw(gameTime);

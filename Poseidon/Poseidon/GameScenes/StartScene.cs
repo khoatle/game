@@ -29,6 +29,8 @@ namespace Poseidon
         protected Vector2 rockPosition;
         protected Rectangle rainRect = new Rectangle(90, 169, 620, 126);
         protected Vector2 rainPosition;
+
+        public bool gameStarted = false;
         //protected Rectangle enhancedRect = new Rectangle(8, 304, 375, 144);
         //protected Vector2 enhancedPosition;
         //protected bool showEnhanced;
@@ -100,8 +102,11 @@ namespace Poseidon
         public override void Hide()
         {
             //MediaPlayer.Stop();
-            string[] items = { "Resume Game", "Help", "Quit" };
-            menu.SetMenuItems(items);
+            if (gameStarted)
+            {
+                string[] items = { "Resume Game", "Help", "Quit" };
+                menu.SetMenuItems(items);
+            }
             base.Hide();
         }
 

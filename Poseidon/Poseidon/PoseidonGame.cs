@@ -80,7 +80,6 @@ namespace Poseidon
         bool doubleClicked = false;
         bool clicked=false;
         double clickTimer = 0;
-        bool firstStartScene = true;
 
         // Texture to show that enemy is stunned
         protected Texture2D stunnedTexture;
@@ -271,6 +270,8 @@ namespace Poseidon
                 if (loadingScene.loadingSceneStarted)
                 {
                     CreateLevelDependentScenes(loadingScene.loadingLevel);
+                    startScene.gameStarted = true;
+                    startScene.Hide();
                     ShowScene(playGameScene);
                 }
             }
@@ -313,6 +314,30 @@ namespace Poseidon
             {
                 HandleTypeGameInput();
             }
+        }
+
+        /// <summary>
+        /// Handle which level to load
+        /// </summary>
+        public void HandleSelectLoadingLevelSceneInput()
+        {
+            int i=0;
+            if (enterPressed)
+            {
+                foreach( int level in selectLoadingLevelScene.savedlevels)
+                {
+                    if (selectLoadingLevelScene.SelectedMenuIndex == i)
+                    {
+                        PlayGameScene.currentLevel = level;
+                        ShowScene(loadingScene);
+                    }
+                    i++;
+                }
+                if (selectLoadingLevelScene.SelectedMenuIndex == i)
+                    ShowScene(startScene);
+            }
+            else if (EscPressed)
+                ShowScene(startScene);
         }
 
         public void HandleQuizzGameInput()
@@ -468,7 +493,7 @@ namespace Poseidon
             if (enterPressed)
             {
                 audio.MenuSelect.Play();
-                if (firstStartScene)
+                if (!startScene.gameStarted)
                 {
                     switch (startScene.SelectedMenuIndex)
                     {
@@ -476,12 +501,10 @@ namespace Poseidon
                             MediaPlayer.Stop();
                             PlayGameScene.currentLevel = 0;
                             ShowScene(loadingScene);
-                            firstStartScene = false;
                             break;
                         case 1:
                             MediaPlayer.Stop();
                             ShowScene(selectLoadingLevelScene);
-                            firstStartScene = false;
                             break;
                         case 2:
                             ShowScene(helpScene);
@@ -508,17 +531,6 @@ namespace Poseidon
                     }
 
                 }
-            }
-        }
-        /// <summary>
-        /// Handle which level to load
-        /// </summary>
-        public void HandleSelectLoadingLevelSceneInput()
-        {
-            if (enterPressed)
-            {
-                PlayGameScene.currentLevel = 2;
-                ShowScene(loadingScene);
             }
         }
         private void CreateLevelDependentScenes(int startLevel)

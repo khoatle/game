@@ -151,6 +151,7 @@ namespace Poseidon
 
         /// <summary>
         /// Deserialize the saved data from file. Overrides the function in Gameobject.
+        /// This function is invoked from ObjectsToSerialize which is invoked by Deserialize objects.
         /// </summary>
         public HydroBot(SerializationInfo info, StreamingContext context)
         {
@@ -162,6 +163,10 @@ namespace Poseidon
             currentHitPoint = maxHitPoint;
             currentEnvPoint = lsCurrentEnvPoint = (int)info.GetValue("currentEnvPoint",typeof(int));
             maxEnvPoint = GameConstants.MaxEnv;
+
+            //deduct the amount of trash dropped
+            currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
+            if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
 
             skills = new bool[GameConstants.numberOfSkills];
             lsSkills = new bool[GameConstants.numberOfSkills];
@@ -205,7 +210,8 @@ namespace Poseidon
         }
 
         /// <summary>
-        /// Serialize the data to save game to file
+        /// Serialize the data to save game to file. Invoked by ObjectsToSerialize.GetObjectData
+        /// which is invoked by Serialiser.SerializeObjects
         /// </summary>
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {

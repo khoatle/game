@@ -95,7 +95,7 @@ namespace Poseidon
         Rectangle tipIconRectangle;
 
         // Current game level
-        public static int currentLevel = 0;
+        public static int currentLevel;
 
         HeightMapInfo heightMapInfo;
 
@@ -153,7 +153,7 @@ namespace Poseidon
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
+        public PlayGameScene(Game game, int startLevel, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
             graphics = graphic;
@@ -173,6 +173,15 @@ namespace Poseidon
             gameCamera = new Camera(GameConstants.MainCamHeight);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
+
+            if (startLevel > 0)
+            {
+                ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
+                Serializer serializer = new Serializer();
+                string SavedFile = "GameLevel" + startLevel.ToString();
+                objectsToSerialize = serializer.DeSerializeObjects(SavedFile);
+                hydroBot = objectsToSerialize.hydrobot;
+            }
             
             //fireTime = TimeSpan.FromSeconds(0.3f);
 
@@ -206,6 +215,8 @@ namespace Poseidon
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
 
             this.Load();
+            //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
+            //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
         }
 
         public void Load()
@@ -322,8 +333,16 @@ namespace Poseidon
 
             if (prevGameState == GameState.Lost && currentLevel < 11)
                 hydroBot.ResetToLevelStart();
-            else
+            else // Level won or currentLevel>=11
+            {
+                ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
+                objectsToSerialize.hydrobot = hydroBot;
+
+                Serializer serializer = new Serializer();
+                serializer.SerializeObjects("GameLevel" + currentLevel.ToString(), objectsToSerialize);
+
                 hydroBot.SetLevelStartValues();
+            }
 
             hydroBot.Reset();
             if (currentLevel == 11) HydroBot.bulletType = 0;

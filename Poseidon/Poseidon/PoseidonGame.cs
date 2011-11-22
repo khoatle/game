@@ -44,6 +44,8 @@ namespace Poseidon
         private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge, typeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture, teamLogo;
         StartScene startScene;
+        LoadingScene loadingScene;
+        SelectLoadingLevelScene selectLoadingLevelScene;
         // For the Attribute board
         AttributeBoard AttributeScene;
         protected Texture2D AttributeBackgroundTexture;
@@ -78,6 +80,7 @@ namespace Poseidon
         bool doubleClicked = false;
         bool clicked=false;
         double clickTimer = 0;
+        bool firstStartScene = true;
 
         // Texture to show that enemy is stunned
         protected Texture2D stunnedTexture;
@@ -96,7 +99,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -170,34 +173,21 @@ namespace Poseidon
             typeGameBackgroundTexture = Content.Load<Texture2D>("Image/MinigameTextures/classroom2");
             boxBackground = Content.Load<Texture2D>("Image/MinigameTextures/whiteskin");
 
+            //Loading the LOADING scene
+            loadingScene = new LoadingScene(this, largeFont, startBackgroundTexture, teamLogo);
+            Components.Add(loadingScene);
+
+            //Loading the select loading level scene
+            selectLoadingLevelScene = new SelectLoadingLevelScene(this, startSceneLarge, startBackgroundTexture, teamLogo);
+            Components.Add(selectLoadingLevelScene);
+
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 
-            // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
-            Components.Add(playGameScene);
-
-            // Create the main game play scene
+            // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
             Components.Add(shipWreckScene);
 
-            // Create the Attribute board
-            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
-            Components.Add(AttributeScene);
-
-            // Create level objective scene
-            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
-            Components.Add(levelObjectiveScene);
-
-            // Create tip scene
-            tipScene = new TipScene(this, tipBackgroundTexture, Content);
-            Components.Add(tipScene);
-
-            // Create minigame scenes
-            quizzGameScene = new QuizzGameScene(this, quizzGameBackgroundTexture, Content);
-            Components.Add(quizzGameScene);
-            typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
-            Components.Add(typeGameScene);
             // Start the game in the start Scene
             startScene.Show();
             activeScene = startScene;
@@ -271,6 +261,18 @@ namespace Poseidon
             if (activeScene == startScene)
             {
                 HandleStartSceneInput();
+            }
+            else if (activeScene == selectLoadingLevelScene)
+            {
+                HandleSelectLoadingLevelSceneInput();
+            }
+            else if (activeScene == loadingScene)
+            {
+                if (loadingScene.loadingSceneStarted)
+                {
+                    CreateLevelDependentScenes(loadingScene.loadingLevel);
+                    ShowScene(playGameScene);
+                }
             }
             // Handle Help Scene input
             else if (activeScene == helpScene)
@@ -346,7 +348,6 @@ namespace Poseidon
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
-                
             }
 
             // User pauses the game
@@ -467,20 +468,83 @@ namespace Poseidon
             if (enterPressed)
             {
                 audio.MenuSelect.Play();
-                switch (startScene.SelectedMenuIndex)
+                if (firstStartScene)
                 {
-                    case 0:
-                        MediaPlayer.Stop();
-                        ShowScene(playGameScene);
-                        break;
-                    case 1:
-                        ShowScene(helpScene);
-                        break;
-                    case 2:
-                        Exit();
-                        break;
+                    switch (startScene.SelectedMenuIndex)
+                    {
+                        case 0:
+                            MediaPlayer.Stop();
+                            PlayGameScene.currentLevel = 0;
+                            ShowScene(loadingScene);
+                            firstStartScene = false;
+                            break;
+                        case 1:
+                            MediaPlayer.Stop();
+                            ShowScene(selectLoadingLevelScene);
+                            firstStartScene = false;
+                            break;
+                        case 2:
+                            ShowScene(helpScene);
+                            break;
+                        case 3:
+                            Exit();
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (startScene.SelectedMenuIndex)
+                    {
+                        case 0:
+                            MediaPlayer.Stop();
+                            ShowScene(playGameScene);
+                            break;
+                        case 1:
+                            ShowScene(helpScene);
+                            break;
+                        case 2:
+                            Exit();
+                            break;
+                    }
+
                 }
             }
+        }
+        /// <summary>
+        /// Handle which level to load
+        /// </summary>
+        public void HandleSelectLoadingLevelSceneInput()
+        {
+            if (enterPressed)
+            {
+                PlayGameScene.currentLevel = 2;
+                ShowScene(loadingScene);
+            }
+        }
+        private void CreateLevelDependentScenes(int startLevel)
+        {
+            // Create the main game play scene
+            playGameScene = new PlayGameScene(this, startLevel, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
+            Components.Add(playGameScene);
+
+            // Create the Attribute board
+            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
+            Components.Add(AttributeScene);
+
+            // Create level objective scene
+            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
+            Components.Add(levelObjectiveScene);
+
+            // Create tip scene
+            tipScene = new TipScene(this, tipBackgroundTexture, Content);
+            Components.Add(tipScene);
+
+            // Create minigame scenes
+            quizzGameScene = new QuizzGameScene(this, quizzGameBackgroundTexture, Content, GraphicsDevice);
+            Components.Add(quizzGameScene);
+            typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
+            Components.Add(typeGameScene);
+
         }
         /// <summary>
         /// Handle buttons and keyboard in Attribute Scene

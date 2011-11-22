@@ -202,7 +202,7 @@ namespace Poseidon.Core
             {
                 SpriteFont font;
                 Color theColor;
-                x = position.X - ((menuItems[i].Length*45)/2);
+                //x = position.X - ((menuItems[i].Length*45)/2);
                 if (i == SelectedIndex)
                 {
                     font = selectedFont;
@@ -213,7 +213,7 @@ namespace Poseidon.Core
                     font = regularFont;
                     theColor = regularColor;
                 }
-
+                x = position.X - (font.MeasureString(menuItems[i]).X / 2);
                 // Draw the text shadow
                 spriteBatch.DrawString(font, menuItems[i],
                     new Vector2(x + 1, y + 1), Color.Black);

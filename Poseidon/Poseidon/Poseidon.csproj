@@ -123,6 +123,9 @@
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="Enemies\BaseEnemy.cs" />
+    <Compile Include="GameScenes\LoadingScene.cs" />
+    <Compile Include="GameScenes\SelectLoadingLevelScene.cs" />
+    <Compile Include="SaveGame\ObjectsToSerialize.cs" />
     <Compile Include="GameScenes\TipScene.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />
     <Compile Include="Miscellaneous\Bubble.cs" />
@@ -150,6 +153,7 @@
     <Compile Include="MiniGames\TypingGameScene.cs" />
     <Compile Include="MiniGames\WritingBox.cs" />
     <Compile Include="Miscellaneous\Point.cs" />
+    <Compile Include="SaveGame\Serializer.cs" />
     <Compile Include="ShipWrecks\OceanPaintings.cs" />
     <Compile Include="MiniGames\QuizzesLibrary.cs" />
     <Compile Include="Miscellaneous\HydroBot.cs" />

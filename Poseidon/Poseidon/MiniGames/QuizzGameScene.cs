@@ -56,12 +56,16 @@ namespace Poseidon.MiniGames
         //introducing game rule and stuff
         bool introducing = false;
         Texture2D introductionTexture;
+
+        GraphicsDevice graphicsDevice;
+
         /// <summary>
         /// Default Constructor
-        public QuizzGameScene(Game game, Texture2D background, ContentManager Content)
+        public QuizzGameScene(Game game, Texture2D background, ContentManager Content, GraphicsDevice graphicsDevice)
             : base(game)
         {
             this.Content = Content;
+            this.graphicsDevice = graphicsDevice;
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
 
@@ -87,17 +91,17 @@ namespace Poseidon.MiniGames
             quizzesLibrary = new QuizzesLibrary();
             questionID = random.Next(quizzesLibrary.quizzesList.Count);
 
-            positionQs = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 300, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Top+105);
-            positionA = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y);
-            positionB = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+100);
-            positionC = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+200);
-            positionD = new Vector2(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Left + 100, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y+300);
-            positionAns = new Vector2 (PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.X, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom - 50);
+            positionQs = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Left + 300, graphicsDevice.Viewport.TitleSafeArea.Top + 105);
+            positionA = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Left + 100, graphicsDevice.Viewport.TitleSafeArea.Center.Y);
+            positionB = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Left + 100, graphicsDevice.Viewport.TitleSafeArea.Center.Y+100);
+            positionC = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Left + 100, graphicsDevice.Viewport.TitleSafeArea.Center.Y+200);
+            positionD = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Left + 100, graphicsDevice.Viewport.TitleSafeArea.Center.Y+300);
+            positionAns = new Vector2 (graphicsDevice.Viewport.TitleSafeArea.Center.X, graphicsDevice.Viewport.TitleSafeArea.Bottom - 50);
             rectA = new Rectangle((int)positionA.X, (int)positionA.Y, 60, 60);
             rectB = new Rectangle((int)positionB.X, (int)positionB.Y, 60, 60);
             rectC = new Rectangle((int)positionC.X, (int)positionC.Y, 60, 60);
             rectD = new Rectangle((int)positionD.X, (int)positionD.Y, 60, 60);
-            nextButtonRect = new Rectangle(PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Right - 220, PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Bottom - 100, 200, 80);
+            nextButtonRect = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Right - 220, graphicsDevice.Viewport.TitleSafeArea.Bottom - 100, 200, 80);
 
             cursor = new Cursor(game, spriteBatch);
             cursor.targetToLock = null;
@@ -173,7 +177,7 @@ namespace Poseidon.MiniGames
             // dictates right/wrong answer
             // move to the next question
             // Reset the world for a new game
-            cursor.Update(PlayGameScene.GraphicDevice, PlayGameScene.gameCamera, gameTime, null);
+            cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
             CheckClick(gameTime);
             if (displayRightWrongAnswer)
             {

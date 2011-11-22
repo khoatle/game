@@ -54,7 +54,7 @@ namespace Poseidon
                                             ImageComponent.DrawMode.Stretch));
 
             // Create the Menu
-            string[] items = { "Start Game", "Help", "Quit" };
+            string[] items = { "New Game",  "Load Saved Level", "Help", "Quit" };
             menu = new TextMenuComponent(game, smallFont, largeFont);
             menu.SetMenuItems(items);
             Components.Add(menu);

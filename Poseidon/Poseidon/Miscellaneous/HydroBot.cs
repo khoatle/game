@@ -172,8 +172,12 @@ namespace Poseidon
             lsSkills = new bool[GameConstants.numberOfSkills];
             skillPrevUsed = new double[GameConstants.numberOfSkills];
             firstUse = new bool[GameConstants.numberOfSkills];
-            lsSkills = (bool[])info.GetValue("skills", typeof(bool[]));
-            lsSkills.CopyTo(skills, 0);
+            for (int i = 0; i < GameConstants.numberOfSkills; i++)
+            {
+                string Skillname = "skills" + i.ToString();
+                lsSkills[i] = skills[i] = (bool)info.GetValue(Skillname, typeof(bool));
+                //System.Diagnostics.Debug.WriteLine("DESerializing skills:" + skills[i]);
+            }
             activeSkillID = lsActiveSkillID = (int)info.GetValue("activeSkillID",typeof(int));
             pointToMoveTo = Vector3.Zero;
 
@@ -221,7 +225,12 @@ namespace Poseidon
             info.AddValue("maxHitPoint", maxHitPoint);
             info.AddValue("currentEnvPoint", currentEnvPoint);
 
-            info.AddValue("skills", skills);
+            for (int i = 0; i < GameConstants.numberOfSkills; i++)
+            {
+                string Skillname = "skills" + i.ToString();
+                info.AddValue(Skillname, skills[i]);
+                //System.Diagnostics.Debug.WriteLine("Serializing skills:" + skills[i]);
+            }
             info.AddValue("activeSkillID", activeSkillID);
 
             info.AddValue("floatHeight", floatHeight);
@@ -260,7 +269,8 @@ namespace Poseidon
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
-                skills[index] = false;
+                if(PlayGameScene.currentLevel==0) //to take care of reload
+                    skills[index] = false;
                 firstUse[index] = true;
                 skillPrevUsed[index] = 0;
             }

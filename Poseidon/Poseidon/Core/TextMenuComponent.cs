@@ -198,7 +198,7 @@ namespace Poseidon.Core
         {
             float y = position.Y;
             float x;
-            if (menuItems.Count * regularFont.LineSpacing < Game.Window.ClientBounds.Height)
+            if (((menuItems.Count * regularFont.LineSpacing)+position.Y) < Game.Window.ClientBounds.Height)
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
@@ -242,7 +242,7 @@ namespace Poseidon.Core
                         font = regularFont;
                         theColor = regularColor;
                     }
-                    if (i < menuItems.Count / 2)
+                    if (i <= menuItems.Count / 2)
                         x = position.X - position.X/2 - (font.MeasureString(menuItems[i]).X / 2);
                     else
                         x = position.X + position.X/2 - (font.MeasureString(menuItems[i]).X / 2);
@@ -254,7 +254,8 @@ namespace Poseidon.Core
                         new Vector2(x, y), theColor);
                     if (i == (int)menuItems.Count / 2)
                         y = position.Y;
-                    y += font.LineSpacing;
+                    else
+                        y += font.LineSpacing;
                 }
             }
 

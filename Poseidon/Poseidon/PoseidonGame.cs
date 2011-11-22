@@ -518,14 +518,23 @@ namespace Poseidon
                 {
                     switch (startScene.SelectedMenuIndex)
                     {
-                        case 0:
+                        case 0: //Resume
                             MediaPlayer.Stop();
                             ShowScene(playGameScene);
                             break;
                         case 1:
-                            ShowScene(helpScene);
+                            MediaPlayer.Stop();
+                            PlayGameScene.currentLevel = 0;
+                            ShowScene(loadingScene);
                             break;
                         case 2:
+                            MediaPlayer.Stop();
+                            ShowScene(selectLoadingLevelScene);
+                            break;
+                        case 3:
+                            ShowScene(helpScene);
+                            break;
+                        case 4:
                             Exit();
                             break;
                     }

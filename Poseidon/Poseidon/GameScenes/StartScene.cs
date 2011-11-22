@@ -85,7 +85,7 @@ namespace Poseidon
             rainPosition.Y = 180;
             // Put the menu centered in screen
             menu.Position = new Vector2(Game.Window.ClientBounds.Width/2
-                                          , 370);
+                                          , 280);
 
             // These elements will be visible when the 'Rock Rain' title
             // is done.
@@ -104,7 +104,7 @@ namespace Poseidon
             //MediaPlayer.Stop();
             if (gameStarted)
             {
-                string[] items = { "Resume Game", "Help", "Quit" };
+                string[] items = { "Resume Game", "New Game", "Load Saved Level", "Help", "Quit" };
                 menu.SetMenuItems(items);
             }
             base.Hide();

@@ -37,22 +37,7 @@ namespace Poseidon
             spriteBatch = (SpriteBatch)Game.Services.GetService(
                                             typeof(SpriteBatch));
 
-            // Create the Menu
-            int i;
-            List<string> menuStringList = new List<string>();
-            for (i = 1; i < GameConstants.RoundTime.Length; i++)
-            {
-                string savedFileName = "GameLevel" + i.ToString();
-                string menuString = "LEVEL " + (i+1).ToString(); // +1 Since the game will start from next level
-                if (File.Exists(savedFileName))
-                {
-                    savedlevels.Add(i);
-                    menuStringList.Add(menuString);
-                }
-            }
-            menuStringList.Add("Go Back");
             menu = new TextMenuComponent(game, font, font);
-            menu.SetMenuItems(menuStringList.ToArray());
             Components.Add(menu);
         }
 
@@ -65,6 +50,24 @@ namespace Poseidon
                                           , 50);
             menu.Visible = true;
             menu.Enabled = true;
+
+            int i;
+            List<string> menuStringList = new List<string>();
+            savedlevels.Clear();
+            for (i = 1; i < GameConstants.RoundTime.Length; i++)
+            {
+                string savedFileName = "GameLevel" + i.ToString();
+                string menuString = "LEVEL " + (i + 1).ToString(); // +1 Since the game will start from next level
+                if (File.Exists(savedFileName))
+                {
+                    savedlevels.Add(i);
+                    menuStringList.Add(menuString);
+                }
+            }
+            menuStringList.Add("Go Back");
+            menu.SetMenuItems(menuStringList.ToArray());
+
+
             base.Show();
         }
 

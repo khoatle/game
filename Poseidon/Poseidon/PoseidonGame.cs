@@ -98,7 +98,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -269,9 +269,11 @@ namespace Poseidon
             {
                 if (loadingScene.loadingSceneStarted)
                 {
-                    CreateLevelDependentScenes(loadingScene.loadingLevel);
+                    //CreateLevelDependentScenes(loadingScene.loadingLevel);
+                    CreateLevelDependentScenes();
                     startScene.gameStarted = true;
                     startScene.Hide();
+                    loadingScene.loadingSceneStarted = false;
                     ShowScene(playGameScene);
                 }
             }
@@ -542,10 +544,10 @@ namespace Poseidon
                 }
             }
         }
-        private void CreateLevelDependentScenes(int startLevel)
+        private void CreateLevelDependentScenes()
         {
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, startLevel, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(playGameScene);
 
             // Create the Attribute board

@@ -20,7 +20,7 @@ namespace Poseidon
         protected SpriteBatch spriteBatch = null;
         private SpriteFont font;
         public bool loadingSceneStarted = false;
-        public int loadingLevel;
+        //public int loadingLevel;
 
         public LoadingScene(Game game, SpriteFont font,
                             Texture2D background, Texture2D teamLogo)
@@ -78,7 +78,7 @@ namespace Poseidon
             spriteBatch.Draw(teamLogo, logoRect , Color.White);
             spriteBatch.DrawString(font, text, textPositon, Color.Black);
             spriteBatch.End();
-            this.loadingLevel = PlayGameScene.currentLevel;
+            //this.loadingLevel = PlayGameScene.currentLevel;
             loadingSceneStarted = true;
         }
 

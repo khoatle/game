@@ -153,7 +153,7 @@ namespace Poseidon
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
-        public PlayGameScene(Game game, int startLevel, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
             graphics = graphic;
@@ -174,11 +174,11 @@ namespace Poseidon
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight);
 
-            if (startLevel > 0)
+            if (PlayGameScene.currentLevel > 0)
             {
                 ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                 Serializer serializer = new Serializer();
-                string SavedFile = "GameLevel" + startLevel.ToString();
+                string SavedFile = "GameLevel" + PlayGameScene.currentLevel.ToString();
                 objectsToSerialize = serializer.DeSerializeObjects(SavedFile);
                 hydroBot = objectsToSerialize.hydrobot;
             }

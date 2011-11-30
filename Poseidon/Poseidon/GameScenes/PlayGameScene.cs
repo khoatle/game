@@ -974,7 +974,7 @@ namespace Poseidon
                     //Are we planting trees?
                     if ((lastKeyboardState.IsKeyDown(Keys.X) && (currentKeyboardState.IsKeyUp(Keys.X))))
                     {
-                        if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, roundTimer, plants, shipWrecks, staticObjects, gameTime))
+                        if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, plants, shipWrecks, staticObjects, gameTime))
                         {
                             audio.plantSound.Play();
                             HydroBot.currentExperiencePts += Plant.experienceReward;
@@ -1339,7 +1339,7 @@ namespace Poseidon
             foreach (Plant p in plants) {
                 if (p.BoundingSphere.Intersects(frustum))
                 {
-                    p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((p.creationTime - roundTimer.TotalSeconds) / 10.0));
+                    p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)(( gameTime.TotalGameTime.TotalSeconds - p.creationTime) / 10.0));
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;

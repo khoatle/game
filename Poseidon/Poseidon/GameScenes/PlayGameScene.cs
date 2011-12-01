@@ -1066,11 +1066,11 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, GameMode.MainGame, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, GameMode.MainGame, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, GameMode.MainGame, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime);
 
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor);
                     Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor);

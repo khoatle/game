@@ -116,7 +116,10 @@ namespace Poseidon
         Texture2D winningTexture, losingTexture;
 
         //score: using hydrobot gained exp as score
-        public float startScore;
+        public static float score = 0;
+
+        //is ancient fish killed
+        public static bool isAncientKilled;
 
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -131,7 +134,7 @@ namespace Poseidon
             this.game = game;
             this.radar = radar;
             this.stunnedTexture = stunnedTexture;
-            roundTime = TimeSpan.FromSeconds(100000);
+            roundTime = TimeSpan.FromSeconds(2592000);
             random = new Random();
             ground = new GameObject();
             gameCamera = new Camera(GameConstants.MainCamHeight);
@@ -147,8 +150,6 @@ namespace Poseidon
                 hydroBot = objectsToSerialize.hydrobot;
             }
 
-            //initiate the starting score
-            startScore = HydroBot.currentExperiencePts;
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -169,6 +170,8 @@ namespace Poseidon
             //loading winning, losing textures
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
+
+            isAncientKilled = false;
 
             this.Load();
 
@@ -254,7 +257,7 @@ namespace Poseidon
         {
             cursor.targetToLock = null;
             MediaPlayer.Stop();
-            roundTime = TimeSpan.FromSeconds(100000);
+            roundTime = TimeSpan.FromSeconds(2592000);
             roundTimer = roundTime;
 
             //Uncomment below line to use LEVELS
@@ -304,11 +307,13 @@ namespace Poseidon
             fishAmount = 0;
             enemies = new BaseEnemy[GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
                 + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator];
+            fish = new Fish[1];
 
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, -1, GameMode.SurvivalMode, GameConstants.MainGameFloatHeight);
- 
 
+            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, -1, GameMode.SurvivalMode, GameConstants.MainGameFloatHeight);
         }
 
         /// <summary>
@@ -756,14 +761,17 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, GameMode.SurvivalMode, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.SurvivalMode);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, GameMode.SurvivalMode, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.SurvivalMode, gameTime);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.SurvivalMode);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, GameMode.SurvivalMode, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime);
 
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, cursor);
                     Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.SurvivalMode, cursor);
+                    
+                    //revive the dead enemies to maintain their number
+                    AddingObjects.ReviveDeadEnemy(enemies, enemiesAmount, fish, fishAmount, hydroBot);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -776,9 +784,12 @@ namespace Poseidon
                         enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.SurvivalMode);
                     }
 
-
+                    for (int i = 0; i < fishAmount; i++)
+                    {
+                        fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
+                    }
                     //Checking win/lost condition for this level
-                    if (HydroBot.currentHitPoint <= 0)
+                    if (HydroBot.currentHitPoint <= 0 || isAncientKilled)
                     {
                         currentGameState = GameState.Lost;
                         audio.gameOver.Play();
@@ -1045,7 +1056,7 @@ namespace Poseidon
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
-            str1 += ((int)(HydroBot.currentExperiencePts - startScore)).ToString();
+            str1 += ((int)score).ToString();
             //if (roundTimer.Minutes < 10)
             //    str1 += "0";
             //str1 += roundTimer.Minutes + ":";

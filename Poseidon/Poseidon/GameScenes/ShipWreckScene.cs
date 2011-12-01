@@ -768,11 +768,11 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.ShipWreck);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.ShipWreck, gameTime);
                 Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck);
-                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime);
 
                 Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, cursor);
                 Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.ShipWreck, cursor);

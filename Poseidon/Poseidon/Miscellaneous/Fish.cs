@@ -48,7 +48,12 @@ namespace Poseidon {
             if (Name.Contains("orca")) scale = 0.5f;
             if (Name.Contains("seal")) scale = 0.5f;
             if (Name.Contains("shark")) scale = 0.5f;
-
+            if (isBigBoss)
+            {
+                scale = 1.0f;
+                maxHealth = 5000;
+                health = 5000;
+            }
             scaledSphere.Radius *= scale;
 
             BoundingSphere =
@@ -133,7 +138,7 @@ namespace Poseidon {
                 if (Name.Contains("dolphin") || Name.Contains("turtle")) scale = 0.5f;
                 if (Name.Contains("manetee")) scale = 0.6f;
                 if (Name.Contains("seal")) scale = 1.1f;
-             
+                if (isBigBoss) scale = 1.5f;
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);

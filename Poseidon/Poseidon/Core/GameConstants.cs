@@ -33,8 +33,8 @@ namespace Poseidon {
         public const int ExpPainting = 35;
         public const int BasicExpHealingFish = 8;
         //game scenes constants
-        public const int MainGameMinRangeX = 20;
-        public const int MainGameMinRangeZ = 20;
+        public const int MainGameMinRangeX = 100;
+        public const int MainGameMinRangeZ = 100;
         public const int ShipWreckMinRangeX = 20;
         public const int ShipWreckMinRangeZ = 10;
         public const int MainGameMaxRangeX = 500;
@@ -212,9 +212,9 @@ namespace Poseidon {
         public static int gainHitPoint = 20;
 
         //consts for the survival mode
-        public const int SurvivalModeMaxShootingEnemy = 5;
-        public const int SurvivalModeMaxCombatEnemy = 5;
-        public const int SurvivalModeMaxMutantShark = 5;
-        public const int SurvivalModeMaxTerminator = 5;
+        public const int SurvivalModeMaxShootingEnemy = 50;
+        public const int SurvivalModeMaxCombatEnemy = 50;
+        public const int SurvivalModeMaxMutantShark = 10;
+        public const int SurvivalModeMaxTerminator = 2;
     }
 }

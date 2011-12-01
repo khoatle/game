@@ -426,10 +426,10 @@ namespace Poseidon
                             hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                             //if the skill has cooled down
                             //or this is the 1st time the user uses it
-                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || HydroBot.firstUse[0] == true)
+                            if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || HydroBot.firstUse[0] == true)
                             {
                                 HydroBot.firstUse[0] = false;
-                                HydroBot.skillPrevUsed[0] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
                                 //audio.Explosion.Play();
                                 CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, this);
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
@@ -449,10 +449,10 @@ namespace Poseidon
                         //Thor's Hammer!!!
                         if (HydroBot.activeSkillID == 1)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || HydroBot.firstUse[1] == true)
+                            if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || HydroBot.firstUse[1] == true)
                             {
                                 HydroBot.firstUse[1] = false;
-                                HydroBot.skillPrevUsed[1] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
                                 audio.Explo1.Play();
                                 gameCamera.Shake(25f, .4f);
                                 CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, GameMode.SurvivalMode);
@@ -471,12 +471,12 @@ namespace Poseidon
                         // Achilles' Armor!!!
                         if (HydroBot.activeSkillID == 2)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || HydroBot.firstUse[2] == true)
+                            if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || HydroBot.firstUse[2] == true)
                             {
                                 HydroBot.firstUse[2] = false;
                                 HydroBot.invincibleMode = true;
                                 audio.armorSound.Play();
-                                HydroBot.skillPrevUsed[2] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.skillPrevUsed[2] = PoseidonGame.playTime.TotalSeconds;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
 
                                 //display HP loss
@@ -493,11 +493,11 @@ namespace Poseidon
                         //Hermes' Winged Sandal!!!
                         if (HydroBot.activeSkillID == 3)
                         {
-                            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || HydroBot.firstUse[3] == true)
+                            if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || HydroBot.firstUse[3] == true)
                             {
                                 HydroBot.firstUse[3] = false;
                                 audio.hermesSound.Play();
-                                HydroBot.skillPrevUsed[3] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.skillPrevUsed[3] = PoseidonGame.playTime.TotalSeconds;
                                 HydroBot.supersonicMode = true;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
 
@@ -517,13 +517,13 @@ namespace Poseidon
                         {
                             BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
 
-                            if (enemy != null && (HydroBot.firstUse[4] == true || gameTime.TotalGameTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
+                            if (enemy != null && (HydroBot.firstUse[4] == true || PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
                             {
                                 HydroBot.firstUse[4] = false;
 
                                 enemy.setHypnotise(gameTime);
 
-                                HydroBot.skillPrevUsed[4] = gameTime.TotalGameTime.TotalSeconds;
+                                HydroBot.skillPrevUsed[4] = PoseidonGame.playTime.TotalSeconds;
                                 HydroBot.currentHitPoint -= GameConstants.skillHealthLoss;
 
                                 //display HP loss
@@ -549,9 +549,9 @@ namespace Poseidon
                         {
                             pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
                             hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
-                            if (gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                            if (PoseidonGame.playTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                             {
-                                prevFireTime = gameTime.TotalGameTime;
+                                prevFireTime = PoseidonGame.playTime;
                                 //audio.Shooting.Play();
                                 if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
                                 else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
@@ -583,10 +583,10 @@ namespace Poseidon
                         else
                         {
                             //if the enemy is in the shooting range then shoot it w/o moving to it
-                            if (mouseOnLivingObject && gameTime.TotalGameTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
+                            if (mouseOnLivingObject && PoseidonGame.playTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                             {
                                 hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
-                                prevFireTime = gameTime.TotalGameTime;
+                                prevFireTime = PoseidonGame.playTime;
                                 //audio.Shooting.Play();
                                 if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(hydroBot, Content, myBullet); }
                                 else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(hydroBot, Content, healthBullet); }
@@ -778,7 +778,7 @@ namespace Poseidon
                         //disable stun if stun effect times out
                         if (enemies[i].stunned)
                         {
-                            if (gameTime.TotalGameTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
+                            if (PoseidonGame.playTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
                         enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.SurvivalMode);

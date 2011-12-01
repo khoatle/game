@@ -796,6 +796,7 @@ namespace Poseidon
                     }
 
                     roundTimer -= gameTime.ElapsedGameTime;
+                    PoseidonGame.playTime += gameTime.ElapsedGameTime;
 
                     //for the shader
                     m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;

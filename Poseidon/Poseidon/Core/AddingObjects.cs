@@ -725,6 +725,9 @@ namespace Poseidon
                 if (enemies[i].health <= 0)
                 {
                     enemies[i].health = enemies[i].maxHealth;
+                    enemies[i].stunned = false;
+                    enemies[i].isHypnotise = false;
+
                     int xValue, zValue;
                     do
                     {

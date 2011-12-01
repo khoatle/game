@@ -133,7 +133,8 @@ namespace Poseidon.Core
                     // at lower elevations have smaller dots.
                     float scaleHeight = 1.0f + ((fishes[i].Position.Y - playerPos.Y) / 200.0f);
 
-                    // Draw enemy dot on radar
+                    if (fishes[i].isBigBoss) scaleHeight *= 1.5f;
+                    // Draw fish dot on radar
                     spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
                 }
             }

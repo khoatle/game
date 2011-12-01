@@ -14,29 +14,43 @@ namespace Poseidon
 {
     public static class AddingObjects
     {
-        public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
+        public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, GameMode gameMode)
         {
-            if (mainGame)
+         
+            if (gameMode == GameMode.SurvivalMode)
+            {
+                enemiesAmount = GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
+                + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator;
+            }
+            else if (gameMode == GameMode.MainGame)
                 enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
                     + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel];
-            else
+            else if (gameMode == GameMode.ShipWreck)
             {
                 if (PlayGameScene.currentLevel >= 4)
                     enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
                 else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
             }
-            int numShootingEnemies;
-            int numCombatEnemies;
+            int numShootingEnemies = 0;
+            int numCombatEnemies= 0;
             int numMutantShark = 0;
             int numTerminator = 0;
-            if (mainGame)
+        
+            if (gameMode == GameMode.SurvivalMode)
+            {
+                numShootingEnemies = GameConstants.SurvivalModeMaxShootingEnemy;
+                numCombatEnemies = GameConstants.SurvivalModeMaxCombatEnemy;
+                numMutantShark = GameConstants.SurvivalModeMaxMutantShark;
+                numTerminator = GameConstants.SurvivalModeMaxTerminator;
+            }
+            else if (gameMode == GameMode.MainGame)
             {
                 numShootingEnemies = GameConstants.NumberShootingEnemies[currentLevel];
                 numCombatEnemies = GameConstants.NumberCombatEnemies[currentLevel];
                 numMutantShark = GameConstants.NumberMutantShark[currentLevel];
                 numTerminator = GameConstants.NumberTerminator[currentLevel];
             }
-            else
+            else if (gameMode == GameMode.ShipWreck)
             {
                 if (PlayGameScene.currentLevel >= 4)
                 {
@@ -73,9 +87,9 @@ namespace Poseidon
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
                 {
-                    Terminator terminator = new Terminator();
+                    Terminator terminator = new Terminator(gameMode);
                     terminator.LoadContent(Content, "Models/EnemyModels/terminator");
-                    if (currentLevel == 4) terminator.Name = "???";
+                    if (currentLevel == 4 && gameMode == GameMode.MainGame) terminator.Name = "???";
                     else terminator.Name = "terminator";
                     terminator.Load(31, 60, 24);
                     enemies[i] = terminator;
@@ -84,11 +98,17 @@ namespace Poseidon
             
         }
 
-        public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, bool mainGame)
+        public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, GameMode gameMode)
         {
-            if (mainGame)
+            if (gameMode == GameMode.MainGame)
                 fishAmount = GameConstants.NumberFish[currentLevel];
-            else fishAmount = GameConstants.ShipNumberFish;
+            else if (gameMode == GameMode.ShipWreck) fishAmount = GameConstants.ShipNumberFish;
+            //there is only 1 fish to protect in the survival mode
+            else if (gameMode == GameMode.SurvivalMode)
+            {
+                fishAmount = 1;
+            }
+            else fishAmount = 0;
             Random random = new Random();
             int type;
             //Level 4 is shark only
@@ -98,11 +118,17 @@ namespace Poseidon
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
+                if (gameMode == GameMode.SurvivalMode)
+                {
+                    fish[i].Name = "Ancient ";
+                    fish[i].isBigBoss = true;
+                }
+                else fish[i].Name = "";
                 if (type == 0)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/turtle");
                     //name must be initialized before Load()
-                    fish[i].Name = "turtle";
+                    fish[i].Name += "turtle";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "We are reptiles from much before the Jurassic age. Oh, I cry not for sorrow, just to get the salt out.";
                     fish[i].sad_talk = "I need to go to the beach to lay eggs. Can you ask the humans not to kill me?";  
@@ -110,7 +136,7 @@ namespace Poseidon
                 else if (type == 1)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphin");
-                    fish[i].Name = "dolphin";
+                    fish[i].Name += "dolphin";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "We remind you to play, play, play, for you will find great power in play.";
                     fish[i].sad_talk = "Though we try to be friends with humans, they always hurt us with their pollution, propellers and what not!";
@@ -118,7 +144,7 @@ namespace Poseidon
                 else if (type == 2)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/manetee");
-                    fish[i].Name = "manetee";
+                    fish[i].Name += "manetee";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "Do not call me sea-cow. Do I look that fat?";
                     fish[i].sad_talk = "I am a vegeterian. Why are they killing me?";
@@ -126,7 +152,7 @@ namespace Poseidon
                 else if (type == 3)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/stingray");
-                    fish[i].Name = "sting ray";
+                    fish[i].Name += "sting ray";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "I can't see you as my eyes are on top. But I can sense a bot with my electro-receptors.";
                     fish[i].sad_talk = "I will teach you to sting, if you promise to sting everyone who eat bbq sting-ray.";
@@ -134,7 +160,7 @@ namespace Poseidon
                 else if (type == 4)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/orca");
-                    fish[i].Name = "orca";
+                    fish[i].Name += "orca";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "Move away, you little bot, here comes the killer whale.";
                     fish[i].sad_talk = "I lost my way. I can't hear my friends due to the noise from the oil-rig.";
@@ -143,7 +169,7 @@ namespace Poseidon
                 {
 
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/seal");
-                    fish[i].Name = "seal";
+                    fish[i].Name += "seal";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
                     fish[i].sad_talk = "We need the arctic ice. Stop global warming.";
@@ -151,7 +177,7 @@ namespace Poseidon
                 else if (type == 6)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalshark");
-                    fish[i].Name = "shark";
+                    fish[i].Name += "shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
                     fish[i].sad_talk = "Humans kill over 30 million sharks every year. We are the oldest fish, spare us.";
@@ -159,7 +185,7 @@ namespace Poseidon
                 else if (type == 7)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardshark");
-                    fish[i].Name = "leopard shark";
+                    fish[i].Name += "leopard shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "No, I am not racist and I date all kinds of shark, not you, dear bot.";
                     fish[i].sad_talk = "We never eat humans. Why do they hurt us?";
@@ -167,7 +193,7 @@ namespace Poseidon
                 else if (type == 8)
                 {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/hammershark");
-                    fish[i].Name = "hammer shark";
+                    fish[i].Name += "hammer shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "I have 360 degree binocular vision. I can detect an electrical signal of half a billionth of a volt. What superpower you brag about?";
                     fish[i].sad_talk = "Why do humans like our fins so much. Does 'delicacy' mean genocide?";
@@ -181,48 +207,51 @@ namespace Poseidon
             }
         }
 
-        public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight)
         {
-            loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, mainGame);
+            loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, gameMode);
 
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;
-            Vector3 tempCenter;
+            //Vector3 tempCenter;
 
             //place enemies
             for (int i = 0; i < enemiesAmount; i++)
             {
                 enemies[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 enemies[i].Position.Y = floatHeight;
-                tempCenter = enemies[i].BoundingSphere.Center;
-                tempCenter.X = enemies[i].Position.X;
-                tempCenter.Y = floatHeight;
-                tempCenter.Z = enemies[i].Position.Z;
+                //tempCenter = enemies[i].BoundingSphere.Center;
+                //tempCenter.X = enemies[i].Position.X;
+                //tempCenter.Y = floatHeight;
+                //tempCenter.Z = enemies[i].Position.Z;
                 enemies[i].BoundingSphere =
-                    new BoundingSphere(tempCenter, enemies[i].BoundingSphere.Radius);
+                    new BoundingSphere(enemies[i].Position, enemies[i].BoundingSphere.Radius);
                 //enemies[i].ChangeBoundingSphere();
             }
         }
 
-        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, BaseEnemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, BaseEnemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight)
         {
-            loadContentFish(ref fishAmount, fish, Content, currentLevel, mainGame);
+            loadContentFish(ref fishAmount, fish, Content, currentLevel, gameMode);
 
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;
-            Vector3 tempCenter;
+            //Vector3 tempCenter;
 
             //place fish
             for (int i = 0; i < fishAmount; i++)
             {
-                fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                //in survival mode, try to place the ancient fish near you
+                if (gameMode == GameMode.SurvivalMode)
+                    fish[i].Position = GenerateSurfaceRandomPosition(0, minX, 0, minZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                else fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = floatHeight;
-                tempCenter = fish[i].BoundingSphere.Center;
-                tempCenter.X = fish[i].Position.X;
-                tempCenter.Y = floatHeight;
-                tempCenter.Z = fish[i].Position.Z;
+                //tempCenter = fish[i].BoundingSphere.Center;
+                //tempCenter.X = fish[i].Position.X;
+                //tempCenter.Y = floatHeight;
+                //tempCenter.Z = fish[i].Position.Z;
                 fish[i].BoundingSphere =
-                    new BoundingSphere(tempCenter, fish[i].BoundingSphere.Radius);
+                    new BoundingSphere(fish[i].Position, fish[i].BoundingSphere.Radius);
             }
         }
 
@@ -307,7 +336,7 @@ namespace Poseidon
             
             ChasingBullet newBullet = new ChasingBullet();
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target);
-            newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
+            newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
             if (shooter.BoundingSphere.Intersects(cameraFrustum)) {
                 PoseidonGame.audio.chasingBulletSound.Play();
@@ -336,13 +365,13 @@ namespace Poseidon
             newBullet.initialize(obj.Position + shootingDirection * offsetFactor, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
             {
-                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");
+                newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/bossBullet");
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.bossShot.Play();
             }
             else
             {
-                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
+                newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/normalbullet");
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.enemyShot.Play();
             }
@@ -369,7 +398,7 @@ namespace Poseidon
         }
 
         public static void placeTrash(
-            List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight, HeightMapInfo heightMapInfo)
+            List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             int positionSign;
@@ -686,6 +715,33 @@ namespace Poseidon
         private static Vector3 PerpendicularVector(Vector3 directionVector)
         {
             return new Vector3(-directionVector.Z, directionVector.Y, directionVector.X);
+        }
+
+        public static void ReviveDeadEnemy(BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, HydroBot hydroBot)
+        {
+            Random random = new Random();
+            for (int i = 0; i < enemyAmount; i++)
+            {
+                if (enemies[i].health <= 0)
+                {
+                    enemies[i].health = enemies[i].maxHealth;
+                    int xValue, zValue;
+                    do
+                    {
+                        xValue = random.Next(0, hydroBot.MaxRangeX);
+                        zValue = random.Next(0, hydroBot.MaxRangeZ);
+
+                    } while (IsSurfaceOccupied(xValue, zValue, enemyAmount, fishAmount, enemies, fishes) ||
+                         (((int)(MathHelper.Distance(xValue, hydroBot.Position.X)) < 200) &&
+                         ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200)));
+
+                    enemies[i].Position.X = xValue;
+                    enemies[i].Position.Z = zValue;
+                    enemies[i].Position.Y = hydroBot.floatHeight;
+                    enemies[i].BoundingSphere =
+                        new BoundingSphere(enemies[i].Position, enemies[i].BoundingSphere.Radius);
+                }
+            }
         }
     }
 }

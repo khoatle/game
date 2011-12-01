@@ -33,8 +33,8 @@ namespace Poseidon {
         public const int ExpPainting = 35;
         public const int BasicExpHealingFish = 8;
         //game scenes constants
-        public const int MainGameMinRangeX = 20;
-        public const int MainGameMinRangeZ = 20;
+        public const int MainGameMinRangeX = 100;
+        public const int MainGameMinRangeZ = 100;
         public const int ShipWreckMinRangeX = 20;
         public const int ShipWreckMinRangeZ = 10;
         public const int MainGameMaxRangeX = 500;
@@ -123,6 +123,7 @@ namespace Poseidon {
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
+        public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
@@ -210,5 +211,10 @@ namespace Poseidon {
         public static float gainStrength = 0.06f;
         public static int gainHitPoint = 20;
 
+        //consts for the survival mode
+        public const int SurvivalModeMaxShootingEnemy = 50;
+        public const int SurvivalModeMaxCombatEnemy = 50;
+        public const int SurvivalModeMaxMutantShark = 10;
+        public const int SurvivalModeMaxTerminator = 2;
     }
 }

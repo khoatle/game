@@ -6,6 +6,8 @@ using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
+using System.IO;
+using System.Collections.Generic;
 
 #endregion
 
@@ -38,6 +40,7 @@ namespace Poseidon
         
         //for continously playing random background musics
         Random rand= new Random();
+        public string[] menuItems;
         /// <summary>
         /// Default Constructor
         /// </summary>
@@ -55,10 +58,21 @@ namespace Poseidon
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
 
+            
             // Create the Menu
-            string[] items = { "New Game",  "Load Saved Level", "Help", "Quit" };
+            if (File.Exists("SurvivalMode"))
+            {
+                string[] items = { "New Game", "Load Saved Level", "Survival Mode", "Help", "Quit" };
+                menuItems = items;
+            }
+            else
+            {
+                string[] items = { "New Game", "Load Saved Level", "Help", "Quit" };
+                menuItems = items;
+            }
+           
             menu = new TextMenuComponent(game, smallFont, largeFont);
-            menu.SetMenuItems(items);
+            menu.SetMenuItems(menuItems);
             Components.Add(menu);
 
             // Get the current spritebatch
@@ -83,6 +97,37 @@ namespace Poseidon
             rockPosition.Y = 40;
             rainPosition.X = Game.Window.ClientBounds.Width;
             rainPosition.Y = 180;
+            if (gameStarted)
+            {
+                // Create the Menu
+                if (PlayGameScene.currentGameState != GameState.GameComplete)
+                {
+                    if (File.Exists("SurvivalMode"))
+                    {
+                        string[] items = { "Resume Game", "New Game", "Load Saved Level", "Survival Mode", "Help", "Quit" };
+                        menuItems = items;
+                    }
+                    else
+                    {
+                        string[] items = { "Resume Game", "New Game", "Load Saved Level", "Help", "Quit" };
+                        menuItems = items;
+                    }
+                }
+                else {
+                    if (File.Exists("SurvivalMode"))
+                    {
+                        string[] items = { "New Game", "Load Saved Level", "Survival Mode", "Help", "Quit" };
+                        menuItems = items;
+                    }
+                    else
+                    {
+                        string[] items = { "New Game", "Load Saved Level", "Help", "Quit" };
+                        menuItems = items;
+                    }
+                }
+                menu.SetMenuItems(menuItems);
+            }
+            //if (PlayGameScen
             // Put the menu centered in screen
             menu.Position = new Vector2(Game.Window.ClientBounds.Width/2
                                           , 280);
@@ -102,11 +147,7 @@ namespace Poseidon
         public override void Hide()
         {
             //MediaPlayer.Stop();
-            if (gameStarted)
-            {
-                string[] items = { "Resume Game", "New Game", "Load Saved Level", "Help", "Quit" };
-                menu.SetMenuItems(items);
-            }
+
             base.Hide();
         }
 

@@ -105,7 +105,10 @@ namespace Poseidon
         public static float maxHPLossFromPoisson;
         public static float poissonInterval;
 
-        public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight)
+        // which game mode is this hydrobot in?
+        public GameMode gameMode;
+
+        public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
             strength = lsStrength = GameConstants.MainCharStrength;
@@ -127,7 +130,13 @@ namespace Poseidon
             lsSkills = new bool[GameConstants.numberOfSkills];
             skillPrevUsed = new double[GameConstants.numberOfSkills];
             firstUse = new bool[GameConstants.numberOfSkills];
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                skills[index] = false;
+            }
 
+            //if(PlayGameScene.currentLevel == 0 && gameMode == GameMode.MainGame) //to take care of reload
+            //    skills[index] = false;
             this.floatHeight = floatHeight;
             Position.Y = floatHeight;
 
@@ -147,6 +156,8 @@ namespace Poseidon
             poissonInterval = 0;
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoisson = 0;
+
+            this.gameMode = gameMode;
         }
 
         /// <summary>
@@ -165,8 +176,11 @@ namespace Poseidon
             maxEnvPoint = GameConstants.MaxEnv;
 
             //deduct the amount of trash dropped
-            currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
-            if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
+            if (gameMode != GameMode.SurvivalMode)
+            {
+                currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
+                if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
+            }
 
             skills = new bool[GameConstants.numberOfSkills];
             lsSkills = new bool[GameConstants.numberOfSkills];
@@ -269,8 +283,7 @@ namespace Poseidon
             //no skill yet activated
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
-                if(PlayGameScene.currentLevel==0) //to take care of reload
-                    skills[index] = false;
+                
                 firstUse[index] = true;
                 skillPrevUsed[index] = 0;
             }
@@ -370,13 +383,13 @@ namespace Poseidon
             accumulatedHealthLossFromPoisson = 0;
             PlayGameScene.points.Clear();
             ShipWreckScene.points.Clear();
-            if(PlayGameScene.currentLevel>0)
+            if(PlayGameScene.currentLevel > 0 && gameMode != GameMode.SurvivalMode)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
             if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
         }
 
 
-        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo, int scene) //scene- 1playgame 2shipwreck
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, Vector3 pointMoveTo, GameMode gameMode)
         {
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
@@ -403,11 +416,13 @@ namespace Poseidon
 
                     Point point = new Point();
                     String point_string = "Poison Free";
-                    point.LoadContent(PlayGameScene.Content, point_string, Position, Color.White);
-                    if (scene == 2)
+                    point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.White);
+                    if (gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);
-                    else
+                    else if (gameMode == GameMode.MainGame)
                         PlayGameScene.points.Add(point);
+                    else if (gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point);
                 }
             }
 
@@ -566,7 +581,7 @@ namespace Poseidon
             //Interacting with trashs and fruits
             if (keyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fruits, trashes, gameTime);
+                Interact_with_trash_and_fruit(fruits, trashes, gameTime, gameMode);
             }
             //Position = Vector3.Zero;
             // if clip player has been initialized, update it
@@ -583,7 +598,7 @@ namespace Poseidon
             }
         }
 
-        private void Interact_with_trash_and_fruit(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime)
+        private void Interact_with_trash_and_fruit(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, GameMode gameMode)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);
@@ -602,8 +617,13 @@ namespace Poseidon
 
                             Point point = new Point();
                             String point_string = "TEMP-SPEED X 2";
-                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(PoseidonGame.contentManager, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 2)
                         {
@@ -612,8 +632,13 @@ namespace Poseidon
 
                             Point point = new Point();
                             String point_string = "\nTEMP-STRENGTH X 2";
-                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(PoseidonGame.contentManager, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 3)
                         {
@@ -622,8 +647,13 @@ namespace Poseidon
 
                             Point point = new Point();
                             String point_string = "\n\nTEMP-SHOOTING RATE X 2";
-                            point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(PoseidonGame.contentManager, point_string, fruits[curCell].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                         else if (fruits[curCell].powerType == 4)
                         {
@@ -634,19 +664,29 @@ namespace Poseidon
                                 currentHitPoint = maxHitPoint;
                                 Point point = new Point();
                                 String point_string = "\n\n\n+"+ (int)hitpointAdded +" HEALTH";
-                                point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
-                                PlayGameScene.points.Add(point);
+                                point.LoadContent(PoseidonGame.contentManager, point_string, fruits[curCell].Position, Color.LawnGreen);
+                                if (gameMode == GameMode.ShipWreck)
+                                    ShipWreckScene.points.Add(point);
+                                else if (gameMode == GameMode.MainGame)
+                                    PlayGameScene.points.Add(point);
+                                else if (gameMode == GameMode.SurvivalMode)
+                                    SurvivalGameScene.points.Add(point);
                             }
                             else
                             {
                                 Point point = new Point();
                                 String point_string = "\n\n\n+100 HEALTH";
-                                point.LoadContent(PlayGameScene.Content, point_string, fruits[curCell].Position, Color.LawnGreen);
-                                PlayGameScene.points.Add(point);
+                                point.LoadContent(PoseidonGame.contentManager, point_string, fruits[curCell].Position, Color.LawnGreen);
+                                if (gameMode == GameMode.ShipWreck)
+                                    ShipWreckScene.points.Add(point);
+                                else if (gameMode == GameMode.MainGame)
+                                    PlayGameScene.points.Add(point);
+                                else if (gameMode == GameMode.SurvivalMode)
+                                    SurvivalGameScene.points.Add(point);
                             }
                         }
                         //RetrievedSound.Play();
-                        PlayGameScene.audio.retrieveSound.Play();
+                        PoseidonGame.audio.retrieveSound.Play();
                     }
                 }
             }
@@ -659,13 +699,18 @@ namespace Poseidon
                         trash.Retrieved = true;
                         currentExperiencePts += trash.experienceReward;
                         currentEnvPoint += GameConstants.envGainForTrashClean;
-                        PlayGameScene.audio.retrieveSound.Play();
+                        PoseidonGame.audio.retrieveSound.Play();
                         //RetrievedSound.Play();
 
                         Point point = new Point();
                         String point_string = "+" + GameConstants.envGainForTrashClean.ToString() + "ENV\n+" + trash.experienceReward + "EXP";
-                        point.LoadContent(PlayGameScene.Content, point_string, trash.Position, Color.LawnGreen);
-                        PlayGameScene.points.Add(point);
+                        point.LoadContent(PoseidonGame.contentManager, point_string, trash.Position, Color.LawnGreen);
+                        if (gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
                     }
                 }
             }

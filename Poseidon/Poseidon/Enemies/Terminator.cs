@@ -29,7 +29,7 @@ namespace Poseidon
         Random random;
         int powerupsType;
 
-        public Terminator()
+        public Terminator(GameMode gameMode)
             : base()
         {
             speed = (float)(GameConstants.EnemySpeed * 1.2);
@@ -38,7 +38,7 @@ namespace Poseidon
             isBigBoss = true;
             random = new Random();
             //Terminator is undefeatable before the last level
-            if (PlayGameScene.currentLevel == 11)
+            if (PlayGameScene.currentLevel == 11 || gameMode == GameMode.SurvivalMode)
             {
                 health = 10000;
                 maxHealth = 10000;
@@ -72,7 +72,7 @@ namespace Poseidon
             Load(1, 30, 24);
         }
 
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, int scene) //scene 1:playgame 2:shipwreck
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,

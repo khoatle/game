@@ -38,14 +38,18 @@ namespace Poseidon
         public Rectangle shootrateIconRectangle;
         public Rectangle bulletStrengthIconRectangle;
         public Rectangle doneIconRectangle;
-        private int centerX = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.X;
-        private int centerY = PlayGameScene.GraphicDevice.Viewport.TitleSafeArea.Center.Y + 50;
+        private int centerX;
+        private int centerY;
+
         Random random = new Random();
         /// <summary>
         /// Default Constructor
          public AttributeBoard(Game game, Texture2D background, ContentManager Content)
             : base(game)
         {
+            centerX = game.GraphicsDevice.Viewport.TitleSafeArea.Center.X;
+            centerY = game.GraphicsDevice.Viewport.TitleSafeArea.Center.Y + 50;
+
             this.Content = Content;
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));

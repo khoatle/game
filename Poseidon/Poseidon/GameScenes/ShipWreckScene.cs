@@ -126,7 +126,7 @@ namespace Poseidon
             ground = new GameObject();
             gameCamera = new Camera(GameConstants.ShipCamHeight);
             boundingSphere = new GameObject();
-            hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight);
+            hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight, GameMode.ShipWreck);
             //fireTime = TimeSpan.FromSeconds(0.3f);
             if (PlayGameScene.currentLevel >= 4)
                 enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
@@ -281,9 +281,9 @@ namespace Poseidon
             else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
             enemies = new BaseEnemy[enemiesAmount];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
-                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 ,false, GameConstants.ShipWreckFloatHeight);
+                GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 , GameMode.ShipWreck, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
-                GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, false, GameConstants.ShipWreckFloatHeight);
+                GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, GameMode.ShipWreck, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeTreasureChests(treasureChests, staticObjects, random, heightMapInfo,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
             
@@ -455,8 +455,8 @@ namespace Poseidon
                             //display HP loss
                             Point point = new Point();
                             String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(Content, point_string, hydroBot.Position, Color.Black);
+                            points.Add(point);
 
                             hydroBot.reachDestination = true;
                             if (!hydroBot.clipPlayer.inRange(61, 90))
@@ -473,14 +473,14 @@ namespace Poseidon
                             HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
                             audio.Explo1.Play();
                             gameCamera.Shake(25f, .4f);
-                            CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, 1);
+                            CastSkill.UseThorHammer(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, GameMode.ShipWreck);
                             HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
 
                             //display HP loss
                             Point point = new Point();
                             String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(Content, point_string, hydroBot.Position, Color.Black);
+                            points.Add(point);
 
                             if (!hydroBot.clipPlayer.inRange(61, 90))
                                 hydroBot.clipPlayer.switchRange(61, 90);
@@ -500,8 +500,8 @@ namespace Poseidon
                             //display HP loss
                             Point point = new Point();
                             String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(Content, point_string, hydroBot.Position, Color.Black);
+                            points.Add(point);
 
                             if (!hydroBot.clipPlayer.inRange(61, 90))
                                 hydroBot.clipPlayer.switchRange(61, 90);
@@ -522,8 +522,8 @@ namespace Poseidon
                             //display HP loss
                             Point point = new Point();
                             String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(Content, point_string, hydroBot.Position, Color.Black);
+                            points.Add(point);
 
                             if (!hydroBot.clipPlayer.inRange(61, 90))
                                 hydroBot.clipPlayer.switchRange(61, 90);
@@ -547,8 +547,8 @@ namespace Poseidon
                             //display HP loss
                             Point point = new Point();
                             String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(Content, point_string, hydroBot.Position, Color.Black);
+                            points.Add(point);
 
                             audio.hipnotizeSound.Play();
                             if (!hydroBot.clipPlayer.inRange(61, 90))
@@ -678,15 +678,15 @@ namespace Poseidon
                 //}
                 //let the user change active skill/bullet too when he presses on number
                 //this is better for fast action
-                InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, hydroBot);
+                InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, hydroBot, GameMode.ShipWreck);
                 
                 if (HydroBot.supersonicMode == true)
                 {
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.ShipWreckFloatHeight);
-                    CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio, 2);
+                    CastSkill.KnockOutEnemies(gameTime, hydroBot, enemies, ref enemiesAmount, fish, fishAmount, audio, GameMode.ShipWreck);
                 }
                 //if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-                hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, null, gameTime, pointIntersect,2);
+                hydroBot.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, null, null, gameTime, pointIntersect, GameMode.ShipWreck);
                 //add 1 bubble over tank and each enemy
                 timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 if (timeNextBubble <= 0)
@@ -768,14 +768,14 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, false, frustum, 2, gameTime);
-                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, true, frustum, 2, gameTime);
-                Collision.updateProjectileHitBot(hydroBot, enemyBullet, 2);
-                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, false, frustum, 2, gameTime);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.ShipWreck);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck);
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime);
 
-                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, 2, cursor);
-                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, 2, cursor);
+                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, cursor);
+                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.ShipWreck, cursor);
 
                 for (int i = 0; i < enemiesAmount; i++)
                 {
@@ -784,7 +784,7 @@ namespace Poseidon
                         if (PoseidonGame.playTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, 2);
+                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
                 }
 
                 foreach (TreasureChest chest in treasureChests)
@@ -841,7 +841,7 @@ namespace Poseidon
 
                                     Point point = new Point();
                                     String point_string = "+" + GameConstants.ExpPainting + " EXP";
-                                    point.LoadContent(PlayGameScene.Content, point_string, chest.Position, Color.LawnGreen);
+                                    point.LoadContent(Content, point_string, chest.Position, Color.LawnGreen);
                                     points.Add(point);
 
                                     // show a random painting

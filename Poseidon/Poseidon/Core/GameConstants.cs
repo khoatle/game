@@ -212,9 +212,9 @@ namespace Poseidon {
         public static int gainHitPoint = 20;
 
         //consts for the survival mode
-        public const int SurvivalModeMaxShootingEnemy = 50;
-        public const int SurvivalModeMaxCombatEnemy = 50;
-        public const int SurvivalModeMaxMutantShark = 10;
-        public const int SurvivalModeMaxTerminator = 2;
+        public const int SurvivalModeMaxShootingEnemy = 5;
+        public const int SurvivalModeMaxCombatEnemy = 5;
+        public const int SurvivalModeMaxMutantShark = 0;
+        public const int SurvivalModeMaxTerminator = 0;
     }
 }

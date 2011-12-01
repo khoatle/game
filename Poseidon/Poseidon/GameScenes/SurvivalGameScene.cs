@@ -979,7 +979,7 @@ namespace Poseidon
             {
                 if (p.BoundingSphere.Intersects(frustum))
                 {
-                    p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((p.creationTime - roundTimer.TotalSeconds) / 10.0));
+                    p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((PoseidonGame.playTime.TotalSeconds - p.creationTime) / 10.0));
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;

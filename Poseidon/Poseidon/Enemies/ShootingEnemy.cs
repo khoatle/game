@@ -74,7 +74,7 @@ namespace Poseidon
                     configBits[0] = false;
                     configBits[1] = false;
                     configBits[2] = true;
-                    configBits[3] = true;
+                    configBits[3] = false;// true;
                 }
                 else
                 {

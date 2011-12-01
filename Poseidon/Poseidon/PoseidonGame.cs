@@ -103,7 +103,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -549,6 +549,7 @@ namespace Poseidon
                     case "Survival Mode":
                         MediaPlayer.Stop();
                         CreateSurvivalDependentScenes();
+                        SurvivalGameScene.score = 0;
                         ShowScene(survivalGameScene);
                         break;
                     case "Help":

@@ -294,6 +294,8 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "To be continued ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
+            sentence = new Sentence(3, "Survival mode has been unlocked!", "Image/Cutscenes/blackScreen", 0);
+            cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
         }

@@ -34,7 +34,7 @@ namespace Poseidon
                     {
                         if (gameMode == GameMode.MainGame)
                             PlayGameScene.isBossKilled = true;
-                        else if (gameMode == GameMode.SurvivalMode)
+                        else if (gameMode == GameMode.SurvivalMode && objs[i] is Fish)
                             SurvivalGameScene.isAncientKilled = true;
                     }
                     if (objs[i] is BaseEnemy) {

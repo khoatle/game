@@ -123,6 +123,7 @@ namespace Poseidon {
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
+        public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
         public const string StrCellsFound = "Fuel Cells Retrieved: ";
         public const string StrGameWon = "Game Won !";
@@ -210,5 +211,10 @@ namespace Poseidon {
         public static float gainStrength = 0.06f;
         public static int gainHitPoint = 20;
 
+        //consts for the survival mode
+        public const int SurvivalModeMaxShootingEnemy = 5;
+        public const int SurvivalModeMaxCombatEnemy = 5;
+        public const int SurvivalModeMaxMutantShark = 5;
+        public const int SurvivalModeMaxTerminator = 5;
     }
 }

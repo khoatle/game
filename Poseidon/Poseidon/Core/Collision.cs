@@ -26,8 +26,7 @@ namespace Poseidon
                 Math.Abs(futurePosition.Z) > MaxRangeZ;
         }
 
-        /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, int scene, Cursor cursor) {
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, Cursor cursor) {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0) {
                     if (objs[i].isBigBoss == true) PlayGameScene.isBossKilled = true;
@@ -39,11 +38,13 @@ namespace Poseidon
                         {
                             Point point = new Point();
                             String point_string = "+" + objs[i].basicExperienceReward.ToString() + "EXP";
-                            point.LoadContent(PlayGameScene.Content, point_string, objs[i].Position, Color.LawnGreen);
-                            if(scene == 2)
+                            point.LoadContent(PoseidonGame.contentManager, point_string, objs[i].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
-                            else
+                            else if (gameMode == GameMode.MainGame)
                                 PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
 
                         if (!objs[i].isBigBoss)
@@ -67,8 +68,13 @@ namespace Poseidon
                         {
                             Point point = new Point();
                             String point_string = "-" + GameConstants.envLossForFishDeath.ToString() + "ENV";
-                            point.LoadContent(PlayGameScene.Content, point_string, objs[i].Position, Color.Red);
-                            PlayGameScene.points.Add(point);
+                            point.LoadContent(PoseidonGame.contentManager, point_string, objs[i].Position, Color.Red);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                     }
                     if (objs[i] == cursor.targetToLock)
@@ -118,25 +124,31 @@ namespace Poseidon
         // Helper
         private static bool isPlantvsStaticObjectCollision(BoundingSphere plantBoundingSphere, List<StaticObject> staticObjects)
         {
-            for (int i = 0; i < staticObjects.Count; i++)
+            if (staticObjects != null)
             {
-                if (plantBoundingSphere.Intersects(
-                    staticObjects[i].BoundingSphere))
-                    return true;
+                for (int i = 0; i < staticObjects.Count; i++)
+                {
+                    if (plantBoundingSphere.Intersects(
+                        staticObjects[i].BoundingSphere))
+                        return true;
+                }
             }
             return false;
         }
         //helper
         private static bool isPlantvsShipwreckCollision(BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
         {
-            BoundingSphere shipSphere;
-            for (int i = 0; i < shipwrecks.Count; i++)
+            if (shipwrecks != null)
             {
-                shipSphere = shipwrecks[i].BoundingSphere;
-                shipSphere.Center = shipwrecks[i].Position;
-                if (plantBoundingSphere.Intersects(
-                    shipSphere))
-                    return true;
+                BoundingSphere shipSphere;
+                for (int i = 0; i < shipwrecks.Count; i++)
+                {
+                    shipSphere = shipwrecks[i].BoundingSphere;
+                    shipSphere.Center = shipwrecks[i].Position;
+                    if (plantBoundingSphere.Intersects(
+                        shipSphere))
+                        return true;
+                }
             }
             return false;
         }
@@ -239,7 +251,8 @@ namespace Poseidon
         /// PROJECTILES FUNCTION
         /// </summary>
         /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, int scene, GameTime gameTime) {
+        /* switch to use GameMode instead, look at the beginning of PoseidonGame for more details */
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, bool soundWhenHit, BoundingFrustum cameraFrustum, GameMode gameMode, GameTime gameTime) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -269,11 +282,13 @@ namespace Poseidon
                         {
                             Point point = new Point();
                             String point_string = "-" + bullets[i].damage.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, barriers[j].Position, Color.DarkRed);
-                            if (scene == 2)
+                            point.LoadContent(PoseidonGame.contentManager, point_string, barriers[j].Position, Color.DarkRed);
+                            if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
-                            else
+                            else if (gameMode == GameMode.MainGame)
                                 PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
 
                         bullets.RemoveAt(i--);
@@ -283,7 +298,7 @@ namespace Poseidon
             }
         }
 
-        public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size, BoundingFrustum cameraFrustum) {
+        public static void updateHealingBulletVsBarrierCollision(List<HealthBullet> bullets, SwimmingObject[] barriers, int size, BoundingFrustum cameraFrustum, GameMode gameMode) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -306,8 +321,13 @@ namespace Poseidon
 
                             Point point = new Point();
                             String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
-                            point.LoadContent(PlayGameScene.Content, point_string , barriers[j].Position, Color.LawnGreen);
-                            PlayGameScene.points.Add(point); // fish is only in playgame scene
+                            point.LoadContent(PoseidonGame.contentManager, point_string, barriers[j].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point); 
                         }
                         bullets.RemoveAt(i--);
                         break;
@@ -316,8 +336,8 @@ namespace Poseidon
             }
         }
 
-        /* scene --> 1-playgamescene, 2-shipwreckscene */
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, int scene) {
+
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode) {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
                     if (!HydroBot.invincibleMode)
@@ -327,11 +347,13 @@ namespace Poseidon
 
                         Point point = new Point();
                         String point_string = "-" + enemyBullets[i].damage.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                        if (scene == 2)
+                        point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.Black);
+                        if (gameMode == GameMode.ShipWreck)
                             ShipWreckScene.points.Add(point);
-                        else
+                        else if (gameMode == GameMode.MainGame)
                             PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
                     }
                     enemyBullets.RemoveAt(i);
                     

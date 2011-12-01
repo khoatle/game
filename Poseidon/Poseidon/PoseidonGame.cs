@@ -16,8 +16,8 @@ using Poseidon.MiniGames;
 
 namespace Poseidon
 {
-    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete }
-
+    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     /// <summary>
     /// This is the main type for your game
     /// </summary>
@@ -65,6 +65,7 @@ namespace Poseidon
         public static AudioLibrary audio;
         PlayGameScene playGameScene;
         ShipWreckScene shipWreckScene;
+        SurvivalGameScene survivalGameScene;
         // Game is paused?
         protected bool paused;
         protected Vector2 pausePosition;
@@ -90,6 +91,8 @@ namespace Poseidon
         //for continously playing random background musics
         Random rand = new Random();
 
+        public static ContentManager contentManager;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -98,7 +101,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -121,6 +124,7 @@ namespace Poseidon
         /// </summary>
         protected override void LoadContent()
         {
+            contentManager = Content;
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
@@ -316,6 +320,10 @@ namespace Poseidon
             {
                 HandleTypeGameInput();
             }
+            else if (activeScene == survivalGameScene)
+            {
+                HandleSurvivalInput();
+            }
         }
 
         /// <summary>
@@ -350,7 +358,7 @@ namespace Poseidon
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
                 if (HydroBot.currentEnvPoint >= HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
                 HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 50;
-                playGameScene.currentGameState = GameState.ToNextLevel;
+                PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
             }
         }
@@ -358,7 +366,7 @@ namespace Poseidon
         {
             if (typeGameScene.isOver && enterPressed)
             {
-                playGameScene.currentGameState = GameState.ToNextLevel;
+                PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
             }
         }
@@ -453,7 +461,7 @@ namespace Poseidon
             {
                 doubleClicked = false;
             }
-            if (playGameScene.currentGameState == GameState.ToMiniGame)
+            if (PlayGameScene.currentGameState == GameState.ToMiniGame)
             {
                 Random rand = new Random();
                 if (rand.Next(2) == 0)
@@ -461,9 +469,9 @@ namespace Poseidon
                 else
                     ShowScene(typeGameScene);
             }
-            if (playGameScene.currentGameState == GameState.GameComplete)
+            if (PlayGameScene.currentGameState == GameState.GameComplete)
             {
-                this.Exit();
+                ShowScene(startScene);
             }
         }
         public bool GetInShipWreck()
@@ -486,7 +494,31 @@ namespace Poseidon
             }
             return false;
         }
+        /// <summary>
+        /// Handle update for the survival mode game
+        /// </summary>
+        private void HandleSurvivalInput()
+        {
 
+            // User pauses the game
+            if (pPressed)
+            {
+                audio.MenuBack.Play();
+                survivalGameScene.Paused = !survivalGameScene.Paused;
+            }
+            if (backPressed)
+            {
+                MediaPlayer.Stop();
+                ShowScene(startScene);
+            }
+            if (AttributePressed)
+            {
+                prevScene = survivalGameScene;
+                ShowScene(AttributeScene);
+            }
+            if (survivalGameScene.currentGameState == GameState.ToMainMenu)
+                ShowScene(startScene);
+        }
         /// <summary>
         /// Handle buttons and keyboard in StartScene
         /// </summary>
@@ -495,52 +527,35 @@ namespace Poseidon
             if (enterPressed)
             {
                 audio.MenuSelect.Play();
-                if (!startScene.gameStarted)
-                {
-                    switch (startScene.SelectedMenuIndex)
-                    {
-                        case 0:
-                            MediaPlayer.Stop();
-                            PlayGameScene.currentLevel = 0;
-                            ShowScene(loadingScene);
-                            break;
-                        case 1:
-                            MediaPlayer.Stop();
-                            ShowScene(selectLoadingLevelScene);
-                            break;
-                        case 2:
-                            ShowScene(helpScene);
-                            break;
-                        case 3:
-                            Exit();
-                            break;
-                    }
-                }
-                else
-                {
-                    switch (startScene.SelectedMenuIndex)
-                    {
-                        case 0: //Resume
-                            MediaPlayer.Stop();
-                            ShowScene(playGameScene);
-                            break;
-                        case 1:
-                            MediaPlayer.Stop();
-                            PlayGameScene.currentLevel = 0;
-                            ShowScene(loadingScene);
-                            break;
-                        case 2:
-                            MediaPlayer.Stop();
-                            ShowScene(selectLoadingLevelScene);
-                            break;
-                        case 3:
-                            ShowScene(helpScene);
-                            break;
-                        case 4:
-                            Exit();
-                            break;
-                    }
 
+                switch (startScene.menuItems[startScene.SelectedMenuIndex])
+                {
+                    case "New Game":
+                        MediaPlayer.Stop();
+                        PlayGameScene.currentLevel = 0;
+                        PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                        ShowScene(loadingScene);
+                        break;
+                    case "Resume Game":
+                        MediaPlayer.Stop();
+                        ShowScene(playGameScene);
+                        break;
+                    case "Load Saved Level":
+                        MediaPlayer.Stop();
+                        ShowScene(selectLoadingLevelScene);
+                        break;
+                    case "Survival Mode":
+                        MediaPlayer.Stop();
+                        CreateSurvivalDependentScenes();
+                        ShowScene(survivalGameScene);
+                        break;
+                    case "Help":
+                        ShowScene(helpScene);
+                        break;
+                    case "Quit":
+                        Exit();
+                        break;
+                        
                 }
             }
         }
@@ -567,6 +582,17 @@ namespace Poseidon
             Components.Add(quizzGameScene);
             typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
             Components.Add(typeGameScene);
+
+        }
+        private void CreateSurvivalDependentScenes()
+        {
+            // Create the survival game play scene
+            survivalGameScene = new SurvivalGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
+            Components.Add(survivalGameScene);
+
+            // Create the Attribute board
+            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
+            Components.Add(AttributeScene);
 
         }
         /// <summary>

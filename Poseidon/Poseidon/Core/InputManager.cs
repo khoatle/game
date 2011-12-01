@@ -11,7 +11,7 @@ namespace Poseidon
 {
     public static class InputManager
     {
-        public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, HydroBot tank)
+        public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, HydroBot tank, GameMode gameMode)
         {
             if (currentKeyboardState.IsKeyDown(Keys.D1) && HydroBot.skills[0]) HydroBot.activeSkillID = 0;
             if (currentKeyboardState.IsKeyDown(Keys.D2) && HydroBot.skills[1]) HydroBot.activeSkillID = 1;
@@ -20,12 +20,12 @@ namespace Poseidon
             if (currentKeyboardState.IsKeyDown(Keys.D5) && HydroBot.skills[4]) HydroBot.activeSkillID = 4;
             if (lastKeyboardState.IsKeyDown(Keys.Space) && currentKeyboardState.IsKeyUp(Keys.Space))
             {
-                // level 0, can only heal
-                if (PlayGameScene.currentLevel != 0)
+                // level 0 of main game, can only heal
+                if (PlayGameScene.currentLevel != 0 || gameMode == GameMode.SurvivalMode)
                 {
                     HydroBot.bulletType++;
                     if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;
-                    PlayGameScene.audio.ChangeBullet.Play();
+                    PoseidonGame.audio.ChangeBullet.Play();
                 }
             }
         }

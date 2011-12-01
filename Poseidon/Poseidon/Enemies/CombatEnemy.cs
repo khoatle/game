@@ -33,8 +33,8 @@ namespace Poseidon
             isHypnotise = false;
         }
 
-        /* scene : 1=playgamescene, 2=shipwreckscene */
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
+   
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
@@ -61,13 +61,13 @@ namespace Poseidon
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(hydroBot, perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, gameMode);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
                 configAction(hydroBot, perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, gameMode);
             }
         }
 
@@ -142,7 +142,7 @@ namespace Poseidon
         }
 
         // Execute the actions .. scene -> 1=playgamescene, 2=shipwreckscene
-        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
+        protected virtual void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
             if (configBits[0] == true)
             {
@@ -202,11 +202,13 @@ namespace Poseidon
                             
                             Point point = new Point();
                             String point_string = "-" + damage.ToString() + "HP";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            if (scene == 2)
+                            point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.Black);
+                            if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
-                            else
+                            else if (gameMode == GameMode.MainGame)
                                 PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
 
                             PoseidonGame.audio.botYell.Play();
                         }
@@ -227,41 +229,5 @@ namespace Poseidon
                 }
             }
         }
-
-        //public override void Draw(Matrix view, Matrix projection)
-        //{
-        //    Matrix[] transforms = new Matrix[Model.Bones.Count];
-        //    Model.CopyAbsoluteBoneTransformsTo(transforms);
-        //    //Matrix translateMatrix = Matrix.CreateTranslation(Position);
-        //    //Matrix worldMatrix = translateMatrix;
-        //    Matrix worldMatrix = Matrix.Identity;
-        //    Matrix rotationYMatrix = Matrix.CreateRotationY(ForwardDirection);
-        //    Matrix translateMatrix = Matrix.CreateTranslation(Position);
-        //    worldMatrix = rotationYMatrix * translateMatrix;
-
-        //    foreach (ModelMesh mesh in Model.Meshes)
-        //    {
-        //        foreach (BasicEffect effect in mesh.Effects)
-        //        {
-        //            effect.World =
-        //                worldMatrix * transforms[mesh.ParentBone.Index];
-        //            effect.View = view;
-        //            effect.Projection = projection;
-        //            if (isHypnotise) {
-        //                effect.DiffuseColor = Color.Black.ToVector3();
-        //            } else 
-        //                effect.DiffuseColor = Color.Green.ToVector3();
-
-        //            effect.EnableDefaultLighting();
-        //            effect.PreferPerPixelLighting = true;
-
-        //            effect.FogEnabled = true;
-        //            effect.FogStart = GameConstants.FogStart;
-        //            effect.FogEnd = GameConstants.FogEnd;
-        //            effect.FogColor = GameConstants.FogColor.ToVector3();
-        //        }
-        //        mesh.Draw();
-        //    }
-        //}
     }
 }

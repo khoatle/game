@@ -63,7 +63,7 @@ namespace Poseidon
         }
 
         /* scene: 1-playgamescene 2-shipwreckscene */
-        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
+        public override void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -97,17 +97,17 @@ namespace Poseidon
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(hydroBot, perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, gameMode);
             }
             else
             {
                 int perceptionID = perceptAndLock(hydroBot, enemyList, enemySize);
                 configAction(hydroBot, perceptionID, gameTime);
-                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, scene);
+                makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, gameMode);
             }
         }
         // Execute the actions. ( scene: 1-playgamescene, 2-shipwreckscene)
-        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, int scene)
+        protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
             if (configBits[0] == true)
             {
@@ -135,7 +135,7 @@ namespace Poseidon
                     if (rand.Next(100) >= 95)
                     {
                         timeLastRoar = gameTime.TotalGameTime.TotalSeconds;
-                        Roar();
+                        Roar(gameMode);
                     }
             }
             if (configBits[3] == true)
@@ -185,11 +185,13 @@ namespace Poseidon
 
                             Point point = new Point();
                             String point_string = "-" + damage.ToString() + "HP (POISONED)";
-                            point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.Black);
-                            if (scene == 2)
+                            point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.Black);
+                            if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
-                            else
+                            else if (gameMode == GameMode.MainGame)
                                 PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                     }
                     //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
@@ -210,11 +212,13 @@ namespace Poseidon
                         {
                             Point point = new Point();
                             String point_string = "-" + damage.ToString() + "HP (POISONED)";
-                            point.LoadContent(PlayGameScene.Content, point_string, currentHuntingTarget.Position, Color.Red);
-                            if (scene == 2)
+                            point.LoadContent(PoseidonGame.contentManager, point_string, currentHuntingTarget.Position, Color.Red);
+                            if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
-                            else
+                            else if (gameMode == GameMode.MainGame)
                                 PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                             if (currentHuntingTarget is Fish)
                                 PoseidonGame.audio.animalYell.Play();
                         }
@@ -227,10 +231,13 @@ namespace Poseidon
             }
         }
 
-        protected void Roar()
+        protected void Roar(GameMode gameMode)
         {
             PoseidonGame.audio.roarSound.Play();
-            PlayGameScene.gameCamera.Shake(10f, 1.9f);
+            if (gameMode == GameMode.MainGame)
+                PlayGameScene.gameCamera.Shake(10f, 1.9f);
+            else if (gameMode == GameMode.SurvivalMode)
+                SurvivalGameScene.gameCamera.Shake(10f, 1.9f);
         }
     }
 }

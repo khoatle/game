@@ -14,29 +14,43 @@ namespace Poseidon
 {
     public static class AddingObjects
     {
-        public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, bool mainGame)
+        public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, GameMode gameMode)
         {
-            if (mainGame)
+         
+            if (gameMode == GameMode.SurvivalMode)
+            {
+                enemiesAmount = GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
+                + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator;
+            }
+            else if (gameMode == GameMode.MainGame)
                 enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
                     + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel];
-            else
+            else if (gameMode == GameMode.ShipWreck)
             {
                 if (PlayGameScene.currentLevel >= 4)
                     enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
                 else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
             }
-            int numShootingEnemies;
-            int numCombatEnemies;
+            int numShootingEnemies = 0;
+            int numCombatEnemies= 0;
             int numMutantShark = 0;
             int numTerminator = 0;
-            if (mainGame)
+        
+            if (gameMode == GameMode.SurvivalMode)
+            {
+                numShootingEnemies = GameConstants.SurvivalModeMaxShootingEnemy;
+                numCombatEnemies = GameConstants.SurvivalModeMaxCombatEnemy;
+                numMutantShark = GameConstants.SurvivalModeMaxMutantShark;
+                numTerminator = GameConstants.SurvivalModeMaxTerminator;
+            }
+            else if (gameMode == GameMode.MainGame)
             {
                 numShootingEnemies = GameConstants.NumberShootingEnemies[currentLevel];
                 numCombatEnemies = GameConstants.NumberCombatEnemies[currentLevel];
                 numMutantShark = GameConstants.NumberMutantShark[currentLevel];
                 numTerminator = GameConstants.NumberTerminator[currentLevel];
             }
-            else
+            else if (gameMode == GameMode.ShipWreck)
             {
                 if (PlayGameScene.currentLevel >= 4)
                 {
@@ -73,9 +87,9 @@ namespace Poseidon
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
                 {
-                    Terminator terminator = new Terminator();
+                    Terminator terminator = new Terminator(gameMode);
                     terminator.LoadContent(Content, "Models/EnemyModels/terminator");
-                    if (currentLevel == 4) terminator.Name = "???";
+                    if (currentLevel == 4 && gameMode == GameMode.MainGame) terminator.Name = "???";
                     else terminator.Name = "terminator";
                     terminator.Load(31, 60, 24);
                     enemies[i] = terminator;
@@ -84,11 +98,12 @@ namespace Poseidon
             
         }
 
-        public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, bool mainGame)
+        public static void loadContentFish(ref int fishAmount, Fish[] fish, ContentManager Content, int currentLevel, GameMode gameMode)
         {
-            if (mainGame)
+            if (gameMode == GameMode.MainGame)
                 fishAmount = GameConstants.NumberFish[currentLevel];
-            else fishAmount = GameConstants.ShipNumberFish;
+            else if (gameMode == GameMode.ShipWreck) fishAmount = GameConstants.ShipNumberFish;
+            else fishAmount = 0;
             Random random = new Random();
             int type;
             //Level 4 is shark only
@@ -181,9 +196,9 @@ namespace Poseidon
             }
         }
 
-        public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight)
         {
-            loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, mainGame);
+            loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, gameMode);
 
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;
@@ -204,9 +219,9 @@ namespace Poseidon
             }
         }
 
-        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, BaseEnemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight)
+        public static void placeFish(ref int fishAmount, Fish[] fish, ContentManager Content, Random random, int enemiesAmount, BaseEnemy[] enemies, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight)
         {
-            loadContentFish(ref fishAmount, fish, Content, currentLevel, mainGame);
+            loadContentFish(ref fishAmount, fish, Content, currentLevel, gameMode);
 
             //int min = GameConstants.MinDistance;
             //int max = GameConstants.MaxDistance;
@@ -307,7 +322,7 @@ namespace Poseidon
             
             ChasingBullet newBullet = new ChasingBullet();
             newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target);
-            newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/chasingBullet");
+            newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
             if (shooter.BoundingSphere.Intersects(cameraFrustum)) {
                 PoseidonGame.audio.chasingBulletSound.Play();
@@ -336,13 +351,13 @@ namespace Poseidon
             newBullet.initialize(obj.Position + shootingDirection * offsetFactor, shootingDirection, GameConstants.BulletSpeed, damage);
             if (type == 1)
             {
-                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/bossBullet");
+                newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/bossBullet");
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.bossShot.Play();
             }
             else
             {
-                newBullet.loadContent(PlayGameScene.Content, "Models/BulletModels/normalbullet");
+                newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/normalbullet");
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.enemyShot.Play();
             }
@@ -369,7 +384,7 @@ namespace Poseidon
         }
 
         public static void placeTrash(
-            List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, bool mainGame, float floatHeight, HeightMapInfo heightMapInfo)
+            List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             int positionSign;

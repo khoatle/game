@@ -53,11 +53,13 @@ namespace Poseidon
                 }
                 mesh.Draw();
             }
-            Vector3 screenPos;
+            Vector3 screenPos = Vector3.Zero;
             if (inGameScene.GetType().Name.Equals("PlayGameScene"))
                 screenPos = PlayGameScene.GraphicDevice.Viewport.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
-            else
+            else if (inGameScene.GetType().Name.Equals("ShipWreckScene"))
                 screenPos = ShipWreckScene.GraphicDevice.Viewport.Project(Position, ShipWreckScene.gameCamera.ProjectionMatrix, ShipWreckScene.gameCamera.ViewMatrix, Matrix.Identity);
+            else if (inGameScene.GetType().Name.Equals("SurvivalGameScene"))
+                screenPos = SurvivalGameScene.GraphicDevice.Viewport.Project(Position, SurvivalGameScene.gameCamera.ProjectionMatrix, SurvivalGameScene.gameCamera.ViewMatrix, Matrix.Identity);
             energyBallPos.X = screenPos.X;
             energyBallPos.Y = screenPos.Y;
             float scale = 1.0f;
@@ -68,7 +70,10 @@ namespace Poseidon
             spriteBatch.End();
             if (inGameScene.GetType().Name.Equals("PlayGameScene"))
                 PlayGameScene.RestoreGraphicConfig();
-            else ShipWreckScene.RestoreGraphicConfig();
+            else if (inGameScene.GetType().Name.Equals("ShipWreckScene"))
+                ShipWreckScene.RestoreGraphicConfig();
+            else if (inGameScene.GetType().Name.Equals("SurvivalGameScene"))
+                SurvivalGameScene.RestoreGraphicConfig();
         }
     }
 }

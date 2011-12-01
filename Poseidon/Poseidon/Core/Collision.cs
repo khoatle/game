@@ -259,7 +259,7 @@ namespace Poseidon
                             }
                             else {
                                 ((BaseEnemy)barriers[j]).justBeingShot = true;
-                                ((BaseEnemy)barriers[j]).startChasingTime = gameTime.TotalGameTime;
+                                ((BaseEnemy)barriers[j]).startChasingTime = PoseidonGame.playTime;
                             }
                         }
 

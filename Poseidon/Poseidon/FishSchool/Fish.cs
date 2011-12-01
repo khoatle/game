@@ -120,7 +120,7 @@ namespace Poseidon.FishSchool
             {
                 // to do this, we'll first generate a value t, which we'll use to
                 // determine how much tint to have.
-                float t = (float)Math.Sin(10 * gameTime.TotalGameTime.TotalSeconds);
+                float t = (float)Math.Sin(10 * PoseidonGame.playTime.TotalSeconds);
 
                 // Sin varies from -1 to 1, and we want t to go from 0 to 1, so we'll 
                 // scale it now.

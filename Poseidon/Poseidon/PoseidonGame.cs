@@ -25,6 +25,8 @@ namespace Poseidon
     {
         GraphicsDeviceManager graphics;
 
+        public static TimeSpan playTime = TimeSpan.Zero;
+
         KeyboardState lastKeyboardState = new KeyboardState();
         //KeyboardState currentKeyboardState = new KeyboardState();
         GamePadState lastGamePadState = new GamePadState();

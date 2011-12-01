@@ -37,7 +37,7 @@ namespace Poseidon
                 if (InThorRange(tank, enemies[i].Position)){
                     float healthiness = (float) HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
                     enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
+                    enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
                     int healthloss = (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength * HydroBot.strengthUp);
                     enemies[i].health -= healthloss;
                     PushEnemy(tank, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
@@ -103,7 +103,7 @@ namespace Poseidon
                     Vector3 pushVector = enemies[i].Position - tank.Position;
                     pushVector.Normalize();
                     enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = gameTime.TotalGameTime.TotalSeconds;
+                    enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
                     enemies[i].Position.X = MathHelper.Clamp(enemies[i].Position.X, -tank.MaxRangeX, tank.MaxRangeX);
                     enemies[i].Position.Z = MathHelper.Clamp(enemies[i].Position.Z, -tank.MaxRangeZ, tank.MaxRangeZ);

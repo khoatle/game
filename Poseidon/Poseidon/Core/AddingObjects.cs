@@ -351,17 +351,17 @@ namespace Poseidon
 
         public static bool placePlant(HydroBot hydroBot, HeightMapInfo heightMapInfo, ContentManager Content, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)
         {
-            if ((gameTime.TotalGameTime.TotalSeconds - HydroBot.prevPlantTime > GameConstants.coolDownForPlant) || HydroBot.firstPlant == true)
+            if ((PoseidonGame.playTime.TotalSeconds - HydroBot.prevPlantTime > GameConstants.coolDownForPlant) || HydroBot.firstPlant == true)
             {
                 Plant p = new Plant();
                 Vector3 possiblePosition = hydroBot.Position;
                 possiblePosition.Y = heightMapInfo.GetHeight(hydroBot.Position);
-                p.LoadContent(Content, possiblePosition, gameTime.TotalGameTime.TotalSeconds);
+                p.LoadContent(Content, possiblePosition, PoseidonGame.playTime.TotalSeconds);
                 if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects))
                 {
                     plants.Add(p);
                     HydroBot.firstPlant = false;
-                    HydroBot.prevPlantTime = gameTime.TotalGameTime.TotalSeconds;
+                    HydroBot.prevPlantTime = PoseidonGame.playTime.TotalSeconds;
                     return true;
                 }
             }

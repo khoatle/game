@@ -142,7 +142,7 @@ namespace Poseidon {
 
 
 
-            if (gameTime.TotalGameTime.TotalSeconds - lastHealthUpdateTime > healthChangeInterval)
+            if (PoseidonGame.playTime.TotalSeconds - lastHealthUpdateTime > healthChangeInterval)
             {
                 double env_health = (double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint;
                 double env_deviation = 0;
@@ -158,7 +158,7 @@ namespace Poseidon {
                     this.health -= GameConstants.healthChangeValue;
                     env_deviation = 0.5 - env_health;
                 }
-                lastHealthUpdateTime = gameTime.TotalGameTime.TotalSeconds;
+                lastHealthUpdateTime = PoseidonGame.playTime.TotalSeconds;
                 healthChangeInterval = GameConstants.maxHealthChangeInterval - env_deviation*10;
                 //System.Diagnostics.Debug.WriteLine(healthChangeInterval);
             }

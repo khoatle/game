@@ -86,7 +86,7 @@ namespace Poseidon
 
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
-            if (isHypnotise && gameTime.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
+            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
             {
                 wearOutHypnotise();
             }
@@ -125,12 +125,12 @@ namespace Poseidon
 
         public void RapidFire(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
-            if (this.BoundingSphere.Intersects(cameraFrustum) && gameTime.TotalGameTime.TotalSeconds - timeLastLaugh > 10)
+            if (this.BoundingSphere.Intersects(cameraFrustum) && PoseidonGame.playTime.TotalSeconds - timeLastLaugh > 10)
             {
                 PoseidonGame.audio.bossLaugh.Play();
-                timeLastLaugh = gameTime.TotalGameTime.TotalSeconds;
+                timeLastLaugh = PoseidonGame.playTime.TotalSeconds;
             }
-            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+            if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
             {
                 float originalForwardDir = ForwardDirection;
                 ForwardDirection += MathHelper.PiOver4 / 4;
@@ -139,34 +139,34 @@ namespace Poseidon
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 ForwardDirection = originalForwardDir;
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                prevFire = gameTime.TotalGameTime;
+                prevFire = PoseidonGame.playTime;
             }
         }
 
         public void RapidFire2(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
-            if (this.BoundingSphere.Intersects(cameraFrustum) && gameTime.TotalGameTime.TotalSeconds - timeLastLaugh > 10)
+            if (this.BoundingSphere.Intersects(cameraFrustum) && PoseidonGame.playTime.TotalSeconds - timeLastLaugh > 10)
             {
                 PoseidonGame.audio.bossLaugh.Play();
-                timeLastLaugh = gameTime.TotalGameTime.TotalSeconds;
+                timeLastLaugh = PoseidonGame.playTime.TotalSeconds;
             }
-            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3 && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+            if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3 && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
             {
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                prevFire = gameTime.TotalGameTime;
+                prevFire = PoseidonGame.playTime;
             }
         }
 
         public void ChasingBullet(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime) { 
-            if (this.BoundingSphere.Intersects(cameraFrustum) && gameTime.TotalGameTime.TotalSeconds - timeLastLaugh > 10) {
+            if (this.BoundingSphere.Intersects(cameraFrustum) && PoseidonGame.playTime.TotalSeconds - timeLastLaugh > 10) {
                 PoseidonGame.audio.bossLaugh.Play();
-                timeLastLaugh = gameTime.TotalGameTime.TotalSeconds;
+                timeLastLaugh = PoseidonGame.playTime.TotalSeconds;
             }
 
-            if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire * 3)
+            if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire * 3)
             {
                 AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
-                prevFire = gameTime.TotalGameTime;
+                prevFire = PoseidonGame.playTime;
             }
         }
 
@@ -187,7 +187,7 @@ namespace Poseidon
             }
             if (configBits[3] == true)
             {
-                startChasingTime = gameTime.TotalGameTime;
+                startChasingTime = PoseidonGame.playTime;
 
                 if (currentHuntingTarget is BaseEnemy)
                 {
@@ -213,21 +213,21 @@ namespace Poseidon
                 {
                     RapidFire(bullets, cameraFrustum, gameTime);
 
-                    if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
+                    if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
                         enragedMode = false;
                 }
                 else if (crazyMode == true)
                 {
                     RapidFire2(bullets, cameraFrustum, gameTime);
-                    if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
+                    if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
                         crazyMode = false;
                 }
                 else if (chasingBulletMode == true) {
                     ChasingBullet(bullets, cameraFrustum, gameTime);
-                    if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > timeChasingBulletLast)
+                    if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeChasingBulletLast)
                         chasingBulletMode = false;
                 }
-                else if (gameTime.TotalGameTime.TotalSeconds - timePrevPowerUsed > 10)
+                else if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 10)
                 {
                     powerupsType = random.Next(3);
                     if (powerupsType == 0)
@@ -239,14 +239,14 @@ namespace Poseidon
                         chasingBulletMode = true;
                     }
                     //PlayGameScene.audio.MinigunWindUp.Play();
-                    timePrevPowerUsed = gameTime.TotalGameTime.TotalSeconds;
+                    timePrevPowerUsed = PoseidonGame.playTime.TotalSeconds;
                 }
-                else if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+                else if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
                 {
                     //ChasingBullet(bullets, cameraFrustum, gameTime);
                     // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
                     AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                    prevFire = gameTime.TotalGameTime;
+                    prevFire = PoseidonGame.playTime;
                 }
             }
         }

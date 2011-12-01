@@ -53,7 +53,7 @@ namespace Poseidon
 
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
-            if (isHypnotise && gameTime.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
+            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
             {
                 wearOutHypnotise();
             }
@@ -166,7 +166,7 @@ namespace Poseidon
             }
             if (configBits[3] == true)
             {
-                startChasingTime = gameTime.TotalGameTime;
+                startChasingTime = PoseidonGame.playTime;
 
                 if (currentHuntingTarget.GetType().Name.Equals("Fish"))
                 {
@@ -190,7 +190,7 @@ namespace Poseidon
                     }
                 }
 
-                if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
                     if (!clipPlayer.inRange(31, 60))
                         clipPlayer.switchRange(31, 60);
@@ -220,7 +220,7 @@ namespace Poseidon
                                 PoseidonGame.audio.animalYell.Play();
                         }
                     }
-                    prevFire = gameTime.TotalGameTime;
+                    prevFire = PoseidonGame.playTime;
 
                     if (this.BoundingSphere.Intersects(cameraFrustum))
                         PoseidonGame.audio.slashSound.Play();

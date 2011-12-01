@@ -88,7 +88,7 @@ namespace Poseidon
             }
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
-            if (isHypnotise && gameTime.TotalGameTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
+            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
             {
                 wearOutHypnotise();
             }
@@ -131,16 +131,16 @@ namespace Poseidon
             }
             if (!configBits[3] && this.BoundingSphere.Intersects(cameraFrustum))
             {
-                if (gameTime.TotalGameTime.TotalSeconds - timeLastRoar > 10)
+                if (PoseidonGame.playTime.TotalSeconds - timeLastRoar > 10)
                     if (rand.Next(100) >= 95)
                     {
-                        timeLastRoar = gameTime.TotalGameTime.TotalSeconds;
+                        timeLastRoar = PoseidonGame.playTime.TotalSeconds;
                         Roar();
                     }
             }
             if (configBits[3] == true)
             {
-                startChasingTime = gameTime.TotalGameTime;
+                startChasingTime = PoseidonGame.playTime;
 
                 if (currentHuntingTarget.GetType().Name.Equals("Fish"))
                 {
@@ -162,7 +162,7 @@ namespace Poseidon
                     }
                 }
 
-                if (gameTime.TotalGameTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
                 {
                     //if attack and swim both at the same time or not
                     //just use attacking anim
@@ -219,7 +219,7 @@ namespace Poseidon
                                 PoseidonGame.audio.animalYell.Play();
                         }
                     }
-                    prevFire = gameTime.TotalGameTime;
+                    prevFire = PoseidonGame.playTime;
 
                     if (this.BoundingSphere.Intersects(cameraFrustum))
                         PoseidonGame.audio.biteSound.Play();

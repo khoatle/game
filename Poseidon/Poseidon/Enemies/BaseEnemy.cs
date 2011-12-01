@@ -98,7 +98,7 @@ namespace Poseidon
         {
             isHypnotise = true;
             currentHuntingTarget = null;
-            startHypnotiseTime = gameTime.TotalGameTime;
+            startHypnotiseTime = PoseidonGame.playTime;
             justBeingShot = false;
         }
 
@@ -113,10 +113,10 @@ namespace Poseidon
         protected bool clearMind(GameTime gameTime)
         {
             if (startChasingTime.TotalSeconds == 0 ||
-                gameTime.TotalGameTime.TotalSeconds - startChasingTime.TotalSeconds > giveupTime.TotalSeconds)
+                PoseidonGame.playTime.TotalSeconds - startChasingTime.TotalSeconds > giveupTime.TotalSeconds)
             {
                 currentHuntingTarget = null;
-                startChasingTime = gameTime.TotalGameTime;
+                startChasingTime = PoseidonGame.playTime;
                 justBeingShot = false;
                 return true;
             }

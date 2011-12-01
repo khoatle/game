@@ -52,7 +52,7 @@ namespace Poseidon.MiniGames
 
             if (currentKeyboardState.IsKeyDown(Keys.Back))
             {
-                handleDelete(gameTime.TotalGameTime);
+                handleDelete(PoseidonGame.playTime);
                 return;
             }
 

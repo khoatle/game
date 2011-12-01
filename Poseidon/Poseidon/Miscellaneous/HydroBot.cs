@@ -429,21 +429,21 @@ namespace Poseidon
             //worn out effect of power-ups
             if (speedUp != 1.0f)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - speedUpStartTime >= GameConstants.EffectExpired)
+                if (PoseidonGame.playTime.TotalSeconds - speedUpStartTime >= GameConstants.EffectExpired)
                 {
                     speedUp = 1.0f;
                 }
             }
             if (strengthUp != 1.0f)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - strengthUpStartTime >= GameConstants.EffectExpired)
+                if (PoseidonGame.playTime.TotalSeconds - strengthUpStartTime >= GameConstants.EffectExpired)
                 {
                     strengthUp = 1.0f;
                 }
             }
             if (fireRateUp != 1.0f)
             {
-                if (gameTime.TotalGameTime.TotalSeconds - fireRateUpStartTime >= GameConstants.EffectExpired)
+                if (PoseidonGame.playTime.TotalSeconds - fireRateUpStartTime >= GameConstants.EffectExpired)
                 {
                     fireRateUp = 1.0f;
                 }
@@ -453,7 +453,7 @@ namespace Poseidon
             {
                 float buffFactor = shootingRate * fireRateUp / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
-                if (gameTime.TotalGameTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
                 {
                     invincibleMode = false;
                 }
@@ -461,7 +461,7 @@ namespace Poseidon
             //worn out effect of supersonic
             if (supersonicMode == true)
             {
-                if (gameTime.TotalGameTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
@@ -597,7 +597,7 @@ namespace Poseidon
                         fruits[curCell].Retrieved = true;
                         if (fruits[curCell].powerType == 1)
                         {
-                            speedUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                            speedUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             speedUp = 2.0f;
 
                             Point point = new Point();
@@ -607,7 +607,7 @@ namespace Poseidon
                         }
                         else if (fruits[curCell].powerType == 2)
                         {
-                            strengthUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                            strengthUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             strengthUp = 2.0f;
 
                             Point point = new Point();
@@ -617,7 +617,7 @@ namespace Poseidon
                         }
                         else if (fruits[curCell].powerType == 3)
                         {
-                            fireRateUpStartTime = gameTime.TotalGameTime.TotalSeconds;
+                            fireRateUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             fireRateUp = 2.0f;
 
                             Point point = new Point();

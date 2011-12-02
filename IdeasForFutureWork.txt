@@ -10,3 +10,6 @@ Maybe this is a "Goodwill bar", increase everytime you do a good deed (trash, tr
 	- Skill icon: increase skill power by 5%
 	- Fruit icon: increase attribute by 1
 	- Revived fish icon: increase their attribute or power
+
+
+Survival Mode: If you scrore > x, give more skills to user.

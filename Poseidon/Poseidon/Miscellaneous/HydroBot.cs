@@ -106,7 +106,7 @@ namespace Poseidon
         public static float poissonInterval;
 
         // which game mode is this hydrobot in?
-        public GameMode gameMode;
+        public static GameMode gameMode;
 
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
@@ -157,7 +157,7 @@ namespace Poseidon
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoisson = 0;
 
-            this.gameMode = gameMode;
+            HydroBot.gameMode = gameMode;
         }
 
         /// <summary>

@@ -32,6 +32,9 @@ namespace Poseidon
 
         public bool isPoissoned;
 
+        //has this enemy given us exp points already?
+        public bool gaveExp;
+
         public SwimmingObject()
             : base()
         {
@@ -43,6 +46,7 @@ namespace Poseidon
             poissonInterval = 0;
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoison = 0;
+            gaveExp = false;
         }
 
         public virtual void LoadContent(ContentManager content, string modelName)

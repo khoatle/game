@@ -29,7 +29,7 @@ namespace Poseidon
         public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, Cursor cursor)
         {
             for (int i = 0; i < size; i++) {
-                if (objs[i].health <= 0) {
+                if (objs[i].health <= 0 && objs[i].gaveExp == false) {
                     if (objs[i].isBigBoss == true)
                     {
                         if (gameMode == GameMode.MainGame)
@@ -39,6 +39,7 @@ namespace Poseidon
                     }
                     if (objs[i] is BaseEnemy) {
                         HydroBot.currentExperiencePts += objs[i].basicExperienceReward;
+                        objs[i].gaveExp = true;
                         if (gameMode == GameMode.SurvivalMode)
                             SurvivalGameScene.score += objs[i].basicExperienceReward / 2;
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))

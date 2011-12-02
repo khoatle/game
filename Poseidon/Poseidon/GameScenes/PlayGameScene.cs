@@ -181,6 +181,7 @@ namespace Poseidon
                 string SavedFile = "GameLevel" + PlayGameScene.currentLevel.ToString();
                 objectsToSerialize = serializer.DeSerializeObjects(SavedFile);
                 hydroBot = objectsToSerialize.hydrobot;
+                currentGameState = GameState.PlayingCutScene;
             }
             
             //fireTime = TimeSpan.FromSeconds(0.3f);
@@ -319,7 +320,7 @@ namespace Poseidon
                 }
                 else hydroBot.ResetToLevelStart();
             }
-            else // Level won or currentLevel>=11
+            else // Level won
             {
                 ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                 objectsToSerialize.hydrobot = hydroBot;

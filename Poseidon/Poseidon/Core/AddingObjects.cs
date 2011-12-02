@@ -218,7 +218,7 @@ namespace Poseidon
             //place enemies
             for (int i = 0; i < enemiesAmount; i++)
             {
-                enemies[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                enemies[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, floatHeight, enemies[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 enemies[i].Position.Y = floatHeight;
                 //tempCenter = enemies[i].BoundingSphere.Center;
                 //tempCenter.X = enemies[i].Position.X;
@@ -243,8 +243,8 @@ namespace Poseidon
             {
                 //in survival mode, try to place the ancient fish near you
                 if (gameMode == GameMode.SurvivalMode)
-                    fish[i].Position = GenerateSurfaceRandomPosition(0, minX, 0, minZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
-                else fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                    fish[i].Position = GenerateSurfaceRandomPosition(0, minX, 0, minZ, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                else fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = floatHeight;
                 //tempCenter = fish[i].BoundingSphere.Center;
                 //tempCenter.X = fish[i].Position.X;
@@ -433,7 +433,7 @@ namespace Poseidon
         }
 
         // Helper
-        public static Vector3 GenerateSurfaceRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
+        public static Vector3 GenerateSurfaceRandomPosition(int minX, int maxX, int minZ, int maxZ, float floatHeight, float boundingSphereRadius, Random random, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
         {
             int xValue, zValue;
             do
@@ -445,7 +445,7 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
 
-            } while (IsSurfaceOccupied(xValue, zValue, enemiesAmount, fishAmount, enemies, fish));
+            } while (IsSurfaceOccupied(new BoundingSphere(new Vector3(xValue, floatHeight, zValue), boundingSphereRadius), enemiesAmount, fishAmount, enemies, fish));
 
             return new Vector3(xValue, 0, zValue);
         }
@@ -485,24 +485,32 @@ namespace Poseidon
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
-        public static bool IsSurfaceOccupied(int xValue, int zValue, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish)
+        public static bool IsSurfaceOccupied(BoundingSphere prospectiveBoundingSphere, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish)
         {
+            //int optimalDistance;
             for (int i = 0; i < enemiesAmount; i++)
             {
-                if (((int)(MathHelper.Distance(
-                    xValue, enemies[i].Position.X)) < 50) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, enemies[i].Position.Z)) < 50))
-                    return true;
+                ////give more space for big guys
+                //if (enemies[i] is MutantShark) optimalDistance = 70;
+                //else optimalDistance = 30;
+                //if (((int)(MathHelper.Distance(
+                //    xValue, enemies[i].Position.X)) < optimalDistance) &&
+                //    ((int)(MathHelper.Distance(
+                //    zValue, enemies[i].Position.Z)) < optimalDistance))
+                //    return true;
+                if (prospectiveBoundingSphere.Intersects(enemies[i].BoundingSphere)) return true;
             }
 
             for (int i = 0; i < fishAmount; i++)
             {
-                if (((int)(MathHelper.Distance(
-                    xValue, fish[i].Position.X)) < 50) &&
-                    ((int)(MathHelper.Distance(
-                    zValue, fish[i].Position.Z)) < 50))
-                    return true;
+                //if (fish[i].isBigBoss) optimalDistance = 70;
+                //else optimalDistance = 30;
+                //if (((int)(MathHelper.Distance(
+                //    xValue, fish[i].Position.X)) < optimalDistance) &&
+                //    ((int)(MathHelper.Distance(
+                //    zValue, fish[i].Position.Z)) < optimalDistance))
+                //    return true;
+                if (prospectiveBoundingSphere.Intersects(fish[i].BoundingSphere)) return true;
             }
            
             return false;
@@ -719,30 +727,50 @@ namespace Poseidon
 
         public static void ReviveDeadEnemy(BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, HydroBot hydroBot)
         {
+            //we can't afford trying forever
+            int numTries = 0;
             Random random = new Random();
             for (int i = 0; i < enemyAmount; i++)
             {
                 if (enemies[i].health <= 0)
                 {
-                    enemies[i].health = enemies[i].maxHealth;
-                    enemies[i].stunned = false;
-                    enemies[i].isHypnotise = false;
-
                     int xValue, zValue;
-                    do
+                    //do
+                    //{
+                    //    xValue = random.Next(0, hydroBot.MaxRangeX);
+                    //    zValue = random.Next(0, hydroBot.MaxRangeZ);
+                    //    numTries++;
+                    //} while (numTries < 20 && (IsSurfaceOccupied(xValue, zValue, enemyAmount, fishAmount, enemies, fishes) ||
+                    //     (((int)(MathHelper.Distance(xValue, hydroBot.Position.X)) < 200) &&
+                    //     ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200))));
+                    for (numTries = 0; numTries < 20; numTries++)
                     {
                         xValue = random.Next(0, hydroBot.MaxRangeX);
                         zValue = random.Next(0, hydroBot.MaxRangeZ);
-
-                    } while (IsSurfaceOccupied(xValue, zValue, enemyAmount, fishAmount, enemies, fishes) ||
+                        if (!(IsSurfaceOccupied(new BoundingSphere(new Vector3(xValue, hydroBot.floatHeight, zValue), enemies[i].BoundingSphere.Radius), enemyAmount, fishAmount, enemies, fishes) ||
                          (((int)(MathHelper.Distance(xValue, hydroBot.Position.X)) < 200) &&
-                         ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200)));
+                         ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200))))
+                        {
+                            enemies[i].health = enemies[i].maxHealth;
+                            enemies[i].stunned = false;
+                            enemies[i].isHypnotise = false;
+                            enemies[i].gaveExp = false;
 
-                    enemies[i].Position.X = xValue;
-                    enemies[i].Position.Z = zValue;
-                    enemies[i].Position.Y = hydroBot.floatHeight;
-                    enemies[i].BoundingSphere =
-                        new BoundingSphere(enemies[i].Position, enemies[i].BoundingSphere.Radius);
+                            enemies[i].Position.X = xValue;
+                            enemies[i].Position.Z = zValue;
+                            enemies[i].Position.Y = hydroBot.floatHeight;
+                            enemies[i].BoundingSphere =
+                                new BoundingSphere(enemies[i].Position, enemies[i].BoundingSphere.Radius);
+                            break;
+                        }
+                        else
+                        {
+                            //if we can not find a spare space to put the revived enemy
+                            //temporarily put it somewhere far
+                            enemies[i].Position.X = -1000;
+                            enemies[i].Position.Z = -1000;
+                        }
+                    }             
                 }
             }
         }

@@ -39,7 +39,7 @@ namespace Poseidon
 
         public CutSceneDialog()
         {
-            int currentLevel = PlayGameScene.currentLevel;
+            //int currentLevel = PlayGameScene.currentLevel;
             // For scene 0
             List<Sentence> cutScene = new List<Sentence>();
             Sentence sentence;
@@ -66,7 +66,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "However, hope is not lost ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Scientists from the University of Houston creates a highly intelligent, self-powered robot that is capable of restoring all ocean life",
+            sentence = new Sentence(3, "Scientists from the University of Houston create a highly intelligent, self-powered robot that is capable of restoring all ocean life",
                 "Image/Cutscenes/Robot Creation", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "With the world's hope resting on his shoulders, the first-ever Hydrobot is deployed to the ocean. ",
@@ -128,7 +128,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Teleportation! Wow, that's exciting. Thank you so much. I will not disappoint you.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
  
@@ -145,7 +145,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Ancient Relics??", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, " Just find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days in one of the shipwrecks and I will explain it further.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, " Just find the relic in " + ((GameConstants.RoundTime[2].Minutes * 60) + GameConstants.RoundTime[2].Seconds) / GameConstants.DaysPerSecond + " days in one of the shipwrecks and I will explain it further.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -162,7 +162,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Sounds interesting, I am fully prepared!", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "The winged sandal is very powerful if used at the correct moment. Your goal is to find and defeat the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "The winged sandal is very powerful if used at the correct moment. Your goal is to find and defeat the mutant shark in " + ((GameConstants.RoundTime[3].Minutes * 60) + GameConstants.RoundTime[3].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -175,7 +175,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Oh my gosh, we have to stop that immediately!", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "They are currently capturing the sharks as we talk. Your mission is to go there and save at least " + (GameConstants.LevelObjective[currentLevel] * 100).ToString() + "% of the sharks during " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "They are currently capturing the sharks as we talk. Your mission is to go there and save at least " + (GameConstants.LevelObjective[4] * 100).ToString() + "% of the sharks during " + ((GameConstants.RoundTime[4].Minutes * 60) + GameConstants.RoundTime[4].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(0, "I got it.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
@@ -196,7 +196,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Then what can I do to defeat him.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "There are more ancient relics lying around. Obtain them and you will have more special powers. Your mission is to explore the shipwrecks and find the Hercules's Bow in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "There are more ancient relics lying around. Obtain them and you will have more special powers. Your mission is to explore the shipwrecks and find the Hercules's Bow in " + ((GameConstants.RoundTime[5].Minutes * 60) + GameConstants.RoundTime[5].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -208,7 +208,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "So what will be the next relic to find?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "This time, find the Thor's hammer in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "This time, find the Thor's hammer in " + ((GameConstants.RoundTime[6].Minutes * 60) + GameConstants.RoundTime[6].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -216,7 +216,7 @@ namespace Poseidon
             cutScene = new List<Sentence>();
             sentence = new Sentence(0, "I found the Thor's hammer. It's power is truly unmatchable!", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Yes, it is. But to defeat the Terminator, you still need more power. This mission, find Achilles' armor in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "Yes, it is. But to defeat the Terminator, you still need more power. This mission, find Achilles' armor in " + ((GameConstants.RoundTime[7].Minutes * 60) + GameConstants.RoundTime[7].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -228,7 +228,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "So have we found all the relics?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "There is yet one relic left to find. It is the The Aphrodite's belt. Go and find it in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "There is yet one relic left to find. It is the The Aphrodite's belt. Go and find it in " + ((GameConstants.RoundTime[8].Minutes * 60) + GameConstants.RoundTime[8].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 

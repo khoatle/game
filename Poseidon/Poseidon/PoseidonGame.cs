@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
 using Poseidon.MiniGames;
+using System.IO;
 
 namespace Poseidon
 {
@@ -83,6 +84,8 @@ namespace Poseidon
         bool doubleClicked = false;
         bool clicked=false;
         double clickTimer = 0;
+
+        bool gamePlus = false;
 
         // Texture to show that enemy is stunned
         protected Texture2D stunnedTexture;
@@ -185,9 +188,6 @@ namespace Poseidon
             //Loading the select loading level scene
             selectLoadingLevelScene = new SelectLoadingLevelScene(this, startSceneLarge, startBackgroundTexture, teamLogo);
             Components.Add(selectLoadingLevelScene);
-
-            // Loading the cutscenes
-            cutSceneDialog = new CutSceneDialog();
 
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
@@ -534,6 +534,14 @@ namespace Poseidon
                 {
                     case "New Game":
                         MediaPlayer.Stop();
+                        gamePlus = false;
+                        PlayGameScene.currentLevel = 0;
+                        PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                        ShowScene(loadingScene);
+                        break;
+                    case "New Game Plus":
+                        MediaPlayer.Stop();
+                        gamePlus = true;
                         PlayGameScene.currentLevel = 0;
                         PlayGameScene.currentGameState = GameState.PlayingCutScene;
                         ShowScene(loadingScene);
@@ -564,6 +572,38 @@ namespace Poseidon
         }
         private void CreateLevelDependentScenes()
         {
+            // Is it Game Plus
+            if (gamePlus)
+            {
+                for (int i = 0; i < GameConstants.LevelObjective.Length; i++)
+                {
+                    GameConstants.NumberShootingEnemies[i] = (int)(GameConstants.NumberShootingEnemies[i]*1.5f);
+                    GameConstants.NumberCombatEnemies[i] = (int)(GameConstants.NumberCombatEnemies[i] * 1.5f);
+                }
+                GameConstants.NumberShootingEnemies[1] = 15; // Make level 2 little more harder
+                GameConstants.NumberCombatEnemies[3] = 7; // Fight some enemies while fighting the shark
+                GameConstants.NumberShootingEnemies[3] = 7; // Fight some enemies while fighting the shark
+                //int[] numtrash = {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+                //GameConstants.NumberTrash = numtrash;
+                //int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                //GameConstants.NumberShootingEnemies = numShootingEnemies;
+                //int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                //GameConstants.NumberCombatEnemies = numCombatEnemies;
+                //int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                //GameConstants.NumberFish = numFish;
+                int[] numMutantShark = { 0, 0, 0, 1, 2, 3, 4, 5, 6, 10, 1, 1 };
+                GameConstants.NumberMutantShark = numMutantShark;
+                int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
+                GameConstants.NumberTerminator = numTerminator;
+                //int[] numShipWreck = { 0, 0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 0 };
+                //GameConstants.NumberShipWreck = numShipWreck;
+                double[] levelObjective = { 1, 0.9, 0, 0, 0.6, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.LevelObjective = levelObjective;
+            }
+
+            // Loading the cutscenes
+            cutSceneDialog = new CutSceneDialog();
+            
             // Create the main game play scene
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(playGameScene);

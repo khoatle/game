@@ -12,4 +12,20 @@ Maybe this is a "Goodwill bar", increase everytime you do a good deed (trash, tr
 	- Revived fish icon: increase their attribute or power
 
 
-Survival Mode: If you scrore > x, give more skills to user.
+Survival Mode: If you scrore > x, give more skills to user. Display score, etc after losing survival mode.
+
+Should we draw a boundary?
+
+How about putting the electric eel, which can zap the bot?
+
+Captain-Nemo Submarine.
+
+Ghosts inside ship wrecks?
+
+Combined skill (Hammer+sandal: throw the hammer)
+
+Luminous fish
+
+Dirty water when env is low
+
+Different mutant shark texture 

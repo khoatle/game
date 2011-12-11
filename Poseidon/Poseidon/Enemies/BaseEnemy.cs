@@ -89,9 +89,17 @@ namespace Poseidon
             stunned = false;
             prevFire = new TimeSpan();
             health = GameConstants.DefaultEnemyHP;
-            speed = GameConstants.EnemySpeed;
+            if (PoseidonGame.gamePlus)
+            {
+                speed = GameConstants.EnemySpeed * 1.5f;
+                basicExperienceReward = 30;
+            }
+            else
+            {
+                speed = GameConstants.EnemySpeed;
+                basicExperienceReward = 60;
+            }
             damage = GameConstants.DefaultEnemyDamage;
-            basicExperienceReward = 60;
         }
 
         public void setHypnotise(GameTime gameTime)

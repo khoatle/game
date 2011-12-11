@@ -696,14 +696,25 @@ namespace Poseidon
                 {
                     if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                     {
+                        int envPoints, expPoints;
+                        if (PoseidonGame.gamePlus)
+                        {
+                            envPoints = GameConstants.envGainForTrashClean - 5;
+                            expPoints = trash.experienceReward - 5;
+                        }
+                        else
+                        {
+                            envPoints = GameConstants.envGainForTrashClean;
+                            expPoints = trash.experienceReward;
+                        }
                         trash.Retrieved = true;
-                        currentExperiencePts += trash.experienceReward;
-                        currentEnvPoint += GameConstants.envGainForTrashClean;
+                        currentExperiencePts += expPoints;
+                        currentEnvPoint += envPoints;
                         PoseidonGame.audio.retrieveSound.Play();
                         //RetrievedSound.Play();
 
                         Point point = new Point();
-                        String point_string = "+" + GameConstants.envGainForTrashClean.ToString() + "ENV\n+" + trash.experienceReward + "EXP";
+                        String point_string = "+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
                         point.LoadContent(PoseidonGame.contentManager, point_string, trash.Position, Color.LawnGreen);
                         if (gameMode == GameMode.ShipWreck)
                             ShipWreckScene.points.Add(point);

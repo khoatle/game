@@ -71,11 +71,16 @@ namespace Poseidon
 
                     if (objs[i] is Fish)
                     {
-                        HydroBot.currentEnvPoint -= GameConstants.envLossForFishDeath;
+                        int envLoss;
+                        if (PoseidonGame.gamePlus)
+                            envLoss = GameConstants.envLossForFishDeath + 5;
+                        else
+                            envLoss = GameConstants.envLossForFishDeath;
+                        HydroBot.currentEnvPoint -= envLoss;
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))
                         {
                             Point point = new Point();
-                            String point_string = "-" + GameConstants.envLossForFishDeath.ToString() + "ENV";
+                            String point_string = "-" + envLoss.ToString() + "ENV";
                             point.LoadContent(PoseidonGame.contentManager, point_string, objs[i].Position, Color.Red);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);

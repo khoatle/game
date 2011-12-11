@@ -568,6 +568,7 @@ namespace Poseidon
                         break;
                     case "Survival Mode":
                         MediaPlayer.Stop();
+                        gamePlus = false;
                         CreateSurvivalDependentScenes();
                         SurvivalGameScene.score = 0;
                         ShowScene(survivalGameScene);
@@ -589,9 +590,9 @@ namespace Poseidon
             {
                 int[] numtrash = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberTrash = numtrash;
-                int[] numShootingEnemies = { 0, 12, 20, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
+                int[] numShootingEnemies = { 0, 8, 15, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 12, 20, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
+                int[] numCombatEnemies = { 1, 8, 15, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -603,7 +604,7 @@ namespace Poseidon
                 GameConstants.NumberShipWreck = numShipWreck;
                 int[] fishInSchool = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.FishInSchool = fishInSchool;
-                double[] levelObjective = { 1, 0.9, 0, 0, 0.6, 0, 0, 0, 0, 0, 0, 0 };
+                double[] levelObjective = { 1, 0.5, 0, 0, 0.6, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.LevelObjective = levelObjective;
             }
             else

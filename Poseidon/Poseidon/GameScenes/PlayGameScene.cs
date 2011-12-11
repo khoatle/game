@@ -1005,12 +1005,17 @@ namespace Poseidon
                     {
                         if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, plants, shipWrecks, staticObjects, gameTime))
                         {
+                            int envPoint;
+                            if (PoseidonGame.gamePlus)
+                                envPoint = GameConstants.envGainForDropSeed - 5;
+                            else
+                                envPoint = GameConstants.envGainForDropSeed;
                             audio.plantSound.Play();
                             HydroBot.currentExperiencePts += Plant.experienceReward;
-                            HydroBot.currentEnvPoint += GameConstants.envGainForDropSeed;
+                            HydroBot.currentEnvPoint += envPoint;
 
                             Point point = new Point();
-                            String point_string = "+" + GameConstants.envGainForDropSeed.ToString() + "ENV\n+" + Plant.experienceReward + "EXP";
+                            String point_string = "+" + envPoint.ToString() + "ENV\n+" + Plant.experienceReward + "EXP";
                             point.LoadContent(PlayGameScene.Content, point_string, hydroBot.Position, Color.LawnGreen);
                             PlayGameScene.points.Add(point);
                         }

@@ -1756,11 +1756,11 @@ namespace Poseidon
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw talking box
                 talkingBox = Content.Load<Texture2D>("Image/Cutscenes/botBox");
-                spriteBatch.Draw(talkingBox,
-                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                Rectangle botRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
+                spriteBatch.Draw(talkingBox, botRectangle, Color.White);
                 //draw what is said
                 string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(botRectangle.Left+50, botRectangle.Top+60), Color.Blue);
             }
             //Poseidon speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
@@ -1777,12 +1777,11 @@ namespace Poseidon
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw talking box
                 talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
-                spriteBatch.Draw(talkingBox,
-                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                Rectangle PoseidonRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
+                spriteBatch.Draw(talkingBox, PoseidonRectangle, Color.White);
                 //draw what is said
                 string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(PoseidonRectangle.Left+50, PoseidonRectangle.Top+65), Color.Blue);
             }
             //Terminator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 2)
@@ -1799,23 +1798,21 @@ namespace Poseidon
                     new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
                 //draw talking box
                 talkingBox = Content.Load<Texture2D>("Image/Cutscenes/otherPersonBox");
-                spriteBatch.Draw(talkingBox,
-                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                Rectangle terminatorRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
+                spriteBatch.Draw(talkingBox, terminatorRectangle, Color.White);
                 //draw what is said
                 string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Blue);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(terminatorRectangle.Left+50, terminatorRectangle.Top+60), Color.Blue);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
             {
                 talkingBox = Content.Load<Texture2D>("Image/Cutscenes/narratorBox");
-                spriteBatch.Draw(talkingBox,
-                    new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
+                Rectangle narratorRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
+                spriteBatch.Draw(talkingBox, narratorRectangle, Color.White);
                 //draw what is said
                 string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text,
-                    new Vector2(50, GraphicDevice.Viewport.TitleSafeArea.Height - 200), Color.Black);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left+50, narratorRectangle.Top+30), Color.Black);
             }
             //float xOffsetText, yOffsetText;
             //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;

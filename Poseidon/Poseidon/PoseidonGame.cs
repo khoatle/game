@@ -85,7 +85,7 @@ namespace Poseidon
         bool clicked=false;
         double clickTimer = 0;
 
-        bool gamePlus = false;
+        public static bool gamePlus = false;
 
         // Texture to show that enemy is stunned
         protected Texture2D stunnedTexture;
@@ -333,18 +333,30 @@ namespace Poseidon
         /// </summary>
         public void HandleSelectLoadingLevelSceneInput()
         {
-            int i=0;
+            int i=0, lvl;
             if (enterPressed)
             {
                 foreach( int level in selectLoadingLevelScene.savedlevels)
                 {
                     if (selectLoadingLevelScene.SelectedMenuIndex == i)
                     {
-                        PlayGameScene.currentLevel = level;
+                        if (level >= 100)
+                        {
+                            PoseidonGame.gamePlus = true;
+                            lvl = level - 100;
+                        }
+                        else
+                        {
+                            PoseidonGame.gamePlus = false;
+                            lvl = level;
+                        }
+                        PlayGameScene.currentLevel = lvl;
                         ShowScene(loadingScene);
                     }
                     i++;
                 }
+
+                //go Back selected
                 if (selectLoadingLevelScene.SelectedMenuIndex == i)
                     ShowScene(startScene);
             }
@@ -575,29 +587,44 @@ namespace Poseidon
             // Is it Game Plus
             if (gamePlus)
             {
-                for (int i = 0; i < GameConstants.LevelObjective.Length; i++)
-                {
-                    GameConstants.NumberShootingEnemies[i] = (int)(GameConstants.NumberShootingEnemies[i]*1.5f);
-                    GameConstants.NumberCombatEnemies[i] = (int)(GameConstants.NumberCombatEnemies[i] * 1.5f);
-                }
-                GameConstants.NumberShootingEnemies[1] = 15; // Make level 2 little more harder
-                GameConstants.NumberCombatEnemies[3] = 7; // Fight some enemies while fighting the shark
-                GameConstants.NumberShootingEnemies[3] = 7; // Fight some enemies while fighting the shark
-                //int[] numtrash = {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-                //GameConstants.NumberTrash = numtrash;
-                //int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
-                //GameConstants.NumberShootingEnemies = numShootingEnemies;
-                //int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
-                //GameConstants.NumberCombatEnemies = numCombatEnemies;
-                //int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
-                //GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 2, 3, 4, 5, 6, 10, 1, 1 };
+                int[] numtrash = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                GameConstants.NumberTrash = numtrash;
+                int[] numShootingEnemies = { 0, 10, 15, 7, 20, 30, 30, 30, 30, 75, 15, 15 };
+                GameConstants.NumberShootingEnemies = numShootingEnemies;
+                int[] numCombatEnemies = { 0, 10, 15, 7, 20, 30, 30, 30, 30, 75, 15, 15 };
+                GameConstants.NumberCombatEnemies = numCombatEnemies;
+                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                GameConstants.NumberFish = numFish;
+                int[] numMutantShark = { 0, 0, 0, 1, 2, 3, 4, 5, 6, 10, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                //int[] numShipWreck = { 0, 0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 0 };
-                //GameConstants.NumberShipWreck = numShipWreck;
+                int[] numShipWreck = { 0, 0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 0 };
+                GameConstants.NumberShipWreck = numShipWreck;
+                int[] fishInSchool = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                GameConstants.FishInSchool = fishInSchool;
                 double[] levelObjective = { 1, 0.9, 0, 0, 0.6, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.LevelObjective = levelObjective;
+            }
+            else
+            {
+                int[] numtrash = {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+                GameConstants.NumberTrash = numtrash;
+                int[] numShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
+                GameConstants.NumberShootingEnemies = numShootingEnemies;
+                int[] numCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
+                GameConstants.NumberCombatEnemies = numCombatEnemies;
+                int[] numFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+                GameConstants.NumberFish = numFish;
+                int[] numMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
+                GameConstants.NumberMutantShark = numMutantShark;
+                int[] numTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
+                GameConstants.NumberTerminator = numTerminator;
+                int[] numShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
+                GameConstants.NumberShipWreck = numShipWreck;
+                int[] fishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+                GameConstants.FishInSchool = fishInSchool;
+                double[] levelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
                 GameConstants.LevelObjective = levelObjective;
             }
 

@@ -306,6 +306,12 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            string filenamePrefix;
+            if (PoseidonGame.gamePlus)
+                filenamePrefix = "GamePlusLevel";
+            else
+                filenamePrefix = "GameLevel";
+
             if (prevGameState == GameState.Lost)
             {
                 // player always lose in lv10
@@ -315,7 +321,7 @@ namespace Poseidon
                     ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                     objectsToSerialize.hydrobot = hydroBot;
                     Serializer serializer = new Serializer();
-                    serializer.SerializeObjects("GameLevel" + currentLevel.ToString(), objectsToSerialize);
+                    serializer.SerializeObjects(filenamePrefix + currentLevel.ToString(), objectsToSerialize);
                     hydroBot.SetLevelStartValues();
                 }
                 else hydroBot.ResetToLevelStart();
@@ -326,7 +332,7 @@ namespace Poseidon
                 objectsToSerialize.hydrobot = hydroBot;
 
                 Serializer serializer = new Serializer();
-                serializer.SerializeObjects("GameLevel" + currentLevel.ToString(), objectsToSerialize);
+                serializer.SerializeObjects(filenamePrefix + currentLevel.ToString(), objectsToSerialize);
 
                 hydroBot.SetLevelStartValues();
             }

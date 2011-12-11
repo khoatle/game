@@ -161,7 +161,7 @@ namespace Poseidon
             Components.Add(helpScene);
 
             // Create the Start Scene
-            startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenSmall");
+            startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
@@ -589,9 +589,9 @@ namespace Poseidon
             {
                 int[] numtrash = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberTrash = numtrash;
-                int[] numShootingEnemies = { 0, 10, 15, 7, 20, 30, 30, 30, 30, 75, 15, 15 };
+                int[] numShootingEnemies = { 0, 12, 20, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 10, 15, 7, 20, 30, 30, 30, 30, 75, 15, 15 };
+                int[] numCombatEnemies = { 0, 12, 20, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;

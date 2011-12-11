@@ -129,8 +129,8 @@ namespace Poseidon
             }
             //if (PlayGameScen
             // Put the menu centered in screen
-            menu.Position = new Vector2(Game.Window.ClientBounds.Width/2
-                                          , 280);
+            menu.Position = new Vector2(Game.Window.ClientBounds.Width / 2
+                                          , 300);
 
             // These elements will be visible when the 'Rock Rain' title
             // is done.

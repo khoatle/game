@@ -68,7 +68,7 @@ namespace Poseidon
             for (i = 1; i < GameConstants.RoundTime.Length; i++)
             {
                 string savedFileName = "GamePlusLevel" + i.ToString();
-                string menuString = "+LEVEL " + (i + 1).ToString(); // +1 Since the game will start from next level
+                string menuString = "LEVEL " + (i + 1).ToString() + "+"; // +1 Since the game will start from next level
                 if (File.Exists(savedFileName))
                 {
                     savedlevels.Add(i+100);

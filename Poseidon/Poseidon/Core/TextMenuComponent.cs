@@ -225,7 +225,7 @@ namespace Poseidon.Core
                     y += font.LineSpacing;
                 }
             }
-            else // Need to draw 2 columns
+            else if (((menuItems.Count * regularFont.LineSpacing) + position.Y) < Game.Window.ClientBounds.Height*2)  // Need to draw 2 columns
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
@@ -253,6 +253,41 @@ namespace Poseidon.Core
                     spriteBatch.DrawString(font, menuItems[i],
                         new Vector2(x, y), theColor);
                     if (i == (int)menuItems.Count / 2)
+                        y = position.Y;
+                    else
+                        y += font.LineSpacing;
+                }
+            }
+            else // Need to draw 3 columns
+            {
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    SpriteFont font;
+                    Color theColor;
+                    //x = position.X - ((menuItems[i].Length*45)/2);
+                    if (i == SelectedIndex)
+                    {
+                        font = selectedFont;
+                        theColor = selectedColor;
+                    }
+                    else
+                    {
+                        font = regularFont;
+                        theColor = regularColor;
+                    }
+                    if (i <= menuItems.Count / 3)
+                        x = position.X - (Game.Window.ClientBounds.Width / 3) - (font.MeasureString(menuItems[i]).X / 2);
+                    else if ( i <= menuItems.Count*2/3)
+                        x = position.X - (font.MeasureString(menuItems[i]).X / 2);
+                    else
+                        x = position.X + (Game.Window.ClientBounds.Width / 3) - (font.MeasureString(menuItems[i]).X / 2);
+                    // Draw the text shadow
+                    spriteBatch.DrawString(font, menuItems[i],
+                        new Vector2(x + 1, y + 1), Color.Black);
+                    // Draw the text item
+                    spriteBatch.DrawString(font, menuItems[i],
+                        new Vector2(x, y), theColor);
+                    if ((i == (int)menuItems.Count / 3) || (i == (int)menuItems.Count*2/3))
                         y = position.Y;
                     else
                         y += font.LineSpacing;

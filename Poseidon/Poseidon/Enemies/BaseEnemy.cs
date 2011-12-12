@@ -84,22 +84,22 @@ namespace Poseidon
             : base()
         {
             giveupTime = new TimeSpan(0, 0, 3);
-            perceptionRadius = GameConstants.EnemyPerceptionRadius;
+            perceptionRadius = GameConstants.EnemyPerceptionRadius;// *(HydroBot.gamePlusLevel + 1);
             timeBetweenFire = 0.5f;
             stunned = false;
             prevFire = new TimeSpan();
-            health = GameConstants.DefaultEnemyHP;
+            health = GameConstants.DefaultEnemyHP * (HydroBot.gamePlusLevel + 1); //+1 as it starts from 0
+            maxHealth = health;
+            basicExperienceReward = 60 * (HydroBot.gamePlusLevel + 1);
             if (PoseidonGame.gamePlus)
             {
-                speed = GameConstants.EnemySpeed * 1.5f;
-                basicExperienceReward = 30;
+                speed = GameConstants.EnemySpeed * (1.0f + HydroBot.gamePlusLevel / 2);
             }
             else
             {
                 speed = GameConstants.EnemySpeed;
-                basicExperienceReward = 60;
             }
-            damage = GameConstants.DefaultEnemyDamage;
+            damage = GameConstants.DefaultEnemyDamage; //overwritten later
         }
 
         public void setHypnotise(GameTime gameTime)

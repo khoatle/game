@@ -603,6 +603,7 @@ namespace Poseidon
                             if (currentLevel == 12)
                             {
                                 currentGameState = GameState.GameComplete;
+                                HydroBot.gamePlusLevel++;
                                 //the save file used for Survival mode
                                 ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                                 objectsToSerialize.hydrobot = hydroBot;
@@ -1501,7 +1502,10 @@ namespace Poseidon
             DrawRadar();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
-            DrawTipIcon();
+            if (PoseidonGame.gamePlus)
+                DrawGamePlusLevel();
+            else
+                DrawTipIcon();
             cursor.Draw(gameTime);
             spriteBatch.End();
         }
@@ -1713,10 +1717,6 @@ namespace Poseidon
         private void DrawTipIcon()
         {
             int xOffsetText, yOffsetText;
-            Rectangle rectSafeArea;
-
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
             xOffsetText = levelObjectiveIconRectangle.Center.X - 25;
             yOffsetText = levelObjectiveIconRectangle.Bottom + 10;
@@ -1725,6 +1725,18 @@ namespace Poseidon
 
             spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
 
+        }
+
+        //Draw GamePlus level
+        private void DrawGamePlusLevel()
+        {
+            int xOffsetText, yOffsetText;
+            string text = "GAMEPLUS(" + HydroBot.gamePlusLevel+")";
+
+            xOffsetText = levelObjectiveIconRectangle.Right - (int)fishTalkFont.MeasureString(text).X;
+            yOffsetText = levelObjectiveIconRectangle.Bottom + 5;
+
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(xOffsetText, yOffsetText), Color.Red);
         }
 
         public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)

@@ -40,16 +40,16 @@ namespace Poseidon
             //Terminator is undefeatable before the last level
             if (PlayGameScene.currentLevel == 11 || gameMode == GameMode.SurvivalMode)
             {
-                health = 10000;
-                maxHealth = 10000;
+                health = 10000 * (HydroBot.gamePlusLevel + 1);
+                maxHealth = health;
             }
             else
             {
                 health = 1000000;
-                maxHealth = 1000000;
+                maxHealth = health;
             }
-            perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 3000;
+            perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
+            basicExperienceReward = 3000 * (HydroBot.gamePlusLevel + 1);
         }
 
         public override void Load(int clipStart, int clipEnd, int fps)

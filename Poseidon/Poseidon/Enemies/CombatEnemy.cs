@@ -28,7 +28,7 @@ namespace Poseidon
         {
             perceptID = new int[] { 0, 1, 2, 3 };
             configBits = new bool[] { false, false, false, false };
-            damage = GameConstants.CombatEnemeyDamage;
+            damage = GameConstants.CombatEnemyDamage * (HydroBot.gamePlusLevel+1);
             perceptionRadius *= 2;
             isHypnotise = false;
         }

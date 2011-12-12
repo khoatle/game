@@ -74,7 +74,7 @@ namespace Poseidon {
         public const int DefaultBulletDamage = 10;
         public const int DefaultEnemyDamage = 10;
         public const int EnemyShootingDamage = 7;
-        public const int CombatEnemeyDamage = 15;
+        public const int CombatEnemyDamage = 15;
         public const int MutantSharkBitingDamage = 25;
         public const int TerminatorShootingDamage = 25;
         public const int ChasingBulletDamage = 80;
@@ -94,26 +94,15 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        //public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        //public static int[] NumberShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-        //public static int[] NumberCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-        //public static int[] NumberFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        //public static int[] NumberMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
-        //public static int[] NumberTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
-        //public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
-        //public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        //public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
-        public static int[] NumberTrash = new int[maxLevel];
+        public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
+        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
         public static int[] NumberFish = new int[maxLevel];
         public static int[] NumberMutantShark = new int[maxLevel];
         public static int[] NumberTerminator = new int[maxLevel];
-        public static int[] NumberShipWreck = new int[maxLevel];
-        public static int[] FishInSchool = new int[maxLevel];
-        public static double[] LevelObjective = new double[maxLevel];
-
-
 
         //number of enemy and fish for ship wreck
         public const int ShipHighNumberShootingEnemies = 5;

@@ -16,21 +16,27 @@ namespace Poseidon
         Random rand = new Random();
         public MutantShark() : base() {
             speed = (float)(GameConstants.EnemySpeed * 1.5);
-            damage = GameConstants.MutantSharkBitingDamage;
+            if(PoseidonGame.gamePlus)
+                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+            damage = GameConstants.MutantSharkBitingDamage * (HydroBot.gamePlusLevel+1);
             isBigBoss = true;
             if (PlayGameScene.currentLevel == 3)
             {
-                health = 6000;
-                maxHealth = 6000;
+                health = 15000;
+                maxHealth = 15000;
             }
             else
             {
                 health = 5000;
                 maxHealth = 5000;
             }
-
+            if (PoseidonGame.gamePlus)
+            {
+                health += (HydroBot.gamePlusLevel * 2000);
+                maxHealth = health;
+            }
             perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 750;
+            basicExperienceReward = 750 + (HydroBot.gamePlusLevel*100);
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)

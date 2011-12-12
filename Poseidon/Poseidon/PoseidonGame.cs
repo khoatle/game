@@ -588,11 +588,9 @@ namespace Poseidon
             // Is it Game Plus
             if (gamePlus)
             {
-                int[] numtrash = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
-                GameConstants.NumberTrash = numtrash;
-                int[] numShootingEnemies = { 0, 8, 15, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
+                int[] numShootingEnemies = { 0, 12, 15, 15, 15, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 1, 8, 15, 7, 25, 30, 30, 30, 30, 75, 15, 15 };
+                int[] numCombatEnemies = { 1, 12, 15, 15, 15, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -600,17 +598,9 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numShipWreck = { 0, 0, 3, 0, 0, 3, 3, 3, 3, 0, 0, 0 };
-                GameConstants.NumberShipWreck = numShipWreck;
-                int[] fishInSchool = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
-                GameConstants.FishInSchool = fishInSchool;
-                double[] levelObjective = { 1, 0.5, 0, 0, 0.6, 0, 0, 0, 0, 0, 0, 0 };
-                GameConstants.LevelObjective = levelObjective;
             }
             else
             {
-                int[] numtrash = {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-                GameConstants.NumberTrash = numtrash;
                 int[] numShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
@@ -621,12 +611,6 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
-                GameConstants.NumberShipWreck = numShipWreck;
-                int[] fishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-                GameConstants.FishInSchool = fishInSchool;
-                double[] levelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
-                GameConstants.LevelObjective = levelObjective;
             }
 
             // Loading the cutscenes

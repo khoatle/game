@@ -108,6 +108,8 @@ namespace Poseidon
         // which game mode is this hydrobot in?
         public static GameMode gameMode;
 
+        public static int gamePlusLevel = 0; //Every time you beat the game, gameplus level increases
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -230,10 +232,8 @@ namespace Poseidon
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoisson = 0;
 
-            //Load(PlayGameScene.Content);
+            gamePlusLevel = (int)info.GetValue("gamePlusLevel", typeof(int));
 
-            //System.Diagnostics.Debug.WriteLine("CurrentExp:"+currentExperiencePts);
-            //System.Diagnostics.Debug.WriteLine("NextExp:" + nextLevelExperience);
         }
 
         /// <summary>
@@ -252,7 +252,6 @@ namespace Poseidon
             {
                 string Skillname = "skills" + i.ToString();
                 info.AddValue(Skillname, skills[i]);
-                //System.Diagnostics.Debug.WriteLine("Serializing skills:" + skills[i]);
             }
             info.AddValue("activeSkillID", activeSkillID);
 
@@ -264,8 +263,7 @@ namespace Poseidon
             info.AddValue("nextLevelExperience", nextLevelExperience);
             info.AddValue("level", level);
             info.AddValue("unassignedPts", unassignedPts);
-            //System.Diagnostics.Debug.WriteLine("Serializiing CurrentExp:" + currentExperiencePts);
-            //System.Diagnostics.Debug.WriteLine("Serializing NextExp:" + nextLevelExperience);
+            info.AddValue("gamePlusLevel", gamePlusLevel);
         }
 
         /// <summary>

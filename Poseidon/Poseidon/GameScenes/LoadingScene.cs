@@ -69,8 +69,12 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
             Rectangle logoRect = new Rectangle(Game.Window.ClientBounds.Center.X - teamLogo.Width/2, Game.Window.ClientBounds.Center.Y - teamLogo.Height, teamLogo.Width, teamLogo.Height);
-            string text = "LOADING...";
-            Vector2 textPositon = new Vector2(logoRect.Center.X - (font.MeasureString("LOADING").X/2), logoRect.Bottom+100);
+            string text;
+            if (PoseidonGame.gamePlus)
+                text = "LOADING GAME+";
+            else
+                text = "LOADING";
+            Vector2 textPositon = new Vector2(logoRect.Center.X - (font.MeasureString(text).X/2), logoRect.Bottom+100);
 
             spriteBatch.Begin();
             base.Draw(gameTime);

@@ -20,10 +20,10 @@ namespace Poseidon
         {
             perceptID = new int[] { 0, 1, 2, 3 };
             configBits = new bool[] { false, false, false, false };
-            shortDistance = GameConstants.EnemyShootingDistance;
+            shortDistance = GameConstants.EnemyShootingDistance;// *(HydroBot.gamePlusLevel + 1);
             isHypnotise = false;
-            timeBetweenFire = GameConstants.EnemyShootingRate;
-            damage = GameConstants.EnemyShootingDamage;
+            timeBetweenFire = GameConstants.EnemyShootingRate * (HydroBot.gamePlusLevel + 1);
+            damage = GameConstants.EnemyShootingDamage * (HydroBot.gamePlusLevel+1);
         }
 
         // Return the perceptID correspondingly

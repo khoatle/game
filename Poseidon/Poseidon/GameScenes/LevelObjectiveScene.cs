@@ -106,9 +106,19 @@ namespace Poseidon
         public override void Draw(GameTime gameTime)
         {
             int currentLevel = PlayGameScene.currentLevel;
-            string level_description = "LEVEL "+ (currentLevel+1).ToString();
+            string level_description;
             string level_objective="";
             string achieved_status="";
+
+            if (PoseidonGame.gamePlus)
+            {
+                level_description = "GAMEPLUS"+ "("+HydroBot.gamePlusLevel+")"+" LEVEL " + (currentLevel + 1).ToString();
+            }
+            else
+            {
+                level_description = "LEVEL " + (currentLevel + 1).ToString();
+            }
+
             spriteBatch.Begin();
             base.Draw(gameTime);
 

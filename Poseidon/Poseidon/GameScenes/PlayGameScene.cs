@@ -174,7 +174,27 @@ namespace Poseidon
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, GameMode.MainGame);
 
-            if (PlayGameScene.currentLevel > 0)
+            if (PoseidonGame.gamePlus)
+            {
+                ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
+                Serializer serializer = new Serializer();
+                string SavedFile;
+                if (PlayGameScene.currentLevel == 0)
+                    SavedFile = "SurvivalMode";
+                else
+                    SavedFile = "GamePlusLevel" + PlayGameScene.currentLevel.ToString();
+                objectsToSerialize = serializer.DeSerializeObjects(SavedFile);
+                hydroBot = objectsToSerialize.hydrobot;
+                //if (PlayGameScene.currentLevel == 0)
+                //{
+                //    for (int index = 0; index < GameConstants.numberOfSkills; index++)
+                //    {
+                //        HydroBot.skills[index] = false;
+                //    }
+                //}
+                currentGameState = GameState.PlayingCutScene;
+            }
+            else if (PlayGameScene.currentLevel > 0)
             {
                 ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                 Serializer serializer = new Serializer();

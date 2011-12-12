@@ -188,11 +188,20 @@ namespace Poseidon
             firstUse = new bool[GameConstants.numberOfSkills];
             for (int i = 0; i < GameConstants.numberOfSkills; i++)
             {
-                string Skillname = "skills" + i.ToString();
-                lsSkills[i] = skills[i] = (bool)info.GetValue(Skillname, typeof(bool));
-                //System.Diagnostics.Debug.WriteLine("DESerializing skills:" + skills[i]);
+                if (PlayGameScene.currentLevel == 0) // No skill in level 0 (gamePLus)
+                {
+                    lsSkills[i] = skills[i] = false;
+                }
+                else
+                {
+                    string Skillname = "skills" + i.ToString();
+                    lsSkills[i] = skills[i] = (bool)info.GetValue(Skillname, typeof(bool));
+                }
             }
-            activeSkillID = lsActiveSkillID = (int)info.GetValue("activeSkillID",typeof(int));
+            if (PlayGameScene.currentLevel == 0) // No skill in level 0 (gamePLus)
+                activeSkillID = lsActiveSkillID = -1;
+            else
+                activeSkillID = lsActiveSkillID = (int)info.GetValue("activeSkillID", typeof(int));
             pointToMoveTo = Vector3.Zero;
 
             // No buff up at the beginning

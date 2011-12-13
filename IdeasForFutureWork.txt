@@ -30,6 +30,7 @@ Maybe this is a "Goodwill bar", increase everytime you do a good deed (trash, tr
 
 
 
++ Increase exp got from painting, quizzes in new game +
 
 --Deb:
 

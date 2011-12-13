@@ -22,8 +22,14 @@ namespace Poseidon
             isBigBoss = true;
             if (PlayGameScene.currentLevel == 3)
             {
-                health = 15000;
-                maxHealth = 15000;
+                if (PoseidonGame.gamePlus)
+                {
+                    health = maxHealth = 15000;
+                }
+                else
+                {
+                    health = maxHealth = 6000;
+                }
             }
             else
             {

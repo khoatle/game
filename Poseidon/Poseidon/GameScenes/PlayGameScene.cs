@@ -203,7 +203,34 @@ namespace Poseidon
                 hydroBot = objectsToSerialize.hydrobot;
                 currentGameState = GameState.PlayingCutScene;
             }
-            
+
+            if (PoseidonGame.gamePlus)
+            {
+                int[] numShootingEnemies = { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+                GameConstants.NumberShootingEnemies = numShootingEnemies;
+                int[] numCombatEnemies =   { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+                GameConstants.NumberCombatEnemies = numCombatEnemies;
+                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                GameConstants.NumberFish = numFish;
+                int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
+                GameConstants.NumberMutantShark = numMutantShark;
+                int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
+                GameConstants.NumberTerminator = numTerminator;
+            }
+            else
+            {
+                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                GameConstants.NumberShootingEnemies = numShootingEnemies;
+                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                GameConstants.NumberCombatEnemies = numCombatEnemies;
+                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                GameConstants.NumberFish = numFish;
+                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 3, 4, 5, 10, 0, 0 };
+                GameConstants.NumberMutantShark = numMutantShark;
+                int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
+                GameConstants.NumberTerminator = numTerminator;
+            }
+
             //fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
@@ -1027,10 +1054,10 @@ namespace Poseidon
                         if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, plants, shipWrecks, staticObjects, gameTime))
                         {
                             int envPoint;
-                            if (PoseidonGame.gamePlus)
-                                envPoint = GameConstants.envGainForDropSeed - 5;
+                            if (PlayGameScene.currentLevel > 0)
+                                envPoint = GameConstants.envGainForDropSeed + 5 * HydroBot.gamePlusLevel;
                             else
-                                envPoint = GameConstants.envGainForDropSeed;
+                                envPoint = GameConstants.envGainForDropSeed - 5;
                             audio.plantSound.Play();
                             HydroBot.currentExperiencePts += Plant.experienceReward;
                             HydroBot.currentEnvPoint += envPoint;

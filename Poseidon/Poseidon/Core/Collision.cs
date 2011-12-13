@@ -72,10 +72,7 @@ namespace Poseidon
                     if (objs[i] is Fish)
                     {
                         int envLoss;
-                        if (PoseidonGame.gamePlus)
-                            envLoss = GameConstants.envLossForFishDeath + 5;
-                        else
-                            envLoss = GameConstants.envLossForFishDeath;
+                        envLoss = GameConstants.envLossForFishDeath + 5*HydroBot.gamePlusLevel;
                         HydroBot.currentEnvPoint -= envLoss;
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))
                         {

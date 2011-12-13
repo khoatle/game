@@ -97,12 +97,12 @@ namespace Poseidon {
         public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        public static double[] LevelObjective =     { 0.8, 0.75,  0,   0, 0.5,   0,   0,   0,   0,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
         public static int[] NumberFish = new int[maxLevel];
         public static int[] NumberMutantShark = new int[maxLevel];
         public static int[] NumberTerminator = new int[maxLevel];
+        public static double[] LevelObjective = new double[maxLevel];
 
         //number of enemy and fish for ship wreck
         public const int ShipHighNumberShootingEnemies = 5;

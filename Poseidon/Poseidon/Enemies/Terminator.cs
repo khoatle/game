@@ -48,7 +48,10 @@ namespace Poseidon
                 health = 1000000;
                 maxHealth = health;
             }
-            perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
+            if (PlayGameScene.currentLevel > 10)
+                perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
+            else
+                perceptionRadius = GameConstants.BossPerceptionRadius;
             basicExperienceReward = 3000 * (HydroBot.gamePlusLevel + 1);
         }
 
@@ -130,7 +133,7 @@ namespace Poseidon
                 PoseidonGame.audio.bossLaugh.Play();
                 timeLastLaugh = PoseidonGame.playTime.TotalSeconds;
             }
-            if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+            if (currentHuntingTarget!=null && PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
             {
                 float originalForwardDir = ForwardDirection;
                 ForwardDirection += MathHelper.PiOver4 / 4;
@@ -150,7 +153,7 @@ namespace Poseidon
                 PoseidonGame.audio.bossLaugh.Play();
                 timeLastLaugh = PoseidonGame.playTime.TotalSeconds;
             }
-            if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3 && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+            if (currentHuntingTarget != null && PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3 && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
             {
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = PoseidonGame.playTime;
@@ -163,7 +166,7 @@ namespace Poseidon
                 timeLastLaugh = PoseidonGame.playTime.TotalSeconds;
             }
 
-            if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire * 3)
+            if (currentHuntingTarget!=null && PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire * 3)
             {
                 AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
                 prevFire = PoseidonGame.playTime;

@@ -585,41 +585,23 @@ namespace Poseidon
         }
         private void CreateLevelDependentScenes()
         {
-            // Is it Game Plus
             if (gamePlus)
             {
-                int[] numShootingEnemies = { 0, 12, 15, 15, 15, 30, 30, 30, 30, 75, 15, 15 };
-                GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 1, 12, 15, 15, 15, 30, 30, 30, 30, 75, 15, 15 };
-                GameConstants.NumberCombatEnemies = numCombatEnemies;
-                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
-                GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 2, 3, 4, 5, 6, 10, 0, 0 };
-                GameConstants.NumberMutantShark = numMutantShark;
-                int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
-                GameConstants.NumberTerminator = numTerminator;
+                double[] levelObjective = { 0.95, 0.65, 0, 0, 0.3, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.LevelObjective = levelObjective;
             }
             else
             {
-                int[] numShootingEnemies = {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-                GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies =   {   0,   5,  10,   0,  15,  20,  20,  20,  20,  50,  10,  10  };
-                GameConstants.NumberCombatEnemies = numCombatEnemies;
-                int[] numFish =            {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-                GameConstants.NumberFish = numFish;
-                int[] numMutantShark =     {   0,   0,   0,   1,   1,   2,   3,   4,   5,  10,   0,   0  };
-                GameConstants.NumberMutantShark = numMutantShark;
-                int[] numTerminator =      {   0,   0,   0,   0,   1,   0,   0,   0,   0,   0,   1,   1  };
-                GameConstants.NumberTerminator = numTerminator;
+                double[] levelObjective = { 0.8, 0.75, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.LevelObjective = levelObjective;
             }
-
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
-            
+
             // Create the main game play scene
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(playGameScene);
-
+                      
             // Create the Attribute board
             AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
             Components.Add(AttributeScene);

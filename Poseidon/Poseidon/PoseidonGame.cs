@@ -586,6 +586,9 @@ namespace Poseidon
         }
         private void CreateLevelDependentScenes()
         {
+            //Set Level Objective. To make it scale with GamePlusLevel, we must put it in playgamescene after the hydrobot is loaded,
+            //However, The cutscene uses the levelobjective values, and the cut scene must be created before playgamescene as it is 
+            //used in playgamescene. Hence levelObj is initialized here , & can not use the gameplusLevel.
             if (gamePlus)
             {
                 double[] levelObjective = { 0.95, 0.65, 0, 0, 0.3, 0, 0, 0, 0, 0, 0, 0 };
@@ -596,6 +599,7 @@ namespace Poseidon
                 double[] levelObjective = { 0.8, 0.75, 0, 0, 0.5, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.LevelObjective = levelObjective;
             }
+
             // Loading the cutscenes
             cutSceneDialog = new CutSceneDialog();
 

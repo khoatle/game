@@ -150,6 +150,7 @@ namespace Poseidon
                 hydroBot = objectsToSerialize.hydrobot;
             }
 
+            HydroBot.gamePlusLevel = 0;
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];

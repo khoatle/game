@@ -547,6 +547,7 @@ namespace Poseidon
                     case "New Game":
                         MediaPlayer.Stop();
                         gamePlus = false;
+                        HydroBot.gamePlusLevel = 0;
                         PlayGameScene.currentLevel = 0;
                         PlayGameScene.currentGameState = GameState.PlayingCutScene;
                         ShowScene(loadingScene);

@@ -1054,10 +1054,15 @@ namespace Poseidon
                         if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, plants, shipWrecks, staticObjects, gameTime))
                         {
                             int envPoint;
-                            if (PlayGameScene.currentLevel > 0)
-                                envPoint = GameConstants.envGainForDropSeed + 5 * HydroBot.gamePlusLevel;
+                            if (PoseidonGame.gamePlus)
+                            {
+                                if (PlayGameScene.currentLevel > 0)
+                                    envPoint = GameConstants.envGainForDropSeed + 5 * HydroBot.gamePlusLevel;
+                                else
+                                    envPoint = GameConstants.envGainForDropSeed - 5;
+                            }
                             else
-                                envPoint = GameConstants.envGainForDropSeed - 5;
+                                envPoint = GameConstants.envGainForDropSeed;
                             audio.plantSound.Play();
                             HydroBot.currentExperiencePts += Plant.experienceReward;
                             HydroBot.currentEnvPoint += envPoint;

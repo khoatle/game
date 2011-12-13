@@ -29,7 +29,21 @@ Maybe this is a "Goodwill bar", increase everytime you do a good deed (trash, tr
 + Survival Mode: If you scrore > x, give more skills to user.
 
 
+
+
 --Deb:
+
+Different kinds of trash with different env points. Most points for radioactive trash, then plastic, glass, rubber, wood, biodegradable.
+
+Bot can ask fish to show him radioactive trash. Fish will only show if health=100%. When bot follows fish to trash, he can not do anything else.
+
+Bot can instruct a fish to come to him when attacked (press C for communicate, a pop up will show bot talk to fish). The more fish he talks to, the easier
+it will be to save.
+
+With the ancient fish, bot can make strategy. THere will be a strategy screen. The bot can choose different options, like:
+If you see the terminator, swim right, or swim toward center of screen, swim towards me, etc.
+Bot can also lend a skill to it, and create strategy when it is supposed to use it.
+
 Should we draw a boundary?
 
 How about putting the electric eel, which can zap the bot?
@@ -46,3 +60,6 @@ Dirty water when env is low
 
 Different mutant shark texture 
 
+Twist in storyline: Poseidon turns bad, bot brings the terminator's gun & poseidon uses it to kill the hunters. Also bot discovers that all the hunters that
+did not pass the quiz and writing test, we're killed by Poseidon. He discovers a room full of stinking dead bodies. The female divers are naked (possibly
+raped by Poseidon). In the last level, he has to fight Poseidon and save the hunters as well even though the hunters are also trying to kill him.

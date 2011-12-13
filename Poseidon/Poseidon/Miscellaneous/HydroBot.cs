@@ -704,10 +704,15 @@ namespace Poseidon
                     if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                     {
                         int envPoints, expPoints;
-                        if (PlayGameScene.currentLevel > 0)
-                            envPoints = GameConstants.envGainForTrashClean + HydroBot.gamePlusLevel * 5;
+                        if (PoseidonGame.gamePlus)
+                        {
+                            if (PlayGameScene.currentLevel > 0)
+                                envPoints = GameConstants.envGainForTrashClean + HydroBot.gamePlusLevel * 5;
+                            else
+                                envPoints = GameConstants.envGainForTrashClean - 5;
+                        }
                         else
-                            envPoints = GameConstants.envGainForTrashClean - 5;
+                            envPoints = GameConstants.envGainForTrashClean;
                         expPoints = trash.experienceReward + HydroBot.gamePlusLevel*5;
                         trash.Retrieved = true;
                         currentExperiencePts += expPoints;

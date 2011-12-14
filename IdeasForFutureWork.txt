@@ -35,6 +35,8 @@ Maybe this is a "Goodwill bar", increase everytime you do a good deed (trash, tr
 --Deb:
 
 Different kinds of trash with different env points. Most points for radioactive trash, then plastic, glass, rubber, wood, biodegradable.
+Don't make it vanish, put it in a bag. Or different techniques to process the trash (press diff keys). Build different trash processing plants. tell fish to 
+carry trash there. To builfd a factory, it takes 10/20 seconds. 
 
 Bot can ask fish to show him radioactive trash. Fish will only show if health=100%. When bot follows fish to trash, he can not do anything else.
 
@@ -51,16 +53,19 @@ How about putting the electric eel, which can zap the bot?
 
 Captain-Nemo Submarine.
 
-Ghosts inside ship wrecks?
+Ghosts inside ship wrecks? swiming skeletons or zombies.
 
 Combined skill (Hammer+sandal: throw the hammer)
 
 Luminous fish
 
-Dirty water when env is low
+Dirty water when env is low. Khoa: ink drops at different places to make the water look dirty.
 
 Different mutant shark texture 
 
 Twist in storyline: Poseidon turns bad, bot brings the terminator's gun & poseidon uses it to kill the hunters. Also bot discovers that all the hunters that
 did not pass the quiz and writing test, we're killed by Poseidon. He discovers a room full of stinking dead bodies. The female divers are naked (possibly
 raped by Poseidon). In the last level, he has to fight Poseidon and save the hunters as well even though the hunters are also trying to kill him.
+
+
+

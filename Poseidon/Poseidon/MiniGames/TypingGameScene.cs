@@ -78,7 +78,7 @@ namespace Poseidon.MiniGames
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
-            LoadContent();
+            Load();
         }
 
         /// <summary>
@@ -108,7 +108,7 @@ namespace Poseidon.MiniGames
             base.Hide();
         }
 
-        protected override void LoadContent()
+        protected void Load()
         {
             // TODO: use this.Content to load your game content here
             trafficLightRed = content.Load<Texture2D>("Image/MinigameTextures/redlight");
@@ -118,7 +118,7 @@ namespace Poseidon.MiniGames
             ((WritingBox)typingBox).loadContent(boxBackground, font);
             ((Textbox)displayBox).loadContent(boxBackground, font);
             startBox = new RectangleBox(trafficLightGreen.Width + 10, 10, 100, 200);
-            base.LoadContent();
+            //base.LoadContent();
         }
 
         /// <summary>

@@ -57,12 +57,12 @@ namespace Poseidon
         {
             this.spriteBatch = spriteBatch;
             this.game = game;
-            LoadContent();
+            Load();
         }
 
         // LoadContent needs to load the cursor texture and find its center.
         // also, we need to create a SpriteBatch.
-        protected override void LoadContent()
+        protected void Load()
         {
             normalCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
             shootingCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/shootcursor");

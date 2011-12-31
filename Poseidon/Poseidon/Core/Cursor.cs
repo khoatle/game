@@ -85,7 +85,7 @@ namespace Poseidon
 
         #region Update
 
-        public new void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime, BoundingFrustum frustum)
+        public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime, BoundingFrustum frustum)
         {
             // We use different input on each platform:
             // On Xbox, we use the GamePad's DPad and left thumbstick to move the cursor around the screen.

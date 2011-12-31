@@ -312,6 +312,141 @@ namespace Poseidon.MiniGames
             quizz.options[3] = "Hairs.";
             quizz.answerID = 1;
             quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which is the largest creature the ever lived on this planet?";
+            quizz.options[0] = "Dinosaur.";
+            quizz.options[1] = "African Elephant.";
+            quizz.options[2] = "Dragon.";
+            quizz.options[3] = "Blue Whale.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "A whale is a ______";
+            quizz.options[0] = "Mammal.";
+            quizz.options[1] = "Fish.";
+            quizz.options[2] = "Reptile.";
+            quizz.options[3] = "Marsupial.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Is it possible to revive extinct species?";
+            quizz.options[0] = "Yes, if its DNA can be found.";
+            quizz.options[1] = "Yes, using a time machine.";
+            quizz.options[2] = "Yes, only if we find their mummy.";
+            quizz.options[3] = "Not possible at all.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What causes ocean tides?";
+            quizz.options[0] = "Earth's rotation.";
+            quizz.options[1] = "Sun's gravitational pull.";
+            quizz.options[2] = "Moon's gravitational pull.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which is the largest ocean?";
+            quizz.options[0] = "Indian Ocean.";
+            quizz.options[1] = "Atlantic Ocean.";
+            quizz.options[2] = "Pacific Ocean.";
+            quizz.options[3] = "Arctic Ocean.";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "The Bermuda Triangle is located in which ocean?";
+            quizz.options[0] = "Indian Ocean.";
+            quizz.options[1] = "Atlantic Ocean.";
+            quizz.options[2] = "Pacific Ocean.";
+            quizz.options[3] = "Arctic Ocean.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "How does plastic recycling help the environment?";
+            quizz.options[0] = "It produces oxygen.";
+            quizz.options[1] = "Prevents excessive landfills.";
+            quizz.options[2] = "It makes the soil fertile.";
+            quizz.options[3] = "Candies are made out of plastic.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "How are fossil fuels formed?";
+            quizz.options[0] = "Decomposition of dead organisms for millions of years.";
+            quizz.options[1] = "Melting of rocks.";
+            quizz.options[2] = "Heating of soil.";
+            quizz.options[3] = "Assembling of fossils.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which of the following is a fossil fuel?";
+            quizz.options[0] = "Coal.";
+            quizz.options[1] = "Petroleum.";
+            quizz.options[2] = "Natural Gas.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Greenhouse gases are bad because _______?";
+            quizz.options[0] = "They are dark and ominous.";
+            quizz.options[1] = "They smell bad.";
+            quizz.options[2] = "They absorb and emit radiation.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
+            
+            quizz = new Quizz();
+            quizz.question = "Which is the main source of greenhouse gases?";
+            quizz.options[0] = "Combustion of fossil fuels.";
+            quizz.options[1] = "Bonfires.";
+            quizz.options[2] = "Forest fires.";
+            quizz.options[3] = "Firecrackers.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Numbers within chasing arrow sign on plastic bottle denotes ____?";
+            quizz.options[0] = "Type of plastic.";
+            quizz.options[1] = "How many times it can be used.";
+            quizz.options[2] = "How many times it can be recycled.";
+            quizz.options[3] = "How many times it has been recycled.";
+            quizz.answerID = 0;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "All plastic with a recycle sign is recycled, irrespective of its number.";
+            quizz.options[0] = "True.";
+            quizz.options[1] = "False, most recycling centers only recycle type 1 & 2.";
+            quizz.options[2] = "Types doesn't matter. All kind of plastic can be melted together.";
+            quizz.options[3] = "False, most of it is dumped.";
+            quizz.answerID = 1;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What are the challenges in recycling plastic?";
+            quizz.options[0] = "Different types of plastic can not be recycled together.";
+            quizz.options[1] = "Compared to glass, plastic recycling requires more processing.";
+            quizz.options[2] = "Colors are hard to remove plastic.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "What will reduce environment impact of plastics?";
+            quizz.options[0] = "Reduce plastic use.";
+            quizz.options[1] = "Reuse plastic containers.";
+            quizz.options[2] = "Disposal in recycle trash containers.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
         }
     }
 }

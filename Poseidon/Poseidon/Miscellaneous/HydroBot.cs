@@ -55,8 +55,10 @@ namespace Poseidon
         //Skills/Spells of our main character
         //true = enabled/found
         public static bool[] skills, lsSkills;
+        //skill combo activated?
+        public static bool skillComboActivated;
         //which skill is being selected
-        public static int activeSkillID, lsActiveSkillID;
+        public static int activeSkillID, lsActiveSkillID, secondSkillID;
         //time that skills were previously casted
         //for managing skills' cool down time
         public static double[] skillPrevUsed;
@@ -149,6 +151,7 @@ namespace Poseidon
             {
                 skills[index] = false;
             }
+            skillComboActivated = false;
 
             //if(PlayGameScene.currentLevel == 0 && gameMode == GameMode.MainGame) //to take care of reload
             //    skills[index] = false;
@@ -163,7 +166,7 @@ namespace Poseidon
             level = lsLevel = 1;
             unassignedPts = lsUnassignedPts = 0;
 
-            activeSkillID = lsActiveSkillID = -1;
+            activeSkillID = lsActiveSkillID = secondSkillID = -1;
             invincibleMode = false;
             supersonicMode = false;
 
@@ -300,7 +303,7 @@ namespace Poseidon
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
-            //no skill yet activated
+            //no skill yet used
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
             {
                 
@@ -312,12 +315,14 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            //activeSkillID = 4;
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
+            skillComboActivated = true;
+            activeSkillID = 4;
+            secondSkillID = -1;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = false;
+            skills[3] = true;
+            skills[4] = true;
 
             firstPlant = true;
             prevPlantTime = 0;

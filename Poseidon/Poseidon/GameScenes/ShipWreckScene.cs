@@ -868,23 +868,7 @@ namespace Poseidon
         // Draw the currently selected skill/spell
         private void DrawActiveSkill()
         {
-            int xOffsetText, yOffsetText;
-            Rectangle rectSafeArea;
-
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-
-            //xOffsetText = rectSafeArea.Right - 400;
-            xOffsetText = rectSafeArea.Center.X + 150;
-            yOffsetText = rectSafeArea.Bottom - 100;
-
-            //Vector2 skillIconPosition =
-            //    new Vector2((int)xOffsetText, (int)yOffsetText);
-            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
-
-            //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
-            spriteBatch.Draw(skillTextures[HydroBot.activeSkillID], destRectangle, Color.White);
-
+            IngamePresentation.DrawActiveSkill(GraphicDevice, skillTextures, spriteBatch);
         }
 
         private void DrawStats()

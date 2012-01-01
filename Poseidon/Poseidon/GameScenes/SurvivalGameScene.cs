@@ -28,10 +28,7 @@ namespace Poseidon
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
-        GamePadState lastGamePadState = new GamePadState();
-        GamePadState currentGamePadState = new GamePadState();
-        MouseState currentMouseState = new MouseState();
-        MouseState lastMouseState = new MouseState();
+        
 
         public static AudioLibrary audio;
 
@@ -66,11 +63,7 @@ namespace Poseidon
 
         // The main character for this level
         public HydroBot hydroBot;
-        // The main character at the beginning of this level
-        // Used for restarting the level
-        //bot prevbot;
-        //private TimeSpan fireTime;
-        private TimeSpan prevFireTime;
+
 
         // Game is paused?
         protected bool paused;
@@ -90,10 +83,6 @@ namespace Poseidon
         // Frustum of the camera
         public BoundingFrustum frustum;
 
-        // For mouse inputs
-        bool doubleClicked = false;
-        bool clicked = false;
-        double clickTimer = 0;
 
         private Texture2D stunnedTexture;
 
@@ -551,9 +540,8 @@ namespace Poseidon
                 if (currentGameState == GameState.Lost)
                 {
                     // Return to main menu
-                    if ((lastKeyboardState.IsKeyDown(Keys.Enter) &&
-                        (currentKeyboardState.IsKeyUp(Keys.Enter))) ||
-                        currentGamePadState.Buttons.Start == ButtonState.Pressed)
+                    if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        currentKeyboardState.IsKeyUp(Keys.Enter))
                     {
                         currentGameState = GameState.ToMainMenu;
                     }

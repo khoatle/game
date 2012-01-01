@@ -480,8 +480,13 @@ namespace Poseidon
                         //display HP loss
                         Point point = new Point();
                         String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, Position, Color.Black);
-                        PlayGameScene.points.Add(point);
+                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
+                        if (gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
 
                         reachDestination = true;
                         if (!clipPlayer.inRange(61, 90))
@@ -504,8 +509,13 @@ namespace Poseidon
                         //display HP loss
                         Point point = new Point();
                         String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, Position, Color.Black);
-                        PlayGameScene.points.Add(point);
+                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
+                        if (gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
 
                         if (!clipPlayer.inRange(61, 90))
                             clipPlayer.switchRange(61, 90);
@@ -525,8 +535,13 @@ namespace Poseidon
                         //display HP loss
                         Point point = new Point();
                         String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, Position, Color.Black);
-                        PlayGameScene.points.Add(point);
+                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
+                        if (gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
 
                         if (!clipPlayer.inRange(61, 90))
                             clipPlayer.switchRange(61, 90);
@@ -547,8 +562,13 @@ namespace Poseidon
                         //display HP loss
                         Point point = new Point();
                         String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, Position, Color.Black);
-                        PlayGameScene.points.Add(point);
+                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
+                        if (gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
 
                         if (!clipPlayer.inRange(61, 90))
                             clipPlayer.switchRange(61, 90);
@@ -572,8 +592,13 @@ namespace Poseidon
                         //display HP loss
                         Point point = new Point();
                         String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PlayGameScene.Content, point_string, Position, Color.Black);
-                        PlayGameScene.points.Add(point);
+                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
+                        if (gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
 
                         PoseidonGame.audio.hipnotizeSound.Play();
                         if (!clipPlayer.inRange(61, 90))
@@ -736,8 +761,13 @@ namespace Poseidon
 
                     Point point = new Point();
                     String point_string = "+" + envPoint.ToString() + "ENV\n+" + Plant.experienceReward + "EXP";
-                    point.LoadContent(PlayGameScene.Content, point_string, Position, Color.LawnGreen);
-                    PlayGameScene.points.Add(point);
+                    point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
+                    if (gameMode == GameMode.ShipWreck)
+                        ShipWreckScene.points.Add(point);
+                    else if (gameMode == GameMode.MainGame)
+                        PlayGameScene.points.Add(point);
+                    else if (gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point);
                 }
             }
 

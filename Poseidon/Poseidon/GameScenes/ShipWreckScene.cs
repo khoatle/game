@@ -51,11 +51,9 @@ namespace Poseidon
         List<TreasureChest> treasureChests;
         List<StaticObject> staticObjects;
 
-        //A tank
+        //the hydrobot
         public HydroBot hydroBot;
 
-        //private TimeSpan fireTime;
-        private TimeSpan prevFireTime;
 
         // For drawing the currently selected skill
         protected Texture2D[] skillTextures;

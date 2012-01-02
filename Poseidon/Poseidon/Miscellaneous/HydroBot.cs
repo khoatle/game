@@ -315,7 +315,7 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            skillComboActivated = true;
+            skillComboActivated = false;
             activeSkillID = 4;
             secondSkillID = -1;
             skills[0] = true;
@@ -465,153 +465,8 @@ namespace Poseidon
             //cast the current selected skill
             //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
             else if (currentMouseState.RightButton == ButtonState.Pressed)
-            {
-
-                // Hercules' Bow!!!
-                if (HydroBot.activeSkillID == 0 && mouseOnLivingObject)
-                {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                    ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
-                    //if the skill has cooled down
-                    //or this is the 1st time the user uses it
-                    if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow) || HydroBot.firstUse[0] == true)
-                    {
-                        HydroBot.firstUse[0] = false;
-                        HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
-                        //audio.Explosion.Play();
-                        CastSkill.UseHerculesBow(this, Content, spriteBatch, myBullet, gameScene);
-                        HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
-
-                        //display HP loss
-                        Point point = new Point();
-                        String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
-                        if (gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
-
-                        reachDestination = true;
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
-                    }
-
-                }
-                //Thor's Hammer!!!
-                if (HydroBot.activeSkillID == 1)
-                {
-                    if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[1] > GameConstants.coolDownForArchillesArmor) || HydroBot.firstUse[1] == true)
-                    {
-                        HydroBot.firstUse[1] = false;
-                        HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
-                        PoseidonGame.audio.Explo1.Play();
-                        gameCamera.Shake(25f, .4f);
-                        CastSkill.UseThorHammer(gameTime, this, enemies, ref enemiesAmount, fish, fishAmount, GameMode.MainGame);
-                        HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
-
-                        //display HP loss
-                        Point point = new Point();
-                        String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
-                        if (gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
-
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
-                    }
-                }
-                // Achilles' Armor!!!
-                if (HydroBot.activeSkillID == 2)
-                {
-                    if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[2] > GameConstants.coolDownForThorHammer) || HydroBot.firstUse[2] == true)
-                    {
-                        HydroBot.firstUse[2] = false;
-                        HydroBot.invincibleMode = true;
-                        PoseidonGame.audio.armorSound.Play();
-                        HydroBot.skillPrevUsed[2] = PoseidonGame.playTime.TotalSeconds;
-                        HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
-
-                        //display HP loss
-                        Point point = new Point();
-                        String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
-                        if (gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
-
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
-                    }
-                }
-
-                //Hermes' Winged Sandal!!!
-                if (HydroBot.activeSkillID == 3)
-                {
-                    if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || HydroBot.firstUse[3] == true)
-                    {
-                        HydroBot.firstUse[3] = false;
-                        PoseidonGame.audio.hermesSound.Play();
-                        HydroBot.skillPrevUsed[3] = PoseidonGame.playTime.TotalSeconds;
-                        HydroBot.supersonicMode = true;
-                        HydroBot.currentHitPoint -= GameConstants.skillHealthLoss; // Lose health after useing this
-
-                        //display HP loss
-                        Point point = new Point();
-                        String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
-                        if (gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
-
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
-                    }
-                }
-
-                // Hypnotise skill
-                if (HydroBot.activeSkillID == 4)
-                {
-                    BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
-
-                    if (enemy != null && (HydroBot.firstUse[4] == true || PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
-                    {
-                        HydroBot.firstUse[4] = false;
-
-                        enemy.setHypnotise(gameTime);
-
-                        HydroBot.skillPrevUsed[4] = PoseidonGame.playTime.TotalSeconds;
-                        HydroBot.currentHitPoint -= GameConstants.skillHealthLoss;
-
-                        //display HP loss
-                        Point point = new Point();
-                        String point_string = "-" + GameConstants.skillHealthLoss.ToString() + "HP";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Black);
-                        if (gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
-
-                        PoseidonGame.audio.hipnotizeSound.Play();
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
-                    }
-                }
-
-                pointIntersect = Vector3.Zero;
+            {         
+                CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount);
             }
 
             //if the user holds down Ctrl button

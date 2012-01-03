@@ -102,7 +102,7 @@ namespace Poseidon
             damage = GameConstants.DefaultEnemyDamage; //overwritten later
         }
 
-        public void setHypnotise(GameTime gameTime)
+        public void setHypnotise()
         {
             isHypnotise = true;
             currentHuntingTarget = null;

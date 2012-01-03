@@ -18,8 +18,8 @@ namespace Poseidon
         public ChasingBullet() : base() { }
 
         public void initialize(Vector3 position, Vector3 headingDirection, float speed, 
-            int damage, GameObject target) {
-                base.initialize(position, headingDirection, speed, damage);
+            int damage, GameObject target, BaseEnemy shooter) {
+                base.initialize(position, headingDirection, speed, damage, shooter);
                 this.target = target;
                 this.unitDirection = target.Position - position;
                 this.unitDirection.Normalize();

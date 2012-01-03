@@ -66,6 +66,8 @@ namespace Poseidon
         public static bool invincibleMode;
         //supersonic mode when using Hermes' winged sandal
         public static bool supersonicMode;
+        //auto-hipnotize mode when using skill combo: armor - belt
+        public static bool autoHipnotizeMode;
         //if it is the 1st time the user use it
         //let him use it
         public static bool[] firstUse;
@@ -169,6 +171,7 @@ namespace Poseidon
             activeSkillID = lsActiveSkillID = secondSkillID = -1;
             invincibleMode = false;
             supersonicMode = false;
+            autoHipnotizeMode = false;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -242,6 +245,7 @@ namespace Poseidon
 
             invincibleMode = false;
             supersonicMode = false;
+            autoHipnotizeMode = false;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -313,6 +317,7 @@ namespace Poseidon
 
             invincibleMode = false;
             supersonicMode = false;
+            autoHipnotizeMode = false;
             //just for testing
             //should be removed
             skillComboActivated = true;
@@ -320,7 +325,7 @@ namespace Poseidon
             secondSkillID = -1;
             skills[0] = true;
             skills[1] = true;
-            skills[2] = false;
+            skills[2] = true;
             skills[3] = true;
             skills[4] = true;
 
@@ -394,6 +399,8 @@ namespace Poseidon
                 skillPrevUsed[index] = 0;
             }
             invincibleMode = false;
+            supersonicMode = false;
+            autoHipnotizeMode = false;
             // No buff up at the beginning
             speedUp = 1.0f;
             strengthUp = 1.0f;
@@ -594,11 +601,11 @@ namespace Poseidon
             if (HydroBot.supersonicMode == true)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                CastSkill.KnockOutEnemies(gameTime, BoundingSphere, Position, MaxRangeX, MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, PoseidonGame.audio, GameMode.MainGame);
+                CastSkill.KnockOutEnemies(BoundingSphere, Position, MaxRangeX, MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, PoseidonGame.audio, GameMode.MainGame);
             }
             if (heightMapInfo != null)
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-            this.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, gameTime, pointIntersect, GameMode.MainGame);
+            this.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, gameTime, pointIntersect);
 
             //planting trees in main game
             if (gameMode != GameMode.ShipWreck && lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X))
@@ -634,10 +641,10 @@ namespace Poseidon
             //Interacting with trashs and fruits
             if (currentKeyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fruits, trashes, gameTime, gameMode);
+                Interact_with_trash_and_fruit(fruits, trashes, gameTime);
             }
         }
-        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo, GameMode gameMode)
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo)
         {
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
@@ -712,6 +719,8 @@ namespace Poseidon
                 }
             }
             //worn out effect of certain skills
+            //worn out effect for invicible mode
+            //and related skill combos
             if (invincibleMode == true)
             {
                 float buffFactor = shootingRate * fireRateUp / 1.5f;
@@ -719,7 +728,9 @@ namespace Poseidon
                 if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
                 {
                     invincibleMode = false;
+                    if (autoHipnotizeMode == true) autoHipnotizeMode = false;
                 }
+                
             }
             //worn out effect of supersonic
             if (supersonicMode == true)
@@ -842,7 +853,7 @@ namespace Poseidon
             }
         }
 
-        private void Interact_with_trash_and_fruit(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime, GameMode gameMode)
+        private void Interact_with_trash_and_fruit(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);

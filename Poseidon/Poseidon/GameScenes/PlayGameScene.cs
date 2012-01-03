@@ -205,7 +205,7 @@ namespace Poseidon
             }
             else
             {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 100, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
@@ -780,7 +780,7 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
 

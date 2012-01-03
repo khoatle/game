@@ -284,7 +284,8 @@ namespace Poseidon
                             PoseidonGame.audio.animalYell.Play();
                         if (barriers[j] is BaseEnemy)
                         {
-                            if (((BaseEnemy)barriers[j]).isHypnotise)
+                            //if (((BaseEnemy)barriers[j]).isHypnotise)
+                            if (bullets[i].shooter == barriers[j])
                             {
                                 continue;
                             }
@@ -385,7 +386,7 @@ namespace Poseidon
         }
 
 
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode) {
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount) {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
                     if (!HydroBot.invincibleMode)
@@ -402,6 +403,21 @@ namespace Poseidon
                             PlayGameScene.points.Add(point);
                         else if (gameMode == GameMode.SurvivalMode)
                             SurvivalGameScene.points.Add(point);
+                    }
+                    //when auto hipnotize mode is on
+                    //whoever hits the bot will be hipnotized
+                    if (HydroBot.autoHipnotizeMode)
+                    {
+                        //for (int k = 0; k < enemiesAmount; k++)
+                        //{
+                        //    if (enemyBullets[i].shooter == enemies[k])
+                        //    {
+                        //        CastSkill.useHypnotise(enemies[k]);
+                        //        break;
+                        //    }
+                        //}
+                        if (enemyBullets[i].shooter != null && !enemyBullets[i].shooter.isHypnotise)
+                            CastSkill.useHypnotise(enemyBullets[i].shooter);
                     }
                     enemyBullets.RemoveAt(i);
                     

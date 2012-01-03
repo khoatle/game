@@ -108,7 +108,7 @@ namespace Poseidon
         public static float poissonInterval;
 
         // which game mode is this hydrobot in?
-        public static GameMode gameMode;
+        public GameMode gameMode;
 
         public static int gamePlusLevel = 0; //Every time you beat the game, gameplus level increases
 
@@ -175,7 +175,7 @@ namespace Poseidon
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoisson = 0;
 
-            HydroBot.gameMode = gameMode;
+            this.gameMode = gameMode;
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace Poseidon
             supersonicMode = false;
             //just for testing
             //should be removed
-            skillComboActivated = false;
+            skillComboActivated = true;
             activeSkillID = 4;
             secondSkillID = -1;
             skills[0] = true;
@@ -589,12 +589,12 @@ namespace Poseidon
 
             //let the user change active skill/bullet too when he presses on number
             //this is better for fast action
-            InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, this, GameMode.MainGame);
+            InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, gameMode);
 
             if (HydroBot.supersonicMode == true)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                CastSkill.KnockOutEnemies(gameTime, this, enemies, ref enemiesAmount, fish, fishAmount, PoseidonGame.audio, GameMode.MainGame);
+                CastSkill.KnockOutEnemies(gameTime, BoundingSphere, Position, MaxRangeX, MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, PoseidonGame.audio, GameMode.MainGame);
             }
             if (heightMapInfo != null)
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;

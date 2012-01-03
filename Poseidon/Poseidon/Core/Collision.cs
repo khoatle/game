@@ -270,7 +270,7 @@ namespace Poseidon
         /// </summary>
         /* scene --> 1-playgamescene, 2-shipwreckscene */
         /* switch to use GameMode instead, look at the beginning of PoseidonGame for more details */
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, GameTime gameTime) {
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, GameTime gameTime, HydroBot hydroBot, BaseEnemy[] enemies, int enemiesAmount, Fish[] fishes, int fishAmount, Camera gameCamera) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 for (int j = 0; j < size; j++) {
@@ -292,6 +292,33 @@ namespace Poseidon
                                 ((BaseEnemy)barriers[j]).justBeingShot = true;
                                 ((BaseEnemy)barriers[j]).startChasingTime = PoseidonGame.playTime;
                             }
+                            //special handling for the skill combo FlyingHammer
+                            if (bullets[i] is FlyingHammer)
+                            {
+                                PoseidonGame.audio.bodyHit.Play();
+                                Vector3 oldPosition = barriers[j].Position;
+                                Vector3 pushVector = barriers[j].Position - bullets[i].Position;
+                                pushVector.Normalize();
+                                ((BaseEnemy)barriers[j]).stunned = true;
+                                ((BaseEnemy)barriers[j]).stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
+                                ((BaseEnemy)barriers[j]).Position += (pushVector * GameConstants.ThorPushFactor);
+                                barriers[j].Position.X = MathHelper.Clamp(barriers[j].Position.X, -hydroBot.MaxRangeX, hydroBot.MaxRangeX);
+                                barriers[j].Position.Z = MathHelper.Clamp(barriers[j].Position.Z, -hydroBot.MaxRangeZ, hydroBot.MaxRangeZ);
+                                barriers[j].BoundingSphere.Center = barriers[j].Position;
+                                if (Collision.isBarrierVsBarrierCollision(barriers[j], barriers[j].BoundingSphere, fishes, fishAmount)
+                                    || Collision.isBarrierVsBarrierCollision(barriers[j], barriers[j].BoundingSphere, enemies, enemiesAmount))
+                                {
+                                    barriers[j].Position = oldPosition;
+                                    barriers[j].BoundingSphere.Center = oldPosition;
+                                }
+                                if (PoseidonGame.playTime.TotalSeconds - ((FlyingHammer)bullets[i]).timeShot > 0.75)
+                                {
+                                    ((FlyingHammer)bullets[i]).explodeNow = true;
+                                    PoseidonGame.audio.Explo1.Play();
+                                    gameCamera.Shake(25f, .4f);
+                                    CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot.gameMode);
+                                }
+                            }
                         }
 
                         barriers[j].health -= bullets[i].damage;
@@ -308,8 +335,11 @@ namespace Poseidon
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
                         }
-
-                        bullets.RemoveAt(i--);
+                        if (bullets[i] is FlyingHammer)
+                        {
+                            if (((FlyingHammer)bullets[i]).explodeNow) bullets.RemoveAt(i--); 
+                        }
+                        else bullets.RemoveAt(i--);
                         break;
                     }
                 }

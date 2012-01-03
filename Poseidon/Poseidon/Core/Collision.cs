@@ -290,8 +290,11 @@ namespace Poseidon
                                 continue;
                             }
                             else {
-                                ((BaseEnemy)barriers[j]).justBeingShot = true;
-                                ((BaseEnemy)barriers[j]).startChasingTime = PoseidonGame.playTime;
+                                if (bullets[i].shooter == null && !((BaseEnemy)barriers[j]).isHypnotise)
+                                {
+                                    ((BaseEnemy)barriers[j]).justBeingShot = true;
+                                    ((BaseEnemy)barriers[j]).startChasingTime = PoseidonGame.playTime;
+                                }
                             }
                             //special handling for the skill combo FlyingHammer
                             if (bullets[i] is FlyingHammer)

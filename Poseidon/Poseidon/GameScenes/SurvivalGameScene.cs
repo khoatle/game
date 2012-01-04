@@ -139,6 +139,9 @@ namespace Poseidon
                 hydroBot = objectsToSerialize.hydrobot;
             }
 
+            //stop spinning the bar
+            IngamePresentation.StopSpinning();
+
             HydroBot.gamePlusLevel = 0;
             hydroBot.gameMode = GameMode.SurvivalMode;
 
@@ -538,6 +541,14 @@ namespace Poseidon
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
+                    //update the good will bar
+                    //if (HydroBot.goodWillPoint >= HydroBot.maxGoodWillPoint)
+                    //{
+                    //    IngamePresentation.SpinNow();
+                    //    HydroBot.goodWillPoint = 0;
+                    //}
+                    //IngamePresentation.UpdateGoodWillBar();
+
                 }
 
                 prevGameState = currentGameState;
@@ -832,7 +843,7 @@ namespace Poseidon
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
                 string line;
                 line = "'";
                 if (fishPointedAt.health < 20)
@@ -841,11 +852,11 @@ namespace Poseidon
                 }
                 else if (fishPointedAt.health < 60)
                 {
-                    line += AddingObjects.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
+                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
                 }
                 else
                 {
-                    line += AddingObjects.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
+                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
                 }
                 line += "'";
                 spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 32), Color.Yellow);
@@ -854,17 +865,20 @@ namespace Poseidon
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
             if (enemyPointedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
-            AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
+            IngamePresentation.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+
+            //Display Good will bar
+            IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

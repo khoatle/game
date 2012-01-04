@@ -367,9 +367,13 @@ namespace Poseidon
 
                             int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * barriers[j].basicExperienceReward);
                             int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
+                            int goodWillReward = (int)(((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.GoodWillPointGainForHealing);
 
                             HydroBot.currentExperiencePts += expReward;
                             HydroBot.currentEnvPoint += envReward;
+
+                            //update good will point
+                            HydroBot.IncreaseGoodWillPoint(goodWillReward);
 
                             Point point = new Point();
                             String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";

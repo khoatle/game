@@ -197,6 +197,8 @@ namespace Poseidon
             startScene.Show();
             activeScene = startScene;
 
+            //initiate graphic for good will bar
+            IngamePresentation.InitiateGoodWillBarGraphic(Content);
         }
 
         /// <summary>

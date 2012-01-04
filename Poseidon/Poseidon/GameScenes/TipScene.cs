@@ -195,7 +195,7 @@ namespace Poseidon
 
             spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X - tipFont.MeasureString(title).X, 2), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
 
-            text = AddingObjects.wrapLine(text, tipBoxRect.Width - 100, tipFont);
+            text = IngamePresentation.wrapLine(text, tipBoxRect.Width - 100, tipFont);
 
             tipStringPosition = new Vector2(tipBoxRect.Center.X - tipFont.MeasureString(text).X / 2, tipBoxRect.Center.Y - tipFont.MeasureString(text).Y/2);
 

@@ -772,7 +772,7 @@ namespace Poseidon
         private void DrawNoKey()
         {
             string message = "You have not had the key to treasure chests yet, try to help the fish first so that they will help you find the key in return";
-            message = AddingObjects.wrapLine(message, 800, paintingFont);
+            message = IngamePresentation.wrapLine(message, 800, paintingFont);
             spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.SandyBrown);
             spriteBatch.DrawString(paintingFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X - 400, 20), Color.White);
             
@@ -788,7 +788,7 @@ namespace Poseidon
             spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
                 oceanPaintings.paintings[paintingToShow].color);
 
-            String line = AddingObjects.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width, paintingFont);
+            String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width, paintingFont);
             spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
@@ -823,7 +823,7 @@ namespace Poseidon
 
             Rectangle rectSafeArea;
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-            str1 = AddingObjects.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
+            str1 = IngamePresentation.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
 
             xOffsetText = rectSafeArea.X;
             yOffsetText = rectSafeArea.Y;
@@ -917,19 +917,21 @@ namespace Poseidon
             //Display Fish Health
             Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPontedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPontedAt.health, (int)fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPontedAt.health, (int)fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
 
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
             if (enemyPointedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
+            //Display Good will bar
+            IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;

@@ -232,8 +232,8 @@ namespace Poseidon
 
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);
 
-            level_objective = AddingObjects.wrapLine(level_objective, objectiveBoxRect.Width-100, levelObjFont);
-            achieved_status = AddingObjects.wrapLine(achieved_status, achievedBoxRect.Width-100, levelObjFont);
+            level_objective = IngamePresentation.wrapLine(level_objective, objectiveBoxRect.Width - 100, levelObjFont);
+            achieved_status = IngamePresentation.wrapLine(achieved_status, achievedBoxRect.Width - 100, levelObjFont);
 
            // objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
            // achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);

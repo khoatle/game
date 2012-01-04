@@ -23,7 +23,10 @@ namespace Poseidon
             // Hercules' Bow!!!
             if (HydroBot.activeSkillID == 0)// && mouseOnLivingObject)
             {
-                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                int floatHeight;
+                if (gameMode == GameMode.ShipWreck) floatHeight = GameConstants.ShipWreckFloatHeight;
+                else floatHeight = GameConstants.MainGameFloatHeight;
+                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                 //use skill combo if activated
                 //cooldowns for both skills must be cleared
@@ -64,7 +67,7 @@ namespace Poseidon
                     HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
                     PoseidonGame.audio.Explo1.Play();
                     gameCamera.Shake(25f, .4f);
-                    CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, GameMode.MainGame);
+                    CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, hydroBot.gameMode);
                     skillUsed = true;
                 }
             }

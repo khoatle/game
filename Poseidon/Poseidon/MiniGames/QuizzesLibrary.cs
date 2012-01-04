@@ -447,6 +447,24 @@ namespace Poseidon.MiniGames
             quizz.options[3] = "All of the above.";
             quizz.answerID = 3;
             quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Which country dumped radioactive waste in the ocean (till 1993)?";
+            quizz.options[0] = "USA.";
+            quizz.options[1] = "USSR.";
+            quizz.options[2] = "UK.";
+            quizz.options[3] = "All of the above.";
+            quizz.answerID = 3;
+            quizzesList.Add(quizz);
+
+            quizz = new Quizz();
+            quizz.question = "Why can't nuclear waste be disposed in space?";
+            quizz.options[0] = "Aliens will steal our technology.";
+            quizz.options[1] = "It will contaminate other plants.";
+            quizz.options[2] = "Failure of a launch vehicle poses high risk.";
+            quizz.options[3] = "It will kill the plants in space.";
+            quizz.answerID = 2;
+            quizzesList.Add(quizz);
         }
     }
 }

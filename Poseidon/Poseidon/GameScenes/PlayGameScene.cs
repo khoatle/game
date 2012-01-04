@@ -205,7 +205,7 @@ namespace Poseidon
             }
             else
             {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 100, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
@@ -775,11 +775,14 @@ namespace Poseidon
                         alliesBullets[i].update();
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
-                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame);
-                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime);
+                    Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount);
+                    Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
 
                     Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor);
                     Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor);
@@ -1030,6 +1033,15 @@ namespace Poseidon
             for (int i = 0; i < myBullet.Count; i++)
             {
                 myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                //RasterizerState rs = new RasterizerState();
+                //rs.FillMode = FillMode.WireFrame;
+                //GraphicDevice.RasterizerState = rs;
+                //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                //rs = new RasterizerState();
+                //rs.FillMode = FillMode.Solid;
+                //GraphicDevice.RasterizerState = rs;
             }
 
             for (int i = 0; i < healthBullet.Count; i++)

@@ -13,7 +13,7 @@ namespace Poseidon
     {
         //for skill combo: to know whether we are waiting for the input of 2nd skill or 1st skill
         public static bool firstSkillEntered = false;
-        public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, HydroBot tank, GameMode gameMode)
+        public static void ChangeSkillBulletWithKeyBoard(KeyboardState lastKeyboardState, KeyboardState currentKeyboardState, GameMode gameMode)
         {
             bool skill1Entered, skill2Entered, skill3Entered, skill4Entered, skill5Entered;
             skill1Entered = skill2Entered = skill3Entered = skill4Entered = skill5Entered = false;
@@ -84,7 +84,7 @@ namespace Poseidon
             if (lastKeyboardState.IsKeyDown(Keys.Space) && currentKeyboardState.IsKeyUp(Keys.Space))
             {
                 // level 0 of main game, can only heal
-                if (PlayGameScene.currentLevel != 0 || gameMode == GameMode.SurvivalMode)
+                if (!(gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0))
                 {
                     HydroBot.bulletType++;
                     if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;

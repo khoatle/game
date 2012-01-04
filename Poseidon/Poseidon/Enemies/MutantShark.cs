@@ -205,6 +205,10 @@ namespace Poseidon
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
                         }
+                        if (HydroBot.autoHipnotizeMode)
+                        {
+                            setHypnotise();
+                        }
                     }
                     //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
                     //{

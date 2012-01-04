@@ -456,11 +456,14 @@ namespace Poseidon
                     enemyBullet[i].update();
                 }
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
+                    enemies, enemiesAmount, fish, fishAmount, gameCamera);
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.ShipWreck);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.ShipWreck, gameTime);
-                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck);
-                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime);
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
+                    enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies, enemiesAmount);
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
+                    enemies, enemiesAmount, fish, fishAmount, gameCamera);
 
                 Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, cursor);
                 Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.ShipWreck, cursor);

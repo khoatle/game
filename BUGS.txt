@@ -1,0 +1,2 @@
+calculate bot's heathiness based on GameConstants.PlayerStartingHitpoint??
+strange enemies behavior when hipnotized close to eachothers

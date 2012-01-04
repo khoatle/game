@@ -212,6 +212,10 @@ namespace Poseidon
 
                             PoseidonGame.audio.botYell.Play();
                         }
+                        if (HydroBot.autoHipnotizeMode)
+                        {
+                            setHypnotise();
+                        }
                     }
                     if (currentHuntingTarget is SwimmingObject)
                     {
@@ -220,6 +224,15 @@ namespace Poseidon
                         {
                             if (currentHuntingTarget is Fish)
                                 PoseidonGame.audio.animalYell.Play();
+                            Point point = new Point();
+                            String point_string = "-" + damage.ToString() + "HP";
+                            point.LoadContent(PoseidonGame.contentManager, point_string, currentHuntingTarget.Position, Color.Red);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                     }
                     prevFire = PoseidonGame.playTime;

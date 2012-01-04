@@ -335,7 +335,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             ChasingBullet newBullet = new ChasingBullet();
-            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target);
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target, (Terminator)shooter);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
             if (shooter.BoundingSphere.Intersects(cameraFrustum)) {
@@ -362,7 +362,7 @@ namespace Poseidon
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-            newBullet.initialize(obj.Position + shootingDirection * offsetFactor, shootingDirection, GameConstants.BulletSpeed, damage);
+            newBullet.initialize(obj.Position + shootingDirection * offsetFactor, shootingDirection, GameConstants.BulletSpeed, damage, (BaseEnemy)obj);
             if (type == 1)
             {
                 newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/bossBullet");

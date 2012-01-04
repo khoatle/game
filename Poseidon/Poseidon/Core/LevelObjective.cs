@@ -126,8 +126,8 @@ namespace Poseidon
 
             if (currentLevel == 0)
             {
-                //if (roundTimer <= TimeSpan.Zero && ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint < GameConstants.LevelObjective[currentLevel])) 
-                //    return true;
+                if (roundTimer <= TimeSpan.Zero && ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint < GameConstants.LevelObjective[currentLevel]))
+                    return true;
             }
             if (currentLevel == 1)
             {

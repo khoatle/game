@@ -35,6 +35,7 @@ namespace Poseidon.Core
         public SoundEffect chasingBulletSound;
         public SoundEffect terminatorYell;
         public SoundEffect levelUpSound;
+        public SoundEffect reelHit;
 
         private SoundEffect explosion;
         private SoundEffect newMeteor;
@@ -152,6 +153,7 @@ namespace Poseidon.Core
             terminatorYell = Content.Load<SoundEffect>("Sounds/SoundEffects/terminatorYell");
             chasingBulletSound = Content.Load<SoundEffect>("Sounds/SoundEffects/chasingBulletSound");
             levelUpSound = Content.Load<SoundEffect>("Sounds/SoundEffects/levelingUpSound");
+            reelHit = Content.Load<SoundEffect>("Sounds/SoundEffects/beep");
 
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");

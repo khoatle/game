@@ -189,6 +189,8 @@ namespace Poseidon
                 hydroBot = objectsToSerialize.hydrobot;
                 currentGameState = GameState.PlayingCutScene;
             }
+            //stop spinning the bar
+            IngamePresentation.StopSpinning();
 
             if (PoseidonGame.gamePlus)
             {
@@ -205,7 +207,7 @@ namespace Poseidon
             }
             else
             {
-                int[] numShootingEnemies = { 100, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
@@ -833,6 +835,7 @@ namespace Poseidon
                     schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+         
                 }
 
                 prevGameState = currentGameState;
@@ -916,7 +919,7 @@ namespace Poseidon
         private void DrawFoundKey()
         {
             string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help!!";
-            message = AddingObjects.wrapLine(message, 800, keyFoundFont);
+            message = IngamePresentation.wrapLine(message, 800, keyFoundFont);
             spriteBatch.Begin();
             spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreen.Width/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreen.Height/2, foundKeyScreen.Width, foundKeyScreen.Height), Color.White);
             spriteBatch.DrawString(keyFoundFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X-400, 20), Color.DarkRed);
@@ -1290,7 +1293,7 @@ namespace Poseidon
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
                 string line;
                 line ="'";
                 if (fishPointedAt.health < 20)
@@ -1299,11 +1302,11 @@ namespace Poseidon
                 }
                 else if (fishPointedAt.health < 60)
                 {
-                    line += AddingObjects.wrapLine(fishPointedAt.sad_talk, HealthBar.Width+20, fishTalkFont);
+                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
                 }
                 else
                 {
-                    line += AddingObjects.wrapLine(fishPointedAt.happy_talk, HealthBar.Width+20, fishTalkFont);
+                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
                 }
                 line += "'";
                 spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width/2 - HealthBar.Width/2, 32), Color.Yellow);
@@ -1312,17 +1315,20 @@ namespace Poseidon
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
             if (enemyPointedAt != null)
-                AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health
-            AddingObjects.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height-60, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
-            AddingObjects.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
+            IngamePresentation.DrawEnvironmentBar(EnvironmentBar, game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            AddingObjects.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height-30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(HealthBar, game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+
+            //Display Good will bar
+            IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -1466,7 +1472,7 @@ namespace Poseidon
                 Rectangle botRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, botRectangle, Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(botRectangle.Left+50, botRectangle.Top+60), Color.Blue);
             }
             //Poseidon speaking
@@ -1487,7 +1493,7 @@ namespace Poseidon
                 Rectangle PoseidonRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, PoseidonRectangle, Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(PoseidonRectangle.Left+50, PoseidonRectangle.Top+65), Color.Blue);
             }
             //Terminator speaking
@@ -1508,7 +1514,7 @@ namespace Poseidon
                 Rectangle terminatorRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, terminatorRectangle, Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(terminatorRectangle.Left+50, terminatorRectangle.Top+60), Color.Blue);
             }
             //Narrator speaking
@@ -1518,7 +1524,7 @@ namespace Poseidon
                 Rectangle narratorRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, narratorRectangle, Color.White);
                 //draw what is said
-                string text = AddingObjects.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left+50, narratorRectangle.Top+30), Color.Black);
             }
             //float xOffsetText, yOffsetText;

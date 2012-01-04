@@ -56,9 +56,10 @@ namespace Poseidon
         //true = enabled/found
         public static bool[] skills, lsSkills;
         //skill combo activated?
-        public static bool skillComboActivated;
+        //TODO: add skillComboActivated, goodWillBarActivated, secondSkillID to save file
+        public static bool skillComboActivated, goodWillBarActivated, lsSkillComboActivated, lsGoodWillBarActivated;
         //which skill is being selected
-        public static int activeSkillID, lsActiveSkillID, secondSkillID;
+        public static int activeSkillID, lsActiveSkillID, secondSkillID, lsSecondSkillID;
         //time that skills were previously casted
         //for managing skills' cool down time
         public static double[] skillPrevUsed;
@@ -125,7 +126,15 @@ namespace Poseidon
         bool clicked = false;
         double clickTimer = 0;
 
+        //monitoring time between fire
         private TimeSpan prevFireTime;
+
+        //TODO: add faceToDraw, iconActivated, goodWillPoint to save file
+        //good will bar related stuff
+        public static int faceToDraw = 0, lsFaceToDraw;
+        public static bool[] iconActivated, lsIconActivated;
+        public static int goodWillPoint, lsGoodWillPoint;
+        public static int maxGoodWillPoint;
 
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
@@ -136,7 +145,7 @@ namespace Poseidon
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
             currentHitPoint = GameConstants.PlayerStartingHP;
-            maxEnvPoint = GameConstants.MaxEnv;
+            maxEnvPoint = GameConstants.MaxEnv;   
             currentEnvPoint = lsCurrentEnvPoint = GameConstants.PlayerStartingEnv;
             pointToMoveTo = Vector3.Zero;
 
@@ -153,7 +162,18 @@ namespace Poseidon
             {
                 skills[index] = false;
             }
+
+            //Hien: new
+            iconActivated = new bool[GameConstants.NumGoodWillBarIcons];
+            lsIconActivated = new bool[GameConstants.NumGoodWillBarIcons];
+            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            {
+                iconActivated[index] = false;
+            }
             skillComboActivated = false;
+            goodWillBarActivated = false;
+            maxGoodWillPoint = GameConstants.MaxGoodWillPoint;
+            goodWillPoint = lsGoodWillPoint = 0;
 
             //if(PlayGameScene.currentLevel == 0 && gameMode == GameMode.MainGame) //to take care of reload
             //    skills[index] = false;
@@ -177,6 +197,8 @@ namespace Poseidon
             poissonInterval = 0;
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoisson = 0;
+
+            
 
             this.gameMode = gameMode;
         }
@@ -329,6 +351,12 @@ namespace Poseidon
             skills[3] = true;
             skills[4] = true;
 
+            goodWillBarActivated = true;
+            iconActivated[0] = true;
+            iconActivated[1] = false;
+            iconActivated[2] = true;
+            iconActivated[3] = true;
+
             firstPlant = true;
             prevPlantTime = 0;
 
@@ -357,11 +385,21 @@ namespace Poseidon
             lsSkills.CopyTo(skills, 0);
             activeSkillID = lsActiveSkillID;
 
+            //new
+            secondSkillID = lsSecondSkillID;
+            faceToDraw = lsFaceToDraw;
+            lsIconActivated.CopyTo(iconActivated, 0);
+            skillComboActivated = lsSkillComboActivated;
+            goodWillBarActivated = lsGoodWillBarActivated;
+            goodWillPoint = lsGoodWillPoint;
+
             currentExperiencePts = lsCurrentExperiencePts;
             nextLevelExperience = lsNextLevelExperience;
             //increaseBy = lsIncreaseBy;
             level = lsLevel;
             unassignedPts = lsUnassignedPts;
+            //stop good will bar from spinning
+            IngamePresentation.StopSpinning();
 
         }
 
@@ -377,6 +415,15 @@ namespace Poseidon
             skills.CopyTo(lsSkills, 0);
 
             lsActiveSkillID = activeSkillID;
+
+            //new
+            lsSecondSkillID = secondSkillID;
+            lsSkillComboActivated = skillComboActivated;
+            lsGoodWillBarActivated = goodWillBarActivated;
+            iconActivated.CopyTo(lsIconActivated, 0);
+            lsFaceToDraw = faceToDraw;
+            lsGoodWillPoint = goodWillPoint;
+
 
             lsCurrentExperiencePts = currentExperiencePts;
             lsNextLevelExperience = nextLevelExperience;
@@ -428,6 +475,9 @@ namespace Poseidon
             currentKeyboardState = Keyboard.GetState();
             CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
             Vector3 pointIntersect = Vector3.Zero;
+            int floatHeight;
+            if (gameMode == GameMode.ShipWreck) floatHeight = GameConstants.ShipWreckFloatHeight;
+            else floatHeight = GameConstants.MainGameFloatHeight;
             bool mouseOnLivingObject = CursorManager.MouseOnEnemy(cursor, gameCamera, enemies, enemiesAmount) || CursorManager.MouseOnFish(cursor, gameCamera, fish, fishAmount);
             //if the user holds down Shift button
             //let him change current bullet or skill type w/o moving
@@ -465,7 +515,7 @@ namespace Poseidon
                 //because this is better for fast action game
                 if (currentMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 }
             }
             //if the user click on right mouse button
@@ -482,7 +532,7 @@ namespace Poseidon
             {
                 if (currentMouseState.LeftButton == ButtonState.Pressed)
                 {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                     ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
                     if (PoseidonGame.playTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                     {
@@ -501,16 +551,16 @@ namespace Poseidon
             //if the user clicks or holds mouse's left button
             else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
             {
-                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 if (!clipPlayer.inRange(1, 30))
                     clipPlayer.switchRange(1, 30);
             }
 
             else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
             {
-                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 //if it is out of shooting range then just move there
-                if (!CursorManager.InShootingRange(this, cursor, gameCamera, GameConstants.MainGameFloatHeight))
+                if (!CursorManager.InShootingRange(this, cursor, gameCamera, floatHeight))
                 {
                     if (!clipPlayer.inRange(1, 30))
                         clipPlayer.switchRange(1, 30);
@@ -599,9 +649,9 @@ namespace Poseidon
             InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, gameMode);
 
             if (HydroBot.supersonicMode == true)
-            {
-                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-                CastSkill.KnockOutEnemies(BoundingSphere, Position, MaxRangeX, MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, PoseidonGame.audio, GameMode.MainGame);
+            {       
+                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
+                CastSkill.KnockOutEnemies(BoundingSphere, Position, MaxRangeX, MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, PoseidonGame.audio, gameMode);
             }
             if (heightMapInfo != null)
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
@@ -623,7 +673,7 @@ namespace Poseidon
                     else
                         envPoint = GameConstants.envGainForDropSeed;
                     PoseidonGame.audio.plantSound.Play();
-                    HydroBot.currentExperiencePts += Plant.experienceReward;
+                    HydroBot.currentExperiencePts += Plant.experienceReward + 5 * HydroBot.gamePlusLevel;
                     HydroBot.currentEnvPoint += envPoint;
 
                     Point point = new Point();
@@ -635,6 +685,9 @@ namespace Poseidon
                         PlayGameScene.points.Add(point);
                     else if (gameMode == GameMode.SurvivalMode)
                         SurvivalGameScene.points.Add(point);
+                    
+                    //update good will point gain
+                    IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForPlanting);
                 }
             }
 
@@ -643,6 +696,22 @@ namespace Poseidon
             {
                 Interact_with_trash_and_fruit(fruits, trashes, gameTime);
             }
+            //if (lastKeyboardState.IsKeyDown(Keys.R) && currentKeyboardState.IsKeyUp(Keys.R))
+            //{
+            //    IngamePresentation.SpinNow();
+            //}
+            //if (lastKeyboardState.IsKeyDown(Keys.T) && currentKeyboardState.IsKeyUp(Keys.T))
+            //{
+            //    IngamePresentation.StopSpinning();
+            //}
+
+            //update the good will bar
+            if (HydroBot.goodWillPoint >= HydroBot.maxGoodWillPoint)
+            {
+                IngamePresentation.SpinNow();
+                HydroBot.goodWillPoint = 0;
+            }
+            IngamePresentation.UpdateGoodWillBar();
         }
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo)
         {
@@ -977,6 +1046,10 @@ namespace Poseidon
                             PlayGameScene.points.Add(point);
                         else if (gameMode == GameMode.SurvivalMode)
                             SurvivalGameScene.points.Add(point);
+
+                        //update good will point
+                        IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
                     }
                 }
             }
@@ -1017,6 +1090,7 @@ namespace Poseidon
                 }
                 mesh.Draw();
             }
+
         }
         internal void DrawTrashFruitSphere(Matrix view, Matrix projection,
             GameObject boundingSphereModel)
@@ -1041,6 +1115,10 @@ namespace Poseidon
         public static float CalculateAngle(Vector3 point2, Vector3 point1)
         {
             return (float)Math.Atan2(point2.X - point1.X, point2.Z - point1.Z);
+        }
+        public static void IncreaseGoodWillPoint(int point)
+        {
+            if (goodWillBarActivated) goodWillPoint += point;
         }
     }
 }

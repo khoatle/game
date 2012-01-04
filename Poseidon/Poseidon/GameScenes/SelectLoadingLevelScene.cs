@@ -119,7 +119,7 @@ namespace Poseidon
             if (savedlevels.Count == 0)
             {
                 string text = "No Saved Games";
-                text = AddingObjects.wrapLine(text, Game.Window.ClientBounds.Width, font);
+                text = IngamePresentation.wrapLine(text, Game.Window.ClientBounds.Width, font);
                 Vector2 textPosition = new Vector2(Game.Window.ClientBounds.Center.X - (font.MeasureString(text).X / 2), Game.Window.ClientBounds.Center.Y);
                 spriteBatch.DrawString(font, text, textPosition, Color.Black);
             }

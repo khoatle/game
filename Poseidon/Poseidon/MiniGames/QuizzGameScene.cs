@@ -272,7 +272,7 @@ namespace Poseidon.MiniGames
             base.Draw(gameTime);
             // draw the question
             Color color = Color.Lime;
-            string question = AddingObjects.wrapLine(quizzesLibrary.quizzesList[questionID].question, 850 , quizFont);
+            string question = IngamePresentation.wrapLine(quizzesLibrary.quizzesList[questionID].question, 850, quizFont);
             spriteBatch.DrawString(quizFont, question, positionQs, Color.Red);
             //draw 4 buttons
             spriteBatch.Draw(buttonTexture, rectA, Color.White);

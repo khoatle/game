@@ -657,10 +657,10 @@ namespace Poseidon
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
             this.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, gameTime, pointIntersect);
 
-            //planting trees in main game
+            //planting trees, not inside shipwreck
             if (gameMode != GameMode.ShipWreck && lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X))
             {
-                if (AddingObjects.placePlant(this, heightMapInfo, Content, plants, shipWrecks, staticObjects, gameTime))
+                if (AddingObjects.placePlant(this, heightMapInfo, Content, plants, shipWrecks, staticObjects))
                 {
                     int envPoint;
                     if (PoseidonGame.gamePlus)
@@ -685,9 +685,21 @@ namespace Poseidon
                         PlayGameScene.points.Add(point);
                     else if (gameMode == GameMode.SurvivalMode)
                         SurvivalGameScene.points.Add(point);
-                    
+
                     //update good will point gain
                     IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForPlanting);
+                }
+                else
+                {
+                    Point point = new Point();
+                    String point_string = "Can not plan here or now";
+                    point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.Red);
+                    if (gameMode == GameMode.ShipWreck)
+                        ShipWreckScene.points.Add(point);
+                    else if (gameMode == GameMode.MainGame)
+                        PlayGameScene.points.Add(point);
+                    else if (gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point);
                 }
             }
 

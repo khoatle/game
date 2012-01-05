@@ -56,7 +56,6 @@ namespace Poseidon
         //true = enabled/found
         public static bool[] skills, lsSkills;
         //skill combo activated?
-        //TODO: add skillComboActivated, goodWillBarActivated, secondSkillID to save file
         public static bool skillComboActivated, goodWillBarActivated, lsSkillComboActivated, lsGoodWillBarActivated;
         //which skill is being selected
         public static int activeSkillID, lsActiveSkillID, secondSkillID, lsSecondSkillID;
@@ -129,7 +128,6 @@ namespace Poseidon
         //monitoring time between fire
         private TimeSpan prevFireTime;
 
-        //TODO: add faceToDraw, iconActivated, goodWillPoint to save file
         //good will bar related stuff
         public static int faceToDraw = 0, lsFaceToDraw;
         public static bool[] iconActivated, lsIconActivated;
@@ -242,9 +240,15 @@ namespace Poseidon
                 }
             }
             if (PlayGameScene.currentLevel == 0) // No skill in level 0 (gamePLus)
+            {
                 activeSkillID = lsActiveSkillID = -1;
+                secondSkillID = lsSecondSkillID = -1;
+            }
             else
+            {
                 activeSkillID = lsActiveSkillID = (int)info.GetValue("activeSkillID", typeof(int));
+                secondSkillID = lsSecondSkillID = (int)info.GetValue("secondSkillID", typeof(int));
+            }
             pointToMoveTo = Vector3.Zero;
 
             // No buff up at the beginning
@@ -276,6 +280,18 @@ namespace Poseidon
 
             gamePlusLevel = (int)info.GetValue("gamePlusLevel", typeof(int));
 
+            goodWillBarActivated = lsGoodWillBarActivated = (bool)info.GetValue("goodWillBarActivated", typeof(bool));
+            goodWillPoint = lsGoodWillPoint = (int)info.GetValue("goodWillPoint", typeof(int));
+            faceToDraw = lsFaceToDraw = (int)info.GetValue("faceToDraw", typeof(int));
+            for (int j = 0; j < GameConstants.NumGoodWillBarIcons; j++)
+            {
+                string iconName = "iconActivated"+j.ToString();
+                iconActivated[j] = lsIconActivated[j] = (bool)info.GetValue(iconName, typeof(bool));
+            }
+            
+
+            skillComboActivated = lsSkillComboActivated = (bool)info.GetValue("skillComboActivated", typeof(bool));
+            
         }
 
         /// <summary>
@@ -296,6 +312,7 @@ namespace Poseidon
                 info.AddValue(Skillname, skills[i]);
             }
             info.AddValue("activeSkillID", activeSkillID);
+            info.AddValue("secondSkillID", secondSkillID);
 
             info.AddValue("floatHeight", floatHeight);
             info.AddValue("MaxRangeX", MaxRangeX);
@@ -306,6 +323,15 @@ namespace Poseidon
             info.AddValue("level", level);
             info.AddValue("unassignedPts", unassignedPts);
             info.AddValue("gamePlusLevel", gamePlusLevel);
+            info.AddValue("goodWillBarActivated", goodWillBarActivated);
+            info.AddValue("goodWillPoint", goodWillPoint);
+            info.AddValue("faceToDraw", faceToDraw);
+            for( int j=0; j<GameConstants.NumGoodWillBarIcons; j++)
+            {
+                string iconName = "iconActivated"+ j.ToString();
+                info.AddValue(iconName, iconActivated[j]);
+            }
+            info.AddValue("skillComboActivated", skillComboActivated);
         }
 
         /// <summary>

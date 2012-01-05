@@ -161,8 +161,9 @@ namespace Poseidon.Core
                         PoseidonGame.audio.reelHit.Play();
 
                         //miracles happen here
-                        if (HydroBot.faceToDraw == 0)
-                            HydroBot.strength += GameConstants.gainStrength;
+                        //the face drawn on the screen is actually faceToDraw + 1
+                        //if (HydroBot.faceToDraw == 0 && HydroBot.iconActivated[HydroBot.faceToDraw])
+                        //    HydroBot.strength += GameConstants.gainStrength;
                         
                     }
 

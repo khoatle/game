@@ -436,21 +436,6 @@ namespace Poseidon
                     }
 
 
-                    //Are we planting trees?
-                    if ((lastKeyboardState.IsKeyDown(Keys.X) && (currentKeyboardState.IsKeyUp(Keys.X))))
-                    {
-                        if (AddingObjects.placePlant(hydroBot, heightMapInfo, Content, plants, null, null, gameTime))
-                        {
-                            audio.plantSound.Play();
-                            HydroBot.currentExperiencePts += Plant.experienceReward;
-                            HydroBot.currentEnvPoint += GameConstants.envGainForDropSeed;
-
-                            Point point = new Point();
-                            String point_string = "+" + GameConstants.envGainForDropSeed.ToString() + "ENV\n+" + Plant.experienceReward + "EXP";
-                            point.LoadContent(Content, point_string, hydroBot.Position, Color.LawnGreen);
-                            points.Add(point);
-                        }
-                    }
 
                     //Are the trees ready for fruit?
                     foreach (Plant plant in plants)

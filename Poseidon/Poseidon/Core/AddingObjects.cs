@@ -378,7 +378,7 @@ namespace Poseidon
             bullets.Add(newBullet);
         }
 
-        public static bool placePlant(HydroBot hydroBot, HeightMapInfo heightMapInfo, ContentManager Content, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, GameTime gameTime)
+        public static bool placePlant(HydroBot hydroBot, HeightMapInfo heightMapInfo, ContentManager Content, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
         {
             if ((PoseidonGame.playTime.TotalSeconds - HydroBot.prevPlantTime > GameConstants.coolDownForPlant) || HydroBot.firstPlant == true)
             {

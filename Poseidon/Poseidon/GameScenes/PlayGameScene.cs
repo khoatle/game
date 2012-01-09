@@ -485,33 +485,52 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
             
             //Initialize trash
-            int random_model;
-            trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
-            for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
+            //int random_model;
+            int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
+            trashes = new List<Trash>(numberTrash);
+            int bioIndex, plasticIndex, nuclearIndex;
+            for (bioIndex = 0; bioIndex < GameConstants.NumberPlasticTrash[currentLevel]; bioIndex++)
             {
-                random_model = random.Next(5);
                 orientation = random.Next(100);
-                trashes.Add(new Trash());
-                switch (random_model)
-                {
-                    case 0:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel1", orientation);
-                        break;
-                    case 1:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
-                        break;
-                    case 2:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
-                        break;
-                    case 3:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
-                        break;
-                    case 4:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
-                        break;
-                }
-               //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
+                trashes.Add(new Trash(TrashType.plastic));
+                trashes[bioIndex].LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //bio model
             }
+            for (plasticIndex = bioIndex; plasticIndex < bioIndex+GameConstants.NumberNuclearTrash[currentLevel]; plasticIndex++)
+            {
+                orientation = random.Next(100);
+                trashes.Add(new Trash(TrashType.radioactive));
+                trashes[plasticIndex].LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //plastic model
+            }
+            for (nuclearIndex = plasticIndex; nuclearIndex< plasticIndex + GameConstants.NumberBioTrash[currentLevel]; nuclearIndex++)
+            {
+                orientation = random.Next(100);
+                trashes.Add(new Trash(TrashType.biodegradable));
+                trashes[nuclearIndex].LoadContent(Content, "Models/TrashModels/trashModel3", orientation); //nuclear model
+            }
+            //for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
+            //{
+            //    random_model = random.Next(5);
+            //    orientation = random.Next(100);
+            //    trashes.Add(new Trash());
+            //    switch (random_model)
+            //    {
+            //        case 0:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel1", orientation);
+            //            break;
+            //        case 1:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+            //            break;
+            //        case 2:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
+            //            break;
+            //        case 3:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
+            //            break;
+            //        case 4:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
+            //            break;
+            //    }
+            //}
             AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
                 GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight, heightMapInfo); 

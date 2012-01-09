@@ -10,6 +10,7 @@ namespace Poseidon
 {
     public class Trash : GameObject
     {
+        public TrashType trashType;
         public int experienceReward;
 
         public bool Retrieved { get; set; }
@@ -25,11 +26,12 @@ namespace Poseidon
         //public float heightChange = 0.5f;
         //public float currentChange = 0.0f;
         //public bool floatUp;
-        public Trash()
+        public Trash( TrashType trashtype)
             : base()
         {
             Retrieved = false;
             experienceReward = 10;
+            trashType = trashtype;
         }
 
         public void LoadContent(ContentManager content, string modelname, float orientation)

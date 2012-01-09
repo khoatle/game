@@ -134,6 +134,11 @@ namespace Poseidon
         public static int goodWillPoint, lsGoodWillPoint;
         public static int maxGoodWillPoint;
 
+        //Trash Collection
+        private int bioTrash = 0;
+        private int plasticTrash = 0;
+        private int nuclearTrash = 0;
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -683,8 +688,9 @@ namespace Poseidon
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
             this.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, gameTime, pointIntersect);
 
+
             //planting trees, not inside shipwreck
-            if (gameMode != GameMode.ShipWreck && lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X))
+            if (gameMode != GameMode.ShipWreck && lastKeyboardState.IsKeyDown(Keys.V) && currentKeyboardState.IsKeyUp(Keys.V))
             {
                 if (AddingObjects.placePlant(this, heightMapInfo, Content, plants, shipWrecks, staticObjects))
                 {
@@ -732,8 +738,92 @@ namespace Poseidon
             //Interacting with trashs and fruits
             if (currentKeyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fruits, trashes, gameTime);
+                Interact_with_trash_and_fruit(fruits, trashes, gameTime); // only biodegradable trash
             }
+            if (currentKeyboardState.IsKeyDown(Keys.X)) // Collect Plastic Trash
+            {
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
+                if (trashes != null)
+                {
+                    foreach (Trash trash in trashes)
+                    {
+                        if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                        {
+                            string display_str;
+                            if (trash.trashType == TrashType.biodegradable)
+                            {
+                                display_str = "Wrong Type: Organic";
+                            }
+                            else if (trash.trashType == TrashType.plastic)
+                            {
+                                plasticTrash++;
+                                display_str = "Plastic Trash Collected " + plasticTrash;
+                            }
+                            else //radioactive
+                            {
+                                display_str = "Wrong Type: Radioactive";
+                            }
+                            trash.Retrieved = true;
+                            PoseidonGame.audio.retrieveSound.Play();
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+
+                            //update good will point
+                            IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
+                        }
+                    }
+                }
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.C)) // Collect Plastic Trash
+            {
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
+                if (trashes != null)
+                {
+                    foreach (Trash trash in trashes)
+                    {
+                        if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                        {
+                            string display_str;
+                            if (trash.trashType == TrashType.biodegradable)
+                            {
+                                display_str = "Wrong Type: Organic";
+                            }
+                            else if (trash.trashType == TrashType.plastic)
+                            {
+                                display_str = "Wrong Type: Plastic";
+                            }
+                            else //radioactive
+                            {
+                                nuclearTrash++;
+                                display_str = "Radioactive Trash Collected " + nuclearTrash;
+                            }
+                            trash.Retrieved = true;
+                            PoseidonGame.audio.retrieveSound.Play();
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+
+                            //update good will point
+                            IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
+                        }
+                    }
+                }
+            }
+
+
             //if (lastKeyboardState.IsKeyDown(Keys.R) && currentKeyboardState.IsKeyUp(Keys.R))
             //{
             //    IngamePresentation.SpinNow();
@@ -1058,32 +1148,57 @@ namespace Poseidon
                 {
                     if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                     {
-                        int envPoints, expPoints;
-                        if (PoseidonGame.gamePlus)
+                        string display_str;
+                        if (trash.trashType == TrashType.biodegradable)
                         {
-                            if (PlayGameScene.currentLevel > 0)
-                                envPoints = GameConstants.envGainForTrashClean + HydroBot.gamePlusLevel * 5;
-                            else
-                                envPoints = GameConstants.envGainForTrashClean - 5;
+                            bioTrash++;
+                            display_str = "Organic Trash Collected " + bioTrash;
                         }
-                        else
-                            envPoints = GameConstants.envGainForTrashClean;
-                        expPoints = trash.experienceReward + HydroBot.gamePlusLevel*5;
+                        else if (trash.trashType == TrashType.plastic)
+                        {
+                            display_str = "Wrong Type: Plastic";
+                        }
+                        else //radioactive
+                        {
+                            display_str = "Wrong Type: Radioactive";
+                        }
                         trash.Retrieved = true;
-                        currentExperiencePts += expPoints;
-                        currentEnvPoint += envPoints;
                         PoseidonGame.audio.retrieveSound.Play();
-                        //RetrievedSound.Play();
-
                         Point point = new Point();
-                        String point_string = "+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, trash.Position, Color.LawnGreen);
+                        point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
                         if (gameMode == GameMode.ShipWreck)
                             ShipWreckScene.points.Add(point);
                         else if (gameMode == GameMode.MainGame)
                             PlayGameScene.points.Add(point);
                         else if (gameMode == GameMode.SurvivalMode)
                             SurvivalGameScene.points.Add(point);
+
+                        //int envPoints, expPoints;
+                        //if (PoseidonGame.gamePlus)
+                        //{
+                        //    if (PlayGameScene.currentLevel > 0)
+                        //        envPoints = GameConstants.envGainForTrashClean + HydroBot.gamePlusLevel * 5;
+                        //    else
+                        //        envPoints = GameConstants.envGainForTrashClean - 5;
+                        //}
+                        //else
+                        //    envPoints = GameConstants.envGainForTrashClean;
+                        //expPoints = trash.experienceReward + HydroBot.gamePlusLevel*5;
+                        //trash.Retrieved = true;
+                        //currentExperiencePts += expPoints;
+                        //currentEnvPoint += envPoints;
+                        //PoseidonGame.audio.retrieveSound.Play();
+                        ////RetrievedSound.Play();
+
+                        //Point point = new Point();
+                        //String point_string = "+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
+                        //point.LoadContent(PoseidonGame.contentManager, point_string, trash.Position, Color.LawnGreen);
+                        //if (gameMode == GameMode.ShipWreck)
+                        //    ShipWreckScene.points.Add(point);
+                        //else if (gameMode == GameMode.MainGame)
+                        //    PlayGameScene.points.Add(point);
+                        //else if (gameMode == GameMode.SurvivalMode)
+                        //    SurvivalGameScene.points.Add(point);
 
                         //update good will point
                         IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);

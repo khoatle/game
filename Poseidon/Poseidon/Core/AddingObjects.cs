@@ -638,6 +638,10 @@ namespace Poseidon
                     {
                         xValue = random.Next(0, hydroBot.MaxRangeX);
                         zValue = random.Next(0, hydroBot.MaxRangeZ);
+                        if (random.Next(100) % 2 == 0)
+                            xValue *= -1;
+                        if (random.Next(100) % 2 == 0)
+                            zValue *= -1;
                         if (!(IsSurfaceOccupied(new BoundingSphere(new Vector3(xValue, hydroBot.floatHeight, zValue), enemies[i].BoundingSphere.Radius), enemyAmount, fishAmount, enemies, fishes) ||
                          (((int)(MathHelper.Distance(xValue, hydroBot.Position.X)) < 200) &&
                          ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200))))

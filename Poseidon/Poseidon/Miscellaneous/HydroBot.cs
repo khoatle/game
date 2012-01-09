@@ -24,7 +24,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace Poseidon
 {
     /// <summary>
-    /// Helper class for drawing a tank model with animated wheels and turret.
+    /// Main character of the game: the HydroBot.
     /// </summary>
     [Serializable()]    
     public class HydroBot : GameObject, ISerializable
@@ -134,6 +134,12 @@ namespace Poseidon
         public static int goodWillPoint, lsGoodWillPoint;
         public static int maxGoodWillPoint;
 
+        //resurrected sidekicks related stuff
+        public static int numStrangeObjCollected, lsNumStrangeObjCollected;
+        public static int numDolphinPieces, numSeaCowPieces, numTurtlePieces, lsNumDolphinPieces, lsNumSeaCowPieces, lsNumTurtlePieces;
+        public static bool hasDolphin, hasSeaCow, hasTurtle, lsHasDolphin, lsHasSeaCow, lsHasTurtle;
+        public static float dolphinPower, seaCowPower, turtlePower, lsDolphinPower, lsSeaCowPower, lsTurtlePower;
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -161,7 +167,7 @@ namespace Poseidon
                 skills[index] = false;
             }
 
-            //Hien: new
+            //stuff related to good will bar and skill combo
             iconActivated = new bool[GameConstants.NumGoodWillBarIcons];
             lsIconActivated = new bool[GameConstants.NumGoodWillBarIcons];
             for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
@@ -172,6 +178,8 @@ namespace Poseidon
             goodWillBarActivated = false;
             maxGoodWillPoint = GameConstants.MaxGoodWillPoint;
             goodWillPoint = lsGoodWillPoint = 0;
+
+            //stuff related to resurrected sidekicks
 
             //if(PlayGameScene.currentLevel == 0 && gameMode == GameMode.MainGame) //to take care of reload
             //    skills[index] = false;
@@ -196,7 +204,11 @@ namespace Poseidon
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoisson = 0;
 
-            
+            //resurrected sidekicks stuff
+            numStrangeObjCollected = lsNumStrangeObjCollected = 0;
+            hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
+            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
+            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
 
             this.gameMode = gameMode;
         }
@@ -366,6 +378,7 @@ namespace Poseidon
             invincibleMode = false;
             supersonicMode = false;
             autoHipnotizeMode = false;
+
             //just for testing
             //should be removed
             skillComboActivated = true;
@@ -411,13 +424,25 @@ namespace Poseidon
             lsSkills.CopyTo(skills, 0);
             activeSkillID = lsActiveSkillID;
 
-            //new
+            //good will bar and skill combo
             secondSkillID = lsSecondSkillID;
             faceToDraw = lsFaceToDraw;
             lsIconActivated.CopyTo(iconActivated, 0);
             skillComboActivated = lsSkillComboActivated;
             goodWillBarActivated = lsGoodWillBarActivated;
             goodWillPoint = lsGoodWillPoint;
+
+            //resurrected sidekicks
+            numStrangeObjCollected = lsNumStrangeObjCollected;
+            hasDolphin = lsHasDolphin;
+            hasSeaCow = lsHasSeaCow;
+            hasTurtle = lsHasTurtle;
+            dolphinPower = lsDolphinPower;
+            seaCowPower = lsSeaCowPower;
+            turtlePower = lsTurtlePower;
+            numDolphinPieces = lsNumDolphinPieces;
+            numSeaCowPieces = lsNumSeaCowPieces;
+            numTurtlePieces = lsNumTurtlePieces;
 
             currentExperiencePts = lsCurrentExperiencePts;
             nextLevelExperience = lsNextLevelExperience;
@@ -442,13 +467,25 @@ namespace Poseidon
 
             lsActiveSkillID = activeSkillID;
 
-            //new
+            //good will bar and skill combo
             lsSecondSkillID = secondSkillID;
             lsSkillComboActivated = skillComboActivated;
             lsGoodWillBarActivated = goodWillBarActivated;
             iconActivated.CopyTo(lsIconActivated, 0);
             lsFaceToDraw = faceToDraw;
             lsGoodWillPoint = goodWillPoint;
+
+            //resurrected sidekicks
+            lsNumStrangeObjCollected = numStrangeObjCollected;
+            lsHasSeaCow = hasSeaCow;
+            lsHasDolphin = hasDolphin;
+            lsHasTurtle = hasTurtle;
+            lsSeaCowPower = seaCowPower;
+            lsDolphinPower = dolphinPower;
+            lsTurtlePower = turtlePower;
+            lsNumDolphinPieces = numDolphinPieces;
+            lsNumSeaCowPieces = numSeaCowPieces;
+            lsNumTurtlePieces = numTurtlePieces;
 
 
             lsCurrentExperiencePts = currentExperiencePts;

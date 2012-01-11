@@ -102,6 +102,8 @@ namespace Poseidon {
         public static int[] NumberFish = new int[maxLevel];
         public static int[] NumberMutantShark = new int[maxLevel];
         public static int[] NumberTerminator = new int[maxLevel];
+        public static int[] NumberSubmarine = new int[maxLevel];
+        public static int NumEnemiesInSubmarine = 20;
         public static double[] LevelObjective = new double[maxLevel];
 
         //number of enemy and fish for ship wreck

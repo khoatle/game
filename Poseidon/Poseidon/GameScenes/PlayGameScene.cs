@@ -204,6 +204,8 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
+                int[] numSubmarine = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.NumberSubmarine = numSubmarine;
             }
             else
             {
@@ -217,6 +219,8 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
+                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.NumberSubmarine = numSubmarine;
             }
 
             //fireTime = TimeSpan.FromSeconds(0.3f);
@@ -474,7 +478,7 @@ namespace Poseidon
             enemiesAmount = 0;
             fishAmount = 0;
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
-                + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel]];
+                + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel]*(1 + GameConstants.NumEnemiesInSubmarine)];
             fish = new Fish[GameConstants.NumberFish[currentLevel]];
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight);
@@ -797,7 +801,7 @@ namespace Poseidon
                             if (PoseidonGame.playTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                                 enemies[i].stunned = false;
                         }
-                        enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.MainGame);
+                        enemies[i].Update(enemies, ref enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.MainGame);
                     }
 
                     for (int i = 0; i < fishAmount; i++)

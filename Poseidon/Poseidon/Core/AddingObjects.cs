@@ -16,7 +16,7 @@ namespace Poseidon
     {
         public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, GameMode gameMode)
         {
-         
+
             if (gameMode == GameMode.SurvivalMode)
             {
                 enemiesAmount = GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
@@ -24,7 +24,7 @@ namespace Poseidon
             }
             else if (gameMode == GameMode.MainGame)
                 enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
-                    + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel];
+                    + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel];
             else if (gameMode == GameMode.ShipWreck)
             {
                 if (PlayGameScene.currentLevel >= 4)
@@ -35,6 +35,7 @@ namespace Poseidon
             int numCombatEnemies= 0;
             int numMutantShark = 0;
             int numTerminator = 0;
+            int numSubmarine = 0;
         
             if (gameMode == GameMode.SurvivalMode)
             {
@@ -49,6 +50,7 @@ namespace Poseidon
                 numCombatEnemies = GameConstants.NumberCombatEnemies[currentLevel];
                 numMutantShark = GameConstants.NumberMutantShark[currentLevel];
                 numTerminator = GameConstants.NumberTerminator[currentLevel];
+                numSubmarine = GameConstants.NumberSubmarine[currentLevel];
             }
             else if (gameMode == GameMode.ShipWreck)
             {
@@ -93,6 +95,14 @@ namespace Poseidon
                     else terminator.Name = "terminator";
                     terminator.Load(31, 60, 24);
                     enemies[i] = terminator;
+                }
+                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator + numSubmarine)
+                {
+                    Submarine submarine = new Submarine(gameMode);
+                    submarine.LoadContent(Content, "Models/EnemyModels/submarine");
+                    submarine.Name = "Shark Submarine";
+                    submarine.Load(31, 60, 24);
+                    enemies[i] = submarine;
                 }
             }
             
@@ -611,7 +621,7 @@ namespace Poseidon
             }
         }
 
-        private static Vector3 PerpendicularVector(Vector3 directionVector)
+        public static Vector3 PerpendicularVector(Vector3 directionVector)
         {
             return new Vector3(-directionVector.Z, directionVector.Y, directionVector.X);
         }

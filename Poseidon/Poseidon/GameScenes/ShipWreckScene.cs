@@ -496,7 +496,7 @@ namespace Poseidon
                         if (PoseidonGame.playTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
+                    enemies[i].Update(enemies, ref enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
                 }
 
                 foreach (TreasureChest chest in treasureChests)

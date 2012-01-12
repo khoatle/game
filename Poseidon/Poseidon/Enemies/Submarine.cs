@@ -142,13 +142,9 @@ namespace Poseidon
             else return false;
         }
 
-        public void SpecialMove2(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime)
+        public void ShootTorpedos(List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
         {
-            if (currentHuntingTarget != null && PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / 3 && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
-            {
-                AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                prevFire = PoseidonGame.playTime;
-            }
+            AddingObjects.placeTorpedo(this, currentHuntingTarget, bullets, cameraFrustum);
         }
 
         public void SpecialMove3(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime)
@@ -206,11 +202,16 @@ namespace Poseidon
                     bool powerUsed = false;
                     powerupsType = random.Next(2);
                     //only generate hunters while hunting hydrobot
-                    if (powerupsType == 0 && numHunterGenerated < GameConstants.NumEnemiesInSubmarine
-                        && currentHuntingTarget is HydroBot
-                        && this.BoundingSphere.Intersects(cameraFrustum))
+                    //if (powerupsType == 0 && numHunterGenerated < GameConstants.NumEnemiesInSubmarine
+                    //    && currentHuntingTarget is HydroBot
+                    //    && this.BoundingSphere.Intersects(cameraFrustum))
+                    //{
+                    //    ReleaseHunter(cameraFrustum, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot);
+                    //    powerUsed = true;
+                    //}
+                    if (powerupsType == 1 && currentHuntingTarget is HydroBot)
                     {
-                        ReleaseHunter(cameraFrustum, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot);
+                        ShootTorpedos(bullets, cameraFrustum);
                         powerUsed = true;
                     }
                     //else if (powerupsType == 1)

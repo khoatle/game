@@ -79,6 +79,7 @@ namespace Poseidon {
         public const int TerminatorShootingDamage = 25;
         public const int ChasingBulletDamage = 80;
         public const int StopBulletChasing = 3;
+        public const int TorpedoDamage = 2;
 
         // Enemy configuration
         public const float EnemyShootingRate = 0.6f;

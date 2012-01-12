@@ -353,6 +353,29 @@ namespace Poseidon
             }
         }
 
+        public static void placeTorpedo(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
+        {
+
+            Matrix orientationMatrix = Matrix.CreateRotationY(((Submarine)shooter).ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+
+            //one topedo on the left and one on the right
+            Torpedo newBullet = new Torpedo();
+            newBullet.initialize(shooter.Position - AddingObjects.PerpendicularVector(shootingDirection) * 10, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
+            bullets.Add(newBullet);
+
+            Torpedo newBullet1 = new Torpedo();
+            newBullet1.initialize(shooter.Position + AddingObjects.PerpendicularVector(shootingDirection) * 10, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
+            bullets.Add(newBullet1);
+            if (shooter.BoundingSphere.Intersects(cameraFrustum))
+            {
+                PoseidonGame.audio.bossShot.Play();
+            }
+        }
 
         public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum, float offsetFactor) {
             HydroBot tmp1;
@@ -379,7 +402,7 @@ namespace Poseidon
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.bossShot.Play();
             }
-            else
+            else if (type == 0)
             {
                 newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/normalbullet");
                 if (obj.BoundingSphere.Intersects(cameraFrustum))

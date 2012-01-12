@@ -242,6 +242,7 @@ namespace Poseidon
                     }
                     else
                         effect.DiffuseColor = Color.White.ToVector3();
+
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;

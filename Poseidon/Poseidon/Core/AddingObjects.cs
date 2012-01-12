@@ -363,12 +363,12 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             Torpedo newBullet = new Torpedo();
-            newBullet.initialize(shooter.Position - AddingObjects.PerpendicularVector(shootingDirection) * 10, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
             Torpedo newBullet1 = new Torpedo();
-            newBullet1.initialize(shooter.Position + AddingObjects.PerpendicularVector(shootingDirection) * 10, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
             newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet1);
             if (shooter.BoundingSphere.Intersects(cameraFrustum))

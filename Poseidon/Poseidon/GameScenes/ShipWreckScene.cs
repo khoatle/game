@@ -98,6 +98,11 @@ namespace Poseidon
         bool showPainting = false;
         int paintingToShow = 0;
         bool showNoKey = false;
+        // showing strange objects found scene
+        bool showStrangeObjectFound = false;
+        Texture2D[] fossilTextures;
+        int fossilToDraw;
+
         // Bubbles over characters
         List<Bubble> bubbles;
         float timeNextBubble = 200.0f;
@@ -149,6 +154,13 @@ namespace Poseidon
 
             bubbles = new List<Bubble>();
             points = new List<Point>();
+
+            fossilTextures = new Texture2D[4];
+            fossilTextures[0] = Content.Load<Texture2D>("Image/Fossils/fossil1");
+            fossilTextures[1] = Content.Load<Texture2D>("Image/Fossils/fossil2");
+            fossilTextures[2] = Content.Load<Texture2D>("Image/Fossils/fossil3");
+            fossilTextures[3] = Content.Load<Texture2D>("Image/Fossils/fossil4");
+
 
             this.Load();
         }
@@ -374,6 +386,15 @@ namespace Poseidon
                 }
                 return;
             }
+            if (showStrangeObjectFound)
+            {
+                // return to game if enter pressed
+                if (chestExitPressed)
+                {
+                    showStrangeObjectFound = false;
+                }
+                return;
+            }
             if (showNoKey)
             {
                 // return to game if enter pressed
@@ -475,7 +496,7 @@ namespace Poseidon
                         if (PoseidonGame.playTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
                             enemies[i].stunned = false;
                     }
-                    enemies[i].Update(enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
+                    enemies[i].Update(enemies, ref enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
                 }
 
                 foreach (TreasureChest chest in treasureChests)
@@ -538,6 +559,15 @@ namespace Poseidon
                                     // show a random painting
                                     paintingToShow = random.Next(oceanPaintings.paintings.Count);
                                     showPainting = true;
+                                }
+                            }
+                            if (showPainting == true)
+                            {
+                                if (random.Next(100) <= 2)
+                                {
+                                    showStrangeObjectFound = true;
+                                    HydroBot.numStrangeObjCollected++;
+                                    fossilToDraw = random.Next(4);
                                 }
                             }
                         }
@@ -767,7 +797,46 @@ namespace Poseidon
                 RestoreGraphicConfig();
                 //return;
             }
+            if (showStrangeObjectFound)
+            {
+                spriteBatch.Begin();
+                DrawFoundStrangeObjScene();
+                spriteBatch.End();
+                RestoreGraphicConfig();
+                //return;
+            }
             
+        }
+        private void DrawFoundStrangeObjScene()
+        {
+            float xOffsetText, yOffsetText;
+            string str1 = "You have found a strange ... \"rock\"";
+
+            Rectangle rectSafeArea;
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            str1 = IngamePresentation.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+
+            //Vector2 strSize = statsFont.MeasureString(str1);
+            Vector2 strPosition =
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText + 20);
+
+            //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
+
+            spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Silver);
+            xOffsetText = rectSafeArea.Center.X - (fossilTextures[fossilToDraw].Width / 2);
+            yOffsetText = rectSafeArea.Center.Y - (fossilTextures[fossilToDraw].Height / 2);
+
+            Vector2 skillIconPosition =
+                new Vector2((int)xOffsetText, (int)yOffsetText);
+
+            spriteBatch.Draw(fossilTextures[fossilToDraw], skillIconPosition, Color.White);
+
+            string nextText = "Press Alt/Enter to continue";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
         }
         private void DrawNoKey()
         {

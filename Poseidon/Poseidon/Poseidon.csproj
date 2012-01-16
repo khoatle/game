@@ -122,9 +122,11 @@
   <ItemGroup>
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Bullets\FlyingHammer.cs" />
+    <Compile Include="Bullets\Torpedo.cs" />
     <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="Core\IngamePresentation.cs" />
     <Compile Include="Enemies\BaseEnemy.cs" />
+    <Compile Include="Enemies\Submarine.cs" />
     <Compile Include="GameScenes\LoadingScene.cs" />
     <Compile Include="GameScenes\SelectLoadingLevelScene.cs" />
     <Compile Include="GameScenes\SurvivalGameScene.cs" />

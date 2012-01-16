@@ -16,7 +16,7 @@ namespace Poseidon
     {
         public static void loadContentEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, int currentLevel, GameMode gameMode)
         {
-         
+
             if (gameMode == GameMode.SurvivalMode)
             {
                 enemiesAmount = GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
@@ -24,7 +24,7 @@ namespace Poseidon
             }
             else if (gameMode == GameMode.MainGame)
                 enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
-                    + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel];
+                    + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel];
             else if (gameMode == GameMode.ShipWreck)
             {
                 if (PlayGameScene.currentLevel >= 4)
@@ -35,6 +35,7 @@ namespace Poseidon
             int numCombatEnemies= 0;
             int numMutantShark = 0;
             int numTerminator = 0;
+            int numSubmarine = 0;
         
             if (gameMode == GameMode.SurvivalMode)
             {
@@ -49,6 +50,7 @@ namespace Poseidon
                 numCombatEnemies = GameConstants.NumberCombatEnemies[currentLevel];
                 numMutantShark = GameConstants.NumberMutantShark[currentLevel];
                 numTerminator = GameConstants.NumberTerminator[currentLevel];
+                numSubmarine = GameConstants.NumberSubmarine[currentLevel];
             }
             else if (gameMode == GameMode.ShipWreck)
             {
@@ -93,6 +95,14 @@ namespace Poseidon
                     else terminator.Name = "terminator";
                     terminator.Load(31, 60, 24);
                     enemies[i] = terminator;
+                }
+                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator + numSubmarine)
+                {
+                    Submarine submarine = new Submarine(gameMode);
+                    submarine.LoadContent(Content, "Models/EnemyModels/submarine");
+                    submarine.Name = "Shark Submarine";
+                    submarine.Load(31, 60, 24);
+                    enemies[i] = submarine;
                 }
             }
             
@@ -343,6 +353,29 @@ namespace Poseidon
             }
         }
 
+        public static void placeTorpedo(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
+        {
+
+            Matrix orientationMatrix = Matrix.CreateRotationY(((Submarine)shooter).ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+
+            //one topedo on the left and one on the right
+            Torpedo newBullet = new Torpedo();
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
+            bullets.Add(newBullet);
+
+            Torpedo newBullet1 = new Torpedo();
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
+            bullets.Add(newBullet1);
+            if (shooter.BoundingSphere.Intersects(cameraFrustum))
+            {
+                PoseidonGame.audio.bossShot.Play();
+            }
+        }
 
         public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum, float offsetFactor) {
             HydroBot tmp1;
@@ -369,7 +402,7 @@ namespace Poseidon
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.bossShot.Play();
             }
-            else
+            else if (type == 0)
             {
                 newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/normalbullet");
                 if (obj.BoundingSphere.Intersects(cameraFrustum))
@@ -611,7 +644,7 @@ namespace Poseidon
             }
         }
 
-        private static Vector3 PerpendicularVector(Vector3 directionVector)
+        public static Vector3 PerpendicularVector(Vector3 directionVector)
         {
             return new Vector3(-directionVector.Z, directionVector.Y, directionVector.X);
         }
@@ -638,6 +671,10 @@ namespace Poseidon
                     {
                         xValue = random.Next(0, hydroBot.MaxRangeX);
                         zValue = random.Next(0, hydroBot.MaxRangeZ);
+                        if (random.Next(100) % 2 == 0)
+                            xValue *= -1;
+                        if (random.Next(100) % 2 == 0)
+                            zValue *= -1;
                         if (!(IsSurfaceOccupied(new BoundingSphere(new Vector3(xValue, hydroBot.floatHeight, zValue), enemies[i].BoundingSphere.Radius), enemyAmount, fishAmount, enemies, fishes) ||
                          (((int)(MathHelper.Distance(xValue, hydroBot.Position.X)) < 200) &&
                          ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200))))

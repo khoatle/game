@@ -47,7 +47,7 @@ namespace Poseidon
         // Detection range of the enemy
         public float perceptionRadius;
 
-        protected GameObject currentHuntingTarget;
+        public GameObject currentHuntingTarget;
 
         protected float speed;
         public int damage;
@@ -219,7 +219,7 @@ namespace Poseidon
             }
         }
 
-        public virtual void Update(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
+        public virtual void Update(SwimmingObject[] enemyList, ref int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
         }
         public virtual void ChangeBoundingSphere()
@@ -242,6 +242,7 @@ namespace Poseidon
                     }
                     else
                         effect.DiffuseColor = Color.White.ToVector3();
+
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;

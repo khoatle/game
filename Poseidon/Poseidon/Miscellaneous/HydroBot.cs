@@ -400,6 +400,13 @@ namespace Poseidon
             prevPlantTime = 0;
 
             LoadAnimation(1, 30, 24);
+
+            //shader stuff
+            // Load the shader
+            effect = content.Load<Effect>("Shaders/Shader");
+
+            // Set up the parameters
+            SetupShaderParameters();
         }
 
         public void LoadAnimation(int clipStart, int clipEnd, int fpsRate)
@@ -1131,12 +1138,138 @@ namespace Poseidon
             return;
         }
 
+        //testing the shader
+        // Parameters for our shader object
+        EffectParameter projectionParameter;
+        EffectParameter viewParameter;
+        EffectParameter worldParameter;
+        EffectParameter ambientIntensityParameter;
+        EffectParameter ambientColorParameter;
+
+        // new parameters for diffuse light
+        EffectParameter diffuseIntensityParameter;
+        EffectParameter diffuseColorParameter;
+        EffectParameter diffuseDirectionParameter;
+
+        Matrix world, view, projection;
+        float ambientLightIntensity;
+        Vector4 ambientLightColor;
+        // The object that will contain our shader
+        Effect effect;
+        public void SetupShaderParameters()
+        {
+            // Bind the parameters with the shader.
+            worldParameter = effect.Parameters["World"];
+            viewParameter = effect.Parameters["View"];
+            projectionParameter = effect.Parameters["Projection"];
+
+            ambientColorParameter = effect.Parameters["AmbientColor"];
+            ambientIntensityParameter = effect.Parameters["AmbientIntensity"];
+
+            diffuseColorParameter = effect.Parameters["DiffuseColor"];
+            diffuseIntensityParameter = effect.Parameters["DiffuseIntensity"];
+            diffuseDirectionParameter = effect.Parameters["DiffuseDirection"];
+
+            ambientLightIntensity = 1.0f;
+            ambientLightColor = Color.DarkGreen.ToVector4();
+        }
+
+        /// <summary>
+        /// Draws the tank model, using the current animation settings.
+        /// </summary>
+        public void Draw(Matrix view, Matrix projection, GraphicsDeviceManager graphics)
+        {
+            
+            //bones = clipPlayer.GetSkinTransforms();
+
+            //foreach (ModelMesh mesh in Model.Meshes)
+            //{
+            //    foreach (SkinnedEffect effect in mesh.Effects)
+            //    {
+            //        effect.SetBoneTransforms(bones);
+            //        effect.View = view;
+            //        effect.Projection = projection;
+
+            //        //if (invincibleMode == true)
+            //        //{
+            //        //    effect.DiffuseColor = Color.Gold.ToVector3();
+            //        //}
+            //        //else if (isPoissoned == true)
+            //        //{
+            //        //    effect.DiffuseColor = Color.Green.ToVector3();
+            //        //}
+            //        //else
+            //        //{
+            //        //    effect.DiffuseColor = Vector3.One;
+            //        //}
+            //        //effect.EmissiveColor = Color.White.ToVector3();
+            //        //effect.SpecularColor = Color.Red.ToVector3();
+            //        //effect.SpecularPower = 1000.0f;
+            //        //effect.EnableDefaultLighting();
+            //        //effect.DirectionalLight0.Enabled = false;
+            //        //effect.DirectionalLight1.Enabled = false;
+            //        //effect.DirectionalLight2.Enabled = false;
+
+
+            //        effect.PreferPerPixelLighting = true;
+            //        effect.FogEnabled = true;
+            //        effect.FogStart = GameConstants.FogStart;
+            //        effect.FogEnd = GameConstants.FogEnd;
+            //        effect.FogColor = GameConstants.FogColor.ToVector3();
+
+            //    }
+            //    mesh.Draw();
+            //}
+            ModelMesh mesh = Model.Meshes[0];
+            ModelMeshPart meshPart = mesh.MeshParts[0];
+
+            // Set parameters
+            this.world = Matrix.Identity;
+            this.projection = projection;
+            this.view = view;
+            projectionParameter.SetValue(this.projection);
+            viewParameter.SetValue(this.view);
+            worldParameter.SetValue(this.world);
+            ambientIntensityParameter.SetValue(ambientLightIntensity);
+            ambientColorParameter.SetValue(ambientLightColor);
+            diffuseColorParameter.SetValue(Color.White.ToVector4());
+            diffuseIntensityParameter.SetValue(0.5f);
+
+            Vector3 diffuseLightDirection = new Vector3(0, -1, -1);
+
+            //ensure the light direction is normalized, or
+            //the shader will give some weird results
+            diffuseLightDirection.Normalize();
+            diffuseDirectionParameter.SetValue(diffuseLightDirection);
+
+            //set the vertex source to the mesh's vertex buffer
+            graphics.GraphicsDevice.SetVertexBuffer(meshPart.VertexBuffer, meshPart.VertexOffset);
+
+            //set the current index buffer to the sample mesh's index buffer
+            graphics.GraphicsDevice.Indices = meshPart.IndexBuffer;
+
+            effect.CurrentTechnique = effect.Techniques["Technique1"];
+
+            for (int i = 0; i < effect.CurrentTechnique.Passes.Count; i++)
+            {
+                //EffectPass.Apply will update the device to
+                //begin using the state information defined in the current pass
+                effect.CurrentTechnique.Passes[i].Apply();
+
+                //theMesh contains all of the information required to draw
+                //the current mesh
+                graphics.GraphicsDevice.DrawIndexedPrimitives(
+                    PrimitiveType.TriangleList, 0, 0,
+                    meshPart.NumVertices, meshPart.StartIndex, meshPart.PrimitiveCount);
+            }
+
+        }
         /// <summary>
         /// Draws the tank model, using the current animation settings.
         /// </summary>
         public void Draw(Matrix view, Matrix projection)
         {
-            
+
             bones = clipPlayer.GetSkinTransforms();
 
             foreach (ModelMesh mesh in Model.Meshes)
@@ -1147,24 +1280,37 @@ namespace Poseidon
                     effect.View = view;
                     effect.Projection = projection;
 
-                    if (invincibleMode == true)
-                    {
-                        effect.DiffuseColor = Color.Gold.ToVector3();
-                    }
-                    else if (isPoissoned == true) {
-                        effect.DiffuseColor = Color.Green.ToVector3();
-                    }
-                    else {
-                        effect.DiffuseColor = Vector3.One;
-                    }
+                    //if (invincibleMode == true)
+                    //{
+                    //    effect.DiffuseColor = Color.Gold.ToVector3();
+                    //}
+                    //else if (isPoissoned == true)
+                    //{
+                    //    effect.DiffuseColor = Color.Green.ToVector3();
+                    //}
+                    //else
+                    //{
+                    //    effect.DiffuseColor = Vector3.One;
+                    //}
+                    //effect.EmissiveColor = Color.White.ToVector3();
+                    //effect.SpecularColor = Color.Red.ToVector3();
+                    //effect.SpecularPower = 1000.0f;
+                    //effect.EnableDefaultLighting();
+                    //effect.DirectionalLight0.Enabled = false;
+                    //effect.DirectionalLight1.Enabled = false;
+                    //effect.DirectionalLight2.Enabled = false;
 
+                    
+                    effect.PreferPerPixelLighting = true;
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
                     effect.FogColor = GameConstants.FogColor.ToVector3();
+
                 }
                 mesh.Draw();
             }
+           
 
         }
         internal void DrawTrashFruitSphere(Matrix view, Matrix projection,

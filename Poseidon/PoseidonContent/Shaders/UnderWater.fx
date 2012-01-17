@@ -18,7 +18,7 @@ float4 PixelShaderGo(float2 Tex: TEXCOORD0) : COLOR
 
 }
 
-technique PostProcess
+technique UnderWater
 {
 	pass P0
 	{

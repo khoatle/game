@@ -636,6 +636,11 @@ namespace Poseidon
                                 Serializer serializer = new Serializer();
                                 serializer.SerializeObjects("SurvivalMode", objectsToSerialize);
                             }
+                            else
+                            {
+                                screenTransitNow = true;
+                                screenTransitionEffect.CurrentTechnique = screenTransitionEffect.Techniques[random.Next(2)];
+                            }
                             
                         }
                     }
@@ -1223,6 +1228,7 @@ namespace Poseidon
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
                 {
                     screenTransitionEffect.Parameters["fFadeAmount"].SetValue(fadeBetweenScenes);
+                    screenTransitionEffect.Parameters["fSmoothSize"].SetValue(0.05f);
                     screenTransitionEffect.Parameters["ColorMap2"].SetValue(Scene2Texture);
                     screenTransitionEffect.CurrentTechnique.Passes[0].Apply();
                     {              
@@ -1579,10 +1585,6 @@ namespace Poseidon
 
             }
             spriteBatch.End();
-            if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count - 1)
-            {
-                screenTransitNow = true;
-            }
         }
         public static void RestoreGraphicConfig()
         {

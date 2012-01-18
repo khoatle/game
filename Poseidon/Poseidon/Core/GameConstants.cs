@@ -60,7 +60,10 @@ namespace Poseidon {
         public const int EachLevelMinEnv = 200;
         public const int envLossForFishDeath = 15;
         public const int envLossPerTrashAdd = 10;
-        public const int envGainForTrashClean = 20;
+        public const int envGainForBioTrashClean = 10;
+        public const int envGainForPlasticTrashClean = 30;
+        public const int envGainForNuclearTrashClean = 100;
+        public const int expGainForTrash = 10;
         public const int BasicEnvGainForHealingFish = 5;
         public const int envGainForDropSeed = 20;
         public const int envGainForCorrectQuizAnswer = 50;

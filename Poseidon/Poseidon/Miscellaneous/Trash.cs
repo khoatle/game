@@ -11,7 +11,6 @@ namespace Poseidon
     public class Trash : GameObject
     {
         public TrashType trashType;
-        public int experienceReward;
 
         public bool Retrieved { get; set; }
 
@@ -30,7 +29,6 @@ namespace Poseidon
             : base()
         {
             Retrieved = false;
-            experienceReward = 10;
             trashType = trashtype;
         }
 

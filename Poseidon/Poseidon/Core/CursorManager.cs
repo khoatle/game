@@ -142,18 +142,7 @@ namespace Poseidon
             float z = cursorRay.Position.Z + cursorRay.Direction.Z * t;
             return new Vector3(x, planeHeight, z);
         }
-        public static bool MouseOnShipWreck(Cursor cursor, BoundingSphere boundingSphere, Vector3 center, Camera gameCamera)
-        {
-
-            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            BoundingSphere boundingSphiro;
-            boundingSphiro = boundingSphere;
-            boundingSphiro.Center = center;
-            if (CursorManager.RayIntersectsBoundingSphere(cursorRay, boundingSphiro))
-                return true;
-            return false;
-        }
-        public static bool MouseOnChest(Cursor cursor, BoundingSphere boundingSphere, Vector3 center, Camera gameCamera)
+        public static bool MouseOnObject(Cursor cursor, BoundingSphere boundingSphere, Vector3 center, Camera gameCamera)
         {
 
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);

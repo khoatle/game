@@ -20,6 +20,7 @@ namespace Poseidon
     public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
+    public enum FactoryType { biodegradable, plastic, radioactive, research };
 
     /// <summary>
     /// This is the main type for your game
@@ -498,7 +499,7 @@ namespace Poseidon
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
                 if (!playGameScene.shipWrecks[curWreck].accessed
-                    && CursorManager.MouseOnShipWreck(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
+                    && CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            

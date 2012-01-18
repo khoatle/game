@@ -135,9 +135,9 @@ namespace Poseidon
         public static int maxGoodWillPoint;
 
         //Trash Collection
-        private int bioTrash = 0;
-        private int plasticTrash = 0;
-        private int nuclearTrash = 0;
+        public static int bioTrash = 0;
+        public static int plasticTrash = 0;
+        public static int nuclearTrash = 0;
         //resurrected sidekicks related stuff
         public static int numStrangeObjCollected, lsNumStrangeObjCollected;
         public static int numDolphinPieces, numSeaCowPieces, numTurtlePieces, lsNumDolphinPieces, lsNumSeaCowPieces, lsNumTurtlePieces;
@@ -771,7 +771,7 @@ namespace Poseidon
                 }
             }
 
-            //Interacting with trashs and fruits
+            //Interacting with trash
             if (currentKeyboardState.IsKeyDown(Keys.Z))
             {
                 Interact_with_trash_and_fruit(fruits, trashes, gameTime); // only biodegradable trash
@@ -858,7 +858,6 @@ namespace Poseidon
                     }
                 }
             }
-
 
             //if (lastKeyboardState.IsKeyDown(Keys.R) && currentKeyboardState.IsKeyUp(Keys.R))
             //{

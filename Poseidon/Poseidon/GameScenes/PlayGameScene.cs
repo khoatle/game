@@ -149,6 +149,7 @@ namespace Poseidon
 
         // For applying graphic effects
         GraphicEffect graphicEffect;
+
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;

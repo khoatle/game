@@ -782,6 +782,7 @@ namespace Poseidon
             if (currentKeyboardState.IsKeyDown(Keys.Z))
             {
                 Interact_with_trash_and_fruit(fruits, trashes, gameTime); // only biodegradable trash
+
             }
             if (currentKeyboardState.IsKeyDown(Keys.X)) // Collect Plastic Trash
             {

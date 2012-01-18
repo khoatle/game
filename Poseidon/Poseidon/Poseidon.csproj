@@ -128,13 +128,13 @@
     <Compile Include="Core\IngamePresentation.cs" />
     <Compile Include="Enemies\BaseEnemy.cs" />
     <Compile Include="Enemies\Submarine.cs" />
-    <Compile Include="GameScenes\Factory.cs" />
     <Compile Include="GameScenes\LoadingScene.cs" />
     <Compile Include="GameScenes\SelectLoadingLevelScene.cs" />
     <Compile Include="GameScenes\SurvivalGameScene.cs" />
     <Compile Include="GraphicEffects\BloomComponent.cs" />
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
+    <Compile Include="Miscellaneous\Factory.cs" />
     <Compile Include="SaveGame\ObjectsToSerialize.cs" />
     <Compile Include="GameScenes\TipScene.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />

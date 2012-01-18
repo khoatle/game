@@ -60,7 +60,10 @@ namespace Poseidon {
         public const int EachLevelMinEnv = 200;
         public const int envLossForFishDeath = 15;
         public const int envLossPerTrashAdd = 10;
-        public const int envGainForTrashClean = 20;
+        public const int envGainForBioTrashClean = 10;
+        public const int envGainForPlasticTrashClean = 30;
+        public const int envGainForNuclearTrashClean = 100;
+        public const int expGainForTrash = 10;
         public const int BasicEnvGainForHealingFish = 5;
         public const int envGainForDropSeed = 20;
         public const int envGainForCorrectQuizAnswer = 50;
@@ -95,7 +98,10 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        public static int[] NumberTrash =           {  0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] NumberBioTrash =        {  24,  24,  24,   0,  24,  24,  24,  24,  24,   0,   0,   0  };
+        public static int[] NumberPlasticTrash =    {  24,  24,  24,   0,  24,  24,  24,  24,  24,   0,   0,   0  };
+        public static int[] NumberNuclearTrash =    {   2,   2,   2,   0,   2,   2,   2,   2,   2,   0,   0,   0  };
         public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
         public static int[] FishInSchool =          {  0,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
@@ -159,6 +165,7 @@ namespace Poseidon {
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
         public const float TrashBoundingSphereFactor = 0.9f;
+        public const float FactoryBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 3.5f;
 
         //skills

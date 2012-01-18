@@ -501,7 +501,7 @@ namespace Poseidon
 
                 foreach (TreasureChest chest in treasureChests)
                 {
-                    if (CharacterNearChest(chest.BoundingSphere) && CursorManager.MouseOnChest(cursor, chest.BoundingSphere, chest.Position, gameCamera)
+                    if (CharacterNearChest(chest.BoundingSphere) && CursorManager.MouseOnObject(cursor, chest.BoundingSphere, chest.Position, gameCamera)
                         && chest.opened == false && doubleClicked)
                     {
                         //fishes are not going to give u the key for treasure chest

@@ -28,6 +28,8 @@ namespace Poseidon
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
+        MouseState currentMouseState = new MouseState();
+        MouseState lastMouseState = new MouseState();
 
         public static AudioLibrary audio;
         int retrievedFruits;
@@ -57,6 +59,7 @@ namespace Poseidon
         List<Plant> plants;
         List<Fruit> fruits;
         List<Trash> trashes;
+        List<Factory> factories;
 
         List<StaticObject> staticObjects;
 
@@ -146,6 +149,13 @@ namespace Poseidon
 
         // For applying graphic effects
         GraphicEffect graphicEffect;
+        // For mouse inputs
+        bool doubleClicked = false;
+        bool clicked = false;
+        double clickTimer = 0;
+
+        private bool openFactoryConfigurationScene = false;
+        private Factory factoryToConfigure;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -506,36 +516,75 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
             
             //Initialize trash
-            int random_model;
-            trashes = new List<Trash>(GameConstants.NumberTrash[currentLevel]);
-            for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
+            //int random_model;
+            int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
+            trashes = new List<Trash>(numberTrash);
+            int bioIndex, plasticIndex, nuclearIndex;
+            for (bioIndex = 0; bioIndex < GameConstants.NumberPlasticTrash[currentLevel]; bioIndex++)
             {
-                random_model = random.Next(5);
                 orientation = random.Next(100);
-                trashes.Add(new Trash());
-                switch (random_model)
-                {
-                    case 0:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel1", orientation);
-                        break;
-                    case 1:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
-                        break;
-                    case 2:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
-                        break;
-                    case 3:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
-                        break;
-                    case 4:
-                        trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
-                        break;
-                }
-               //trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
+                trashes.Add(new Trash(TrashType.plastic));
+                trashes[bioIndex].LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //bio model
             }
+            for (plasticIndex = bioIndex; plasticIndex < bioIndex+GameConstants.NumberNuclearTrash[currentLevel]; plasticIndex++)
+            {
+                orientation = random.Next(100);
+                trashes.Add(new Trash(TrashType.radioactive));
+                trashes[plasticIndex].LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //plastic model
+            }
+            for (nuclearIndex = plasticIndex; nuclearIndex< plasticIndex + GameConstants.NumberBioTrash[currentLevel]; nuclearIndex++)
+            {
+                orientation = random.Next(100);
+                trashes.Add(new Trash(TrashType.biodegradable));
+                trashes[nuclearIndex].LoadContent(Content, "Models/TrashModels/trashModel3", orientation); //nuclear model
+            }
+            //for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
+            //{
+            //    random_model = random.Next(5);
+            //    orientation = random.Next(100);
+            //    trashes.Add(new Trash());
+            //    switch (random_model)
+            //    {
+            //        case 0:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel1", orientation);
+            //            break;
+            //        case 1:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
+            //            break;
+            //        case 2:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
+            //            break;
+            //        case 3:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
+            //            break;
+            //        case 4:
+            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
+            //            break;
+            //    }
+            //}
             AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
                 GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight, heightMapInfo); 
+
+            //Create 3 trash processing factories at the beginning
+            //JUST FOR TESTING .. REMOVE WHEN THE FACTORY CREATION MENU IS AVAILABLE (SUSHIL)
+            Vector3 position;
+            factories = new List<Factory>(3);
+            position = new Vector3(100,0,0);
+            position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            orientation = random.Next(100);
+            factories.Add(new Factory(FactoryType.biodegradable));
+            factories[0].LoadContent(Content, "Models/FactoryModels/BiodegradableFactory", position, orientation);
+            factories.Add(new Factory(FactoryType.plastic));
+            position = new Vector3(0,0,0);
+            position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            orientation = random.Next(100);
+            factories[1].LoadContent(Content, "Models/FactoryModels/PlasticFactory", position, orientation);
+            factories.Add(new Factory(FactoryType.radioactive));
+            position = new Vector3(-100,0,0);
+            position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            orientation = random.Next(100);
+            factories[2].LoadContent(Content, "Models/FactoryModels/NuclearFactory", position, orientation);
 
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
@@ -656,6 +705,30 @@ namespace Poseidon
                 }
                 if ((currentGameState == GameState.Running))
                 {
+                    MouseState currentMouseState;
+                    currentMouseState = Mouse.GetState();
+                    if (currentMouseState.RightButton == ButtonState.Pressed) //Also need to check for position
+                    {
+                        foreach (Factory factory in factories)
+                        {
+                            if (CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                            {
+                                openFactoryConfigurationScene = true;
+                                factoryToConfigure = factory;
+                                break;
+                            }
+                        }
+                        
+                    }
+                    if (openFactoryConfigurationScene)
+                    {
+                        bool exitFactConfPressed;
+                        exitFactConfPressed = (lastKeyboardState.IsKeyDown(Keys.Enter) && (currentKeyboardState.IsKeyUp(Keys.Enter)));
+                        if (exitFactConfPressed)
+                            openFactoryConfigurationScene = false;
+                        else
+                            return;
+                    }
                     if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
                         if ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint > GameConstants.EnvThresholdForKey)
@@ -779,6 +852,33 @@ namespace Poseidon
                     {
                         trash.Update(gameTime);
                     }
+
+                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                    foreach (Factory factory in factories)
+                    {
+                        factory.Update(gameTime);
+                        if (doubleClicked && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                        {
+                            //Dump Trash
+                            switch (factory.factoryType)
+                            {
+                                case FactoryType.biodegradable:
+                                    dumpTrashInFactory(FactoryType.biodegradable, HydroBot.bioTrash, factory.Position);
+                                    HydroBot.bioTrash = 0;
+                                    break;
+                                case FactoryType.plastic:
+                                    dumpTrashInFactory(FactoryType.plastic, HydroBot.plasticTrash, factory.Position);
+                                    HydroBot.plasticTrash = 0;
+                                    break;
+                                case FactoryType.radioactive:
+                                    dumpTrashInFactory(FactoryType.radioactive, HydroBot.nuclearTrash, factory.Position);
+                                    HydroBot.nuclearTrash = 0;
+                                    break;
+                            }
+                            doubleClicked = false;
+                        }
+                    }
+
                     foreach (ShipWreck shipWreck in shipWrecks)
                     {
                         if (shipWreck.BoundingSphere.Intersects(frustum) && shipWreck.seen == false)
@@ -903,6 +1003,44 @@ namespace Poseidon
                 }
                 base.Update(gameTime);
             }
+        }
+
+        public void dumpTrashInFactory(FactoryType factoryType, int amount, Vector3 position)
+        {
+            int envGain=0, envPoints, expPoints;
+            string point_string = "";
+            switch (factoryType)
+            {
+                case FactoryType.biodegradable:
+                    envGain = GameConstants.envGainForBioTrashClean;
+                    point_string = HydroBot.bioTrash + " Biodegradable Trash Dumped.\n";
+                    break;
+                case FactoryType.plastic:
+                    envGain = GameConstants.envGainForPlasticTrashClean;
+                    point_string = HydroBot.plasticTrash + " Plastic Trash Dumped.\n";
+                    break;
+                case FactoryType.radioactive:
+                    envGain = GameConstants.envGainForNuclearTrashClean;
+                    point_string = HydroBot.nuclearTrash + " Radioactive Trash Dumped.\n";
+                    break;
+            }
+            if (PoseidonGame.gamePlus)
+            {
+                if (currentLevel > 0)
+                    envPoints = (envGain + HydroBot.gamePlusLevel * 5) * amount;
+                else
+                    envPoints = (envGain - 5) * amount;
+            }
+            else
+                envPoints = envGain * amount;
+            expPoints = (GameConstants.expGainForTrash + HydroBot.gamePlusLevel*5) * amount;
+            HydroBot.currentExperiencePts += expPoints;
+            HydroBot.currentEnvPoint += envPoints;
+
+            Point point = new Point();
+            point_string += "+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
+            point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.LawnGreen);
+            points.Add(point);
         }
 
         public override void Draw(GameTime gameTime)
@@ -1148,6 +1286,17 @@ namespace Poseidon
                     //trash.DrawFadingPoint(spriteBatch, trashRealSphere);
                 }
             }
+            // Drawing Factories
+            BoundingSphere factoryRealSphere;
+            foreach (Factory factory in factories)
+            {
+                factoryRealSphere = factory.BoundingSphere;
+                factoryRealSphere.Center.Y = factory.Position.Y;
+                if (factoryRealSphere.Intersects(frustum))
+                {
+                    factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects)
             {
@@ -1213,6 +1362,9 @@ namespace Poseidon
                 DrawGamePlusLevel();
             else
                 DrawTipIcon();
+
+            if (openFactoryConfigurationScene)
+                DrawFactoryConfigurationScene();
             cursor.Draw(gameTime);
             spriteBatch.End();
             //if (screenTransitNow)
@@ -1235,6 +1387,15 @@ namespace Poseidon
             //    spriteBatch.End();
             //}
             
+        }
+
+        private void DrawFactoryConfigurationScene()
+        {
+            spriteBatch.DrawString(menuSmall, factoryToConfigure.factoryType+" factory Configuration Screen (To Be Done Later)", new Vector2(100, 100), Color.Red);
+            string nextText = "Press Enter to continue";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Black);
+
         }
 
         private void DrawRadar()

@@ -1508,6 +1508,27 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\FactoryModels\BiodegradableFactory.fbx">
+      <Name>BiodegradableFactory</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\FactoryModels\PlasticFactory.fbx">
+      <Name>PlasticFactory</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\FactoryModels\NuclearFactory.fbx">
+      <Name>NuclearFactory</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Shaders\Shader.fx">
       <Name>Shader</Name>
       <Importer>EffectImporter</Importer>

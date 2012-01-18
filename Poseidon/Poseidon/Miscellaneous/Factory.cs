@@ -32,7 +32,7 @@ namespace Poseidon
 
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= GameConstants.TrashBoundingSphereFactor;
+            scaledSphere.Radius *= GameConstants.FactoryBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             Vector3 tempCenter;
@@ -48,15 +48,6 @@ namespace Poseidon
         }
         public void Update(GameTime gameTime)
         {
-            //for floating trash
-            //if (currentChange >= heightChange)
-            //{
-            //    currentChange = 0.0f;
-            //    floatUp = !floatUp;
-            //}
-            //currentChange += 0.025f;
-            //if (floatUp) Position.Y += currentChange;
-            //else Position.Y -= currentChange;
             if (increaseFog)
                 fogEndValue += 2.5f;
             else fogEndValue -= 2.5f;

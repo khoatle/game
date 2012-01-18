@@ -165,6 +165,7 @@ namespace Poseidon {
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
         public const float TrashBoundingSphereFactor = 0.9f;
+        public const float FactoryBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 3.5f;
 
         //skills

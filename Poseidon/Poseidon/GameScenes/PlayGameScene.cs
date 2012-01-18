@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Poseidon.FishSchool;
-
+using Poseidon.GraphicEffects;
 
 namespace Poseidon
 {
@@ -103,8 +103,8 @@ namespace Poseidon
 
         // shader for underwater effect
         // Our Post Process effect object, this is where our shader will be loaded and compiled
-        Effect underWaterEffect, screenTransitionEffect;
-        float m_Timer = 0;
+        Effect screenTransitionEffect;
+        
         RenderTarget2D renderTarget;
         Texture2D SceneTexture;
         RenderTarget2D renderTarget2;
@@ -143,6 +143,9 @@ namespace Poseidon
         CutSceneDialog cutSceneDialog;
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
+
+        // For applying graphic effects
+        GraphicEffect graphicEffect;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -262,6 +265,7 @@ namespace Poseidon
             this.Load();
             //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
             //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
+            
         }
 
         public void Load()
@@ -330,7 +334,6 @@ namespace Poseidon
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
-            underWaterEffect = Content.Load<Effect>("Shaders/UnderWater");
             screenTransitionEffect = Content.Load<Effect>("Shaders/ScreenTransition");
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
@@ -339,6 +342,8 @@ namespace Poseidon
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             renderTarget3 = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+
+            graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
         }
 
         /// <summary>
@@ -847,8 +852,8 @@ namespace Poseidon
                         currentGameState = GameState.Lost;
                         audio.gameOver.Play();
                     }
-                    //for the shader
-                    m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
+                    
+                    graphicEffect.UpdateInput(gameTime);
 
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
@@ -962,6 +967,7 @@ namespace Poseidon
                 {
                     //effect.Alpha = 1.0f;
                     effect.EnableDefaultLighting();
+                    effect.SpecularColor = Vector3.One;
                     effect.PreferPerPixelLighting = true;
                     effect.World = Matrix.Identity;
 
@@ -1192,22 +1198,10 @@ namespace Poseidon
 
             graphics.GraphicsDevice.SetRenderTarget(null);
             SceneTexture = renderTarget;
-            if (screenTransitNow)
-                graphics.GraphicsDevice.SetRenderTarget(renderTarget3);
-            // Render the scene with Edge Detection, using the render target from last frame.
-            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            //if (screenTransitNow)
+            //    graphics.GraphicsDevice.SetRenderTarget(renderTarget3);
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            {
-                underWaterEffect.Parameters["fTimer"].SetValue(m_Timer);
-                // Apply the underwater effect post process shader
-                underWaterEffect.CurrentTechnique.Passes[0].Apply();
-                {        
-                    spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-                    //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
-                }
-            }
-            spriteBatch.End();
+            graphicEffect.Draw(gameTime, SceneTexture, graphics);
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
@@ -1221,25 +1215,25 @@ namespace Poseidon
                 DrawTipIcon();
             cursor.Draw(gameTime);
             spriteBatch.End();
-            if (screenTransitNow)
-            {
-                graphics.GraphicsDevice.SetRenderTarget(null);
-                SceneTexture = renderTarget3;
-                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-                {
-                    screenTransitionEffect.Parameters["fFadeAmount"].SetValue(fadeBetweenScenes);
-                    screenTransitionEffect.Parameters["fSmoothSize"].SetValue(0.05f);
-                    screenTransitionEffect.Parameters["ColorMap2"].SetValue(Scene2Texture);
-                    screenTransitionEffect.CurrentTechnique.Passes[0].Apply();
-                    {              
-                        //float fadeBetweenScenes = ((float)Math.Sin(m_Timer) * 0.5f) + 0.5f;  
-                        spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-                        fadeBetweenScenes -= 0.01f;
-                        if (fadeBetweenScenes <= 0.0f) screenTransitNow = false;
-                    }
-                }
-                spriteBatch.End();
-            }
+            //if (screenTransitNow)
+            //{
+            //    graphics.GraphicsDevice.SetRenderTarget(null);
+            //    SceneTexture = renderTarget3;
+            //    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            //    {
+            //        screenTransitionEffect.Parameters["fFadeAmount"].SetValue(fadeBetweenScenes);
+            //        screenTransitionEffect.Parameters["fSmoothSize"].SetValue(0.05f);
+            //        screenTransitionEffect.Parameters["ColorMap2"].SetValue(Scene2Texture);
+            //        screenTransitionEffect.CurrentTechnique.Passes[0].Apply();
+            //        {              
+            //            //float fadeBetweenScenes = ((float)Math.Sin(m_Timer) * 0.5f) + 0.5f;  
+            //            spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            //            fadeBetweenScenes -= 0.01f;
+            //            if (fadeBetweenScenes <= 0.0f) screenTransitNow = false;
+            //        }
+            //    }
+            //    spriteBatch.End();
+            //}
             
         }
 

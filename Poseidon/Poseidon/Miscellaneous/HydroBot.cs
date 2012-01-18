@@ -1295,11 +1295,11 @@ namespace Poseidon
                     //effect.EmissiveColor = Color.White.ToVector3();
                     //effect.SpecularColor = Color.Red.ToVector3();
                     //effect.SpecularPower = 1000.0f;
-                    //effect.EnableDefaultLighting();
                     //effect.DirectionalLight0.Enabled = false;
                     //effect.DirectionalLight1.Enabled = false;
                     //effect.DirectionalLight2.Enabled = false;
-
+                    effect.EnableDefaultLighting();
+                    effect.SpecularColor = Vector3.One;
                     
                     effect.PreferPerPixelLighting = true;
                     effect.FogEnabled = true;

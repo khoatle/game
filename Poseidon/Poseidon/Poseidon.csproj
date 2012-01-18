@@ -131,6 +131,9 @@
     <Compile Include="GameScenes\LoadingScene.cs" />
     <Compile Include="GameScenes\SelectLoadingLevelScene.cs" />
     <Compile Include="GameScenes\SurvivalGameScene.cs" />
+    <Compile Include="GraphicEffects\BloomComponent.cs" />
+    <Compile Include="GraphicEffects\BloomSettings.cs" />
+    <Compile Include="GraphicEffects\GraphicEffect.cs" />
     <Compile Include="SaveGame\ObjectsToSerialize.cs" />
     <Compile Include="GameScenes\TipScene.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />

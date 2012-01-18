@@ -79,10 +79,11 @@ namespace Poseidon
                 {
                     effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.View = view;
-                    effect.DiffuseColor = Color.White.ToVector3();
+                    //effect.DiffuseColor = Color.White.ToVector3();
                     effect.Projection = projection;
 
                     effect.EnableDefaultLighting();
+                    effect.SpecularColor = Vector3.One;
                     effect.PreferPerPixelLighting = true;
 
                     //effect.Alpha = 0.7f;

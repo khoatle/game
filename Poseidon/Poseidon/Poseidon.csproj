@@ -120,6 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Behavior\MovingBehaviors.cs" />
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Bullets\FlyingHammer.cs" />
     <Compile Include="Bullets\Torpedo.cs" />

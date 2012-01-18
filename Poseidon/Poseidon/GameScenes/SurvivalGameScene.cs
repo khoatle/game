@@ -88,7 +88,7 @@ namespace Poseidon
 
         // shader for underwater effect
         // Our Post Process effect object, this is where our shader will be loaded and compiled
-        Effect effectPost;
+        Effect underWaterEffect;
         float m_Timer = 0;
         RenderTarget2D renderTarget;
         Texture2D SceneTexture;
@@ -232,7 +232,7 @@ namespace Poseidon
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
-            effectPost = Content.Load<Effect>("Shaders/PostProcess");
+            underWaterEffect = Content.Load<Effect>("Shaders/UnderWater");
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
@@ -755,9 +755,9 @@ namespace Poseidon
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             {
                 // Apply the post process shader
-                effectPost.CurrentTechnique.Passes[0].Apply();
+                underWaterEffect.CurrentTechnique.Passes[0].Apply();
                 {
-                    effectPost.Parameters["fTimer"].SetValue(m_Timer);
+                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer);
                     spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
                 }
             }

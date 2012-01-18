@@ -106,10 +106,15 @@ namespace Poseidon
 
         // shader for underwater effect
         // Our Post Process effect object, this is where our shader will be loaded and compiled
-        Effect effectPost;
+        Effect underWaterEffect, screenTransitionEffect;
         float m_Timer = 0;
         RenderTarget2D renderTarget;
         Texture2D SceneTexture;
+        RenderTarget2D renderTarget2;
+        Texture2D Scene2Texture;
+        RenderTarget2D renderTarget3;
+        bool screenTransitNow = false;
+        float fadeBetweenScenes = 1.0f;
 
         // Bubbles over characters
         List<Bubble> bubbles;
@@ -336,9 +341,14 @@ namespace Poseidon
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Load and compile our Shader into our Effect instance.
-            effectPost = Content.Load<Effect>("Shaders/PostProcess");
+            underWaterEffect = Content.Load<Effect>("Shaders/UnderWater");
+            screenTransitionEffect = Content.Load<Effect>("Shaders/ScreenTransition");
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            renderTarget2 = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            renderTarget3 = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
         }
 
@@ -400,6 +410,8 @@ namespace Poseidon
             firstShow = true;
             showFoundKey = false;
             hadkey = false;
+            screenTransitNow = false;
+            fadeBetweenScenes = 1.0f;
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
@@ -674,6 +686,12 @@ namespace Poseidon
                                 Serializer serializer = new Serializer();
                                 serializer.SerializeObjects("SurvivalMode", objectsToSerialize);
                             }
+                            else
+                            {
+                                screenTransitNow = true;
+                                screenTransitionEffect.CurrentTechnique = screenTransitionEffect.Techniques[random.Next(2)];
+                            }
+                            
                         }
                     }
                 }
@@ -1033,9 +1051,7 @@ namespace Poseidon
             switch (currentGameState)
             {
                 case GameState.PlayingCutScene:
-                    spriteBatch.Begin();
                     DrawCutScene();
-                    spriteBatch.End();
                     break;
                 case GameState.Running:
                     RestoreGraphicConfig();
@@ -1083,6 +1099,7 @@ namespace Poseidon
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
+                    //effect.Alpha = 1.0f;
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
                     effect.World = Matrix.Identity;
@@ -1325,16 +1342,19 @@ namespace Poseidon
 
             graphics.GraphicsDevice.SetRenderTarget(null);
             SceneTexture = renderTarget;
+            if (screenTransitNow)
+                graphics.GraphicsDevice.SetRenderTarget(renderTarget3);
             // Render the scene with Edge Detection, using the render target from last frame.
             graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
 
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             {
-                // Apply the post process shader
-                effectPost.CurrentTechnique.Passes[0].Apply();
-                {
-                    effectPost.Parameters["fTimer"].SetValue(m_Timer);
+                underWaterEffect.Parameters["fTimer"].SetValue(m_Timer);
+                // Apply the underwater effect post process shader
+                underWaterEffect.CurrentTechnique.Passes[0].Apply();
+                {        
                     spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                    //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height), Color.White);
                 }
             }
             spriteBatch.End();
@@ -1354,6 +1374,26 @@ namespace Poseidon
                 DrawFactoryConfigurationScene();
             cursor.Draw(gameTime);
             spriteBatch.End();
+            if (screenTransitNow)
+            {
+                graphics.GraphicsDevice.SetRenderTarget(null);
+                SceneTexture = renderTarget3;
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+                {
+                    screenTransitionEffect.Parameters["fFadeAmount"].SetValue(fadeBetweenScenes);
+                    screenTransitionEffect.Parameters["fSmoothSize"].SetValue(0.05f);
+                    screenTransitionEffect.Parameters["ColorMap2"].SetValue(Scene2Texture);
+                    screenTransitionEffect.CurrentTechnique.Passes[0].Apply();
+                    {              
+                        //float fadeBetweenScenes = ((float)Math.Sin(m_Timer) * 0.5f) + 0.5f;  
+                        spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                        fadeBetweenScenes -= 0.01f;
+                        if (fadeBetweenScenes <= 0.0f) screenTransitNow = false;
+                    }
+                }
+                spriteBatch.End();
+            }
+            
         }
 
         private void DrawFactoryConfigurationScene()
@@ -1600,10 +1640,13 @@ namespace Poseidon
 
         private void DrawCutScene()
         {
+            graphics.GraphicsDevice.SetRenderTarget(renderTarget2);
+            graphics.GraphicsDevice.Clear(Color.Black);
             //draw the background 1st
+            spriteBatch.Begin();
             spriteBatch.Draw(Content.Load<Texture2D>(cutSceneDialog.cutScenes[currentLevel][currentSentence].backgroundName),
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
-            
+
             //draw face of the last speaker
             if (currentSentence > 0 && cutSceneDialog.cutScenes[currentLevel][currentSentence - 1].speakerID != 3 && cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID != 3)
             {
@@ -1640,7 +1683,7 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox, botRectangle, Color.White);
                 //draw what is said
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(botRectangle.Left+50, botRectangle.Top+60), Color.Blue);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(botRectangle.Left + 50, botRectangle.Top + 60), Color.Blue);
             }
             //Poseidon speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
@@ -1661,7 +1704,7 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox, PoseidonRectangle, Color.White);
                 //draw what is said
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(PoseidonRectangle.Left+50, PoseidonRectangle.Top+65), Color.Blue);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(PoseidonRectangle.Left + 50, PoseidonRectangle.Top + 65), Color.Blue);
             }
             //Terminator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 2)
@@ -1682,7 +1725,7 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox, terminatorRectangle, Color.White);
                 //draw what is said
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(terminatorRectangle.Left+50, terminatorRectangle.Top+60), Color.Blue);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(terminatorRectangle.Left + 50, terminatorRectangle.Top + 60), Color.Blue);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
@@ -1692,23 +1735,19 @@ namespace Poseidon
                 spriteBatch.Draw(talkingBox, narratorRectangle, Color.White);
                 //draw what is said
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left+50, narratorRectangle.Top+30), Color.Black);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black);
             }
-            //float xOffsetText, yOffsetText;
-            //string str1 = cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence;
-            //Rectangle rectSafeArea;
-            ////Calculate str1 position
-            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            spriteBatch.End();
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            Scene2Texture = renderTarget2;
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            {
+                spriteBatch.Draw(renderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
 
-            //xOffsetText = rectSafeArea.X;
-            //yOffsetText = rectSafeArea.Y;
-
-            //Vector2 strSize = statsFont.MeasureString(str1);
-            //Vector2 strPosition =
-            //    new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            }
+            spriteBatch.End();
         }
-
         public static void RestoreGraphicConfig()
         {
             // Change back the config changed by spriteBatch

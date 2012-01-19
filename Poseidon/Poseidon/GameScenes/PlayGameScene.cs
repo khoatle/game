@@ -104,17 +104,14 @@ namespace Poseidon
         // and the level is won
         public static bool isBossKilled = false;
 
-        // shader for underwater effect
-        // Our Post Process effect object, this is where our shader will be loaded and compiled
-        Effect screenTransitionEffect;
-        
-        RenderTarget2D renderTarget;
+     
+        //stuffs for applying special effects
+        RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
         Texture2D SceneTexture;
-        RenderTarget2D renderTarget2;
+        RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
         Texture2D Scene2Texture;
         RenderTarget2D renderTarget3;
         bool screenTransitNow = false;
-        float fadeBetweenScenes = 1.0f;
 
         // Bubbles over characters
         List<Bubble> bubbles;
@@ -344,14 +341,19 @@ namespace Poseidon
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
-            // Load and compile our Shader into our Effect instance.
-            screenTransitionEffect = Content.Load<Effect>("Shaders/ScreenTransition");
+            // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             renderTarget2 = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             renderTarget3 = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            afterEffectsAppliedRenderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            cutSceneImmediateRenderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            cutSceneFinalRenderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
@@ -416,7 +418,7 @@ namespace Poseidon
             showFoundKey = false;
             hadkey = false;
             screenTransitNow = false;
-            fadeBetweenScenes = 1.0f;
+            graphicEffect.resetTransitTimer();
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
@@ -693,11 +695,13 @@ namespace Poseidon
                             }
                             else
                             {
-                                screenTransitNow = true;
-                                screenTransitionEffect.CurrentTechnique = screenTransitionEffect.Techniques[random.Next(2)];
+                               // screenTransitNow = true;
+                                
                             }
                             
                         }
+                        graphicEffect.resetTransitTimer();
+                        screenTransitNow = true;
                     }
                 }
                 if (currentGameState == GameState.ToNextLevel)
@@ -1346,12 +1350,14 @@ namespace Poseidon
             schoolOfFish3.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
-            graphics.GraphicsDevice.SetRenderTarget(null);
             SceneTexture = renderTarget;
-            //if (screenTransitNow)
-            //    graphics.GraphicsDevice.SetRenderTarget(renderTarget3);
-
-            graphicEffect.Draw(gameTime, SceneTexture, graphics);
+            //graphics.GraphicsDevice.SetRenderTarget(null);
+            //spriteBatch.Begin();
+            //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            //spriteBatch.End();
+            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
@@ -1368,26 +1374,22 @@ namespace Poseidon
                 DrawFactoryConfigurationScene();
             cursor.Draw(gameTime);
             spriteBatch.End();
-            //if (screenTransitNow)
-            //{
-            //    graphics.GraphicsDevice.SetRenderTarget(null);
-            //    SceneTexture = renderTarget3;
-            //    spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
-            //    {
-            //        screenTransitionEffect.Parameters["fFadeAmount"].SetValue(fadeBetweenScenes);
-            //        screenTransitionEffect.Parameters["fSmoothSize"].SetValue(0.05f);
-            //        screenTransitionEffect.Parameters["ColorMap2"].SetValue(Scene2Texture);
-            //        screenTransitionEffect.CurrentTechnique.Passes[0].Apply();
-            //        {              
-            //            //float fadeBetweenScenes = ((float)Math.Sin(m_Timer) * 0.5f) + 0.5f;  
-            //            spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-            //            fadeBetweenScenes -= 0.01f;
-            //            if (fadeBetweenScenes <= 0.0f) screenTransitNow = false;
-            //        }
-            //    }
-            //    spriteBatch.End();
-            //}
-            
+            if (screenTransitNow)
+            {
+                bool doneTransit = graphicEffect.TransitTwoSceens(Scene2Texture, afterEffectsAppliedRenderTarget, graphics, cutSceneImmediateRenderTarget);
+                if (doneTransit) screenTransitNow = false;
+            }
+            else
+            {
+                graphics.GraphicsDevice.SetRenderTarget(cutSceneImmediateRenderTarget);
+                spriteBatch.Begin();
+                spriteBatch.Draw(afterEffectsAppliedRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                spriteBatch.End();
+            }
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.Begin();
+            spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            spriteBatch.End();
         }
 
         private void DrawFactoryConfigurationScene()
@@ -1732,12 +1734,32 @@ namespace Poseidon
                 spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black);
             }
             spriteBatch.End();
-            graphics.GraphicsDevice.SetRenderTarget(null);
-            Scene2Texture = renderTarget2;
+            if (screenTransitNow)
+            {
+                bool doneTransit = graphicEffect.TransitTwoSceens(Scene2Texture, renderTarget2, graphics, cutSceneImmediateRenderTarget);
+                if (doneTransit) screenTransitNow = false;
+            }
+            else
+            {
+                graphics.GraphicsDevice.SetRenderTarget(cutSceneImmediateRenderTarget);
+                spriteBatch.Begin();
+                spriteBatch.Draw(renderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                spriteBatch.End();
+            }
+            graphics.GraphicsDevice.SetRenderTarget(cutSceneFinalRenderTarget);
             graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             {
-                spriteBatch.Draw(renderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+
+            }
+            spriteBatch.End();
+            Scene2Texture = cutSceneFinalRenderTarget;
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+            {
+                spriteBatch.Draw(cutSceneFinalRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
 
             }
             spriteBatch.End();

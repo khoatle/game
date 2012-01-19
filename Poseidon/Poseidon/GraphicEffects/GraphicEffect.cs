@@ -20,25 +20,36 @@ namespace Poseidon.GraphicEffects
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Effect underWaterEffect;
+        Effect underWaterEffect, screenTransitionEffect;
         bool underWaterEffectEnabled = true;
         bool bloomEffectEnabled = false;
-        RenderTarget2D beforeBloomTexture, afterBloomTexture;
+        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget;
 
         PresentationParameters pp;
 
         float m_Timer = 0;
+        Random random;
+        float fadeBetweenScenes = 1.0f;
 
         public GraphicEffect(GameScene gameScene, SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
+            random = new Random();
             bloom = new BloomComponent(gameScene.Game);
             // Look up the resolution and format of our main backbuffer.
             pp = gameScene.Game.GraphicsDevice.PresentationParameters;
 
-            beforeBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
-            afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
+            afterUnderWaterTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
+            //beforeBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+            //    false, gameScene.Game.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
+            //new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+            //    false, gameScene.Game.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            afterEffectsRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
+            //new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+            //    false, gameScene.Game.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             underWaterEffect = gameScene.Game.Content.Load<Effect>("Shaders/UnderWater");
+            screenTransitionEffect = gameScene.Game.Content.Load<Effect>("Shaders/ScreenTransition");
             this.spriteBatch = spriteBatch;
             this.spriteFont = spriteFont;
         }
@@ -89,10 +100,10 @@ namespace Poseidon.GraphicEffects
         }
 
 
-        public void Draw(GameTime gameTime, Texture2D originalScene, GraphicsDeviceManager graphics)
+        public RenderTarget2D DrawWithEffects(GameTime gameTime, Texture2D originalScene, GraphicsDeviceManager graphics)
         {
-            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
-            graphics.GraphicsDevice.SetRenderTarget(beforeBloomTexture);
+            //graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            graphics.GraphicsDevice.SetRenderTarget(afterUnderWaterTexture);
             if (underWaterEffectEnabled)
             {
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
@@ -115,19 +126,22 @@ namespace Poseidon.GraphicEffects
             if (bloomEffectEnabled)
             {
                 afterBloomTexture = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
-                bloom.Draw(gameTime, beforeBloomTexture, afterBloomTexture);
+                //afterBloomTexture = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                //false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+                bloom.Draw(gameTime, afterUnderWaterTexture, afterBloomTexture);
             }
             else
             {
-                afterBloomTexture = beforeBloomTexture;
+                afterBloomTexture = afterUnderWaterTexture;
             }
-
-            graphics.GraphicsDevice.SetRenderTarget(null);
+            graphics.GraphicsDevice.SetRenderTarget(afterEffectsRenderTarget);
             spriteBatch.Begin();
             spriteBatch.Draw(afterBloomTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
-
+            //graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
+            //graphics.GraphicsDevice.Textures[1] = afterBloomTexture;          
             DrawOverlayText();
+            return afterEffectsRenderTarget;
         }
 
         void DrawOverlayText()
@@ -137,8 +151,8 @@ namespace Poseidon.GraphicEffects
                           "D = show buffer (" + bloom.ShowBuffer.ToString() + ")\n" +
                           "U = toggle underwater (" + (underWaterEffectEnabled ? "on" : "off") + ")";
 
+            //spriteBatch.Begin(0, BlendState.Opaque, null, null, null, null);
             spriteBatch.Begin();
-
             // Draw the string twice to create a drop shadow, first colored black
             // and offset one pixel to the bottom right, then again in white at the
             // intended position. This makes text easier to read over the background.
@@ -146,6 +160,36 @@ namespace Poseidon.GraphicEffects
             spriteBatch.DrawString(spriteFont, text, new Vector2(64, 64), Color.White);
 
             spriteBatch.End();
+        }
+
+        public void resetTransitTimer()
+        {
+            fadeBetweenScenes = 1.0f;
+            screenTransitionEffect.CurrentTechnique = screenTransitionEffect.Techniques[random.Next(2)];
+        }
+
+        public bool TransitTwoSceens(Texture2D sceenFadeOut, Texture2D sceenFadeIn, GraphicsDeviceManager graphics, RenderTarget2D outputRenderTarget)
+        {
+            graphics.GraphicsDevice.SetRenderTarget(outputRenderTarget);
+            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend);
+            {
+                screenTransitionEffect.Parameters["fFadeAmount"].SetValue(fadeBetweenScenes);
+                screenTransitionEffect.Parameters["fSmoothSize"].SetValue(0.05f);
+                screenTransitionEffect.Parameters["ColorMap2"].SetValue(sceenFadeOut);
+                screenTransitionEffect.CurrentTechnique.Passes[0].Apply();
+                {
+                    //float fadeBetweenScenes = ((float)Math.Sin(m_Timer) * 0.5f) + 0.5f;  
+                    spriteBatch.Draw(sceenFadeIn, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                }
+            }
+            spriteBatch.End();
+            fadeBetweenScenes -= 0.01f;
+            if (fadeBetweenScenes <= 0.0f)
+            {
+                fadeBetweenScenes = 1.0f;
+                return true;
+            }
+            else return false;
         }
     }
 }

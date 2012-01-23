@@ -729,7 +729,7 @@ namespace Poseidon
             }
             if (heightMapInfo != null)
                 if (!heightMapInfo.IsOnHeightmap(pointIntersect)) pointIntersect = Vector3.Zero;
-            this.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, gameTime, pointIntersect);
+            this.Update(currentKeyboardState, enemies, enemiesAmount, fish, fishAmount, gameTime, pointIntersect, heightMapInfo);
 
 
             //planting trees, not inside shipwreck
@@ -884,7 +884,7 @@ namespace Poseidon
             }
             IngamePresentation.UpdateGoodWillBar();
         }
-        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo)
+        public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo, HeightMapInfo heightMapInfo)
         {
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
@@ -1062,7 +1062,7 @@ namespace Poseidon
             speedl *= GameConstants.MainCharVelocity * speedUp * speed;
             if (supersonicMode == true) speedl *= 5;
             futurePosition = Position + speedl;
-            if (Collision.isBotValidMove(this, futurePosition, enemies, enemyAmount, fishes, fishAmount))
+            if (Collision.isBotValidMove(this, futurePosition, enemies, enemyAmount, fishes, fishAmount, heightMapInfo))
             {
                 Position = futurePosition;
 

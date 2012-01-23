@@ -233,6 +233,7 @@ namespace Poseidon.Core
             if (HydroBot.iconActivated[HydroBot.faceToDraw]) colorToDraw = Color.White;
             else colorToDraw = Color.Black;
             spriteBatch.Draw(iconTextures[HydroBot.faceToDraw], new Vector2(barX - 32, barY - iconTextures[faceDrawNext].Height - 20 + iconTextures[HydroBot.faceToDraw].Height * partialDraw), new Rectangle(0, 0, iconTextures[HydroBot.faceToDraw].Width, (int)(iconTextures[HydroBot.faceToDraw].Height * (1.0f - partialDraw))), colorToDraw);
+            
         }
 
         public static void DrawLevelBar(Texture2D LevelBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)

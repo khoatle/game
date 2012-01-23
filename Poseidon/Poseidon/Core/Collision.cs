@@ -222,7 +222,7 @@ namespace Poseidon
         /// <summary>
         /// BOT COLLISION
         /// </summary>
-        public static bool isBotValidMove(HydroBot hydroBot, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount)
+        public static bool isBotValidMove(HydroBot hydroBot, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount, HeightMapInfo heightMapInfo)
         {
             BoundingSphere futureBoundingSphere = hydroBot.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
@@ -248,6 +248,9 @@ namespace Poseidon
             if (isBotVsBarrierCollision(futureBoundingSphere, fish, fishAmount)) {
                 return false;
             }
+
+            if (heightMapInfo.GetHeight(futurePosition) >= -10)
+                return false;
             return true;
         }
 

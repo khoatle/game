@@ -292,7 +292,7 @@ namespace Poseidon
             //temporary code for testing
             Random random = new Random();
             int random_level = random.Next(20);
-            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain0";// + random_level;
             //end temporary testing code
 
             ground.Model = Content.Load<Model>(terrain_name);
@@ -1361,7 +1361,7 @@ namespace Poseidon
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
-            //DrawHeight();
+            DrawHeight();
             DrawRadar();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
@@ -1416,32 +1416,22 @@ namespace Poseidon
 
         private void DrawHeight()
         {
-            //float xOffsetText, yOffsetText;
-            //string str1 = " Height: " + heightMapInfo.GetHeight(tank.Position);
-            //Rectangle rectSafeArea;
-            //Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
-            //BoundingSphere boundingSphere;
-            //foreach (ShipWreck shipWreck in shipWrecks)
-            //{
-            //    boundingSphere = shipWreck.BoundingSphere;
-            //    boundingSphere.Center = shipWreck.Position;
-            //    if (CursorManager.RayIntersectsBoundingSphere(cursorRay, boundingSphere))
-            //        str1 += " Pointing to ship wreck ";
+            float xOffsetText, yOffsetText;
+            string str1 = " Height: " + heightMapInfo.GetHeight(hydroBot.Position);
+            Rectangle rectSafeArea;
 
-            //}
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            ////Calculate str1 position
-            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
 
-            //xOffsetText = rectSafeArea.X;
-            //yOffsetText = rectSafeArea.Y;
+            Vector2 strSize = statsFont.MeasureString(str1);
+            Vector2 strPosition =
+                new Vector2((int)xOffsetText + 200, (int)yOffsetText);
 
-            //Vector2 strSize = statsFont.MeasureString(str1);
-            //Vector2 strPosition =
-            //    new Vector2((int)xOffsetText + 200, (int)yOffsetText);
-
-            ////spriteBatch.Begin();
-            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            //spriteBatch.Begin();
+            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
         private void DrawStats()

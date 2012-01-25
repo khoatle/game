@@ -11,6 +11,8 @@ namespace Poseidon
     public class Factory : GameObject
     {
         public FactoryType factoryType;
+        public FactoryConfigurationScene configScene;
+        public int upgradeLevel = 1;
 
         public float orientation;
 

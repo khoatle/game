@@ -572,22 +572,34 @@ namespace Poseidon
             //Create 3 trash processing factories at the beginning
             //JUST FOR TESTING .. REMOVE WHEN THE FACTORY CREATION MENU IS AVAILABLE (SUSHIL)
             Vector3 position;
-            factories = new List<Factory>(3);
+            factories = new List<Factory>();
             position = new Vector3(100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories.Add(new Factory(FactoryType.biodegradable));
             factories[0].LoadContent(Content, "Models/FactoryModels/BiodegradableFactory", position, orientation);
+            factories[0].configScene = new FactoryConfigurationScene(game, Content);
+
             factories.Add(new Factory(FactoryType.plastic));
             position = new Vector3(0,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[1].LoadContent(Content, "Models/FactoryModels/PlasticFactory", position, orientation);
+            factories[1].configScene = new FactoryConfigurationScene(game, Content);
+
             factories.Add(new Factory(FactoryType.radioactive));
             position = new Vector3(-100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[2].LoadContent(Content, "Models/FactoryModels/NuclearFactory", position, orientation);
+            factories[2].configScene = new FactoryConfigurationScene(game, Content);
+            factories.Add(new Factory(FactoryType.research));
+            position = new Vector3(0, 0, -100);
+            position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            orientation = random.Next(100);
+            factories[3].LoadContent(Content, "Models/FactoryModels/ResearchFacility", position, orientation);
+            factories[3].configScene = new FactoryConfigurationScene(game, Content);
+
 
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
@@ -732,7 +744,10 @@ namespace Poseidon
                         if (exitFactConfPressed)
                             openFactoryConfigurationScene = false;
                         else
+                        {
+                            
                             return;
+                        }
                     }
                     if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
@@ -1371,7 +1386,7 @@ namespace Poseidon
                 DrawTipIcon();
 
             if (openFactoryConfigurationScene)
-                DrawFactoryConfigurationScene();
+                factoryToConfigure.configScene.DrawFactoryConfigurationScene(spriteBatch, factoryToConfigure.factoryType, factoryToConfigure.upgradeLevel, menuSmall);
             cursor.Draw(gameTime);
             spriteBatch.End();
             if (screenTransitNow)
@@ -1390,15 +1405,6 @@ namespace Poseidon
             spriteBatch.Begin();
             spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
-        }
-
-        private void DrawFactoryConfigurationScene()
-        {
-            spriteBatch.DrawString(menuSmall, factoryToConfigure.factoryType+" factory Configuration Screen (To Be Done Later)", new Vector2(100, 100), Color.Red);
-            string nextText = "Press Enter to continue";
-            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Black);
-
         }
 
         private void DrawRadar()

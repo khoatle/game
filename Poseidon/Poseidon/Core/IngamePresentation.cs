@@ -278,5 +278,23 @@ namespace Poseidon.Core
             }
             return returnString + line;
         }
+
+        public static string wrapLine(string input_line, int width, SpriteFont font, float scale)
+        {
+            String line = String.Empty;
+            String returnString = String.Empty;
+            String[] wordArray = input_line.Split(' ');
+
+            foreach (String word in wordArray)
+            {
+                if (font.MeasureString(line + word).Length()*scale > width)
+                {
+                    returnString = returnString + line + '\n';
+                    line = String.Empty;
+                }
+                line = line + word + ' ';
+            }
+            return returnString + line;
+        }
     }
 }

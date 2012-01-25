@@ -573,33 +573,31 @@ namespace Poseidon
             //JUST FOR TESTING .. REMOVE WHEN THE FACTORY CREATION MENU IS AVAILABLE (SUSHIL)
             Vector3 position;
             factories = new List<Factory>();
+
+            factories.Add(new Factory(FactoryType.biodegradable));
             position = new Vector3(100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
-            factories.Add(new Factory(FactoryType.biodegradable));
-            factories[0].LoadContent(Content, "Models/FactoryModels/BiodegradableFactory", position, orientation);
-            factories[0].configScene = new FactoryConfigurationScene(game, Content);
+            factories[0].LoadContent(Content, game, "Models/FactoryModels/BiodegradableFactory", position, orientation);
 
             factories.Add(new Factory(FactoryType.plastic));
             position = new Vector3(0,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
-            factories[1].LoadContent(Content, "Models/FactoryModels/PlasticFactory", position, orientation);
-            factories[1].configScene = new FactoryConfigurationScene(game, Content);
+            factories[1].LoadContent(Content, game, "Models/FactoryModels/PlasticFactory", position, orientation);
 
             factories.Add(new Factory(FactoryType.radioactive));
             position = new Vector3(-100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
-            factories[2].LoadContent(Content, "Models/FactoryModels/NuclearFactory", position, orientation);
-            factories[2].configScene = new FactoryConfigurationScene(game, Content);
+            factories[2].LoadContent(Content, game, "Models/FactoryModels/NuclearFactory", position, orientation);
+
             factories.Add(new Factory(FactoryType.research));
             position = new Vector3(0, 0, -100);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
-            factories[3].LoadContent(Content, "Models/FactoryModels/ResearchFacility", position, orientation);
-            factories[3].configScene = new FactoryConfigurationScene(game, Content);
-
+            factories[3].LoadContent(Content, game, "Models/FactoryModels/ResearchFacility", position, orientation);
+            
 
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
@@ -745,7 +743,15 @@ namespace Poseidon
                             openFactoryConfigurationScene = false;
                         else
                         {
-                            
+                            //cursor update
+                            cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
+                            CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                            if (clicked 
+                               && factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                            {
+                                clicked = false;
+                                factoryToConfigure.SwitchProductionItem();
+                            }
                             return;
                         }
                     }
@@ -1386,7 +1392,7 @@ namespace Poseidon
                 DrawTipIcon();
 
             if (openFactoryConfigurationScene)
-                factoryToConfigure.configScene.DrawFactoryConfigurationScene(spriteBatch, factoryToConfigure.factoryType, factoryToConfigure.upgradeLevel, menuSmall);
+                factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
             cursor.Draw(gameTime);
             spriteBatch.End();
             if (screenTransitNow)

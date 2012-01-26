@@ -233,5 +233,9 @@ namespace Poseidon {
         public const int GoodWillPointGainForPlanting = 250;
         public const int GoodWillPointGainForCleaning = 250;
         public const int GoodWillPointGainForHealing = 150;
+
+        //const for particle systems
+        public const int numExplosionParticles = 20;
+        public const int numExplosionSmokeParticles = 50;
     }
 }

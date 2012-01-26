@@ -396,7 +396,8 @@ namespace Poseidon
         }
 
 
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount) {
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount, ParticleSystem explosionParticles)
+        {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
                     if (!HydroBot.invincibleMode)
@@ -429,6 +430,17 @@ namespace Poseidon
                         if (enemyBullets[i].shooter != null && !enemyBullets[i].shooter.isHypnotise)
                             CastSkill.useHypnotise(enemyBullets[i].shooter);
                     }
+
+                    // add particle effect when certain kind of bullet hits
+                    if (enemyBullets[i] is Torpedo)
+                    {
+                        if (explosionParticles != null)
+                        {
+                            for (int k = 0; k < GameConstants.numExplosionParticles; k++)
+                                explosionParticles.AddParticle(enemyBullets[i].Position, Vector3.Zero);
+                        }
+                    }
+
                     enemyBullets.RemoveAt(i);
                     
                 }

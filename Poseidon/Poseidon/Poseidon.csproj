@@ -179,7 +179,6 @@
     <Compile Include="Core\InputManager.cs" />
     <Compile Include="Core\LevelObjective.cs" />
     <Compile Include="Enemies\MutantShark.cs" />
-    <Compile Include="Miscellaneous\Plant.cs" />
     <Compile Include="GameScenes\PlayGameScene.cs" />
     <Compile Include="Core\AddingObjects.cs" />
     <Compile Include="Core\Collision.cs" />
@@ -189,7 +188,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\Barrier.cs" />
     <Compile Include="Core\Camera.cs" />
-    <Compile Include="Miscellaneous\Fruit.cs" />
+    <Compile Include="TrashManagement\Powerpack.cs" />
     <Compile Include="PoseidonGame.cs" />
     <Compile Include="Core\GameConstants.cs" />
     <Compile Include="Core\GameObject.cs" />
@@ -201,6 +200,7 @@
     <Compile Include="Core\StaticObject.cs" />
     <Compile Include="GameScenes\StartScene.cs" />
     <Compile Include="Enemies\Terminator.cs" />
+    <Compile Include="TrashManagement\Resource.cs" />
     <Compile Include="TrashManagement\Trash.cs" />
     <Compile Include="ShipWrecks\TreasureChest.cs" />
   </ItemGroup>

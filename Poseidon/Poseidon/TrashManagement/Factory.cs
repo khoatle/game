@@ -82,7 +82,7 @@ namespace Poseidon
             //else floatUp = false;
         }
        
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources)
         {
             if (increaseFog)
                 fogEndValue += 2.5f;
@@ -98,11 +98,11 @@ namespace Poseidon
                     listTimeTrashProcessing.RemoveAt(i);
                     if (produce == Produce.powerpack)
                     {
-                        producePowerPacks();
+                        producePowerPacks(ref powerpacks);
                     }
                     else
                     {
-                        ProduceResource();
+                        ProduceResource(ref resources);
                     }
                     if (factoryType == FactoryType.biodegradable)
                         ResearchFacility.totalBioTrashProcessed += trashBlockSize;
@@ -296,26 +296,43 @@ namespace Poseidon
             }
         }
 
-        void producePowerPacks()
+        void producePowerPacks(ref List<Powerpack> powerpacks)
         {
             if (factoryType == FactoryType.radioactive)
             {
-                //produce 5
+                for (int i = 0; i < 5; i++)
+                {
+                    int powerType = random.Next(4) + 1;
+                    Powerpack powerpack = new Powerpack(powerType);
+                    powerpacks.Add(powerpack);
+                    powerpack.LoadContent(Content, Position);
+                }
             }
             else
             {
                 int powerType = random.Next(4) + 1;
-                Fruit fruit = new Fruit(powerType);
-                //fruits.Add(fruit);
-                //fruit.LoadContent(Content, plant.Position);
+                Powerpack powerpack = new Powerpack(powerType);
+                powerpacks.Add(powerpack);
+                powerpack.LoadContent(Content, Position);
             }
         }
 
-        void ProduceResource()
+        void ProduceResource(ref List<Resource> resources)
         {
             if (factoryType == FactoryType.radioactive)
             {
-                //produce 5
+                for (int i = 0; i < 5; i++)
+                {
+                    Resource resource = new Resource();
+                    resources.Add(resource);
+                    resource.LoadContent(Content, Position);
+                }
+            }
+            else
+            {
+                Resource resource = new Resource();
+                resources.Add(resource);
+                resource.LoadContent(Content, Position);
             }
         }
     }

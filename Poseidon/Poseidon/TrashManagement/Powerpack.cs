@@ -5,57 +5,58 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-
+//using Microsoft.Xna.Framework.Audio;
 
 namespace Poseidon
 {
-
-    public class Plant : GameObject
+    public class Powerpack : GameObject
     {
-        //public int MaxRange { get; set; }
+        public bool Retrieved { get; set; }
+        //SoundEffect RetrievedSound;
+        //Temporary power-up types
+        //1: speed
+        //2: power
+        //3: fire rate
+        //4: health point
+        public int powerType;
 
-        public double creationTime;
-        public bool timeForFruit;
-        public int fruitCreated;
-        public static int experienceReward = 5;
-        
-        public Plant()
+        public Powerpack(int powerType)
             : base()
         {
-            //MaxRange = GameConstants.MaxRange;
-            timeForFruit = false;
-            fruitCreated = 0;
+            Retrieved = false;
+            this.powerType = powerType;
         }
 
-        public void LoadContent(ContentManager content, Vector3 cyborgPosition, double loadTime)
+        public void LoadContent(ContentManager content, Vector3 factoryPosition)
         {
-            creationTime = loadTime;
-            Model = content.Load<Model>("Models/PlantAndFruitModels/plant1");
-            Position = cyborgPosition;
+            if (this.powerType == 1)
+                Model = content.Load<Model>("Models/PlantAndFruitModels/green-fruit");
+            else if (this.powerType == 2)
+                Model = content.Load<Model>("Models/PlantAndFruitModels/red-fruit");
+            else if (this.powerType == 3)
+                Model = content.Load<Model>("Models/PlantAndFruitModels/blue-fruit");
+            else if (this.powerType == 4)
+                Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
+            
+            Position = factoryPosition;
+            Position.Y = GameConstants.MainGameFloatHeight;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
             scaledSphere.Center = Position;
             scaledSphere.Radius *=
-                GameConstants.PlantBoundingSphereFactor;
+                GameConstants.FruitBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
         }
 
-        public void Draw(Matrix view, Matrix projection, float growth)
+        public void Draw(Matrix view, Matrix projection)
         {
-            if (growth > GameConstants.FruitGrowth) // stop plant growth
-            {
-                if (growth > (GameConstants.FruitGrowth * (fruitCreated + 1)))
-                    timeForFruit = true;
-                growth = GameConstants.FruitGrowth;
-            }
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
-            //Matrix translateMatrix = Matrix.CreateScale(1.0f,growth,1.0f) * Matrix.CreateTranslation(Position);
-            Matrix translateMatrix = Matrix.CreateScale(growth/3.1f, growth*1.6f, growth/3.1f) * Matrix.CreateTranslation(Position);
+            Matrix translateMatrix = Matrix.CreateTranslation(Position);
             Matrix worldMatrix = translateMatrix;
-                        
+
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -67,7 +68,7 @@ namespace Poseidon
 
                     effect.EnableDefaultLighting();
                     effect.PreferPerPixelLighting = true;
-
+                    //effect.EmissiveColor = Color.White.ToVector3();
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
@@ -77,7 +78,11 @@ namespace Poseidon
             }
         }
 
-                
+        internal void Update(KeyboardState keyboardState, BoundingSphere vehicleBoundingSphere, BoundingSphere vehicleTrashFruitBoundingSphere)
+        {
+            
+        }
+
     }
 
 }

@@ -411,25 +411,6 @@ namespace Poseidon
             bullets.Add(newBullet);
         }
 
-        public static bool placePlant(HydroBot hydroBot, HeightMapInfo heightMapInfo, ContentManager Content, List<Plant> plants, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
-        {
-            if ((PoseidonGame.playTime.TotalSeconds - HydroBot.prevPlantTime > GameConstants.coolDownForPlant) || HydroBot.firstPlant == true)
-            {
-                Plant p = new Plant();
-                Vector3 possiblePosition = hydroBot.Position;
-                possiblePosition.Y = heightMapInfo.GetHeight(hydroBot.Position);
-                p.LoadContent(Content, possiblePosition, PoseidonGame.playTime.TotalSeconds);
-                if (Collision.isPlantPositionValid(p, plants, shipWrecks, staticObjects))
-                {
-                    plants.Add(p);
-                    HydroBot.firstPlant = false;
-                    HydroBot.prevPlantTime = PoseidonGame.playTime.TotalSeconds;
-                    return true;
-                }
-            }
-            return false;
-        }
-
         public static void placeTrash(
             List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {

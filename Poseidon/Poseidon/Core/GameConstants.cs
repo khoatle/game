@@ -52,7 +52,10 @@ namespace Poseidon {
         public const int DefaultEnemyHP = 100;
         public const int DefaultFishHP = 100;
         //public const int FishHP = 50;
-        
+
+        //Factory upgrade
+        public const int numTrashForUpgrade = 1; //25
+        public const int numDaysForUpgrade = 1; //15
 
         //Environment Const
         public const int PlayerStartingEnv = 300;
@@ -65,7 +68,6 @@ namespace Poseidon {
         public const int envGainForNuclearTrashClean = 100;
         public const int expGainForTrash = 10;
         public const int BasicEnvGainForHealingFish = 5;
-        public const int envGainForDropSeed = 20;
         public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
         public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds

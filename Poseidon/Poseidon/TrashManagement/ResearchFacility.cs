@@ -27,6 +27,9 @@ namespace Poseidon
         public static int totalPlasticTrashProcessed = 0;
         public static int totalNuclearTrashProcessed = 0;
 
+        //upgrade bools
+        public bool bioUpgrade, plasticUpgrade; 
+
         //For Factory Configuration Screen
         SpriteFont facilityFont;
         Texture2D background, bioUpgradeButton, plasticUpgradeButton;
@@ -39,6 +42,7 @@ namespace Poseidon
         {
             facilityCreationTime = PoseidonGame.playTime.TotalSeconds;
             random = new Random();
+            bioUpgrade = plasticUpgrade = false;
         }
 
         public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
@@ -131,26 +135,100 @@ namespace Poseidon
             description = Poseidon.Core.IngamePresentation.wrapLine(description, backgroundRect.Width - 100, facilityFont);
             spriteBatch.DrawString(facilityFont, description, new Vector2(backgroundRect.Left + 50, backgroundRect.Top + 100), Color.White);
 
-            //draw upgrade buttons
-            spriteBatch.Draw(bioUpgradeButton, bioUpgradeRect, Color.White);
-            spriteBatch.Draw(plasticUpgradeButton, plasticUpgradeRect, Color.White);
+            string bioButtonText, plasticButtonText;
 
-            //Draw text on button.
-            string buttonText = "UpgradeL"+(HydroBot.bioPlantLevel+1).ToString();
-            spriteBatch.DrawString(facilityFont, buttonText, new Vector2(bioUpgradeRect.Center.X - facilityFont.MeasureString(buttonText).X / 2, bioUpgradeRect.Center.Y - facilityFont.MeasureString(buttonText).Y / 2), Color.Red);
-            buttonText = "UpgradeL" + (HydroBot.plasticPlantLevel + 1).ToString();
-            spriteBatch.DrawString(facilityFont, buttonText, new Vector2(plasticUpgradeRect.Center.X - facilityFont.MeasureString(buttonText).X / 2, plasticUpgradeRect.Center.Y - facilityFont.MeasureString(buttonText).Y / 2), Color.Red);
+            if ((PoseidonGame.playTime.TotalSeconds - facilityCreationTime) < GameConstants.numDaysForUpgrade * GameConstants.DaysPerSecond)
+            {
+                bioButtonText = "No upgrades available. Research Facility takes atleast 15 days to develop upgrades";
+                bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width, facilityFont);
+                spriteBatch.DrawString(facilityFont, bioButtonText, new Vector2(backgroundRect.Left + 50, bioUpgradeRect.Top - 50), Color.White);
+            }
+            else
+            {
+                string button_title_text = "ORGANIC FACTORY UPGRADE";
+                spriteBatch.DrawString(facilityFont, button_title_text, new Vector2(bioUpgradeRect.Center.X - facilityFont.MeasureString(button_title_text).X / 2, bioUpgradeRect.Top - 50), Color.White);
+                button_title_text = "PLASTIC FACTORY UPGRADE";
+                spriteBatch.DrawString(facilityFont, button_title_text, new Vector2(plasticUpgradeRect.Center.X - facilityFont.MeasureString(button_title_text).X / 2, plasticUpgradeRect.Top - 50), Color.White);
+                if (HydroBot.bioPlantLevel == 1 && totalBioTrashProcessed > GameConstants.numTrashForUpgrade)
+                {
+                    bioUpgrade = true;
+                    bioButtonText = "UPGRADE TO L2";
+                }
+                else if (HydroBot.bioPlantLevel == 2 && totalBioTrashProcessed > GameConstants.numTrashForUpgrade)
+                {
+                    bioUpgrade = true;
+                    bioButtonText = "UPGRADE TO L3";
+                }
+                else
+                {
+                    bioUpgrade = false;
+                    bioButtonText = "";
+                }
 
+                if (HydroBot.plasticPlantLevel == 1 && totalPlasticTrashProcessed > GameConstants.numTrashForUpgrade)
+                {
+                    plasticUpgrade = true;
+                    plasticButtonText = "UPGRADE TO L2";
+                }
+                else if (HydroBot.plasticPlantLevel == 2 && totalPlasticTrashProcessed > GameConstants.numTrashForUpgrade)
+                {
+                    plasticUpgrade = true;
+                    plasticButtonText = "UPGRADE TO L3";
+                }
+                else
+                {
+                    plasticUpgrade = false;
+                    plasticButtonText = "";
+                }
+
+                if(bioUpgrade)
+                {
+                    //draw bio upgrade buttons
+                    spriteBatch.Draw(bioUpgradeButton, bioUpgradeRect, Color.White);
+                    spriteBatch.DrawString(menuSmall, bioButtonText, new Vector2(bioUpgradeRect.Center.X - menuSmall.MeasureString(bioButtonText).X / 4, bioUpgradeRect.Center.Y - menuSmall.MeasureString(bioButtonText).Y / 4), Color.Red,  0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+                }
+                else if (HydroBot.bioPlantLevel == 3)
+                {
+                    bioButtonText= "This is the best technology available. Can not upgrade.";
+                    bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, (backgroundRect.Width / 2) - 200, facilityFont);
+                    spriteBatch.DrawString(facilityFont, bioButtonText, new Vector2(bioUpgradeRect.Center.X - facilityFont.MeasureString(bioButtonText).X / 2, bioUpgradeRect.Center.Y - facilityFont.MeasureString(bioButtonText).Y / 2), Color.White);
+                }
+                else
+                {
+                    bioButtonText = "You need to process "+(GameConstants.numTrashForUpgrade-totalBioTrashProcessed).ToString()+" more trash to upgrade";
+                    bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, (backgroundRect.Width/2) - 200, facilityFont);
+                    spriteBatch.DrawString(facilityFont, bioButtonText, new Vector2(bioUpgradeRect.Center.X - facilityFont.MeasureString(bioButtonText).X/2, bioUpgradeRect.Center.Y - facilityFont.MeasureString(bioButtonText).Y/2), Color.White);
+                }
+
+                if(plasticUpgrade)
+                {
+                    spriteBatch.Draw(plasticUpgradeButton, plasticUpgradeRect, Color.White);
+                    spriteBatch.DrawString(menuSmall, plasticButtonText, new Vector2(plasticUpgradeRect.Center.X - menuSmall.MeasureString(plasticButtonText).X / 4, plasticUpgradeRect.Center.Y - menuSmall.MeasureString(plasticButtonText).Y / 4), Color.Red,  0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+                }
+                else if (HydroBot.plasticPlantLevel == 3)
+                {
+                    plasticButtonText = "This is the best technology available. Can not upgrade.";
+                    plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, (backgroundRect.Width / 2) - 200, facilityFont);
+                    spriteBatch.DrawString(facilityFont, plasticButtonText, new Vector2(plasticUpgradeRect.Center.X - facilityFont.MeasureString(plasticButtonText).X / 2, plasticUpgradeRect.Center.Y - facilityFont.MeasureString(plasticButtonText).Y / 2), Color.White);
+                }
+                else
+                {
+                    plasticButtonText = "You need to process " + (GameConstants.numTrashForUpgrade - totalPlasticTrashProcessed).ToString() + " more trash to upgrade";
+                    plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, (backgroundRect.Width / 2) - 200, facilityFont);
+                    spriteBatch.DrawString(facilityFont, plasticButtonText, new Vector2(plasticUpgradeRect.Center.X - facilityFont.MeasureString(plasticButtonText).X / 2, plasticUpgradeRect.Center.Y - facilityFont.MeasureString(plasticButtonText).Y / 2), Color.White);
+                }
+            }
             string nextText = "Press Enter to continue";
             Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y);
             spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Black);
-
         }
 
         public void UpgradeBioFactory(List<Factory> factories)
         {
             //Need to check whether upgrade is allowed. TODO: Deb
             HydroBot.bioPlantLevel++;
+            totalBioTrashProcessed -= GameConstants.numTrashForUpgrade;
+            bioUpgrade = false;
             foreach (Factory factory in factories)
             {
                 if (factory.factoryType == FactoryType.biodegradable)
@@ -162,6 +240,8 @@ namespace Poseidon
         {
             //Need to check if upgrade is allowed. TODO: Deb
             HydroBot.plasticPlantLevel++;
+            totalPlasticTrashProcessed -= GameConstants.numTrashForUpgrade;
+            plasticUpgrade = false;
             foreach (Factory factory in factories)
             {
                 if (factory.factoryType == FactoryType.plastic)

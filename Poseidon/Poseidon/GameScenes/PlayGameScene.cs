@@ -60,6 +60,7 @@ namespace Poseidon
         List<Fruit> fruits;
         List<Trash> trashes;
         List<Factory> factories;
+        ResearchFacility researchFacility;
 
         List<StaticObject> staticObjects;
 
@@ -153,6 +154,7 @@ namespace Poseidon
         double clickTimer = 0;
 
         private bool openFactoryConfigurationScene = false;
+        private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
@@ -574,31 +576,35 @@ namespace Poseidon
             Vector3 position;
             factories = new List<Factory>();
 
+            //create research facility
+            researchFacility = new ResearchFacility(); //There can be only 1 research facility.
+            position = new Vector3(0, 0, -100);
+            position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            orientation = random.Next(100);
+            researchFacility.LoadContent(Content, game, "Models/FactoryModels/ResearchFacility", position, orientation);
+            HydroBot.resources -= 5;
+
             factories.Add(new Factory(FactoryType.biodegradable));
             position = new Vector3(100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[0].LoadContent(Content, game, "Models/FactoryModels/BiodegradableFactory", position, orientation);
+            HydroBot.resources -= 5;
 
             factories.Add(new Factory(FactoryType.plastic));
             position = new Vector3(0,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[1].LoadContent(Content, game, "Models/FactoryModels/PlasticFactory", position, orientation);
+            HydroBot.resources -= 5;
 
             factories.Add(new Factory(FactoryType.radioactive));
             position = new Vector3(-100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[2].LoadContent(Content, game, "Models/FactoryModels/NuclearFactory", position, orientation);
-
-            factories.Add(new Factory(FactoryType.research));
-            position = new Vector3(0, 0, -100);
-            position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            orientation = random.Next(100);
-            factories[3].LoadContent(Content, game, "Models/FactoryModels/ResearchFacility", position, orientation);
+            HydroBot.resources -= 5;
             
-
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
             for (int index = 0; index < GameConstants.NumStaticObjectsMain; index++)
@@ -733,24 +739,40 @@ namespace Poseidon
                                 break;
                             }
                         }
-                        
+                        if (CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
+                        {
+                            openResearchFacilityConfigScene = true;
+                        }
                     }
-                    if (openFactoryConfigurationScene)
+                    if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
                     {
                         bool exitFactConfPressed;
                         exitFactConfPressed = (lastKeyboardState.IsKeyDown(Keys.Enter) && (currentKeyboardState.IsKeyUp(Keys.Enter)));
                         if (exitFactConfPressed)
+                        {
                             openFactoryConfigurationScene = false;
+                            openResearchFacilityConfigScene = false;
+                        }
                         else
                         {
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
                             CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
-                            if (clicked 
-                               && factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                            if (clicked)
                             {
+                                if (openFactoryConfigurationScene)
+                                {
+                                    if (factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                        factoryToConfigure.SwitchProductionItem();
+                                }
+                                else
+                                {
+                                    if (researchFacility.bioUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                        researchFacility.UpgradeBioFactory(factories);
+                                    if (researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                        researchFacility.UpgradePlasticFactory(factories);
+                                }
                                 clicked = false;
-                                factoryToConfigure.SwitchProductionItem();
                             }
                             return;
                         }
@@ -889,20 +911,25 @@ namespace Poseidon
                             switch (factory.factoryType)
                             {
                                 case FactoryType.biodegradable:
-                                    dumpTrashInFactory(FactoryType.biodegradable, HydroBot.bioTrash, factory.Position);
+                                    dumpTrashInFactory(factory, HydroBot.bioTrash, factory.Position);
                                     HydroBot.bioTrash = 0;
                                     break;
                                 case FactoryType.plastic:
-                                    dumpTrashInFactory(FactoryType.plastic, HydroBot.plasticTrash, factory.Position);
+                                    dumpTrashInFactory(factory, HydroBot.plasticTrash, factory.Position);
                                     HydroBot.plasticTrash = 0;
                                     break;
                                 case FactoryType.radioactive:
-                                    dumpTrashInFactory(FactoryType.radioactive, HydroBot.nuclearTrash, factory.Position);
+                                    dumpTrashInFactory(factory, HydroBot.nuclearTrash, factory.Position);
                                     HydroBot.nuclearTrash = 0;
                                     break;
                             }
                             doubleClicked = false;
                         }
+                    }
+
+                    if (researchFacility != null)
+                    {
+                        researchFacility.Update(gameTime);
                     }
 
                     foreach (ShipWreck shipWreck in shipWrecks)
@@ -1031,23 +1058,26 @@ namespace Poseidon
             }
         }
 
-        public void dumpTrashInFactory(FactoryType factoryType, int amount, Vector3 position)
+        public void dumpTrashInFactory(Factory factory, int amount, Vector3 position)
         {
             int envGain=0, envPoints, expPoints;
             string point_string = "";
-            switch (factoryType)
+            switch (factory.factoryType)
             {
                 case FactoryType.biodegradable:
                     envGain = GameConstants.envGainForBioTrashClean;
                     point_string = HydroBot.bioTrash + " Biodegradable Trash Dumped.\n";
+                    factory.numTrashWaiting += HydroBot.bioTrash;
                     break;
                 case FactoryType.plastic:
                     envGain = GameConstants.envGainForPlasticTrashClean;
                     point_string = HydroBot.plasticTrash + " Plastic Trash Dumped.\n";
+                    factory.numTrashWaiting += HydroBot.plasticTrash;
                     break;
                 case FactoryType.radioactive:
                     envGain = GameConstants.envGainForNuclearTrashClean;
                     point_string = HydroBot.nuclearTrash + " Radioactive Trash Dumped.\n";
+                    factory.numTrashWaiting += HydroBot.nuclearTrash;
                     break;
             }
             if (PoseidonGame.gamePlus)
@@ -1323,6 +1353,14 @@ namespace Poseidon
                     factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
+            if (researchFacility != null)
+            {
+                factoryRealSphere = researchFacility.BoundingSphere;
+                factoryRealSphere.Center.Y = researchFacility.Position.Y;
+                if (factoryRealSphere.Intersects(frustum))
+                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            }
+
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects)
             {
@@ -1393,6 +1431,8 @@ namespace Poseidon
 
             if (openFactoryConfigurationScene)
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
+            if (openResearchFacilityConfigScene)
+                researchFacility.DrawResearchFacilityConfigurationScene(spriteBatch, menuSmall);
             cursor.Draw(gameTime);
             spriteBatch.End();
             if (screenTransitNow)

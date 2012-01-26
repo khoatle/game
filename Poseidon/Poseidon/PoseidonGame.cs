@@ -20,7 +20,7 @@ namespace Poseidon
     public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
-    public enum FactoryType { biodegradable, plastic, radioactive, research };
+    public enum FactoryType { biodegradable, plastic, radioactive};
 
     /// <summary>
     /// This is the main type for your game

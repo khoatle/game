@@ -134,7 +134,8 @@
     <Compile Include="GraphicEffects\BloomComponent.cs" />
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
-    <Compile Include="Miscellaneous\Factory.cs" />
+    <Compile Include="TrashManagement\Factory.cs" />
+    <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="SaveGame\ObjectsToSerialize.cs" />
     <Compile Include="GameScenes\TipScene.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />
@@ -200,7 +201,7 @@
     <Compile Include="Core\StaticObject.cs" />
     <Compile Include="GameScenes\StartScene.cs" />
     <Compile Include="Enemies\Terminator.cs" />
-    <Compile Include="Miscellaneous\Trash.cs" />
+    <Compile Include="TrashManagement\Trash.cs" />
     <Compile Include="ShipWrecks\TreasureChest.cs" />
   </ItemGroup>
   <ItemGroup>

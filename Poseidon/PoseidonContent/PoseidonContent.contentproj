@@ -1567,7 +1567,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\ChangeFactoryProduceBox.jpg">
+    <Compile Include="Image\TrashManagement\ChangeFactoryProduceBox.jpg">
       <Name>ChangeFactoryProduceBox</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
@@ -1581,10 +1581,31 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\factory_config_background.png">
+    <Compile Include="Image\TrashManagement\factory_config_background.png">
       <Name>factory_config_background</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\TrashManagement\ResearchFacilityBackground.png">
+      <Name>ResearchFacilityBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\TrashManagement\upgradeButton.png">
+      <Name>upgradeButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Fonts\researchFacilityConfig.spritefont">
+      <Name>researchFacilityConfig</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

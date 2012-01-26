@@ -138,6 +138,14 @@ namespace Poseidon
         public static int bioTrash = 0;
         public static int plasticTrash = 0;
         public static int nuclearTrash = 0;
+
+        //Resources for building factories and research facility.
+        public static int resources = 20;
+
+        //Factory levels
+        public static int bioPlantLevel, lsBioPlantLevel;
+        public static int plasticPlantLevel, lsPlasticPlantLevel;
+
         //resurrected sidekicks related stuff
         public static int numStrangeObjCollected, lsNumStrangeObjCollected;
         public static int numDolphinPieces, numSeaCowPieces, numTurtlePieces, lsNumDolphinPieces, lsNumSeaCowPieces, lsNumTurtlePieces;
@@ -214,6 +222,9 @@ namespace Poseidon
             dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
             numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
 
+            bioTrash = plasticTrash = nuclearTrash = 0;
+            bioPlantLevel = plasticPlantLevel = lsBioPlantLevel = lsPlasticPlantLevel = 1;
+            
             this.gameMode = gameMode;
         }
 
@@ -305,9 +316,12 @@ namespace Poseidon
                 iconActivated[j] = lsIconActivated[j] = (bool)info.GetValue(iconName, typeof(bool));
             }
             
-
             skillComboActivated = lsSkillComboActivated = (bool)info.GetValue("skillComboActivated", typeof(bool));
-            
+
+            bioTrash = plasticTrash = nuclearTrash = 0;
+            bioPlantLevel = lsBioPlantLevel = (int)info.GetValue("bioPlantLevel", typeof(int));
+            plasticPlantLevel = lsPlasticPlantLevel = (int)info.GetValue("plasticPlantLevel", typeof(int));
+
         }
 
         /// <summary>
@@ -348,6 +362,8 @@ namespace Poseidon
                 info.AddValue(iconName, iconActivated[j]);
             }
             info.AddValue("skillComboActivated", skillComboActivated);
+            info.AddValue("bioPlantLevel", bioPlantLevel);
+            info.AddValue("plasticPlantLevel", plasticPlantLevel);
         }
 
         /// <summary>
@@ -463,6 +479,9 @@ namespace Poseidon
             //stop good will bar from spinning
             IngamePresentation.StopSpinning();
 
+            //factory levels
+            bioPlantLevel = lsBioPlantLevel;
+            plasticPlantLevel = lsPlasticPlantLevel;
         }
 
         public void SetLevelStartValues()
@@ -505,6 +524,10 @@ namespace Poseidon
             lsLevel = level;
             lsUnassignedPts = unassignedPts;
             lsCurrentEnvPoint = currentEnvPoint;
+
+            //factories
+            lsBioPlantLevel = bioPlantLevel;
+            lsPlasticPlantLevel = plasticPlantLevel;
         }
 
         internal void Reset()
@@ -539,6 +562,8 @@ namespace Poseidon
             if(PlayGameScene.currentLevel > 0 && gameMode != GameMode.SurvivalMode)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
             if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
+            bioTrash = plasticTrash = 0;
+            resources = 20;
         }
 
         public void UpdateAction(GameTime gameTime, Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount, ContentManager Content,
@@ -781,8 +806,43 @@ namespace Poseidon
             //Interacting with trash
             if (currentKeyboardState.IsKeyDown(Keys.Z))
             {
-                Interact_with_trash_and_fruit(fruits, trashes, gameTime); // only biodegradable trash
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
+                if (trashes != null)
+                {
+                    foreach (Trash trash in trashes)
+                    {
+                        if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                        {
+                            string display_str;
+                            if (trash.trashType == TrashType.biodegradable)
+                            {
+                                bioTrash++;
+                                display_str = "Organic Trash Collected " + bioTrash;
+                            }
+                            else if (trash.trashType == TrashType.plastic)
+                            {
+                                display_str = "Wrong Type: Plastic";
+                            }
+                            else //radioactive
+                            {
+                                display_str = "Wrong Type: Radioactive";
+                            }
+                            trash.Retrieved = true;
+                            PoseidonGame.audio.retrieveSound.Play();
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
 
+                            IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
+                        }
+                    }
+                }
             }
             if (currentKeyboardState.IsKeyDown(Keys.X)) // Collect Plastic Trash
             {
@@ -1093,7 +1153,7 @@ namespace Poseidon
             }
         }
 
-        private void Interact_with_trash_and_fruit(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime)
+        private void Collect_Powerpacks_and_Resources(List<Fruit> fruits, List<Trash> trashes, GameTime gameTime)
         {
             Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     20);

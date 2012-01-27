@@ -156,6 +156,10 @@ namespace Poseidon
         private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
 
+        //for particle systems
+        ParticleSystem explosionParticles;
+        //ParticleSystem explosionSmokeParticles;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -340,6 +344,14 @@ namespace Poseidon
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
+            // Construct our particle system components.
+            explosionParticles = new ParticleSystem(this.game, Content, "ExplosionSettings", GraphicDevice);
+            //explosionSmokeParticles = new ParticleSystem(this.game, Content, "ExplosionSmokeSettings", GraphicDevice);
+            //explosionSmokeParticles.DrawOrder = 200;
+            explosionParticles.DrawOrder = 400;
+            explosionParticles.Load();
+            //explosionSmokeParticles.Load();
+
             // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
@@ -356,6 +368,9 @@ namespace Poseidon
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
+
+            
+            
         }
 
         /// <summary>
@@ -929,7 +944,7 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, explosionParticles);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
 
@@ -973,6 +988,7 @@ namespace Poseidon
                         audio.gameOver.Play();
                     }
                     
+                    //update graphic effects
                     graphicEffect.UpdateInput(gameTime);
 
                     //cursor update
@@ -983,6 +999,9 @@ namespace Poseidon
                     schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
          
+                    //update particle systems
+                    explosionParticles.Update(gameTime);
+                    //explosionSmokeParticles.Update(gameTime);
                 }
 
                 prevGameState = currentGameState;
@@ -1359,6 +1378,13 @@ namespace Poseidon
             {
                 point.Draw(spriteBatch);
             }
+
+            //draw particle effects
+            // Pass camera matrices through to the particle system components.
+            explosionParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            //explosionSmokeParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            explosionParticles.Draw(gameTime);
+            //explosionSmokeParticles.Draw(gameTime);
 
             //draw schools of fish
             spriteBatch.Begin();

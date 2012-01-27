@@ -482,7 +482,7 @@ namespace Poseidon
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.ShipWreck);
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
                     enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies, enemiesAmount);
+                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies, enemiesAmount, null);
                 Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
                     enemies, enemiesAmount, fish, fishAmount, gameCamera);
 

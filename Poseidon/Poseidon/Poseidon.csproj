@@ -136,6 +136,10 @@
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
+    <Compile Include="ParticleSystem\ParticleEmitter.cs" />
+    <Compile Include="ParticleSystem\ParticleSystem.cs" />
+    <Compile Include="ParticleSystem\ParticleVertex.cs" />
+    <Compile Include="ParticleSystem\Projectile.cs" />
     <Compile Include="SaveGame\ObjectsToSerialize.cs" />
     <Compile Include="GameScenes\TipScene.cs" />
     <Compile Include="MiniGames\ParagraphLibrary.cs" />
@@ -209,6 +213,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\ParticleSettings\ParticleSettings.csproj">
+      <Project>{2D9A06FD-F612-4E2B-A08C-341420091EAB}</Project>
+      <Name>ParticleSettings</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PoseidonContent\PoseidonContent.contentproj">
       <Name>PoseidonContent %28Content%29</Name>
       <XnaReferenceType>Content</XnaReferenceType>
@@ -249,6 +257,7 @@
   <ItemGroup>
     <None Include="Poseidon_TemporaryKey.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
   <!--

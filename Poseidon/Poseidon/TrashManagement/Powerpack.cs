@@ -27,7 +27,7 @@ namespace Poseidon
             this.powerType = powerType;
         }
 
-        public void LoadContent(ContentManager content, Vector3 factoryPosition)
+        public void LoadContent(ContentManager content, Vector3 powerpackPosition)
         {
             if (this.powerType == 1)
                 Model = content.Load<Model>("Models/PlantAndFruitModels/green-fruit");
@@ -38,8 +38,7 @@ namespace Poseidon
             else if (this.powerType == 4)
                 Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
             
-            Position = factoryPosition;
-            Position.Y = GameConstants.MainGameFloatHeight;
+            Position = powerpackPosition;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;

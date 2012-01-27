@@ -110,66 +110,43 @@ namespace Poseidon
         }
         // End-----------------------------------------------------
 
-        ///Powerpacks & Resources Functions : TODO Deb
-        //public static bool isPlantPositionValid(Plant plant, List<Plant> plants, List<ShipWreck> shipwrecks, List<StaticObject> staticObjects)
-        //{
-        //    if (isPlantvsPlantCollision(plant.BoundingSphere, plants))
-        //    {
-        //        return false;
-        //    }
-        //    if (isPlantvsShipwreckCollision(plant.BoundingSphere, shipwrecks))
-        //    {
-        //        return false;
-        //    }
-        //    if (isPlantvsStaticObjectCollision(plant.BoundingSphere, staticObjects)) {
-        //        return false;
-        //    }
+        ///Powerpacks & Resources Functions : 
+        public static bool isFloatPositionValid(Vector3 position, float radius, List<Powerpack> powerpacks, List<Resource> resources)
+        {
+            BoundingSphere b = new BoundingSphere(position, radius);
+            if(PowerpackCollision(b, powerpacks))
+            {
+                return false;
+            }
+            if(ResourceCollision(b, resources))
+            {
+                return false;
+            }
+            return true;
+        }
 
-        //    return true;
-        //}
+        // Helper
+        private static bool PowerpackCollision(BoundingSphere thisBoundingSphere, List<Powerpack> powerpacks)
+        {
+            for (int i = 0; i < powerpacks.Count; i++)
+            {
+                if (!powerpacks[i].Retrieved && thisBoundingSphere.Intersects(powerpacks[i].BoundingSphere))
+                    return true;
+            }
+            return false;
+        }
 
-        //// Helper
-        //private static bool isPlantvsPlantCollision(BoundingSphere plantBoundingSphere, List<Plant> plants)
-        //{
-        //    for (int i = 0; i < plants.Count; i++)
-        //    {
-        //        if (plantBoundingSphere.Intersects(
-        //            plants[i].BoundingSphere))
-        //            return true;
-        //    }
-        //    return false;
-        //}
-        //// Helper
-        //private static bool isPlantvsStaticObjectCollision(BoundingSphere plantBoundingSphere, List<StaticObject> staticObjects)
-        //{
-        //    if (staticObjects != null)
-        //    {
-        //        for (int i = 0; i < staticObjects.Count; i++)
-        //        {
-        //            if (plantBoundingSphere.Intersects(
-        //                staticObjects[i].BoundingSphere))
-        //                return true;
-        //        }
-        //    }
-        //    return false;
-        //}
-        ////helper
-        //private static bool isPlantvsShipwreckCollision(BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
-        //{
-        //    if (shipwrecks != null)
-        //    {
-        //        BoundingSphere shipSphere;
-        //        for (int i = 0; i < shipwrecks.Count; i++)
-        //        {
-        //            shipSphere = shipwrecks[i].BoundingSphere;
-        //            shipSphere.Center = shipwrecks[i].Position;
-        //            if (plantBoundingSphere.Intersects(
-        //                shipSphere))
-        //                return true;
-        //        }
-        //    }
-        //    return false;
-        //}
+        //Helper
+        private static bool ResourceCollision(BoundingSphere thisBoundingSphere, List<Resource> resources)
+        {
+            foreach (Resource resource in resources)
+            {
+                if(!resource.Retrieved && thisBoundingSphere.Intersects(resource.BoundingSphere))
+                    return true;
+            }
+            return false;
+        }
+        
 
         /// <summary>
         /// BARRIERS FUNCTIONS

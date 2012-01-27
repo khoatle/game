@@ -47,33 +47,33 @@ namespace Poseidon
             //cutScene.Add(sentence);
             sentence = new Sentence(3, "Not every story ends happily ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
-            //sentence = new Sentence(3, "So is the story of our hydrobot ...", "Image/Cutscenes/terminatorKillBot", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(0, "... Sorry everyone, I could not do it ...", "Image/Cutscenes/terminatorKillBot", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "The story begins around 2 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "Year 2100 ...", "Image/Cutscenes/blackScreen", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "Year 2100 ... and marine life is in grave danger", "Image/Cutscenes/blackScreen", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "Garbage dumping of harmful materials has taken its toll on the oceans", "Image/Cutscenes/Beach", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "Effectively, all ocean life is facing mass extinction. The black market is in high demand for marine animals",
-            //    "Image/Cutscenes/tire trash", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "Consequently, poachers take to the oceans to hunt the remaining few ...", "Image/Cutscenes/poachers", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "However, hope is not lost ...", "Image/Cutscenes/blackScreen", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "Scientists from the University of Houston create a highly intelligent, self-powered robot that is capable of restoring all ocean life",
-            //    "Image/Cutscenes/Robot Creation", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "With the world's hope resting on his shoulders, the first-ever Hydrobot is deployed to the ocean. ",
-            //    "Image/Cutscenes/Robot Creation", 0);
-            //cutScene.Add(sentence);
-            //sentence = new Sentence(3, "His first mission is to improve the polluted sea environment at Gulf of Mexico ", "Image/Cutscenes/blackScreen", 0);
-            //cutScene.Add(sentence);
+            sentence = new Sentence(3, "So is the story of our hydrobot ...", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "... Sorry everyone, I could not do it ...", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "The story begins around 2 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "Year 2100 ...", "Image/Cutscenes/blackScreen", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "Year 2100 ... and marine life is in grave danger", "Image/Cutscenes/blackScreen", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "Garbage dumping of harmful materials has taken its toll on the oceans", "Image/Cutscenes/Beach", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "Effectively, all ocean life is facing mass extinction. The black market is in high demand for marine animals",
+                "Image/Cutscenes/tire trash", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "Consequently, poachers take to the oceans to hunt the remaining few ...", "Image/Cutscenes/poachers", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "However, hope is not lost ...", "Image/Cutscenes/blackScreen", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "Scientists from the University of Houston create a highly intelligent, self-powered robot that is capable of restoring all ocean life",
+                "Image/Cutscenes/Robot Creation", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "With the world's hope resting on his shoulders, the first-ever Hydrobot is deployed to the ocean. ",
+                "Image/Cutscenes/Robot Creation", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(3, "His first mission is to improve the polluted sea environment at Gulf of Mexico ", "Image/Cutscenes/blackScreen", 0);
+            cutScene.Add(sentence);
            
             cutScenes.Add(cutScene);
 

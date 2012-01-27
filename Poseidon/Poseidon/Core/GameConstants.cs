@@ -53,9 +53,11 @@ namespace Poseidon {
         public const int DefaultFishHP = 100;
         //public const int FishHP = 50;
 
-        //Factory upgrade
-        public const int numTrashForUpgrade = 1; //25
-        public const int numDaysForUpgrade = 1; //15
+        //Trash Factory
+        public const int numTrashForUpgrade = 25;
+        public const int numDaysForUpgrade = 15;
+        public const int numResourcesAtStart = 20;
+        public const int numResourcesForEachFactory = 5;
 
         //Environment Const
         public const int PlayerStartingEnv = 300;
@@ -163,10 +165,9 @@ namespace Poseidon {
         public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = 0.06f;
         public const float ShipWreckBoundingSphereFactor = 1.0f;
-        public const float PlantBoundingSphereFactor = 0.2f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
-        public const float TrashBoundingSphereFactor = 0.9f;
+        public const float TrashBoundingSphereFactor = 0.2f; //0.9f
         public const float FactoryBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 3.5f;
 

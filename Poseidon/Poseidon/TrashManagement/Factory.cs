@@ -98,11 +98,11 @@ namespace Poseidon
                     listTimeTrashProcessing.RemoveAt(i);
                     if (produce == Produce.powerpack)
                     {
-                        producePowerPacks(ref powerpacks);
+                        producePowerPacks(ref powerpacks, resources);
                     }
                     else
                     {
-                        ProduceResource(ref resources);
+                        ProduceResource(ref resources, powerpacks);
                     }
                     if (factoryType == FactoryType.biodegradable)
                         ResearchFacility.totalBioTrashProcessed += trashBlockSize;
@@ -120,7 +120,9 @@ namespace Poseidon
             {
                 numTrashWaiting = numTrashWaiting % trashBlockSize;
                 for (int i = 0; i < numNewTrashBlock; i++)
+                {
                     listTimeTrashProcessing.Add(PoseidonGame.playTime.TotalSeconds);
+                }
             }
         }
 
@@ -263,7 +265,7 @@ namespace Poseidon
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
-                        trashBlockSize = 5;
+                        trashBlockSize = 5; 
                         processingTime = 4;
                     }
                     else
@@ -296,44 +298,84 @@ namespace Poseidon
             }
         }
 
-        void producePowerPacks(ref List<Powerpack> powerpacks)
+        void producePowerPacks(ref List<Powerpack> powerpacks, List<Resource> resources)
         {
+            Vector3 powerpackPosition;
             if (factoryType == FactoryType.radioactive)
             {
                 for (int i = 0; i < 5; i++)
                 {
                     int powerType = random.Next(4) + 1;
                     Powerpack powerpack = new Powerpack(powerType);
+                    powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+                    powerpack.LoadContent(Content, powerpackPosition);
                     powerpacks.Add(powerpack);
-                    powerpack.LoadContent(Content, Position);
                 }
             }
             else
             {
                 int powerType = random.Next(4) + 1;
                 Powerpack powerpack = new Powerpack(powerType);
+                powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+                powerpack.LoadContent(Content, powerpackPosition);
                 powerpacks.Add(powerpack);
-                powerpack.LoadContent(Content, Position);
             }
         }
 
-        void ProduceResource(ref List<Resource> resources)
+        void ProduceResource(ref List<Resource> resources, List<Powerpack> powerpacks)
         {
+            Vector3 resourcePosition;
             if (factoryType == FactoryType.radioactive)
             {
                 for (int i = 0; i < 5; i++)
                 {
                     Resource resource = new Resource();
+                    resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+                    resource.LoadContent(Content, resourcePosition);
                     resources.Add(resource);
-                    resource.LoadContent(Content, Position);
                 }
             }
             else
             {
                 Resource resource = new Resource();
+                resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+                resource.LoadContent(Content, resourcePosition);
                 resources.Add(resource);
-                resource.LoadContent(Content, Position);
             }
+        }
+
+        private Vector3 findResourcePowerpackPosition(Vector3 factoryPosition, List<Resource> resources, List<Powerpack> powerpacks)
+        {
+            Vector3 floatPosition = factoryPosition;
+            float radius = 5f;
+            floatPosition.Y = GameConstants.MainGameFloatHeight;
+            for(int i=0; i<20; i++) // try 20 times
+            {
+                if (Collision.isFloatPositionValid(floatPosition, radius, powerpacks, resources))
+                {
+                    return floatPosition;
+                }
+                else
+                {
+                    int movement = random.Next(4);
+                    switch (movement)
+                    {
+                        case 0:
+                            floatPosition.X += radius * 2;
+                            break;
+                        case 1:
+                            floatPosition.Z += radius * 2;
+                            break;
+                        case 2:
+                            floatPosition.X -= radius * 2;
+                            break;
+                        case 3:
+                            floatPosition.Z -= radius * 2;
+                            break;
+                    }
+                }
+            }
+            return floatPosition;
         }
     }
 }

@@ -140,7 +140,7 @@ namespace Poseidon
         public static int nuclearTrash = 0;
 
         //Resources for building factories and research facility.
-        public static int numResources = 20;
+        public static int numResources, lsNumResources;
 
         //Factory levels
         public static int bioPlantLevel, lsBioPlantLevel;
@@ -224,7 +224,8 @@ namespace Poseidon
 
             bioTrash = plasticTrash = nuclearTrash = 0;
             bioPlantLevel = plasticPlantLevel = lsBioPlantLevel = lsPlasticPlantLevel = 1;
-            
+            numResources  = lsNumResources = GameConstants.numResourcesAtStart;
+
             this.gameMode = gameMode;
         }
 
@@ -321,7 +322,8 @@ namespace Poseidon
             bioTrash = plasticTrash = nuclearTrash = 0;
             bioPlantLevel = lsBioPlantLevel = (int)info.GetValue("bioPlantLevel", typeof(int));
             plasticPlantLevel = lsPlasticPlantLevel = (int)info.GetValue("plasticPlantLevel", typeof(int));
-
+            numResources = lsNumResources = (int)info.GetValue("numResources", typeof(int));
+            numResources += GameConstants.numResourcesAtStart;
         }
 
         /// <summary>
@@ -364,6 +366,7 @@ namespace Poseidon
             info.AddValue("skillComboActivated", skillComboActivated);
             info.AddValue("bioPlantLevel", bioPlantLevel);
             info.AddValue("plasticPlantLevel", plasticPlantLevel);
+            info.AddValue("numResources", numResources);
         }
 
         /// <summary>
@@ -482,6 +485,7 @@ namespace Poseidon
             //factory levels
             bioPlantLevel = lsBioPlantLevel;
             plasticPlantLevel = lsPlasticPlantLevel;
+            numResources = lsNumResources;
         }
 
         public void SetLevelStartValues()
@@ -528,6 +532,9 @@ namespace Poseidon
             //factories
             lsBioPlantLevel = bioPlantLevel;
             lsPlasticPlantLevel = plasticPlantLevel;
+
+            numResources += GameConstants.numResourcesAtStart;
+            lsNumResources = numResources; 
         }
 
         internal void Reset()
@@ -563,7 +570,6 @@ namespace Poseidon
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
             if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
             bioTrash = plasticTrash = 0;
-            numResources = 20;
         }
 
         public void UpdateAction(GameTime gameTime, Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount, ContentManager Content,

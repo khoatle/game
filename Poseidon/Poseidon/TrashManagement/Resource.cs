@@ -19,12 +19,11 @@ namespace Poseidon
             Retrieved = false;
         }
 
-        public void LoadContent(ContentManager content, Vector3 factoryPosition)
+        public void LoadContent(ContentManager content, Vector3 resourcePosition)
         {
             Model = content.Load<Model>("Models/BulletModels/chasingBullet");
 
-            Position = factoryPosition;
-            Position.Y = GameConstants.MainGameFloatHeight;
+            Position = resourcePosition;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;

@@ -588,28 +588,28 @@ namespace Poseidon
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             researchFacility.LoadContent(Content, game, "Models/FactoryModels/ResearchFacility", position, orientation);
-            HydroBot.numResources -= 5;
+            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
 
             factories.Add(new Factory(FactoryType.biodegradable));
             position = new Vector3(100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[0].LoadContent(Content, game, "Models/FactoryModels/BiodegradableFactory", position, orientation);
-            HydroBot.numResources -= 5;
+            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
 
             factories.Add(new Factory(FactoryType.plastic));
             position = new Vector3(0,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[1].LoadContent(Content, game, "Models/FactoryModels/PlasticFactory", position, orientation);
-            HydroBot.numResources -= 5;
+            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
 
             factories.Add(new Factory(FactoryType.radioactive));
             position = new Vector3(-100,0,0);
             position.Y = heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             orientation = random.Next(100);
             factories[2].LoadContent(Content, game, "Models/FactoryModels/NuclearFactory", position, orientation);
-            HydroBot.numResources -= 5;
+            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
             
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);

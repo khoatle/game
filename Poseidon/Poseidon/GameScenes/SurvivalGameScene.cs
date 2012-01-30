@@ -53,8 +53,8 @@ namespace Poseidon
         public List<DamageBullet> enemyBullet;
         public List<HealthBullet> healthBullet;
 
-        List<Plant> plants;
-        List<Fruit> fruits;
+        List<Powerpack> powerpacks;
+        List<Resource> resources;
 
         public BaseEnemy[] enemies;
         public Fish[] fish;
@@ -217,10 +217,8 @@ namespace Poseidon
             //Initialize the game field
             InitializeGameField(Content);
 
-
-
-            plants = new List<Plant>();
-            fruits = new List<Fruit>();
+            powerpacks = new List<Powerpack>();
+            resources = new List<Resource>();
 
             hydroBot.Load(Content);
 
@@ -275,12 +273,9 @@ namespace Poseidon
                 hydroBot.Position, aspectRatio, gameTime);
 
 
-
-            //Clean all trees
-            plants.Clear();
-
-            //Clean all fruits
-            fruits.Clear();
+            //Clean all fruits and resources
+            powerpacks.Clear();
+            resources.Clear();
 
             startTime = gameTime.TotalGameTime;
 
@@ -365,7 +360,7 @@ namespace Poseidon
                 {
 
                     //hydrobot update
-                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, heightMapInfo, healthBullet, fruits, null, null, plants, null);
+                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, heightMapInfo, healthBullet, powerpacks, resources, null, null,null);
 
                     //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -435,31 +430,9 @@ namespace Poseidon
                         point.Update(GraphicDevice, gameCamera, gameTime);
                     }
 
-
-
-                    //Are the trees ready for fruit?
-                    foreach (Plant plant in plants)
-                    {
-                        if (plant.timeForFruit == true)
-                        {
-                            int powerType = random.Next(4) + 1;
-                            Fruit fruit = new Fruit(powerType);
-                            fruits.Add(fruit);
-                            fruit.LoadContent(Content, plant.Position);
-                            plant.timeForFruit = false;
-                            plant.fruitCreated++;
-                        }
-                    }
-
                     gameCamera.Update(hydroBot.ForwardDirection, hydroBot.Position, aspectRatio, gameTime);
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
-
-                    foreach (Fruit fruit in fruits)
-                    {
-                        fruit.Update(currentKeyboardState, hydroBot.BoundingSphere, hydroBot.Trash_Fruit_BoundingSphere);
-                    }
-
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
@@ -485,7 +458,7 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.SurvivalMode);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.SurvivalMode, enemies, enemiesAmount);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.SurvivalMode, enemies, enemiesAmount, null);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
 
@@ -622,7 +595,7 @@ namespace Poseidon
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
-            foreach (Fruit f in fruits)
+            foreach (Powerpack f in powerpacks)
             {
                 if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
                 {
@@ -636,6 +609,13 @@ namespace Poseidon
                     //rs = new RasterizerState();
                     //rs.FillMode = FillMode.Solid;
                     //GraphicDevice.RasterizerState = rs;
+                }
+            }
+            foreach (Resource r in resources)
+            {
+                if (!r.Retrieved && r.BoundingSphere.Intersects(frustum))
+                {
+                    r.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
 
@@ -700,25 +680,6 @@ namespace Poseidon
             for (int i = 0; i < alliesBullets.Count; i++)
             {
                 alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
-
-
-            // Draw each plant
-            foreach (Plant p in plants)
-            {
-                if (p.BoundingSphere.Intersects(frustum))
-                {
-                    p.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, (float)((PoseidonGame.playTime.TotalSeconds - p.creationTime) / 10.0));
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //p.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
-
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
             }
 
 

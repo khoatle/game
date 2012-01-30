@@ -112,7 +112,9 @@ namespace Poseidon.GraphicEffects
                     // Apply the underwater effect post process shader
                     underWaterEffect.CurrentTechnique.Passes[0].Apply();
                     {
-                        spriteBatch.Draw(originalScene, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                        spriteBatch.Draw(originalScene, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                            //fix the problem of ugly areas at the edges of the screen
+                            new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
                     }
                 }
                 spriteBatch.End();

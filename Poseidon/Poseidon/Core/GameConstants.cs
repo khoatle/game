@@ -52,7 +52,12 @@ namespace Poseidon {
         public const int DefaultEnemyHP = 100;
         public const int DefaultFishHP = 100;
         //public const int FishHP = 50;
-        
+
+        //Trash Factory
+        public const int numTrashForUpgrade = 25;
+        public const int numDaysForUpgrade = 15;
+        public const int numResourcesAtStart = 20;
+        public const int numResourcesForEachFactory = 5;
 
         //Environment Const
         public const int PlayerStartingEnv = 300;
@@ -65,7 +70,6 @@ namespace Poseidon {
         public const int envGainForNuclearTrashClean = 100;
         public const int expGainForTrash = 10;
         public const int BasicEnvGainForHealingFish = 5;
-        public const int envGainForDropSeed = 20;
         public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
         public const double maxHealthChangeInterval = 6; // Must be  greater than 5 seconds
@@ -161,10 +165,9 @@ namespace Poseidon {
         public const float BarrierBoundingSphereFactor = 0.7f;
         public const float TankBoundingSphereFactor = 0.06f;
         public const float ShipWreckBoundingSphereFactor = 1.0f;
-        public const float PlantBoundingSphereFactor = 0.2f;
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
-        public const float TrashBoundingSphereFactor = 0.9f;
+        public const float TrashBoundingSphereFactor = 0.2f; //0.9f
         public const float FactoryBoundingSphereFactor = 0.9f;
         public const float FruitGrowth = 3.5f;
 
@@ -233,5 +236,9 @@ namespace Poseidon {
         public const int GoodWillPointGainForPlanting = 250;
         public const int GoodWillPointGainForCleaning = 250;
         public const int GoodWillPointGainForHealing = 150;
+
+        //const for particle systems
+        public const int numExplosionParticles = 20;
+        public const int numExplosionSmokeParticles = 50;
     }
 }

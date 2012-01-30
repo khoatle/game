@@ -9,37 +9,21 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon
 {
-    public class Fruit : GameObject
+    public class Resource : GameObject
     {
         public bool Retrieved { get; set; }
-        //SoundEffect RetrievedSound;
-        //Temporary power-up types
-        //1: speed
-        //2: power
-        //3: fire rate
-        //4: health point
-        public int powerType;
-
-        public Fruit(int powerType)
+        
+        public Resource()
             : base()
         {
             Retrieved = false;
-            this.powerType = powerType;
         }
 
-        public void LoadContent(ContentManager content, Vector3 plantPosition)
+        public void LoadContent(ContentManager content, Vector3 resourcePosition)
         {
-            if (this.powerType == 1)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/green-fruit");
-            else if (this.powerType == 2)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/red-fruit");
-            else if (this.powerType == 3)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/blue-fruit");
-            else if (this.powerType == 4)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
-            
-            Position = plantPosition;
-            Position.Y = GameConstants.MainGameFloatHeight;
+            Model = content.Load<Model>("Models/BulletModels/chasingBullet");
+
+            Position = resourcePosition;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
@@ -89,9 +73,9 @@ namespace Poseidon
             //        RetrievedSound.Play();
             //        this.Retrieved = true;
             //    }
-                
+
             //}
-            
+
         }
 
     }

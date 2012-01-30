@@ -233,6 +233,7 @@ namespace Poseidon.Core
             if (HydroBot.iconActivated[HydroBot.faceToDraw]) colorToDraw = Color.White;
             else colorToDraw = Color.Black;
             spriteBatch.Draw(iconTextures[HydroBot.faceToDraw], new Vector2(barX - 32, barY - iconTextures[faceDrawNext].Height - 20 + iconTextures[HydroBot.faceToDraw].Height * partialDraw), new Rectangle(0, 0, iconTextures[HydroBot.faceToDraw].Width, (int)(iconTextures[HydroBot.faceToDraw].Height * (1.0f - partialDraw))), colorToDraw);
+            
         }
 
         public static void DrawLevelBar(Texture2D LevelBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
@@ -269,6 +270,24 @@ namespace Poseidon.Core
             foreach (String word in wordArray)
             {
                 if (font.MeasureString(line + word).Length() > width)
+                {
+                    returnString = returnString + line + '\n';
+                    line = String.Empty;
+                }
+                line = line + word + ' ';
+            }
+            return returnString + line;
+        }
+
+        public static string wrapLine(string input_line, int width, SpriteFont font, float scale)
+        {
+            String line = String.Empty;
+            String returnString = String.Empty;
+            String[] wordArray = input_line.Split(' ');
+
+            foreach (String word in wordArray)
+            {
+                if (font.MeasureString(line + word).Length()*scale > width)
                 {
                     returnString = returnString + line + '\n';
                     line = String.Empty;

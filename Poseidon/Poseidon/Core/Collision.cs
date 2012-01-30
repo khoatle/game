@@ -110,66 +110,43 @@ namespace Poseidon
         }
         // End-----------------------------------------------------
 
-        ///PLANT FUNCTIONS
-        public static bool isPlantPositionValid(Plant plant, List<Plant> plants, List<ShipWreck> shipwrecks, List<StaticObject> staticObjects)
+        ///Powerpacks & Resources Functions : 
+        public static bool isFloatPositionValid(Vector3 position, float radius, List<Powerpack> powerpacks, List<Resource> resources)
         {
-            if (isPlantvsPlantCollision(plant.BoundingSphere, plants))
+            BoundingSphere b = new BoundingSphere(position, radius);
+            if(PowerpackCollision(b, powerpacks))
             {
                 return false;
             }
-            if (isPlantvsShipwreckCollision(plant.BoundingSphere, shipwrecks))
+            if(ResourceCollision(b, resources))
             {
                 return false;
             }
-            if (isPlantvsStaticObjectCollision(plant.BoundingSphere, staticObjects)) {
-                return false;
-            }
-
             return true;
         }
 
         // Helper
-        private static bool isPlantvsPlantCollision(BoundingSphere plantBoundingSphere, List<Plant> plants)
+        private static bool PowerpackCollision(BoundingSphere thisBoundingSphere, List<Powerpack> powerpacks)
         {
-            for (int i = 0; i < plants.Count; i++)
+            for (int i = 0; i < powerpacks.Count; i++)
             {
-                if (plantBoundingSphere.Intersects(
-                    plants[i].BoundingSphere))
+                if (!powerpacks[i].Retrieved && thisBoundingSphere.Intersects(powerpacks[i].BoundingSphere))
                     return true;
             }
             return false;
         }
-        // Helper
-        private static bool isPlantvsStaticObjectCollision(BoundingSphere plantBoundingSphere, List<StaticObject> staticObjects)
+
+        //Helper
+        private static bool ResourceCollision(BoundingSphere thisBoundingSphere, List<Resource> resources)
         {
-            if (staticObjects != null)
+            foreach (Resource resource in resources)
             {
-                for (int i = 0; i < staticObjects.Count; i++)
-                {
-                    if (plantBoundingSphere.Intersects(
-                        staticObjects[i].BoundingSphere))
-                        return true;
-                }
+                if(!resource.Retrieved && thisBoundingSphere.Intersects(resource.BoundingSphere))
+                    return true;
             }
             return false;
         }
-        //helper
-        private static bool isPlantvsShipwreckCollision(BoundingSphere plantBoundingSphere, List<ShipWreck> shipwrecks)
-        {
-            if (shipwrecks != null)
-            {
-                BoundingSphere shipSphere;
-                for (int i = 0; i < shipwrecks.Count; i++)
-                {
-                    shipSphere = shipwrecks[i].BoundingSphere;
-                    shipSphere.Center = shipwrecks[i].Position;
-                    if (plantBoundingSphere.Intersects(
-                        shipSphere))
-                        return true;
-                }
-            }
-            return false;
-        }
+        
 
         /// <summary>
         /// BARRIERS FUNCTIONS
@@ -222,7 +199,7 @@ namespace Poseidon
         /// <summary>
         /// BOT COLLISION
         /// </summary>
-        public static bool isBotValidMove(HydroBot hydroBot, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount)
+        public static bool isBotValidMove(HydroBot hydroBot, Vector3 futurePosition, SwimmingObject[] enemies,int enemiesAmount, SwimmingObject[] fish, int fishAmount, HeightMapInfo heightMapInfo)
         {
             BoundingSphere futureBoundingSphere = hydroBot.BoundingSphere;
             futureBoundingSphere.Center.X = futurePosition.X;
@@ -248,6 +225,9 @@ namespace Poseidon
             if (isBotVsBarrierCollision(futureBoundingSphere, fish, fishAmount)) {
                 return false;
             }
+
+            if (heightMapInfo.GetHeight(futurePosition) >= -10)
+                return false;
             return true;
         }
 
@@ -393,7 +373,8 @@ namespace Poseidon
         }
 
 
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount) {
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount, ParticleSystem explosionParticles)
+        {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
                     if (!HydroBot.invincibleMode)
@@ -426,6 +407,17 @@ namespace Poseidon
                         if (enemyBullets[i].shooter != null && !enemyBullets[i].shooter.isHypnotise)
                             CastSkill.useHypnotise(enemyBullets[i].shooter);
                     }
+
+                    // add particle effect when certain kind of bullet hits
+                    if (enemyBullets[i] is Torpedo)
+                    {
+                        if (explosionParticles != null)
+                        {
+                            for (int k = 0; k < GameConstants.numExplosionParticles; k++)
+                                explosionParticles.AddParticle(enemyBullets[i].Position, Vector3.Zero);
+                        }
+                    }
+
                     enemyBullets.RemoveAt(i);
                     
                 }

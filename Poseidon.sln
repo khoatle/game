@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinnedModelWindows", "Pose
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinnedModelPipeline", "Poseidon\SkinnedModelPipeline\SkinnedModelPipeline.csproj", "{4636C7E1-B845-4B83-B96D-64A11B8A4515}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleSettings", "ParticleSettings\ParticleSettings.csproj", "{2D9A06FD-F612-4E2B-A08C-341420091EAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -91,6 +93,18 @@ Global
 		{4636C7E1-B845-4B83-B96D-64A11B8A4515}.Release|x86.Build.0 = Debug|x86
 		{4636C7E1-B845-4B83-B96D-64A11B8A4515}.Release|Xbox 360.ActiveCfg = Debug|x86
 		{4636C7E1-B845-4B83-B96D-64A11B8A4515}.Release|Xbox 360.Build.0 = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Debug|x86.ActiveCfg = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Debug|x86.Build.0 = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Debug|Xbox 360.ActiveCfg = Debug|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|Any CPU.ActiveCfg = Release|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|x86.ActiveCfg = Release|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|x86.Build.0 = Release|x86
+		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|Xbox 360.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

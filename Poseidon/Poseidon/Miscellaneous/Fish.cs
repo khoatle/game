@@ -179,7 +179,7 @@ namespace Poseidon {
         public void SetupShaderParameters(ContentManager content, Model model)
         {
             newSkinnedeffect = content.Load<Effect>("Shaders/NewSkinnedEffect");
-            //EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
+            EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
         }
 
         public override void Draw(Matrix view, Matrix projection, Camera gameCamera)
@@ -195,46 +195,46 @@ namespace Poseidon {
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
-                foreach (SkinnedEffect effect in mesh.Effects)
-                //foreach (Effect effect in mesh.Effects)
+                //foreach (SkinnedEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
                     //for standard Skinned Effect
-                    effect.SetBoneTransforms(bones);
-                    effect.View = view;
-                    effect.Projection = projection;
+                    //effect.SetBoneTransforms(bones);
+                    //effect.View = view;
+                    //effect.Projection = projection;
 
-                    if (isPoissoned) {
-                        effect.DiffuseColor = Color.Green.ToVector3();
-                    }
-                    else {
-                        effect.DiffuseColor = Color.White.ToVector3();
-                    }
+                    //if (isPoissoned) {
+                    //    effect.DiffuseColor = Color.Green.ToVector3();
+                    //}
+                    //else {
+                    //    effect.DiffuseColor = Color.White.ToVector3();
+                    //}
                     
-                    effect.FogEnabled = true;
-                    effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    //effect.FogEnabled = true;
+                    //effect.FogStart = GameConstants.FogStart;
+                    //effect.FogEnd = GameConstants.FogEnd;
+                    //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom SkinnedEffect
-                    //effect.CurrentTechnique = effect.Techniques["NormalShading"];
-                    //effect.Parameters["World"].SetValue(Matrix.Identity);
+                    effect.CurrentTechnique = effect.Techniques["NormalShading"];
+                    effect.Parameters["World"].SetValue(Matrix.Identity);
 
-                    //effect.Parameters["Bones"].SetValue(bones);
-                    //effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(Matrix.Identity));
-                    //effect.Parameters["View"].SetValue(view);
-                    //effect.Parameters["Projection"].SetValue(projection);
-                    //effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
-                    //Matrix WorldView = Matrix.Identity * view;
-                    //if (isPoissoned == true)
-                    //{
-                    //    effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
-                    //}
-                    //else
-                    //{
-                    //    effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
-                    //}
-                    //EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    //effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["Bones"].SetValue(bones);
+                    effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(Matrix.Identity));
+                    effect.Parameters["View"].SetValue(view);
+                    effect.Parameters["Projection"].SetValue(projection);
+                    effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
+                    Matrix WorldView = Matrix.Identity * view;
+                    if (isPoissoned == true)
+                    {
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
+                    }
+                    else
+                    {
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
+                    }
+                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
                 }
                 mesh.Draw();
             }

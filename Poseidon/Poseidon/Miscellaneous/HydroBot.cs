@@ -139,6 +139,11 @@ namespace Poseidon
         public static int plasticTrash = 0;
         public static int nuclearTrash = 0;
 
+        //Total trash processed across levels
+        public static int totalBioTrashProcessed, lsTotalBioTrashProcessed;
+        public static int totalPlasticTrashProcessed, lsTotalPlasticTrashProcessed;
+        public static int totalNuclearTrashProcessed, lsTotalNuclearTrashProcessed;
+
         //Resources for building factories and research facility.
         public static int numResources, lsNumResources;
 
@@ -223,6 +228,7 @@ namespace Poseidon
             numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
 
             bioTrash = plasticTrash = nuclearTrash = 0;
+            totalBioTrashProcessed = totalPlasticTrashProcessed = totalNuclearTrashProcessed = 0;
             bioPlantLevel = plasticPlantLevel = lsBioPlantLevel = lsPlasticPlantLevel = 1;
             numResources  = lsNumResources = GameConstants.numResourcesAtStart;
 
@@ -320,6 +326,9 @@ namespace Poseidon
             skillComboActivated = lsSkillComboActivated = (bool)info.GetValue("skillComboActivated", typeof(bool));
 
             bioTrash = plasticTrash = nuclearTrash = 0;
+            totalBioTrashProcessed = lsTotalBioTrashProcessed = (int)info.GetValue("totalBioTrashProcessed", typeof(int));
+            totalPlasticTrashProcessed = lsTotalPlasticTrashProcessed = (int)info.GetValue("totalPlasticTrashProcessed", typeof(int));
+            totalNuclearTrashProcessed = lsTotalNuclearTrashProcessed = (int)info.GetValue("totalNuclearTrashProcessed", typeof(int));
             bioPlantLevel = lsBioPlantLevel = (int)info.GetValue("bioPlantLevel", typeof(int));
             plasticPlantLevel = lsPlasticPlantLevel = (int)info.GetValue("plasticPlantLevel", typeof(int));
             numResources = lsNumResources = (int)info.GetValue("numResources", typeof(int));
@@ -367,6 +376,9 @@ namespace Poseidon
             info.AddValue("bioPlantLevel", bioPlantLevel);
             info.AddValue("plasticPlantLevel", plasticPlantLevel);
             info.AddValue("numResources", numResources);
+            info.AddValue("totalBioTrashProcessed", totalBioTrashProcessed);
+            info.AddValue("totalPlasticTrashProcessed", totalPlasticTrashProcessed);
+            info.AddValue("totalNuclearTrashProcessed", totalNuclearTrashProcessed);
         }
 
         /// <summary>
@@ -484,6 +496,10 @@ namespace Poseidon
             bioPlantLevel = lsBioPlantLevel;
             plasticPlantLevel = lsPlasticPlantLevel;
             numResources = lsNumResources;
+
+            totalBioTrashProcessed = lsTotalBioTrashProcessed;
+            totalPlasticTrashProcessed = lsTotalPlasticTrashProcessed;
+            totalNuclearTrashProcessed = lsTotalNuclearTrashProcessed;
         }
 
         public void SetLevelStartValues()
@@ -532,7 +548,11 @@ namespace Poseidon
             lsPlasticPlantLevel = plasticPlantLevel;
 
             numResources += GameConstants.numResourcesAtStart;
-            lsNumResources = numResources; 
+            lsNumResources = numResources;
+
+            lsTotalBioTrashProcessed = totalBioTrashProcessed;
+            lsTotalPlasticTrashProcessed = totalPlasticTrashProcessed;
+            lsTotalNuclearTrashProcessed = totalNuclearTrashProcessed;
         }
 
         internal void Reset()
@@ -567,7 +587,7 @@ namespace Poseidon
             if(PlayGameScene.currentLevel > 0 && gameMode != GameMode.SurvivalMode)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
             if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
-            bioTrash = plasticTrash = 0;
+            bioTrash = plasticTrash = nuclearTrash = 0;
         }
 
         public void UpdateAction(GameTime gameTime, Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount, ContentManager Content,

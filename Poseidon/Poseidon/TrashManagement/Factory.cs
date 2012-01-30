@@ -105,11 +105,11 @@ namespace Poseidon
                         ProduceResource(ref resources, powerpacks);
                     }
                     if (factoryType == FactoryType.biodegradable)
-                        ResearchFacility.totalBioTrashProcessed += trashBlockSize;
+                        HydroBot.totalBioTrashProcessed += trashBlockSize;
                     else if (factoryType == FactoryType.plastic)
-                        ResearchFacility.totalPlasticTrashProcessed += trashBlockSize;
+                        HydroBot.totalPlasticTrashProcessed += trashBlockSize;
                     else
-                        ResearchFacility.totalNuclearTrashProcessed += trashBlockSize;
+                        HydroBot.totalNuclearTrashProcessed += trashBlockSize;
                     break;
                 }
             }
@@ -188,7 +188,7 @@ namespace Poseidon
                     break;
                 case FactoryType.plastic:
                     title = "Plastic Recycling Plant";
-                    plant_basic_description = "Basic steps for plastic recycling:\n1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n3) Washing: Contaminants are removed.\n4) Pelleting: The plastic is mented down and made into small pellets.\n\nTypes of plastic (with code and examples):\n1: PET - bottles\n2: HDPE - milk bottles, bags\n3: PVC - pipes, detergent bottles, raincoats\n4: LDPE - bread bags\n5: PP - straws, screw-on lids\n6: PS - foam, yogurt containers\n7: Others - ketchup bottles\n\nThe code numbers are printed within a recycle sign on most plastic containers.";
+                    plant_basic_description = "Basic steps for plastic recycling:\n1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n3) Washing: Contaminants are removed.\n4) Pelleting: The plastic is mented down and made into small pellets.\n\nTypes of plastic (with code and examples):\n1: PET - bottles\n2: HDPE - milk bottles, bags\n3: PVC - pipes, detergent bottles, raincoats\n4: LDPE - bread bags\n5: PP - straws, screw-on lids\n6: PS - foam, yogurt containers\n7: Others - ketchup bottles\nThe code numbers are printed within a recycle sign on most plastic containers.";
                     if (HydroBot.plasticPlantLevel == 1)
                     {
                         title += " (Basic technology)";
@@ -238,9 +238,21 @@ namespace Poseidon
                 changeProduceButtonText = "CLICK TO PRODUCE RESOURCES";
             spriteBatch.DrawString(factoryFont, changeProduceButtonText, new Vector2(produceRect.Center.X - factoryFont.MeasureString(changeProduceButtonText).X / 2, produceRect.Center.Y - factoryFont.MeasureString(changeProduceButtonText).Y / 2), Color.White);
             
+            //draw how many resources are being processed
+            string beingProcessedStr;
+            int numBeingProcessed;
+            numBeingProcessed = listTimeTrashProcessing.Count;
+            if (factoryType == FactoryType.radioactive) numBeingProcessed *= 5;
+            if (numBeingProcessed < 2)
+                beingProcessedStr = "CURRENT STATUS: "+numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + " ARE BEING GENERATED.";
+            else
+                beingProcessedStr = "CURRENT STATUS: "+numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + "S ARE BEING GENERATED.";
+            beingProcessedStr = Poseidon.Core.IngamePresentation.wrapLine(beingProcessedStr, backgroundRect.Width - 100, factoryFont);
+            spriteBatch.DrawString(factoryFont, beingProcessedStr, new Vector2(backgroundRect.Center.X - factoryFont.MeasureString(beingProcessedStr).X/2, produceRect.Bottom + 5), Color.Black);
+
             //draw description
             string text = Poseidon.Core.IngamePresentation.wrapLine(plant_basic_description + plant_upgradeLevel_description, backgroundRect.Width - 100, factoryFont);
-            spriteBatch.DrawString(factoryFont, text, new Vector2(backgroundRect.Left + 50, produceRect.Bottom + 5), Color.DarkRed);
+            spriteBatch.DrawString(factoryFont, text, new Vector2(backgroundRect.Left + 50, produceRect.Bottom + 35), Color.DarkRed);
 
             string nextText = "Press Enter to continue";
             Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y);

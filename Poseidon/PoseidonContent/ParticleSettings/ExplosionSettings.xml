@@ -7,10 +7,10 @@
     <Duration>PT1S</Duration>
     <DurationRandomness>1</DurationRandomness>
     <EmitterVelocitySensitivity>1</EmitterVelocitySensitivity>
-    <MinHorizontalVelocity>-15</MinHorizontalVelocity>
-    <MaxHorizontalVelocity>15</MaxHorizontalVelocity>
-    <MinVerticalVelocity>-15</MinVerticalVelocity>
-    <MaxVerticalVelocity>15</MaxVerticalVelocity>
+    <MinHorizontalVelocity>-5</MinHorizontalVelocity>
+    <MaxHorizontalVelocity>5</MaxHorizontalVelocity>
+    <MinVerticalVelocity>-5</MinVerticalVelocity>
+    <MaxVerticalVelocity>5</MaxVerticalVelocity>
     <Gravity>0 0 0</Gravity>
     <EndVelocity>0</EndVelocity>
     <MinColor>FF808080</MinColor>

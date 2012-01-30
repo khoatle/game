@@ -405,13 +405,13 @@ namespace Poseidon
             //just for testing
             //should be removed
             //skillComboActivated = true;
-            //activeSkillID = 4;
-            //secondSkillID = -1;
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
+            activeSkillID = 4;
+            secondSkillID = -1;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = true;
+            skills[3] = true;
+            skills[4] = true;
 
             //goodWillBarActivated = true;
             //iconActivated[0] = true;
@@ -424,12 +424,10 @@ namespace Poseidon
 
             LoadAnimation(1, 30, 24);
 
-            //shader stuff
-            // Load the shader
-            effect = content.Load<Effect>("Shaders/Shader");
+            
 
             // Set up the parameters
-            SetupShaderParameters();
+            SetupShaderParameters(content, Model);
         }
 
         public void LoadAnimation(int clipStart, int clipEnd, int fpsRate)
@@ -1233,147 +1231,33 @@ namespace Poseidon
             return;
         }
 
-        //testing the shader
-        // Parameters for our shader object
-        EffectParameter projectionParameter;
-        EffectParameter viewParameter;
-        EffectParameter worldParameter;
-        EffectParameter ambientIntensityParameter;
-        EffectParameter ambientColorParameter;
 
-        // new parameters for diffuse light
-        EffectParameter diffuseIntensityParameter;
-        EffectParameter diffuseColorParameter;
-        EffectParameter diffuseDirectionParameter;
-
-        Matrix world, view, projection;
-        float ambientLightIntensity;
-        Vector4 ambientLightColor;
-        // The object that will contain our shader
-        Effect effect;
-        public void SetupShaderParameters()
+        // our custom shader
+        Effect newSkinnedeffect;
+  
+        public void SetupShaderParameters(ContentManager content, Model model)
         {
-            // Bind the parameters with the shader.
-            worldParameter = effect.Parameters["World"];
-            viewParameter = effect.Parameters["View"];
-            projectionParameter = effect.Parameters["Projection"];
-
-            ambientColorParameter = effect.Parameters["AmbientColor"];
-            ambientIntensityParameter = effect.Parameters["AmbientIntensity"];
-
-            diffuseColorParameter = effect.Parameters["DiffuseColor"];
-            diffuseIntensityParameter = effect.Parameters["DiffuseIntensity"];
-            diffuseDirectionParameter = effect.Parameters["DiffuseDirection"];
-
-            ambientLightIntensity = 1.0f;
-            ambientLightColor = Color.DarkGreen.ToVector4();
+            newSkinnedeffect = content.Load<Effect>("Shaders/NewSkinnedEffect");
+            EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
         }
 
         /// <summary>
         /// Draws the tank model, using the current animation settings.
         /// </summary>
-        public void Draw(Matrix view, Matrix projection, GraphicsDeviceManager graphics)
-        {
-            
-            //bones = clipPlayer.GetSkinTransforms();
-
-            //foreach (ModelMesh mesh in Model.Meshes)
-            //{
-            //    foreach (SkinnedEffect effect in mesh.Effects)
-            //    {
-            //        effect.SetBoneTransforms(bones);
-            //        effect.View = view;
-            //        effect.Projection = projection;
-
-            //        //if (invincibleMode == true)
-            //        //{
-            //        //    effect.DiffuseColor = Color.Gold.ToVector3();
-            //        //}
-            //        //else if (isPoissoned == true)
-            //        //{
-            //        //    effect.DiffuseColor = Color.Green.ToVector3();
-            //        //}
-            //        //else
-            //        //{
-            //        //    effect.DiffuseColor = Vector3.One;
-            //        //}
-            //        //effect.EmissiveColor = Color.White.ToVector3();
-            //        //effect.SpecularColor = Color.Red.ToVector3();
-            //        //effect.SpecularPower = 1000.0f;
-            //        //effect.EnableDefaultLighting();
-            //        //effect.DirectionalLight0.Enabled = false;
-            //        //effect.DirectionalLight1.Enabled = false;
-            //        //effect.DirectionalLight2.Enabled = false;
-
-
-            //        effect.PreferPerPixelLighting = true;
-            //        effect.FogEnabled = true;
-            //        effect.FogStart = GameConstants.FogStart;
-            //        effect.FogEnd = GameConstants.FogEnd;
-            //        effect.FogColor = GameConstants.FogColor.ToVector3();
-
-            //    }
-            //    mesh.Draw();
-            //}
-            ModelMesh mesh = Model.Meshes[0];
-            ModelMeshPart meshPart = mesh.MeshParts[0];
-
-            // Set parameters
-            this.world = Matrix.Identity;
-            this.projection = projection;
-            this.view = view;
-            projectionParameter.SetValue(this.projection);
-            viewParameter.SetValue(this.view);
-            worldParameter.SetValue(this.world);
-            ambientIntensityParameter.SetValue(ambientLightIntensity);
-            ambientColorParameter.SetValue(ambientLightColor);
-            diffuseColorParameter.SetValue(Color.White.ToVector4());
-            diffuseIntensityParameter.SetValue(0.5f);
-
-            Vector3 diffuseLightDirection = new Vector3(0, -1, -1);
-
-            //ensure the light direction is normalized, or
-            //the shader will give some weird results
-            diffuseLightDirection.Normalize();
-            diffuseDirectionParameter.SetValue(diffuseLightDirection);
-
-            //set the vertex source to the mesh's vertex buffer
-            graphics.GraphicsDevice.SetVertexBuffer(meshPart.VertexBuffer, meshPart.VertexOffset);
-
-            //set the current index buffer to the sample mesh's index buffer
-            graphics.GraphicsDevice.Indices = meshPart.IndexBuffer;
-
-            effect.CurrentTechnique = effect.Techniques["Technique1"];
-
-            for (int i = 0; i < effect.CurrentTechnique.Passes.Count; i++)
-            {
-                //EffectPass.Apply will update the device to
-                //begin using the state information defined in the current pass
-                effect.CurrentTechnique.Passes[i].Apply();
-
-                //theMesh contains all of the information required to draw
-                //the current mesh
-                graphics.GraphicsDevice.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList, 0, 0,
-                    meshPart.NumVertices, meshPart.StartIndex, meshPart.PrimitiveCount);
-            }
-
-        }
-        /// <summary>
-        /// Draws the tank model, using the current animation settings.
-        /// </summary>
-        public void Draw(Matrix view, Matrix projection)
+        public void Draw(Matrix view, Matrix projection, Camera gameCamera)
         {
 
             bones = clipPlayer.GetSkinTransforms();
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
-                foreach (SkinnedEffect effect in mesh.Effects)
+                //foreach (SkinnedEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
-                    effect.SetBoneTransforms(bones);
-                    effect.View = view;
-                    effect.Projection = projection;
+                    //for standard SkinnedEffect
+                    //effect.SetBoneTransforms(bones);
+                    //effect.View = view;
+                    //effect.Projection = projection;
 
                     //if (invincibleMode == true)
                     //{
@@ -1387,27 +1271,65 @@ namespace Poseidon
                     //{
                     //    effect.DiffuseColor = Vector3.One;
                     //}
-                    //effect.EmissiveColor = Color.White.ToVector3();
-                    //effect.SpecularColor = Color.Red.ToVector3();
-                    //effect.SpecularPower = 1000.0f;
-                    //effect.DirectionalLight0.Enabled = false;
-                    //effect.DirectionalLight1.Enabled = false;
-                    //effect.DirectionalLight2.Enabled = false;
-                    effect.EnableDefaultLighting();
-                    effect.SpecularColor = Vector3.One;
-                    
-                    effect.PreferPerPixelLighting = true;
-                    effect.FogEnabled = true;
-                    effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    ////effect.EmissiveColor = Color.White.ToVector3();
+                    ////effect.SpecularColor = Color.Red.ToVector3();
+                    ////effect.SpecularPower = 1000.0f;
+                    ////effect.DirectionalLight0.Enabled = false;
+                    ////effect.DirectionalLight1.Enabled = false;
+                    ////effect.DirectionalLight2.Enabled = false;
+                    //effect.EnableDefaultLighting();
+                    ////effect.SpecularColor = Vector3.One;
+
+                    //effect.PreferPerPixelLighting = true;
+                    //effect.FogEnabled = true;
+                    //effect.FogStart = GameConstants.FogStart;
+                    //effect.FogEnd = GameConstants.FogEnd;
+                    //effect.FogColor = GameConstants.FogColor.ToVector3();
+
+                    //for our custom SkinnedEffect
+                    //NewSkinnedEffect.fx
+                    effect.CurrentTechnique = effect.Techniques["NormalShading"];
+                    effect.Parameters["World"].SetValue(Matrix.Identity);
+
+                    effect.Parameters["Bones"].SetValue(bones);
+                    effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(Matrix.Identity));
+                    effect.Parameters["View"].SetValue(view);
+                    effect.Parameters["Projection"].SetValue(projection);
+                    effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
+                    Matrix WorldView = Matrix.Identity * view;
+                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    if (invincibleMode == true)
+                    {
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Gold.ToVector3(), 1));
+                    }
+                    else if (isPoissoned == true)
+                    {
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
+                    }
+                    else
+                    {
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
+                    }
+
+                    //SkinnedEffect.fx
+                    //effect.Parameters["ShaderIndex"].SetValue(17);
+                    //effect.Parameters["WorldViewProj"].SetValue(view * projection);
+                    //// The direction of the diffuse light 
+                    //Vector3 DiffuseLightDirection = new Vector3(0.0f, 0.5f, 0.5f);
+                    //effect.Parameters["DirLight0Direction"].SetValue(DiffuseLightDirection);
+                    //// The color of the diffuse light 
+                    //Vector4 DiffuseColor = new Vector4(1, 1, 1, 1);
+                    //effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
 
                 }
                 mesh.Draw();
             }
-           
 
-        }
+        
+        } 
+
+        
         internal void DrawTrashFruitSphere(Matrix view, Matrix projection,
             GameObject boundingSphereModel)
         {

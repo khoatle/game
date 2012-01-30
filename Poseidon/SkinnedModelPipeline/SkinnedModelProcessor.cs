@@ -272,5 +272,48 @@ namespace SkinnedModelPipeline
             get { return MaterialProcessorDefaultEffect.SkinnedEffect; }
             set { }
         }
+
+        //protected override MaterialContent ConvertMaterial(MaterialContent material, ContentProcessorContext context)
+        //{
+        //    EffectMaterialContent myMaterial = new EffectMaterialContent();
+
+        //    string effectPath = Path.GetFullPath("Shaders/SkinnedEffect.fx");
+
+        //    myMaterial.Effect = new ExternalReference<EffectContent>(effectPath);
+
+        //    if (material is BasicMaterialContent)
+        //    {
+        //        BasicMaterialContent basicMaterial = (BasicMaterialContent)material;
+
+        //        // You can set textures for the effect to use
+        //        //myMaterial.Textures.Add("DiffuseTexture", basicMaterial.Texture);
+        //        // And you can also set any arbitrary effect parameters at this point
+        //        //myMaterial.OpaqueData.Add("Shininess", basicMaterial.SpecularPower * 10);
+        //        //myMaterial.OpaqueData.Add("BumpSize", 42);
+        //    }
+        //    else if (material is SkinnedMaterialContent)
+        //    {
+        //        SkinnedMaterialContent skinnedMaterial = (SkinnedMaterialContent)material;
+        //        myMaterial.Textures.Add("Texture123", skinnedMaterial.Texture);
+ 
+        //        // You can set textures for the effect to use
+        //        //myMaterial.Textures.Add("DiffuseTexture", skinnedMaterial.Texture);
+
+        //        // And you can also set any arbitrary effect parameters at this point
+        //        //myMaterial.OpaqueData.Add("Shininess", skinnedMaterial.SpecularPower * 10);
+        //        //myMaterial.OpaqueData.Add("BumpSize", 42);
+        //    }
+        //    else if (material is EffectMaterialContent)
+        //    {
+        //        EffectMaterialContent effectMaterial = (EffectMaterialContent)material;
+        //        // todo: put something interesting here if you want
+        //        // or don't bother if you don't want
+        //        // whatever really...
+        //    }
+        //    else
+        //        throw new Exception("huh? this is very odd");
+
+        //    return base.ConvertMaterial(myMaterial, context);
+        //}
     }
 }

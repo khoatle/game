@@ -68,6 +68,10 @@ namespace Poseidon
             scaledSphere.Radius *= 0.08f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+
+
+            // Set up the parameters
+            SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
         public void Load()

@@ -713,7 +713,7 @@ namespace Poseidon
             {
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
                     if (enemies[i].stunned == true)
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
@@ -728,7 +728,7 @@ namespace Poseidon
             for (int i = 0; i < fishAmount; i++)
             {
                 if (fish[i].BoundingSphere.Intersects(frustum))
-                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
             }
 
             for (int i = 0; i < myBullet.Count; i++) {
@@ -746,7 +746,7 @@ namespace Poseidon
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
-            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
             //RasterizerState rs = new RasterizerState();
             //rs.FillMode = FillMode.WireFrame;
             //GraphicsDevice.RasterizerState = rs;

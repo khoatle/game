@@ -1666,6 +1666,32 @@
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Shaders\SkinnedEffect.fx">
+      <Name>SkinnedEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\Common.fxh">
+      <Name>Common</Name>
+    </None>
+    <Compile Include="Shaders\NewSkinnedEffect.fx">
+      <Name>NewSkinnedEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+    <None Include="Shaders\Lighting.fxh">
+      <Name>Lighting</Name>
+    </None>
+    <None Include="Shaders\Macros.fxh">
+      <Name>Macros</Name>
+    </None>
+    <None Include="Shaders\Structures.fxh">
+      <Name>Structures</Name>
+    </None>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

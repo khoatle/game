@@ -12,7 +12,7 @@ namespace Poseidon.Core
 {
     public class ClipPlayer
     {
-        Matrix[] boneTransforms, skinTransforms, worldTransforms;
+        public Matrix[] boneTransforms, skinTransforms, worldTransforms;
         AnimationClip currentClip;
         IList<Keyframe> keyframeList;
         SkinningData skinData;

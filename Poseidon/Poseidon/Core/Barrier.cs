@@ -94,7 +94,9 @@ namespace Poseidon
                 mesh.Draw();
             }
         }
-
+        public virtual void Draw(Matrix view, Matrix projection, Camera gameCamera)
+        {
+        }
         //public virtual void Update(SwimmingObject[] swimmingObjects, int size, int changeDirection, Tank tank)
         //{
             //Vector3 futurePosition = Position;

@@ -1046,41 +1046,23 @@ namespace Poseidon
 
         public void dumpTrashInFactory(Factory factory, int amount, Vector3 position)
         {
-            int envGain=0, envPoints, expPoints;
             string point_string = "";
             switch (factory.factoryType)
             {
                 case FactoryType.biodegradable:
-                    envGain = GameConstants.envGainForBioTrashClean;
                     point_string = HydroBot.bioTrash + " Biodegradable Trash Dumped.\n";
                     factory.numTrashWaiting += HydroBot.bioTrash;
                     break;
                 case FactoryType.plastic:
-                    envGain = GameConstants.envGainForPlasticTrashClean;
                     point_string = HydroBot.plasticTrash + " Plastic Trash Dumped.\n";
                     factory.numTrashWaiting += HydroBot.plasticTrash;
                     break;
                 case FactoryType.radioactive:
-                    envGain = GameConstants.envGainForNuclearTrashClean;
                     point_string = HydroBot.nuclearTrash + " Radioactive Trash Dumped.\n";
                     factory.numTrashWaiting += HydroBot.nuclearTrash;
                     break;
             }
-            if (PoseidonGame.gamePlus)
-            {
-                if (currentLevel > 0)
-                    envPoints = (envGain + HydroBot.gamePlusLevel * 5) * amount;
-                else
-                    envPoints = (envGain - 5) * amount;
-            }
-            else
-                envPoints = envGain * amount;
-            expPoints = (GameConstants.expGainForTrash + HydroBot.gamePlusLevel*5) * amount;
-            HydroBot.currentExperiencePts += expPoints;
-            HydroBot.currentEnvPoint += envPoints;
-
             Point point = new Point();
-            point_string += "+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
             point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.LawnGreen);
             points.Add(point);
         }

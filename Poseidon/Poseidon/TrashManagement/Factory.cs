@@ -167,45 +167,49 @@ namespace Poseidon
             {
                 case FactoryType.biodegradable:
                     plant_basic_description = "";
+                    float numDays = (float)processingTime / GameConstants.DaysPerSecond;
+                    production_str += " for 5 trash in " + numDays.ToString();
+                    if(numDays > 1)
+                        production_str += " days";
+                    else
+                        production_str += " day";
                     if (HydroBot.bioPlantLevel == 1)
                     {
                         title = "Biodegradable Trash Processing Plant (Basic technology)";
                         plant_upgradeLevel_description = "Trash decompose naturally to produce methane.";
-                        production_str += " for 5 trash in 10 days";
+                        //production_str += " for 5 trash in 5 days";
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
                         title = "Biodegradable Trash Processing Plant (Advanced)";
                         plant_upgradeLevel_description = "Put level 2 description here.";
-                        production_str += " for 5 trash in 1 day";
+                        //production_str += " for 5 trash in 2 days";
                     }
                     else
                     {
                         title = "Biodegradable Trash Processing Plant (State of the Art)";
                         plant_upgradeLevel_description = "Need to write level 3 description";
-                        production_str += " for 5 trash in 1/4 day";
+                        //production_str += " for 5 trash in 1 day";
                     }
                     break;
                 case FactoryType.plastic:
                     title = "Plastic Recycling Plant";
                     plant_basic_description = "Basic steps for plastic recycling:\n1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n3) Washing: Contaminants are removed.\n4) Pelleting: The plastic is mented down and made into small pellets.\n\nTypes of plastic (with code and examples):\n1: PET - bottles\n2: HDPE - milk bottles, bags\n3: PVC - pipes, detergent bottles, raincoats\n4: LDPE - bread bags\n5: PP - straws, screw-on lids\n6: PS - foam, yogurt containers\n7: Others - ketchup bottles\nThe code numbers are printed within a recycle sign on most plastic containers.";
+                    production_str += " for " + trashBlockSize + " trash in 1 day";
                     if (HydroBot.plasticPlantLevel == 1)
                     {
                         title += " (Basic technology)";
                         plant_upgradeLevel_description = " Usually only type 1 and 2 are recycled. Recycled PET is usually used to make threads which are used to make shoes, jackets, hats. Recycled HDPE is used to make durable products like tables, rulers, trashcans, etc. Other types are not recycled due to lack of incentive to invest in equipments required.";
-                        production_str += " for 10 trash in 1 day";
                     }
                     else if (HydroBot.plasticPlantLevel == 2)
                     {
                         title += " (Advanced)";
                         plant_upgradeLevel_description = " Monomer Recycling: The polymers undergoes inverse of the polymerization reaction which is used during manufacturing. This creates same mix of chemicals that formed the original polymer, which can be purified and used to synthesize new polymer chains of the same type.";
-                        production_str += " for 3 trash in 1 day";
                     }
                     else
                     {
                         title += " (State of the Art)";
                         plant_upgradeLevel_description = " Thermal Depolymerization: Melts plastic into petroleum that can be remade into a variety of products.\nBiodegradable plastics can also be produced which can decompose in composting plants where it is placed in a heated environment with moisture and oxygen for months.";
-                        production_str += " for 1 trash in 1 day";
                     }
                     break;
                 case FactoryType.radioactive:
@@ -275,23 +279,23 @@ namespace Poseidon
                     if (HydroBot.bioPlantLevel == 1)
                     {
                         trashBlockSize = 5;
-                        processingTime = 40;
+                        processingTime = 20; //5 days
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
                         trashBlockSize = 5; 
-                        processingTime = 4;
+                        processingTime = 8; // 2 days
                     }
                     else
                     {
                         trashBlockSize = 5;
-                        processingTime = 1;
+                        processingTime = 4; //1 day
                     }
                     break;
                 case FactoryType.plastic:
                     if (HydroBot.plasticPlantLevel == 1)
                     {
-                        trashBlockSize = 10;
+                        trashBlockSize = 5;
                         processingTime = 4;
                     }
                     else if (HydroBot.plasticPlantLevel == 2)

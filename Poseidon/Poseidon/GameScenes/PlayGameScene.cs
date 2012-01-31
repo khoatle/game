@@ -160,6 +160,9 @@ namespace Poseidon
         ParticleSystem explosionParticles;
         //ParticleSystem explosionSmokeParticles;
 
+        //for edge detection effect
+        RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -240,7 +243,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -366,6 +369,14 @@ namespace Poseidon
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             cutSceneFinalRenderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+
+            //for edge detection effect
+            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
+            edgeDetectionRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
 
@@ -1157,8 +1168,13 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
+            //preparingedge detecting for the object being pointed at
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, graphics.GraphicsDevice, normalDepthRenderTarget);
+
+            //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
+            
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -1190,7 +1206,7 @@ namespace Poseidon
             {
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
+                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     if (enemies[i].stunned == true)
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
@@ -1216,7 +1232,7 @@ namespace Poseidon
             {
                 if (fish[i].BoundingSphere.Intersects(frustum))
                 {
-                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
+                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;
@@ -1339,7 +1355,7 @@ namespace Poseidon
             }
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
-            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
             //RasterizerState rs = new RasterizerState();
             //rs.FillMode = FillMode.WireFrame;
             //GraphicDevice.RasterizerState = rs;
@@ -1375,7 +1391,10 @@ namespace Poseidon
             schoolOfFish3.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
-            SceneTexture = renderTarget;
+            //applying edge detection
+            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
+
+            SceneTexture = edgeDetectionRenderTarget;
             //graphics.GraphicsDevice.SetRenderTarget(null);
             //spriteBatch.Begin();
             //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
@@ -1525,7 +1544,7 @@ namespace Poseidon
 
             //Display Enemy Health
             BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
-            if (enemyPointedAt != null)
+            if (fishPointedAt == null && enemyPointedAt != null)
                 IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 
             //Display Cyborg health

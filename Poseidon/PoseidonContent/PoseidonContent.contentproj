@@ -1688,6 +1688,11 @@
     <None Include="Shaders\Macros.fxh">
       <Name>Macros</Name>
     </None>
+    <Compile Include="Shaders\EdgeDetectionEffect.Fx">
+      <Name>EdgeDetectionEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Structures.fxh">
       <Name>Structures</Name>
     </None>

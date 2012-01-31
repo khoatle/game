@@ -1338,7 +1338,7 @@ namespace Poseidon
         /// <summary>
         /// Draws the tank model, using the current animation settings.
         /// </summary>
-        public void Draw(Matrix view, Matrix projection, Camera gameCamera)
+        public void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
 
             bones = clipPlayer.GetSkinTransforms();
@@ -1382,7 +1382,7 @@ namespace Poseidon
 
                     //for our custom SkinnedEffect
                     //NewSkinnedEffect.fx
-                    effect.CurrentTechnique = effect.Techniques["NormalShading"];
+                    effect.CurrentTechnique = effect.Techniques[techniqueName];
                     effect.Parameters["World"].SetValue(Matrix.Identity);
 
                     effect.Parameters["Bones"].SetValue(bones);

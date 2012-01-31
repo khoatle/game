@@ -237,7 +237,7 @@ namespace Poseidon
             EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
         }
 
-        public override void Draw(Matrix view, Matrix projection, Camera gameCamera)
+        public override void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
             if (clipPlayer == null)
             {
@@ -277,7 +277,7 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom SkinnedEffect
-                    effect.CurrentTechnique = effect.Techniques["NormalShading"];
+                    effect.CurrentTechnique = effect.Techniques[techniqueName];
                     effect.Parameters["World"].SetValue(Matrix.Identity);
 
                     effect.Parameters["Bones"].SetValue(bones);

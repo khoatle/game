@@ -20,10 +20,11 @@ namespace Poseidon.GraphicEffects
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Effect underWaterEffect, screenTransitionEffect;
+        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect;
         bool underWaterEffectEnabled = true;
         bool bloomEffectEnabled = false;
         RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget;
+        EffectParameterCollection edgeDetectionParameters;
 
         PresentationParameters pp;
 
@@ -39,17 +40,17 @@ namespace Poseidon.GraphicEffects
             pp = gameScene.Game.GraphicsDevice.PresentationParameters;
 
             afterUnderWaterTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
-            //beforeBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
-            //    false, gameScene.Game.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
-            //new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
-            //    false, gameScene.Game.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
             afterEffectsRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
-            //new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
-            //    false, gameScene.Game.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             underWaterEffect = gameScene.Game.Content.Load<Effect>("Shaders/UnderWater");
             screenTransitionEffect = gameScene.Game.Content.Load<Effect>("Shaders/ScreenTransition");
+            edgeDetectionEffect = gameScene.Game.Content.Load<Effect>("Shaders/EdgeDetectionEffect");
+
+
+            edgeDetectionParameters = edgeDetectionEffect.Parameters;
+            edgeDetectionEffect.CurrentTechnique = edgeDetectionEffect.Techniques["EdgeDetect"];
+
             this.spriteBatch = spriteBatch;
             this.spriteFont = spriteFont;
         }
@@ -192,6 +193,45 @@ namespace Poseidon.GraphicEffects
                 return true;
             }
             else return false;
+        }
+
+        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
+        {
+            graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
+            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
+
+            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+            if (fishPointedAt != null)
+            {
+                fishPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(0, 1, 0, 1));
+            }
+            else
+            {
+                BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+                if (enemyPointedAt != null)
+                {
+                    enemyPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                    edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(1, 0, 0, 1));
+                }
+            }
+
+            graphicsDevice.SamplerStates[0] = SamplerState.LinearWrap;
+        }
+
+        public void ApplyEdgeDetection(RenderTarget2D wholeScene, RenderTarget2D normalDepthRenderTarget, GraphicsDevice graphicsDevice, RenderTarget2D edgeDetectionRenderTarget)
+        {
+            Vector2 resolution = new Vector2(wholeScene.Width, wholeScene.Height);
+            Texture2D normalDepthTexture = normalDepthRenderTarget;
+            edgeDetectionParameters["ScreenResolution"].SetValue(resolution);
+            edgeDetectionParameters["NormalDepthTexture"].SetValue(normalDepthTexture);
+            edgeDetectionEffect.CurrentTechnique = edgeDetectionEffect.Techniques["EdgeDetect"];
+
+            graphicsDevice.SetRenderTarget(edgeDetectionRenderTarget);
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, edgeDetectionEffect);
+            spriteBatch.Draw(wholeScene, Vector2.Zero, Color.White);
+            spriteBatch.End();
         }
     }
 }

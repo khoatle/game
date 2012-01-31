@@ -584,7 +584,7 @@ namespace Poseidon
             //            break;
             //    }
             //}
-            AddingObjects.placeTrash(trashes, Content, random, shipWrecks,
+            AddingObjects.placeTrash(ref trashes, Content, random, shipWrecks, staticObjects,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
                 GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight, heightMapInfo); 
 

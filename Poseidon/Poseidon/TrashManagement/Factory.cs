@@ -177,19 +177,16 @@ namespace Poseidon
                     {
                         title = "Biodegradable Trash Processing Plant (Basic technology)";
                         plant_upgradeLevel_description = "Trash decompose naturally to produce methane.";
-                        //production_str += " for 5 trash in 5 days";
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
                         title = "Biodegradable Trash Processing Plant (Advanced)";
                         plant_upgradeLevel_description = "Put level 2 description here.";
-                        //production_str += " for 5 trash in 2 days";
                     }
                     else
                     {
                         title = "Biodegradable Trash Processing Plant (State of the Art)";
                         plant_upgradeLevel_description = "Need to write level 3 description";
-                        //production_str += " for 5 trash in 1 day";
                     }
                     break;
                 case FactoryType.plastic:

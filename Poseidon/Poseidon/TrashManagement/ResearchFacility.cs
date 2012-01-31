@@ -145,12 +145,12 @@ namespace Poseidon
                 spriteBatch.DrawString(menuSmall, button_title_text, new Vector2(bioUpgradeRect.Center.X - menuSmall.MeasureString(button_title_text).X / 2, bioUpgradeRect.Top - 50), Color.White);
                 button_title_text = "PLASTIC FACTORY";
                 spriteBatch.DrawString(menuSmall, button_title_text, new Vector2(plasticUpgradeRect.Center.X - menuSmall.MeasureString(button_title_text).X / 2, plasticUpgradeRect.Top - 50), Color.White);
-                if (HydroBot.bioPlantLevel == 1 && HydroBot.totalBioTrashProcessed > GameConstants.numTrashForUpgrade)
+                if (HydroBot.bioPlantLevel == 1 && HydroBot.totalBioTrashProcessed >= GameConstants.numTrashForUpgrade)
                 {
                     bioUpgrade = true;
                     bioButtonText = "UPGRADE TO L2";
                 }
-                else if (HydroBot.bioPlantLevel == 2 && HydroBot.totalBioTrashProcessed > GameConstants.numTrashForUpgrade)
+                else if (HydroBot.bioPlantLevel == 2 && HydroBot.totalBioTrashProcessed >= GameConstants.numTrashForUpgrade)
                 {
                     bioUpgrade = true;
                     bioButtonText = "UPGRADE TO L3";
@@ -161,12 +161,12 @@ namespace Poseidon
                     bioButtonText = "";
                 }
 
-                if (HydroBot.plasticPlantLevel == 1 && HydroBot.totalPlasticTrashProcessed > GameConstants.numTrashForUpgrade)
+                if (HydroBot.plasticPlantLevel == 1 && HydroBot.totalPlasticTrashProcessed >= GameConstants.numTrashForUpgrade)
                 {
                     plasticUpgrade = true;
                     plasticButtonText = "UPGRADE TO L2";
                 }
-                else if (HydroBot.plasticPlantLevel == 2 && HydroBot.totalPlasticTrashProcessed > GameConstants.numTrashForUpgrade)
+                else if (HydroBot.plasticPlantLevel == 2 && HydroBot.totalPlasticTrashProcessed >= GameConstants.numTrashForUpgrade)
                 {
                     plasticUpgrade = true;
                     plasticButtonText = "UPGRADE TO L3";

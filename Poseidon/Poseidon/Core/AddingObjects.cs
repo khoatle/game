@@ -413,7 +413,7 @@ namespace Poseidon
         }
 
         public static void placeTrash(
-            List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
+            ref List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             int positionSign;
@@ -421,22 +421,26 @@ namespace Poseidon
             {
                 //trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
                 //    fish, shipWrecks);
-                positionSign = random.Next(4);
-                trash.Position.X= random.Next(minX, maxX);
-                trash.Position.Z = random.Next(minZ, maxZ);
-                switch(positionSign)
+                do
                 {
-                    case 0:
-                        trash.Position.X *= -1;
-                        break;
-                    case 1:
-                        trash.Position.Z *= -1;
-                        break;
-                    case 2:
-                        trash.Position.X *= -1;
-                        trash.Position.Z *= -1;
-                        break;
-                }
+                    positionSign = random.Next(4);
+                    trash.Position.X = random.Next(minX, maxX);
+                    trash.Position.Z = random.Next(minZ, maxZ);
+                    switch (positionSign)
+                    {
+                        case 0:
+                            trash.Position.X *= -1;
+                            break;
+                        case 1:
+                            trash.Position.Z *= -1;
+                            break;
+                        case 2:
+                            trash.Position.X *= -1;
+                            trash.Position.Z *= -1;
+                            break;
+                    }
+                } while (IsSeaBedPlaceOccupied((int)trash.Position.X, (int)trash.Position.Y, shipWrecks, staticObjects, trashes) );
+                
                 trash.Position.Y = heightMapInfo.GetHeight(new Vector3(trash.Position.X, 0, trash.Position.Z));//GameConstants.TrashFloatHeight;
                 tempCenter = trash.BoundingSphere.Center;
                 tempCenter.X = trash.Position.X;
@@ -495,7 +499,7 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
                 
-            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects));
+            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects, null));
             
             return new Vector3(xValue, 0, zValue);
         }
@@ -559,7 +563,7 @@ namespace Poseidon
             return false;
         }
         // Helper
-        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes)
         {
 
             if (shipWrecks != null)
@@ -583,6 +587,17 @@ namespace Poseidon
                         ((int)(MathHelper.Distance(
                         zValue, currentObj.Position.Z)) < 15))
                         return true;
+                }
+            }
+            if (trashes != null)
+            {
+                foreach (Trash trash in trashes)
+                {
+                    if ( ((int)(MathHelper.Distance(
+                        xValue, trash.Position.X)) < 20) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, trash.Position.Z)) < 20))
+                            return true;
                 }
             }
             return false;

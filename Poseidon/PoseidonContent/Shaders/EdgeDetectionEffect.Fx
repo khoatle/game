@@ -9,6 +9,7 @@
 // Settings controlling the edge detection filter.
 float EdgeWidth = 1;
 float EdgeIntensity = 1;
+float4 EdgeColor;
 
 // How sensitive should the edge detection be to tiny variations in the input data?
 // Smaller settings will make it pick up more subtle edges, while larger values get
@@ -140,7 +141,10 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD0, uniform bool applyEdgeDe
         float edgeAmount = saturate(normalDelta + depthDelta) * EdgeIntensity;
         
         // Apply the edge detection result to the main scene color.
-        scene *= (1 - edgeAmount);
+		if (1 - edgeAmount == 0) scene = EdgeColor;
+        else scene *= (1 - edgeAmount);
+
+		
     }
 
     return float4(scene, 1);

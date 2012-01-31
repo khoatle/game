@@ -205,6 +205,7 @@ namespace Poseidon.GraphicEffects
             if (fishPointedAt != null)
             {
                 fishPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(0, 1, 0, 1));
             }
             else
             {
@@ -212,6 +213,7 @@ namespace Poseidon.GraphicEffects
                 if (enemyPointedAt != null)
                 {
                     enemyPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                    edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(1, 0, 0, 1));
                 }
             }
 

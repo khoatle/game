@@ -15,6 +15,10 @@ namespace Poseidon.Core
         private Texture2D FishDotImage;
         private Texture2D RadarImage;
         private Texture2D ShipwreckDotImage;
+        private Texture2D OrganicFactoryDotImage;
+        private Texture2D PlasticFactoryDotImage;
+        private Texture2D NuclearFactoryDotImage;
+        private Texture2D ResearchFacilityDotImage;
 
         // Local coords of the radar image's center, used to offset image when being drawn
         private Vector2 RadarImageCenter;
@@ -37,11 +41,15 @@ namespace Poseidon.Core
             FishDotImage = Content.Load<Texture2D>(fishDotPath);
             RadarImage = Content.Load<Texture2D>(radarImagePath);
             ShipwreckDotImage = Content.Load<Texture2D>("Image/RadarTextures/shipwreckDot");
+            OrganicFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/bioFactoryDot");
+            PlasticFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/plasticFactoryDot");
+            NuclearFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/nuclearFactoryDot");
+            ResearchFacilityDotImage = Content.Load<Texture2D>("Image/RadarTextures/researchFactoryDot");
             this.RadarCenterPos = radarCenter;
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / ((RadarImage.Height) * 0.5f), SpriteEffects.None, 0.0f);
@@ -81,6 +89,84 @@ namespace Poseidon.Core
                     }
                 }
             }
+
+            // display factories on the map
+            if (factories != null)
+            {
+                foreach (Factory factory in factories)
+                {
+                    Vector2 diffVect = new Vector2(factory.Position.X - playerPos.X, factory.Position.Z - playerPos.Z);
+                    float distance = diffVect.LengthSquared();
+
+                    // Check if enemy is within RadarRange
+                    //if (distance < RadarRangeSquared)
+                    //{
+                        if (distance > RadarRangeSquared)
+                            diffVect *= RadarRange / diffVect.Length();
+                        // Scale the distance from world coords to radar coords
+                        diffVect *= RadarScreenRadius / RadarRange;
+
+                        // We rotate each point on the radar so that the player is always facing UP on the radar
+                        //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                        // Offset coords from radar's center
+                        diffVect = -diffVect;
+                        diffVect += RadarCenterPos;
+
+                        // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                        // at lower elevations have smaller dots.
+                        float scaleHeight = 1.0f + ((factory.Position.Y - playerPos.Y) / 200.0f);
+
+                        // Draw factory dot on radar
+                        Texture2D thisImage;
+                        switch (factory.factoryType)
+                        {
+                            case FactoryType.biodegradable:
+                                thisImage = OrganicFactoryDotImage;
+                                break;
+                            case FactoryType.plastic:
+                                thisImage = PlasticFactoryDotImage;
+                                break;
+                            case FactoryType.radioactive:
+                                thisImage = NuclearFactoryDotImage;
+                                break;
+                            default:
+                                thisImage = OrganicFactoryDotImage;
+                                break;
+                        }
+                        spriteBatch.Draw(thisImage, diffVect, null, Color.White, 0.0f, new Vector2(thisImage.Width / 2, thisImage.Height / 2), scaleHeight * 0.8f, SpriteEffects.None, 0.0f);
+                    //}
+                }
+            }
+            if (researchFacility != null)
+            {
+                Vector2 diffVect = new Vector2(researchFacility.Position.X - playerPos.X, researchFacility.Position.Z - playerPos.Z);
+                float distance = diffVect.LengthSquared();
+
+                // Check if enemy is within RadarRange
+                //if (distance < RadarRangeSquared)
+                //{
+                    if (distance > RadarRangeSquared)
+                        diffVect *= RadarRange / diffVect.Length();
+                    // Scale the distance from world coords to radar coords
+                    diffVect *= RadarScreenRadius / RadarRange;
+
+                    // We rotate each point on the radar so that the player is always facing UP on the radar
+                    //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                    // Offset coords from radar's center
+                    diffVect = -diffVect;
+                    diffVect += RadarCenterPos;
+
+                    // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                    // at lower elevations have smaller dots.
+                    float scaleHeight = 1.0f + ((researchFacility.Position.Y - playerPos.Y) / 200.0f);
+
+                    // Draw enemy dot on radar
+                    spriteBatch.Draw(ResearchFacilityDotImage, diffVect, null, Color.White, 0.0f, new Vector2(ResearchFacilityDotImage.Width / 2, ResearchFacilityDotImage.Height / 2), scaleHeight * 0.8f, SpriteEffects.None, 0.0f);
+                //}
+            }
+
             // If enemy is in range
             for (int i = 0; i < enemyAmount; i++)
             {

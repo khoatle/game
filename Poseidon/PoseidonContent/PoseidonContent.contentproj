@@ -1692,6 +1692,28 @@
       <Name>Structures</Name>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\RadarTextures\bioFactoryDot.png">
+      <Name>bioFactoryDot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\RadarTextures\nuclearFactoryDot.png">
+      <Name>nuclearFactoryDot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\RadarTextures\plasticFactoryDot.png">
+      <Name>plasticFactoryDot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\RadarTextures\researchFactoryDot.png">
+      <Name>researchFactoryDot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

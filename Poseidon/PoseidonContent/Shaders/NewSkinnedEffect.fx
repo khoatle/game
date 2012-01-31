@@ -164,6 +164,38 @@ float4 NothingSpecialPixelShader(VertexToPixel input) : COLOR0
     return color; 
 }
 
+// Output structure for the vertex shader that renders normal and depth information.
+struct NormalDepthVertexShaderOutput
+{
+    float4 Position : POSITION0;
+    float4 Color : COLOR0;
+};
+
+NormalDepthVertexShaderOutput NormalDepthVertexShader(AppToVertex input)
+{
+    NormalDepthVertexShaderOutput output;
+	Skin(input, 4);
+
+    // Apply camera matrices to the input position.
+    output.Position = mul(mul(mul(input.Position, World), View), Projection);
+    
+    float3 worldNormal = mul(input.Normal, World);
+
+    // The output color holds the normal, scaled to fit into a 0 to 1 range.
+    output.Color.rgb = (worldNormal + 1) / 2;
+
+    // The output alpha holds the depth, scaled to fit into a 0 to 1 range.
+    output.Color.a = output.Position.z / output.Position.w;
+    
+    return output;    
+}
+// Simple pixel shader for rendering the normal and depth information.
+float4 NormalDepthPixelShader(float4 color : COLOR0) : COLOR0
+{
+    return color;
+}
+
+// Normal here means not abnormal
 technique NormalShading
 {
 	pass Pass1
@@ -172,4 +204,14 @@ technique NormalShading
         PixelShader = compile ps_2_0 NothingSpecialPixelShader(); 
 		//CullMode = CCW;
 	}
+}
+
+// Technique draws the object as normal and depth values.
+technique NormalDepth
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 NormalDepthVertexShader();
+        PixelShader = compile ps_2_0 NormalDepthPixelShader();
+    }
 }

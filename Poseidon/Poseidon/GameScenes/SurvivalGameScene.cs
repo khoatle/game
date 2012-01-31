@@ -623,7 +623,7 @@ namespace Poseidon
             {
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
+                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     if (enemies[i].stunned == true)
                     {
                         Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
@@ -649,7 +649,7 @@ namespace Poseidon
             {
                 if (fish[i].BoundingSphere.Intersects(frustum))
                 {
-                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
+                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;
@@ -685,7 +685,7 @@ namespace Poseidon
 
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
-            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera);
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "Normal Shading");
             //RasterizerState rs = new RasterizerState();
             //rs.FillMode = FillMode.WireFrame;
             //GraphicDevice.RasterizerState = rs;

@@ -594,9 +594,9 @@ namespace Poseidon
                 foreach (Trash trash in trashes)
                 {
                     if ( ((int)(MathHelper.Distance(
-                        xValue, trash.Position.X)) < 20) &&
+                        xValue, trash.Position.X)) < 50) &&
                         ((int)(MathHelper.Distance(
-                        zValue, trash.Position.Z)) < 20))
+                        zValue, trash.Position.Z)) < 50))
                             return true;
                 }
             }

@@ -28,6 +28,9 @@ namespace Poseidon
         int trashBlockSize;
         int processingTime;
 
+        int numRadioActiveProducts = 5;
+        int delayRadioActiveProducts = 4; //4sec,1day
+
         //For Factory Configuration Screen
         SpriteFont factoryFont;
         Texture2D background, produceButton;
@@ -122,6 +125,11 @@ namespace Poseidon
                 for (int i = 0; i < numNewTrashBlock; i++)
                 {
                     listTimeTrashProcessing.Add(PoseidonGame.playTime.TotalSeconds);
+                    if (factoryType == FactoryType.radioactive)
+                    {
+                        for (int j = 1; j < numRadioActiveProducts; j++)
+                            listTimeTrashProcessing.Add(PoseidonGame.playTime.TotalSeconds + j*delayRadioActiveProducts);
+                    }
                 }
             }
         }
@@ -163,12 +171,13 @@ namespace Poseidon
             string production_str = "PRODUCT: "+produce.ToString().ToUpper();
             string plant_basic_description = "";
             string plant_upgradeLevel_description = "";
+            float numDays;
             switch (factoryType)
             {
                 case FactoryType.biodegradable:
                     plant_basic_description = "";
-                    float numDays = (float)processingTime / GameConstants.DaysPerSecond;
-                    production_str += " for 5 trash in " + numDays.ToString();
+                    numDays = (float)processingTime / GameConstants.DaysPerSecond;
+                    production_str += " for "+trashBlockSize+" trash in " + numDays.ToString();
                     if(numDays > 1)
                         production_str += " days";
                     else
@@ -192,7 +201,8 @@ namespace Poseidon
                 case FactoryType.plastic:
                     title = "Plastic Recycling Plant";
                     plant_basic_description = "Basic steps for plastic recycling:\n1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n3) Washing: Contaminants are removed.\n4) Pelleting: The plastic is mented down and made into small pellets.\n\nTypes of plastic (with code and examples):\n1: PET - bottles\n2: HDPE - milk bottles, bags\n3: PVC - pipes, detergent bottles, raincoats\n4: LDPE - bread bags\n5: PP - straws, screw-on lids\n6: PS - foam, yogurt containers\n7: Others - ketchup bottles\nThe code numbers are printed within a recycle sign on most plastic containers.";
-                    production_str += " for " + trashBlockSize + " trash in 1 day";
+                    numDays = (float)processingTime / GameConstants.DaysPerSecond;
+                    production_str += " for " + trashBlockSize + " trash in "+ numDays.ToString() +" day";
                     if (HydroBot.plasticPlantLevel == 1)
                     {
                         title += " (Basic technology)";
@@ -212,7 +222,7 @@ namespace Poseidon
                 case FactoryType.radioactive:
                     title = "Radioactive Trash Processing Plant";
                     plant_basic_description = " Some part is reused to produce fuel. Remaining waste is concentrated to reduce the volume and stored it in a sealed container. It might take millions of years to lose its radioactive property completely.";
-                    production_str = "PRODUCT: 5 "+produce.ToString().ToUpper()+ "S for 1 trash in 1 day";
+                    production_str = "PRODUCT: "+ numRadioActiveProducts +""+produce.ToString().ToUpper()+ "S for 1 trash in 1 day";
                     break;
             }
 
@@ -243,7 +253,6 @@ namespace Poseidon
             string beingProcessedStr;
             int numBeingProcessed;
             numBeingProcessed = listTimeTrashProcessing.Count;
-            if (factoryType == FactoryType.radioactive) numBeingProcessed *= 5;
             if (numBeingProcessed == 1)
                 beingProcessedStr = "CURRENT STATUS: " + numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + " ARE BEING GENERATED.";
             else if (numBeingProcessed > 1)
@@ -316,47 +325,20 @@ namespace Poseidon
         void producePowerPacks(ref List<Powerpack> powerpacks, List<Resource> resources)
         {
             Vector3 powerpackPosition;
-            if (factoryType == FactoryType.radioactive)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    int powerType = random.Next(4) + 1;
-                    Powerpack powerpack = new Powerpack(powerType);
-                    powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-                    powerpack.LoadContent(Content, powerpackPosition);
-                    powerpacks.Add(powerpack);
-                }
-            }
-            else
-            {
-                int powerType = random.Next(4) + 1;
-                Powerpack powerpack = new Powerpack(powerType);
-                powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-                powerpack.LoadContent(Content, powerpackPosition);
-                powerpacks.Add(powerpack);
-            }
+            int powerType = random.Next(4) + 1;
+            Powerpack powerpack = new Powerpack(powerType);
+            powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+            powerpack.LoadContent(Content, powerpackPosition);
+            powerpacks.Add(powerpack);
         }
 
         void ProduceResource(ref List<Resource> resources, List<Powerpack> powerpacks)
         {
             Vector3 resourcePosition;
-            if (factoryType == FactoryType.radioactive)
-            {
-                for (int i = 0; i < 5; i++)
-                {
-                    Resource resource = new Resource();
-                    resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-                    resource.LoadContent(Content, resourcePosition);
-                    resources.Add(resource);
-                }
-            }
-            else
-            {
-                Resource resource = new Resource();
-                resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-                resource.LoadContent(Content, resourcePosition);
-                resources.Add(resource);
-            }
+            Resource resource = new Resource();
+            resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+            resource.LoadContent(Content, resourcePosition);
+            resources.Add(resource);
         }
 
         private Vector3 findResourcePowerpackPosition(Vector3 factoryPosition, List<Resource> resources, List<Powerpack> powerpacks)

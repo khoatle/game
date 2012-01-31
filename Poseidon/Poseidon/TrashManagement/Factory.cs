@@ -243,10 +243,12 @@ namespace Poseidon
             int numBeingProcessed;
             numBeingProcessed = listTimeTrashProcessing.Count;
             if (factoryType == FactoryType.radioactive) numBeingProcessed *= 5;
-            if (numBeingProcessed < 2)
-                beingProcessedStr = "CURRENT STATUS: "+numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + " ARE BEING GENERATED.";
+            if (numBeingProcessed == 1)
+                beingProcessedStr = "CURRENT STATUS: " + numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + " ARE BEING GENERATED.";
+            else if (numBeingProcessed > 1)
+                beingProcessedStr = "CURRENT STATUS: " + numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + "S ARE BEING GENERATED.";
             else
-                beingProcessedStr = "CURRENT STATUS: "+numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + "S ARE BEING GENERATED.";
+                beingProcessedStr = "CURRENT STATUS: " + numTrashWaiting.ToString() + " TRASH WAITING TO BE PROCESSED.";
             beingProcessedStr = Poseidon.Core.IngamePresentation.wrapLine(beingProcessedStr, backgroundRect.Width - 100, factoryFont);
             spriteBatch.DrawString(factoryFont, beingProcessedStr, new Vector2(backgroundRect.Center.X - factoryFont.MeasureString(beingProcessedStr).X/2, produceRect.Bottom + 5), Color.Black);
 

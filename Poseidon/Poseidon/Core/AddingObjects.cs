@@ -436,7 +436,7 @@ namespace Poseidon
             ref List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
-            int positionSign;
+            int positionSign, xVal, zVal;
             foreach (Trash trash in trashes)
             {
                 //trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
@@ -444,23 +444,25 @@ namespace Poseidon
                 do
                 {
                     positionSign = random.Next(4);
-                    trash.Position.X = random.Next(minX, maxX);
-                    trash.Position.Z = random.Next(minZ, maxZ);
+                    xVal = random.Next(minX, maxX);
+                    zVal = random.Next(minZ, maxZ);
                     switch (positionSign)
                     {
                         case 0:
-                            trash.Position.X *= -1;
+                            xVal *= -1;
                             break;
                         case 1:
-                            trash.Position.Z *= -1;
+                            zVal *= -1;
                             break;
                         case 2:
-                            trash.Position.X *= -1;
-                            trash.Position.Z *= -1;
+                            xVal *= -1;
+                            zVal *= -1;
                             break;
                     }
-                } while (IsSeaBedPlaceOccupied((int)trash.Position.X, (int)trash.Position.Y, shipWrecks, staticObjects, trashes) );
-                
+                } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes) );
+
+                trash.Position.X = xVal;
+                trash.Position.Z = zVal;
                 trash.Position.Y = heightMapInfo.GetHeight(new Vector3(trash.Position.X, 0, trash.Position.Z));//GameConstants.TrashFloatHeight;
                 tempCenter = trash.BoundingSphere.Center;
                 tempCenter.X = trash.Position.X;
@@ -595,7 +597,9 @@ namespace Poseidon
                         xValue, currentObj.Position.X)) < 200) &&
                         ((int)(MathHelper.Distance(
                         zValue, currentObj.Position.Z)) < 200))
+                    {
                         return true;
+                    }
                 }
             }
             if (staticObjects != null)
@@ -606,18 +610,22 @@ namespace Poseidon
                         xValue, currentObj.Position.X)) < 15) &&
                         ((int)(MathHelper.Distance(
                         zValue, currentObj.Position.Z)) < 15))
+                    {
                         return true;
+                    }
                 }
             }
             if (trashes != null)
             {
                 foreach (Trash trash in trashes)
                 {
-                    if ( ((int)(MathHelper.Distance(
-                        xValue, trash.Position.X)) < 20) &&
+                    if (((int)(MathHelper.Distance(
+                        xValue, trash.Position.X)) < 10) &&
                         ((int)(MathHelper.Distance(
-                        zValue, trash.Position.Z)) < 20))
-                            return true;
+                        zValue, trash.Position.Z)) < 10))
+                    {
+                        return true;
+                    }
                 }
             }
             return false;

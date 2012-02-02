@@ -378,6 +378,26 @@ namespace Poseidon
             }
         }
 
+        public static void placeLaser(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameMode gameMode)
+        {
+
+            Matrix orientationMatrix = Matrix.CreateRotationY(((Submarine)shooter).ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+
+            //one topedo on the left and one on the right
+            LaserBeam newBullet = new LaserBeam();
+            newBullet.initialize(shooter.Position + shootingDirection * 5, shootingDirection, GameConstants.BulletSpeed, GameConstants.LaserBeamDamage, target, (Submarine)shooter, gameMode);
+            newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
+            bullets.Add(newBullet);
+
+            if (shooter.BoundingSphere.Intersects(cameraFrustum))
+            {
+                PoseidonGame.audio.bossShot.Play();
+            }
+        }
+
         public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum, float offsetFactor) {
             HydroBot tmp1;
             SwimmingObject tmp2;

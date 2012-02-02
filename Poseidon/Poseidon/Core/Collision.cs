@@ -226,8 +226,11 @@ namespace Poseidon
                 return false;
             }
 
-            if (heightMapInfo.GetHeight(futurePosition) >= -10)
-                return false;
+            if (heightMapInfo != null)
+            {
+                if (heightMapInfo.GetHeight(futurePosition) >= -10)
+                    return false;
+            }
             return true;
         }
 

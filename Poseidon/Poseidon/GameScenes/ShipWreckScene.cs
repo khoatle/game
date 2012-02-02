@@ -731,27 +731,48 @@ namespace Poseidon
                     fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
             }
 
-            for (int i = 0; i < myBullet.Count; i++) {
-                myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
-
-            for (int i = 0; i < healthBullet.Count; i++) {
-                healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
-
-            for (int i = 0; i < enemyBullet.Count; i++) {
-                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
-
-
-            //fuelCarrier.Draw(gameCamera.ViewMatrix, 
-            //    gameCamera.ProjectionMatrix);
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-            //RasterizerState rs = new RasterizerState();
-            //rs.FillMode = FillMode.WireFrame;
-            //GraphicsDevice.RasterizerState = rs;
-            //tank.DrawBoundingSphere(gameCamera.ViewMatrix,
-            //    gameCamera.ProjectionMatrix, boundingSphere);
+
+            for (int i = 0; i < myBullet.Count; i++)
+            {
+                if (myBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+
+            for (int i = 0; i < healthBullet.Count; i++)
+            {
+                if (healthBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+
+            for (int i = 0; i < enemyBullet.Count; i++)
+            {
+                if (enemyBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+
+            for (int i = 0; i < alliesBullets.Count; i++)
+            {
+                if (alliesBullets[i].BoundingSphere.Intersects(frustum))
+                {
+                    alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
             // draw bubbles
             foreach (Bubble bubble in bubbles)
             {

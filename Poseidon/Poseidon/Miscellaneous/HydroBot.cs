@@ -417,13 +417,13 @@ namespace Poseidon
             //just for testing
             //should be removed
             //skillComboActivated = true;
-            activeSkillID = 4;
-            secondSkillID = -1;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
+            //activeSkillID = 4;
+            //secondSkillID = -1;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
             //goodWillBarActivated = true;
             //iconActivated[0] = true;

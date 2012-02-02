@@ -662,39 +662,47 @@ namespace Poseidon
                 }
             }
 
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "Normal Shading");
             for (int i = 0; i < myBullet.Count; i++)
             {
-                myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                if (myBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
             }
 
             for (int i = 0; i < healthBullet.Count; i++)
             {
-                healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                if (healthBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
             }
 
             for (int i = 0; i < enemyBullet.Count; i++)
             {
-                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                if (enemyBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
             }
 
             for (int i = 0; i < alliesBullets.Count; i++)
             {
-                alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                if (alliesBullets[i].BoundingSphere.Intersects(frustum))
+                {
+                    alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
             }
-
-
-            //fuelCarrier.Draw(gameCamera.ViewMatrix, 
-            //    gameCamera.ProjectionMatrix);
-            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "Normal Shading");
-            //RasterizerState rs = new RasterizerState();
-            //rs.FillMode = FillMode.WireFrame;
-            //GraphicDevice.RasterizerState = rs;
-            //hydroBot.DrawBoundingSphere(gameCamera.ViewMatrix,
-            //    gameCamera.ProjectionMatrix, boundingSphere);
-
-            //rs = new RasterizerState();
-            //rs.FillMode = FillMode.Solid;
-            //GraphicDevice.RasterizerState = rs;
             // draw bubbles
             foreach (Bubble bubble in bubbles)
             {

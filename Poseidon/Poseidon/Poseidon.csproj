@@ -123,6 +123,7 @@
     <Compile Include="Behavior\MovingBehaviors.cs" />
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Bullets\FlyingHammer.cs" />
+    <Compile Include="Bullets\LaserBeam.cs" />
     <Compile Include="Bullets\Torpedo.cs" />
     <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="Core\IngamePresentation.cs" />

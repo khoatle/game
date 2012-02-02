@@ -228,7 +228,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
             else
@@ -243,7 +243,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -1245,32 +1245,7 @@ namespace Poseidon
                 }
             }
 
-            for (int i = 0; i < myBullet.Count; i++)
-            {
-                myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                //RasterizerState rs = new RasterizerState();
-                //rs.FillMode = FillMode.WireFrame;
-                //GraphicDevice.RasterizerState = rs;
-                //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
-                //    gameCamera.ProjectionMatrix, boundingSphere);
-
-                //rs = new RasterizerState();
-                //rs.FillMode = FillMode.Solid;
-                //GraphicDevice.RasterizerState = rs;
-            }
-
-            for (int i = 0; i < healthBullet.Count; i++)
-            {
-                healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
-
-            for (int i = 0; i < enemyBullet.Count; i++) {
-                enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
-
-            for (int i = 0; i < alliesBullets.Count; i++) {
-                alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            }
+            
             BoundingSphere shipSphere;
             // Drawing ship wrecks
             foreach (ShipWreck shipWreck in shipWrecks)
@@ -1356,15 +1331,48 @@ namespace Poseidon
             //fuelCarrier.Draw(gameCamera.ViewMatrix, 
             //    gameCamera.ProjectionMatrix);
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-            //RasterizerState rs = new RasterizerState();
-            //rs.FillMode = FillMode.WireFrame;
-            //GraphicDevice.RasterizerState = rs;
-            //hydroBot.DrawBoundingSphere(gameCamera.ViewMatrix,
-            //    gameCamera.ProjectionMatrix, boundingSphere);
 
-            //rs = new RasterizerState();
-            //rs.FillMode = FillMode.Solid;
             //GraphicDevice.RasterizerState = rs;
+            for (int i = 0; i < myBullet.Count; i++)
+            {
+                if (myBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+
+            for (int i = 0; i < healthBullet.Count; i++)
+            {
+                if (healthBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+
+            for (int i = 0; i < enemyBullet.Count; i++)
+            {
+                if (enemyBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+
+            for (int i = 0; i < alliesBullets.Count; i++)
+            {
+                if (alliesBullets[i].BoundingSphere.Intersects(frustum))
+                {
+                    alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
             // draw bubbles
             foreach (Bubble bubble in bubbles)
             {
@@ -1453,22 +1461,22 @@ namespace Poseidon
 
         private void DrawHeight()
         {
-            float xOffsetText, yOffsetText;
-            string str1 = " Height: " + heightMapInfo.GetHeight(hydroBot.Position);
-            Rectangle rectSafeArea;
+            //float xOffsetText, yOffsetText;
+            //string str1 = " Height: " + heightMapInfo.GetHeight(hydroBot.Position);
+            //Rectangle rectSafeArea;
 
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            ////Calculate str1 position
+            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+            //xOffsetText = rectSafeArea.X;
+            //yOffsetText = rectSafeArea.Y;
 
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 200, (int)yOffsetText);
+            //Vector2 strSize = statsFont.MeasureString(str1);
+            //Vector2 strPosition =
+            //    new Vector2((int)xOffsetText + 200, (int)yOffsetText);
 
-            //spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
+            ////spriteBatch.Begin();
+            //spriteBatch.DrawString(statsFont, str1, strPosition, Color.White);
         }
 
         private void DrawStats()

@@ -1332,7 +1332,7 @@ namespace Poseidon
         public void SetupShaderParameters(ContentManager content, Model model)
         {
             newSkinnedeffect = content.Load<Effect>("Shaders/NewSkinnedEffect");
-            EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
+            EffectHelpers.ChangeEffectUsedByModelToCustomSkinnedEffect(model, newSkinnedeffect);
         }
 
         /// <summary>

@@ -136,6 +136,7 @@
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\EffectHelpers.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
+    <Compile Include="Miscellaneous\Terrain.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />

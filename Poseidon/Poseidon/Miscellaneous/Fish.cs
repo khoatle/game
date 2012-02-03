@@ -179,14 +179,14 @@ namespace Poseidon {
         public void SetupShaderParameters(ContentManager content, Model model)
         {
             newSkinnedeffect = content.Load<Effect>("Shaders/NewSkinnedEffect");
-            EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
+            EffectHelpers.ChangeEffectUsedByModelToCustomSkinnedEffect(model, newSkinnedeffect);
         }
 
         public override void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
             if (clipPlayer == null)
             {
-                // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
+                // just return for now. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
                 base.Draw(view, projection);
                 return;
             }

@@ -620,9 +620,9 @@ namespace Poseidon
                 foreach (Trash trash in trashes)
                 {
                     if (((int)(MathHelper.Distance(
-                        xValue, trash.Position.X)) < 10) &&
+                        xValue, trash.Position.X)) < 20) &&
                         ((int)(MathHelper.Distance(
-                        zValue, trash.Position.Z)) < 10))
+                        zValue, trash.Position.Z)) < 20))
                     {
                         return true;
                     }

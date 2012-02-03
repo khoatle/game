@@ -66,7 +66,7 @@ namespace Poseidon
             laserBeamPos.X = screenPos.X;
             laserBeamPos.Y = screenPos.Y;
             spriteBatch.Begin();
-            spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir,new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.3f, SpriteEffects.None, 1); 
+            spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir,new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f, SpriteEffects.None, 1); 
             spriteBatch.End();
             if (gameMode == GameMode.MainGame)
             {

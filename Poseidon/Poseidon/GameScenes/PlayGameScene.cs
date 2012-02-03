@@ -586,7 +586,7 @@ namespace Poseidon
             //}
             AddingObjects.placeTrash(ref trashes, Content, random, shipWrecks, staticObjects,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, 
-                GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight, heightMapInfo); 
+                GameConstants.MainGameMaxRangeZ, GameMode.MainGame, GameConstants.MainGameFloatHeight, heightMapInfo); 
 
             //Create 3 trash processing factories at the beginning
             //JUST FOR TESTING .. REMOVE WHEN THE FACTORY CREATION MENU IS AVAILABLE (SUSHIL)
@@ -1055,29 +1055,6 @@ namespace Poseidon
             }
         }
 
-        public void dumpTrashInFactory(Factory factory, int amount, Vector3 position)
-        {
-            string point_string = "";
-            switch (factory.factoryType)
-            {
-                case FactoryType.biodegradable:
-                    point_string = HydroBot.bioTrash + " Biodegradable Trash Dumped.\n";
-                    factory.numTrashWaiting += HydroBot.bioTrash;
-                    break;
-                case FactoryType.plastic:
-                    point_string = HydroBot.plasticTrash + " Plastic Trash Dumped.\n";
-                    factory.numTrashWaiting += HydroBot.plasticTrash;
-                    break;
-                case FactoryType.radioactive:
-                    point_string = HydroBot.nuclearTrash + " Radioactive Trash Dumped.\n";
-                    factory.numTrashWaiting += HydroBot.nuclearTrash;
-                    break;
-            }
-            Point point = new Point();
-            point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.LawnGreen);
-            points.Add(point);
-        }
-
         public override void Draw(GameTime gameTime)
         {
 
@@ -1286,10 +1263,6 @@ namespace Poseidon
                     //rs = new RasterizerState();
                     //rs.FillMode = FillMode.Solid;
                     //GraphicDevice.RasterizerState = rs;
-                }
-                else if ( trash.Retrieved && trashRealSphere.Intersects(frustum))
-                {
-                    //trash.DrawFadingPoint(spriteBatch, trashRealSphere);
                 }
             }
             // Drawing Factories
@@ -1806,6 +1779,29 @@ namespace Poseidon
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
             GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
             return;
+        }
+
+        public void dumpTrashInFactory(Factory factory, int amount, Vector3 position)
+        {
+            string point_string = "";
+            switch (factory.factoryType)
+            {
+                case FactoryType.biodegradable:
+                    point_string = HydroBot.bioTrash + " Biodegradable Trash Dumped.\n";
+                    factory.numTrashWaiting += HydroBot.bioTrash;
+                    break;
+                case FactoryType.plastic:
+                    point_string = HydroBot.plasticTrash + " Plastic Trash Dumped.\n";
+                    factory.numTrashWaiting += HydroBot.plasticTrash;
+                    break;
+                case FactoryType.radioactive:
+                    point_string = HydroBot.nuclearTrash + " Radioactive Trash Dumped.\n";
+                    factory.numTrashWaiting += HydroBot.nuclearTrash;
+                    break;
+            }
+            Point point = new Point();
+            point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.LawnGreen);
+            points.Add(point);
         }
     }
 }

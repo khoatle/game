@@ -119,13 +119,21 @@ namespace GeneratedGeometryPipeline
             // Create a material, and point it at our terrain texture.
             BasicMaterialContent material = new BasicMaterialContent();
             material.SpecularColor = new Vector3(.4f, .4f, .4f);
-
+           
             string directory = Path.GetDirectoryName(input.Identity.SourceFilename);
             string texture = Path.Combine("", terrainTextureFilename);
             //directory
             material.Texture = new ExternalReference<TextureContent>(texture);
 
             builder.SetMaterial(material);
+
+            //EffectMaterialContent myMaterial = new EffectMaterialContent();
+            //string effectPath = Path.GetFullPath("Shaders/NewBasicEffect.fx");
+            //myMaterial.Effect = new ExternalReference<EffectContent>(effectPath);
+            //myMaterial.Textures.Add("Texture", new ExternalReference<TextureContent>(texture));
+            //myMaterial.OpaqueData.Add("SpecularColor", new Vector3(.4f, .4f, .4f));
+
+            //builder.SetMaterial(myMaterial);
 
             // Create a vertex channel for holding texture coordinates.
             int texCoordId = builder.CreateVertexChannel<Vector2>(

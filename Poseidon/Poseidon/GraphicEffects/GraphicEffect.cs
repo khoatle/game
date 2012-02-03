@@ -195,7 +195,7 @@ namespace Poseidon.GraphicEffects
             else return false;
         }
 
-        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
+        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
         {
             graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
             graphicsDevice.Clear(Color.Black);
@@ -214,6 +214,24 @@ namespace Poseidon.GraphicEffects
                 {
                     enemyPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                     edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(1, 0, 0, 1));
+                }
+                else
+                {
+                    Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
+                    if (trashPointedAt != null)
+                    {
+                        trashPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                        edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
+                    }
+                    else
+                    {
+                        ShipWreck shipPointedAt = CursorManager.MouseOnWhichShipWreck(cursor, gameCamera, shipWrecks);
+                        if (shipPointedAt != null)
+                        {
+                            shipPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                            edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
+                        }
+                    }
                 }
             }
 

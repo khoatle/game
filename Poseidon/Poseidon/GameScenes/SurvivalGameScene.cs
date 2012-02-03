@@ -39,7 +39,7 @@ namespace Poseidon
         SpriteFont fishTalkFont;
 
         SpriteFont menuSmall;
-        GameObject ground;
+        
         public static Camera gameCamera;
         public GameState currentGameState = GameState.Running;
         // In order to know we are resetting the level winning or losing
@@ -47,6 +47,8 @@ namespace Poseidon
         // losing: reset our bot to the bot at the beginning of the level
         GameState prevGameState;
         GameObject boundingSphere;
+
+        Terrain terrain;
 
         public List<DamageBullet> myBullet;
         public List<DamageBullet> alliesBullets;
@@ -76,7 +78,6 @@ namespace Poseidon
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
 
-        HeightMapInfo heightMapInfo;
 
         Radar radar;
 
@@ -125,7 +126,7 @@ namespace Poseidon
             this.stunnedTexture = stunnedTexture;
             roundTime = TimeSpan.FromSeconds(2592000);
             random = new Random();
-            ground = new GameObject();
+            
             gameCamera = new Camera(GameConstants.MainCamHeight);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, GameMode.SurvivalMode);
@@ -181,26 +182,7 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            //Uncomment below line to use LEVELS
-            //string terrain_name = "Image/terrain" + currentLevel;
-
-            //temporary code for testing
-            Random random = new Random();
-            int random_level = random.Next(20);
-            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
-            //end temporary testing code
-
-            ground.Model = Content.Load<Model>(terrain_name);
-            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
-
-            heightMapInfo = ground.Model.Tag as HeightMapInfo;
-            if (heightMapInfo == null)
-            {
-                string message = "The terrain model did not have a HeightMapInfo " +
-                    "object attached. Are you sure you are using the " +
-                    "TerrainProcessor?";
-                throw new InvalidOperationException(message);
-            }
+            terrain = new Terrain(Content);
 
             // Loading main character skill icon textures
             for (int index = 0; index < GameConstants.numberOfSkills; index++)
@@ -252,17 +234,7 @@ namespace Poseidon
             roundTime = TimeSpan.FromSeconds(2592000);
             roundTimer = roundTime;
 
-            //Uncomment below line to use LEVELS
-            //string terrain_name = "Image/terrain" + currentLevel;
-
-            //temporary code for testing
-            Random random = new Random();
-            int random_level = random.Next(20);
-            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
-            //end temporary testing code
-
-            ground.Model = Content.Load<Model>(terrain_name);
-
+            terrain = new Terrain(Content);
             // If we are resetting the level losing the game
             // Reset our bot to the one at the beginning of the lost level
 
@@ -360,7 +332,7 @@ namespace Poseidon
                 {
 
                     //hydrobot update
-                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, heightMapInfo, healthBullet, powerpacks, resources, null, null,null);
+                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, terrain.heightMapInfo, healthBullet, powerpacks, resources, null, null,null);
 
                     //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -552,33 +524,6 @@ namespace Poseidon
 
         }
 
-        /// <summary>
-        /// Draws the game terrain, a simple blue grid.
-        /// </summary>
-        /// <param name="model">Model representing the game playing field.</param>
-        private void DrawTerrain(Model model)
-        {
-            foreach (ModelMesh mesh in model.Meshes)
-            {
-                foreach (BasicEffect effect in mesh.Effects)
-                {
-                    effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
-                    effect.World = Matrix.Identity;
-
-                    // Use the matrices provided by the game camera
-                    effect.View = gameCamera.ViewMatrix;
-                    effect.Projection = gameCamera.ProjectionMatrix;
-
-                    effect.FogEnabled = true;
-                    effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
-                }
-                mesh.Draw();
-            }
-        }
-
         private void DrawWinOrLossScreen()
         {
             spriteBatch.Begin();
@@ -592,7 +537,9 @@ namespace Poseidon
         {
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
-            DrawTerrain(ground.Model);
+
+            terrain.Draw(gameCamera);
+
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
             foreach (Powerpack f in powerpacks)

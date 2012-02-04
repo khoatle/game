@@ -518,19 +518,19 @@ namespace Poseidon
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.plastic));
-                trashes[bioIndex].LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //bio model
+                trashes[bioIndex].LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //plastic model
             }
             for (plasticIndex = bioIndex; plasticIndex < bioIndex+GameConstants.NumberNuclearTrash[currentLevel]; plasticIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.radioactive));
-                trashes[plasticIndex].LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //plastic model
+                trashes[plasticIndex].LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //nuclear model
             }
             for (nuclearIndex = plasticIndex; nuclearIndex< plasticIndex + GameConstants.NumberBioTrash[currentLevel]; nuclearIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.biodegradable));
-                trashes[nuclearIndex].LoadContent(Content, "Models/TrashModels/trashModel3", orientation); //nuclear model
+                trashes[nuclearIndex].LoadContent(Content, "Models/TrashModels/trashModel3", orientation); //organic model
             }
             //for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
             //{
@@ -717,7 +717,7 @@ namespace Poseidon
                 {
                     MouseState currentMouseState;
                     currentMouseState = Mouse.GetState();
-                    if (currentMouseState.RightButton == ButtonState.Pressed) //Also need to check for position
+                    if (currentMouseState.RightButton == ButtonState.Pressed)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -861,6 +861,15 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
+                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel]/2)
+                    {
+                        Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects,
+                                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
+                                GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo);
+                        Point point = new Point();
+                        point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
+                        points.Add(point);
+                    }
                     foreach (Trash trash in trashes)
                     {
                         trash.Update(gameTime);
@@ -1196,7 +1205,7 @@ namespace Poseidon
             {
                 trashRealSphere = trash.BoundingSphere;
                 trashRealSphere.Center.Y = trash.Position.Y;
-                if (!trash.Retrieved && trashRealSphere.Intersects(frustum))
+                if (trashRealSphere.Intersects(frustum))
                 {
                     trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();

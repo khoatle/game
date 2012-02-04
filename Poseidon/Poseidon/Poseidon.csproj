@@ -120,7 +120,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Behavior\MovingBehaviors.cs" />
+    <Compile Include="Behavior\Behavior.cs" />
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Bullets\FlyingHammer.cs" />
     <Compile Include="Bullets\LaserBeam.cs" />
@@ -136,6 +136,9 @@
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\EffectHelpers.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
+    <Compile Include="Minion\SeaCow.cs" />
+    <Compile Include="Minion\SeaTurtle.cs" />
+    <Compile Include="Minion\ThirdFish.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />

@@ -14,13 +14,15 @@ namespace Poseidon {
 
         Matrix[] bones;
         SkinningData skd;
-        ClipPlayer clipPlayer;
-        Matrix fishMatrix;
-        Quaternion qRotation = Quaternion.Identity;
+        protected ClipPlayer clipPlayer;
+        protected Matrix fishMatrix;
+        protected Quaternion qRotation = Quaternion.Identity;
         double lastHealthUpdateTime;
         double healthChangeInterval;
         public string happy_talk;
         public string sad_talk;
+        public bool flee = false;
+        public bool isWandering = true;
 
         public Fish() : base() {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
@@ -63,7 +65,7 @@ namespace Poseidon {
             SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
-        public void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet) {
+        public virtual void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet) {
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoison < maxHPLossFromPoisson) {
                     health -= 0.1f;
@@ -147,8 +149,6 @@ namespace Poseidon {
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
-
-
 
             if (PoseidonGame.playTime.TotalSeconds - lastHealthUpdateTime > healthChangeInterval)
             {
@@ -237,6 +237,144 @@ namespace Poseidon {
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
                 }
                 mesh.Draw();
+            }
+        }
+
+        protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
+        {
+            Vector3 futurePosition = Position;
+            //int barrier_move
+            Random random = new Random();
+            float turnAmount = 0;
+            //also try to change direction if we are stuck
+            if (stucked == true)
+            {
+                ForwardDirection += MathHelper.PiOver4;
+            }
+            else if (changeDirection >= 95)
+            {
+                int rightLeft = random.Next(2);
+                if (rightLeft == 0)
+                    turnAmount = 20;
+                else turnAmount = -20;
+            }
+
+            Matrix orientationMatrix;
+            // Vector3 speed;
+            Vector3 movement = Vector3.Zero;
+
+            movement.Z = 1;
+            float prevForwardDir = ForwardDirection;
+            Vector3 prevFuturePosition = futurePosition;
+            // try upto 10 times to change direction is there is collision
+            for (int i = 0; i < 4; i++)
+            {
+                ForwardDirection += turnAmount * GameConstants.TurnSpeed;
+                orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
+                Vector3 headingDirection = Vector3.Transform(movement, orientationMatrix);
+                headingDirection *= GameConstants.FishSpeed;
+                futurePosition = Position + headingDirection;
+
+                if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot) &&
+                    Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
+                {
+                    Position = futurePosition;
+
+                    BoundingSphere updatedSphere;
+                    updatedSphere = BoundingSphere;
+
+                    updatedSphere.Center.X = Position.X;
+                    updatedSphere.Center.Z = Position.Z;
+                    BoundingSphere = new BoundingSphere(updatedSphere.Center,
+                        updatedSphere.Radius);
+
+                    stucked = false;
+                    break;
+                }
+                else
+                {
+                    stucked = true;
+                    futurePosition = prevFuturePosition;
+                }
+            }
+        }
+
+        // Go straight
+        protected virtual void seekDestination(Vector3 destination, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
+        {
+            //Vector3 futurePosition = Position + speed * headingDirection;
+            //if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
+            //        && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
+            //{
+            //    Position = futurePosition;
+            //    //BoundingSphere.Center = Position;
+            //    BoundingSphere.Center.X += speed * headingDirection.X;
+            //    BoundingSphere.Center.Z += speed * headingDirection.Z;
+            //}
+            float pullDistance = Vector3.Distance(destination, Position);
+            // float timeFactor = (currentHuntingTarget.GetType().Name.Equals("CombatEnemy")) ? 1.25f : 1f;
+            Vector3 futurePosition;
+
+            if (pullDistance > (BoundingSphere.Radius + BoundingSphere.Radius))
+            {
+                Vector3 pull = (destination - Position) * (1 / pullDistance);
+                Vector3 totalPush = Vector3.Zero;
+
+                int contenders = 0;
+                for (int i = 0; i < enemiesAmount; i++)
+                {
+                    if (enemies[i] != this)
+                    {
+                        Vector3 push = Position - enemies[i].Position;
+
+                        float distance = (Vector3.Distance(Position, enemies[i].Position)) - enemies[i].BoundingSphere.Radius;
+                        if (distance < BoundingSphere.Radius * 3)
+                        {
+                            contenders++;
+                            if (distance < 0.0001f) // prevent divide by 0 
+                            {
+                                distance = 0.0001f;
+                            }
+                            float weight = 1 / distance;
+                            totalPush += push * weight;
+                        }
+                    }
+                }
+
+                for (int i = 0; i < fishAmount; i++)
+                {
+                    if (fishes[i] != this)
+                    {
+                        Vector3 push = Position - fishes[i].Position;
+
+                        float distance = (Vector3.Distance(Position, fishes[i].Position) - fishes[i].BoundingSphere.Radius) - BoundingSphere.Radius;
+                        if (distance < BoundingSphere.Radius * 3)
+                        {
+                            contenders++;
+                            if (distance < 0.0001f) // prevent divide by 0 
+                            {
+                                distance = 0.0001f;
+                            }
+                            float weight = 1 / distance;
+                            totalPush += push * weight;
+                        }
+                    }
+                }
+
+                pull *= Math.Max(1, 4 * contenders);
+                pull += totalPush;
+                pull.Normalize();
+
+                futurePosition = Position + (pull * GameConstants.FishSpeed);
+
+                if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
+                        && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
+                {
+                    Position = futurePosition;
+                    BoundingSphere.Center.X += (pull * GameConstants.FishSpeed).X;
+                    BoundingSphere.Center.Z += (pull * GameConstants.FishSpeed).Z;
+                    ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
+                }
             }
         }
     }

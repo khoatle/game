@@ -1452,5 +1452,7 @@ namespace Poseidon
         {
             if (goodWillBarActivated) goodWillPoint += point;
         }
+
+        public bool isMoving() { return  !reachDestination; }
     }
 }

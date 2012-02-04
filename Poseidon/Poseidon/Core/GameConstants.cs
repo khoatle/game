@@ -28,7 +28,6 @@ namespace Poseidon {
         public const float BotShootingRange = 70.0f;
         public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.6f);
 
-
         //experience reward
         public const int ExpPainting = 35;
         public const int BasicExpHealingFish = 8;

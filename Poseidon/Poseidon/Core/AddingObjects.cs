@@ -308,28 +308,28 @@ namespace Poseidon
                 else chest.orientation = MathHelper.PiOver2;
             }
         }
-        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet) {
+        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet, GameMode gameMode) {
             HealthBullet h = new HealthBullet();
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
- 
-            h.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
+
+            h.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             h.loadContent(Content, "Models/BulletModels/healBullet");
             PoseidonGame.audio.botNormalShot.Play();
             healthBullet.Add(h);
         }
 
-        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet) {
+        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet, GameMode gameMode) {
             DamageBullet d = new DamageBullet();
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-            
-            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
+
+            d.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
             PoseidonGame.audio.botNormalShot.Play();
             myBullet.Add(d);

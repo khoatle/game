@@ -661,8 +661,8 @@ namespace Poseidon
                     {
                         prevFireTime = PoseidonGame.playTime;
                         //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet); }
+                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
+                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
                         if (!clipPlayer.inRange(61, 90))
                             clipPlayer.switchRange(61, 90);
                     }
@@ -696,8 +696,8 @@ namespace Poseidon
                         ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
                         prevFireTime = PoseidonGame.playTime;
                         //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet); }
+                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
+                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
                         //so the bot will not move
                         pointIntersect = Vector3.Zero;
                         reachDestination = true;

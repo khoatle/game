@@ -123,6 +123,7 @@
     <Compile Include="Behavior\MovingBehaviors.cs" />
     <Compile Include="Bullets\ChasingBullet.cs" />
     <Compile Include="Bullets\FlyingHammer.cs" />
+    <Compile Include="Bullets\LaserBeam.cs" />
     <Compile Include="Bullets\Torpedo.cs" />
     <Compile Include="Core\AudioLibrary.cs" />
     <Compile Include="Core\IngamePresentation.cs" />
@@ -135,6 +136,7 @@
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\EffectHelpers.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
+    <Compile Include="Miscellaneous\Terrain.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />

@@ -308,28 +308,28 @@ namespace Poseidon
                 else chest.orientation = MathHelper.PiOver2;
             }
         }
-        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet) {
+        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet, GameMode gameMode) {
             HealthBullet h = new HealthBullet();
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
- 
-            h.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
+
+            h.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             h.loadContent(Content, "Models/BulletModels/healBullet");
             PoseidonGame.audio.botNormalShot.Play();
             healthBullet.Add(h);
         }
 
-        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet) {
+        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet, GameMode gameMode) {
             DamageBullet d = new DamageBullet();
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-            
-            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
+
+            d.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
             PoseidonGame.audio.botNormalShot.Play();
             myBullet.Add(d);
@@ -378,6 +378,26 @@ namespace Poseidon
             }
         }
 
+        public static void placeLaser(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameMode gameMode)
+        {
+
+            Matrix orientationMatrix = Matrix.CreateRotationY(((Submarine)shooter).ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+
+            //one topedo on the left and one on the right
+            LaserBeam newBullet = new LaserBeam();
+            newBullet.initialize(shooter.Position + shootingDirection * 5, shootingDirection, GameConstants.BulletSpeed, GameConstants.LaserBeamDamage, target, (Submarine)shooter, gameMode);
+            newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
+            bullets.Add(newBullet);
+
+            if (shooter.BoundingSphere.Intersects(cameraFrustum))
+            {
+                PoseidonGame.audio.bossShot.Play();
+            }
+        }
+
         public static void placeEnemyBullet(GameObject obj, int damage, List<DamageBullet> bullets, int type, BoundingFrustum cameraFrustum, float offsetFactor) {
             HydroBot tmp1;
             SwimmingObject tmp2;
@@ -413,7 +433,7 @@ namespace Poseidon
         }
 
         public static void placeTrash(
-            ref List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
+            ref List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             int positionSign, xVal, zVal;
@@ -443,7 +463,7 @@ namespace Poseidon
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
-                trash.Position.Y = heightMapInfo.GetHeight(new Vector3(trash.Position.X, 0, trash.Position.Z));//GameConstants.TrashFloatHeight;
+                trash.Position.Y = trash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(trash.Position.X, 0, trash.Position.Z));//GameConstants.TrashFloatHeight;
                 tempCenter = trash.BoundingSphere.Center;
                 tempCenter.X = trash.Position.X;
                 tempCenter.Y = floatHeight;
@@ -451,6 +471,70 @@ namespace Poseidon
                 trash.BoundingSphere = new BoundingSphere(tempCenter,
                     trash.BoundingSphere.Radius);
             }
+        }
+
+        public static Vector3 createSinkingTrash(
+            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo)
+        {
+            Vector3 tempCenter;
+            int positionSign, xVal, zVal;
+            float orientation = random.Next(100);
+            int trash_type = random.Next(100);
+            Trash sinkingTrash;
+            if (trash_type < 48)
+            {
+                sinkingTrash = new Trash(TrashType.biodegradable);
+                sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
+                sinkingTrash.sinkingRate = 0.25f;
+                sinkingTrash.sinkingRotationRate = 0.015f;
+            }
+            else if (trash_type < 96)
+            {
+                sinkingTrash = new Trash(TrashType.plastic);
+                sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //nuclear model
+                sinkingTrash.sinkingRate = 0.35f;
+                sinkingTrash.sinkingRotationRate = -0.015f;
+            }
+            else
+            {
+                sinkingTrash = new Trash(TrashType.radioactive);
+                sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //nuclear model
+                sinkingTrash.sinkingRate = 0.6f;
+                sinkingTrash.sinkingRotationRate = 0.025f;
+            }
+            sinkingTrash.sinking = true;
+            
+            do
+            {
+                positionSign = random.Next(4);
+                xVal = random.Next(minX, maxX);
+                zVal = random.Next(minZ, maxZ);
+                switch (positionSign)
+                {
+                    case 0:
+                        xVal *= -1;
+                        break;
+                    case 1:
+                        zVal *= -1;
+                        break;
+                    case 2:
+                        xVal *= -1;
+                        zVal *= -1;
+                        break;
+                }
+            } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes));
+
+            sinkingTrash.Position.X = xVal;
+            sinkingTrash.Position.Z = zVal;
+            sinkingTrash.Position.Y = floatHeight;
+            sinkingTrash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(sinkingTrash.Position.X, 0, sinkingTrash.Position.Z));//GameConstants.TrashFloatHeight;
+            tempCenter = sinkingTrash.BoundingSphere.Center;
+            tempCenter.X = sinkingTrash.Position.X;
+            tempCenter.Y = floatHeight;
+            tempCenter.Z = sinkingTrash.Position.Z;
+            sinkingTrash.BoundingSphere = new BoundingSphere(tempCenter,sinkingTrash.BoundingSphere.Radius);
+            trashes.Add(sinkingTrash);
+            return sinkingTrash.Position;
         }
 
         // Helper
@@ -600,9 +684,9 @@ namespace Poseidon
                 foreach (Trash trash in trashes)
                 {
                     if (((int)(MathHelper.Distance(
-                        xValue, trash.Position.X)) < 10) &&
+                        xValue, trash.Position.X)) < 20) &&
                         ((int)(MathHelper.Distance(
-                        zValue, trash.Position.Z)) < 10))
+                        zValue, trash.Position.Z)) < 20))
                     {
                         return true;
                     }

@@ -244,7 +244,7 @@ namespace Poseidon
         /// Alters a model so it will draw using a custom effect, while preserving
         /// whatever textures were set on it as part of the original effects.
         /// </summary>
-        public static void ChangeEffectUsedByModel(Model model, Effect replacementEffect)
+        public static void ChangeEffectUsedByModelToCustomSkinnedEffect(Model model, Effect replacementEffect)
         {
             // Table mapping the original effects to our replacement versions.
             Dictionary<Effect, Effect> effectMapping = new Dictionary<Effect, Effect>();
@@ -297,5 +297,22 @@ namespace Poseidon
                 }
             }
         }
+        public static void ChangeEffectUsedByModelToCustomBasicEffect(Model model, Effect replacementEffect)
+        {
+            // Table mapping the original effects to our replacement versions.
+            Dictionary<Effect, Effect> effectMapping = new Dictionary<Effect, Effect>();
+
+            foreach (ModelMesh mesh in model.Meshes)
+            {
+                foreach (ModelMeshPart meshPart in mesh.MeshParts)
+                {
+                    if (!(meshPart.Effect is SkinnedEffect || meshPart.Effect is BasicEffect || meshPart.Effect is AlphaTestEffect || meshPart.Effect is DualTextureEffect || meshPart.Effect is EnvironmentMapEffect)) continue;
+                    Effect newEffect = replacementEffect.Clone();
+                    newEffect.Parameters["Texture"].SetValue(((BasicEffect)meshPart.Effect).Texture);
+                    meshPart.Effect = newEffect;// effectMapping[meshPart.Effect];
+                }
+            }
+        }
+
     }
 }

@@ -18,6 +18,7 @@ namespace Poseidon
 
         int numHunterGenerated = 0;
         int numHunterGeneratedAtOnce = 2;
+        GameMode gameMode;
 
         public Submarine(GameMode gameMode)
             : base()
@@ -35,6 +36,8 @@ namespace Poseidon
             else
                 perceptionRadius = GameConstants.BossPerceptionRadius;
             basicExperienceReward = 3000 * (HydroBot.gamePlusLevel + 1);
+
+            this.gameMode = gameMode;
         }
 
         public override void Load(int clipStart, int clipEnd, int fps)
@@ -149,6 +152,11 @@ namespace Poseidon
             AddingObjects.placeTorpedo(this, currentHuntingTarget, bullets, cameraFrustum);
         }
 
+        public void ShootLaser(List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
+        {
+            AddingObjects.placeLaser(this, currentHuntingTarget, bullets, cameraFrustum, gameMode);
+        }
+
         public void SpecialMove3(List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
             if (currentHuntingTarget != null && PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire * 3)
@@ -213,7 +221,7 @@ namespace Poseidon
                     //}
                     if (powerupsType == 1 && currentHuntingTarget is HydroBot)
                     {
-                        ShootTorpedos(bullets, cameraFrustum);
+                        ShootLaser(bullets, cameraFrustum);
                         powerUsed = true;
                     }
                     //else if (powerupsType == 1)

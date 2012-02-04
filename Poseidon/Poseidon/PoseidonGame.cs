@@ -38,7 +38,7 @@ namespace Poseidon
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
 
-        SpriteBatch spriteBatch;
+        public static SpriteBatch spriteBatch;
         SpriteFont statsFont;
         CutSceneDialog cutSceneDialog;
         // Textures for help scene

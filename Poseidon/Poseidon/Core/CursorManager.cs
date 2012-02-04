@@ -108,6 +108,42 @@ namespace Poseidon
             return null;
         }
 
+        public static Trash MouseOnWhichTrash(Cursor cursor, Camera gameCamera, List<Trash> trashes)
+        {
+            BoundingSphere trashRealSphere;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (Trash trash in trashes)
+            {
+                trashRealSphere = trash.BoundingSphere;
+                trashRealSphere.Center.Y = trash.Position.Y;
+                trashRealSphere.Radius *= 5;
+                if (RayIntersectsBoundingSphere(cursorRay, trashRealSphere))
+                {
+                    return trash;
+                }
+            }
+            //cursor.SetNormalMouseImage();
+            return null;
+        }
+
+        public static ShipWreck MouseOnWhichShipWreck(Cursor cursor, Camera gameCamera, List<ShipWreck> shipWrecks)
+        {
+            BoundingSphere shipRealSphere;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (ShipWreck shipWreck in shipWrecks)
+            {
+                shipRealSphere = shipWreck.BoundingSphere;
+                shipRealSphere.Center.Y = shipWreck.Position.Y;
+                shipRealSphere.Radius *= 1;
+                if (RayIntersectsBoundingSphere(cursorRay, shipRealSphere))
+                {
+                    return shipWreck;
+                }
+            }
+            //cursor.SetNormalMouseImage();
+            return null;
+        }
+
         public static void CheckClick(ref MouseState lastMouseState, ref MouseState currentMouseState, GameTime gameTime, ref double clickTimer, ref bool clicked, ref bool doubleClicked)
         {
             lastMouseState = currentMouseState;

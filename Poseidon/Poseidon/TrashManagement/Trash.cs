@@ -12,7 +12,10 @@ namespace Poseidon
     {
         public TrashType trashType;
 
-        public bool Retrieved { get; set; }
+        public bool sinking;
+        public float sinkingRate;
+        public float sinkingRotationRate;
+        public float seaFloorHeight;
 
         public float orientation;
 
@@ -27,7 +30,7 @@ namespace Poseidon
         public Trash( TrashType trashtype)
             : base()
         {
-            Retrieved = false;
+            sinking = false;
             trashType = trashtype;
         }
 
@@ -59,6 +62,16 @@ namespace Poseidon
             //currentChange += 0.025f;
             //if (floatUp) Position.Y += currentChange;
             //else Position.Y -= currentChange;
+            if (sinking)
+            {
+                Position.Y -= sinkingRate;
+                orientation += sinkingRotationRate;
+                if (Position.Y <= seaFloorHeight)
+                {
+                    Position.Y = seaFloorHeight;
+                    sinking = false;
+                }
+            }
             if (increaseFog)
                 fogEndValue += 2.5f;
             else fogEndValue -= 2.5f;

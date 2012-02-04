@@ -25,6 +25,8 @@ namespace Poseidon
         private Texture2D HealthBar;
         private Texture2D EnvironmentBar;
 
+        int numTrash = 100; //45 - 45 - 10
+
         Game game;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
@@ -296,8 +298,7 @@ namespace Poseidon
             //Initialize trash
             //int random_model;
             //int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
-            int numberTrash = 100; // 45, 45, 10
-            trashes = new List<Trash>(numberTrash);
+            trashes = new List<Trash>(numTrash);
             int bioIndex, plasticIndex, nuclearIndex;
             for (bioIndex = 0; bioIndex < 45; bioIndex++)
             {
@@ -537,6 +538,16 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
+                    if (trashes != null && trashes.Count < numTrash)
+                    {
+                        Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, null, null,
+                                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
+                                GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo);
+                        Point point = new Point();
+                        point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
+                        points.Add(point);
+                    }
+
                     foreach (Trash trash in trashes)
                     {
                         trash.Update(gameTime);
@@ -765,7 +776,7 @@ namespace Poseidon
             {
                 trashRealSphere = trash.BoundingSphere;
                 trashRealSphere.Center.Y = trash.Position.Y;
-                if (!trash.Retrieved && trashRealSphere.Intersects(frustum))
+                if (trashRealSphere.Intersects(frustum))
                 {
                     trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                 }

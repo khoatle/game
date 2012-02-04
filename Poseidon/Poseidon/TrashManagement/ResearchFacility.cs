@@ -40,9 +40,8 @@ namespace Poseidon
             bioUpgrade = plasticUpgrade = false;
         }
 
-        public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
+        public void LoadContent(ContentManager content, Game game, Vector3 position, float orientation)
         {
-            Model = content.Load<Model>(modelname);
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
 
@@ -73,6 +72,13 @@ namespace Poseidon
 
             this.game = game;
 
+        }
+
+        // Overloading content load so that survival mode game compiles properly.
+        public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
+        {
+            Model = content.Load<Model>(modelname);
+            LoadContent(content, game, position, orientation);
         }
 
         public void Update(GameTime gameTime)

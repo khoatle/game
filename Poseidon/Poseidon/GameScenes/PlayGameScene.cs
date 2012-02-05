@@ -582,6 +582,9 @@ namespace Poseidon
             // Initialize a list of factories
             factories = new List<Factory>();
             
+            // Set research facility to null
+            researchFacility = null;
+
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
             for (int index = 0; index < GameConstants.NumStaticObjectsMain; index++)
@@ -716,7 +719,7 @@ namespace Poseidon
                                 break;
                             }
                         }
-                        if (CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
+                        if (researchFacility != null && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             openResearchFacilityConfigScene = true;
                         }

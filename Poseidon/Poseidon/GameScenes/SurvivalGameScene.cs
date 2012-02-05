@@ -463,8 +463,10 @@ namespace Poseidon
                         }
                     }
 
+                    bool mouseOnInteractiveIcons = false;
                     //hydrobot update
-                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, terrain.heightMapInfo, healthBullet, powerpacks, resources, null, null,null);
+                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
+                        this, terrain.heightMapInfo, healthBullet, powerpacks, resources, null, null,null, mouseOnInteractiveIcons);
 
                     //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;

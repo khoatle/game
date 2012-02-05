@@ -21,6 +21,7 @@ namespace Poseidon
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum FactoryType { biodegradable, plastic, radioactive};
+    public enum BuildingType { biodegradable, plastic, radioactive, researchlab }; // as a super type for factory-type (including researchlab)
 
     /// <summary>
     /// This is the main type for your game

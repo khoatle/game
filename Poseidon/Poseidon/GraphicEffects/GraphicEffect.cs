@@ -195,7 +195,7 @@ namespace Poseidon.GraphicEffects
             else return false;
         }
 
-        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
+        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
         {
             graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
             graphicsDevice.Clear(Color.Black);
@@ -230,6 +230,23 @@ namespace Poseidon.GraphicEffects
                         {
                             shipPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                             edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
+                        }
+                        else
+                        {
+                            Factory factoryPointedAt = CursorManager.MouseOnWhichFactory(cursor, gameCamera, factories);
+                            if (factoryPointedAt != null)
+                            {
+                                factoryPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                                edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
+                            }
+                            else
+                            {
+                                if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
+                                {
+                                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                                    edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
+                                }
+                            }
                         }
                     }
                 }

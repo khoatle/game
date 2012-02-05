@@ -792,7 +792,7 @@ namespace Poseidon
                 factoryRealSphere.Center.Y = factory.Position.Y;
                 if (factoryRealSphere.Intersects(frustum))
                 {
-                    factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                 }
             }
             if (researchFacility != null)
@@ -800,7 +800,7 @@ namespace Poseidon
                 factoryRealSphere = researchFacility.BoundingSphere;
                 factoryRealSphere.Center.Y = researchFacility.Position.Y;
                 if (factoryRealSphere.Intersects(frustum))
-                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
             }
 
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "Normal Shading");

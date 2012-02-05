@@ -420,13 +420,13 @@ namespace Poseidon
             //just for testing
             //should be removed
             //skillComboActivated = true;
-            //activeSkillID = 4;
-            //secondSkillID = -1;
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
+            activeSkillID = 4;
+            secondSkillID = -1;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = true;
+            skills[3] = true;
+            skills[4] = true;
 
             //goodWillBarActivated = true;
             //iconActivated[0] = true;
@@ -647,7 +647,7 @@ namespace Poseidon
             //if the user click on right mouse button
             //cast the current selected skill
             //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
-            else if (currentMouseState.RightButton == ButtonState.Pressed)
+            else if (currentMouseState.RightButton == ButtonState.Pressed && !mouseOnInteractiveIcons)
             {         
                 CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount);
             }

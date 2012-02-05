@@ -144,6 +144,38 @@ namespace Poseidon
             return null;
         }
 
+        public static Factory MouseOnWhichFactory(Cursor cursor, Camera gameCamera, List<Factory> factories)
+        {
+            BoundingSphere factoryRealSphere;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (Factory factory in factories)
+            {
+                factoryRealSphere = factory.BoundingSphere;
+                factoryRealSphere.Center.Y = factory.Position.Y;
+                factoryRealSphere.Radius *= 1;
+                if (RayIntersectsBoundingSphere(cursorRay, factoryRealSphere))
+                {
+                    return factory;
+                }
+            }
+            return null;
+        }
+
+        public static bool MouseOnResearchFacility(Cursor cursor, Camera gameCamera, ResearchFacility researchFacility)
+        {
+            if (researchFacility == null) return false;
+            BoundingSphere researchFacilityRealSphere;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            researchFacilityRealSphere = researchFacility.BoundingSphere;
+            researchFacilityRealSphere.Center.Y = researchFacility.Position.Y;
+            researchFacilityRealSphere.Radius *= 1;
+            if (RayIntersectsBoundingSphere(cursorRay, researchFacilityRealSphere))
+            {
+                return true;
+            }
+            else return false;
+        }
+
         public static void CheckClick(ref MouseState lastMouseState, ref MouseState currentMouseState, GameTime gameTime, ref double clickTimer, ref bool clicked, ref bool doubleClicked)
         {
             lastMouseState = currentMouseState;

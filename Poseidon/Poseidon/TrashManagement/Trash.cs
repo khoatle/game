@@ -100,7 +100,7 @@ namespace Poseidon
                 //foreach (BasicEffect effect in mesh.Effects)
                 foreach (Effect effect in mesh.Effects)
                 {
-                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                    
                     //effect.World =
                     //    worldMatrix * transforms[mesh.ParentBone.Index];
                     //effect.View = view;
@@ -117,6 +117,7 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom BasicEffect
+                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);
                     effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));

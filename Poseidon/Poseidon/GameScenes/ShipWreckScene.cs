@@ -408,9 +408,11 @@ namespace Poseidon
             {   
              
                 CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
-                
+
+                bool mouseOnInteractiveIcons = false;
                 //hydrobot update
-                hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, heightMapInfo, healthBullet, null, null, null, null, null);
+                hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
+                    this, heightMapInfo, healthBullet, null, null, null, null, null, mouseOnInteractiveIcons);
 
                 //add 1 bubble over tank and each enemy
                 timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;

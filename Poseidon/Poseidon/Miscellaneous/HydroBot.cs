@@ -595,7 +595,7 @@ namespace Poseidon
 
         public void UpdateAction(GameTime gameTime, Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount, ContentManager Content,
             SpriteBatch spriteBatch, List<DamageBullet> myBullet, GameScene gameScene, HeightMapInfo heightMapInfo, List<HealthBullet> healthBullet, List<Powerpack> powerpacks, List<Resource> resources,
-            List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+            List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, bool mouseOnInteractiveIcons)
         {
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -675,14 +675,14 @@ namespace Poseidon
                 reachDestination = true;
             }
             //if the user clicks or holds mouse's left button
-            else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
+            else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject && !mouseOnInteractiveIcons)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 if (!clipPlayer.inRange(1, 30))
                     clipPlayer.switchRange(1, 30);
             }
 
-            else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+            else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && !mouseOnInteractiveIcons)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 //if it is out of shooting range then just move there

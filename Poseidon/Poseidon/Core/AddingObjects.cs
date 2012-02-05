@@ -509,7 +509,7 @@ namespace Poseidon
                             zVal *= -1;
                             break;
                     }
-                } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes) );
+                } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
@@ -524,7 +524,7 @@ namespace Poseidon
         }
 
         public static Vector3 createSinkingTrash(
-            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo)
+            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Factory> factories, ResearchFacility researchFacility, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             int positionSign, xVal, zVal;
@@ -572,7 +572,7 @@ namespace Poseidon
                         zVal *= -1;
                         break;
                 }
-            } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes));
+            } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
             sinkingTrash.Position.X = xVal;
             sinkingTrash.Position.Z = zVal;
@@ -635,7 +635,7 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
                 
-            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects, null));
+            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects, null, null, null));
             
             return new Vector3(xValue, 0, zValue);
         }
@@ -699,7 +699,7 @@ namespace Poseidon
             return false;
         }
         // Helper
-        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes)
+        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
         {
 
             if (shipWrecks != null)
@@ -740,6 +740,29 @@ namespace Poseidon
                     {
                         return true;
                     }
+                }
+            }
+            if (factories != null)
+            {
+                foreach (Factory factory in factories)
+                {
+                    if (((int)(MathHelper.Distance(
+                        xValue, factory.Position.X)) < 100) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, factory.Position.Z)) < 100))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (researchFacility != null)
+            {
+                if (((int)(MathHelper.Distance(
+                        xValue, researchFacility.Position.X)) < 100) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, researchFacility.Position.Z)) < 100))
+                {
+                    return true;
                 }
             }
             return false;

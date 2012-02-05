@@ -542,7 +542,7 @@ namespace Poseidon
 
                     if (trashes != null && trashes.Count < numTrash)
                     {
-                        Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, null, null,
+                        Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, null, null, factories, researchFacility,
                                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
                                 GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo);
                         Point point = new Point();

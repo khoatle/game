@@ -83,11 +83,7 @@ namespace Poseidon
 
         public void Update(GameTime gameTime)
         {
-            if (increaseFog)
-                fogEndValue += 2.5f;
-            else fogEndValue -= 2.5f;
-            if (fogEndValue > fogEndMaxVal || fogEndValue < GameConstants.FogEnd)
-                increaseFog = !increaseFog;
+
         }
 
         public void Draw(Matrix view, Matrix projection)

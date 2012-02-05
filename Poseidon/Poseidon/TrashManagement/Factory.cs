@@ -93,12 +93,6 @@ namespace Poseidon
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources)
         {
-            if (increaseFog)
-                fogEndValue += 2.5f;
-            else fogEndValue -= 2.5f;
-            if (fogEndValue > fogEndMaxVal || fogEndValue < GameConstants.FogEnd)
-                increaseFog = !increaseFog;
-
             //Is trash finished processing?
             for (int i = 0; i < listTimeTrashProcessing.Count; i++)
             {

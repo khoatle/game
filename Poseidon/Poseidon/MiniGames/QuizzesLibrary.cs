@@ -433,8 +433,8 @@ namespace Poseidon.MiniGames
             quizz = new Quizz();
             quizz.question = "What are the challenges in recycling plastic?";
             quizz.options[0] = "Different types of plastic can not be recycled together.";
-            quizz.options[1] = "Compared to glass, plastic recycling requires more processing.";
-            quizz.options[2] = "Colors are hard to remove plastic.";
+            quizz.options[1] = "Plastic recycling requires more processing.";
+            quizz.options[2] = "Colors are hard to remove in plastic.";
             quizz.options[3] = "All of the above.";
             quizz.answerID = 3;
             quizzesList.Add(quizz);

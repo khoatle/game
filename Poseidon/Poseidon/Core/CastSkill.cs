@@ -36,7 +36,7 @@ namespace Poseidon
                      (PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow &&
                       PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[1] > GameConstants.coolDownForThorHammer)))
                 {
-                    ShootHammer(hydroBot, Content, myBullet);
+                    ShootHammer(hydroBot, Content, myBullet, gameMode);
                     HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
                     HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
                     HydroBot.firstUse[0] = false;
@@ -51,7 +51,7 @@ namespace Poseidon
                     HydroBot.firstUse[0] = false;
                     HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
                     //audio.Explosion.Play();
-                    CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, gameScene);
+                    CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, gameScene, gameMode);
                     skillUsed = true;
                 }
 
@@ -152,7 +152,7 @@ namespace Poseidon
             pointIntersect = Vector3.Zero;
         }
         //=================//combo skills casting
-        public static void ShootHammer(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullets)
+        public static void ShootHammer(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
             FlyingHammer f = new FlyingHammer();
@@ -162,13 +162,13 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            f.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 10 * healthiness, HydroBot.strengthUp);
+            f.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 10 * healthiness, HydroBot.strengthUp, gameMode);
             f.loadContent(Content, "Models/BulletModels/mjolnir");
             PoseidonGame.audio.herculesShot.Play();
             myBullets.Add(f);
         }
         //=================//single skill casting
-        public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameScene inGameScene)
+        public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameScene inGameScene, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
             HerculesBullet d = new HerculesBullet(Content, spriteBatch, inGameScene);
@@ -178,7 +178,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness, HydroBot.strengthUp);
+            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/herculesBullet");
             //d.loadContent(Content, "Models/BulletModels/mjolnir");
             PoseidonGame.audio.herculesShot.Play();

@@ -47,6 +47,9 @@ namespace Poseidon
         public static float currentHitPoint;//, lsCurrentHitPoint;
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
+
+        public float controlRadius = 80f;
+
         // 2 types of bullet
         // 0: killing
         // 1: healing
@@ -661,8 +664,8 @@ namespace Poseidon
                     {
                         prevFireTime = PoseidonGame.playTime;
                         //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet); }
+                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
+                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
                         if (!clipPlayer.inRange(61, 90))
                             clipPlayer.switchRange(61, 90);
                     }
@@ -696,8 +699,8 @@ namespace Poseidon
                         ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
                         prevFireTime = PoseidonGame.playTime;
                         //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet); }
+                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
+                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
                         //so the bot will not move
                         pointIntersect = Vector3.Zero;
                         reachDestination = true;
@@ -802,9 +805,11 @@ namespace Poseidon
                     Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                     if (trashes != null)
                     {
-                        foreach (Trash trash in trashes)
+                        //foreach (Trash trash in trashes)
+                        for(int i=0; i<trashes.Count; i++)
                         {
-                            if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                            Trash trash = trashes[i];
+                            if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                             {
                                 string display_str;
                                 if (trash.trashType == TrashType.biodegradable)
@@ -837,7 +842,6 @@ namespace Poseidon
                                 {
                                     display_str = "Wrong Type: Radioactive";
                                 }
-                                trash.Retrieved = true;
                                 PoseidonGame.audio.retrieveSound.Play();
 
                                 Point point = new Point();
@@ -848,7 +852,7 @@ namespace Poseidon
                                     PlayGameScene.points.Add(point);
                                 else if (gameMode == GameMode.SurvivalMode)
                                     SurvivalGameScene.points.Add(point);
-
+                                trashes.Remove(trash);
                             }
                         }
                     }
@@ -872,9 +876,11 @@ namespace Poseidon
                     Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                     if (trashes != null)
                     {
-                        foreach (Trash trash in trashes)
+                        //foreach (Trash trash in trashes)
+                        for(int i=0; i<trashes.Count; i++)
                         {
-                            if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                            Trash trash = trashes[i];
+                            if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                             {
                                 string display_str;
                                 if (trash.trashType == TrashType.biodegradable)
@@ -908,7 +914,6 @@ namespace Poseidon
                                 {
                                     display_str = "Wrong Type: Radioactive";
                                 }
-                                trash.Retrieved = true;
                                 PoseidonGame.audio.retrieveSound.Play();
                                 Point point = new Point();
                                 point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
@@ -918,7 +923,7 @@ namespace Poseidon
                                     PlayGameScene.points.Add(point);
                                 else if (gameMode == GameMode.SurvivalMode)
                                     SurvivalGameScene.points.Add(point);
-
+                                trashes.Remove(trash);
                             }
                         }
                     }
@@ -929,9 +934,11 @@ namespace Poseidon
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                 if (trashes != null)
                 {
-                    foreach (Trash trash in trashes)
+                    //foreach (Trash trash in trashes)
+                    for(int i=0; i<trashes.Count; i++)
                     {
-                        if (trash.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                        Trash trash = trashes[i];
+                        if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
                             string display_str;
                             if (trash.trashType == TrashType.biodegradable)
@@ -965,7 +972,6 @@ namespace Poseidon
                                 HydroBot.currentEnvPoint += envPoints;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
                             }
-                            trash.Retrieved = true;
                             PoseidonGame.audio.retrieveSound.Play();
                             Point point = new Point();
                             point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
@@ -975,7 +981,7 @@ namespace Poseidon
                                 PlayGameScene.points.Add(point);
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
-
+                            trashes.Remove(trash);
                         }
                     }
                 }
@@ -1332,7 +1338,7 @@ namespace Poseidon
         public void SetupShaderParameters(ContentManager content, Model model)
         {
             newSkinnedeffect = content.Load<Effect>("Shaders/NewSkinnedEffect");
-            EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
+            EffectHelpers.ChangeEffectUsedByModelToCustomSkinnedEffect(model, newSkinnedeffect);
         }
 
         /// <summary>

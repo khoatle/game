@@ -84,7 +84,7 @@ namespace Poseidon
             if (lastKeyboardState.IsKeyDown(Keys.Space) && currentKeyboardState.IsKeyUp(Keys.Space))
             {
                 // level 0 of main game, can only heal
-                if (!(gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0))
+                //if (!(gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0))
                 {
                     HydroBot.bulletType++;
                     if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;

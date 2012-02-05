@@ -22,7 +22,10 @@ namespace Poseidon {
         public string happy_talk;
         public string sad_talk;
         public bool flee = false;
-        public bool isWandering = true;
+        public bool isWandering = false;
+        public bool isFollowing = false;
+        public bool isFighting = false;
+        public BaseEnemy currentTarget = null;
 
         public Fish() : base() {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
@@ -179,14 +182,14 @@ namespace Poseidon {
         public void SetupShaderParameters(ContentManager content, Model model)
         {
             newSkinnedeffect = content.Load<Effect>("Shaders/NewSkinnedEffect");
-            EffectHelpers.ChangeEffectUsedByModel(model, newSkinnedeffect);
+            EffectHelpers.ChangeEffectUsedByModelToCustomSkinnedEffect(model, newSkinnedeffect);
         }
 
         public override void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
             if (clipPlayer == null)
             {
-                // just return for now.. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
+                // just return for now. Some of the fishes do not have animation, so clipPlayer won't be initialized for them
                 base.Draw(view, projection);
                 return;
             }

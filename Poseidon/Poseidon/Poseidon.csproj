@@ -138,7 +138,8 @@
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
     <Compile Include="Minion\SeaCow.cs" />
     <Compile Include="Minion\SeaTurtle.cs" />
-    <Compile Include="Minion\ThirdFish.cs" />
+    <Compile Include="Minion\SeaDolphin.cs" />
+    <Compile Include="Miscellaneous\Terrain.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />

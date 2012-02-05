@@ -258,8 +258,9 @@ namespace Poseidon
             BoundingSphere newSphere = new BoundingSphere(new Vector3(), radius);
             float X, Y = bot.Position.Y, Z;
             do {
-                X = bot.Position.X + (float)random.NextDouble() * 50f;
-                Z = bot.Position.Z + (float)random.NextDouble() * 50f;
+                X = (float)random.NextDouble() * (2 * bot.Position.X + 100) - bot.Position.X - 50f;
+                //X = bot.Position.X + (float)random.NextDouble() * 50f;
+                Z = (float)random.NextDouble() * (2 * bot.Position.Z + 100) - bot.Position.Z - 50f;
                 newSphere.Center = new Vector3(X, Y, Z);
             } while (IsSurfaceOccupied(newSphere, enemiesAmount, fishAmount, enemies, fish));
 

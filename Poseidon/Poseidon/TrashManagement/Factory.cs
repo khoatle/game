@@ -175,7 +175,7 @@ namespace Poseidon
             switch (factoryType)
             {
                 case FactoryType.biodegradable:
-                    plant_basic_description = "";
+                    plant_basic_description = "Biodegradable trash decompose naturally. The organic matter in these great mounds of waste is consumed by bacteria that give off gas rich in methane, which is a harmful greenhouse gas. However, Methane's risk to global warming is also a great opportunity to supplying us with a bounty of fuel to take care of our social needs. Therefore these trashes must be processed in a factory not only to prevent these gases from escaping into the atmosphere, but also to use them to generate energy. In fact, power from landfill methane exceeds solar power in New York and New Jersey, and landfill methane in those states and in Connecticut powers generators that produce a total of 169 megawatts of electricity - almost as much as a small conventional generating station. The methane also provides 16.7 million cubic feet of gas daily for heating and other direct uses.\n";
                     numDays = (float)processingTime / GameConstants.DaysPerSecond;
                     production_str += " for "+trashBlockSize+" trash in " + numDays.ToString();
                     if(numDays > 1)
@@ -185,7 +185,7 @@ namespace Poseidon
                     if (HydroBot.bioPlantLevel == 1)
                     {
                         title = "Biodegradable Trash Processing Plant (Basic technology)";
-                        plant_upgradeLevel_description = "Trash decompose naturally to produce methane.";
+                        plant_upgradeLevel_description = "";
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {

@@ -218,6 +218,56 @@ namespace Poseidon
             }
         }
 
+        public static void placeMinion(ContentManager Content, int type, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, ref int fishAmount, HydroBot bot) {
+            
+            
+            Fish newFish;
+            if (type == 0)
+            {
+                newFish = new SeaCow();
+                newFish.Name = "seal";
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/seal");
+                newFish.Load(1, 24, 24);
+                newFish.happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
+                newFish.sad_talk = "We need the arctic ice. Stop global warming.";
+            }
+            else if (type == 1)
+            {
+                newFish = new SeaTurtle();
+                newFish.Name = "turtle";
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/turtle");
+                newFish.Load(1, 24, 24);
+                newFish.happy_talk = "We are reptiles from much before the Jurassic age. Oh, I cry not for sorrow, just to get the salt out.";
+                newFish.sad_talk = "I need to go to the beach to lay eggs. Can you ask the humans not to kill me?";
+            }
+            else {
+                newFish = new SeaDolphin();
+                newFish.Name = "shark";
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/normalshark");
+                newFish.Load(1, 24, 24);
+                newFish.happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
+                newFish.sad_talk = "Humans kill over 30 million sharks every year. We are the oldest fish, spare us."; 
+            }
+            newFish.Position = newFish.BoundingSphere.Center = calculatePlacingPosition(newFish.BoundingSphere.Radius, bot, enemies, enemiesAmount, fish, fishAmount);
+            fish[fishAmount] = newFish;
+            fishAmount++;
+        }
+
+        public static Vector3 calculatePlacingPosition(float radius, HydroBot bot, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount) {
+            Random random = new Random();
+            BoundingSphere newSphere = new BoundingSphere(new Vector3(), radius);
+            float X, Y = bot.Position.Y, Z;
+            do {
+                X = (float)random.NextDouble() * (2 * bot.Position.X + 100) - bot.Position.X - 50f;
+                //X = bot.Position.X + (float)random.NextDouble() * 50f;
+                Z = (float)random.NextDouble() * (2 * bot.Position.Z + 100) - bot.Position.Z - 50f;
+                newSphere.Center = new Vector3(X, Y, Z);
+            } while (IsSurfaceOccupied(newSphere, enemiesAmount, fishAmount, enemies, fish));
+
+            return new Vector3(X, Y, Z);
+        }
+
+
         public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight)
         {
             loadContentEnemies(ref enemiesAmount, enemies, Content, currentLevel, gameMode);
@@ -287,9 +337,9 @@ namespace Poseidon
                     shipWreck.BoundingSphere.Radius);
             }
         }
+
         public static void placeTreasureChests(List<TreasureChest> treasureChests, List<StaticObject> staticObjects, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
-
             Vector3 tempCenter;
 
             //place treasure chests
@@ -308,28 +358,28 @@ namespace Poseidon
                 else chest.orientation = MathHelper.PiOver2;
             }
         }
-        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet) {
+        public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet, GameMode gameMode) {
             HealthBullet h = new HealthBullet();
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
- 
-            h.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
+
+            h.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             h.loadContent(Content, "Models/BulletModels/healBullet");
             PoseidonGame.audio.botNormalShot.Play();
             healthBullet.Add(h);
         }
 
-        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet) {
+        public static void placeBotDamageBullet(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullet, GameMode gameMode) {
             DamageBullet d = new DamageBullet();
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
-            
-            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp);
+
+            d.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
             PoseidonGame.audio.botNormalShot.Play();
             myBullet.Add(d);

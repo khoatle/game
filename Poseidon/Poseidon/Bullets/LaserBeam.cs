@@ -54,7 +54,6 @@ namespace Poseidon
 
         public override void update()
         {
-
             Position += unitDirection * projectionSpeed;
             BoundingSphere = new BoundingSphere(Position, BoundingSphere.Radius);
         }

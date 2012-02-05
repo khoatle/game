@@ -28,7 +28,6 @@ namespace Poseidon {
         public const float BotShootingRange = 70.0f;
         public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.6f);
 
-
         //experience reward
         public const int ExpPainting = 35;
         public const int BasicExpHealingFish = 8;
@@ -242,5 +241,8 @@ namespace Poseidon {
         //const for particle systems
         public const int numExplosionParticles = 20;
         public const int numExplosionSmokeParticles = 50;
+
+        // constants for Factory Buildings
+        public const int FactoryPanelMaxButtons = 4;
     }
 }

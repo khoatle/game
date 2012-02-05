@@ -47,6 +47,8 @@ namespace Poseidon
         // losing: reset our bot to the bot at the beginning of the level
         GameState prevGameState;
         GameObject boundingSphere;
+        public int type = 0;
+
         Terrain terrain;
         public List<ShipWreck> shipWrecks;
 
@@ -102,7 +104,6 @@ namespace Poseidon
         // and the level is won
         public static bool isBossKilled = false;
 
-     
         //stuffs for applying special effects
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
         Texture2D SceneTexture;
@@ -153,6 +154,16 @@ namespace Poseidon
         private bool openFactoryConfigurationScene = false;
         private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
+
+        // Texture for Mouse Interaction panel for factories
+        Texture2D factoryPanelTexture;
+        ButtonPanel factoryButtonPanel;
+
+        // Models for Factories and buildings
+        private Model researchBuildingModel;
+        private Model plasticFactoryModel;
+        private Model biodegradableFactoryModel;
+        private Model radioactiveFactoryModel;
 
         //for particle systems
         ParticleSystem explosionParticles;
@@ -228,12 +239,11 @@ namespace Poseidon
                 GameConstants.NumberTerminator = numTerminator;
                 int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
-            }
-            else
-            {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+            } 
+            else {
+                int[] numShootingEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -241,14 +251,14 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
             //fireTime = TimeSpan.FromSeconds(0.3f);
 
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
-            fish = new Fish[GameConstants.NumberFish[currentLevel]];
+            fish = new Fish[GameConstants.NumberFish[currentLevel] + 50]; // Possible 10 sidekicks
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -276,10 +286,18 @@ namespace Poseidon
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
 
+            // Instantiate the factory Button
+            factoryButtonPanel = new ButtonPanel(4, 1.0f);
+
+            // Load models for factories.. LoadContent would be better place for this rather than here.
+            researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
+            biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
+            plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
+            radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
+
             this.Load();
             //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
             //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
-            
         }
 
         public void Load()
@@ -500,7 +518,7 @@ namespace Poseidon
             fishAmount = 0;
             enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
                 + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel]*(1 + GameConstants.NumEnemiesInSubmarine)];
-            fish = new Fish[GameConstants.NumberFish[currentLevel]];
+            fish = new Fish[GameConstants.NumberFish[currentLevel] + 50]; // Possible 10 sidekicks
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight);
             AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, shipWrecks,
@@ -560,40 +578,12 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
                 GameConstants.MainGameMaxRangeZ, GameMode.MainGame, GameConstants.MainGameFloatHeight, terrain.heightMapInfo); 
 
-            //Create 3 trash processing factories at the beginning
-            //JUST FOR TESTING .. REMOVE WHEN THE FACTORY CREATION MENU IS AVAILABLE (SUSHIL)
-            Vector3 position;
+            // Initialize a list of factories
             factories = new List<Factory>();
-
-            //create research facility
-            researchFacility = new ResearchFacility(); //There can be only 1 research facility.
-            position = new Vector3(0, 0, -100);
-            position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            orientation = random.Next(100);
-            researchFacility.LoadContent(Content, game, "Models/FactoryModels/ResearchFacility", position, orientation);
-            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
-
-            factories.Add(new Factory(FactoryType.biodegradable));
-            position = new Vector3(100,0,0);
-            position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            orientation = random.Next(100);
-            factories[0].LoadContent(Content, game, "Models/FactoryModels/BiodegradableFactory", position, orientation);
-            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
-
-            factories.Add(new Factory(FactoryType.plastic));
-            position = new Vector3(0,0,0);
-            position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            orientation = random.Next(100);
-            factories[1].LoadContent(Content, game, "Models/FactoryModels/PlasticFactory", position, orientation);
-            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
-
-            factories.Add(new Factory(FactoryType.radioactive));
-            position = new Vector3(-100,0,0);
-            position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            orientation = random.Next(100);
-            factories[2].LoadContent(Content, game, "Models/FactoryModels/NuclearFactory", position, orientation);
-            HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
             
+            // Set research facility to null
+            researchFacility = null;
+
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
             for (int index = 0; index < GameConstants.NumStaticObjectsMain; index++)
@@ -652,6 +642,11 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
+            if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
+                AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+                type++;
+            }
+
             // play the boss fight music for certain levels
             if (currentLevel == 3 || currentLevel == 11)
             {
@@ -728,7 +723,7 @@ namespace Poseidon
                                 break;
                             }
                         }
-                        if (CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
+                        if (researchFacility != null && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             openResearchFacilityConfigScene = true;
                         }
@@ -994,6 +989,28 @@ namespace Poseidon
                     //update particle systems
                     explosionParticles.Update(gameTime);
                     //explosionSmokeParticles.Update(gameTime);
+
+                    // Update Factory Button Panel
+                    factoryButtonPanel.Update(gameTime, currentMouseState);
+                    // if mouse click happened, check for the click position and add new factory
+                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        // adjust the position to build factory depending on current camera position
+                        Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+
+                        // identify which factory depending on anchor index
+                        BuildingType newBuildingType = factoryButtonPanel.anchorIndexToBuildingType();
+
+                        // if addition is successful, play successful sound, otherwise play unsuccessful sound
+                        if (addNewBuilding(newBuildingType, newBuildingPosition))
+                        {
+                            factoryButtonPanel.removeAnchor();
+                        }
+                        else
+                        {
+                            // play sound to denote building could not be added
+                        }
+                    }
                 }
 
                 prevGameState = currentGameState;
@@ -1034,6 +1051,92 @@ namespace Poseidon
                 }
                 base.Update(gameTime);
             }
+        }
+
+        // Add new factory in the game arena if conditions for adding them satisty
+        // Research Facility: Only one
+        // Uses class variables factories, researchFacility, HydroBot
+        private bool addNewBuilding(BuildingType buildingType, Vector3 position)
+        {
+            bool status = false;
+            float orientation; // currently orientation is random, this needs to be fixed to one of the four directional orientations because aligning building too view might make it appealing
+            Factory oneFactory;
+
+            // Check if hydrobot has sufficient resources for building a factory
+            if (HydroBot.numResources < GameConstants.numResourcesForEachFactory)
+            {
+                // TODO: play some sound saying no sufficient resource
+                return false;
+            }
+
+            // TODO: See if position is within game arena
+
+            // TODO: Verify that current location is available for adding the building
+
+            switch (buildingType)
+            {
+                case BuildingType.researchlab:
+                    if (researchFacility != null)
+                    {
+                        // do not allow addition of more than one research facility
+                        status = false;
+                    }
+                    else
+                    {
+                        //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
+                        researchFacility = new ResearchFacility();
+                        position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+                        orientation = random.Next(100);
+                        researchFacility.Model = researchBuildingModel;
+                        researchFacility.LoadContent(Content, game, position, orientation);
+                        HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                        status = true;
+                    }
+                    break;
+
+                case BuildingType.biodegradable:
+                    oneFactory = new Factory(FactoryType.biodegradable);
+                    position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+                    orientation = random.Next(100);
+                    oneFactory.Model = biodegradableFactoryModel;
+                    oneFactory.LoadContent(Content, game, position, orientation);
+                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    factories.Add(oneFactory);
+                    status = true;
+                    break;
+
+                case BuildingType.plastic:
+                    oneFactory = new Factory(FactoryType.plastic);
+                    position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+                    orientation = random.Next(100);
+                    oneFactory.Model = plasticFactoryModel;
+                    oneFactory.LoadContent(Content, game, position, orientation);
+                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    factories.Add(oneFactory);
+                    status = true;
+                    break;
+                case BuildingType.radioactive:
+                    oneFactory = new Factory(FactoryType.radioactive);
+                    position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+                    orientation = random.Next(100);
+                    oneFactory.Model = radioactiveFactoryModel;
+                    oneFactory.LoadContent(Content, game, position, orientation);
+                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    factories.Add(oneFactory);
+                    status = true;
+                    break;
+            }
+            return status;
+        }
+
+        // LoadContent gets called as a part of framework.
+        // Called once, and called after initialization. The texture/models should be loaded here
+        protected override void LoadContent()
+        {
+            // Load lower left pannel button
+            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+            // Initialie the button panel
+            factoryButtonPanel.Initialize(factoryPanelTexture, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
         }
 
         public override void Draw(GameTime gameTime)
@@ -1342,6 +1445,11 @@ namespace Poseidon
             DrawBulletType();
             DrawHeight();
             DrawRadar();
+
+            // Draw the factory panel
+            factoryButtonPanel.Draw(spriteBatch);
+            factoryButtonPanel.DrawAnchor(spriteBatch);
+
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
             if (PoseidonGame.gamePlus)
@@ -1353,6 +1461,9 @@ namespace Poseidon
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
             if (openResearchFacilityConfigScene)
                 researchFacility.DrawResearchFacilityConfigurationScene(spriteBatch, menuSmall);
+
+            spriteBatch.DrawString(statsFont, "Is bot moving: " + hydroBot.isMoving() + "\n", new Vector2(50, 50), Color.Black);
+
             cursor.Draw(gameTime);
             spriteBatch.End();
             if (screenTransitNow)

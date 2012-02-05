@@ -50,7 +50,7 @@ namespace GeneratedGeometryPipeline
             set { terrainBumpiness = value; }
         }
 
-        private float texCoordScale = 0.1f;
+        private float texCoordScale = 0.125f;
         [DisplayName("Texture Coordinate Scale")]
         [DefaultValue(0.1f)]
         [Description("Terrain texture tiling density.")]

@@ -23,7 +23,7 @@ float4 AmbientColor = float4(0.075, 0.075, 0.2, 1.0);
 
 //--------------------------- DIFFUSE LIGHT PROPERTIES ------------------------------ 
 // The direction of the diffuse light 
-float3 DiffuseLightDirection = float3(0, 0.5, 0.5); 
+float3 DiffuseLightDirection = float3(0, 1, 0); 
   
 // The color of the diffuse light 
 float4 DiffuseColor = float4(1, 1, 1, 1); 

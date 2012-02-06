@@ -1682,6 +1682,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="Shaders\CustomBlur.fx">
+      <Name>CustomBlur</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Lighting.fxh">
       <Name>Lighting</Name>
     </None>

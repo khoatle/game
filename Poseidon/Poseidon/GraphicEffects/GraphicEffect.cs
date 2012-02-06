@@ -20,10 +20,10 @@ namespace Poseidon.GraphicEffects
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect;
+        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect, customBlurEffect;
         bool underWaterEffectEnabled = true;
         bool bloomEffectEnabled = false;
-        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget;
+        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget, blurRenderTarget1, blurRenderTarget2;
         EffectParameterCollection edgeDetectionParameters;
 
         PresentationParameters pp;
@@ -39,6 +39,14 @@ namespace Poseidon.GraphicEffects
             // Look up the resolution and format of our main backbuffer.
             pp = gameScene.Game.GraphicsDevice.PresentationParameters;
 
+            int width = pp.BackBufferWidth;
+            int height = pp.BackBufferHeight;
+            //width /= 2;
+            //height /= 2;
+
+            blurRenderTarget1 = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
+            blurRenderTarget2 = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
+
             afterUnderWaterTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
             afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
             afterEffectsRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
@@ -46,6 +54,7 @@ namespace Poseidon.GraphicEffects
             underWaterEffect = gameScene.Game.Content.Load<Effect>("Shaders/UnderWater");
             screenTransitionEffect = gameScene.Game.Content.Load<Effect>("Shaders/ScreenTransition");
             edgeDetectionEffect = gameScene.Game.Content.Load<Effect>("Shaders/EdgeDetectionEffect");
+            customBlurEffect = gameScene.Game.Content.Load<Effect>("Shaders/CustomBlur");
 
 
             edgeDetectionParameters = edgeDetectionEffect.Parameters;
@@ -104,6 +113,15 @@ namespace Poseidon.GraphicEffects
         public RenderTarget2D DrawWithEffects(GameTime gameTime, Texture2D originalScene, GraphicsDeviceManager graphics)
         {
             //graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            SetBlurEffectParameters(1.0f / (float)blurRenderTarget1.Width, 0);
+
+            DrawFullscreenQuad(originalScene, blurRenderTarget1, customBlurEffect, graphics.GraphicsDevice);
+
+            SetBlurEffectParameters(0, 1.0f / (float)blurRenderTarget1.Height);
+
+            DrawFullscreenQuad(blurRenderTarget1, blurRenderTarget2,
+                               customBlurEffect, graphics.GraphicsDevice);
+
             graphics.GraphicsDevice.SetRenderTarget(afterUnderWaterTexture);
             if (underWaterEffectEnabled)
             {
@@ -113,9 +131,9 @@ namespace Poseidon.GraphicEffects
                     // Apply the underwater effect post process shader
                     underWaterEffect.CurrentTechnique.Passes[0].Apply();
                     {
-                        spriteBatch.Draw(originalScene, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                        spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
                             //fix the problem of ugly areas at the edges of the screen
-                            new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
+                             new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
                     }
                 }
                 spriteBatch.End();
@@ -267,6 +285,114 @@ namespace Poseidon.GraphicEffects
             spriteBatch.Begin(0, BlendState.Opaque, null, null, null, edgeDetectionEffect);
             spriteBatch.Draw(wholeScene, Vector2.Zero, Color.White);
             spriteBatch.End();
+        }
+
+
+        /// <summary>
+        /// Helper for drawing a texture into a rendertarget, using
+        /// a custom shader to apply postprocessing effects.
+        /// </summary>
+        void DrawFullscreenQuad(Texture2D texture, RenderTarget2D renderTarget,
+                                Effect effect, GraphicsDevice graphicsDevice)
+        {
+            graphicsDevice.SetRenderTarget(renderTarget);
+
+            DrawFullscreenQuad(texture,
+                               renderTarget.Width, renderTarget.Height,
+                               effect);
+        }
+
+
+        /// <summary>
+        /// Helper for drawing a texture into the current rendertarget,
+        /// using a custom shader to apply postprocessing effects.
+        /// </summary>
+        void DrawFullscreenQuad(Texture2D texture, int width, int height,
+                                Effect effect)
+        {
+            spriteBatch.Begin(0, BlendState.Opaque, null, null, null, effect);
+            spriteBatch.Draw(texture, new Rectangle(0, 0, width, height), Color.White);
+            spriteBatch.End();
+        }
+
+
+        /// <summary>
+        /// Computes sample weightings and texture coordinate offsets
+        /// for one pass of a separable gaussian blur filter.
+        /// </summary>
+        void SetBlurEffectParameters(float dx, float dy)
+        {
+            // Look up the sample weight and offset effect parameters.
+            EffectParameter weightsParameter, offsetsParameter;
+
+            weightsParameter = customBlurEffect.Parameters["SampleWeights"];
+            offsetsParameter = customBlurEffect.Parameters["SampleOffsets"];
+
+            // Look up how many samples our gaussian blur effect supports.
+            int sampleCount = weightsParameter.Elements.Count;
+
+            // Create temporary arrays for computing our filter settings.
+            float[] sampleWeights = new float[sampleCount];
+            Vector2[] sampleOffsets = new Vector2[sampleCount];
+
+            // The first sample always has a zero offset.
+            sampleWeights[0] = ComputeGaussian(0);
+            sampleOffsets[0] = new Vector2(0);
+
+            // Maintain a sum of all the weighting values.
+            float totalWeights = sampleWeights[0];
+
+            // Add pairs of additional sample taps, positioned
+            // along a line in both directions from the center.
+            for (int i = 0; i < sampleCount / 2; i++)
+            {
+                // Store weights for the positive and negative taps.
+                float weight = ComputeGaussian(i + 1);
+
+                sampleWeights[i * 2 + 1] = weight;
+                sampleWeights[i * 2 + 2] = weight;
+
+                totalWeights += weight * 2;
+
+                // To get the maximum amount of blurring from a limited number of
+                // pixel shader samples, we take advantage of the bilinear filtering
+                // hardware inside the texture fetch unit. If we position our texture
+                // coordinates exactly halfway between two texels, the filtering unit
+                // will average them for us, giving two samples for the price of one.
+                // This allows us to step in units of two texels per sample, rather
+                // than just one at a time. The 1.5 offset kicks things off by
+                // positioning us nicely in between two texels.
+                float sampleOffset = i * 2 + 1.5f;
+
+                Vector2 delta = new Vector2(dx, dy) * sampleOffset;
+
+                // Store texture coordinate offsets for the positive and negative taps.
+                sampleOffsets[i * 2 + 1] = delta;
+                sampleOffsets[i * 2 + 2] = -delta;
+            }
+
+            // Normalize the list of sample weightings, so they will always sum to one.
+            for (int i = 0; i < sampleWeights.Length; i++)
+            {
+                sampleWeights[i] /= totalWeights;
+            }
+
+            // Tell the effect about our new filter settings.
+            weightsParameter.SetValue(sampleWeights);
+            offsetsParameter.SetValue(sampleOffsets);
+        }
+
+
+        /// <summary>
+        /// Evaluates a single point on the gaussian falloff curve.
+        /// Used for setting up the blur filter weightings.
+        /// </summary>
+        float ComputeGaussian(float n)
+        {
+            float theta = 3;
+
+            return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
+                           Math.Exp(-(n * n) / (2 * theta * theta)));
         }
     }
 }

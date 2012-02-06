@@ -576,7 +576,7 @@ namespace Poseidon
 
             sinkingTrash.Position.X = xVal;
             sinkingTrash.Position.Z = zVal;
-            sinkingTrash.Position.Y = floatHeight;
+            sinkingTrash.Position.Y = floatHeight+100;
             sinkingTrash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(sinkingTrash.Position.X, 0, sinkingTrash.Position.Z));//GameConstants.TrashFloatHeight;
             tempCenter = sinkingTrash.BoundingSphere.Center;
             tempCenter.X = sinkingTrash.Position.X;

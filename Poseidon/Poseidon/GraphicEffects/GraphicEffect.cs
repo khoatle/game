@@ -389,7 +389,7 @@ namespace Poseidon.GraphicEffects
         /// </summary>
         float ComputeGaussian(float n)
         {
-            float theta = 3;
+            float theta = 2;//blur amount
 
             return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
                            Math.Exp(-(n * n) / (2 * theta * theta)));

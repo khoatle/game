@@ -1411,12 +1411,6 @@ namespace Poseidon
                 bubble.Draw(spriteBatch, 1.0f);
             }
 
-            //Draw points gained / lost
-            foreach (Point point in points)
-            {
-                point.Draw(spriteBatch);
-            }
-
             //draw particle effects
             // Pass camera matrices through to the particle system components.
             explosionParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
@@ -1442,6 +1436,11 @@ namespace Poseidon
             afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
+            //Draw points gained / lost
+            foreach (Point point in points)
+            {
+                point.Draw(spriteBatch);
+            }
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();

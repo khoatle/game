@@ -207,7 +207,7 @@ namespace Poseidon {
 
         //const for the fog effect
         public const float FogStart = 10;
-        public const float FogEnd = 500;//350;
+        public const float FogEnd = 450;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
 
         //so that it is easier to aim and hit

@@ -186,6 +186,9 @@ namespace Poseidon
         }
         public static void UseThorHammer(Vector3 Position, int MaxRangeX, int MaxRangeZ, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, GameMode gameMode)
         {
+            HydroBot.distortingScreen = true;
+            HydroBot.distortionStart = PoseidonGame.playTime.TotalSeconds;
+
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (InThorRange(Position, enemies[i].Position)){

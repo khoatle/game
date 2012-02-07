@@ -1708,6 +1708,11 @@
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
+    <Compile Include="Shaders\DistortionEffect.fx">
+      <Name>DistortionEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Structures.fxh">
       <Name>Structures</Name>
     </None>
@@ -1763,6 +1768,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\ParticleTextures\sand.png">
+      <Name>sand</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Image\MinigameTextures\BlackBox.jpg">
       <Name>BlackBox</Name>
       <Importer>TextureImporter</Importer>

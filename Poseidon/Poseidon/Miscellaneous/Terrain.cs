@@ -54,11 +54,18 @@ namespace Poseidon
                 foreach (BasicEffect effect in mesh.Effects)
                 //foreach (Effect effect in mesh.Effects)
                 {
-                    effect.AmbientLightColor = new Vector3(0, 191.0f / 255.0f, 1);
+                    //effect.AmbientLightColor = new Vector3(0, 191.0f / 255.0f, 1);
                     //effect.Alpha = 1.0f;
-                    effect.EnableDefaultLighting();
+                    //effect.EnableDefaultLighting();
                     //effect.SpecularColor = Vector3.One;
-                    effect.PreferPerPixelLighting = true;
+                    //effect.DirectionalLight1.Enabled = false;
+                    //effect.DirectionalLight2.Enabled = false;
+                    //effect.DirectionalLight0.Enabled = false;
+                    //effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
+                    //effect.DirectionalLight0.DiffuseColor = new Vector3(0, 1, 1);
+                    //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
+                    //effect.SpecularPower = 1.0f;
+                    //effect.PreferPerPixelLighting = true;
                     effect.World = Matrix.Identity;
 
                     // Use the matrices provided by the game camera

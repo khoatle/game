@@ -240,9 +240,12 @@ namespace Poseidon {
 
         //const for particle systems
         public const int numExplosionParticles = 20;
-        public const int numExplosionSmokeParticles = 50;
+        public const int numExplosionSmokeParticles = 20;
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;
+
+        //constants for certain effects
+        public const float distortionDuration = 1000;
     }
 }

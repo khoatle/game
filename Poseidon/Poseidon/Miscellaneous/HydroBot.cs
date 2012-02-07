@@ -160,6 +160,11 @@ namespace Poseidon
         public static bool hasDolphin, hasSeaCow, hasTurtle, lsHasDolphin, lsHasSeaCow, lsHasTurtle;
         public static float dolphinPower, seaCowPower, turtlePower, lsDolphinPower, lsSeaCowPower, lsTurtlePower;
 
+        //screen should be in distorted mode or not
+        //do not need to be added to save file
+        public static bool distortingScreen = false;
+        public static double distortionStart = 0;
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -1095,13 +1100,20 @@ namespace Poseidon
             //worn out effect of supersonic
             if (supersonicMode == true)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp / GameConstants.BasicStartSpeed)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
                     {
                         supersonicMode = false;
                     }
+                }
+            }
+            if (distortingScreen == true)
+            {
+                if (PoseidonGame.playTime.TotalMilliseconds - distortionStart * 1000 >= GameConstants.distortionDuration)
+                {
+                    distortingScreen = false;
                 }
             }
             //float turnAmount = 0;

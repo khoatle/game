@@ -24,6 +24,8 @@ namespace Poseidon
         public float fogEndMaxVal = 1000.0f;
         public bool increaseFog = true;
 
+        public bool particleAnimationPlayed = false;
+
         //public float heightChange = 0.5f;
         //public float currentChange = 0.0f;
         //public bool floatUp;

@@ -20,10 +20,10 @@ namespace Poseidon.GraphicEffects
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect, customBlurEffect;
+        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect, customBlurEffect, distortionEffect;
         bool underWaterEffectEnabled = true;
         bool bloomEffectEnabled = true;
-        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget, blurRenderTarget1, blurRenderTarget2;
+        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget, blurRenderTarget1, blurRenderTarget2, distortionRenderTarget;
         EffectParameterCollection edgeDetectionParameters;
 
         PresentationParameters pp;
@@ -46,16 +46,16 @@ namespace Poseidon.GraphicEffects
 
             blurRenderTarget1 = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
             blurRenderTarget2 = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
-
-            afterUnderWaterTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
-            afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
-            afterEffectsRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None); 
+            distortionRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
+            afterUnderWaterTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
+            afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
+            afterEffectsRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
 
             underWaterEffect = gameScene.Game.Content.Load<Effect>("Shaders/UnderWater");
             screenTransitionEffect = gameScene.Game.Content.Load<Effect>("Shaders/ScreenTransition");
             edgeDetectionEffect = gameScene.Game.Content.Load<Effect>("Shaders/EdgeDetectionEffect");
             customBlurEffect = gameScene.Game.Content.Load<Effect>("Shaders/CustomBlur");
-
+            distortionEffect = gameScene.Game.Content.Load<Effect>("Shaders/DistortionEffect");
 
             edgeDetectionParameters = edgeDetectionEffect.Parameters;
             edgeDetectionEffect.CurrentTechnique = edgeDetectionEffect.Techniques["EdgeDetect"];
@@ -112,7 +112,7 @@ namespace Poseidon.GraphicEffects
 
         public RenderTarget2D DrawWithEffects(GameTime gameTime, Texture2D originalScene, GraphicsDeviceManager graphics)
         {
-            //graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
+            //applying blurring effect
             SetBlurEffectParameters(1.0f / (float)blurRenderTarget1.Width, 0);
 
             DrawFullscreenQuad(originalScene, blurRenderTarget1, customBlurEffect, graphics.GraphicsDevice);
@@ -122,18 +122,44 @@ namespace Poseidon.GraphicEffects
             DrawFullscreenQuad(blurRenderTarget1, blurRenderTarget2,
                                customBlurEffect, graphics.GraphicsDevice);
 
+            //applying distortion effect
+            if (HydroBot.distortingScreen)
+            {
+                float distortionFactor = (float)(GameConstants.distortionDuration - (PoseidonGame.playTime.TotalMilliseconds - HydroBot.distortionStart * 1000)) / GameConstants.distortionDuration;
+                graphics.GraphicsDevice.SetRenderTarget(distortionRenderTarget);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                {
+                    // Apply the post process shader
+                    distortionEffect.CurrentTechnique.Passes[0].Apply();
+                    {
+                        distortionEffect.Parameters["fTimer"].SetValue(m_Timer*2);
+                        distortionEffect.Parameters["iSeed"].SetValue(1337);
+                        distortionEffect.Parameters["fNoiseAmount"].SetValue(0.01f * distortionFactor);
+                        spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                    }
+                }
+                spriteBatch.End();
+            }
+
             graphics.GraphicsDevice.SetRenderTarget(afterUnderWaterTexture);
             if (underWaterEffectEnabled)
             {
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
                 {
-                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer);
+                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer*1.5f);
                     // Apply the underwater effect post process shader
                     underWaterEffect.CurrentTechnique.Passes[0].Apply();
                     {
-                        spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
-                            //fix the problem of ugly areas at the edges of the screen
-                             new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
+                        if (!HydroBot.distortingScreen)
+                        {
+                            spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                                //fix the problem of ugly areas at the edges of the screen
+                                 new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
+                        }
+                        else
+                            spriteBatch.Draw(distortionRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                                //fix the problem of ugly areas at the edges of the screen
+                                 new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
                     }
                 }
                 spriteBatch.End();
@@ -390,7 +416,11 @@ namespace Poseidon.GraphicEffects
         /// </summary>
         float ComputeGaussian(float n)
         {
-            float theta = 2;//blur amount
+            float theta;
+            if (HydroBot.supersonicMode == true)
+                theta = 20;
+            else 
+                theta = 2;//blur amount
 
             return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
                            Math.Exp(-(n * n) / (2 * theta * theta)));

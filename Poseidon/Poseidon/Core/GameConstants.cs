@@ -244,5 +244,8 @@ namespace Poseidon {
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;
+
+        //constants for certain effects
+        public const float distortionDuration = 1000;
     }
 }

@@ -23,8 +23,8 @@ namespace Poseidon
 
         //For Factory Configuration Screen
         SpriteFont facilityFont, facilityFont2;
-        Texture2D background, bioUpgradeButton, plasticUpgradeButton;
-        public Rectangle backgroundRect, bioUpgradeRect, plasticUpgradeRect;
+        Texture2D background, upgradeButton, playJigsawButton;
+        public Rectangle backgroundRect, bioUpgradeRect, plasticUpgradeRect, playSeaCowJigsawRect, playTurtleJigsawRect, playDolphinJigsawRect;
 
         Random random;
 
@@ -59,12 +59,15 @@ namespace Poseidon
             facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
             facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
             background = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
-            bioUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            plasticUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            upgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             
             backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - 500, game.Window.ClientBounds.Center.Y - 400, 1000, 800);
             bioUpgradeRect = new Rectangle(game.Window.ClientBounds.Center.X - 300, backgroundRect.Top + 300, 200, 50);
             plasticUpgradeRect = new Rectangle(game.Window.ClientBounds.Center.X + 100, backgroundRect.Top + 300, 200, 50);
+            playSeaCowJigsawRect = new Rectangle(backgroundRect.Center.X - 350, backgroundRect.Bottom - 300, 200, 50);
+            playTurtleJigsawRect = new Rectangle(backgroundRect.Center.X - 100, backgroundRect.Bottom - 300, 200, 50);
+            playDolphinJigsawRect = new Rectangle(backgroundRect.Center.X + 150, backgroundRect.Bottom - 300, 200, 50);
 
             this.game = game;
 
@@ -206,7 +209,7 @@ namespace Poseidon
                 if(bioUpgrade)
                 {
                     //draw bio upgrade buttons
-                    spriteBatch.Draw(bioUpgradeButton, bioUpgradeRect, Color.White);
+                    spriteBatch.Draw(upgradeButton, bioUpgradeRect, Color.White);
                     spriteBatch.DrawString(menuSmall, bioButtonText, new Vector2(bioUpgradeRect.Center.X - menuSmall.MeasureString(bioButtonText).X / 4, bioUpgradeRect.Center.Y - menuSmall.MeasureString(bioButtonText).Y / 4), Color.Red,  0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.bioPlantLevel == 3)
@@ -224,7 +227,7 @@ namespace Poseidon
 
                 if(plasticUpgrade)
                 {
-                    spriteBatch.Draw(plasticUpgradeButton, plasticUpgradeRect, Color.White);
+                    spriteBatch.Draw(upgradeButton, plasticUpgradeRect, Color.White);
                     spriteBatch.DrawString(menuSmall, plasticButtonText, new Vector2(plasticUpgradeRect.Center.X - menuSmall.MeasureString(plasticButtonText).X / 4, plasticUpgradeRect.Center.Y - menuSmall.MeasureString(plasticButtonText).Y / 4), Color.Red,  0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.plasticPlantLevel == 3)
@@ -240,6 +243,22 @@ namespace Poseidon
                     spriteBatch.DrawString(facilityFont2, plasticButtonText, new Vector2(plasticUpgradeRect.Center.X - facilityFont2.MeasureString(plasticButtonText).X / 2, plasticUpgradeRect.Center.Y - facilityFont2.MeasureString(plasticButtonText).Y / 2), Color.White);
                 }
             }
+
+            //Draw Sea Cow Jigsaw Button
+            string seacowJigsawButtonText = "RESURRECT STELLAR'S\nSEACOW";
+            spriteBatch.Draw(playJigsawButton, playSeaCowJigsawRect, Color.White);
+            spriteBatch.DrawString(menuSmall, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - menuSmall.MeasureString(seacowJigsawButtonText).X / 4, playSeaCowJigsawRect.Center.Y - menuSmall.MeasureString(seacowJigsawButtonText).Y / 4), Color.Red, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+
+            //Draw Sea Turtle Jigsaw Button
+            string turtleJigsawButtonText = "RESURRECT MEIOLANIA\nTURTLE";
+            spriteBatch.Draw(playJigsawButton, playTurtleJigsawRect, Color.White);
+            spriteBatch.DrawString(menuSmall, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - menuSmall.MeasureString(turtleJigsawButtonText).X / 4, playTurtleJigsawRect.Center.Y - menuSmall.MeasureString(turtleJigsawButtonText).Y / 4), Color.Red, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
+
+            //Draw Sea Dolphin Jigsaw Button
+            string dolphinJigsawButtonText = "RESURRECT MAUI'S\nDOLPHIN";
+            spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White);
+            spriteBatch.DrawString(menuSmall, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - menuSmall.MeasureString(dolphinJigsawButtonText).X/4, playDolphinJigsawRect.Center.Y - menuSmall.MeasureString(dolphinJigsawButtonText).Y/4), Color.Red, 0, new Vector2(0,0), 0.5f, SpriteEffects.None, 0);
+
             string nextText = "Press Enter to continue";
             Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y);
             spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Black);

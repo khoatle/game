@@ -61,7 +61,7 @@ namespace Poseidon
         List<Resource> resources;
         List<Trash> trashes;
         List<Factory> factories;
-        ResearchFacility researchFacility;
+        public ResearchFacility researchFacility;
 
         List<StaticObject> staticObjects;
 
@@ -755,6 +755,21 @@ namespace Poseidon
                                         researchFacility.UpgradeBioFactory(factories);
                                     if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                         researchFacility.UpgradePlasticFactory(factories);
+                                    if (researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 0; //seacow
+                                    }
+                                    if (researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 1; //turtle
+                                    }
+                                    if (researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 2; //dolphin
+                                    }
                                 }
                                 clicked = false;
                             }
@@ -883,23 +898,26 @@ namespace Poseidon
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources);
-                        if (doubleClicked && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                        if(doubleClicked)
                         {
-                            //Dump Trash
-                            switch (factory.factoryType)
+                            if (hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                             {
-                                case FactoryType.biodegradable:
-                                    dumpTrashInFactory(factory, HydroBot.bioTrash, factory.Position);
-                                    HydroBot.bioTrash = 0;
-                                    break;
-                                case FactoryType.plastic:
-                                    dumpTrashInFactory(factory, HydroBot.plasticTrash, factory.Position);
-                                    HydroBot.plasticTrash = 0;
-                                    break;
-                                case FactoryType.radioactive:
-                                    dumpTrashInFactory(factory, HydroBot.nuclearTrash, factory.Position);
-                                    HydroBot.nuclearTrash = 0;
-                                    break;
+                                //Dump Trash
+                                switch (factory.factoryType)
+                                {
+                                    case FactoryType.biodegradable:
+                                        dumpTrashInFactory(factory, HydroBot.bioTrash, factory.Position);
+                                        HydroBot.bioTrash = 0;
+                                        break;
+                                    case FactoryType.plastic:
+                                        dumpTrashInFactory(factory, HydroBot.plasticTrash, factory.Position);
+                                        HydroBot.plasticTrash = 0;
+                                        break;
+                                    case FactoryType.radioactive:
+                                        dumpTrashInFactory(factory, HydroBot.nuclearTrash, factory.Position);
+                                        HydroBot.nuclearTrash = 0;
+                                        break;
+                                }
                             }
                             doubleClicked = false;
                         }

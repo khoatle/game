@@ -401,14 +401,17 @@ namespace Poseidon
         }
         public void HandleJigsawInput()
         {
-            if (jigsawGameScene.inOrder == true)
+            if (jigsawGameScene.inOrder)
             {
                 AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
                 ShowScene(playGameScene);
+                jigsawGameScene.inOrder = false;
+                jigsawGameScene.shufflePieces();
             }
             if (EscPressed)
             {
                 ShowScene(playGameScene);
+                EscPressed = false;
             }
         }
         /// <summary>

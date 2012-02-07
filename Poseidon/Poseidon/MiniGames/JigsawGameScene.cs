@@ -310,6 +310,8 @@ namespace Poseidon.MiniGames
         // Swap the empty cell with the cell (rowFrom, colFrom)
         private void swapCell(int rowFrom, int colFrom, int rowTo, int colTo)
         {
+            if (rowTo >= numberOfRow || colTo >= numberOfCol)
+                return;
             float desiredWidthPerPiece;
             float desiredHeightPerPiece;
             getDesiredWidthAndHeightPerPiece(out desiredWidthPerPiece, out desiredHeightPerPiece);
@@ -485,7 +487,7 @@ namespace Poseidon.MiniGames
         }
 
         // Shuffle Pieces. Only apply to jigsawPieces, trueOrderOfPieces stays the same
-        private void shufflePieces()
+        public void shufflePieces()
         {
             Random rnd = new Random();
             int dirRow, dirCol;

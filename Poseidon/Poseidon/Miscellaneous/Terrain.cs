@@ -54,6 +54,7 @@ namespace Poseidon
                 foreach (BasicEffect effect in mesh.Effects)
                 //foreach (Effect effect in mesh.Effects)
                 {
+                    effect.AmbientLightColor = new Vector3(0, 191.0f / 255.0f, 1);
                     //effect.Alpha = 1.0f;
                     effect.EnableDefaultLighting();
                     //effect.SpecularColor = Vector3.One;

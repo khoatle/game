@@ -19,14 +19,14 @@ float4x4 WorldInverseTranspose;
 //Intensity 
 float AmbientIntensity = 0.8f;
 //Color
-float4 AmbientColor = float4(0.075, 0.075, 0.2, 1.0);
+float4 AmbientColor = float4(0, 191.0f / 255.0f, 1, 1);
 
 //--------------------------- DIFFUSE LIGHT PROPERTIES ------------------------------ 
 // The direction of the diffuse light 
 float3 DiffuseLightDirection = float3(0, 1, 0); 
   
 // The color of the diffuse light 
-float4 DiffuseColor = float4(1, 1, 1, 1); 
+float4 DiffuseColor = float4(0, 1, 1, 1);
   
 // The intensity of the diffuse light 
 float DiffuseIntensity = 1.0f; 
@@ -35,7 +35,7 @@ float DiffuseIntensity = 1.0f;
 //Camera position
 float4 EyePosition;
 //Color
-float4 SpecularColor = float4(1, 1, 1, 1);
+float4 SpecularColor = float4(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f, 1);
 //Shininess
 float Shininess = 15.0f;
   

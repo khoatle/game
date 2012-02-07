@@ -22,7 +22,7 @@ namespace Poseidon.GraphicEffects
 
         Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect, customBlurEffect;
         bool underWaterEffectEnabled = true;
-        bool bloomEffectEnabled = false;
+        bool bloomEffectEnabled = true;
         RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget, blurRenderTarget1, blurRenderTarget2;
         EffectParameterCollection edgeDetectionParameters;
 
@@ -224,6 +224,7 @@ namespace Poseidon.GraphicEffects
             {
                 fishPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                 edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(0, 1, 0, 1));
+                
             }
             else
             {

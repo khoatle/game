@@ -1411,7 +1411,7 @@ namespace Poseidon
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
                     }
-
+                    effect.Parameters["Shininess"].SetValue(30);
                     //SkinnedEffect.fx
                     //effect.Parameters["ShaderIndex"].SetValue(17);
                     //effect.Parameters["WorldViewProj"].SetValue(view * projection);

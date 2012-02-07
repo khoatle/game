@@ -1095,7 +1095,7 @@ namespace Poseidon
             //worn out effect of supersonic
             if (supersonicMode == true)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp / GameConstants.BasicStartSpeed)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))

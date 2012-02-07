@@ -167,7 +167,7 @@ namespace Poseidon
 
         //for particle systems
         ParticleSystem explosionParticles;
-        //ParticleSystem explosionSmokeParticles;
+        ParticleSystem explosionSmokeParticles;
 
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
@@ -349,11 +349,11 @@ namespace Poseidon
 
             // Construct our particle system components.
             explosionParticles = new ParticleSystem(this.game, Content, "ExplosionSettings", GraphicDevice);
-            //explosionSmokeParticles = new ParticleSystem(this.game, Content, "ExplosionSmokeSettings", GraphicDevice);
-            //explosionSmokeParticles.DrawOrder = 200;
+            explosionSmokeParticles = new ParticleSystem(this.game, Content, "ExplosionSmokeSettings", GraphicDevice);
+            explosionSmokeParticles.DrawOrder = 400;
             explosionParticles.DrawOrder = 400;
             explosionParticles.Load();
-            //explosionSmokeParticles.Load();
+            explosionSmokeParticles.Load();
 
             // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
@@ -866,10 +866,17 @@ namespace Poseidon
                         Point point = new Point();
                         point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
                         points.Add(point);
+                        
                     }
                     foreach (Trash trash in trashes)
                     {
                         trash.Update(gameTime);
+                        if (trash.sinking == false && trash.particleAnimationPlayed == false)
+                        {
+                            for (int k = 0; k < GameConstants.numExplosionSmokeParticles; k++)
+                                explosionSmokeParticles.AddParticle(trash.Position, Vector3.Zero);
+                            trash.particleAnimationPlayed = true;
+                        }
                     }
 
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
@@ -990,7 +997,7 @@ namespace Poseidon
          
                     //update particle systems
                     explosionParticles.Update(gameTime);
-                    //explosionSmokeParticles.Update(gameTime);
+                    explosionSmokeParticles.Update(gameTime);
 
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
@@ -1414,9 +1421,9 @@ namespace Poseidon
             //draw particle effects
             // Pass camera matrices through to the particle system components.
             explosionParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            //explosionSmokeParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            explosionSmokeParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             explosionParticles.Draw(gameTime);
-            //explosionSmokeParticles.Draw(gameTime);
+            explosionSmokeParticles.Draw(gameTime);
 
             //draw schools of fish
             spriteBatch.Begin();

@@ -741,6 +741,7 @@ namespace Poseidon
                         {
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
+                            clicked = doubleClicked = false;
                             CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                             if (clicked)
                             {

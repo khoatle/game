@@ -131,6 +131,12 @@ namespace Poseidon.MiniGames
             shufflePieces();
         }
 
+        public override void Show()
+        {
+            MediaPlayer.Stop();
+            base.Show();
+        }
+
         public void setImageType(int imageType)
         {
             switch (imageType)

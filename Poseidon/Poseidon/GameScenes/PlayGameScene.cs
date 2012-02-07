@@ -61,7 +61,7 @@ namespace Poseidon
         List<Resource> resources;
         List<Trash> trashes;
         List<Factory> factories;
-        ResearchFacility researchFacility;
+        public ResearchFacility researchFacility;
 
         List<StaticObject> staticObjects;
 
@@ -755,6 +755,21 @@ namespace Poseidon
                                         researchFacility.UpgradeBioFactory(factories);
                                     if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                         researchFacility.UpgradePlasticFactory(factories);
+                                    if (researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 0; //seacow
+                                    }
+                                    if (researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 1; //turtle
+                                    }
+                                    if (researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 2; //dolphin
+                                    }
                                 }
                                 clicked = false;
                             }

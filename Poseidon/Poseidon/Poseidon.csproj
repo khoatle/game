@@ -138,6 +138,8 @@
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\EffectHelpers.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
+    <Compile Include="MiniGames\JigsawGameScene.cs" />
+    <Compile Include="MiniGames\JigsawPiece.cs" />
     <Compile Include="Minion\SeaCow.cs" />
     <Compile Include="Minion\SeaTurtle.cs" />
     <Compile Include="Minion\SeaDolphin.cs" />

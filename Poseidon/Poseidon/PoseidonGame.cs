@@ -403,7 +403,7 @@ namespace Poseidon
         {
             if (jigsawGameScene.inOrder == true)
             {
-                AddingObjects.placeMinion(Content, 0, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
                 ShowScene(playGameScene);
             }
             if (EscPressed)

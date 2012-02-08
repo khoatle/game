@@ -143,9 +143,6 @@ namespace Poseidon
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
-        // For applying graphic effects
-        GraphicEffect graphicEffect;
-
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
@@ -165,9 +162,11 @@ namespace Poseidon
         private Model biodegradableFactoryModel;
         private Model radioactiveFactoryModel;
 
+
+        // For applying graphic effects
+        GraphicEffect graphicEffect;
         //for particle systems
-        ParticleSystem explosionParticles;
-        ParticleSystem explosionSmokeParticles;
+        ParticleManagement particleManager;
 
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
@@ -348,12 +347,7 @@ namespace Poseidon
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Construct our particle system components.
-            explosionParticles = new ParticleSystem(this.game, Content, "ExplosionSettings", GraphicDevice);
-            explosionSmokeParticles = new ParticleSystem(this.game, Content, "ExplosionSmokeSettings", GraphicDevice);
-            explosionSmokeParticles.DrawOrder = 400;
-            explosionParticles.DrawOrder = 400;
-            explosionParticles.Load();
-            explosionSmokeParticles.Load();
+            particleManager = new ParticleManagement(this.game, GraphicDevice);
 
             // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
@@ -874,7 +868,7 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel]/2)
+                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel])
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
@@ -889,8 +883,8 @@ namespace Poseidon
                         trash.Update(gameTime);
                         if (trash.sinking == false && trash.particleAnimationPlayed == false)
                         {
-                            for (int k = 0; k < GameConstants.numExplosionSmokeParticles; k++)
-                                explosionSmokeParticles.AddParticle(trash.Position, Vector3.Zero);
+                            for (int k = 0; k < GameConstants.numSandParticles; k++)
+                                particleManager.sandParticles.AddParticle(trash.Position, Vector3.Zero);
                             trash.particleAnimationPlayed = true;
                         }
                     }
@@ -959,7 +953,7 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, explosionParticles);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, particleManager.explosionParticles);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
 
@@ -1015,8 +1009,7 @@ namespace Poseidon
                     schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
          
                     //update particle systems
-                    explosionParticles.Update(gameTime);
-                    explosionSmokeParticles.Update(gameTime);
+                    particleManager.Update(gameTime);
 
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
@@ -1438,11 +1431,7 @@ namespace Poseidon
             }
 
             //draw particle effects
-            // Pass camera matrices through to the particle system components.
-            explosionParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            explosionSmokeParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            explosionParticles.Draw(gameTime);
-            explosionSmokeParticles.Draw(gameTime);
+            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
 
             //draw schools of fish
             spriteBatch.Begin();

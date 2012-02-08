@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent>
   <Asset Type="Poseidon.ParticleSettings">
-    <BlendState>NonPremultiplied</BlendState>
-    <TextureName>Image/ParticleTextures/smoke</TextureName>
+    <BlendState>Additive</BlendState>
+    <TextureName>Image/ParticleTextures/sand</TextureName>
     <MaxParticles>200</MaxParticles>
     <Duration>PT5S</Duration>
     <DurationRandomness>0</DurationRandomness>
@@ -17,9 +17,9 @@
     <MaxColor>FFFFFFFF</MaxColor>
     <MinRotateSpeed>-2</MinRotateSpeed>
     <MaxRotateSpeed>2</MaxRotateSpeed>
-    <MinStartSize>100</MinStartSize>
-    <MaxStartSize>100</MaxStartSize>
-    <MinEndSize>200</MinEndSize>
-    <MaxEndSize>200</MaxEndSize>
+    <MinStartSize>40</MinStartSize>
+    <MaxStartSize>60</MaxStartSize>
+    <MinEndSize>120</MinEndSize>
+    <MaxEndSize>150</MaxEndSize>
   </Asset>
 </XnaContent>

@@ -12,11 +12,13 @@ namespace Poseidon
     public class Resource : GameObject
     {
         public bool Retrieved { get; set; }
+        private float orientation;
         
         public Resource()
             : base()
         {
             Retrieved = false;
+            orientation = 0f;
         }
 
         public void LoadContent(ContentManager content, Vector3 resourcePosition)
@@ -36,10 +38,12 @@ namespace Poseidon
 
         public void Draw(Matrix view, Matrix projection)
         {
+            Update(); //since update is only changing orientation, it is better to put here than in playgamescene & survival scene
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix rotationYmatrix = Matrix.CreateRotationY(orientation);
+            Matrix worldMatrix = rotationYmatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -62,20 +66,9 @@ namespace Poseidon
             }
         }
 
-        internal void Update(KeyboardState keyboardState, BoundingSphere vehicleBoundingSphere, BoundingSphere vehicleTrashFruitBoundingSphere)
+        public void Update()
         {
-            //if (vehicleBoundingSphere.Intersects(this.BoundingSphere))
-            //    this.Retrieved = true;
-            //if (keyboardState.IsKeyDown(Keys.Z))
-            //{
-            //    if (vehicleTrashFruitBoundingSphere.Intersects(this.BoundingSphere))
-            //    {
-            //        RetrievedSound.Play();
-            //        this.Retrieved = true;
-            //    }
-
-            //}
-
+            orientation -= 0.05f;
         }
 
     }

@@ -19,11 +19,13 @@ namespace Poseidon
         //3: fire rate
         //4: health point
         public int powerType;
+        private float orientation; //rotation in radians
 
         public Powerpack(int powerType)
             : base()
         {
             Retrieved = false;
+            orientation = 0f;
             this.powerType = powerType;
         }
 
@@ -51,10 +53,12 @@ namespace Poseidon
 
         public void Draw(Matrix view, Matrix projection)
         {
+            Update(); //since update is only changing orientation, it is better to put here than in playgamescene & survival scene
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -77,9 +81,9 @@ namespace Poseidon
             }
         }
 
-        internal void Update(KeyboardState keyboardState, BoundingSphere vehicleBoundingSphere, BoundingSphere vehicleTrashFruitBoundingSphere)
+        public void Update()
         {
-            
+            orientation += 0.05f;
         }
 
     }

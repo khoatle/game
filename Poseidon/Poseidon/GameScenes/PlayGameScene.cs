@@ -920,9 +920,9 @@ namespace Poseidon
                                         break;
                                 }
                             }
-                            doubleClicked = false;
                         }
                     }
+                    doubleClicked = false;
 
                     if (researchFacility != null)
                     {

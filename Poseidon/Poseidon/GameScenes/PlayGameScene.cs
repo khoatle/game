@@ -1359,7 +1359,10 @@ namespace Poseidon
                 factoryRealSphere = researchFacility.BoundingSphere;
                 factoryRealSphere.Center.Y = researchFacility.Position.Y;
                 if (factoryRealSphere.Intersects(frustum))
+                {
                     researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "BalloonShading");
+                }
             }
 
             //Draw each static object

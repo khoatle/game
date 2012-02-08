@@ -1401,6 +1401,7 @@ namespace Poseidon
                     //for our custom SkinnedEffect
                     //NewSkinnedEffect.fx
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
+
                     effect.Parameters["World"].SetValue(Matrix.Identity);
 
                     effect.Parameters["Bones"].SetValue(bones);
@@ -1411,11 +1412,8 @@ namespace Poseidon
                     Matrix WorldView = Matrix.Identity * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
-                    if (invincibleMode == true)
-                    {
-                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Gold.ToVector3(), 1));
-                    }
-                    else if (isPoissoned == true)
+
+                    if (isPoissoned == true)
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
                     }
@@ -1434,6 +1432,19 @@ namespace Poseidon
                     //Vector4 DiffuseColor = new Vector4(1, 1, 1, 1);
                     //effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
 
+                }
+                mesh.Draw();
+                if (invincibleMode == true)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                    }
                 }
                 mesh.Draw();
             }

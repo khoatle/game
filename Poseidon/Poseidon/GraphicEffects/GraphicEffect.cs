@@ -172,14 +172,15 @@ namespace Poseidon.GraphicEffects
             }
             if (bloomEffectEnabled)
             {
-                afterBloomTexture = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
-                //afterBloomTexture = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
-                //false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+                //afterBloomTexture = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);
                 bloom.Draw(gameTime, afterUnderWaterTexture, afterBloomTexture);
             }
             else
             {
-                afterBloomTexture = afterUnderWaterTexture;
+                graphics.GraphicsDevice.SetRenderTarget(afterBloomTexture);
+                spriteBatch.Begin();
+                spriteBatch.Draw(afterUnderWaterTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                spriteBatch.End();
             }
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsRenderTarget);
             spriteBatch.Begin();

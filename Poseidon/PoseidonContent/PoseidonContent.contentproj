@@ -1612,8 +1612,8 @@
       <Processor>PassThroughProcessor</Processor>
       <SubType>Designer</SubType>
     </Compile>
-    <Compile Include="ParticleSettings\ExplosionSmokeSettings.xml">
-      <Name>ExplosionSmokeSettings</Name>
+    <Compile Include="ParticleSettings\SandSettings.xml">
+      <Name>SandSettings</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>
@@ -1768,11 +1768,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\ParticleTextures\sand.png">
-      <Name>sand</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Image\MinigameTextures\BlackBox.jpg">
       <Name>BlackBox</Name>
       <Importer>TextureImporter</Importer>
@@ -1792,6 +1787,13 @@
     </Compile>
     <Compile Include="Image\MinigameTextures\seaTurtle.jpg">
       <Name>seaTurtle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ParticleTextures\sand.png">
+      <Name>sand</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

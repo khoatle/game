@@ -43,6 +43,16 @@ float Shininess = 15.0f;
 float3 FogColor;   
 float4 FogVector;
  
+//--------------------------- BALLOON EFFECT PROPERTIES ------------------------------
+float4x4 gWorldXf;
+float4x4 gWorldITXf;
+float4x4 gWvpXf;
+float4x4 gViewIXf;
+/* data from application vertex buffer */
+float gInflate = 4;//0.06f;
+float3 gGlowColor = {1.0f, 0.9f, 0.3f};
+float gGlowExpon = 2.3;
+
 //--------------------------- HELPER FUNCTIONS ------------------------------ 
 float ComputeFogFactor(float4 position)
 {
@@ -53,13 +63,6 @@ void ApplyFog(inout float4 color, float fogFactor)
     color.rgb = lerp(color.rgb, FogColor * color.a, fogFactor);
 }
 
-//--------------------------- TOON SHADER PROPERTIES ------------------------------ 
-// The color to draw the lines in.  Black is a good default. 
-float4 LineColor = float4(0, 0, 0, 1); 
-  
-// The thickness of the lines.  This may need to change, depending on the scale of 
-// the objects you are drawing. 
-float4 LineThickness = 0.12; 
   
 //--------------------------- TEXTURE PROPERTIES ------------------------------ 
 // The texture being used for the object 
@@ -95,7 +98,27 @@ struct VertexToPixel
     float3 NormalWS : TEXCOORD2; 
 	float4 PositionPS : SV_Position;
 }; 
-  
+
+//--------------------------- DATA STRUCTURES FOR BALLOON EFFECT ------------------------------ 
+
+struct appdata {
+    float3 Position	: POSITION;
+    float4 UV		: TEXCOORD0;
+    float3 Normal	: NORMAL;
+    float4 Tangent	: TANGENT0;
+    float4 Binormal	: BINORMAL0;
+	int4   Indices  : BLENDINDICES0; 
+    float4 Weights  : BLENDWEIGHT0; 
+};
+
+/* data passed from vertex shader to pixel shader */
+struct gloVertOut {
+    float4 HPosition	: POSITION;
+    float3 WorldNormal	: TEXCOORD0;
+    float3 WorldView	: TEXCOORD1;
+};
+
+
 //--------------------------- SHADERS ------------------------------ 
 
 // A completely normal vertex shader
@@ -173,6 +196,41 @@ float4 NormalDepthPixelShader(float4 color : COLOR0) : COLOR0
     return color;
 }
 
+//--------------------------- SHADERS FOR BALLOON EFFECT ------------------------------ 
+
+/*********** vertex shader ******/
+
+gloVertOut gloBalloon_VS(appdata IN,
+    uniform float Inflate,
+    uniform float4x4 WorldITXf, // our four standard "untweakable" xforms
+	uniform float4x4 WorldXf,
+	uniform float4x4 ViewIXf,
+	uniform float4x4 WvpXf
+) {
+    gloVertOut OUT = (gloVertOut)0;
+    OUT.WorldNormal = mul(IN.Normal,WorldITXf).xyz;
+    float4 Po = float4(IN.Position.xyz,1);
+    Po += (Inflate*normalize(float4(IN.Normal.xyz,0))); // the balloon effect
+    float4 Pw = mul(Po,WorldXf);
+    OUT.WorldView = normalize(ViewIXf[3].xyz - Pw.xyz);
+    OUT.HPosition = mul(Po,WvpXf);
+    return OUT;
+}
+
+/********* pixel shaders ********/
+
+float4 gloBalloon_PS(gloVertOut IN,
+    uniform float3 GlowColor,
+    uniform float GlowExpon
+) : COLOR {
+    float3 Nn = normalize(IN.WorldNormal);
+    float3 Vn = normalize(IN.WorldView);
+    float edge = 1.0 - dot(Nn,Vn);
+    edge = pow(edge,GlowExpon);
+    float3 result = edge * GlowColor.rgb;
+    return float4(result,edge);
+}
+
 // Normal here means not abnormal
 technique NormalShading
 {
@@ -191,5 +249,21 @@ technique NormalDepth
     {
         VertexShader = compile vs_2_0 NormalDepthVertexShader();
         PixelShader = compile ps_2_0 NormalDepthPixelShader();
+    }
+}
+
+// Balloon effect technique
+technique BalloonShading
+{
+    pass GlowPass     	
+    {
+        VertexShader = compile vs_2_0 gloBalloon_VS(gInflate,gWorldITXf,gWorldXf,gViewIXf,gWvpXf);
+		ZEnable = true;
+		ZWriteEnable = true;
+		AlphaBlendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+		CullMode = CCW;
+        PixelShader = compile ps_2_0 gloBalloon_PS(gGlowColor,gGlowExpon);
     }
 }

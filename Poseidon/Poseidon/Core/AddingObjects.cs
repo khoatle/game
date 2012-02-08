@@ -535,21 +535,21 @@ namespace Poseidon
             {
                 sinkingTrash = new Trash(TrashType.biodegradable);
                 sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
-                sinkingTrash.sinkingRate = 0.25f;
+                sinkingTrash.sinkingRate = 2;// 0.25f;
                 sinkingTrash.sinkingRotationRate = 0.015f;
             }
             else if (trash_type < 96)
             {
                 sinkingTrash = new Trash(TrashType.plastic);
                 sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //nuclear model
-                sinkingTrash.sinkingRate = 0.35f;
+                sinkingTrash.sinkingRate = 2;// 0.35f;
                 sinkingTrash.sinkingRotationRate = -0.015f;
             }
             else
             {
                 sinkingTrash = new Trash(TrashType.radioactive);
                 sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //nuclear model
-                sinkingTrash.sinkingRate = 0.6f;
+                sinkingTrash.sinkingRate = 2;// 0.6f;
                 sinkingTrash.sinkingRotationRate = 0.025f;
             }
             sinkingTrash.sinking = true;
@@ -574,8 +574,8 @@ namespace Poseidon
                 }
             } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
-            sinkingTrash.Position.X = xVal;
-            sinkingTrash.Position.Z = zVal;
+            sinkingTrash.Position.X = 0;// xVal;
+            sinkingTrash.Position.Z = 0;// zVal;
             sinkingTrash.Position.Y = floatHeight+100;
             sinkingTrash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(sinkingTrash.Position.X, 0, sinkingTrash.Position.Z));//GameConstants.TrashFloatHeight;
             tempCenter = sinkingTrash.BoundingSphere.Center;

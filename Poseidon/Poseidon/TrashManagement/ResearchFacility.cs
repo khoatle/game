@@ -180,16 +180,28 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom BasicEffect
-                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
-                    effect.Parameters["World"].SetValue(readlWorldMatrix);
-                    effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));
-                    effect.Parameters["View"].SetValue(view);
-                    effect.Parameters["Projection"].SetValue(projection);
-                    effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
-                    Matrix WorldView = readlWorldMatrix * view;
-                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                    if (!techniqueName.Equals("BalloonShading"))
+                    {            
+                        //effect.CurrentTechnique = effect.Techniques[techniqueName];
+                        effect.Parameters["World"].SetValue(readlWorldMatrix);
+                        effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));
+                        effect.Parameters["View"].SetValue(view);
+                        effect.Parameters["Projection"].SetValue(projection);
+                        effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
+                        Matrix WorldView = readlWorldMatrix * view;
+                        EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                        effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    }
+                    else
+                    {
+
+                        effect.Parameters["gWorldXf"].SetValue(readlWorldMatrix);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(readlWorldMatrix));
+                        effect.Parameters["gWvpXf"].SetValue(readlWorldMatrix * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                    }
                 }
                 mesh.Draw();
             }

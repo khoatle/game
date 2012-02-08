@@ -899,35 +899,42 @@ namespace Poseidon
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources);
-                        if(doubleClicked)
+                        if(doubleClicked && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
-                            if (hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
-                            {
                                 //Dump Trash
                                 switch (factory.factoryType)
                                 {
                                     case FactoryType.biodegradable:
-                                        dumpTrashInFactory(factory, HydroBot.bioTrash, factory.Position);
+                                        dumpTrashInFactory(factory, factory.Position);
                                         HydroBot.bioTrash = 0;
                                         break;
                                     case FactoryType.plastic:
-                                        dumpTrashInFactory(factory, HydroBot.plasticTrash, factory.Position);
+                                        dumpTrashInFactory(factory, factory.Position);
                                         HydroBot.plasticTrash = 0;
                                         break;
                                     case FactoryType.radioactive:
-                                        dumpTrashInFactory(factory, HydroBot.nuclearTrash, factory.Position);
+                                        dumpTrashInFactory(factory, factory.Position);
                                         HydroBot.nuclearTrash = 0;
                                         break;
                                 }
-                            }
                         }
                     }
-                    doubleClicked = false;
+                    
 
                     if (researchFacility != null)
                     {
-                        researchFacility.Update(gameTime);
+                        researchFacility.Update(gameTime, hydroBot.Position, ref points);
+                        if (doubleClicked && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera) )
+                        {
+                            string point_string = HydroBot.numStrangeObjCollected + " strange rocks deposited for inspection";
+                            researchFacility.listTimeRockProcessing.Add(PoseidonGame.playTime.TotalSeconds);
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, point_string, researchFacility.Position, Color.LawnGreen);
+                            points.Add(point);
+                            HydroBot.numStrangeObjCollected = 0;
+                        }
                     }
+                    doubleClicked = false;
 
                     foreach (ShipWreck shipWreck in shipWrecks)
                     {
@@ -1873,7 +1880,7 @@ namespace Poseidon
             return;
         }
 
-        public void dumpTrashInFactory(Factory factory, int amount, Vector3 position)
+        public void dumpTrashInFactory(Factory factory, Vector3 position)
         {
             string point_string = "";
             switch (factory.factoryType)

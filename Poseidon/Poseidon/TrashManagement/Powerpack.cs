@@ -18,6 +18,7 @@ namespace Poseidon
         //2: power
         //3: fire rate
         //4: health point
+        //5: Strange Rock
         public int powerType;
         private float orientation; //rotation in radians
 
@@ -39,6 +40,8 @@ namespace Poseidon
                 Model = content.Load<Model>("Models/PlantAndFruitModels/blue-fruit");
             else if (this.powerType == 4)
                 Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
+            else if (this.powerType == 5) //Strange Rock
+                Model = content.Load<Model>("Models/BulletModels/bossBullet");
             
             Position = powerpackPosition;
             BoundingSphere = CalculateBoundingSphere();
@@ -83,7 +86,7 @@ namespace Poseidon
 
         public void Update()
         {
-            orientation += 0.05f;
+            orientation += GameConstants.powerpackResourceRotationSpeed;
         }
 
     }

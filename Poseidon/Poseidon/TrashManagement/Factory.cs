@@ -108,6 +108,13 @@ namespace Poseidon
                     {
                         ProduceResource(ref resources, powerpacks);
                     }
+
+                    //Produce strange rock
+                    if (random.Next(100) < 5) //5
+                    {
+                        ProduceStrangeRock(ref powerpacks, resources);
+                    }
+
                     if (factoryType == FactoryType.biodegradable)
                         HydroBot.totalBioTrashProcessed += trashBlockSize;
                     else if (factoryType == FactoryType.plastic)
@@ -362,6 +369,16 @@ namespace Poseidon
             resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
             resource.LoadContent(Content, resourcePosition);
             resources.Add(resource);
+        }
+
+        void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources)
+        {
+            Vector3 powerpackPosition;
+            int powerType = 5; //type 5 for strange rock
+            Powerpack powerpack = new Powerpack(powerType);
+            powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+            powerpack.LoadContent(Content, powerpackPosition);
+            powerpacks.Add(powerpack);
         }
 
         private Vector3 findResourcePowerpackPosition(Vector3 factoryPosition, List<Resource> resources, List<Powerpack> powerpacks)

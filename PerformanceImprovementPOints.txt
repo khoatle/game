@@ -1,0 +1,3 @@
+1) Load Content of trash, treasure chest, powerpacks, etc. only once. Currently it is done every time a new object is created. We should do this for all objects which are created multiple times.
+
+2) When we collect a powerpack/resource/strange-rock, we mark it as 'retrieved' instead of removing from the list. When playing survival mode, this list can become too long. To remove object from list we need to replace 'foreach' loop with 'for' loop, else it will cause runtime error.

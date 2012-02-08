@@ -407,6 +407,21 @@ namespace Poseidon
                 ShowScene(playGameScene);
                 jigsawGameScene.inOrder = false;
                 jigsawGameScene.shufflePieces();
+                switch (jigsawType)
+                {
+                    case 0:
+                        HydroBot.hasSeaCow = true;
+                        HydroBot.numSeaCowPieces = 0;
+                        break;
+                    case 1:
+                        HydroBot.hasTurtle = true;
+                        HydroBot.numTurtlePieces = 0;
+                        break;
+                    case 2:
+                        HydroBot.hasDolphin = true;
+                        HydroBot.numDolphinPieces = 0;
+                        break;
+                }
             }
             if (EscPressed)
             {

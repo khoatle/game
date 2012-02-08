@@ -1312,6 +1312,19 @@ namespace Poseidon
                                     SurvivalGameScene.points.Add(point);
                             }
                         }
+                        else if (powerpacks[curCell].powerType == 5)
+                        {
+                            numStrangeObjCollected++;
+                            Point point = new Point();
+                            String point_string = "\nFound Strange Rock";
+                            point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                        }
                         //RetrievedSound.Play();
                         PoseidonGame.audio.retrieveSound.Play();
                     }

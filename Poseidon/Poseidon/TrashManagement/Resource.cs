@@ -68,7 +68,7 @@ namespace Poseidon
 
         public void Update()
         {
-            orientation -= 0.05f;
+            orientation -= GameConstants.powerpackResourceRotationSpeed;
         }
 
     }

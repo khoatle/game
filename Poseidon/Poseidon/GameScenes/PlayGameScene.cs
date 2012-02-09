@@ -720,6 +720,7 @@ namespace Poseidon
                         if (researchFacility != null && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             openResearchFacilityConfigScene = true;
+                            ResearchFacility.dolphinLost = ResearchFacility.seaCowLost = ResearchFacility.turtleLost = false;
                         }
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)

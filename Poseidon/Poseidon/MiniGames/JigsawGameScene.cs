@@ -66,12 +66,12 @@ namespace Poseidon.MiniGames
         private float distanceTraveled;
 
         // String for debugging
-        public string debugString;
-        SpriteFont font;
+        public string debugString, timerString;
+        SpriteFont font, timerFont;
 
         public bool inOrder = false;
 
-        private double startTime;
+        private double timeNow;
         public bool timeUp;
 
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
@@ -121,6 +121,7 @@ namespace Poseidon.MiniGames
         protected override void LoadContent()
         {
             font = content.Load<SpriteFont>("Fonts/JigsawFont");
+            timerFont = content.Load<SpriteFont>("Fonts/menuSmall");
 
             seacowImage = content.Load<Texture2D>("Image/MinigameTextures/seaCow");
             turtleImage = content.Load<Texture2D>("Image/MinigameTextures/seaTurtle");
@@ -138,7 +139,7 @@ namespace Poseidon.MiniGames
         {
             MediaPlayer.Stop();
             timeUp = false;
-            startTime = PoseidonGame.playTime.TotalSeconds;
+            timeNow = (double)GameConstants.jigsawGameMaxTime;
             inOrder = false;
             shufflePieces();
             base.Show();
@@ -179,11 +180,13 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            if (PoseidonGame.playTime.TotalSeconds - startTime > GameConstants.jigsawGameMaxTime)
+            timeNow -= gameTime.ElapsedGameTime.TotalSeconds;
+            if (timeNow <= 0)
             {
                 timeUp = true;
             }
-
+            timerString = "TIME REMAINING: "+ ((int)timeNow).ToString() + " Seconds";
+            
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera , gameTime, null);
    
             putInfoInDebuggingString();
@@ -231,7 +234,8 @@ namespace Poseidon.MiniGames
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, debugString, new Vector2(), Color.Black);
+            spriteBatch.DrawString(timerFont, timerString, new Vector2(), Color.DarkRed);
+            spriteBatch.DrawString(font, debugString, new Vector2(0,200), Color.Black);
             cursor.Draw(gameTime);
             spriteBatch.End();
 
@@ -406,6 +410,7 @@ namespace Poseidon.MiniGames
             }
             if (inOrder) debugString += "\nWinner\n";
             else debugString += "\nLoser\n";
+
         }
 
         // Display all the pieces by drawing piece by pieces, rowFrom-wise

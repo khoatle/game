@@ -42,7 +42,7 @@ namespace Poseidon {
         public const int ShipWreckMaxRangeZ = 800;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
-        public const double jigsawGameMaxTime = 120;
+        public const int jigsawGameMaxTime = 180; //sec
         public const int boneCountForJigsaw = 8;
 
         // bullet consts

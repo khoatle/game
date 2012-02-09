@@ -435,14 +435,17 @@ namespace Poseidon
                     case 0:
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playSeaCowJigsaw = false;
+                        ResearchFacility.seaCowLost = true;
                         break;
                     case 1:
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playTurtleJigsaw = false;
+                        ResearchFacility.turtleLost = true;
                         break;
                     case 2:
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playDolphinJigsaw = false;
+                        ResearchFacility.dolphinLost = true;
                         break;
                 }
             }

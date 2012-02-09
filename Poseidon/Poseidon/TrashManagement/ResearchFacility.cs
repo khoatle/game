@@ -26,6 +26,7 @@ namespace Poseidon
         Texture2D background, upgradeButton, playJigsawButton;
         public Rectangle backgroundRect, bioUpgradeRect, plasticUpgradeRect, playSeaCowJigsawRect, playTurtleJigsawRect, playDolphinJigsawRect;
         public static bool playSeaCowJigsaw, playTurtleJigsaw, playDolphinJigsaw; // ensure that clicking on the rect when button is not drawn does not start game.
+        public static bool seaCowLost, turtleLost, dolphinLost; // To diplay if the user failed to win the jigsaw game (timeout).
 
         //Rock Processing
         public List<double> listTimeRockProcessing;
@@ -122,7 +123,7 @@ namespace Poseidon
                             boneFound = true;
                         }
                     }
-                    else// if (fossilType >= 40)
+                    else if (fossilType >= 40)
                     {
                         if (HydroBot.numSeaCowPieces < 8)
                         {
@@ -317,7 +318,13 @@ namespace Poseidon
             string resurrectTitle = "EXTINCT ANIMAL RESURRECTION";
             spriteBatch.DrawString(facilityFont, resurrectTitle, new Vector2(backgroundRect.Center.X - facilityFont.MeasureString(resurrectTitle).X / 2, playSeaCowJigsawRect.Top - 50), Color.White);
 
-            if (HydroBot.hasSeaCow)
+            if (seaCowLost)
+            {
+                string lost_Str = "SORRY, RESURRECTION TIMED OUT. THE BONES CANNOT BE REUSED.";
+                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, playSeaCowJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, lost_Str, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
+            }
+            else if (HydroBot.hasSeaCow)
             {
                 if (HydroBot.numSeaCowPieces >= GameConstants.boneCountForJigsaw)
                 {
@@ -358,7 +365,13 @@ namespace Poseidon
                 }
             }
 
-            if (HydroBot.hasTurtle)
+            if (turtleLost)
+            {
+                string lostStr = "SORRY, RESURRECTION TIMED OUT. THE FOSSILS CANNOT BE REUSED.";
+                lostStr = Poseidon.Core.IngamePresentation.wrapLine(lostStr, playTurtleJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, lostStr, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
+            }
+            else if (HydroBot.hasTurtle)
             {
                 if (HydroBot.numTurtlePieces >= GameConstants.boneCountForJigsaw)
                 {
@@ -399,8 +412,13 @@ namespace Poseidon
                 }
             }
 
-
-            if (HydroBot.hasDolphin)
+            if (dolphinLost)
+            {
+                string lostStr = "SORRY, RESURRECTION TIMED OUT. THE BONES CANNOT BE REUSED.";
+                lostStr = Poseidon.Core.IngamePresentation.wrapLine(lostStr, playDolphinJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, lostStr, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
+            }
+            else if (HydroBot.hasDolphin)
             {
                 if (HydroBot.numDolphinPieces >= GameConstants.boneCountForJigsaw)
                 {

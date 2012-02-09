@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <XnaContent>
   <Asset Type="Poseidon.ParticleSettings">
-    <BlendState>NonPremultiplied</BlendState>
-    <TextureName>Image/ParticleTextures/smoke</TextureName>
+    <BlendState>Additive</BlendState>
+    <TextureName>Image/ParticleTextures/explosion</TextureName>
     <MaxParticles>1000</MaxParticles>
-    <Duration>PT3S</Duration>
+    <Duration>PT0.6S</Duration>
     <DurationRandomness>1.5</DurationRandomness>
     <EmitterVelocitySensitivity>0.1</EmitterVelocitySensitivity>
     <MinHorizontalVelocity>0</MinHorizontalVelocity>

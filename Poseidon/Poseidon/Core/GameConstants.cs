@@ -244,6 +244,7 @@ namespace Poseidon {
         //const for particle systems
         public const int numExplosionParticles = 20;
         public const int numSandParticles = 30;
+        public const float trailParticlesPerSecond = 100;
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;

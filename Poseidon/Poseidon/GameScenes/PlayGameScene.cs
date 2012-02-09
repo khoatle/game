@@ -152,6 +152,18 @@ namespace Poseidon
         private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
 
+        // Texture and font for property window of a factory
+        private SpriteFont factoryFont;
+        private Texture2D factoryBackground;
+        private Texture2D factoryProduceButton;
+
+        // Texture and font for property window of a research facility
+        SpriteFont facilityFont;
+        SpriteFont facilityFont2;
+        Texture2D facilityBackground;
+        Texture2D facilityUpgradeButton;
+        Texture2D playJigsawButton;
+
         // Texture for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
         ButtonPanel factoryButtonPanel;
@@ -161,7 +173,6 @@ namespace Poseidon
         private Model plasticFactoryModel;
         private Model biodegradableFactoryModel;
         private Model radioactiveFactoryModel;
-
 
         // For applying graphic effects
         GraphicEffect graphicEffect;
@@ -1118,7 +1129,7 @@ namespace Poseidon
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = random.Next(100);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(Content, game, position, orientation);
+                        researchFacility.LoadContent(game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1129,7 +1140,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation);
+                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1140,7 +1151,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation);
+                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1150,7 +1161,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation);
+                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1167,6 +1178,18 @@ namespace Poseidon
             factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
             // Initialie the button panel
             factoryButtonPanel.Initialize(factoryPanelTexture, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
+
+            // Load Textures and fonts for factory property dialog
+            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
+            factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+
+            // Load Textures and fonts for research facility property dialog
+            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
+            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
+            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
         }
 
         public override void Draw(GameTime gameTime)

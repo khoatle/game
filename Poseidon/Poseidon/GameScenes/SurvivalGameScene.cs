@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
 using Poseidon.FishSchool;
 using System.IO;
+using Poseidon.GraphicEffects;
 
 
 namespace Poseidon
@@ -125,6 +126,14 @@ namespace Poseidon
         private bool openFactoryConfigurationScene = false;
         private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
+
+        // For applying graphic effects
+        GraphicEffect graphicEffect;
+        //for particle systems
+        public static ParticleManagement particleManager;
+
+        //for edge detection effect
+        RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
 
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -597,21 +606,21 @@ namespace Poseidon
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
-                        myBullet[i].update();
+                        myBullet[i].update(gameTime);
                     }
 
                     for (int i = 0; i < healthBullet.Count; i++)
                     {
-                        healthBullet[i].update();
+                        healthBullet[i].update(gameTime);
                     }
 
                     for (int i = 0; i < enemyBullet.Count; i++)
                     {
-                        enemyBullet[i].update();
+                        enemyBullet[i].update(gameTime);
                     }
                     for (int i = 0; i < alliesBullets.Count; i++)
                     {
-                        alliesBullets[i].update();
+                        alliesBullets[i].update(gameTime);
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,

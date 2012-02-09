@@ -48,7 +48,7 @@ namespace Poseidon
             return Position + unitDirection * projectionSpeed;
         }
 
-        public virtual void update()
+        public virtual void update(GameTime gameTime)
         {
             Vector3 tmp = calculateFuturePosition();
 
@@ -60,6 +60,21 @@ namespace Poseidon
         {
             this.Model = content.Load<Model>(modelName);
             BoundingSphere = CalculateBoundingSphere();
+
+            // Set up the parameters
+            //currently only applies for herculesBullet
+            //and the mjolnir
+            if (modelName.Contains("herculesBullet")) //|| modelName.Contains("mjolnir"))
+                SetupShaderParameters(PoseidonGame.contentManager, Model);
+        }
+
+        // our custom shader
+        Effect newBasicEffect;
+
+        public void SetupShaderParameters(ContentManager content, Model model)
+        {
+            newBasicEffect = content.Load<Effect>("Shaders/NewBasicEffect");
+            EffectHelpers.ChangeEffectUsedByModelToCustomBasicEffect(model, newBasicEffect);
         }
 
         public bool getStatus() { return isActive; }

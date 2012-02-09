@@ -166,7 +166,7 @@ namespace Poseidon
         // For applying graphic effects
         GraphicEffect graphicEffect;
         //for particle systems
-        ParticleManagement particleManager;
+        public static ParticleManagement particleManager;
 
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
@@ -250,7 +250,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -938,21 +938,21 @@ namespace Poseidon
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
-                        myBullet[i].update();
+                        myBullet[i].update(gameTime);
                     }
 
                     for (int i = 0; i < healthBullet.Count; i++)
                     {
-                        healthBullet[i].update();
+                        healthBullet[i].update(gameTime);
                     }
 
                     for (int i = 0; i < enemyBullet.Count; i++)
                     {
-                        enemyBullet[i].update();
+                        enemyBullet[i].update(gameTime);
                     }
                     for (int i = 0; i < alliesBullets.Count; i++)
                     {
-                        alliesBullets[i].update();
+                        alliesBullets[i].update(gameTime);
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,

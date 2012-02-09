@@ -52,7 +52,7 @@ namespace Poseidon
             laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/laserBeam");
         }
 
-        public override void update()
+        public override void update(GameTime gameTime)
         {
             Position += unitDirection * projectionSpeed;
             BoundingSphere = new BoundingSphere(Position, BoundingSphere.Radius);

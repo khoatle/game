@@ -141,6 +141,7 @@ namespace Poseidon.GraphicEffects
                 spriteBatch.End();
             }
 
+            //apply underwater effect
             graphics.GraphicsDevice.SetRenderTarget(afterUnderWaterTexture);
             if (underWaterEffectEnabled)
             {
@@ -170,6 +171,8 @@ namespace Poseidon.GraphicEffects
                 spriteBatch.Draw(originalScene, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
                 spriteBatch.End();
             }
+
+            //apply bloom effect
             if (bloomEffectEnabled)
             {
                 //afterBloomTexture = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, false, pp.BackBufferFormat, DepthFormat.None);

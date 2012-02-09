@@ -404,7 +404,7 @@ namespace Poseidon
             }
         }
 
-        public static void placeTorpedo(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
+        public static void placeTorpedo(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameMode gameMode)
         {
 
             Matrix orientationMatrix = Matrix.CreateRotationY(((Submarine)shooter).ForwardDirection);
@@ -414,12 +414,12 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             Torpedo newBullet = new Torpedo();
-            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
             Torpedo newBullet1 = new Torpedo();
-            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
             newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet1);
             if (shooter.BoundingSphere.Intersects(cameraFrustum))

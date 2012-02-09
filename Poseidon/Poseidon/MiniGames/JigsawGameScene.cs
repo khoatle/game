@@ -71,6 +71,9 @@ namespace Poseidon.MiniGames
 
         public bool inOrder = false;
 
+        private double startTime;
+        public bool timeUp;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -134,6 +137,10 @@ namespace Poseidon.MiniGames
         public override void Show()
         {
             MediaPlayer.Stop();
+            timeUp = false;
+            startTime = PoseidonGame.playTime.TotalSeconds;
+            inOrder = false;
+            shufflePieces();
             base.Show();
         }
 
@@ -172,6 +179,11 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (PoseidonGame.playTime.TotalSeconds - startTime > GameConstants.jigsawGameMaxTime)
+            {
+                timeUp = true;
+            }
+
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera , gameTime, null);
    
             putInfoInDebuggingString();

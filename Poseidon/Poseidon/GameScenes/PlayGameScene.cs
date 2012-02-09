@@ -750,17 +750,17 @@ namespace Poseidon
                                         researchFacility.UpgradeBioFactory(factories);
                                     if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                         researchFacility.UpgradePlasticFactory(factories);
-                                    if (researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    if (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                     {
                                         PoseidonGame.playJigsaw = true;
                                         PoseidonGame.jigsawType = 0; //seacow
                                     }
-                                    if (researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    if (ResearchFacility.playTurtleJigsaw && researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                     {
                                         PoseidonGame.playJigsaw = true;
                                         PoseidonGame.jigsawType = 1; //turtle
                                     }
-                                    if (researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    if (ResearchFacility.playDolphinJigsaw && researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                     {
                                         PoseidonGame.playJigsaw = true;
                                         PoseidonGame.jigsawType = 2; //dolphin

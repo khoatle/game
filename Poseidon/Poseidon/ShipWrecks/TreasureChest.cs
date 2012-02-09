@@ -33,9 +33,21 @@ namespace Poseidon
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             opened = false;
             this.skillID = skillID;
+
+            // Set up the parameters
+            SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
-        public void Draw(Matrix view, Matrix projection)
+        // our custom shader
+        Effect newBasicEffect;
+
+        public void SetupShaderParameters(ContentManager content, Model model)
+        {
+            newBasicEffect = content.Load<Effect>("Shaders/NewBasicEffect");
+            EffectHelpers.ChangeEffectUsedByModelToCustomBasicEffect(model, newBasicEffect);
+        }
+
+        public void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -45,20 +57,33 @@ namespace Poseidon
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                //foreach (BasicEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
-                    effect.World =
-                        worldMatrix * transforms[mesh.ParentBone.Index];
-                    effect.View = view;
-                    effect.Projection = projection;
+                    //effect.World =
+                    //    worldMatrix * transforms[mesh.ParentBone.Index];
+                    //effect.View = view;
+                    //effect.Projection = projection;
 
-                    effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
+                    //effect.EnableDefaultLighting();
+                    //effect.PreferPerPixelLighting = true;
 
-                    effect.FogEnabled = true;
-                    effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    //effect.FogEnabled = true;
+                    //effect.FogStart = GameConstants.FogStart;
+                    //effect.FogEnd = GameConstants.FogEnd;
+                    //effect.FogColor = GameConstants.FogColor.ToVector3();
+
+                    //for our custom BasicEffect
+                    effect.CurrentTechnique = effect.Techniques[techniqueName];
+                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                    effect.Parameters["World"].SetValue(readlWorldMatrix);
+                    effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));
+                    effect.Parameters["View"].SetValue(view);
+                    effect.Parameters["Projection"].SetValue(projection);
+                    effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
+                    Matrix WorldView = readlWorldMatrix * view;
+                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
                 }
                 mesh.Draw();
             }

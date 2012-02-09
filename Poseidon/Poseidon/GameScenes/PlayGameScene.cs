@@ -250,7 +250,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -346,9 +346,6 @@ namespace Poseidon
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
-            // Construct our particle system components.
-            particleManager = new ParticleManagement(this.game, GraphicDevice);
-
             // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
@@ -373,9 +370,9 @@ namespace Poseidon
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
-
-            
-            
+            // Construct our particle system components.
+            particleManager = new ParticleManagement(this.game, GraphicDevice);
+        
         }
 
         /// <summary>
@@ -771,7 +768,7 @@ namespace Poseidon
                             return;
                         }
                     }
-                    if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
+                    //if (currentLevel == 2 || currentLevel == 5 || currentLevel == 6 || currentLevel == 7 || currentLevel == 8)
                     {
                         if ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint > GameConstants.EnvThresholdForKey)
                         {
@@ -1004,10 +1001,7 @@ namespace Poseidon
                         currentGameState = GameState.Lost;
                         audio.gameOver.Play();
                     }
-                    
-                    //update graphic effects
-                    graphicEffect.UpdateInput(gameTime);
-
+                   
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
@@ -1015,7 +1009,9 @@ namespace Poseidon
                     schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
-         
+
+                    //update graphic effects
+                    graphicEffect.UpdateInput(gameTime);
                     //update particle systems
                     particleManager.Update(gameTime);
 
@@ -1231,7 +1227,7 @@ namespace Poseidon
         private void DrawGameplayScreen(GameTime gameTime)
         {
             //preparingedge detecting for the object being pointed at
-            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, graphics.GraphicsDevice, normalDepthRenderTarget);
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, graphics.GraphicsDevice, normalDepthRenderTarget);
 
             //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
@@ -1441,9 +1437,6 @@ namespace Poseidon
                 bubble.Draw(spriteBatch, 1.0f);
             }
 
-            //draw particle effects
-            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
-
             //draw schools of fish
             spriteBatch.Begin();
             schoolOfFish1.Draw(gameTime, spriteBatch);
@@ -1451,6 +1444,8 @@ namespace Poseidon
             schoolOfFish3.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
+            //draw particle effects
+            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
             //applying edge detection
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
 

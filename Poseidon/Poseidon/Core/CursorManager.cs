@@ -55,6 +55,7 @@ namespace Poseidon
 
         public static BaseEnemy MouseOnWhichEnemy(Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount)
         {
+            if (enemies == null) return null;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             BoundingSphere sphere;
             for (int i = 0; i < enemiesAmount; i++)
@@ -93,6 +94,7 @@ namespace Poseidon
 
         public static Fish MouseOnWhichFish(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount)
         {
+            if (fish == null) return null;
             BoundingSphere sphere;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             for (int i = 0; i < fishAmount; i++)
@@ -110,6 +112,7 @@ namespace Poseidon
 
         public static Trash MouseOnWhichTrash(Cursor cursor, Camera gameCamera, List<Trash> trashes)
         {
+            if (trashes == null) return null;
             BoundingSphere trashRealSphere;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (Trash trash in trashes)
@@ -128,6 +131,7 @@ namespace Poseidon
 
         public static ShipWreck MouseOnWhichShipWreck(Cursor cursor, Camera gameCamera, List<ShipWreck> shipWrecks)
         {
+            if (shipWrecks == null) return null;
             BoundingSphere shipRealSphere;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (ShipWreck shipWreck in shipWrecks)
@@ -146,6 +150,7 @@ namespace Poseidon
 
         public static Factory MouseOnWhichFactory(Cursor cursor, Camera gameCamera, List<Factory> factories)
         {
+            if (factories == null) return null;
             BoundingSphere factoryRealSphere;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (Factory factory in factories)
@@ -156,6 +161,24 @@ namespace Poseidon
                 if (RayIntersectsBoundingSphere(cursorRay, factoryRealSphere))
                 {
                     return factory;
+                }
+            }
+            return null;
+        }
+
+        public static TreasureChest MouseOnWhichChest(Cursor cursor, Camera gameCamera, List<TreasureChest> treasureChests)
+        {
+            if (treasureChests == null) return null;
+            BoundingSphere treasureChestRealSphere;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (TreasureChest treasureChest in treasureChests)
+            {
+                treasureChestRealSphere = treasureChest.BoundingSphere;
+                treasureChestRealSphere.Center.Y = treasureChest.Position.Y;
+                treasureChestRealSphere.Radius *= 1;
+                if (RayIntersectsBoundingSphere(cursorRay, treasureChestRealSphere))
+                {
+                    return treasureChest;
                 }
             }
             return null;

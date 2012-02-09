@@ -87,11 +87,8 @@ namespace Poseidon
         // draw a cutscene when finding a god's relic
         bool foundRelic = false;
 
-        // shader for underwater effect
-        // Our Post Process effect object, this is where our shader will be loaded and compiled
-        Effect underWaterEffect;
         float m_Timer = 0;
-        RenderTarget2D renderTarget;
+        RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
         Texture2D SceneTexture;
 
         // showing paintings when openning treasure chests
@@ -231,11 +228,21 @@ namespace Poseidon
 
             skillFoundScreen = Content.Load<Texture2D>("Image/SceneTextures/skillFoundBackground");
 
-            // Load and compile our Shader into our Effect instance.
-            underWaterEffect = Content.Load<Effect>("Shaders/UnderWater");
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+
+            //for edge detection effect
+            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
+            edgeDetectionRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
+
+            graphicEffect = new GraphicEffect(this, this.spriteBatch, statsFont);
+            // Construct our particle system components.
+            particleManager = new ParticleManagement(this.game, GraphicDevice);
         }
 
         /// <summary>
@@ -530,6 +537,7 @@ namespace Poseidon
                             chest.opened = true;
                             audio.OpenChest.Play();
                             chest.Model = Content.Load<Model>("Models/ShipWreckModels/chest");
+                            chest.SetupShaderParameters(PoseidonGame.contentManager, chest.Model);
                             //this is just for testing
                             //should be removed
                             //skillID = 4;
@@ -599,6 +607,11 @@ namespace Poseidon
 
                 //cursor update
                 cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
+
+                //update graphic effects
+                graphicEffect.UpdateInput(gameTime);
+                //update particle systems
+                particleManager.Update(gameTime);
 
                 roundTimer -= gameTime.ElapsedGameTime;
                 PoseidonGame.playTime += gameTime.ElapsedGameTime;
@@ -679,6 +692,10 @@ namespace Poseidon
                 return;
             }
 
+            //preparingedge detecting for the object being pointed at
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, null, null, null, null, treasureChests, graphics.GraphicsDevice, normalDepthRenderTarget);
+
+            //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
             
@@ -694,8 +711,7 @@ namespace Poseidon
                 chestSphere.Center = treasureChest.Position;
                 if (chestSphere.Intersects(frustum))
                 {
-                    treasureChest.Draw(gameCamera.ViewMatrix,
-                        gameCamera.ProjectionMatrix);
+                    treasureChest.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;
@@ -794,31 +810,24 @@ namespace Poseidon
                 bubble.Draw(spriteBatch, 1.5f);
             }
 
+            //draw particle effects
+            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
+            //applying edge detection
+            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
+
+            SceneTexture = edgeDetectionRenderTarget;
+            //graphics.GraphicsDevice.SetRenderTarget(null);
+            //spriteBatch.Begin();
+            //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            //spriteBatch.End();
+            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
             //Draw points gained / lost
             foreach (Point point in points)
             {
                 point.Draw(spriteBatch);
             }
-
-            //rs = new RasterizerState();
-            //rs.FillMode = FillMode.Solid;
-            //GraphicsDevice.RasterizerState = rs;
-            graphics.GraphicsDevice.SetRenderTarget(null);
-            SceneTexture = renderTarget;
-            // Render the scene with Edge Detection, using the render target from last frame.
-            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
-
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            {
-                // Apply the post process shader
-                underWaterEffect.CurrentTechnique.Passes[0].Apply();
-                {
-                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer);
-                    spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-                }
-            }
-            spriteBatch.End();
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
@@ -841,6 +850,10 @@ namespace Poseidon
                 RestoreGraphicConfig();
                 //return;
             }
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.Begin();
+            spriteBatch.Draw(afterEffectsAppliedRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            spriteBatch.End();
             
         }
         private void DrawFoundStrangeObjScene()

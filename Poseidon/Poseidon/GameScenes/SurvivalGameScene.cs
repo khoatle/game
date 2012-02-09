@@ -586,7 +586,8 @@ namespace Poseidon
                         if (doubleClicked && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             string point_string = HydroBot.numStrangeObjCollected + " strange rocks deposited for inspection";
-                            researchFacility.listTimeRockProcessing.Add(PoseidonGame.playTime.TotalSeconds);
+                            for(int i=0; i<HydroBot.numStrangeObjCollected; i++)
+                                researchFacility.listTimeRockProcessing.Add(PoseidonGame.playTime.TotalSeconds + (i*GameConstants.DaysPerSecond));
                             Point point = new Point();
                             point.LoadContent(PoseidonGame.contentManager, point_string, researchFacility.Position, Color.LawnGreen);
                             points.Add(point);

@@ -341,6 +341,19 @@ namespace Poseidon
             plasticPlantLevel = lsPlasticPlantLevel = (int)info.GetValue("plasticPlantLevel", typeof(int));
             numResources = lsNumResources = (int)info.GetValue("numResources", typeof(int));
             numResources += GameConstants.numResourcesAtStart;
+
+            //resurrected sidekicks stuff
+            numStrangeObjCollected = lsNumStrangeObjCollected = (int)info.GetValue("numStrangeObjCollected", typeof(int));
+            hasDolphin = lsHasDolphin = (bool)info.GetValue("hasDolphin", typeof(bool));
+            hasSeaCow = lsHasSeaCow = (bool)info.GetValue("hasSeaCow", typeof(bool));
+            hasTurtle = lsHasTurtle = (bool)info.GetValue("hasTurtle", typeof(bool));
+            numDolphinPieces = lsNumDolphinPieces = (int)info.GetValue("numDolphinPieces", typeof(int));
+            numSeaCowPieces = lsNumSeaCowPieces = (int)info.GetValue("numSeaCowPieces", typeof(int));
+            numTurtlePieces = lsNumTurtlePieces = (int)info.GetValue("numTurtlePieces", typeof(int));
+            dolphinPower = lsDolphinPower = (float)info.GetValue("dolphinPower", typeof(float));
+            seaCowPower = lsSeaCowPower = (float)info.GetValue("seaCowPower", typeof(float));
+            turtlePower = lsTurtlePower = (float)info.GetValue("turtlePower", typeof(float));
+            
         }
 
         /// <summary>
@@ -387,6 +400,18 @@ namespace Poseidon
             info.AddValue("totalBioTrashProcessed", totalBioTrashProcessed);
             info.AddValue("totalPlasticTrashProcessed", totalPlasticTrashProcessed);
             info.AddValue("totalNuclearTrashProcessed", totalNuclearTrashProcessed);
+
+            //resurrected sidekicks stuff
+            info.AddValue("numStrangeObjCollected", numStrangeObjCollected);
+            info.AddValue("hasDolphin", hasDolphin);
+            info.AddValue("hasSeaCow", hasSeaCow);
+            info.AddValue("hasTurtle", hasTurtle);
+            info.AddValue("numDolphinPieces", numDolphinPieces);
+            info.AddValue("numSeaCowPieces", numSeaCowPieces);
+            info.AddValue("numTurtlePieces", numTurtlePieces);
+            info.AddValue("dolphinPower", dolphinPower);
+            info.AddValue("seaCowPower", seaCowPower);
+            info.AddValue("turtlePower", turtlePower);
         }
 
         /// <summary>

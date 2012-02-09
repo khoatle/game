@@ -706,6 +706,27 @@ namespace Poseidon
                 {
                     MouseState currentMouseState;
                     currentMouseState = Mouse.GetState();
+                    // Update Factory Button Panel
+                    factoryButtonPanel.Update(gameTime, currentMouseState);
+                    // if mouse click happened, check for the click position and add new factory
+                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        // adjust the position to build factory depending on current camera position
+                        Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+
+                        // identify which factory depending on anchor index
+                        BuildingType newBuildingType = factoryButtonPanel.anchorIndexToBuildingType();
+
+                        // if addition is successful, play successful sound, otherwise play unsuccessful sound
+                        if (addNewBuilding(newBuildingType, newBuildingPosition))
+                        {
+                            factoryButtonPanel.removeAnchor();
+                        }
+                        else
+                        {
+                            // play sound to denote building could not be added
+                        }
+                    }
                     if (currentMouseState.RightButton == ButtonState.Pressed)
                     {
                         foreach (Factory factory in factories)
@@ -792,7 +813,8 @@ namespace Poseidon
                         return;
                     }
 
-                    bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState);
+                    bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState) 
+                        || (!factoryButtonPanel.cursorOutsidePanelArea());
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
@@ -1019,28 +1041,6 @@ namespace Poseidon
          
                     //update particle systems
                     particleManager.Update(gameTime);
-
-                    // Update Factory Button Panel
-                    factoryButtonPanel.Update(gameTime, currentMouseState);
-                    // if mouse click happened, check for the click position and add new factory
-                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
-                    {
-                        // adjust the position to build factory depending on current camera position
-                        Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-
-                        // identify which factory depending on anchor index
-                        BuildingType newBuildingType = factoryButtonPanel.anchorIndexToBuildingType();
-
-                        // if addition is successful, play successful sound, otherwise play unsuccessful sound
-                        if (addNewBuilding(newBuildingType, newBuildingPosition))
-                        {
-                            factoryButtonPanel.removeAnchor();
-                        }
-                        else
-                        {
-                            // play sound to denote building could not be added
-                        }
-                    }
                 }
 
                 prevGameState = currentGameState;

@@ -45,7 +45,7 @@ namespace Poseidon
             random = new Random();
         }
 
-        public void LoadContent(ContentManager content, Game game, Vector3 position, float orientation)
+        public void LoadContent(Game game, Vector3 position, float orientation, SpriteFont font, Texture2D backgroundTexture, Texture2D produceButtonTexture)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -63,12 +63,11 @@ namespace Poseidon
             BoundingSphere = new BoundingSphere(tempCenter,BoundingSphere.Radius);
 
             this.orientation = orientation;
-            this.Content = content;
 
             produce = Produce.resource;
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            background = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
-            produceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+            factoryFont = font;
+            background = backgroundTexture;
+            produceButton = produceButtonTexture;
             backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - 500, game.Window.ClientBounds.Center.Y - 400, 1000, 800);
             produceRect = new Rectangle(backgroundRect.Center.X - 250, backgroundRect.Top + 120, 500, 65);
 
@@ -86,7 +85,10 @@ namespace Poseidon
         public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
         {
             Model = content.Load<Model>(modelname);
-            LoadContent(content, game, position, orientation);
+            SpriteFont font = content.Load<SpriteFont>("Fonts/factoryConfig");
+            Texture2D backgroundTexture = content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
+            Texture2D produceButtonTexture = content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+            LoadContent(game, position, orientation, font, backgroundTexture, produceButtonTexture);
 
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);
@@ -110,7 +112,7 @@ namespace Poseidon
                     }
 
                     //Produce strange rock
-                    if (random.Next(100) < 5)
+                    if (random.Next(100) < 5) //5% probability
                     {
                         ProduceStrangeRock(ref powerpacks, resources);
                     }

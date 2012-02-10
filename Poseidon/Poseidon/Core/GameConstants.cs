@@ -42,6 +42,8 @@ namespace Poseidon {
         public const int ShipWreckMaxRangeZ = 800;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
+        public const int jigsawGameMaxTime = 180; //sec
+        public const int boneCountForJigsaw = 8;
 
         // bullet consts
         public const float BulletSpeed = 2.0f;
@@ -58,7 +60,7 @@ namespace Poseidon {
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
         public const int maxTrashCarryingCapacity = 15;
-        public const float powerpackResourceRotationSpeed = 0.5f;
+        public const float powerpackResourceRotationSpeed = 0.25f;
 
         //Environment Const
         public const int PlayerStartingEnv = 300;

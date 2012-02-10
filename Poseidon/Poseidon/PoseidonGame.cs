@@ -405,21 +405,47 @@ namespace Poseidon
             {
                 AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
                 ShowScene(playGameScene);
-                jigsawGameScene.inOrder = false;
-                jigsawGameScene.shufflePieces();
                 switch (jigsawType)
                 {
                     case 0:
                         HydroBot.hasSeaCow = true;
-                        HydroBot.numSeaCowPieces = 0;
+                        HydroBot.seaCowPower += 1.0f;
+                        HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playSeaCowJigsaw = false;
                         break;
                     case 1:
                         HydroBot.hasTurtle = true;
-                        HydroBot.numTurtlePieces = 0;
+                        HydroBot.turtlePower += 1.0f;
+                        HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playTurtleJigsaw = false;
                         break;
                     case 2:
                         HydroBot.hasDolphin = true;
-                        HydroBot.numDolphinPieces = 0;
+                        HydroBot.dolphinPower += 1.0f;
+                        HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playDolphinJigsaw = false;
+                        break;
+                }
+            }
+            if (jigsawGameScene.timeUp)
+            {
+                ShowScene(playGameScene);
+                switch (jigsawType)
+                {
+                    case 0:
+                        HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playSeaCowJigsaw = false;
+                        ResearchFacility.seaCowLost = true;
+                        break;
+                    case 1:
+                        HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playTurtleJigsaw = false;
+                        ResearchFacility.turtleLost = true;
+                        break;
+                    case 2:
+                        HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playDolphinJigsaw = false;
+                        ResearchFacility.dolphinLost = true;
                         break;
                 }
             }

@@ -77,8 +77,6 @@ namespace Poseidon
 
             //if (orientation > 50) floatUp = true;
             //else floatUp = false;
-            // Set up the parameters
-            SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
         // Overloading content load so that survival mode game compiles properly.
@@ -89,7 +87,7 @@ namespace Poseidon
             Texture2D backgroundTexture = content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
             Texture2D produceButtonTexture = content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
             LoadContent(game, position, orientation, font, backgroundTexture, produceButtonTexture);
-
+            Content = content;
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);
         }

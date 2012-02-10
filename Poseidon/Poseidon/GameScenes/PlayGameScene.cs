@@ -727,7 +727,7 @@ namespace Poseidon
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
                     // if mouse click happened, check for the click position and add new factory
-                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
+                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && factoryButtonPanel.clickToBuildDetected)
                     {
                         // adjust the position to build factory depending on current camera position
                         Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
@@ -1106,7 +1106,7 @@ namespace Poseidon
         private bool addNewBuilding(BuildingType buildingType, Vector3 position)
         {
             bool status = false;
-            float orientation; // currently orientation is random, this needs to be fixed to one of the four directional orientations because aligning building too view might make it appealing
+            float orientation; // 0, PI/2, PI, 3*PI/2
             Factory oneFactory;
 
             // Check if hydrobot has sufficient resources for building a factory
@@ -1116,7 +1116,12 @@ namespace Poseidon
                 return false;
             }
 
-            // TODO: See if position is within game arena
+            // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
+            if (Math.Abs(position.X) > (float)GameConstants.MainGameMaxRangeX || Math.Abs(position.Z) > (float)GameConstants.MainGameMaxRangeZ)
+            {
+                // TODO: play some sound hinting position selected is outside game arena
+                return false;
+            }
 
             // TODO: Verify that current location is available for adding the building
 
@@ -1133,7 +1138,7 @@ namespace Poseidon
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
                         researchFacility = new ResearchFacility();
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                        orientation = random.Next(100);
+                        orientation = (float)(Math.PI/2) * random.Next(4);
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.LoadContent(Content, game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1144,7 +1149,7 @@ namespace Poseidon
                 case BuildingType.biodegradable:
                     oneFactory = new Factory(FactoryType.biodegradable);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = random.Next(100);
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = biodegradableFactoryModel;
                     oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1155,7 +1160,7 @@ namespace Poseidon
                 case BuildingType.plastic:
                     oneFactory = new Factory(FactoryType.plastic);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = random.Next(100);
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = plasticFactoryModel;
                     oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1165,7 +1170,7 @@ namespace Poseidon
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = random.Next(100);
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = radioactiveFactoryModel;
                     oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;

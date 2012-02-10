@@ -18,6 +18,8 @@ namespace Poseidon.Core
         private Rectangle panelRectangle;
         private SpriteFont infoTextFont;
         private string[] buildingNames = new string[] { "Research Facility", "Radioactive Processing Facility", "Biodegradable Processing Facility", "Plastic Processing Facility" };
+        private ButtonState previousLButtonState;
+        public bool clickToBuildDetected;
 
         // Currently Anchored button (-ve if none)
         private int anchoredIndex = -1;
@@ -33,6 +35,8 @@ namespace Poseidon.Core
                 maxButtons = buttonCount;
             }
             scale = scaleFactor;
+            clickToBuildDetected = false;
+            previousLButtonState = ButtonState.Released;
         }
 
         public bool hasAnyAnchor()
@@ -100,10 +104,12 @@ namespace Poseidon.Core
         public void Update(GameTime gameTime, MouseState mouseState)
         {
             // this function ensures that only one button has an anchor at one time
+            bool cursorInGameArena = true;
             anchoredIndex = -1;
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Update(gameTime, mouseState, panelRectangle.Contains(mouseState.X, mouseState.Y));
+                cursorInGameArena &= (buttons[i].state == Button.InteractionState.OUT); // this variable will remain true if cursor is outside all of the buttons
                 if (buttons[i].Anchored)
                 {
                     anchoredIndex = i;
@@ -116,6 +122,17 @@ namespace Poseidon.Core
                 }
                 
             }
+
+            // if cursor in game arena and lbutton down -> up detected, and one of the buildings anchored
+            if (cursorInGameArena && previousLButtonState == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released && anchoredIndex >= 0)
+            {
+                clickToBuildDetected = true;
+            }
+            else
+            {
+                clickToBuildDetected = false;
+            }
+            previousLButtonState = mouseState.LeftButton;
         }
 
         public void Draw(SpriteBatch spriteBatch)

@@ -337,7 +337,7 @@ namespace Poseidon
             }
         }
 
-        public static void placeTreasureChests(List<TreasureChest> treasureChests, List<StaticObject> staticObjects, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        public static void placeTreasureChests(List<TreasureChest> treasureChests, List<StaticObject> staticObjects, Random random, int minX, int maxX, int minZ, int maxZ)
         {
             Vector3 tempCenter;
 
@@ -786,7 +786,7 @@ namespace Poseidon
             }
         }
 
-        public static void PlaceStaticObjectsOnShipFloor(List<StaticObject> staticObjects, List<TreasureChest> treasureChests, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
+        public static void PlaceStaticObjectsOnShipFloor(List<StaticObject> staticObjects, List<TreasureChest> treasureChests, Random random, int minX, int maxX, int minZ, int maxZ)
         {
             Vector3 tempCenter;
 

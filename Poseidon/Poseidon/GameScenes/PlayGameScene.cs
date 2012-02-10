@@ -397,6 +397,7 @@ namespace Poseidon
         public override void Show()
         {
             paused = false;
+            HydroBot.gameMode = GameMode.MainGame;
             //MediaPlayer.Play(audio.BackMusic);
             //PlaceFuelCellsAndBarriers();
             //MediaPlayer.Stop();
@@ -476,6 +477,10 @@ namespace Poseidon
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
             schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
+
+            //reset the shipwreck content too
+            ShipWreckScene.resetShipWreckNow = true;
+
             InitializeGameField(Content);
         }
 
@@ -1436,8 +1441,6 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            //fuelCarrier.Draw(gameCamera.ViewMatrix, 
-            //    gameCamera.ProjectionMatrix);
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
             //GraphicDevice.RasterizerState = rs;

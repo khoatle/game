@@ -48,7 +48,7 @@ namespace Poseidon
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
 
-        public static float controlRadius = 70f;
+        public static float controlRadius = 80f;
 
         // 2 types of bullet
         // 0: killing

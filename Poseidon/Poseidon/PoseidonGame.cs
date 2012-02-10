@@ -489,11 +489,11 @@ namespace Poseidon
             }
             //do not let the player to open the attribute board in shipwreck now
             //because it will reset the shipwreck
-            //if (AttributePressed)
-            //{
-            //    prevScene = shipWreckScene;
-            //    ShowScene(AttributeScene);
-            //}
+            if (AttributePressed)
+            {
+                prevScene = shipWreckScene;
+                ShowScene(AttributeScene);
+            }
         }
         /// <summary>
         /// Handle update for the main game
@@ -585,6 +585,7 @@ namespace Poseidon
                     // no, let the user re-explore now because he would miss a relic -> lose
                     //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
+                    shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
                     return true;
                 }
@@ -778,7 +779,15 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
                 || EscPressed || enterPressed)
             {
+                if (prevScene is ShipWreckScene)
+                {
+                    shipWreckScene.backFromAttributeBoard = true;
+                }
                 ShowScene(prevScene);
+                if (prevScene is ShipWreckScene)
+                {
+                    shipWreckScene.screenTransitNow = false;
+                }
             }
 
         }

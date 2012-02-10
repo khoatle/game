@@ -39,18 +39,38 @@ namespace Poseidon
         
         GameObject boundingSphere;
 
-        BaseEnemy[] enemies;
-        Fish[] fish;
+        //objects that must be remembered for each shipwreck
+        //List<bool> shipAccessed;
+        //List<BaseEnemy[]> enemies;
+        //List<Fish[]> fishes;
+        //List<int> enemiesAmount;// = 0;
+        //List<int> fishAmount;// = 0;
 
-        int enemiesAmount = 0;
-        int fishAmount = 0;
+        //List<List<TreasureChest>> treasureChests;
+        //List<List<StaticObject>> staticObjects;
+        //List<bool> foundRelic;// = false;
+
+        bool[] shipAccessed;
+        BaseEnemy[][] enemies;
+        Fish[][] fishes;
+        int[] enemiesAmount;
+        int[] fishAmount;
+        List<TreasureChest>[] treasureChests;
+        List<StaticObject>[] staticObjects;
+        // draw a cutscene when finding a god's relic
+        bool[] foundRelic;// = false;
+        // has artifact?
+        public int skillID;
 
         List<DamageBullet> myBullet;
         List<DamageBullet> enemyBullet;
         List<HealthBullet> healthBullet;
         List<DamageBullet> alliesBullets;
-        List<TreasureChest> treasureChests;
-        List<StaticObject> staticObjects;
+
+
+        public int currentShipWreckID;
+        public static bool resetShipWreckNow = true;
+        public bool backFromAttributeBoard = false;
 
         //the hydrobot
         public HydroBot hydroBot;
@@ -71,8 +91,6 @@ namespace Poseidon
         protected Texture2D skillFoundScreen;
         // He died inside the ship wreck?
         public bool returnToMain;
-        // has artifact?
-        public int skillID = -1;
 
         // Frustum of the camera
         BoundingFrustum frustum;
@@ -82,15 +100,10 @@ namespace Poseidon
         bool clicked = false;
         double clickTimer = 0;
 
-        HeightMapInfo heightMapInfo;
-
-        // draw a cutscene when finding a god's relic
-        bool foundRelic = false;
-
         float m_Timer = 0;
         public RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget, cutSceneImmediateRenderTarget;
         public Texture2D SceneTexture, Scene2Texture;
-        bool screenTransitNow = false;
+        public bool screenTransitNow = false;
 
         // showing paintings when openning treasure chests
         OceanPaintings oceanPaintings;
@@ -136,11 +149,11 @@ namespace Poseidon
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight, GameMode.ShipWreck);
             //fireTime = TimeSpan.FromSeconds(0.3f);
-            if (PlayGameScene.currentLevel >= 4)
-                enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
-            else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
-            enemies = new BaseEnemy[enemiesAmount];
-            fish = new Fish[GameConstants.ShipNumberFish];
+            //if (PlayGameScene.currentLevel >= 4)
+            //    enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
+            //else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+            //enemies = new BaseEnemy[enemiesAmount];
+            //fish = new Fish[GameConstants.ShipNumberFish];
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
 
@@ -168,9 +181,11 @@ namespace Poseidon
             fossilTextures[2] = Content.Load<Texture2D>("Image/Fossils/fossil3");
             fossilTextures[3] = Content.Load<Texture2D>("Image/Fossils/fossil4");
 
+            
 
             this.Load();
         }
+
 
         public void Load()
         {
@@ -218,7 +233,7 @@ namespace Poseidon
             //}
 
             //Initialize the game field
-            InitializeShipField(Content);
+            //InitializeShipField(Content);
 
             hydroBot.Load(Content);
 
@@ -261,82 +276,142 @@ namespace Poseidon
             //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
-            //reset position for the tank
-            hydroBot.Position = Vector3.Zero;
-            hydroBot.Position.Y = GameConstants.ShipWreckFloatHeight;
-            hydroBot.ForwardDirection = 0f;
             //MediaPlayer.Play(audio.BackMusic);
             showNoKey = false;
             showPainting = false;
             cursor.targetToLock = null;
-            InitializeShipField(Content);
+            returnToMain = false;
+            HydroBot.gameMode = GameMode.ShipWreck;
+
+            if (resetShipWreckNow == true)
+            {
+                CreateNewShipWreckVariables();
+                resetShipWreckNow = false;
+            }
+            if (!backFromAttributeBoard)
+            {
+                ResetShipWreckGeneralVariables();
+            }
+            if (shipAccessed[currentShipWreckID] == false)
+            {
+                InitializeShipField(Content);
+                shipAccessed[currentShipWreckID] = true;
+            }
+
             graphicEffect.resetTransitTimer();
             screenTransitNow = true;
+            if (backFromAttributeBoard == true) backFromAttributeBoard = false;
             base.Show();
         }
 
-        private void ResetGame(GameTime gameTime, float aspectRatio)
+        private void CreateNewShipWreckVariables()
         {
-            
-            hydroBot.Reset();
-            gameCamera.Update(hydroBot.ForwardDirection,
-                hydroBot.Position, aspectRatio, gameTime);
-            //enemiesAmount = GameConstants.NumberEnemies;
-            //fishAmount = GameConstants.NumberFish;
-            InitializeShipField(Content);
+            //shipAccessed = new List<bool>(GameConstants.maxShipPerLevel);
+            //enemies = new List<BaseEnemy[]>(GameConstants.maxShipPerLevel);
+            //fishes = new List<Fish[]>(GameConstants.maxShipPerLevel);
+            //enemiesAmount = new List<int>(GameConstants.maxShipPerLevel);
+            //fishAmount = new List<int>(GameConstants.maxShipPerLevel);
+            //treasureChests = new List<List<TreasureChest>>(GameConstants.maxShipPerLevel);
+            //staticObjects = new List<List<StaticObject>>(GameConstants.maxShipPerLevel);
+            //foundRelic = new List<bool>(GameConstants.maxShipPerLevel);// = false;
+            //for (int index = 0; index < GameConstants.maxShipPerLevel; index++)
+            //{
+            //    //shipAccessed[index] = new Boolean();// false;
+            //    //shipAccessed[index] = false;
+            //    shipAccessed.Add(false);
+            //    //foundRelic[index] = false;
+            //    foundRelic.Add(false);
+            //}
+
+            shipAccessed = new bool[GameConstants.maxShipPerLevel];
+            enemies = new BaseEnemy[GameConstants.maxShipPerLevel][];
+            fishes = new Fish[GameConstants.maxShipPerLevel][];
+            enemiesAmount = new int[GameConstants.maxShipPerLevel];
+            fishAmount = new int[GameConstants.maxShipPerLevel];
+            treasureChests = new List<TreasureChest>[GameConstants.maxShipPerLevel];
+            staticObjects = new List<StaticObject>[GameConstants.maxShipPerLevel];
+            foundRelic = new bool[GameConstants.maxShipPerLevel];
+            for (int index = 0; index < GameConstants.maxShipPerLevel; index++)
+            {
+                shipAccessed[index] = false;
+                foundRelic[index] = false;
+            }
         }
 
-        private void InitializeShipField(ContentManager Content)
+        private void ResetShipWreckGeneralVariables()//(GameTime gameTime, float aspectRatio)
         {
-            returnToMain = false;
+
+            hydroBot.Position = Vector3.Zero;
+            hydroBot.Position.Y = GameConstants.ShipWreckFloatHeight;
+            hydroBot.ForwardDirection = 0f;
+            hydroBot.pointToMoveTo = Vector3.Zero;
+            hydroBot.reachDestination = true;
+            //gameCamera.Update(hydroBot.ForwardDirection,
+            //    hydroBot.Position, aspectRatio, gameTime);
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             myBullet = new List<DamageBullet>();
             alliesBullets = new List<DamageBullet>();
+            bubbles = new List<Bubble>();
+            points = new List<Point>();
+            //enemiesAmount = GameConstants.NumberEnemies;
+            //fishAmount = GameConstants.NumberFish;
+            //InitializeShipField(Content);
+        }
+
+        private void InitializeShipField(ContentManager Content)
+        {
+  
+            //enemyBullet = new List<DamageBullet>();
+            //healthBullet = new List<HealthBullet>();
+            //myBullet = new List<DamageBullet>();
+            //alliesBullets = new List<DamageBullet>();
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != -1
-            treasureChests = new List<TreasureChest>(GameConstants.NumberChests);
+            treasureChests[currentShipWreckID] = new List<TreasureChest>(GameConstants.NumberChests);
             int randomType = random.Next(3);
             for (int index = 0; index < GameConstants.NumberChests; index++)
             {
-                treasureChests.Add(new TreasureChest());
+                treasureChests[currentShipWreckID].Add(new TreasureChest());
                 //put a God's relic inside a chest!
-                if (index == 0 && skillID != -1) treasureChests[index].LoadContent(Content, randomType, skillID);
-                else treasureChests[index].LoadContent(Content, randomType, -1);
+                if (index == 0 && skillID != -1) treasureChests[currentShipWreckID][index].LoadContent(Content, randomType, skillID);
+                else treasureChests[currentShipWreckID][index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }
             if (PlayGameScene.currentLevel >= 4)
-                enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
-            else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
-            enemies = new BaseEnemy[enemiesAmount];
-            AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
+                enemiesAmount[currentShipWreckID] = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
+            else enemiesAmount[currentShipWreckID] = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+            enemies[currentShipWreckID] = new BaseEnemy[enemiesAmount[currentShipWreckID]];
+            int enemyNum = enemiesAmount[currentShipWreckID];
+            int fishNum = 0;// fishAmount[currentShipWreckID];
+            AddingObjects.placeEnemies(ref enemyNum, enemies[currentShipWreckID], Content, random, fishAmount[currentShipWreckID], fishes[currentShipWreckID], null,
                 GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 , GameMode.ShipWreck, GameConstants.ShipWreckFloatHeight);
-            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
+            AddingObjects.placeFish(ref fishNum, fishes[currentShipWreckID], Content, random, enemiesAmount[currentShipWreckID], enemies[currentShipWreckID], null,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, GameMode.ShipWreck, GameConstants.ShipWreckFloatHeight);
-            AddingObjects.placeTreasureChests(treasureChests, staticObjects, random, heightMapInfo,
+            AddingObjects.placeTreasureChests(treasureChests[currentShipWreckID], staticObjects[currentShipWreckID], random,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
             
             //Initialize the static objects.
-            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsShip);
+            staticObjects[currentShipWreckID] = new List<StaticObject>(GameConstants.NumStaticObjectsShip);
             for (int index = 0; index < GameConstants.NumStaticObjectsShip; index++)
             {
-                staticObjects.Add(new StaticObject());
+                staticObjects[currentShipWreckID].Add(new StaticObject());
                 int randomObject = random.Next(3);
                 switch (randomObject)
                 {
                     case 0:
-                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/barrel");
+                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/barrel");
                         break;
                     case 1:
-                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/barrelstack");
+                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/barrelstack");
                         break;
                     case 2:
-                        staticObjects[index].LoadContent(Content, "Models/ShipWreckModels/boxstack");
+                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/boxstack");
                         break;
                 }
                 //staticObjects[index].LoadContent(Content, "Models/boxstack");
             }
-            AddingObjects.PlaceStaticObjectsOnShipFloor(staticObjects, treasureChests, random, heightMapInfo, GameConstants.ShipWreckMinRangeX,
+            AddingObjects.PlaceStaticObjectsOnShipFloor(staticObjects[currentShipWreckID], treasureChests[currentShipWreckID], random, GameConstants.ShipWreckMinRangeX,
                 GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
         }
 
@@ -389,12 +464,12 @@ namespace Poseidon
             lastKeyboardState = currentKeyboardState;
             //lastMouseState = currentMouseState;
             currentKeyboardState = Keyboard.GetState();
-            if (foundRelic)
+            if (foundRelic[currentShipWreckID])
             {
                 // return to game if enter pressed
                 if (chestExitPressed)
                 {
-                    foundRelic = false;
+                    foundRelic[currentShipWreckID] = false;
                 }
                 return;
             }
@@ -432,8 +507,8 @@ namespace Poseidon
 
                 bool mouseOnInteractiveIcons = false;
                 //hydrobot update
-                hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
-                    this, heightMapInfo, healthBullet, null, null, null, null, null, mouseOnInteractiveIcons);
+                hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID],
+                    Content, spriteBatch, myBullet, this, null, healthBullet, null, null, null, null, null, mouseOnInteractiveIcons);
 
                 //add 1 bubble over tank and each enemy
                 timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -442,12 +517,12 @@ namespace Poseidon
                     Bubble bubble = new Bubble();
                     bubble.LoadContent(Content, hydroBot.Position, false, 0.025f);
                     bubbles.Add(bubble);
-                    for (int i = 0; i < enemiesAmount; i++)
+                    for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
                     {
-                        if (enemies[i].BoundingSphere.Intersects(frustum))
+                        if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
                         {
                             Bubble aBubble = new Bubble();
-                            aBubble.LoadContent(Content, enemies[i].Position, false, 0.025f);
+                            aBubble.LoadContent(Content, enemies[currentShipWreckID][i].Position, false, 0.025f);
                             bubbles.Add(aBubble);
                         }
                     }
@@ -504,29 +579,40 @@ namespace Poseidon
                     alliesBullets[i].update(gameTime);
                 }
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
-                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.ShipWreck);
-                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies, enemiesAmount, null);
-                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                int refNum = enemiesAmount[currentShipWreckID];
+                Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                enemiesAmount[currentShipWreckID] = refNum;
+                Collision.updateHealingBulletVsBarrierCollision(healthBullet, fishes[currentShipWreckID], fishAmount[currentShipWreckID], frustum, GameMode.ShipWreck);
+                refNum = fishAmount[currentShipWreckID];
+                Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                fishAmount[currentShipWreckID] = refNum;
+                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null);
+                refNum = enemiesAmount[currentShipWreckID];
+                Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                enemiesAmount[currentShipWreckID] = refNum;
+                refNum = enemiesAmount[currentShipWreckID];
+                Collision.deleteSmallerThanZero(enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor);
+                enemiesAmount[currentShipWreckID] = refNum;
+                refNum = fishAmount[currentShipWreckID];
+                Collision.deleteSmallerThanZero(fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor);
+                fishAmount[currentShipWreckID] = refNum;
 
-                Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, cursor);
-                Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.ShipWreck, cursor);
-
-                for (int i = 0; i < enemiesAmount; i++)
+                for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
                 {
-                    if (enemies[i].stunned)
+                    if (enemies[currentShipWreckID][i].stunned)
                     {
-                        if (PoseidonGame.playTime.TotalSeconds - enemies[i].stunnedStartTime > GameConstants.timeStunLast)
-                            enemies[i].stunned = false;
+                        if (PoseidonGame.playTime.TotalSeconds - enemies[currentShipWreckID][i].stunnedStartTime > GameConstants.timeStunLast)
+                            enemies[currentShipWreckID][i].stunned = false;
                     }
-                    enemies[i].Update(enemies, ref enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
+                    refNum = enemiesAmount[currentShipWreckID];
+                    enemies[currentShipWreckID][i].Update(enemies[currentShipWreckID], ref refNum, fishes[currentShipWreckID], fishAmount[currentShipWreckID], random.Next(100), hydroBot, enemyBullet, alliesBullets, frustum, gameTime, GameMode.ShipWreck);
+                    enemiesAmount[currentShipWreckID] = refNum;
                 }
 
-                foreach (TreasureChest chest in treasureChests)
+                foreach (TreasureChest chest in treasureChests[currentShipWreckID])
                 {
                     if (CharacterNearChest(chest.BoundingSphere) && CursorManager.MouseOnObject(cursor, chest.BoundingSphere, chest.Position, gameCamera)
                         && chest.opened == false && doubleClicked)
@@ -572,7 +658,7 @@ namespace Poseidon
                                 {
                                     HydroBot.skills[chest.skillID] = true;
                                     HydroBot.activeSkillID = chest.skillID;
-                                    foundRelic = true;
+                                    foundRelic[currentShipWreckID] = true;
                                 }
                                 else
                                 {
@@ -603,8 +689,9 @@ namespace Poseidon
                     }
                 }
 
-                for (int i = 0; i < fishAmount; i++) {
-                    fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100) ,hydroBot, enemyBullet);
+                for (int i = 0; i < fishAmount[currentShipWreckID]; i++)
+                {
+                    fishes[currentShipWreckID][i].Update(gameTime, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], random.Next(100), hydroBot, enemyBullet);
                 }
 
                 //for the shader
@@ -698,7 +785,8 @@ namespace Poseidon
             }
 
             //preparingedge detecting for the object being pointed at
-            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, null, null, null, null, treasureChests, graphics.GraphicsDevice, normalDepthRenderTarget);
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fishes[currentShipWreckID], fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID],
+                null, null, null, null, treasureChests[currentShipWreckID], graphics.GraphicsDevice, normalDepthRenderTarget);
 
             //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
@@ -710,7 +798,7 @@ namespace Poseidon
 
             BoundingSphere chestSphere;
             // Drawing ship wrecks
-            foreach (TreasureChest treasureChest in treasureChests)
+            foreach (TreasureChest treasureChest in treasureChests[currentShipWreckID])
             {
                 chestSphere = treasureChest.BoundingSphere;
                 chestSphere.Center = treasureChest.Position;
@@ -729,7 +817,7 @@ namespace Poseidon
                 }
             }
             //Draw each static object
-            foreach (StaticObject staticObject in staticObjects)
+            foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
             {
                 if (staticObject.BoundingSphere.Intersects(frustum))
                 {
@@ -745,14 +833,14 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            for (int i = 0; i < enemiesAmount; i++)
+            for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
             {
-                if (enemies[i].BoundingSphere.Intersects(frustum))
+                if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
                 {
-                    enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    if (enemies[i].stunned == true)
+                    enemies[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    if (enemies[currentShipWreckID][i].stunned == true)
                     {
-                        Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[currentShipWreckID][i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
                         spriteBatch.Begin();
                         spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
@@ -761,10 +849,10 @@ namespace Poseidon
                     }
                 }
             }
-            for (int i = 0; i < fishAmount; i++)
+            for (int i = 0; i < fishAmount[currentShipWreckID]; i++)
             {
-                if (fish[i].BoundingSphere.Intersects(frustum))
-                    fish[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                if (fishes[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
+                    fishes[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
             }
 
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
@@ -839,7 +927,7 @@ namespace Poseidon
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);
             spriteBatch.End();
-            if (foundRelic)
+            if (foundRelic[currentShipWreckID])
             {
                 spriteBatch.Begin();
                 DrawFoundRelicScene(skillID);
@@ -1050,12 +1138,12 @@ namespace Poseidon
             //str2 += "\n" + tank.skillPrevUsed[0] + " " + tank.skillPrevUsed[1] + " " + tank.skillPrevUsed[2];
 
             //Display Fish Health
-            Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+            Fish fishPontedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fishes[currentShipWreckID], fishAmount[currentShipWreckID]);
             if (fishPontedAt != null)
                 IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPontedAt.health, (int)fishPontedAt.maxHealth, 5, fishPontedAt.Name, Color.BlueViolet);
 
             //Display Enemy Health
-            BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+            BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID]);
             if (enemyPointedAt != null)
                 IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
 

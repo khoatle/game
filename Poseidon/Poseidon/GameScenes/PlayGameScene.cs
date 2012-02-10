@@ -107,10 +107,10 @@ namespace Poseidon
         //stuffs for applying special effects
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
         Texture2D SceneTexture;
-        RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
-        Texture2D Scene2Texture;
+        public RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
+        public Texture2D Scene2Texture;
         RenderTarget2D renderTarget3;
-        bool screenTransitNow = false;
+        public bool screenTransitNow = false;
 
         // Bubbles over characters
         List<Bubble> bubbles;
@@ -176,7 +176,7 @@ namespace Poseidon
         private Model radioactiveFactoryModel;
 
         // For applying graphic effects
-        GraphicEffect graphicEffect;
+        public GraphicEffect graphicEffect;
         //for particle systems
         public static ParticleManagement particleManager;
 

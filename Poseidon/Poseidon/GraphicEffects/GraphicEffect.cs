@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Poseidon.GraphicEffects
 {
-    class GraphicEffect
+    public class GraphicEffect
     {
         BloomComponent bloom;
         int bloomSettingsIndex = 0;

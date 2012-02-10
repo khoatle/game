@@ -480,6 +480,9 @@ namespace Poseidon
             {
                 //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
+                playGameScene.Scene2Texture = shipWreckScene.cutSceneImmediateRenderTarget;
+                playGameScene.screenTransitNow = true;
+                playGameScene.graphicEffect.resetTransitTimer();
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
                 doubleClicked = false;
@@ -524,6 +527,8 @@ namespace Poseidon
                 PlayGameScene.gameCamera.shaking = false;
                 //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
+                shipWreckScene.Scene2Texture = playGameScene.cutSceneImmediateRenderTarget;
+                
                 //shipWreckScene.Load();
                 ShowScene(shipWreckScene);
                 doubleClicked = false;

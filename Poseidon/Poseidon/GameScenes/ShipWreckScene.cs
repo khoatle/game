@@ -88,8 +88,9 @@ namespace Poseidon
         bool foundRelic = false;
 
         float m_Timer = 0;
-        RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
-        Texture2D SceneTexture;
+        public RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget, cutSceneImmediateRenderTarget;
+        public Texture2D SceneTexture, Scene2Texture;
+        bool screenTransitNow = false;
 
         // showing paintings when openning treasure chests
         OceanPaintings oceanPaintings;
@@ -239,6 +240,8 @@ namespace Poseidon
             edgeDetectionRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
+            cutSceneImmediateRenderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, statsFont);
             // Construct our particle system components.
@@ -267,6 +270,8 @@ namespace Poseidon
             showPainting = false;
             cursor.targetToLock = null;
             InitializeShipField(Content);
+            graphicEffect.resetTransitTimer();
+            screenTransitNow = true;
             base.Show();
         }
 
@@ -850,9 +855,21 @@ namespace Poseidon
                 RestoreGraphicConfig();
                 //return;
             }
+            if (screenTransitNow)
+            {
+                bool doneTransit = graphicEffect.TransitTwoSceens(Scene2Texture, afterEffectsAppliedRenderTarget, graphics, cutSceneImmediateRenderTarget);
+                if (doneTransit) screenTransitNow = false;
+            }
+            else
+            {
+                graphics.GraphicsDevice.SetRenderTarget(cutSceneImmediateRenderTarget);
+                spriteBatch.Begin();
+                spriteBatch.Draw(afterEffectsAppliedRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                spriteBatch.End();
+            }
             graphics.GraphicsDevice.SetRenderTarget(null);
             spriteBatch.Begin();
-            spriteBatch.Draw(afterEffectsAppliedRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
             
         }

@@ -262,11 +262,10 @@ namespace Poseidon
                 //X = bot.Position.X + (float)random.NextDouble() * 50f;
                 Z = (float)random.NextDouble() * (2 * bot.Position.Z + 100) - bot.Position.Z - 50f;
                 newSphere.Center = new Vector3(X, Y, Z);
-            } while (IsSurfaceOccupied(newSphere, enemiesAmount, fishAmount, enemies, fish));
+            } while (IsSurfaceOccupied(newSphere, enemiesAmount, fishAmount, enemies, fish) || newSphere.Intersects(bot.BoundingSphere));
 
             return new Vector3(X, Y, Z);
         }
-
 
         public static void placeEnemies(ref int enemiesAmount, BaseEnemy[] enemies, ContentManager Content, Random random, int fishAmount, Fish[] fish, List<ShipWreck> shipWrecks, int minX, int maxX, int minZ, int maxZ, int currentLevel, GameMode gameMode, float floatHeight)
         {

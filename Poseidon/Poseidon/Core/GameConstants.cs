@@ -249,6 +249,7 @@ namespace Poseidon {
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;
 
+        public const float SideKick_Look_Radius = 60f;
         //constants for certain effects
         public const float distortionDuration = 1000;
     }

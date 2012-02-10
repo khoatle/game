@@ -67,7 +67,7 @@ namespace Poseidon
                     HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
                     PoseidonGame.audio.Explo1.Play();
                     gameCamera.Shake(25f, .4f);
-                    CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, hydroBot.gameMode);
+                    CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, HydroBot.gameMode);
                     skillUsed = true;
                 }
             }

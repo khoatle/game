@@ -164,8 +164,9 @@ namespace Poseidon
         Texture2D facilityUpgradeButton;
         Texture2D playJigsawButton;
 
-        // Texture for Mouse Interaction panel for factories
+        // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
+        SpriteFont factoryPanelFont;
         ButtonPanel factoryButtonPanel;
 
         // Models for Factories and buildings
@@ -1172,8 +1173,11 @@ namespace Poseidon
         {
             // Load lower left pannel button
             factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+            // Load Font for displaying extra information on factory panel
+            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
+            
             // Initialie the button panel
-            factoryButtonPanel.Initialize(factoryPanelTexture, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
+            factoryButtonPanel.Initialize(factoryPanelTexture, factoryPanelFont, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
 
             // Load Textures and fonts for factory property dialog
             factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
@@ -1258,6 +1262,24 @@ namespace Poseidon
             graphics.GraphicsDevice.Clear(Color.Black);
 
             terrain.Draw(gameCamera);
+
+            //spriteBatch.Begin();
+            //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 1].isWandering, new Vector2(200, 100), Color.White);
+            //spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 1].isReturnBot, new Vector2(200, 120), Color.White);
+            //spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 1].isChasing, new Vector2(200, 140), Color.White);
+            //spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 1].isFighting, new Vector2(200, 160), Color.White);
+
+            //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 2].isWandering, new Vector2(400, 100), Color.White);
+            //spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 2].isReturnBot, new Vector2(400, 120), Color.White);
+            //spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 2].isChasing, new Vector2(400, 140), Color.White);
+            //spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 2].isFighting, new Vector2(400, 160), Color.White);
+
+            //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 3].isWandering, new Vector2(600, 100), Color.White);
+            //spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 3].isReturnBot, new Vector2(600, 120), Color.White);
+            //spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 3].isChasing, new Vector2(600, 140), Color.White);
+            //spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 3].isFighting, new Vector2(600, 160), Color.White);
+
+            //spriteBatch.End();
 
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);

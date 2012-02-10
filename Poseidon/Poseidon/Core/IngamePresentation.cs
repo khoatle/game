@@ -91,8 +91,8 @@ namespace Poseidon.Core
 
         public static void DrawEnvironmentBar(Texture2D Bar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)
         {
-            int barX = game.Window.ClientBounds.Right - 50;
-            int barY = game.Window.ClientBounds.Center.Y - Bar.Height / 2;
+            int barX = game.Window.ClientBounds.Width - 50;
+            int barY = game.Window.ClientBounds.Height / 2 - Bar.Height / 2;
             string type = "ENVIRONMENT";
             Color typeColor = Color.Black;
             int barWidth = Bar.Width / 2;

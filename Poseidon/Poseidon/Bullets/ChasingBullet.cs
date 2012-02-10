@@ -27,7 +27,7 @@ namespace Poseidon
                 stopChasingTime = GameConstants.StopBulletChasing;
         }
 
-        public override void update()
+        public override void update(GameTime gameTime)
         {
             if (target != null && target.GetType().Name.Equals("HydroBot") && !stopChasing) {
                 if (Vector3.Distance(target.Position, Position) > target.BoundingSphere.Radius * 6) {

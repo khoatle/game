@@ -66,6 +66,7 @@ namespace Poseidon
         QuizzGameScene quizzGameScene;
         protected Texture2D quizzGameBackgroundTexture;
         TypingGameScene typeGameScene;
+        JigsawGameScene jigsawGameScene;
         protected Texture2D typeGameBackgroundTexture;
         protected Texture2D boxBackground;
         // Audio Stuff
@@ -90,6 +91,10 @@ namespace Poseidon
         double clickTimer = 0;
 
         public static bool gamePlus = false;
+
+        //jigsaw
+        public static bool playJigsaw = false;
+        public static int jigsawType; // 0-seacow, 1-turtle 2-dolphin
 
         // Texture to show that enemy is stunned
         protected Texture2D stunnedTexture;
@@ -332,6 +337,10 @@ namespace Poseidon
             {
                 HandleSurvivalInput();
             }
+            else if (activeScene == jigsawGameScene)
+            {
+                HandleJigsawInput();
+            }
         }
 
         /// <summary>
@@ -388,6 +397,62 @@ namespace Poseidon
             {
                 PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
+            }
+        }
+        public void HandleJigsawInput()
+        {
+            if (jigsawGameScene.inOrder)
+            {
+                AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                ShowScene(playGameScene);
+                switch (jigsawType)
+                {
+                    case 0:
+                        HydroBot.hasSeaCow = true;
+                        HydroBot.seaCowPower += 1.0f;
+                        HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playSeaCowJigsaw = false;
+                        break;
+                    case 1:
+                        HydroBot.hasTurtle = true;
+                        HydroBot.turtlePower += 1.0f;
+                        HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playTurtleJigsaw = false;
+                        break;
+                    case 2:
+                        HydroBot.hasDolphin = true;
+                        HydroBot.dolphinPower += 1.0f;
+                        HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playDolphinJigsaw = false;
+                        break;
+                }
+            }
+            if (jigsawGameScene.timeUp)
+            {
+                ShowScene(playGameScene);
+                switch (jigsawType)
+                {
+                    case 0:
+                        HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playSeaCowJigsaw = false;
+                        ResearchFacility.seaCowLost = true;
+                        break;
+                    case 1:
+                        HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playTurtleJigsaw = false;
+                        ResearchFacility.turtleLost = true;
+                        break;
+                    case 2:
+                        HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
+                        ResearchFacility.playDolphinJigsaw = false;
+                        ResearchFacility.dolphinLost = true;
+                        break;
+                }
+            }
+            if (EscPressed)
+            {
+                ShowScene(playGameScene);
+                EscPressed = false;
             }
         }
         /// <summary>
@@ -492,6 +557,13 @@ namespace Poseidon
             if (PlayGameScene.currentGameState == GameState.GameComplete)
             {
                 ShowScene(startScene);
+            }
+            if (playJigsaw)
+            {
+                prevScene = playGameScene;
+                playJigsaw = false;
+                jigsawGameScene.setImageType(jigsawType);
+                ShowScene(jigsawGameScene);
             }
         }
         public bool GetInShipWreck()
@@ -630,6 +702,8 @@ namespace Poseidon
             Components.Add(quizzGameScene);
             typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
             Components.Add(typeGameScene);
+            jigsawGameScene = new JigsawGameScene(this, Content, graphics, GraphicsDevice);
+            Components.Add(jigsawGameScene);
 
         }
         private void CreateSurvivalDependentScenes()

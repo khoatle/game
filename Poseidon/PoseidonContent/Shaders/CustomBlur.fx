@@ -14,14 +14,13 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD0) : COLOR0
 {
     float4 c = 0;
     
-	//float distanceFromCenter = sqrt(pow(texCoord.x - 0.5, 2) + pow(texCoord.y - 0.5, 2));
-	//float blurFactor = distanceFromCenter / sqrt(0.5);
+	float distanceFromCenter = sqrt(pow(texCoord.x - 0.5, 2) + pow(texCoord.y - 0.5, 2));
+	float blurFactor = distanceFromCenter / sqrt(0.5);
 
     // Combine a number of weighted image filter taps.
     for (int i = 0; i < SAMPLE_COUNT; i++)
     {
-        //c += tex2D(TextureSampler, texCoord + SampleOffsets[i] * blurFactor) * SampleWeights[i];
-		c += tex2D(TextureSampler, texCoord + SampleOffsets[i]) * SampleWeights[i];
+        c += tex2D(TextureSampler, texCoord + SampleOffsets[i] * blurFactor) * SampleWeights[i];
     }
     
     return c;

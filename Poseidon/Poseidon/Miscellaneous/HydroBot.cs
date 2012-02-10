@@ -48,7 +48,7 @@ namespace Poseidon
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
 
-        public float controlRadius = 70f;
+        public static float controlRadius = 70f;
 
         // 2 types of bullet
         // 0: killing
@@ -159,6 +159,11 @@ namespace Poseidon
         public static int numDolphinPieces, numSeaCowPieces, numTurtlePieces, lsNumDolphinPieces, lsNumSeaCowPieces, lsNumTurtlePieces;
         public static bool hasDolphin, hasSeaCow, hasTurtle, lsHasDolphin, lsHasSeaCow, lsHasTurtle;
         public static float dolphinPower, seaCowPower, turtlePower, lsDolphinPower, lsSeaCowPower, lsTurtlePower;
+
+        //screen should be in distorted mode or not
+        //do not need to be added to save file
+        public static bool distortingScreen = false;
+        public static double distortionStart = 0;
 
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
@@ -336,6 +341,19 @@ namespace Poseidon
             plasticPlantLevel = lsPlasticPlantLevel = (int)info.GetValue("plasticPlantLevel", typeof(int));
             numResources = lsNumResources = (int)info.GetValue("numResources", typeof(int));
             numResources += GameConstants.numResourcesAtStart;
+
+            //resurrected sidekicks stuff
+            numStrangeObjCollected = lsNumStrangeObjCollected = (int)info.GetValue("numStrangeObjCollected", typeof(int));
+            hasDolphin = lsHasDolphin = (bool)info.GetValue("hasDolphin", typeof(bool));
+            hasSeaCow = lsHasSeaCow = (bool)info.GetValue("hasSeaCow", typeof(bool));
+            hasTurtle = lsHasTurtle = (bool)info.GetValue("hasTurtle", typeof(bool));
+            numDolphinPieces = lsNumDolphinPieces = (int)info.GetValue("numDolphinPieces", typeof(int));
+            numSeaCowPieces = lsNumSeaCowPieces = (int)info.GetValue("numSeaCowPieces", typeof(int));
+            numTurtlePieces = lsNumTurtlePieces = (int)info.GetValue("numTurtlePieces", typeof(int));
+            dolphinPower = lsDolphinPower = (float)info.GetValue("dolphinPower", typeof(float));
+            seaCowPower = lsSeaCowPower = (float)info.GetValue("seaCowPower", typeof(float));
+            turtlePower = lsTurtlePower = (float)info.GetValue("turtlePower", typeof(float));
+            
         }
 
         /// <summary>
@@ -382,6 +400,18 @@ namespace Poseidon
             info.AddValue("totalBioTrashProcessed", totalBioTrashProcessed);
             info.AddValue("totalPlasticTrashProcessed", totalPlasticTrashProcessed);
             info.AddValue("totalNuclearTrashProcessed", totalNuclearTrashProcessed);
+
+            //resurrected sidekicks stuff
+            info.AddValue("numStrangeObjCollected", numStrangeObjCollected);
+            info.AddValue("hasDolphin", hasDolphin);
+            info.AddValue("hasSeaCow", hasSeaCow);
+            info.AddValue("hasTurtle", hasTurtle);
+            info.AddValue("numDolphinPieces", numDolphinPieces);
+            info.AddValue("numSeaCowPieces", numSeaCowPieces);
+            info.AddValue("numTurtlePieces", numTurtlePieces);
+            info.AddValue("dolphinPower", dolphinPower);
+            info.AddValue("seaCowPower", seaCowPower);
+            info.AddValue("turtlePower", turtlePower);
         }
 
         /// <summary>
@@ -419,14 +449,14 @@ namespace Poseidon
 
             //just for testing
             //should be removed
-            //skillComboActivated = true;
-            //activeSkillID = 4;
-            //secondSkillID = -1;
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
+            skillComboActivated = true;
+            activeSkillID = 4;
+            secondSkillID = -1;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = true;
+            skills[3] = true;
+            skills[4] = true;
 
             //goodWillBarActivated = true;
             //iconActivated[0] = true;
@@ -595,7 +625,7 @@ namespace Poseidon
 
         public void UpdateAction(GameTime gameTime, Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount, ContentManager Content,
             SpriteBatch spriteBatch, List<DamageBullet> myBullet, GameScene gameScene, HeightMapInfo heightMapInfo, List<HealthBullet> healthBullet, List<Powerpack> powerpacks, List<Resource> resources,
-            List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
+            List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, bool mouseOnInteractiveIcons)
         {
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -647,7 +677,7 @@ namespace Poseidon
             //if the user click on right mouse button
             //cast the current selected skill
             //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
-            else if (currentMouseState.RightButton == ButtonState.Pressed)
+            else if (currentMouseState.RightButton == ButtonState.Pressed && !mouseOnInteractiveIcons)
             {         
                 CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount);
             }
@@ -675,14 +705,14 @@ namespace Poseidon
                 reachDestination = true;
             }
             //if the user clicks or holds mouse's left button
-            else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject)
+            else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject && !mouseOnInteractiveIcons)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 if (!clipPlayer.inRange(1, 30))
                     clipPlayer.switchRange(1, 30);
             }
 
-            else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+            else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && !mouseOnInteractiveIcons)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                 //if it is out of shooting range then just move there
@@ -1095,13 +1125,20 @@ namespace Poseidon
             //worn out effect of supersonic
             if (supersonicMode == true)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast)
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp / GameConstants.BasicStartSpeed)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
                     {
                         supersonicMode = false;
                     }
+                }
+            }
+            if (distortingScreen == true)
+            {
+                if (PoseidonGame.playTime.TotalMilliseconds - distortionStart * 1000 >= GameConstants.distortionDuration)
+                {
+                    distortingScreen = false;
                 }
             }
             //float turnAmount = 0;
@@ -1300,6 +1337,19 @@ namespace Poseidon
                                     SurvivalGameScene.points.Add(point);
                             }
                         }
+                        else if (powerpacks[curCell].powerType == 5)
+                        {
+                            numStrangeObjCollected++;
+                            Point point = new Point();
+                            String point_string = "\nFound Strange Rock";
+                            point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                        }
                         //RetrievedSound.Play();
                         PoseidonGame.audio.retrieveSound.Play();
                     }
@@ -1389,6 +1439,7 @@ namespace Poseidon
                     //for our custom SkinnedEffect
                     //NewSkinnedEffect.fx
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
+
                     effect.Parameters["World"].SetValue(Matrix.Identity);
 
                     effect.Parameters["Bones"].SetValue(bones);
@@ -1399,11 +1450,8 @@ namespace Poseidon
                     Matrix WorldView = Matrix.Identity * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
-                    if (invincibleMode == true)
-                    {
-                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Gold.ToVector3(), 1));
-                    }
-                    else if (isPoissoned == true)
+
+                    if (isPoissoned == true)
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
                     }
@@ -1411,7 +1459,7 @@ namespace Poseidon
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
                     }
-
+                    effect.Parameters["Shininess"].SetValue(30);
                     //SkinnedEffect.fx
                     //effect.Parameters["ShaderIndex"].SetValue(17);
                     //effect.Parameters["WorldViewProj"].SetValue(view * projection);
@@ -1422,6 +1470,19 @@ namespace Poseidon
                     //Vector4 DiffuseColor = new Vector4(1, 1, 1, 1);
                     //effect.Parameters["DiffuseColor"].SetValue(DiffuseColor);
 
+                }
+                mesh.Draw();
+                if (invincibleMode == true)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                    }
                 }
                 mesh.Draw();
             }

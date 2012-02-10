@@ -1612,8 +1612,8 @@
       <Processor>PassThroughProcessor</Processor>
       <SubType>Designer</SubType>
     </Compile>
-    <Compile Include="ParticleSettings\ExplosionSmokeSettings.xml">
-      <Name>ExplosionSmokeSettings</Name>
+    <Compile Include="ParticleSettings\SandSettings.xml">
+      <Name>SandSettings</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
     </Compile>
@@ -1674,11 +1674,21 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fonts\JigsawFont.spritefont">
+      <Name>JigsawFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>
     <Compile Include="Shaders\NewSkinnedEffect.fx">
       <Name>NewSkinnedEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Shaders\CustomBlur.fx">
+      <Name>CustomBlur</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
@@ -1695,6 +1705,11 @@
     </Compile>
     <Compile Include="Shaders\NewBasicEffect.fx">
       <Name>NewBasicEffect</Name>
+      <Importer>EffectImporter</Importer>
+      <Processor>EffectProcessor</Processor>
+    </Compile>
+    <Compile Include="Shaders\DistortionEffect.fx">
+      <Name>DistortionEffect</Name>
       <Importer>EffectImporter</Importer>
       <Processor>EffectProcessor</Processor>
     </Compile>
@@ -1748,6 +1763,37 @@
   <ItemGroup>
     <Compile Include="Image\ButtonTextures\factory_button.png">
       <Name>factory_button</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\MinigameTextures\BlackBox.jpg">
+      <Name>BlackBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\MinigameTextures\seaCow.jpg">
+      <Name>seaCow</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\MinigameTextures\seaDolphin.jpg">
+      <Name>seaDolphin</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\MinigameTextures\seaTurtle.jpg">
+      <Name>seaTurtle</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ParticleTextures\sand.png">
+      <Name>sand</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

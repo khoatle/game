@@ -18,12 +18,15 @@ namespace Poseidon
         //2: power
         //3: fire rate
         //4: health point
+        //5: Strange Rock
         public int powerType;
+        private float orientation; //rotation in radians
 
         public Powerpack(int powerType)
             : base()
         {
             Retrieved = false;
+            orientation = 0f;
             this.powerType = powerType;
         }
 
@@ -37,6 +40,8 @@ namespace Poseidon
                 Model = content.Load<Model>("Models/PlantAndFruitModels/blue-fruit");
             else if (this.powerType == 4)
                 Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
+            else if (this.powerType == 5) //Strange Rock
+                Model = content.Load<Model>("Models/BulletModels/bossBullet");
             
             Position = powerpackPosition;
             BoundingSphere = CalculateBoundingSphere();
@@ -51,10 +56,12 @@ namespace Poseidon
 
         public void Draw(Matrix view, Matrix projection)
         {
+            Update(); //since update is only changing orientation, it is better to put here than in playgamescene & survival scene
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
@@ -77,9 +84,9 @@ namespace Poseidon
             }
         }
 
-        internal void Update(KeyboardState keyboardState, BoundingSphere vehicleBoundingSphere, BoundingSphere vehicleTrashFruitBoundingSphere)
+        public void Update()
         {
-            
+            orientation += GameConstants.powerpackResourceRotationSpeed;
         }
 
     }

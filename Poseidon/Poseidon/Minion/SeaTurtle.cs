@@ -11,8 +11,8 @@ namespace Poseidon
 {
     public class SeaTurtle : Fish
     {
-        public static float AfterX = 20;
-        public static float AfterZ = -34.64f;
+        public static float AfterX = HydroBot.controlRadius / 4;
+        public static float AfterZ = - HydroBot.controlRadius * 1.73f / 4 ;
 
         public static float turtleDamage = 30f;
 
@@ -23,6 +23,7 @@ namespace Poseidon
             lastAttack = PoseidonGame.playTime;
             // Cool down 10s
             timeBetweenAttack = new TimeSpan(0, 0, 1);
+            isBigBoss = true;
         }
 
         public override void attack()
@@ -51,7 +52,7 @@ namespace Poseidon
             if (isWandering == true)
             {
                 // If the fish is far from the point after the bot's back or is the bot moving
-                if (Vector3.Distance(tank.Position, Position) > tank.controlRadius || tank.isMoving())
+                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius || tank.isMoving())
                 {
                     isWandering = false;
                     isReturnBot = true;
@@ -81,8 +82,8 @@ namespace Poseidon
             else if (isReturnBot == true)
             {
                 // If the fish is near the point after the bot's back, wander
-                if (Vector3.Distance(destination, Position) < tank.controlRadius / 3 &&
-                    Vector3.Distance(tank.Position, Position) < tank.controlRadius)
+                if (Vector3.Distance(destination, Position) < HydroBot.controlRadius * 0.75 &&
+                    Vector3.Distance(tank.Position, Position) < HydroBot.controlRadius)
                 {
                     float test = Vector3.Distance(destination, Position);
 
@@ -99,7 +100,7 @@ namespace Poseidon
             // If the fish is chasing some enemy
             else if (isChasing == true)
             {
-                if (Vector3.Distance(tank.Position, Position) > tank.controlRadius)
+                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius)
                 {  // If too far, return to bot
                     isWandering = false;
                     isReturnBot = true;
@@ -141,7 +142,7 @@ namespace Poseidon
                 else
                 {
                     // If the enemy ran away and the fish is not too far from bot
-                    if (Vector3.Distance(tank.Position, Position) >= tank.controlRadius)
+                    if (Vector3.Distance(tank.Position, Position) >= HydroBot.controlRadius)
                     {
                         isWandering = false;
                         isReturnBot = true;

@@ -24,6 +24,8 @@ namespace Poseidon
         public float fogEndMaxVal = 1000.0f;
         public bool increaseFog = true;
 
+        public bool particleAnimationPlayed = false;
+
         //public float heightChange = 0.5f;
         //public float currentChange = 0.0f;
         //public bool floatUp;
@@ -100,7 +102,7 @@ namespace Poseidon
                 //foreach (BasicEffect effect in mesh.Effects)
                 foreach (Effect effect in mesh.Effects)
                 {
-                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                    
                     //effect.World =
                     //    worldMatrix * transforms[mesh.ParentBone.Index];
                     //effect.View = view;
@@ -117,6 +119,7 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom BasicEffect
+                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);
                     effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));
@@ -126,6 +129,7 @@ namespace Poseidon
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, fogEndValue, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["Shininess"].SetValue(1);
                 }
                 mesh.Draw();
             }

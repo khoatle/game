@@ -6,6 +6,7 @@ using Poseidon.Core;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework.Content;
+using Poseidon.GraphicEffects;
 
 namespace Poseidon
 {
@@ -110,6 +111,14 @@ namespace Poseidon
 
         //Points gained
         public static List<Point> points;
+
+        // For applying graphic effects
+        GraphicEffect graphicEffect;
+        //for particle systems
+        public static ParticleManagement particleManager;
+
+        //for edge detection effect
+        RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
 
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
@@ -408,9 +417,11 @@ namespace Poseidon
             {   
              
                 CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
-                
+
+                bool mouseOnInteractiveIcons = false;
                 //hydrobot update
-                hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, heightMapInfo, healthBullet, null, null, null, null, null);
+                hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
+                    this, heightMapInfo, healthBullet, null, null, null, null, null, mouseOnInteractiveIcons);
 
                 //add 1 bubble over tank and each enemy
                 timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -466,15 +477,19 @@ namespace Poseidon
                 frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
                 for (int i = 0; i < myBullet.Count; i++) {
-                    myBullet[i].update();
+                    myBullet[i].update(gameTime);
                 }
 
                 for (int i = 0; i < healthBullet.Count; i++) {
-                    healthBullet[i].update();
+                    healthBullet[i].update(gameTime);
                 }
 
                 for (int i = 0; i < enemyBullet.Count; i++) {
-                    enemyBullet[i].update();
+                    enemyBullet[i].update(gameTime);
+                }
+                for (int i = 0; i < alliesBullets.Count; i++)
+                {
+                    alliesBullets[i].update(gameTime);
                 }
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.ShipWreck, gameTime, hydroBot,

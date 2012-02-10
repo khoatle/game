@@ -138,10 +138,13 @@
     <Compile Include="GraphicEffects\BloomSettings.cs" />
     <Compile Include="GraphicEffects\EffectHelpers.cs" />
     <Compile Include="GraphicEffects\GraphicEffect.cs" />
+    <Compile Include="MiniGames\JigsawGameScene.cs" />
+    <Compile Include="MiniGames\JigsawPiece.cs" />
     <Compile Include="Minion\SeaCow.cs" />
     <Compile Include="Minion\SeaTurtle.cs" />
     <Compile Include="Minion\SeaDolphin.cs" />
     <Compile Include="Miscellaneous\Terrain.cs" />
+    <Compile Include="ParticleSystem\ParticleManagement.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />

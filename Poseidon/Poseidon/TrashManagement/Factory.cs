@@ -14,10 +14,6 @@ namespace Poseidon
 
         public float orientation;
 
-        public float fogEndValue = GameConstants.FogEnd;
-        public float fogEndMaxVal = 1000.0f;
-        public bool increaseFog = true;
-
         ContentManager Content;
         Game game;
 
@@ -49,7 +45,7 @@ namespace Poseidon
             random = new Random();
         }
 
-        public void LoadContent(ContentManager content, Game game, Vector3 position, float orientation)
+        public void LoadContent(Game game, Vector3 position, float orientation, SpriteFont font, Texture2D backgroundTexture, Texture2D produceButtonTexture)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -67,12 +63,11 @@ namespace Poseidon
             BoundingSphere = new BoundingSphere(tempCenter,BoundingSphere.Radius);
 
             this.orientation = orientation;
-            this.Content = content;
 
             produce = Produce.resource;
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            background = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
-            produceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+            factoryFont = font;
+            background = backgroundTexture;
+            produceButton = produceButtonTexture;
             backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - 500, game.Window.ClientBounds.Center.Y - 400, 1000, 800);
             produceRect = new Rectangle(backgroundRect.Center.X - 250, backgroundRect.Top + 120, 500, 65);
 
@@ -82,23 +77,25 @@ namespace Poseidon
 
             //if (orientation > 50) floatUp = true;
             //else floatUp = false;
+            // Set up the parameters
+            SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
         // Overloading content load so that survival mode game compiles properly.
         public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
         {
             Model = content.Load<Model>(modelname);
-            LoadContent(content, game, position, orientation);
+            SpriteFont font = content.Load<SpriteFont>("Fonts/factoryConfig");
+            Texture2D backgroundTexture = content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
+            Texture2D produceButtonTexture = content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+            LoadContent(game, position, orientation, font, backgroundTexture, produceButtonTexture);
+
+            // Set up the parameters
+            SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources)
         {
-            if (increaseFog)
-                fogEndValue += 2.5f;
-            else fogEndValue -= 2.5f;
-            if (fogEndValue > fogEndMaxVal || fogEndValue < GameConstants.FogEnd)
-                increaseFog = !increaseFog;
-
             //Is trash finished processing?
             for (int i = 0; i < listTimeTrashProcessing.Count; i++)
             {
@@ -113,6 +110,13 @@ namespace Poseidon
                     {
                         ProduceResource(ref resources, powerpacks);
                     }
+
+                    //Produce strange rock
+                    if (random.Next(100) < 5) //5% probability
+                    {
+                        ProduceStrangeRock(ref powerpacks, resources);
+                    }
+
                     if (factoryType == FactoryType.biodegradable)
                         HydroBot.totalBioTrashProcessed += trashBlockSize;
                     else if (factoryType == FactoryType.plastic)
@@ -140,7 +144,16 @@ namespace Poseidon
             }
         }
 
-        public void Draw(Matrix view, Matrix projection)
+        // our custom shader
+        Effect newBasicEffect;
+
+        public void SetupShaderParameters(ContentManager content, Model model)
+        {
+            newBasicEffect = content.Load<Effect>("Shaders/NewBasicEffect");
+            EffectHelpers.ChangeEffectUsedByModelToCustomBasicEffect(model, newBasicEffect);
+        }
+
+        public void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -150,22 +163,35 @@ namespace Poseidon
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
-                foreach (BasicEffect effect in mesh.Effects)
+                //foreach (BasicEffect effect in mesh.Effects)
+                foreach (Effect effect in mesh.Effects)
                 {
-                    effect.World =
-                        worldMatrix * transforms[mesh.ParentBone.Index];
-                    effect.View = view;
-                    effect.Projection = projection;
+                    //effect.World =
+                    //    worldMatrix * transforms[mesh.ParentBone.Index];
+                    //effect.View = view;
+                    //effect.Projection = projection;
 
-                    effect.EnableDefaultLighting();
-                    effect.PreferPerPixelLighting = true;
+                    //effect.EnableDefaultLighting();
+                    //effect.PreferPerPixelLighting = true;
 
-                    //effect.DiffuseColor = Color.Green.ToVector3();
+                    ////effect.DiffuseColor = Color.Green.ToVector3();
 
-                    effect.FogEnabled = true;
-                    effect.FogStart = GameConstants.FogStart;
-                    effect.FogEnd = fogEndValue;// GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    //effect.FogEnabled = true;
+                    //effect.FogStart = GameConstants.FogStart;
+                    //effect.FogEnd =  GameConstants.FogEnd;
+                    //effect.FogColor = GameConstants.FogColor.ToVector3();
+
+                    //for our custom BasicEffect
+                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                    effect.CurrentTechnique = effect.Techniques[techniqueName];
+                    effect.Parameters["World"].SetValue(readlWorldMatrix);
+                    effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));
+                    effect.Parameters["View"].SetValue(view);
+                    effect.Parameters["Projection"].SetValue(projection);
+                    effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
+                    Matrix WorldView = readlWorldMatrix * view;
+                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
                 }
                 mesh.Draw();
             }
@@ -181,7 +207,7 @@ namespace Poseidon
             switch (factoryType)
             {
                 case FactoryType.biodegradable:
-                    plant_basic_description = "";
+                    plant_basic_description = "Biodegradable trash decompose naturally. The organic matter in these great mounds of waste is consumed by bacteria that give off gas rich in methane, which is a harmful greenhouse gas. However, Methane's risk to global warming is also a great opportunity to supplying us with a bounty of fuel to take care of our social needs. Therefore these trashes must be processed in a factory not only to prevent these gases from escaping into the atmosphere, but also to use them to generate energy. In fact, power from landfill methane exceeds solar power in New York and New Jersey, and landfill methane in those states and in Connecticut powers generators that produce a total of 169 megawatts of electricity - almost as much as a small conventional generating station. The methane also provides 16.7 million cubic feet of gas daily for heating and other direct uses.\n";
                     numDays = (float)processingTime / GameConstants.DaysPerSecond;
                     production_str += " for "+trashBlockSize+" trash in " + numDays.ToString();
                     if(numDays > 1)
@@ -191,7 +217,7 @@ namespace Poseidon
                     if (HydroBot.bioPlantLevel == 1)
                     {
                         title = "Biodegradable Trash Processing Plant (Basic technology)";
-                        plant_upgradeLevel_description = "Trash decompose naturally to produce methane.";
+                        plant_upgradeLevel_description = "";
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
@@ -345,6 +371,16 @@ namespace Poseidon
             resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
             resource.LoadContent(Content, resourcePosition);
             resources.Add(resource);
+        }
+
+        void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources)
+        {
+            Vector3 powerpackPosition;
+            int powerType = 5; //type 5 for strange rock
+            Powerpack powerpack = new Powerpack(powerType);
+            powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
+            powerpack.LoadContent(Content, powerpackPosition);
+            powerpacks.Add(powerpack);
         }
 
         private Vector3 findResourcePowerpackPosition(Vector3 factoryPosition, List<Resource> resources, List<Powerpack> powerpacks)

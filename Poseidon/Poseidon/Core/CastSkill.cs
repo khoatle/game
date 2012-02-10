@@ -51,7 +51,7 @@ namespace Poseidon
                     HydroBot.firstUse[0] = false;
                     HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
                     //audio.Explosion.Play();
-                    CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, gameScene, gameMode);
+                    CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, gameMode);
                     skillUsed = true;
                 }
 
@@ -155,7 +155,7 @@ namespace Poseidon
         public static void ShootHammer(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
-            FlyingHammer f = new FlyingHammer();
+            FlyingHammer f = new FlyingHammer(gameMode);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
@@ -168,10 +168,10 @@ namespace Poseidon
             myBullets.Add(f);
         }
         //=================//single skill casting
-        public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameScene inGameScene, GameMode gameMode)
+        public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
-            HerculesBullet d = new HerculesBullet(Content, spriteBatch, inGameScene);
+            HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
@@ -186,6 +186,9 @@ namespace Poseidon
         }
         public static void UseThorHammer(Vector3 Position, int MaxRangeX, int MaxRangeZ, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, GameMode gameMode)
         {
+            HydroBot.distortingScreen = true;
+            HydroBot.distortionStart = PoseidonGame.playTime.TotalSeconds;
+
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (InThorRange(Position, enemies[i].Position)){

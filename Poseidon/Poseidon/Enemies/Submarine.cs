@@ -149,7 +149,7 @@ namespace Poseidon
 
         public void ShootTorpedos(List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
         {
-            AddingObjects.placeTorpedo(this, currentHuntingTarget, bullets, cameraFrustum);
+            AddingObjects.placeTorpedo(this, currentHuntingTarget, bullets, cameraFrustum, gameMode);
         }
 
         public void ShootLaser(List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
@@ -221,7 +221,7 @@ namespace Poseidon
                     //}
                     if (powerupsType == 1 && currentHuntingTarget is HydroBot)
                     {
-                        ShootLaser(bullets, cameraFrustum);
+                        ShootTorpedos(bullets, cameraFrustum);
                         powerUsed = true;
                     }
                     //else if (powerupsType == 1)

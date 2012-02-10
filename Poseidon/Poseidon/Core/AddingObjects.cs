@@ -403,7 +403,7 @@ namespace Poseidon
             }
         }
 
-        public static void placeTorpedo(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum)
+        public static void placeTorpedo(GameObject shooter, GameObject target, List<DamageBullet> bullets, BoundingFrustum cameraFrustum, GameMode gameMode)
         {
 
             Matrix orientationMatrix = Matrix.CreateRotationY(((Submarine)shooter).ForwardDirection);
@@ -413,12 +413,12 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             Torpedo newBullet = new Torpedo();
-            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
             Torpedo newBullet1 = new Torpedo();
-            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter);
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
             newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet1);
             if (shooter.BoundingSphere.Intersects(cameraFrustum))
@@ -508,7 +508,7 @@ namespace Poseidon
                             zVal *= -1;
                             break;
                     }
-                } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes) );
+                } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
@@ -523,7 +523,7 @@ namespace Poseidon
         }
 
         public static Vector3 createSinkingTrash(
-            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo)
+            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Factory> factories, ResearchFacility researchFacility, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
             int positionSign, xVal, zVal;
@@ -534,21 +534,21 @@ namespace Poseidon
             {
                 sinkingTrash = new Trash(TrashType.biodegradable);
                 sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
-                sinkingTrash.sinkingRate = 0.25f;
+                sinkingTrash.sinkingRate = 2;// 0.25f;
                 sinkingTrash.sinkingRotationRate = 0.015f;
             }
             else if (trash_type < 96)
             {
                 sinkingTrash = new Trash(TrashType.plastic);
                 sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //nuclear model
-                sinkingTrash.sinkingRate = 0.35f;
+                sinkingTrash.sinkingRate = 2;// 0.35f;
                 sinkingTrash.sinkingRotationRate = -0.015f;
             }
             else
             {
                 sinkingTrash = new Trash(TrashType.radioactive);
                 sinkingTrash.LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //nuclear model
-                sinkingTrash.sinkingRate = 0.6f;
+                sinkingTrash.sinkingRate = 2;// 0.6f;
                 sinkingTrash.sinkingRotationRate = 0.025f;
             }
             sinkingTrash.sinking = true;
@@ -571,11 +571,11 @@ namespace Poseidon
                         zVal *= -1;
                         break;
                 }
-            } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes));
+            } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
-            sinkingTrash.Position.X = xVal;
-            sinkingTrash.Position.Z = zVal;
-            sinkingTrash.Position.Y = floatHeight;
+            sinkingTrash.Position.X = 0;// xVal;
+            sinkingTrash.Position.Z = 0;// zVal;
+            sinkingTrash.Position.Y = floatHeight+100;
             sinkingTrash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(sinkingTrash.Position.X, 0, sinkingTrash.Position.Z));//GameConstants.TrashFloatHeight;
             tempCenter = sinkingTrash.BoundingSphere.Center;
             tempCenter.X = sinkingTrash.Position.X;
@@ -634,7 +634,7 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
                 
-            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects, null));
+            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects, null, null, null));
             
             return new Vector3(xValue, 0, zValue);
         }
@@ -698,7 +698,7 @@ namespace Poseidon
             return false;
         }
         // Helper
-        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes)
+        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
         {
 
             if (shipWrecks != null)
@@ -739,6 +739,29 @@ namespace Poseidon
                     {
                         return true;
                     }
+                }
+            }
+            if (factories != null)
+            {
+                foreach (Factory factory in factories)
+                {
+                    if (((int)(MathHelper.Distance(
+                        xValue, factory.Position.X)) < 100) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, factory.Position.Z)) < 100))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (researchFacility != null)
+            {
+                if (((int)(MathHelper.Distance(
+                        xValue, researchFacility.Position.X)) < 100) &&
+                        ((int)(MathHelper.Distance(
+                        zValue, researchFacility.Position.Z)) < 100))
+                {
+                    return true;
                 }
             }
             return false;

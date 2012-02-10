@@ -42,6 +42,8 @@ namespace Poseidon {
         public const int ShipWreckMaxRangeZ = 800;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
+        public const int jigsawGameMaxTime = 180; //sec
+        public const int boneCountForJigsaw = 8;
 
         // bullet consts
         public const float BulletSpeed = 2.0f;
@@ -58,6 +60,7 @@ namespace Poseidon {
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
         public const int maxTrashCarryingCapacity = 15;
+        public const float powerpackResourceRotationSpeed = 0.25f;
 
         //Environment Const
         public const int PlayerStartingEnv = 300;
@@ -107,7 +110,7 @@ namespace Poseidon {
         public static int[] NumberBioTrash =        {  24,  24,  24,   0,  24,  24,  24,  24,  24,   0,   0,   0  };
         public static int[] NumberPlasticTrash =    {  24,  24,  24,   0,  24,  24,  24,  24,  24,   0,   0,   0  };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,   0,   2,   2,   2,   2,   2,   0,   0,   0  };
-        public static int[] NumberShipWreck =       {   10,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
+        public static int[] NumberShipWreck =       {   0,   0,   3,   0,   0,   3,   3,   3,   3,   0,   0,   0  };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
@@ -133,7 +136,7 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
+        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
@@ -207,7 +210,7 @@ namespace Poseidon {
 
         //const for the fog effect
         public const float FogStart = 10;
-        public const float FogEnd = 500;//350;
+        public const float FogEnd = 450;
         public static Color FogColor = Color.Blue;//Color.CornflowerBlue;
 
         //so that it is easier to aim and hit
@@ -240,11 +243,14 @@ namespace Poseidon {
 
         //const for particle systems
         public const int numExplosionParticles = 20;
-        public const int numExplosionSmokeParticles = 50;
+        public const int numSandParticles = 30;
+        public const float trailParticlesPerSecond = 100;
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;
 
         public const float SideKick_Look_Radius = 60f;
+        //constants for certain effects
+        public const float distortionDuration = 1000;
     }
 }

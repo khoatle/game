@@ -12,23 +12,46 @@ namespace Poseidon
     public class Torpedo : DamageBullet
     {
         public float forwardDir;
+        GameMode gameMode;
+        public ParticleEmitter trailEmitter;
+        ParticleManagement particleManager;
 
         public Torpedo() : base() { }
 
         public void initialize(Vector3 position, Vector3 headingDirection, float speed,
-            int damage, GameObject target, BaseEnemy shooter)
+            int damage, GameObject target, BaseEnemy shooter, GameMode gameMode)
         {
             base.initialize(position, headingDirection, speed, damage, shooter);
             this.unitDirection = headingDirection; //target.Position - position;
             this.unitDirection.Normalize();
             this.forwardDir = shooter.ForwardDirection;
+            this.gameMode = gameMode;
+            if (gameMode == GameMode.MainGame)
+            {
+                this.particleManager = PlayGameScene.particleManager;
+            }
+            else if (gameMode == GameMode.ShipWreck)
+            {
+                this.particleManager = ShipWreckScene.particleManager;
+            }
+            else if (gameMode == GameMode.SurvivalMode)
+            {
+                this.particleManager = SurvivalGameScene.particleManager;
+            }
+
+            // Use the particle emitter helper to output our trail particles.
+            trailEmitter = new ParticleEmitter(particleManager.projectileTrailParticles,
+                                               GameConstants.trailParticlesPerSecond, position);
         }
 
-        public override void update()
+        public override void update(GameTime gameTime)
         {
             
             Position += unitDirection * projectionSpeed;
             BoundingSphere = new BoundingSphere(Position, BoundingSphere.Radius);
+
+            // Update the particle emitter, which will create our particle trail.
+            trailEmitter.Update(gameTime, Position);
         }
 
         public override void draw(Matrix view, Matrix projection)

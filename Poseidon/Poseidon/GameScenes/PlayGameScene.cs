@@ -61,7 +61,7 @@ namespace Poseidon
         List<Resource> resources;
         List<Trash> trashes;
         List<Factory> factories;
-        ResearchFacility researchFacility;
+        public ResearchFacility researchFacility;
 
         List<StaticObject> staticObjects;
 
@@ -143,9 +143,6 @@ namespace Poseidon
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
-        // For applying graphic effects
-        GraphicEffect graphicEffect;
-
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
@@ -154,6 +151,18 @@ namespace Poseidon
         private bool openFactoryConfigurationScene = false;
         private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
+
+        // Texture and font for property window of a factory
+        private SpriteFont factoryFont;
+        private Texture2D factoryBackground;
+        private Texture2D factoryProduceButton;
+
+        // Texture and font for property window of a research facility
+        SpriteFont facilityFont;
+        SpriteFont facilityFont2;
+        Texture2D facilityBackground;
+        Texture2D facilityUpgradeButton;
+        Texture2D playJigsawButton;
 
         // Texture for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
@@ -165,9 +174,10 @@ namespace Poseidon
         private Model biodegradableFactoryModel;
         private Model radioactiveFactoryModel;
 
+        // For applying graphic effects
+        GraphicEffect graphicEffect;
         //for particle systems
-        ParticleSystem explosionParticles;
-        //ParticleSystem explosionSmokeParticles;
+        public static ParticleManagement particleManager;
 
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
@@ -241,9 +251,9 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -251,7 +261,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = { 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -348,12 +358,7 @@ namespace Poseidon
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
             // Construct our particle system components.
-            explosionParticles = new ParticleSystem(this.game, Content, "ExplosionSettings", GraphicDevice);
-            //explosionSmokeParticles = new ParticleSystem(this.game, Content, "ExplosionSmokeSettings", GraphicDevice);
-            //explosionSmokeParticles.DrawOrder = 200;
-            explosionParticles.DrawOrder = 400;
-            explosionParticles.Load();
-            //explosionSmokeParticles.Load();
+            particleManager = new ParticleManagement(this.game, GraphicDevice);
 
             // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
@@ -712,6 +717,27 @@ namespace Poseidon
                 {
                     MouseState currentMouseState;
                     currentMouseState = Mouse.GetState();
+                    // Update Factory Button Panel
+                    factoryButtonPanel.Update(gameTime, currentMouseState);
+                    // if mouse click happened, check for the click position and add new factory
+                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        // adjust the position to build factory depending on current camera position
+                        Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+
+                        // identify which factory depending on anchor index
+                        BuildingType newBuildingType = factoryButtonPanel.anchorIndexToBuildingType();
+
+                        // if addition is successful, play successful sound, otherwise play unsuccessful sound
+                        if (addNewBuilding(newBuildingType, newBuildingPosition))
+                        {
+                            factoryButtonPanel.removeAnchor();
+                        }
+                        else
+                        {
+                            // play sound to denote building could not be added
+                        }
+                    }
                     if (currentMouseState.RightButton == ButtonState.Pressed)
                     {
                         foreach (Factory factory in factories)
@@ -726,6 +752,7 @@ namespace Poseidon
                         if (researchFacility != null && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             openResearchFacilityConfigScene = true;
+                            ResearchFacility.dolphinLost = ResearchFacility.seaCowLost = ResearchFacility.turtleLost = false;
                         }
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
@@ -741,6 +768,7 @@ namespace Poseidon
                         {
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
+                            clicked = false;
                             CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                             if (clicked)
                             {
@@ -755,6 +783,21 @@ namespace Poseidon
                                         researchFacility.UpgradeBioFactory(factories);
                                     if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
                                         researchFacility.UpgradePlasticFactory(factories);
+                                    if (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 0; //seacow
+                                    }
+                                    if (ResearchFacility.playTurtleJigsaw && researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 1; //turtle
+                                    }
+                                    if (ResearchFacility.playDolphinJigsaw && researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.playJigsaw = true;
+                                        PoseidonGame.jigsawType = 2; //dolphin
+                                    }
                                 }
                                 clicked = false;
                             }
@@ -780,9 +823,12 @@ namespace Poseidon
                         }
                         return;
                     }
-                    
+
+                    bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState) 
+                        || (!factoryButtonPanel.cursorOutsidePanelArea());
                     //hydrobot update
-                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet, this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects);
+                    hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
+                        this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
 
                     //add 1 bubble over bot and each enemy
                     timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -856,50 +902,68 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel]/2)
+                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel])
                     {
-                        Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects,
+                        Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
                                 GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo);
                         Point point = new Point();
                         point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
                         points.Add(point);
+                        
                     }
                     foreach (Trash trash in trashes)
                     {
                         trash.Update(gameTime);
+                        if (trash.sinking == false && trash.particleAnimationPlayed == false)
+                        {
+                            for (int k = 0; k < GameConstants.numSandParticles; k++)
+                                particleManager.sandParticles.AddParticle(trash.Position, Vector3.Zero);
+                            trash.particleAnimationPlayed = true;
+                        }
                     }
 
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources);
-                        if (doubleClicked && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                        if(doubleClicked && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
-                            //Dump Trash
-                            switch (factory.factoryType)
-                            {
-                                case FactoryType.biodegradable:
-                                    dumpTrashInFactory(factory, HydroBot.bioTrash, factory.Position);
-                                    HydroBot.bioTrash = 0;
-                                    break;
-                                case FactoryType.plastic:
-                                    dumpTrashInFactory(factory, HydroBot.plasticTrash, factory.Position);
-                                    HydroBot.plasticTrash = 0;
-                                    break;
-                                case FactoryType.radioactive:
-                                    dumpTrashInFactory(factory, HydroBot.nuclearTrash, factory.Position);
-                                    HydroBot.nuclearTrash = 0;
-                                    break;
-                            }
-                            doubleClicked = false;
+                                //Dump Trash
+                                switch (factory.factoryType)
+                                {
+                                    case FactoryType.biodegradable:
+                                        dumpTrashInFactory(factory, factory.Position);
+                                        HydroBot.bioTrash = 0;
+                                        break;
+                                    case FactoryType.plastic:
+                                        dumpTrashInFactory(factory, factory.Position);
+                                        HydroBot.plasticTrash = 0;
+                                        break;
+                                    case FactoryType.radioactive:
+                                        dumpTrashInFactory(factory, factory.Position);
+                                        HydroBot.nuclearTrash = 0;
+                                        break;
+                                }
                         }
                     }
+                    
 
                     if (researchFacility != null)
                     {
-                        researchFacility.Update(gameTime);
+                        researchFacility.Update(gameTime, hydroBot.Position, ref points);
+                        if (doubleClicked && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera) )
+                        {
+                            string point_string = HydroBot.numStrangeObjCollected + " strange rocks deposited for inspection";
+                            for (int i = 0; i < HydroBot.numStrangeObjCollected; i++)
+                                researchFacility.listTimeRockProcessing.Add(PoseidonGame.playTime.TotalSeconds + (i*GameConstants.DaysPerSecond));
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, point_string, researchFacility.Position, Color.LawnGreen);
+                            points.Add(point);
+                            HydroBot.numStrangeObjCollected = 0;
+                        }
                     }
+                    doubleClicked = false;
 
                     foreach (ShipWreck shipWreck in shipWrecks)
                     {
@@ -909,21 +973,21 @@ namespace Poseidon
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
-                        myBullet[i].update();
+                        myBullet[i].update(gameTime);
                     }
 
                     for (int i = 0; i < healthBullet.Count; i++)
                     {
-                        healthBullet[i].update();
+                        healthBullet[i].update(gameTime);
                     }
 
                     for (int i = 0; i < enemyBullet.Count; i++)
                     {
-                        enemyBullet[i].update();
+                        enemyBullet[i].update(gameTime);
                     }
                     for (int i = 0; i < alliesBullets.Count; i++)
                     {
-                        alliesBullets[i].update();
+                        alliesBullets[i].update(gameTime);
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
@@ -931,7 +995,7 @@ namespace Poseidon
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
-                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, explosionParticles);
+                    Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, particleManager.explosionParticles);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera);
 
@@ -987,30 +1051,7 @@ namespace Poseidon
                     schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
          
                     //update particle systems
-                    explosionParticles.Update(gameTime);
-                    //explosionSmokeParticles.Update(gameTime);
-
-                    // Update Factory Button Panel
-                    factoryButtonPanel.Update(gameTime, currentMouseState);
-                    // if mouse click happened, check for the click position and add new factory
-                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
-                    {
-                        // adjust the position to build factory depending on current camera position
-                        Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
-
-                        // identify which factory depending on anchor index
-                        BuildingType newBuildingType = factoryButtonPanel.anchorIndexToBuildingType();
-
-                        // if addition is successful, play successful sound, otherwise play unsuccessful sound
-                        if (addNewBuilding(newBuildingType, newBuildingPosition))
-                        {
-                            factoryButtonPanel.removeAnchor();
-                        }
-                        else
-                        {
-                            // play sound to denote building could not be added
-                        }
-                    }
+                    particleManager.Update(gameTime);
                 }
 
                 prevGameState = currentGameState;
@@ -1088,7 +1129,7 @@ namespace Poseidon
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = random.Next(100);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(Content, game, position, orientation);
+                        researchFacility.LoadContent(game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1099,7 +1140,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation);
+                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1110,7 +1151,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation);
+                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1120,7 +1161,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation);
+                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1137,6 +1178,18 @@ namespace Poseidon
             factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
             // Initialie the button panel
             factoryButtonPanel.Initialize(factoryPanelTexture, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
+
+            // Load Textures and fonts for factory property dialog
+            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
+            factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+
+            // Load Textures and fonts for research facility property dialog
+            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
+            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
+            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
         }
 
         public override void Draw(GameTime gameTime)
@@ -1202,7 +1255,7 @@ namespace Poseidon
         private void DrawGameplayScreen(GameTime gameTime)
         {
             //preparingedge detecting for the object being pointed at
-            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, graphics.GraphicsDevice, normalDepthRenderTarget);
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, graphics.GraphicsDevice, normalDepthRenderTarget);
 
             //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
@@ -1210,23 +1263,23 @@ namespace Poseidon
 
             terrain.Draw(gameCamera);
 
-            spriteBatch.Begin();
-            spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 1].isWandering, new Vector2(200, 100), Color.White);
-            spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 1].isReturnBot, new Vector2(200, 120), Color.White);
-            spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 1].isChasing, new Vector2(200, 140), Color.White);
-            spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 1].isFighting, new Vector2(200, 160), Color.White);
+            //spriteBatch.Begin();
+            //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 1].isWandering, new Vector2(200, 100), Color.White);
+            //spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 1].isReturnBot, new Vector2(200, 120), Color.White);
+            //spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 1].isChasing, new Vector2(200, 140), Color.White);
+            //spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 1].isFighting, new Vector2(200, 160), Color.White);
 
-            spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 2].isWandering, new Vector2(400, 100), Color.White);
-            spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 2].isReturnBot, new Vector2(400, 120), Color.White);
-            spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 2].isChasing, new Vector2(400, 140), Color.White);
-            spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 2].isFighting, new Vector2(400, 160), Color.White);
+            //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 2].isWandering, new Vector2(400, 100), Color.White);
+            //spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 2].isReturnBot, new Vector2(400, 120), Color.White);
+            //spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 2].isChasing, new Vector2(400, 140), Color.White);
+            //spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 2].isFighting, new Vector2(400, 160), Color.White);
 
-            spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 3].isWandering, new Vector2(600, 100), Color.White);
-            spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 3].isReturnBot, new Vector2(600, 120), Color.White);
-            spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 3].isChasing, new Vector2(600, 140), Color.White);
-            spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 3].isFighting, new Vector2(600, 160), Color.White);
+            //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 3].isWandering, new Vector2(600, 100), Color.White);
+            //spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 3].isReturnBot, new Vector2(600, 120), Color.White);
+            //spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 3].isChasing, new Vector2(600, 140), Color.White);
+            //spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 3].isFighting, new Vector2(600, 160), Color.White);
 
-            spriteBatch.End();
+            //spriteBatch.End();
 
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -1348,7 +1401,7 @@ namespace Poseidon
                 factoryRealSphere.Center.Y = factory.Position.Y;
                 if (factoryRealSphere.Intersects(frustum))
                 {
-                    factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                 }
             }
             if (researchFacility != null)
@@ -1356,7 +1409,10 @@ namespace Poseidon
                 factoryRealSphere = researchFacility.BoundingSphere;
                 factoryRealSphere.Center.Y = researchFacility.Position.Y;
                 if (factoryRealSphere.Intersects(frustum))
-                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                {
+                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "BalloonShading");
+                }
             }
 
             //Draw each static object
@@ -1427,18 +1483,8 @@ namespace Poseidon
                 bubble.Draw(spriteBatch, 1.0f);
             }
 
-            //Draw points gained / lost
-            foreach (Point point in points)
-            {
-                point.Draw(spriteBatch);
-            }
-
             //draw particle effects
-            // Pass camera matrices through to the particle system components.
-            explosionParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            //explosionSmokeParticles.SetCamera(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-            explosionParticles.Draw(gameTime);
-            //explosionSmokeParticles.Draw(gameTime);
+            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
 
             //draw schools of fish
             spriteBatch.Begin();
@@ -1458,6 +1504,11 @@ namespace Poseidon
             afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
+            //Draw points gained / lost
+            foreach (Point point in points)
+            {
+                point.Draw(spriteBatch);
+            }
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
@@ -1864,7 +1915,7 @@ namespace Poseidon
             return;
         }
 
-        public void dumpTrashInFactory(Factory factory, int amount, Vector3 position)
+        public void dumpTrashInFactory(Factory factory, Vector3 position)
         {
             string point_string = "";
             switch (factory.factoryType)

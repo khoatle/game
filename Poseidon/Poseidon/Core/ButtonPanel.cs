@@ -11,10 +11,13 @@ namespace Poseidon.Core
     class ButtonPanel
     {
         private Vector2 topLeft;
+        private Vector2 infoTextPosition;
         private int maxButtons = 4;
         private List<Button> buttons;
         private float scale = 1.0f;
         private Rectangle panelRectangle;
+        private SpriteFont infoTextFont;
+        private string[] buildingNames = new string[] { "Research Facility", "Radioactive Processing Facility", "Biodegradable Processing Facility", "Plastic Processing Facility" };
 
         // Currently Anchored button (-ve if none)
         private int anchoredIndex = -1;
@@ -79,15 +82,17 @@ namespace Poseidon.Core
             return anchoredBuildingType;
         }
 
-        public void Initialize(Texture2D buttonTexture, Vector2 position)
+         public void Initialize(Texture2D buttonTexture, SpriteFont font, Vector2 position)
         {
+            infoTextFont = font;
             topLeft = position;
             panelRectangle = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)(maxButtons * 64 * scale), 64);
+            infoTextPosition = new Vector2(panelRectangle.X, panelRectangle.Y);
             buttons = new List<Button>();
             for (int i = 0; i < maxButtons; i++)
             {
                 Button btn = new Button();
-                btn.Initialize(i, buttonTexture, new Vector2(position.X + i * 64 * scale, position.Y + (64 - scale * 64)), 64, 64, scale);
+                btn.Initialize(i, buildingNames[i], buttonTexture, new Vector2(position.X + i * 64 * scale, position.Y + (64 - scale * 64)), 64, 64, scale);
                 buttons.Add(btn);
             }
         }
@@ -103,6 +108,12 @@ namespace Poseidon.Core
                 {
                     anchoredIndex = i;
                 }
+                if (buttons[i].state != Button.InteractionState.OUT)
+                {
+                    // This condition will satisfy for at most one button
+                    infoTextPosition.X = buttons[i].TopLeft.X;
+                    infoTextPosition.Y = buttons[i].TopLeft.Y - 5;
+                }
                 
             }
         }
@@ -112,6 +123,13 @@ namespace Poseidon.Core
             for (int i = 0; i < buttons.Count; i++)
             {
                 buttons[i].Draw(spriteBatch);
+                if (buttons[i].state != Button.InteractionState.OUT)
+                {
+                    // display info text
+                    String displayText = buttons[i].Name + "\nRequired  : " + GameConstants.numResourcesForEachFactory + " resources\nAvailable : " + HydroBot.numResources + " resources";
+                    infoTextPosition.Y -= (int)infoTextFont.MeasureString(displayText).Y;
+                    spriteBatch.DrawString(infoTextFont, displayText, infoTextPosition, Color.Red);
+                }
             }
         }
 

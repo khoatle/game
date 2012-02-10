@@ -164,8 +164,9 @@ namespace Poseidon
         Texture2D facilityUpgradeButton;
         Texture2D playJigsawButton;
 
-        // Texture for Mouse Interaction panel for factories
+        // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
+        SpriteFont factoryPanelFont;
         ButtonPanel factoryButtonPanel;
 
         // Models for Factories and buildings
@@ -1176,8 +1177,11 @@ namespace Poseidon
         {
             // Load lower left pannel button
             factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+            // Load Font for displaying extra information on factory panel
+            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
+            
             // Initialie the button panel
-            factoryButtonPanel.Initialize(factoryPanelTexture, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
+            factoryButtonPanel.Initialize(factoryPanelTexture, factoryPanelFont, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
 
             // Load Textures and fonts for factory property dialog
             factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");

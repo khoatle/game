@@ -1679,6 +1679,11 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
+    <Compile Include="Fonts\panelInfoText.spritefont">
+      <Name>panelInfoText</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>

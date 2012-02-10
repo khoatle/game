@@ -1254,7 +1254,7 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
-            //preparingedge detecting for the object being pointed at
+            //preparing edge detecting for the object being pointed at
             graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, graphics.GraphicsDevice, normalDepthRenderTarget);
 
             //normal drawing of the game scene

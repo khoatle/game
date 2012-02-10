@@ -94,11 +94,8 @@ namespace Poseidon
 
         private Texture2D stunnedTexture;
 
-        // shader for underwater effect
-        // Our Post Process effect object, this is where our shader will be loaded and compiled
-        Effect underWaterEffect;
         float m_Timer = 0;
-        RenderTarget2D renderTarget;
+        RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
         Texture2D SceneTexture;
 
         // Bubbles over characters
@@ -238,11 +235,23 @@ namespace Poseidon
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
-            // Load and compile our Shader into our Effect instance.
-            underWaterEffect = Content.Load<Effect>("Shaders/UnderWater");
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+            afterEffectsAppliedRenderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
+                false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
+
+            //for edge detection effect
+            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
+            edgeDetectionRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+                                                         pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                                         pp.BackBufferFormat, pp.DepthStencilFormat);
+
+            graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
+            // Construct our particle system components.
+            particleManager = new ParticleManagement(this.game, GraphicDevice);
         }
 
         /// <summary>
@@ -670,6 +679,11 @@ namespace Poseidon
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
+                    //update graphic effects
+                    graphicEffect.UpdateInput(gameTime);
+                    //update particle systems
+                    particleManager.Update(gameTime);
+
                     //update the good will bar
                     //if (HydroBot.goodWillPoint >= HydroBot.maxGoodWillPoint)
                     //{
@@ -735,6 +749,10 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
+            //preparing edge detecting for the object being pointed at
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, graphics.GraphicsDevice, normalDepthRenderTarget);
+
+            //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
 
@@ -822,7 +840,7 @@ namespace Poseidon
                     researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
             }
 
-            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "Normal Shading");
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
             for (int i = 0; i < myBullet.Count; i++)
             {
                 if (myBullet[i].BoundingSphere.Intersects(frustum))
@@ -869,28 +887,24 @@ namespace Poseidon
                 bubble.Draw(spriteBatch, 1.0f);
             }
 
+            //draw particle effects
+            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
+            //applying edge detection
+            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
+
+            SceneTexture = edgeDetectionRenderTarget;
+            //graphics.GraphicsDevice.SetRenderTarget(null);
+            //spriteBatch.Begin();
+            //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            //spriteBatch.End();
+            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
             //Draw points gained / lost
             foreach (Point point in points)
             {
                 point.Draw(spriteBatch);
             }
-
-
-            graphics.GraphicsDevice.SetRenderTarget(null);
-            SceneTexture = renderTarget;
-            // Render the scene with Edge Detection, using the render target from last frame.
-            graphics.GraphicsDevice.Clear(ClearOptions.Target | ClearOptions.DepthBuffer, Color.DarkSlateBlue, 1.0f, 0);
-
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
-            {
-                // Apply the post process shader
-                underWaterEffect.CurrentTechnique.Passes[0].Apply();
-                {
-                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer);
-                    spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-                }
-            }
-            spriteBatch.End();
             spriteBatch.Begin();
             DrawStats();
             DrawBulletType();
@@ -898,6 +912,10 @@ namespace Poseidon
             DrawRadar();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);
+            spriteBatch.End();
+            graphics.GraphicsDevice.SetRenderTarget(null);
+            spriteBatch.Begin();
+            spriteBatch.Draw(afterEffectsAppliedRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
         }
 

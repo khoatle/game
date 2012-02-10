@@ -20,6 +20,12 @@ namespace Poseidon
         protected Matrix enemyMatrix;
         protected Quaternion qRotation = Quaternion.Identity;
 
+        // Fleeing stuff
+        public bool isFleeing;
+        public TimeSpan fleeingStart;
+        public TimeSpan fleeingDuration;
+        public Vector3 fleeingDirection;
+
         // Percept ID:
         // 0 = nothing detected
         // 1 = hydrobot detected - 1st priory
@@ -86,6 +92,11 @@ namespace Poseidon
         public BaseEnemy()
             : base()
         {
+            fleeingStart = PoseidonGame.playTime;
+            fleeingDuration = new TimeSpan(0, 0, 3);
+            isFleeing = false;
+            fleeingDirection = new Vector3();
+
             giveupTime = new TimeSpan(0, 0, 3);
             perceptionRadius = GameConstants.EnemyPerceptionRadius;// *(HydroBot.gamePlusLevel + 1);
             timeBetweenFire = 0.5f;
@@ -103,6 +114,17 @@ namespace Poseidon
                 speed = GameConstants.EnemySpeed;
             }
             damage = GameConstants.DefaultEnemyDamage; //overwritten later
+        }
+
+        // Flee
+        public void flee(SwimmingObject[] enemyList, int enemySize, SwimmingObject[] fishList, int fishSize, HydroBot hydroBot)
+        {
+            Vector2 tmp = new Vector2(fleeingDirection.X, fleeingDirection.Z);
+            tmp.Normalize();
+            tmp *= 100f; // Somewhere faraway
+
+            Vector3 fleeTarget = Position + new Vector3(tmp.X, 0, tmp.Y);
+            seekDestination(fleeTarget, enemyList, enemySize, fishList, fishSize, hydroBot);
         }
 
         public void setHypnotise()

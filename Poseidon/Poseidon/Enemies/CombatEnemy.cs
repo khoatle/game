@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Input;
 namespace Poseidon
 {
     public class CombatEnemy : BaseEnemy
-    {
+    {   
         private BoundingSphere futureBoundingSphere;
 
         // Percept ID:
@@ -32,7 +32,6 @@ namespace Poseidon
             perceptionRadius *= 2;
             isHypnotise = false;
         }
-
    
         public override void Update(SwimmingObject[] enemyList, ref int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
@@ -44,6 +43,18 @@ namespace Poseidon
                                 Matrix.CreateTranslation(Position);
             clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
 
+            // Fleeing stuff
+            if (isFleeing == true) {
+                if (PoseidonGame.playTime.TotalSeconds - fleeingStart.TotalSeconds < fleeingDuration.TotalSeconds) {
+                    flee(enemyList, enemySize, fishList, fishSize, hydroBot);
+                    return;
+                }
+                else {
+                    isFleeing = false;
+                }
+            }
+
+            // Stun stuff
             if (stunned)
             {
                 if (!clipPlayer.inRange(1, 30))

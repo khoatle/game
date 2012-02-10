@@ -303,7 +303,7 @@ namespace Poseidon
                                     ((FlyingHammer)bullets[i]).explodeNow = true;
                                     PoseidonGame.audio.Explo1.Play();
                                     gameCamera.Shake(25f, .4f);
-                                    CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot.gameMode);
+                                    CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
                                 }
                             }
                         }

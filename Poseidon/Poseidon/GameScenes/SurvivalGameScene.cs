@@ -159,7 +159,7 @@ namespace Poseidon
             IngamePresentation.StopSpinning();
 
             HydroBot.gamePlusLevel = 0;
-            hydroBot.gameMode = GameMode.SurvivalMode;
+            HydroBot.gameMode = GameMode.SurvivalMode;
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];

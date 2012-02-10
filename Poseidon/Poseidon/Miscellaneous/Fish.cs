@@ -22,10 +22,11 @@ namespace Poseidon {
         public string happy_talk;
         public string sad_talk;
         public bool flee = false;
-        public bool isWandering = false;
-        public bool isFollowing = false;
-        public bool isFighting = false;
         public BaseEnemy currentTarget = null;
+        public bool isWandering = true;
+        public bool isReturnBot;
+        public bool isChasing;
+        public bool isFighting;
 
         public Fish() : base() {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
@@ -242,6 +243,17 @@ namespace Poseidon {
                 mesh.Draw();
             }
         }
+
+
+        public BaseEnemy lookForEnemy(SwimmingObject[] enemies, int enemiesSize)
+        {
+            for (int i = 0; i < enemiesSize; i++)
+                if (Vector3.Distance(Position, enemies[i].Position) < GameConstants.SideKick_Look_Radius)
+                    return (BaseEnemy)enemies[i];
+            return null;
+        }
+
+        public virtual void attack() {}
 
         protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {

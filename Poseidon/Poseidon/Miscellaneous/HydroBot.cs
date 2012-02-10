@@ -48,7 +48,7 @@ namespace Poseidon
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
 
-        public float controlRadius = 80f;
+        public float controlRadius = 70f;
 
         // 2 types of bullet
         // 0: killing
@@ -113,7 +113,7 @@ namespace Poseidon
         public static float poissonInterval;
 
         // which game mode is this hydrobot in?
-        public GameMode gameMode;
+        public static GameMode gameMode;
 
         public static int gamePlusLevel = 0; //Every time you beat the game, gameplus level increases
 
@@ -235,7 +235,7 @@ namespace Poseidon
             bioPlantLevel = plasticPlantLevel = lsBioPlantLevel = lsPlasticPlantLevel = 1;
             numResources  = lsNumResources = GameConstants.numResourcesAtStart;
 
-            this.gameMode = gameMode;
+            HydroBot.gameMode = gameMode;
         }
 
         /// <summary>

@@ -1210,6 +1210,24 @@ namespace Poseidon
 
             terrain.Draw(gameCamera);
 
+            spriteBatch.Begin();
+            spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 1].isWandering, new Vector2(200, 100), Color.White);
+            spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 1].isReturnBot, new Vector2(200, 120), Color.White);
+            spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 1].isChasing, new Vector2(200, 140), Color.White);
+            spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 1].isFighting, new Vector2(200, 160), Color.White);
+
+            spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 2].isWandering, new Vector2(400, 100), Color.White);
+            spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 2].isReturnBot, new Vector2(400, 120), Color.White);
+            spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 2].isChasing, new Vector2(400, 140), Color.White);
+            spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 2].isFighting, new Vector2(400, 160), Color.White);
+
+            spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 3].isWandering, new Vector2(600, 100), Color.White);
+            spriteBatch.DrawString(statsFont, "isReturn: " + fish[fishAmount - 3].isReturnBot, new Vector2(600, 120), Color.White);
+            spriteBatch.DrawString(statsFont, "isChasing: " + fish[fishAmount - 3].isChasing, new Vector2(600, 140), Color.White);
+            spriteBatch.DrawString(statsFont, "isFighting: " + fish[fishAmount - 3].isFighting, new Vector2(600, 160), Color.White);
+
+            spriteBatch.End();
+
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
             foreach (Powerpack f in powerpacks)

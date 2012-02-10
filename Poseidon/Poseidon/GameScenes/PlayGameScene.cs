@@ -298,7 +298,11 @@ namespace Poseidon
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
 
             // Instantiate the factory Button
-            factoryButtonPanel = new ButtonPanel(4, 1.0f);
+            float buttonScale = 1.0f;
+            if (game.Window.ClientBounds.Width <= 900) {
+                buttonScale = 0.8f; // scale the factory panel icons a bit smaller in small window mode
+            }
+            factoryButtonPanel = new ButtonPanel(4, buttonScale);
 
             // Load models for factories.. LoadContent would be better place for this rather than here.
             researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");

@@ -20,11 +20,22 @@ namespace Poseidon.Core
         private bool anchored;
         private int buttonIndex;
         private float scale = 1.0f;
+        private string name;
 
         public bool Anchored
         {
             get { return anchored; }
             set { anchored = value; }
+        }
+
+        public Vector2 TopLeft
+        {
+            get { return topLeft; }
+        }
+
+        public string Name
+        {
+            get { return name; }
         }
 
         // Rectangle of image strip we want to display
@@ -37,12 +48,13 @@ namespace Poseidon.Core
         Rectangle anchorSourceRect;
         Rectangle anchorDestinationRect;
 
-        public void Initialize(int idx, Texture2D buttonTexture, Vector2 topLeft, int width, int height, float scaleFactor)
+        public void Initialize(int idx, string name, Texture2D buttonTexture, Vector2 topLeft, int width, int height, float scaleFactor)
         {
             this.buttonTexture = buttonTexture;
             this.topLeft = topLeft;
             this.width = width;
             this.height = height;
+            this.name = name;
             scale = scaleFactor;
             buttonIndex = idx;
             anchored = false;

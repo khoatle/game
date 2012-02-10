@@ -1135,7 +1135,7 @@ namespace Poseidon
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = random.Next(100);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
+                        researchFacility.LoadContent(Content, game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1146,7 +1146,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1157,7 +1157,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1167,7 +1167,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = random.Next(100);
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;

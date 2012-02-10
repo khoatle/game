@@ -45,7 +45,7 @@ namespace Poseidon
             random = new Random();
         }
 
-        public void LoadContent(Game game, Vector3 position, float orientation, SpriteFont font, Texture2D backgroundTexture, Texture2D produceButtonTexture)
+        public void LoadContent(ContentManager content, Game game, Vector3 position, float orientation, SpriteFont font, Texture2D backgroundTexture, Texture2D produceButtonTexture)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -61,7 +61,7 @@ namespace Poseidon
             tempCenter.Y = GameConstants.MainGameFloatHeight;
             tempCenter.Z = Position.Z;
             BoundingSphere = new BoundingSphere(tempCenter,BoundingSphere.Radius);
-
+            this.Content = content;
             this.orientation = orientation;
 
             produce = Produce.resource;
@@ -79,9 +79,6 @@ namespace Poseidon
             //else floatUp = false;
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);
-
-            //a temporary fix
-            Content = PoseidonGame.contentManager;
         }
 
         // Overloading content load so that survival mode game compiles properly.
@@ -91,8 +88,7 @@ namespace Poseidon
             SpriteFont font = content.Load<SpriteFont>("Fonts/factoryConfig");
             Texture2D backgroundTexture = content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
             Texture2D produceButtonTexture = content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
-            LoadContent(game, position, orientation, font, backgroundTexture, produceButtonTexture);
-            
+            LoadContent(content, game, position, orientation, font, backgroundTexture, produceButtonTexture);    
         }
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources)

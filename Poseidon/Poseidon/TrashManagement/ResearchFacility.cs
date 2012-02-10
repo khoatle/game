@@ -42,7 +42,7 @@ namespace Poseidon
             listTimeRockProcessing = new List<double>();
         }
 
-        public void LoadContent(Game game, Vector3 position, float orientation, SpriteFont facilityFont, SpriteFont facilityFont2, Texture2D background, Texture2D upgradeButton, Texture2D playJigsawButton)
+        public void LoadContent(ContentManager content, Game game, Vector3 position, float orientation, SpriteFont facilityFont, SpriteFont facilityFont2, Texture2D background, Texture2D upgradeButton, Texture2D playJigsawButton)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -59,6 +59,7 @@ namespace Poseidon
             tempCenter.Z = Position.Z;
             BoundingSphere = new BoundingSphere(tempCenter, BoundingSphere.Radius);
 
+            this.Content = content;
             this.orientation = orientation;
 
             this.facilityFont = facilityFont;
@@ -85,12 +86,12 @@ namespace Poseidon
         public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
         {
             Model = content.Load<Model>(modelname);
-            SpriteFont font1 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
-            SpriteFont font2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
-            Texture2D facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
-            Texture2D facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            Texture2D playJigsawTexture = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            LoadContent(game, position, orientation, font1, font2, facilityBackground, facilityUpgradeButton, playJigsawTexture);
+            SpriteFont font1 = content.Load<SpriteFont>("Fonts/researchFacilityConfig");
+            SpriteFont font2 = content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
+            Texture2D facilityBackground = content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
+            Texture2D facilityUpgradeButton = content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            Texture2D playJigsawTexture = content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            LoadContent(content, game, position, orientation, font1, font2, facilityBackground, facilityUpgradeButton, playJigsawTexture);
 
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);

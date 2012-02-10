@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Poseidon.GraphicEffects
 {
-    class GraphicEffect
+    public class GraphicEffect
     {
         BloomComponent bloom;
         int bloomSettingsIndex = 0;
@@ -243,7 +243,7 @@ namespace Poseidon.GraphicEffects
             else return false;
         }
 
-        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
+        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
         {
             graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
             graphicsDevice.Clear(Color.Black);
@@ -266,6 +266,12 @@ namespace Poseidon.GraphicEffects
                 }
                 else
                 {
+                    TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
+                    if (chestPointedAt != null)
+                    {
+                        chestPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                        edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
+                    }
                     Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
                     if (trashPointedAt != null)
                     {

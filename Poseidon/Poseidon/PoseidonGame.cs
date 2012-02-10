@@ -480,17 +480,20 @@ namespace Poseidon
             {
                 //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
+                playGameScene.Scene2Texture = shipWreckScene.cutSceneImmediateRenderTarget;
+                playGameScene.screenTransitNow = true;
+                playGameScene.graphicEffect.resetTransitTimer();
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
                 doubleClicked = false;
             }
             //do not let the player to open the attribute board in shipwreck now
             //because it will reset the shipwreck
-            //if (AttributePressed)
-            //{
-            //    prevScene = shipWreckScene;
-            //    ShowScene(AttributeScene);
-            //}
+            if (AttributePressed)
+            {
+                prevScene = shipWreckScene;
+                ShowScene(AttributeScene);
+            }
         }
         /// <summary>
         /// Handle update for the main game
@@ -524,6 +527,8 @@ namespace Poseidon
                 PlayGameScene.gameCamera.shaking = false;
                 //shipWreckScene.tank.CopyAttribute(playGameScene.tank);
                 shipWreckScene.roundTimer = playGameScene.roundTimer;
+                shipWreckScene.Scene2Texture = playGameScene.cutSceneImmediateRenderTarget;
+                
                 //shipWreckScene.Load();
                 ShowScene(shipWreckScene);
                 doubleClicked = false;
@@ -580,6 +585,7 @@ namespace Poseidon
                     // no, let the user re-explore now because he would miss a relic -> lose
                     //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
+                    shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
                     return true;
                 }
@@ -773,7 +779,15 @@ namespace Poseidon
                 && currentMouseState.LeftButton == ButtonState.Released)
                 || EscPressed || enterPressed)
             {
+                if (prevScene is ShipWreckScene)
+                {
+                    shipWreckScene.backFromAttributeBoard = true;
+                }
                 ShowScene(prevScene);
+                if (prevScene is ShipWreckScene)
+                {
+                    shipWreckScene.screenTransitNow = false;
+                }
             }
 
         }

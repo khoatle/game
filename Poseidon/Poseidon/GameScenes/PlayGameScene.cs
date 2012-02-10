@@ -107,10 +107,10 @@ namespace Poseidon
         //stuffs for applying special effects
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
         Texture2D SceneTexture;
-        RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
-        Texture2D Scene2Texture;
+        public RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
+        public Texture2D Scene2Texture;
         RenderTarget2D renderTarget3;
-        bool screenTransitNow = false;
+        public bool screenTransitNow = false;
 
         // Bubbles over characters
         List<Bubble> bubbles;
@@ -176,7 +176,7 @@ namespace Poseidon
         private Model radioactiveFactoryModel;
 
         // For applying graphic effects
-        GraphicEffect graphicEffect;
+        public GraphicEffect graphicEffect;
         //for particle systems
         public static ParticleManagement particleManager;
 
@@ -298,7 +298,11 @@ namespace Poseidon
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
 
             // Instantiate the factory Button
-            factoryButtonPanel = new ButtonPanel(4, 1.0f);
+            float buttonScale = 1.0f;
+            if (game.Window.ClientBounds.Width <= 900) {
+                buttonScale = 0.8f; // scale the factory panel icons a bit smaller in small window mode
+            }
+            factoryButtonPanel = new ButtonPanel(4, buttonScale);
 
             // Load models for factories.. LoadContent would be better place for this rather than here.
             researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
@@ -358,9 +362,6 @@ namespace Poseidon
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
 
-            // Construct our particle system components.
-            particleManager = new ParticleManagement(this.game, GraphicDevice);
-
             // initialize render targets
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight, 
@@ -385,9 +386,9 @@ namespace Poseidon
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
-
-            
-            
+            // Construct our particle system components.
+            particleManager = new ParticleManagement(this.game, GraphicDevice);
+        
         }
 
         /// <summary>
@@ -396,6 +397,7 @@ namespace Poseidon
         public override void Show()
         {
             paused = false;
+            HydroBot.gameMode = GameMode.MainGame;
             //MediaPlayer.Play(audio.BackMusic);
             //PlaceFuelCellsAndBarriers();
             //MediaPlayer.Stop();
@@ -475,6 +477,10 @@ namespace Poseidon
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
             schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
+
+            //reset the shipwreck content too
+            ShipWreckScene.resetShipWreckNow = true;
+
             InitializeGameField(Content);
         }
 
@@ -721,7 +727,7 @@ namespace Poseidon
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
                     // if mouse click happened, check for the click position and add new factory
-                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && currentMouseState.LeftButton == ButtonState.Pressed)
+                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && factoryButtonPanel.clickToBuildDetected)
                     {
                         // adjust the position to build factory depending on current camera position
                         Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
@@ -1039,10 +1045,7 @@ namespace Poseidon
                         currentGameState = GameState.Lost;
                         audio.gameOver.Play();
                     }
-                    
-                    //update graphic effects
-                    graphicEffect.UpdateInput(gameTime);
-
+                   
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
@@ -1050,7 +1053,9 @@ namespace Poseidon
                     schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
                     schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
-         
+
+                    //update graphic effects
+                    graphicEffect.UpdateInput(gameTime);
                     //update particle systems
                     particleManager.Update(gameTime);
                 }
@@ -1101,7 +1106,7 @@ namespace Poseidon
         private bool addNewBuilding(BuildingType buildingType, Vector3 position)
         {
             bool status = false;
-            float orientation; // currently orientation is random, this needs to be fixed to one of the four directional orientations because aligning building too view might make it appealing
+            float orientation; // 0, PI/2, PI, 3*PI/2
             Factory oneFactory;
 
             // Check if hydrobot has sufficient resources for building a factory
@@ -1111,7 +1116,12 @@ namespace Poseidon
                 return false;
             }
 
-            // TODO: See if position is within game arena
+            // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
+            if (Math.Abs(position.X) > (float)GameConstants.MainGameMaxRangeX || Math.Abs(position.Z) > (float)GameConstants.MainGameMaxRangeZ)
+            {
+                // TODO: play some sound hinting position selected is outside game arena
+                return false;
+            }
 
             // TODO: Verify that current location is available for adding the building
 
@@ -1128,9 +1138,9 @@ namespace Poseidon
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
                         researchFacility = new ResearchFacility();
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                        orientation = random.Next(100);
+                        orientation = (float)(Math.PI/2) * random.Next(4);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
+                        researchFacility.LoadContent(Content, game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1139,9 +1149,9 @@ namespace Poseidon
                 case BuildingType.biodegradable:
                     oneFactory = new Factory(FactoryType.biodegradable);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = random.Next(100);
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1150,9 +1160,9 @@ namespace Poseidon
                 case BuildingType.plastic:
                     oneFactory = new Factory(FactoryType.plastic);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = random.Next(100);
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1160,9 +1170,9 @@ namespace Poseidon
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = random.Next(100);
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1258,8 +1268,8 @@ namespace Poseidon
 
         private void DrawGameplayScreen(GameTime gameTime)
         {
-            //preparingedge detecting for the object being pointed at
-            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, graphics.GraphicsDevice, normalDepthRenderTarget);
+            //preparing edge detecting for the object being pointed at
+            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, graphics.GraphicsDevice, normalDepthRenderTarget);
 
             //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
@@ -1436,8 +1446,6 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            //fuelCarrier.Draw(gameCamera.ViewMatrix, 
-            //    gameCamera.ProjectionMatrix);
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
             //GraphicDevice.RasterizerState = rs;
@@ -1487,9 +1495,6 @@ namespace Poseidon
                 bubble.Draw(spriteBatch, 1.0f);
             }
 
-            //draw particle effects
-            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
-
             //draw schools of fish
             spriteBatch.Begin();
             schoolOfFish1.Draw(gameTime, spriteBatch);
@@ -1497,6 +1502,8 @@ namespace Poseidon
             schoolOfFish3.Draw(gameTime, spriteBatch);
             spriteBatch.End();
 
+            //draw particle effects
+            particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
             //applying edge detection
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
 

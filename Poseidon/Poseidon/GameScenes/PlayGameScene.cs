@@ -746,7 +746,7 @@ namespace Poseidon
                             // play sound to denote building could not be added
                         }
                     }
-                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -761,6 +761,7 @@ namespace Poseidon
                         {
                             openResearchFacilityConfigScene = true;
                             ResearchFacility.dolphinLost = ResearchFacility.seaCowLost = ResearchFacility.turtleLost = false;
+                            ResearchFacility.dolphinWon = ResearchFacility.seaCowWon = ResearchFacility.turtleWon = false;
                         }
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)

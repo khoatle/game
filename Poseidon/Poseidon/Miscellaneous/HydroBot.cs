@@ -1252,10 +1252,15 @@ namespace Poseidon
 
         private void Collect_Powerpacks_and_Resources(List<Powerpack> powerpacks, List<Resource> resources, GameTime gameTime)
         {
-            Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
-                    20);
+            string point_string = "";
+            bool incrSpeed, incrStrength, incrShootRate;
+            int numHealth, numResourceCollected, numRocks;
+            incrShootRate = incrSpeed = incrStrength = false;
+            numHealth = numResourceCollected = numRocks = 0;
+
             if (powerpacks != null)
             {
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 5);
                 for (int curCell = 0; curCell < powerpacks.Count; curCell++)
                 {
                     if (powerpacks[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
@@ -1266,46 +1271,19 @@ namespace Poseidon
                         {
                             speedUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             speedUp = 2.0f;
-
-                            Point point = new Point();
-                            String point_string = "TEMP-SPEED X 2";
-                            point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
-                            if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.points.Add(point);
-                            else if (gameMode == GameMode.MainGame)
-                                PlayGameScene.points.Add(point);
-                            else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.points.Add(point);
+                            incrSpeed = true;
                         }
                         else if (powerpacks[curCell].powerType == 2)
                         {
                             strengthUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             strengthUp = 2.0f;
-
-                            Point point = new Point();
-                            String point_string = "\nTEMP-STRENGTH X 2";
-                            point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
-                            if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.points.Add(point);
-                            else if (gameMode == GameMode.MainGame)
-                                PlayGameScene.points.Add(point);
-                            else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.points.Add(point);
+                            incrStrength = true;
                         }
                         else if (powerpacks[curCell].powerType == 3)
                         {
                             fireRateUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             fireRateUp = 2.0f;
-
-                            Point point = new Point();
-                            String point_string = "\n\nTEMP-SHOOTING RATE X 2";
-                            point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
-                            if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.points.Add(point);
-                            else if (gameMode == GameMode.MainGame)
-                                PlayGameScene.points.Add(point);
-                            else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.points.Add(point);
+                            incrShootRate = true;
                         }
                         else if (powerpacks[curCell].powerType == 4)
                         {
@@ -1314,41 +1292,17 @@ namespace Poseidon
                             if (currentHitPoint > maxHitPoint)
                             {
                                 currentHitPoint = maxHitPoint;
-                                Point point = new Point();
-                                String point_string = "\n\n\n+"+ (int)hitpointAdded +" HEALTH";
-                                point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
-                                if (gameMode == GameMode.ShipWreck)
-                                    ShipWreckScene.points.Add(point);
-                                else if (gameMode == GameMode.MainGame)
-                                    PlayGameScene.points.Add(point);
-                                else if (gameMode == GameMode.SurvivalMode)
-                                    SurvivalGameScene.points.Add(point);
+                                numHealth += (int)hitpointAdded;
                             }
                             else
                             {
-                                Point point = new Point();
-                                String point_string = "\n\n\n+100 HEALTH";
-                                point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
-                                if (gameMode == GameMode.ShipWreck)
-                                    ShipWreckScene.points.Add(point);
-                                else if (gameMode == GameMode.MainGame)
-                                    PlayGameScene.points.Add(point);
-                                else if (gameMode == GameMode.SurvivalMode)
-                                    SurvivalGameScene.points.Add(point);
+                                numHealth += 100;
                             }
                         }
                         else if (powerpacks[curCell].powerType == 5)
                         {
                             numStrangeObjCollected++;
-                            Point point = new Point();
-                            String point_string = "\nFound Strange Rock";
-                            point.LoadContent(PoseidonGame.contentManager, point_string, powerpacks[curCell].Position, Color.LawnGreen);
-                            if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.points.Add(point);
-                            else if (gameMode == GameMode.MainGame)
-                                PlayGameScene.points.Add(point);
-                            else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.points.Add(point);
+                            numRocks += 1;
                         }
                         //RetrievedSound.Play();
                         PoseidonGame.audio.retrieveSound.Play();
@@ -1357,27 +1311,40 @@ namespace Poseidon
             }
             if (resources != null)
             {
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
+                    20);
                 foreach (Resource resource in resources)
                 {
                     if (resource.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(resource.BoundingSphere))
                     {
                         resource.Retrieved = true;
-
                         numResources++;
-
-                        Point point = new Point();
-                        String point_string = "Building Resource: "+numResources;
-                        point.LoadContent(PoseidonGame.contentManager, point_string, resource.Position, Color.LawnGreen);
-                        if (gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
+                        numResourceCollected++;
                     }
                      
                 }
             }
+            
+            Point point = new Point();
+            if (numResourceCollected > 0)
+                point_string += numResourceCollected + " RESOURCE COLLECTED";
+            if (numHealth > 0)
+                point_string += "\n+" + numHealth + " HEALTH";
+            if (incrSpeed)
+                point_string += "\nTEMP SPEED X 2";
+            if (incrShootRate)
+                point_string += "\nTEMP SHOOTING-RATE X 2";
+            if (incrStrength)
+                point_string += "\nTEMP STRENGTH X 2";
+            if (numRocks > 0)
+                point_string += "\n"+numRocks+" STRANGE ROCKS COLLECTED";
+            point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
+            if (gameMode == GameMode.ShipWreck)
+                ShipWreckScene.points.Add(point);
+            else if (gameMode == GameMode.MainGame)
+                PlayGameScene.points.Add(point);
+            else if (gameMode == GameMode.SurvivalMode)
+                SurvivalGameScene.points.Add(point);
             return;
         }
 

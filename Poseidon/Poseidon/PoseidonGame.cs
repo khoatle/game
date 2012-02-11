@@ -413,18 +413,21 @@ namespace Poseidon
                         HydroBot.seaCowPower += 1.0f;
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playSeaCowJigsaw = false;
+                        ResearchFacility.seaCowWon = true;
                         break;
                     case 1:
                         HydroBot.hasTurtle = true;
                         HydroBot.turtlePower += 1.0f;
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playTurtleJigsaw = false;
+                        ResearchFacility.turtleWon = true;
                         break;
                     case 2:
                         HydroBot.hasDolphin = true;
                         HydroBot.dolphinPower += 1.0f;
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playDolphinJigsaw = false;
+                        ResearchFacility.dolphinWon = true;
                         break;
                 }
             }

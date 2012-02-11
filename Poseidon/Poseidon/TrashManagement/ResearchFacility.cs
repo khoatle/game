@@ -27,6 +27,7 @@ namespace Poseidon
         public Rectangle backgroundRect, bioUpgradeRect, plasticUpgradeRect, playSeaCowJigsawRect, playTurtleJigsawRect, playDolphinJigsawRect, increaseAttributeRect;
         public static bool playSeaCowJigsaw, playTurtleJigsaw, playDolphinJigsaw; // ensure that clicking on the rect when button is not drawn does not start game.
         public static bool seaCowLost, turtleLost, dolphinLost; // To diplay if the user failed to win the jigsaw game (timeout).
+        public static bool seaCowWon, turtleWon, dolphinWon; //To display if the user won the jigsaw game.
         public bool mouseOnIncreaseAttributeIcon;
 
         //Rock Processing
@@ -323,7 +324,7 @@ namespace Poseidon
                     string desc_text = "INCREASE BOT ATTRIBUTES";
                     desc_text = Poseidon.Core.IngamePresentation.wrapLine(desc_text, increaseAttributeRect.Width + 200, facilityFont2);
                     spriteBatch.Draw(increaseAttributeButton, increaseAttributeRect, Color.Red);
-                    spriteBatch.DrawString(facilityFont2, desc_text, new Vector2(increaseAttributeRect.Center.X - facilityFont2.MeasureString(desc_text).X / 4, increaseAttributeRect.Bottom), Color.Red, 0f, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0f);
+                    spriteBatch.DrawString(facilityFont2, desc_text, new Vector2(increaseAttributeRect.Center.X - facilityFont2.MeasureString(desc_text).X / 4, increaseAttributeRect.Bottom), Color.Gold, 0f, new Vector2(0, 0), 0.7f, SpriteEffects.None, 0f);
                 }
                 else
                 {
@@ -341,6 +342,18 @@ namespace Poseidon
                 lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, playSeaCowJigsawRect.Width + 100, facilityFont2);
                 spriteBatch.DrawString(facilityFont2, lost_Str, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
             }
+            else if (seaCowWon && HydroBot.seaCowPower > 1f)
+            {
+                string seacowText = "Congrats! Your Stellar SeaCow's power has been increased " + ((int)HydroBot.seaCowPower).ToString() + " times.";
+                seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, playSeaCowJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, seacowText, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
+            }
+            else if (seaCowWon)
+            {
+                string seacowText = "Congrats! You have resurrected the Stellar's SeaCow. It is your minion.";
+                seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, playSeaCowJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, seacowText, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
+            }
             else if (HydroBot.hasSeaCow)
             {
                 if (HydroBot.numSeaCowPieces >= GameConstants.boneCountForJigsaw)
@@ -351,21 +364,9 @@ namespace Poseidon
                     spriteBatch.Draw(playJigsawButton, playSeaCowJigsawRect, Color.White);
                     spriteBatch.DrawString(menuSmall, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - menuSmall.MeasureString(seacowJigsawButtonText).X / 4, playSeaCowJigsawRect.Center.Y - menuSmall.MeasureString(seacowJigsawButtonText).Y / 4), Color.Red, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
                 }
-                else if (HydroBot.numSeaCowPieces > 0)
-                {
-                    string seacowText = "You need " + (GameConstants.boneCountForJigsaw - HydroBot.numSeaCowPieces).ToString() + " more bones to strengthen Stellar's Seacow";
-                    seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, playSeaCowJigsawRect.Width + 100, facilityFont2);
-                    spriteBatch.DrawString(facilityFont2, seacowText, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
-                }
-                else if (HydroBot.seaCowPower > 1f)
-                {
-                    string seacowText = "Your Stellar SeaCow's power has been increased "+ ((int)HydroBot.seaCowPower).ToString() + " times.";
-                    seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, playSeaCowJigsawRect.Width + 100, facilityFont2);
-                    spriteBatch.DrawString(facilityFont2, seacowText, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
-                }
                 else
                 {
-                    string seacowText = "You have resurrected the Stellar's SeaCow. It is your minion.";
+                    string seacowText = "You need " + (GameConstants.boneCountForJigsaw - HydroBot.numSeaCowPieces).ToString() + " more bones to strengthen Stellar's Seacow";
                     seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, playSeaCowJigsawRect.Width + 100, facilityFont2);
                     spriteBatch.DrawString(facilityFont2, seacowText, new Vector2(playSeaCowJigsawRect.Left - 50, playSeaCowJigsawRect.Top), Color.White);
                 }
@@ -394,6 +395,18 @@ namespace Poseidon
                 lostStr = Poseidon.Core.IngamePresentation.wrapLine(lostStr, playTurtleJigsawRect.Width + 100, facilityFont2);
                 spriteBatch.DrawString(facilityFont2, lostStr, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
             }
+            else if (turtleWon && HydroBot.turtlePower>1f)
+            {
+                string turtleText = "Congrats! Your Meiolania Turtle's power has been increased " + ((int)HydroBot.turtlePower).ToString() + " times.";
+                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playTurtleJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
+            }
+            else if (turtleWon)
+            {
+                string turtleText = "Congrats! You have resurrected the Meiolania Turtle. It is your minion.";
+                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playTurtleJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
+            }
             else if (HydroBot.hasTurtle)
             {
                 if (HydroBot.numTurtlePieces >= GameConstants.boneCountForJigsaw)
@@ -404,21 +417,9 @@ namespace Poseidon
                     spriteBatch.Draw(playJigsawButton, playTurtleJigsawRect, Color.White);
                     spriteBatch.DrawString(menuSmall, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - menuSmall.MeasureString(turtleJigsawButtonText).X / 4, playTurtleJigsawRect.Center.Y - menuSmall.MeasureString(turtleJigsawButtonText).Y / 4), Color.Red, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
                 }
-                else if (HydroBot.numTurtlePieces > 0)
-                {
-                    string turtleText = "You need " + (GameConstants.boneCountForJigsaw - HydroBot.numTurtlePieces).ToString() + " more fossils to strengthen Meiolania Turtle";
-                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playTurtleJigsawRect.Width + 100, facilityFont2);
-                    spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
-                }
-                else if (HydroBot.turtlePower > 1f)
-                {
-                    string turtleText = "Your Meiolania Turtle's power has been increased "+ ((int)HydroBot.turtlePower).ToString() + " times.";
-                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playTurtleJigsawRect.Width + 100, facilityFont2);
-                    spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
-                }
                 else
                 {
-                    string turtleText = "You have resurrected the Meiolania Turtle. It is your minion.";
+                    string turtleText = "You need " + (GameConstants.boneCountForJigsaw - HydroBot.numTurtlePieces).ToString() + " more fossils to strengthen Meiolania Turtle";
                     turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playTurtleJigsawRect.Width + 100, facilityFont2);
                     spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playTurtleJigsawRect.Left - 50, playTurtleJigsawRect.Top), Color.White);
                 }
@@ -447,6 +448,18 @@ namespace Poseidon
                 lostStr = Poseidon.Core.IngamePresentation.wrapLine(lostStr, playDolphinJigsawRect.Width + 100, facilityFont2);
                 spriteBatch.DrawString(facilityFont2, lostStr, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
             }
+            else if (dolphinWon && HydroBot.dolphinPower>1f)
+            {
+                string turtleText = "Congrats! Your Maui dolphin's strength has been increased " + (int)HydroBot.dolphinPower + " times.";
+                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playDolphinJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
+            }
+            else if (dolphinWon)
+            {
+                string dolphinText = "Congrats! You have resurrected the Maui's dolphin. It is your minion.";
+                dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, playDolphinJigsawRect.Width + 100, facilityFont2);
+                spriteBatch.DrawString(facilityFont2, dolphinText, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
+            }
             else if (HydroBot.hasDolphin)
             {
                 if (HydroBot.numDolphinPieces >= GameConstants.boneCountForJigsaw)
@@ -457,21 +470,9 @@ namespace Poseidon
                     spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White);
                     spriteBatch.DrawString(menuSmall, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - menuSmall.MeasureString(dolphinJigsawButtonText).X / 4, playDolphinJigsawRect.Center.Y - menuSmall.MeasureString(dolphinJigsawButtonText).Y / 4), Color.Red, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
                 }
-                else if (HydroBot.numDolphinPieces > 0)
-                {
-                    string dolphinText = "You need " + (GameConstants.boneCountForJigsaw - HydroBot.numDolphinPieces).ToString() + " more bones to strengthen Maui's Dolphin";
-                    dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, playDolphinJigsawRect.Width + 100, facilityFont2);
-                    spriteBatch.DrawString(facilityFont2, dolphinText, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
-                }
-                else if (HydroBot.dolphinPower > 1f)
-                {
-                    string turtleText = "Your Maui dolphin's strength has been incresed "+ (int)HydroBot.dolphinPower +" times.";
-                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, playDolphinJigsawRect.Width + 100, facilityFont2);
-                    spriteBatch.DrawString(facilityFont2, turtleText, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
-                }
                 else
                 {
-                    string dolphinText = "You have resurrected the Maui's dolphin. It is your minion.";
+                    string dolphinText = "You need " + (GameConstants.boneCountForJigsaw - HydroBot.numDolphinPieces).ToString() + " more bones to strengthen Maui's Dolphin";
                     dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, playDolphinJigsawRect.Width + 100, facilityFont2);
                     spriteBatch.DrawString(facilityFont2, dolphinText, new Vector2(playDolphinJigsawRect.Left - 50, playDolphinJigsawRect.Top), Color.White);
                 }

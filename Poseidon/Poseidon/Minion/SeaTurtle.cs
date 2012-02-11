@@ -14,16 +14,25 @@ namespace Poseidon
         public static float AfterX = HydroBot.controlRadius / 4;
         public static float AfterZ = - HydroBot.controlRadius * 1.73f / 4 ;
 
-        public static float turtleDamage = 30f;
+        public static float turtleDamage = 5f;
 
-        public static TimeSpan lastAttack;
-        public static TimeSpan timeBetweenAttack; 
+        // Frozen breathe attack stuff
+        public TimeSpan lastCast;
+        public TimeSpan coolDown;
+
+        public TimeSpan lastAttack;
+        public TimeSpan timeBetweenAttack; 
 
         public SeaTurtle() : base() {
             lastAttack = PoseidonGame.playTime;
             // Cool down 10s
             timeBetweenAttack = new TimeSpan(0, 0, 1);
-            isBigBoss = true;
+
+            // Cool down 5s for the skill
+            coolDown = new TimeSpan(0, 0, 5);
+            lastCast = PoseidonGame.playTime;
+
+            isBigBoss = false;
         }
 
         public override void attack()
@@ -46,8 +55,42 @@ namespace Poseidon
             }
         }
 
+        public void roar(SwimmingObject[] enemies, int enemiesSize) {
+            Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 observerDirection = Vector3.Transform(movement, orientationMatrix);
+            
+            for (int i = 0; i < enemiesSize; i++) {
+                Vector3 otherDirection = enemies[i].Position - Position;
+                if (Behavior.isInSight(observerDirection, Position, otherDirection, enemies[i].Position, (float)Math.PI * 4/3, 60f)) {
+                //if (Vector3.Distance(enemies[i].Position, Position) < 60f) {
+                    enemies[i].health -= turtleDamage;
+                    enemies[i].speedFactor = 0.5f;
+                    enemies[i].slowStart = PoseidonGame.playTime;
+                }
+            }
+        }
+
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
+            // Frozen breathe
+            if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds) {
+                roar(enemies, enemiesSize);
+
+                lastCast = PoseidonGame.playTime;
+
+                Point point = new Point();
+                String point_string = "Just roar";
+                point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
+                if (HydroBot.gameMode == GameMode.ShipWreck)
+                    ShipWreckScene.points.Add(point);
+                else if (HydroBot.gameMode == GameMode.MainGame)
+                    PlayGameScene.points.Add(point);
+                else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                    SurvivalGameScene.points.Add(point);
+            }
+
             Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);
             if (isWandering == true)
             {
@@ -59,7 +102,7 @@ namespace Poseidon
                     isChasing = false;
                     isFighting = false;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else
                 {
@@ -73,7 +116,7 @@ namespace Poseidon
                         isChasing = true;
                         isFighting = false;
 
-                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank);
+                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                     }
                 }
             }// End wandering
@@ -95,7 +138,7 @@ namespace Poseidon
                     randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, tank);
                 }
                 else
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
             }
             // If the fish is chasing some enemy
             else if (isChasing == true)
@@ -109,7 +152,7 @@ namespace Poseidon
 
                     currentTarget = null;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else if (Vector3.Distance(Position, currentTarget.Position) <
                     5f + BoundingSphere.Radius + currentTarget.BoundingSphere.Radius) // Too close then attack
@@ -122,7 +165,7 @@ namespace Poseidon
                     attack();
                 }
                 else
-                    seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
             }
             // If fighting some enemy
             else if (isFighting == true)
@@ -137,7 +180,7 @@ namespace Poseidon
 
                     currentTarget = null;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else
                 {
@@ -151,7 +194,7 @@ namespace Poseidon
 
                         currentTarget = null;
 
-                        seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                        seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                     } // Or enemy ran away
                     else if (Vector3.Distance(Position, currentTarget.Position) >=
                       10f + BoundingSphere.Radius + currentTarget.BoundingSphere.Radius)
@@ -161,7 +204,7 @@ namespace Poseidon
                         isChasing = true;
                         isFighting = false;
 
-                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank);
+                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                     }
                     else
                         attack();

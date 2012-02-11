@@ -27,7 +27,7 @@ namespace Poseidon
         public Vector3 fleeingDirection;
 
         // Percept ID:
-        // 0 = nothing detected
+        // 0 = nothing detecteds
         // 1 = hydrobot detected - 1st priory
         // 2 = last target is still in range - 2nd priory
         // 3 = a fish is detected - 3rd priory
@@ -124,7 +124,7 @@ namespace Poseidon
             tmp *= 100f; // Somewhere faraway
 
             Vector3 fleeTarget = Position + new Vector3(tmp.X, 0, tmp.Y);
-            seekDestination(fleeTarget, enemyList, enemySize, fishList, fishSize, hydroBot);
+            seekDestination(fleeTarget, enemyList, enemySize, fishList, fishSize, hydroBot, speedFactor);
         }
 
         public void setHypnotise()
@@ -230,17 +230,16 @@ namespace Poseidon
                 pull += totalPush;
                 pull.Normalize();
 
-                futurePosition = Position + (pull * speed);
+                futurePosition = Position + (pull * speed * speedFactor);
 
                 if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
                         && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
                 {
                     Position = futurePosition;
-                    BoundingSphere.Center.X += (pull * speed).X;
-                    BoundingSphere.Center.Z += (pull * speed).Z;
+                    BoundingSphere.Center.X += (pull * speed * speedFactor).X;
+                    BoundingSphere.Center.Z += (pull * speed * speedFactor).Z;
                     ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
                 }
-
             }
         }
 
@@ -350,7 +349,7 @@ namespace Poseidon
         }
 
         // Go randomly is default move
-        protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
+        protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot, float speedFactor)
         {
             Vector3 futurePosition = Position;
             //int barrier_move
@@ -382,7 +381,7 @@ namespace Poseidon
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 headingDirection = Vector3.Transform(movement, orientationMatrix);
-                headingDirection *= GameConstants.EnemySpeed;
+                headingDirection *= GameConstants.EnemySpeed * speedFactor;
                 futurePosition = Position + headingDirection;
 
                 if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)

@@ -14,11 +14,11 @@ namespace Poseidon
         public static float AfterX = -HydroBot.controlRadius/4;
         public static float AfterZ = 0;
 
-        public static TimeSpan lastCast;
-        public static TimeSpan coolDown;
+        public TimeSpan lastCast;
+        public TimeSpan coolDown;
 
-        public static TimeSpan lastAttack;
-        public static TimeSpan timeBetweenAttack; 
+        public TimeSpan lastAttack;
+        public TimeSpan timeBetweenAttack; 
 
         public static float healAmount = 50f;
 
@@ -31,8 +31,7 @@ namespace Poseidon
             timeBetweenAttack = new TimeSpan(0,0,1);
             // Cool down 5s
             coolDown = new TimeSpan(0, 0, 5);
-            isBigBoss = true;
-
+            isBigBoss = false;
         }
 
         public bool isTargeting() {
@@ -91,7 +90,7 @@ namespace Poseidon
                     isChasing = false;
                     isFighting = false;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else
                 {
@@ -105,7 +104,7 @@ namespace Poseidon
                         isChasing = true;
                         isFighting = false;
 
-                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank);
+                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                     }
                 }
             }// End wandering
@@ -125,7 +124,7 @@ namespace Poseidon
                     randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, tank);
                 }
                 else
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
             }
             // If the fish is chasing some enemy
             else if (isChasing == true)
@@ -139,7 +138,7 @@ namespace Poseidon
 
                     currentTarget = null;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else if (Vector3.Distance(Position, currentTarget.Position) <
                     10f + BoundingSphere.Radius + currentTarget.BoundingSphere.Radius) // Too close then attack
@@ -152,7 +151,7 @@ namespace Poseidon
                     attack();
                 }
                 else
-                    seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
             }
             // If fighting some enemy
             else if (isFighting == true)
@@ -167,7 +166,7 @@ namespace Poseidon
 
                     currentTarget = null;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else
                 {
@@ -182,7 +181,7 @@ namespace Poseidon
 
                         currentTarget = null;
 
-                        seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank);
+                        seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                     }
                     else if (Vector3.Distance(Position, currentTarget.Position) >=
                       5f + BoundingSphere.Radius + currentTarget.BoundingSphere.Radius)
@@ -192,13 +191,12 @@ namespace Poseidon
                         isChasing = true;
                         isFighting = false;
 
-                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank);
+                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                     }
                     else
                         attack();
                 }
             }
-
 
             // if clip player has been initialized, update it
             if (clipPlayer != null)

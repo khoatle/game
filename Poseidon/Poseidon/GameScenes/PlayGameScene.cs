@@ -47,7 +47,7 @@ namespace Poseidon
         // losing: reset our bot to the bot at the beginning of the level
         GameState prevGameState;
         GameObject boundingSphere;
-        public int type = 2;
+        public int type = 0;
 
         Terrain terrain;
         public List<ShipWreck> shipWrecks;
@@ -252,11 +252,11 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 30, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 30, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
-                int[] numFish = { 0, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 3, 4, 5, 10, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
@@ -655,7 +655,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
-                AddingObjects.placeMinion(Content, 1, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+                AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
                 type++;
             }
 

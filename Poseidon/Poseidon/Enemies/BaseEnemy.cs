@@ -309,6 +309,12 @@ namespace Poseidon
                     Matrix WorldView = Matrix.Identity * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                    {
+                        effect.Parameters["DiffuseIntensity"].SetValue(0.65f);
+                        effect.Parameters["AmbientIntensity"].SetValue(0.65f);
+                    }
+                    else effect.Parameters["DiffuseIntensity"].SetValue(1.0f);
                 }
                 mesh.Draw();
             }

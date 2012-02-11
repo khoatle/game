@@ -195,7 +195,7 @@ namespace Poseidon
                 }
                 else if (type == 7)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardshark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardShark2");
                     fish[i].Name += "leopard shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "No, I am not racist and I date all kinds of shark, not you, dear bot.";

@@ -619,11 +619,11 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        if (!PlayGameScene.hadkey)
-                        {
-                            showNoKey = true;
-                        }
-                        else
+                        //if (!PlayGameScene.hadkey)
+                        //{
+                        //    showNoKey = true;
+                        //}
+                        //else
                         {
                             chest.opened = true;
                             audio.OpenChest.Play();

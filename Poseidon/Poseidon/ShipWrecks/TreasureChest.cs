@@ -84,6 +84,8 @@ namespace Poseidon
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["AmbientIntensity"].SetValue(1.0f);
+                    effect.Parameters["DiffuseIntensity"].SetValue(0.2f);
                 }
                 mesh.Draw();
             }

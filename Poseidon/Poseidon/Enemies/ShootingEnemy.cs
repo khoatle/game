@@ -165,6 +165,17 @@ namespace Poseidon
             // do not delete this
             if (stunned) return;
 
+            // Fleeing stuff
+            if (isFleeing == true)
+            {
+                if (PoseidonGame.playTime.TotalSeconds - fleeingStart.TotalSeconds < fleeingDuration.TotalSeconds) {
+                    flee(enemyList, enemySize, fishList, fishSize, hydroBot);
+                    return;
+                }
+                else
+                    isFleeing = false;
+            }
+
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
             if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)

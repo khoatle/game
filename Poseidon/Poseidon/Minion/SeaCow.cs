@@ -14,6 +14,7 @@ namespace Poseidon
     {
         public static float AfterX = HydroBot.controlRadius / 4;
         public static float AfterZ = HydroBot.controlRadius * 1.73f / 4;
+        public static float roarRadius = 50f;
 
         public static float cowDamage = 30f;
         public static TimeSpan lastAttack;
@@ -29,7 +30,7 @@ namespace Poseidon
             lastCast = PoseidonGame.playTime;
             timeBetweenAttack = new TimeSpan(0, 0, 1);
             // Cool down 20s
-            coolDown = new TimeSpan(0, 0, 20);
+            coolDown = new TimeSpan(0, 0, 3);
             isBigBoss = true;
         }
 
@@ -107,12 +108,40 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
-            // Skill stuffs
+            // Fleeing stuffs
             if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds) {
-                giveBuff();
+                // giveBuff();
+                
+                // All enemies within a radius flee
+                for (int i = 0; i < enemiesSize; i++)
+                {
+                    BaseEnemy tmp = (BaseEnemy)enemies[i];
+                    if (Vector3.Distance(tmp.Position, Position) < roarRadius && !tmp.isFleeing) {
+                        tmp.isFleeing = true;
+                        tmp.fleeingStart = PoseidonGame.playTime;
+                        
+                        // Find the fleeing direction for this guy
+                        Matrix orientationMatrix = Matrix.CreateRotationY(tmp.ForwardDirection);
+                        Vector3 movement = Vector3.Zero;
+                        movement.Z = 1;
+                        tmp.fleeingDirection = -Vector3.Transform(movement, orientationMatrix);
+
+                        // Display some info, will remove later
+                        Point point = new Point();
+                        String point_string = "Fleeing!";
+                        point.LoadContent(PoseidonGame.contentManager, point_string, tmp.Position, Color.Red);
+                        if (HydroBot.gameMode == GameMode.ShipWreck)
+                            ShipWreckScene.points.Add(point);
+                        else if (HydroBot.gameMode == GameMode.MainGame)
+                            PlayGameScene.points.Add(point);
+                        else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                            SurvivalGameScene.points.Add(point);
+                    }
+                }
                 lastCast = PoseidonGame.playTime;
             }
 
+            // Moving, and changing state Logic
             Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);
             if (isWandering == true)
             {

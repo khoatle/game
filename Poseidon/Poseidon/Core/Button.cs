@@ -21,6 +21,7 @@ namespace Poseidon.Core
         private int buttonIndex;
         private float scale = 1.0f;
         private string name;
+        private ButtonState previousRightButtonState;
 
         public bool Anchored
         {
@@ -60,6 +61,7 @@ namespace Poseidon.Core
             anchored = false;
             state = InteractionState.OUT;
             cursorPosition = new Vector2();
+            previousRightButtonState = ButtonState.Released;
 
             sourceRect = new Rectangle(0, idx * height, width, height);
             destinationRect = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)(width * scale), (int)(height * scale));
@@ -103,11 +105,12 @@ namespace Poseidon.Core
                 anchorDestinationRect = new Rectangle((int)cursorPosition.X, (int)cursorPosition.Y, width, height);
             }
 
-            if (mouseState.RightButton == ButtonState.Pressed)
+            if (previousRightButtonState == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
             {
                 // Anchor released
                 anchored = false;
             }
+            previousRightButtonState = mouseState.RightButton;
         }
 
         public void Draw(SpriteBatch spriteBatch)

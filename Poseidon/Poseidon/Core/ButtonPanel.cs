@@ -18,8 +18,12 @@ namespace Poseidon.Core
         private Rectangle panelRectangle;
         private SpriteFont infoTextFont;
         private string[] buildingNames = new string[] { "Research Facility", "Radioactive Processing Facility", "Biodegradable Processing Facility", "Plastic Processing Facility" };
-        private ButtonState previousLButtonState;
-        public bool clickToBuildDetected;
+        private ButtonState previousLButtonState, previousRButtonState;
+        private TimeSpan clickActiveSpan;
+        private TimeSpan buildDetectedTime, removeAnchorDetectedTime;
+        public bool clickToBuildDetected, clickToBuildActive;
+        public bool rightClickToRemoveAnchor, clickToRemoveAnchorActive;
+        public bool cursorOutsidePanelArea;
 
         // Currently Anchored button (-ve if none)
         private int anchoredIndex = -1;
@@ -35,8 +39,11 @@ namespace Poseidon.Core
                 maxButtons = buttonCount;
             }
             scale = scaleFactor;
-            clickToBuildDetected = false;
-            previousLButtonState = ButtonState.Released;
+            clickToBuildDetected = clickToBuildActive = false;
+            previousLButtonState = previousRButtonState = ButtonState.Released;
+            rightClickToRemoveAnchor = clickToRemoveAnchorActive = false;
+            buildDetectedTime = removeAnchorDetectedTime = TimeSpan.Zero;
+            clickActiveSpan = TimeSpan.FromMilliseconds(100.0);
         }
 
         public bool hasAnyAnchor()
@@ -50,18 +57,6 @@ namespace Poseidon.Core
             {
                 buttons[anchoredIndex].Anchored = false;
             }
-        }
-
-        public bool cursorOutsidePanelArea()
-        {
-            for (int i = 0; i < buttons.Count; i++)
-            {
-                if (buttons[i].state != Button.InteractionState.OUT)
-                {
-                    return false;
-                }
-            }
-            return true;
         }
 
         public BuildingType anchorIndexToBuildingType()
@@ -123,16 +118,41 @@ namespace Poseidon.Core
                 
             }
 
+            cursorOutsidePanelArea = cursorInGameArena;
             // if cursor in game arena and lbutton down -> up detected, and one of the buildings anchored
             if (cursorInGameArena && previousLButtonState == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released && anchoredIndex >= 0)
             {
                 clickToBuildDetected = true;
+                buildDetectedTime = gameTime.TotalGameTime;
+                clickToBuildActive = true;
             }
             else
             {
+                clickToBuildActive = false;
+                if (gameTime.TotalGameTime - buildDetectedTime < clickActiveSpan) {
+                    clickToBuildActive = true;
+                }
                 clickToBuildDetected = false;
             }
+
+            if (cursorInGameArena && previousRButtonState == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released && anchoredIndex >= 0)
+            {
+                rightClickToRemoveAnchor = true;
+                removeAnchorDetectedTime = gameTime.TotalGameTime;
+                clickToRemoveAnchorActive = true;
+            }
+            else
+            {
+                clickToRemoveAnchorActive = false;
+                if (gameTime.TotalGameTime - removeAnchorDetectedTime < clickActiveSpan)
+                {
+                    clickToRemoveAnchorActive = true;
+                }
+                rightClickToRemoveAnchor = false;
+            }
+
             previousLButtonState = mouseState.LeftButton;
+            previousRButtonState = mouseState.RightButton;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -152,7 +172,7 @@ namespace Poseidon.Core
 
         public void DrawAnchor(SpriteBatch spriteBatch)
         {
-            if (hasAnyAnchor() && cursorOutsidePanelArea())
+            if (hasAnyAnchor() && cursorOutsidePanelArea)
             {
                 buttons[anchoredIndex].DrawAnchor(spriteBatch);
             }

@@ -727,7 +727,7 @@ namespace Poseidon
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
                     // if mouse click happened, check for the click position and add new factory
-                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea() && factoryButtonPanel.clickToBuildDetected)
+                    if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea && factoryButtonPanel.clickToBuildDetected)
                     {
                         // adjust the position to build factory depending on current camera position
                         Vector3 newBuildingPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
@@ -831,8 +831,8 @@ namespace Poseidon
                         return;
                     }
 
-                    bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState) 
-                        || (!factoryButtonPanel.cursorOutsidePanelArea());
+                    bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState)
+                        || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor();
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);

@@ -1312,7 +1312,7 @@ namespace Poseidon
             if (resources != null)
             {
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
-                    20);
+                    25);
                 foreach (Resource resource in resources)
                 {
                     if (resource.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(resource.BoundingSphere))

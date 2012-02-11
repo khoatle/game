@@ -485,29 +485,34 @@ namespace Poseidon
             ref List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
-            int positionSign, xVal, zVal;
+            int xVal, zVal; //positionSign
             foreach (Trash trash in trashes)
             {
                 //trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
                 //    fish, shipWrecks);
                 do
                 {
-                    positionSign = random.Next(4);
                     xVal = random.Next(minX, maxX);
                     zVal = random.Next(minZ, maxZ);
-                    switch (positionSign)
-                    {
-                        case 0:
-                            xVal *= -1;
-                            break;
-                        case 1:
-                            zVal *= -1;
-                            break;
-                        case 2:
-                            xVal *= -1;
-                            zVal *= -1;
-                            break;
-                    }
+                    if (random.Next(100) % 2 == 0)
+                        xVal *= -1;
+                    if (random.Next(100) % 2 == 0)
+                        zVal *= -1;
+                    //positionSign = random.Next(4);
+                    
+                    //switch (positionSign)
+                    //{
+                    //    case 0:
+                    //        xVal *= -1;
+                    //        break;
+                    //    case 1:
+                    //        zVal *= -1;
+                    //        break;
+                    //    case 2:
+                    //        xVal *= -1;
+                    //        zVal *= -1;
+                    //        break;
+                    //}
                 } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;

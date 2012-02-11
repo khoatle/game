@@ -953,16 +953,25 @@ namespace Poseidon
                                 switch (factory.factoryType)
                                 {
                                     case FactoryType.biodegradable:
-                                        dumpTrashInFactory(factory, factory.Position);
-                                        HydroBot.bioTrash = 0;
+                                        if (HydroBot.bioTrash > 0)
+                                        {
+                                            dumpTrashInFactory(factory, factory.Position);
+                                            HydroBot.bioTrash = 0;
+                                        }
                                         break;
                                     case FactoryType.plastic:
-                                        dumpTrashInFactory(factory, factory.Position);
-                                        HydroBot.plasticTrash = 0;
+                                        if (HydroBot.plasticTrash > 0)
+                                        {
+                                            dumpTrashInFactory(factory, factory.Position);
+                                            HydroBot.plasticTrash = 0;
+                                        }
                                         break;
                                     case FactoryType.radioactive:
-                                        dumpTrashInFactory(factory, factory.Position);
-                                        HydroBot.nuclearTrash = 0;
+                                        if (HydroBot.nuclearTrash > 0)
+                                        {
+                                            dumpTrashInFactory(factory, factory.Position);
+                                            HydroBot.nuclearTrash = 0;
+                                        }
                                         break;
                                 }
                         }

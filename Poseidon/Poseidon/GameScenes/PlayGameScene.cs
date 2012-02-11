@@ -1112,18 +1112,26 @@ namespace Poseidon
             // Check if hydrobot has sufficient resources for building a factory
             if (HydroBot.numResources < GameConstants.numResourcesForEachFactory)
             {
-                // TODO: play some sound saying no sufficient resource
+                // Play some sound hinting no sufficient resource
+                audio.MenuScroll.Play();
                 return false;
             }
 
             // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
             if (Math.Abs(position.X) > (float)GameConstants.MainGameMaxRangeX || Math.Abs(position.Z) > (float)GameConstants.MainGameMaxRangeZ)
             {
-                // TODO: play some sound hinting position selected is outside game arena
+                // Play some sound hinting position selected is outside game arena
+                audio.MenuScroll.Play();
                 return false;
             }
 
-            // TODO: Verify that current location is available for adding the building
+            //Verify that current location is available for adding the building
+            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, (int)position.Z, shipWrecks, staticObjects, trashes, factories, researchFacility))
+            {
+                // Play some sound hinting seabed place is occupied
+                audio.MenuScroll.Play();
+                return false;
+            }
 
             switch (buildingType)
             {
@@ -1131,6 +1139,7 @@ namespace Poseidon
                     if (researchFacility != null)
                     {
                         // do not allow addition of more than one research facility
+                        audio.MenuScroll.Play();
                         status = false;
                     }
                     else
@@ -1178,6 +1187,12 @@ namespace Poseidon
                     status = true;
                     break;
             }
+            if (status)
+            {
+                // Play sound for successful addition of a building
+                audio.OpenChest.Play();
+            }
+
             return status;
         }
 

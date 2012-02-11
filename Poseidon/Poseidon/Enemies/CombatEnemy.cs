@@ -54,6 +54,11 @@ namespace Poseidon
                 }
             }
 
+            // Wear out slow
+            if (speedFactor != 1)
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds)
+                    speedFactor = 1;
+            
             // Stun stuff
             if (stunned)
             {
@@ -148,7 +153,7 @@ namespace Poseidon
 
         protected void calculateFutureBoundingSphere()
         {
-            Vector3 futurePosition = Position + speed * headingDirection;
+            Vector3 futurePosition = Position + speed * headingDirection * speedFactor;
             futureBoundingSphere = new BoundingSphere(futurePosition, BoundingSphere.Radius);
         }
 
@@ -160,7 +165,7 @@ namespace Poseidon
                 // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 30) && !configBits[3])
                     clipPlayer.switchRange(1, 30);
-                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot);
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot, speedFactor);
                 return;
             }
             if (currentHuntingTarget != null)
@@ -201,7 +206,7 @@ namespace Poseidon
                     }
                 }
 
-                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / speedFactor)
                 {
                     if (!clipPlayer.inRange(31, 60))
                         clipPlayer.switchRange(31, 60);

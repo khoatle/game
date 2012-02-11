@@ -25,6 +25,11 @@ namespace Poseidon
         public float poissonInterval;
         public int basicExperienceReward;
 
+        // Slow down stuff
+        public float speedFactor;
+        public TimeSpan slowStart;
+        public TimeSpan slowDuration;
+
         // is this enemy a big boss
         // in order to know whether the big boss is killed
         // and the level is won
@@ -47,6 +52,10 @@ namespace Poseidon
             maxHPLossFromPoisson = 50;
             accumulatedHealthLossFromPoison = 0;
             gaveExp = false;
+            speedFactor = 1f;
+
+            // Slow duration is init as 5
+            slowDuration = new TimeSpan(0, 0, 5);
         }
 
         public virtual void LoadContent(ContentManager content, string modelName)
@@ -64,7 +73,7 @@ namespace Poseidon
         }
 
         // Go straight
-        protected virtual void seekDestination(Vector3 destination, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
+        protected virtual void seekDestination(Vector3 destination, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot, float speedFactor)
         {
             //Vector3 futurePosition = Position + speed * headingDirection;
             //if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
@@ -129,14 +138,15 @@ namespace Poseidon
                 pull += totalPush;
                 pull.Normalize();
 
-                futurePosition = Position + (pull * GameConstants.FishSpeed);
+                // Speed factor stuff
+                futurePosition = Position + (pull * GameConstants.FishSpeed * speedFactor);
 
                 if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot)
                         && Collision.isBarriersValidMove(this, futurePosition, fishes, fishAmount, hydroBot))
                 {
                     Position = futurePosition;
-                    BoundingSphere.Center.X += (pull * GameConstants.FishSpeed).X;
-                    BoundingSphere.Center.Z += (pull * GameConstants.FishSpeed).Z;
+                    BoundingSphere.Center.X += (pull * GameConstants.FishSpeed * speedFactor).X;
+                    BoundingSphere.Center.Z += (pull * GameConstants.FishSpeed * speedFactor).Z;
                     ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
                 }
             }

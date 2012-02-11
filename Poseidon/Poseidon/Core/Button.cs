@@ -22,6 +22,7 @@ namespace Poseidon.Core
         private float scale = 1.0f;
         private string name;
         private ButtonState previousRightButtonState;
+        private bool selectSoundPlayed;
 
         public bool Anchored
         {
@@ -62,6 +63,7 @@ namespace Poseidon.Core
             state = InteractionState.OUT;
             cursorPosition = new Vector2();
             previousRightButtonState = ButtonState.Released;
+            selectSoundPlayed = false;
 
             sourceRect = new Rectangle(0, idx * height, width, height);
             destinationRect = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)(width * scale), (int)(height * scale));
@@ -86,6 +88,12 @@ namespace Poseidon.Core
                 state = InteractionState.SELECTED;
                 sourceRect = new Rectangle(2 * width, buttonIndex * height, width, height);
                 anchored = true;
+
+                if (!selectSoundPlayed)
+                {
+                    PoseidonGame.audio.MenuSelect.Play();
+                    selectSoundPlayed = true;
+                }
             }
             else if (mouseState.LeftButton == ButtonState.Pressed && !onButtonArea)
             {
@@ -103,6 +111,11 @@ namespace Poseidon.Core
                 state = InteractionState.OUT;
                 sourceRect = new Rectangle(0, buttonIndex * height, width, height);
                 anchorDestinationRect = new Rectangle((int)cursorPosition.X, (int)cursorPosition.Y, width, height);
+            }
+
+            if (mouseState.LeftButton == ButtonState.Released)
+            {
+                selectSoundPlayed = false; // reset boolean when leftbutton is released
             }
 
             if (previousRightButtonState == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)

@@ -91,6 +91,11 @@ namespace Poseidon
             // do not delete this
             if (stunned) return;
 
+            // Wear out slow
+            if (speedFactor != 1) 
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds)
+                    speedFactor = 1;
+
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
             if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
@@ -181,7 +186,7 @@ namespace Poseidon
         {
             if (configBits[0] == true)
             {
-                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot);
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot, speedFactor);
                 return;
             }
             if (currentHuntingTarget != null)

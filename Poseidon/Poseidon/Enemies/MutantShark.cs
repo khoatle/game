@@ -101,6 +101,12 @@ namespace Poseidon
                     clipPlayer.switchRange(1, 24);
                 return;
             }
+                        
+            // Wear out slow
+            if (speedFactor != 1) 
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds)
+                    speedFactor = 1;
+
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
             if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
@@ -129,7 +135,7 @@ namespace Poseidon
                 // swimming w/o attacking
                 if (!clipPlayer.inRange(1, 24) && !configBits[3])
                     clipPlayer.switchRange(1, 24);
-                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot);
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot, speedFactor);
                 return;
             }
             if (currentHuntingTarget != null)

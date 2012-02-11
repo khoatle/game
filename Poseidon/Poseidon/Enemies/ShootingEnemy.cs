@@ -111,7 +111,7 @@ namespace Poseidon
         {
             if (configBits[0] == true)
             {
-                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot);
+                randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot, speedFactor);
                 return;
             }
             if (currentHuntingTarget != null)
@@ -145,7 +145,8 @@ namespace Poseidon
                     }
                 }
 
-                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.EnemeyShootingRange)
+                // Divide speed factor make enemy attacks slower
+                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / speedFactor && (Position - currentHuntingTarget.Position).Length() < GameConstants.EnemeyShootingRange)
                 {
                     AddingObjects.placeEnemyBullet(this, damage, bullets, 0, cameraFrustum, 0);
                     prevFire = PoseidonGame.playTime;
@@ -175,6 +176,12 @@ namespace Poseidon
                 else
                     isFleeing = false;
             }
+
+            // Wear out slow
+            if (speedFactor != 1)
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds)
+                    speedFactor = 1;
+                
 
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
             buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);

@@ -1148,7 +1148,9 @@ namespace Poseidon
             }
 
             //Verify that current location is available for adding the building
-            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, (int)position.Z, shipWrecks, staticObjects, trashes, factories, researchFacility))
+            int radius = 60; // probably need to calculate this based on the model for each building
+            int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();

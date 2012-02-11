@@ -772,6 +772,61 @@ namespace Poseidon
             return false;
         }
 
+        // Finds if seabed place is free within the radius from point xValue,zValue
+        public static bool IsSeaBedPlaceOccupied(int xValue, int yValue, int zValue, int radius, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
+        {
+            BoundingSphere objectBoundingSphere = new BoundingSphere(new Vector3(xValue, 0, zValue), radius);
+            if (shipWrecks != null)
+            {
+                //not so close to the ship wreck
+                foreach (GameObject currentObj in shipWrecks)
+                {
+                    if (objectBoundingSphere.Intersects(currentObj.BoundingSphere))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (staticObjects != null)
+            {
+                foreach (GameObject currentObj in staticObjects)
+                {
+                    if (objectBoundingSphere.Intersects(currentObj.BoundingSphere))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (trashes != null)
+            {
+                foreach (Trash trash in trashes)
+                {
+                    if (objectBoundingSphere.Intersects(trash.BoundingSphere))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (factories != null)
+            {
+                foreach (Factory factory in factories)
+                {
+                    if (objectBoundingSphere.Intersects(factory.BoundingSphere))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (researchFacility != null)
+            {
+                if (objectBoundingSphere.Intersects(researchFacility.BoundingSphere))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static void PlaceStaticObjects(List<StaticObject> staticObjects, List<ShipWreck> shipWrecks, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
             Vector3 tempCenter;

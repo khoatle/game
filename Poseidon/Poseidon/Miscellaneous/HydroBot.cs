@@ -1450,7 +1450,7 @@ namespace Poseidon
                     Matrix WorldView = Matrix.Identity * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
-
+  
                     if (isPoissoned == true)
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
@@ -1460,6 +1460,17 @@ namespace Poseidon
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
                     }
                     effect.Parameters["Shininess"].SetValue(30);
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                    {
+                        effect.Parameters["DiffuseIntensity"].SetValue(0.65f);
+                        effect.Parameters["AmbientIntensity"].SetValue(0.65f);
+                        effect.Parameters["Shininess"].SetValue(1.0f);
+                    }
+                    else effect.Parameters["DiffuseIntensity"].SetValue(1.0f);
+                    if (invincibleMode == true)
+                    {
+                        effect.Parameters["DiffuseIntensity"].SetValue(3.0f);
+                    }
                     //SkinnedEffect.fx
                     //effect.Parameters["ShaderIndex"].SetValue(17);
                     //effect.Parameters["WorldViewProj"].SetValue(view * projection);

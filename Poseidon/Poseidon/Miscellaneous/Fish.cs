@@ -239,6 +239,7 @@ namespace Poseidon {
                     }
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["DiffuseIntensity"].SetValue(0.5f);
                 }
                 mesh.Draw();
             }

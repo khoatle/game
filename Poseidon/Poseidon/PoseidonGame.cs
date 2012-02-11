@@ -85,6 +85,7 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool AttributePressed;
+        public static bool AttributeButtonPressed;
         bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
@@ -489,10 +490,11 @@ namespace Poseidon
             }
             //do not let the player to open the attribute board in shipwreck now
             //because it will reset the shipwreck
-            if (AttributePressed)
+            if (AttributePressed || AttributeButtonPressed)
             {
                 prevScene = shipWreckScene;
                 ShowScene(AttributeScene);
+                AttributeButtonPressed = false;
             }
         }
         /// <summary>
@@ -512,10 +514,11 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (AttributePressed)
+            if (AttributePressed || AttributeButtonPressed)
             {
                 prevScene = playGameScene;
                 ShowScene(AttributeScene);
+                AttributeButtonPressed = false;
             }
             if (doubleClicked 
                 && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
@@ -609,10 +612,11 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (AttributePressed)
+            if (AttributePressed || AttributeButtonPressed)
             {
                 prevScene = survivalGameScene;
                 ShowScene(AttributeScene);
+                AttributeButtonPressed = false;
             }
             if (survivalGameScene.currentGameState == GameState.ToMainMenu)
                 ShowScene(startScene);

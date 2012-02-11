@@ -85,6 +85,7 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool AttributePressed;
+        public static bool AttributeButtonPressed;
         bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
@@ -412,18 +413,21 @@ namespace Poseidon
                         HydroBot.seaCowPower += 1.0f;
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playSeaCowJigsaw = false;
+                        ResearchFacility.seaCowWon = true;
                         break;
                     case 1:
                         HydroBot.hasTurtle = true;
                         HydroBot.turtlePower += 1.0f;
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playTurtleJigsaw = false;
+                        ResearchFacility.turtleWon = true;
                         break;
                     case 2:
                         HydroBot.hasDolphin = true;
                         HydroBot.dolphinPower += 1.0f;
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playDolphinJigsaw = false;
+                        ResearchFacility.dolphinWon = true;
                         break;
                 }
             }
@@ -489,10 +493,11 @@ namespace Poseidon
             }
             //do not let the player to open the attribute board in shipwreck now
             //because it will reset the shipwreck
-            if (AttributePressed)
+            if (AttributePressed || AttributeButtonPressed)
             {
                 prevScene = shipWreckScene;
                 ShowScene(AttributeScene);
+                AttributeButtonPressed = false;
             }
         }
         /// <summary>
@@ -512,10 +517,11 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (AttributePressed)
+            if (AttributePressed || AttributeButtonPressed)
             {
                 prevScene = playGameScene;
                 ShowScene(AttributeScene);
+                AttributeButtonPressed = false;
             }
             if (doubleClicked 
                 && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
@@ -609,10 +615,11 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (AttributePressed)
+            if (AttributePressed || AttributeButtonPressed)
             {
                 prevScene = survivalGameScene;
                 ShowScene(AttributeScene);
+                AttributeButtonPressed = false;
             }
             if (survivalGameScene.currentGameState == GameState.ToMainMenu)
                 ShowScene(startScene);

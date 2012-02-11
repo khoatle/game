@@ -163,6 +163,7 @@ namespace Poseidon
         Texture2D facilityBackground;
         Texture2D facilityUpgradeButton;
         Texture2D playJigsawButton;
+        Texture2D increaseAttributeButton;
 
         // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
@@ -745,7 +746,7 @@ namespace Poseidon
                             // play sound to denote building could not be added
                         }
                     }
-                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -760,6 +761,7 @@ namespace Poseidon
                         {
                             openResearchFacilityConfigScene = true;
                             ResearchFacility.dolphinLost = ResearchFacility.seaCowLost = ResearchFacility.turtleLost = false;
+                            ResearchFacility.dolphinWon = ResearchFacility.seaCowWon = ResearchFacility.turtleWon = false;
                         }
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
@@ -805,8 +807,19 @@ namespace Poseidon
                                         PoseidonGame.playJigsaw = true;
                                         PoseidonGame.jigsawType = 2; //dolphin
                                     }
+                                    if (HydroBot.unassignedPts>0 && researchFacility.increaseAttributeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    {
+                                        PoseidonGame.AttributeButtonPressed = true;
+                                    }
                                 }
                                 clicked = false;
+                            }
+                            else if (openResearchFacilityConfigScene)
+                            {
+                                if (researchFacility.increaseAttributeRect.Contains(lastMouseState.X, lastMouseState.Y))
+                                    researchFacility.mouseOnIncreaseAttributeIcon = true;
+                                else
+                                    researchFacility.mouseOnIncreaseAttributeIcon = false;
                             }
                             return;
                         }
@@ -1149,7 +1162,7 @@ namespace Poseidon
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = (float)(Math.PI/2) * random.Next(4);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(Content, game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton);
+                        researchFacility.LoadContent(Content, game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton, increaseAttributeButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1219,6 +1232,7 @@ namespace Poseidon
             facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
             facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         }
 
         public override void Draw(GameTime gameTime)

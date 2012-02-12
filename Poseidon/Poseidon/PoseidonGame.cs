@@ -514,8 +514,15 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                MediaPlayer.Stop();
-                ShowScene(startScene);
+                if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
+                {
+                    PlayGameScene.currentGameState = GameState.Running;
+                }
+                else
+                {
+                    MediaPlayer.Stop();
+                    ShowScene(startScene);
+                }
             }
             if (AttributePressed || AttributeButtonPressed)
             {

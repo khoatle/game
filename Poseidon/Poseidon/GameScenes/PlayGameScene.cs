@@ -176,6 +176,14 @@ namespace Poseidon
         private Model biodegradableFactoryModel;
         private Model radioactiveFactoryModel;
 
+        //Models for Trash
+        private Model biodegradableTrash, plasticTrash, radioactiveTrash;
+
+        //Models for powerpacks, strangeRock and resource
+        private Model[] powerpackModels;
+        private Model strangeRockModel;
+        private Model resourceModel;
+
         // For applying graphic effects
         public GraphicEffect graphicEffect;
         //for particle systems
@@ -305,16 +313,11 @@ namespace Poseidon
             }
             factoryButtonPanel = new ButtonPanel(4, buttonScale);
 
-            // Load models for factories.. LoadContent would be better place for this rather than here.
-            researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
-            biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
-            plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
-            radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
-
             this.Load();
             //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
             //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
         }
+
 
         public void Load()
         {
@@ -347,9 +350,6 @@ namespace Poseidon
             tipIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
 
             foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
-
-            //Initialize the game field
-            InitializeGameField(Content);
 
             powerpacks = new List<Powerpack>();
             resources = new List<Resource>();
@@ -389,7 +389,59 @@ namespace Poseidon
             graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
             // Construct our particle system components.
             particleManager = new ParticleManagement(this.game, GraphicDevice);
+
+            // Load lower left pannel button
+            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+            // Load Font for displaying extra information on factory panel
+            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
+
+            // Load Textures and fonts for factory property dialog
+            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
+            factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
+
+            // Load Textures and fonts for research facility property dialog
+            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
+            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
+            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         
+            // Load factory and research lab models
+            researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
+            biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
+            plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
+            radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
+
+            // Load Trash
+            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrash");
+            plasticTrash = Content.Load<Model>("Models/TrashModels/plasticTrash");
+            radioactiveTrash = Content.Load<Model>("Models/TrashModels/radioactiveTrash");
+
+            //Load Powerpacks
+            powerpackModels = new Model[5];
+            powerpackModels[1] = Content.Load<Model>("Models/PowerpackResource/speed");
+            powerpackModels[2] = Content.Load<Model>("Models/PowerpackResource/strength");
+            powerpackModels[3] = Content.Load<Model>("Models/PowerpackResource/shootingRate");
+            powerpackModels[4] = Content.Load<Model>("Models/PowerpackResource/health");
+
+            //Load Resource
+            resourceModel = Content.Load<Model>("Models/PowerpackResource/resource");
+
+            //Load Strange Rock
+            strangeRockModel = Content.Load<Model>("Models/PowerpackResource/strangeRock");
+
+            //Initialize the game field
+            InitializeGameField(Content);
+
+        }
+
+        //Below stuff uses GraphicsDevice which can not be called from Load, as it gives runtime error "GraphicDevice not initialized"
+        protected override void LoadContent()
+        {
+            // Initialie the button panel
+            factoryButtonPanel.Initialize(ref factoryPanelTexture, ref factoryPanelFont, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
         }
 
         /// <summary>
@@ -545,48 +597,25 @@ namespace Poseidon
             int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
             trashes = new List<Trash>(numberTrash);
             int bioIndex, plasticIndex, nuclearIndex;
-            for (bioIndex = 0; bioIndex < GameConstants.NumberPlasticTrash[currentLevel]; bioIndex++)
-            {
-                orientation = random.Next(100);
-                trashes.Add(new Trash(TrashType.plastic));
-                trashes[bioIndex].LoadContent(Content, "Models/TrashModels/trashModel1", orientation); //plastic model
-            }
-            for (plasticIndex = bioIndex; plasticIndex < bioIndex+GameConstants.NumberNuclearTrash[currentLevel]; plasticIndex++)
-            {
-                orientation = random.Next(100);
-                trashes.Add(new Trash(TrashType.radioactive));
-                trashes[plasticIndex].LoadContent(Content, "Models/TrashModels/trashModel2", orientation); //nuclear model
-            }
-            for (nuclearIndex = plasticIndex; nuclearIndex< plasticIndex + GameConstants.NumberBioTrash[currentLevel]; nuclearIndex++)
+            for (bioIndex = 0; bioIndex < GameConstants.NumberBioTrash[currentLevel]; bioIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.biodegradable));
-                trashes[nuclearIndex].LoadContent(Content, "Models/TrashModels/trashModel3", orientation); //organic model
+                trashes[bioIndex].Load(Content,ref biodegradableTrash, orientation);
             }
-            //for (int index = 0; index < GameConstants.NumberTrash[currentLevel]; index++)
-            //{
-            //    random_model = random.Next(5);
-            //    orientation = random.Next(100);
-            //    trashes.Add(new Trash());
-            //    switch (random_model)
-            //    {
-            //        case 0:
-            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel1", orientation);
-            //            break;
-            //        case 1:
-            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel2", orientation);
-            //            break;
-            //        case 2:
-            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel3", orientation);
-            //            break;
-            //        case 3:
-            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel4", orientation);
-            //            break;
-            //        case 4:
-            //            trashes[index].LoadContent(Content, "Models/TrashModels/trashModel5", orientation);
-            //            break;
-            //    }
-            //}
+            for (plasticIndex = bioIndex; plasticIndex < bioIndex+GameConstants.NumberPlasticTrash[currentLevel]; plasticIndex++)
+            {
+                orientation = random.Next(100);
+                trashes.Add(new Trash(TrashType.plastic));
+                trashes[plasticIndex].Load(Content,ref plasticTrash, orientation); //nuclear model
+            }
+            for (nuclearIndex = plasticIndex; nuclearIndex< plasticIndex + GameConstants.NumberNuclearTrash[currentLevel]; nuclearIndex++)
+            {
+                orientation = random.Next(100);
+                trashes.Add(new Trash(TrashType.radioactive));
+                trashes[nuclearIndex].Load(Content,ref radioactiveTrash, orientation); //organic model
+            }
+
             AddingObjects.placeTrash(ref trashes, Content, random, shipWrecks, staticObjects,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
                 GameConstants.MainGameMaxRangeZ, GameMode.MainGame, GameConstants.MainGameFloatHeight, terrain.heightMapInfo); 
@@ -926,11 +955,10 @@ namespace Poseidon
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
-                                GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo);
+                                GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo,ref biodegradableTrash,ref plasticTrash,ref radioactiveTrash);
                         Point point = new Point();
                         point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
                         points.Add(point);
-                        
                     }
                     foreach (Trash trash in trashes)
                     {
@@ -946,7 +974,7 @@ namespace Poseidon
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                     foreach (Factory factory in factories)
                     {
-                        factory.Update(gameTime,ref powerpacks, ref resources);
+                        factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModel);
                         if(doubleClicked && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
                                 //Dump Trash
@@ -1173,7 +1201,7 @@ namespace Poseidon
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = (float)(Math.PI/2) * random.Next(4);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(Content, game, position, orientation, facilityFont, facilityFont2, facilityBackground, facilityUpgradeButton, playJigsawButton, increaseAttributeButton);
+                        researchFacility.LoadContent(game, position, orientation,ref facilityFont,ref facilityFont2,ref facilityBackground,ref facilityUpgradeButton,ref playJigsawButton,ref increaseAttributeButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1184,7 +1212,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1195,7 +1223,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1205,7 +1233,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(Content, game, position, orientation, factoryFont, factoryBackground, factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1218,32 +1246,6 @@ namespace Poseidon
             }
 
             return status;
-        }
-
-        // LoadContent gets called as a part of framework.
-        // Called once, and called after initialization. The texture/models should be loaded here
-        protected override void LoadContent()
-        {
-            // Load lower left pannel button
-            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
-            // Load Font for displaying extra information on factory panel
-            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
-            
-            // Initialie the button panel
-            factoryButtonPanel.Initialize(factoryPanelTexture, factoryPanelFont, new Vector2(10, GraphicsDevice.Viewport.Height - 70));
-
-            // Load Textures and fonts for factory property dialog
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
-            factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
-
-            // Load Textures and fonts for research facility property dialog
-            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
-            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
-            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
-            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         }
 
         public override void Draw(GameTime gameTime)

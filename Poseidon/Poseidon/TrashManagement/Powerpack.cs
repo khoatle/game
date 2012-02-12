@@ -30,19 +30,8 @@ namespace Poseidon
             this.powerType = powerType;
         }
 
-        public void LoadContent(ContentManager content, Vector3 powerpackPosition)
+        public void LoadContent(Vector3 powerpackPosition)
         {
-            if (this.powerType == 1)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/green-fruit");
-            else if (this.powerType == 2)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/red-fruit");
-            else if (this.powerType == 3)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/blue-fruit");
-            else if (this.powerType == 4)
-                Model = content.Load<Model>("Models/PlantAndFruitModels/white-fruit");
-            else if (this.powerType == 5) //Strange Rock
-                Model = content.Load<Model>("Models/BulletModels/bossBullet");
-            
             Position = powerpackPosition;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;

@@ -14,7 +14,6 @@ namespace Poseidon
 
         public float orientation;
 
-        ContentManager Content;
         Game game;
 
         public int numTrashWaiting;
@@ -45,7 +44,7 @@ namespace Poseidon
             random = new Random();
         }
 
-        public void LoadContent(ContentManager content, Game game, Vector3 position, float orientation, SpriteFont font, Texture2D backgroundTexture, Texture2D produceButtonTexture)
+        public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont font,ref Texture2D backgroundTexture,ref Texture2D produceButtonTexture)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -61,7 +60,6 @@ namespace Poseidon
             tempCenter.Y = GameConstants.MainGameFloatHeight;
             tempCenter.Z = Position.Z;
             BoundingSphere = new BoundingSphere(tempCenter,BoundingSphere.Radius);
-            this.Content = content;
             this.orientation = orientation;
 
             produce = Produce.resource;
@@ -81,17 +79,7 @@ namespace Poseidon
             SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 
-        // Overloading content load so that survival mode game compiles properly.
-        public void LoadContent(ContentManager content, Game game, string modelname, Vector3 position, float orientation)
-        {
-            Model = content.Load<Model>(modelname);
-            SpriteFont font = content.Load<SpriteFont>("Fonts/factoryConfig");
-            Texture2D backgroundTexture = content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
-            Texture2D produceButtonTexture = content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
-            LoadContent(content, game, position, orientation, font, backgroundTexture, produceButtonTexture);    
-        }
-
-        public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources)
+        public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model strangeRockModel)
         {
             //Is trash finished processing?
             for (int i = 0; i < listTimeTrashProcessing.Count; i++)
@@ -101,17 +89,17 @@ namespace Poseidon
                     listTimeTrashProcessing.RemoveAt(i);
                     if (produce == Produce.powerpack)
                     {
-                        producePowerPacks(ref powerpacks, resources);
+                        producePowerPacks(ref powerpacks, resources, ref powerpackModels);
                     }
                     else
                     {
-                        ProduceResource(ref resources, powerpacks);
+                        ProduceResource(ref resources, powerpacks, ref resourceModel);
                     }
 
                     //Produce strange rock
                     if (random.Next(100) < 10) //10% probability
                     {
-                        ProduceStrangeRock(ref powerpacks, resources);
+                        ProduceStrangeRock(ref powerpacks, resources, ref strangeRockModel);
                     }
 
                     if (factoryType == FactoryType.biodegradable)
@@ -351,32 +339,35 @@ namespace Poseidon
             }
         }
 
-        void producePowerPacks(ref List<Powerpack> powerpacks, List<Resource> resources)
+        void producePowerPacks(ref List<Powerpack> powerpacks, List<Resource> resources, ref Model[] powerpackModels)
         {
             Vector3 powerpackPosition;
             int powerType = random.Next(4) + 1;
             Powerpack powerpack = new Powerpack(powerType);
             powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-            powerpack.LoadContent(Content, powerpackPosition);
+            powerpack.Model = powerpackModels[powerType];
+            powerpack.LoadContent(powerpackPosition);
             powerpacks.Add(powerpack);
         }
 
-        void ProduceResource(ref List<Resource> resources, List<Powerpack> powerpacks)
+        void ProduceResource(ref List<Resource> resources, List<Powerpack> powerpacks, ref Model resourceModel)
         {
             Vector3 resourcePosition;
             Resource resource = new Resource();
             resourcePosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-            resource.LoadContent(Content, resourcePosition);
+            resource.Model = resourceModel;
+            resource.LoadContent(resourcePosition);
             resources.Add(resource);
         }
 
-        void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources)
+        void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources, ref Model strangeRockModel)
         {
             Vector3 powerpackPosition;
             int powerType = 5; //type 5 for strange rock
             Powerpack powerpack = new Powerpack(powerType);
             powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-            powerpack.LoadContent(Content, powerpackPosition);
+            powerpack.Model = strangeRockModel;
+            powerpack.LoadContent(powerpackPosition);
             powerpacks.Add(powerpack);
         }
 

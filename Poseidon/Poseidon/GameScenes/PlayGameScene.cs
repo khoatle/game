@@ -1140,7 +1140,9 @@ namespace Poseidon
             }
 
             // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
-            if (Math.Abs(position.X) > (float)GameConstants.MainGameMaxRangeX || Math.Abs(position.Z) > (float)GameConstants.MainGameMaxRangeZ)
+            // Give a lax of 40 units so that if a click happened at the edge of the arena, building is not allowed. This is to prevent the case
+            // that power packs might appear above the end of the factory whose edge is just beyond the game arena.
+            if (Math.Abs(position.X) > (float)(GameConstants.MainGameMaxRangeX - 40) || Math.Abs(position.Z) > (float)(GameConstants.MainGameMaxRangeZ - 40))
             {
                 // Play some sound hinting position selected is outside game arena
                 audio.MenuScroll.Play();

@@ -31,6 +31,7 @@ namespace Poseidon.GraphicEffects
         float m_Timer = 0;
         Random random;
         float fadeBetweenScenes = 1.0f;
+        public float fadeTransitAmount = 0.01f;
 
         public GraphicEffect(GameScene gameScene, SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
@@ -234,7 +235,7 @@ namespace Poseidon.GraphicEffects
                 }
             }
             spriteBatch.End();
-            fadeBetweenScenes -= 0.01f;
+            fadeBetweenScenes -= fadeTransitAmount;
             if (fadeBetweenScenes <= 0.0f)
             {
                 fadeBetweenScenes = 1.0f;

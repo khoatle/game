@@ -259,6 +259,7 @@ namespace Poseidon
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, statsFont);
+            graphicEffect.fadeTransitAmount = 0.025f;
             // Construct our particle system components.
             particleManager = new ParticleManagement(this.game, GraphicDevice);
         }
@@ -619,11 +620,11 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        //if (!PlayGameScene.hadkey)
-                        //{
-                        //    showNoKey = true;
-                        //}
-                        //else
+                        if (!PlayGameScene.hadkey)
+                        {
+                            showNoKey = true;
+                        }
+                        else
                         {
                             chest.opened = true;
                             audio.OpenChest.Play();

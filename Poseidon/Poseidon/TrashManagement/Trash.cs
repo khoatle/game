@@ -36,9 +36,9 @@ namespace Poseidon
             trashType = trashtype;
         }
 
-        public void LoadContent(ContentManager content, string modelname, float orientation)
+        public void Load(ContentManager content,ref Model model, float orientation)
         {
-            Model = content.Load<Model>(modelname);
+            Model = model;
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 

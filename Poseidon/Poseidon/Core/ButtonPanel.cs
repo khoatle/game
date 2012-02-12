@@ -81,7 +81,7 @@ namespace Poseidon.Core
             return anchoredBuildingType;
         }
 
-         public void Initialize(Texture2D buttonTexture, SpriteFont font, Vector2 position)
+         public void Initialize(ref Texture2D buttonTexture,ref SpriteFont font, Vector2 position)
         {
             infoTextFont = font;
             topLeft = position;

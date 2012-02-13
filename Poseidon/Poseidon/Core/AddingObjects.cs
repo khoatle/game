@@ -485,7 +485,7 @@ namespace Poseidon
             ref List<Trash> trashes,  ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, int minX, int maxX, int minZ, int maxZ, GameMode gameMode, float floatHeight, HeightMapInfo heightMapInfo)
         {
             Vector3 tempCenter;
-            int xVal, zVal; //positionSign
+            int xVal, zVal, heightValue; //positionSign
             foreach (Trash trash in trashes)
             {
                 //trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
@@ -498,6 +498,7 @@ namespace Poseidon
                         xVal *= -1;
                     if (random.Next(100) % 2 == 0)
                         zVal *= -1;
+                    heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
                     //positionSign = random.Next(4);
                     
                     //switch (positionSign)
@@ -513,11 +514,11 @@ namespace Poseidon
                     //        zVal *= -1;
                     //        break;
                     //}
-                } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
+                } while (IsSeaBedPlaceOccupied(xVal, heightValue, zVal, 20, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
-                trash.Position.Y = trash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(trash.Position.X, 0, trash.Position.Z));//GameConstants.TrashFloatHeight;
+                trash.Position.Y = trash.seaFloorHeight = heightValue;
                 tempCenter = trash.BoundingSphere.Center;
                 tempCenter.X = trash.Position.X;
                 tempCenter.Y = floatHeight;
@@ -531,7 +532,7 @@ namespace Poseidon
             ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Factory> factories, ResearchFacility researchFacility, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo,ref Model bioTrash,ref Model plasticTrash,ref Model nukeTrash)
         {
             Vector3 tempCenter;
-            int positionSign, xVal, zVal;
+            int positionSign, xVal, zVal, heightValue;
             float orientation = random.Next(100);
             int trash_type = random.Next(100);
             Trash sinkingTrash;
@@ -576,7 +577,8 @@ namespace Poseidon
                         zVal *= -1;
                         break;
                 }
-            } while (IsSeaBedPlaceOccupied(xVal, zVal, shipWrecks, staticObjects, trashes, factories, researchFacility));
+                heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
+            } while (IsSeaBedPlaceOccupied(xVal, heightValue, zVal, 20, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
             sinkingTrash.Position.X = 0;// xVal;
             sinkingTrash.Position.Z = 0;// zVal;
@@ -639,7 +641,8 @@ namespace Poseidon
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
                 
-            } while (IsSeaBedPlaceOccupied(xValue, zValue, shipWrecks, staticObjects, null, null, null));
+                
+            } while (IsSeaBedPlaceOccupied(xValue,0, zValue, 30, shipWrecks, staticObjects, null, null, null));
             
             return new Vector3(xValue, 0, zValue);
         }
@@ -703,79 +706,80 @@ namespace Poseidon
             return false;
         }
         // Helper
-        public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
-        {
+        //public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
+        //{
 
-            if (shipWrecks != null)
-            {
-                //not so close to the ship wreck
-                foreach (GameObject currentObj in shipWrecks)
-                {
-                    if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 200) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 200))
-                    {
-                        return true;
-                    }
-                }
-            }
-            if (staticObjects != null)
-            {
-                foreach (GameObject currentObj in staticObjects)
-                {
-                    if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 15) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 15))
-                    {
-                        return true;
-                    }
-                }
-            }
-            if (trashes != null)
-            {
-                foreach (Trash trash in trashes)
-                {
-                    if (((int)(MathHelper.Distance(
-                        xValue, trash.Position.X)) < 20) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, trash.Position.Z)) < 20))
-                    {
-                        return true;
-                    }
-                }
-            }
-            if (factories != null)
-            {
-                foreach (Factory factory in factories)
-                {
-                    if (((int)(MathHelper.Distance(
-                        xValue, factory.Position.X)) < 100) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, factory.Position.Z)) < 100))
-                    {
-                        return true;
-                    }
-                }
-            }
-            if (researchFacility != null)
-            {
-                if (((int)(MathHelper.Distance(
-                        xValue, researchFacility.Position.X)) < 100) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, researchFacility.Position.Z)) < 100))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
+        //    if (shipWrecks != null)
+        //    {
+        //        //not so close to the ship wreck
+        //        foreach (GameObject currentObj in shipWrecks)
+        //        {
+        //            if (((int)(MathHelper.Distance(
+        //                xValue, currentObj.Position.X)) < 200) &&
+        //                ((int)(MathHelper.Distance(
+        //                zValue, currentObj.Position.Z)) < 200))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    if (staticObjects != null)
+        //    {
+        //        foreach (GameObject currentObj in staticObjects)
+        //        {
+        //            if (((int)(MathHelper.Distance(
+        //                xValue, currentObj.Position.X)) < 15) &&
+        //                ((int)(MathHelper.Distance(
+        //                zValue, currentObj.Position.Z)) < 15))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    if (trashes != null)
+        //    {
+        //        foreach (Trash trash in trashes)
+        //        {
+        //            if (((int)(MathHelper.Distance(
+        //                xValue, trash.Position.X)) < 20) &&
+        //                ((int)(MathHelper.Distance(
+        //                zValue, trash.Position.Z)) < 20))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    if (factories != null)
+        //    {
+        //        foreach (Factory factory in factories)
+        //        {
+        //            if (((int)(MathHelper.Distance(
+        //                xValue, factory.Position.X)) < 100) &&
+        //                ((int)(MathHelper.Distance(
+        //                zValue, factory.Position.Z)) < 100))
+        //            {
+        //                return true;
+        //            }
+        //        }
+        //    }
+        //    if (researchFacility != null)
+        //    {
+        //        if (((int)(MathHelper.Distance(
+        //                xValue, researchFacility.Position.X)) < 100) &&
+        //                ((int)(MathHelper.Distance(
+        //                zValue, researchFacility.Position.Z)) < 100))
+        //        {
+        //            return true;
+        //        }
+        //    }
+        //    return false;
+        //}
 
         // Finds if seabed place is free within the radius from point xValue,zValue
         public static bool IsSeaBedPlaceOccupied(int xValue, int yValue, int zValue, int radius, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
         {
-            BoundingSphere objectBoundingSphere = new BoundingSphere(new Vector3(xValue, 0, zValue), radius);
+            //BoundingSphere objectBoundingSphere = new BoundingSphere(new Vector3(xValue, 0, zValue), radius);
+            BoundingSphere objectBoundingSphere = new BoundingSphere(new Vector3(xValue, yValue, zValue), radius);
             if (shipWrecks != null)
             {
                 //not so close to the ship wreck

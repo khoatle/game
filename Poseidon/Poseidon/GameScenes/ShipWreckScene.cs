@@ -259,6 +259,7 @@ namespace Poseidon
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             graphicEffect = new GraphicEffect(this, this.spriteBatch, statsFont);
+            graphicEffect.fadeTransitAmount = 0.025f;
             // Construct our particle system components.
             particleManager = new ParticleManagement(this.game, GraphicDevice);
         }
@@ -619,11 +620,11 @@ namespace Poseidon
                     {
                         //fishes are not going to give u the key for treasure chest
                         //when they are not pleased because of polluted environment
-                        //if (!PlayGameScene.hadkey)
-                        //{
-                        //    showNoKey = true;
-                        //}
-                        //else
+                        if (!PlayGameScene.hadkey)
+                        {
+                            showNoKey = true;
+                        }
+                        else
                         {
                             chest.opened = true;
                             audio.OpenChest.Play();
@@ -657,6 +658,12 @@ namespace Poseidon
                                 if (HydroBot.skills[chest.skillID] == false)
                                 {
                                     HydroBot.skills[chest.skillID] = true;
+                                    //activate the goodwill bar icon too
+                                    if (chest.skillID == 0) HydroBot.iconActivated[IngamePresentation.bowIcon] = true;
+                                    else if (chest.skillID == 1) HydroBot.iconActivated[IngamePresentation.hammerIcon] = true;
+                                    else if (chest.skillID == 2) HydroBot.iconActivated[IngamePresentation.armorIcon] = true;
+                                    else if (chest.skillID == 3) HydroBot.iconActivated[IngamePresentation.sandalIcon] = true;
+                                    else if (chest.skillID == 4) HydroBot.iconActivated[IngamePresentation.beltIcon] = true;
                                     HydroBot.activeSkillID = chest.skillID;
                                     foundRelic[currentShipWreckID] = true;
                                 }

@@ -34,6 +34,8 @@ namespace Poseidon {
         //game scenes constants
         public const int MainGameMinRangeX = 100;
         public const int MainGameMinRangeZ = 100;
+        public const int TrashMinRangeX = 10;
+        public const int TrashMinRangeZ = 10;
         public const int ShipWreckMinRangeX = 20;
         public const int ShipWreckMinRangeZ = 10;
         public const int MainGameMaxRangeX = 500;
@@ -236,7 +238,7 @@ namespace Poseidon {
         public const int SurvivalModeMaxMutantShark = 15;
         public const int SurvivalModeMaxTerminator = 2;
 
-        public const int NumGoodWillBarIcons = 4;
+        public const int NumGoodWillBarIcons = 13;
         public const int MaxGoodWillPoint = 1000;
         public const int GoodWillPointGainForPlanting = 250;
         public const int GoodWillPointGainForCleaning = 250;

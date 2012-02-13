@@ -429,7 +429,7 @@ namespace Poseidon
             }
 
             AddingObjects.placeTrash(ref trashes, Content, random, null, null,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
+                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.TrashMinRangeZ,
                 GameConstants.MainGameMaxRangeZ, GameMode.MainGame, GameConstants.MainGameFloatHeight, terrain.heightMapInfo); 
 
            //Initialize a list of factories
@@ -674,7 +674,7 @@ namespace Poseidon
                     if (trashes != null && trashes.Count < numTrash)
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, null, null, factories, researchFacility,
-                                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ,
+                                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.TrashMinRangeZ,
                                 GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo,ref biodegradableTrash,ref plasticTrash,ref radioactiveTrash);
                         Point point = new Point();
                         point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
@@ -859,8 +859,8 @@ namespace Poseidon
 
             //Verify that current location is available for adding the building
             int radius = 60; // probably need to calculate this based on the model for each building
-            int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, null, null, trashes, factories, researchFacility))
+            //int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, 0, (int)position.Z, radius, null, null, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();

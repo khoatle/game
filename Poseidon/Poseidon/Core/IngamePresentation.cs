@@ -23,14 +23,26 @@ namespace Poseidon.Core
         static Texture2D[] iconTextures;
         static Texture2D GoodWillBar;
 
+        public static int poseidonFace = 0, strengthIcon = 1, speedIcon = 2, shootRateIcon = 3, healthIcon = 4, bowIcon = 5, hammerIcon = 6,
+            armorIcon = 7, sandalIcon = 8, beltIcon = 9, dolphinIcon = 10, seaCowIcon = 11, turtleIcon = 12;
+
         public static void InitiateGoodWillBarGraphic(ContentManager Content)
         {
             //load icons for good will bar
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
-            iconTextures[0] = Content.Load<Texture2D>("Image/SpinningReel/reelicon1");
-            iconTextures[1] = Content.Load<Texture2D>("Image/SpinningReel/reelicon2");
-            iconTextures[2] = Content.Load<Texture2D>("Image/SpinningReel/reelicon3");
-            iconTextures[3] = Content.Load<Texture2D>("Image/SpinningReel/reelicon4");
+            iconTextures[poseidonFace] = Content.Load<Texture2D>("Image/SpinningReel/poseidonFace");
+            iconTextures[strengthIcon] = Content.Load<Texture2D>("Image/SpinningReel/strengthIcon");
+            iconTextures[speedIcon] = Content.Load<Texture2D>("Image/SpinningReel/speedIcon");
+            iconTextures[shootRateIcon] = Content.Load<Texture2D>("Image/SpinningReel/shootRateIcon");
+            iconTextures[bowIcon] = Content.Load<Texture2D>("Image/SpinningReel/bowIcon");
+            iconTextures[hammerIcon] = Content.Load<Texture2D>("Image/SpinningReel/hammerIcon");
+            iconTextures[armorIcon] = Content.Load<Texture2D>("Image/SpinningReel/armorIcon");
+            iconTextures[sandalIcon] = Content.Load<Texture2D>("Image/SpinningReel/sandalIcon");
+            iconTextures[beltIcon] = Content.Load<Texture2D>("Image/SpinningReel/beltIcon");
+            iconTextures[healthIcon] = Content.Load<Texture2D>("Image/SpinningReel/healthIcon");
+            iconTextures[dolphinIcon] = Content.Load<Texture2D>("Image/SpinningReel/dolphinIcon");
+            iconTextures[seaCowIcon] = Content.Load<Texture2D>("Image/SpinningReel/seaCowIcon");
+            iconTextures[turtleIcon] = Content.Load<Texture2D>("Image/SpinningReel/turtleIcon");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
         }
         public static void DrawActiveSkill(GraphicsDevice GraphicDevice, Texture2D[] skillTextures, SpriteBatch spriteBatch)
@@ -126,6 +138,7 @@ namespace Poseidon.Core
 
         public static void UpdateGoodWillBar()
         {
+            int faceBeingShown;
             if (!HydroBot.goodWillBarActivated) return;
             if (PoseidonGame.playTime - lastChangeTime >= TimeSpan.FromMilliseconds(20) && !stoppedSpinning)
             {
@@ -162,8 +175,70 @@ namespace Poseidon.Core
 
                         //miracles happen here
                         //the face drawn on the screen is actually faceToDraw + 1
-                        //if (HydroBot.faceToDraw == 0 && HydroBot.iconActivated[HydroBot.faceToDraw])
-                        //    HydroBot.strength += GameConstants.gainStrength;
+                        faceBeingShown = HydroBot.faceToDraw + 1;
+                        if (faceBeingShown == GameConstants.NumGoodWillBarIcons) faceBeingShown = 0;
+                        if (HydroBot.iconActivated[faceBeingShown]){
+                            if (faceBeingShown == poseidonFace)
+                            {
+                                //fill up the hitpoint
+                                HydroBot.currentHitPoint = HydroBot.lsMaxHitPoint;
+                                //reset all skills' cooldown
+                                for (int i = 0; i < GameConstants.numberOfSkills; i++)
+                                {
+                                    HydroBot.firstUse[i] = false;
+                                }
+                            }
+                            else if (faceBeingShown == strengthIcon)
+                            {
+                                HydroBot.strength += GameConstants.gainStrength;
+                            }
+                            else if (faceBeingShown == speedIcon)
+                            {
+                                HydroBot.speed += GameConstants.gainSpeed;
+                            }
+                            else if (faceBeingShown == shootRateIcon)
+                            {
+                                HydroBot.shootingRate += GameConstants.gainShootingRate;
+                            }
+                            else if (faceBeingShown == healthIcon)
+                            {
+                                HydroBot.currentHitPoint += GameConstants.gainHitPoint;
+                                HydroBot.maxHitPoint += GameConstants.gainHitPoint;
+                            }
+                            else if (faceBeingShown == bowIcon)
+                            {
+                                HydroBot.bowPower += 0.05f;
+                            }
+                            else if (faceBeingShown == hammerIcon)
+                            {
+                                HydroBot.hammerPower += 0.05f;
+                            }
+                            else if (faceBeingShown == armorIcon)
+                            {
+                                HydroBot.armorPower += 0.05f;
+                            }
+                            else if (faceBeingShown == sandalIcon)
+                            {
+                                HydroBot.sandalPower += 0.05f;
+                            }
+                            else if (faceBeingShown == beltIcon)
+                            {
+                                HydroBot.beltPower += 0.05f;
+                            }
+                            else if (faceBeingShown == dolphinIcon)
+                            {
+                                HydroBot.dolphinPower += 0.05f;
+                            }
+                            else if (faceBeingShown == seaCowIcon)
+                            {
+                                HydroBot.seaCowPower += 0.05f;
+                            }
+                            else if (faceBeingShown == turtleIcon)
+                            {
+                                HydroBot.turtlePower += 0.05f;
+                            }
+
+                        }
                         
                     }
 

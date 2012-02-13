@@ -1447,28 +1447,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SpinningReel\reelicon1.png">
-      <Name>reelicon1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\SpinningReel\reelicon2.png">
-      <Name>reelicon2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\SpinningReel\reelicon3.png">
-      <Name>reelicon3</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\SpinningReel\reelicon4.png">
-      <Name>reelicon4</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Sounds\SoundEffects\beep.wav">
       <Name>beep</Name>
       <Importer>WavImporter</Importer>
@@ -1821,6 +1799,75 @@
   <ItemGroup>
     <Compile Include="Image\TrashManagement\increaseAttributeButton.png">
       <Name>increaseAttributeButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SpinningReel\armorIcon.png">
+      <Name>armorIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\beltIcon.png">
+      <Name>beltIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\bowIcon.png">
+      <Name>bowIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\dolphinIcon.png">
+      <Name>dolphinIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\hammerIcon.png">
+      <Name>hammerIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\healthIcon.png">
+      <Name>healthIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\poseidonFace.png">
+      <Name>poseidonFace</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SpinningReel\sandalIcon.png">
+      <Name>sandalIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\seaCowIcon.png">
+      <Name>seaCowIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\shootRateIcon.png">
+      <Name>shootRateIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\SpeedIcon.png">
+      <Name>SpeedIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\strengthIcon.png">
+      <Name>strengthIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SpinningReel\turtleIcon.png">
+      <Name>turtleIcon</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

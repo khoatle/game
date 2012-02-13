@@ -410,6 +410,7 @@ namespace Poseidon
                 {
                     case 0:
                         HydroBot.hasSeaCow = true;
+                        HydroBot.iconActivated[IngamePresentation.seaCowIcon] = true;
                         HydroBot.seaCowPower += 1.0f;
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playSeaCowJigsaw = false;
@@ -417,6 +418,7 @@ namespace Poseidon
                         break;
                     case 1:
                         HydroBot.hasTurtle = true;
+                        HydroBot.iconActivated[IngamePresentation.turtleIcon] = true;
                         HydroBot.turtlePower += 1.0f;
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playTurtleJigsaw = false;
@@ -424,6 +426,7 @@ namespace Poseidon
                         break;
                     case 2:
                         HydroBot.hasDolphin = true;
+                        HydroBot.iconActivated[IngamePresentation.dolphinIcon] = true;
                         HydroBot.dolphinPower += 1.0f;
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForJigsaw;
                         ResearchFacility.playDolphinJigsaw = false;
@@ -514,8 +517,15 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                MediaPlayer.Stop();
-                ShowScene(startScene);
+                if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
+                {
+                    PlayGameScene.currentGameState = GameState.Running;
+                }
+                else
+                {
+                    MediaPlayer.Stop();
+                    ShowScene(startScene);
+                }
             }
             if (AttributePressed || AttributeButtonPressed)
             {

@@ -165,6 +165,12 @@ namespace Poseidon
         public static bool distortingScreen = false;
         public static double distortionStart = 0;
 
+        //new stuff related to power of skills
+        //they are upgraded thru the good will bar
+        //need to be added to save file
+        public static float bowPower, hammerPower, armorPower, sandalPower, beltPower,
+            lsBowPower, lsHammerPower, lsArmorPower, lsSandalPower, lsBeltPower;
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -197,7 +203,11 @@ namespace Poseidon
             lsIconActivated = new bool[GameConstants.NumGoodWillBarIcons];
             for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
             {
-                iconActivated[index] = false;
+                //some basic icons are activated right from the beginning
+                if (index == IngamePresentation.poseidonFace || index == IngamePresentation.strengthIcon || index == IngamePresentation.speedIcon
+                    || index == IngamePresentation.shootRateIcon || index == IngamePresentation.healthIcon)
+                    iconActivated[index] = true;
+                else iconActivated[index] = false;
             }
             skillComboActivated = false;
             goodWillBarActivated = false;
@@ -232,8 +242,12 @@ namespace Poseidon
             //resurrected sidekicks stuff
             numStrangeObjCollected = lsNumStrangeObjCollected = 0;
             hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
-            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
+            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 1.0f;
             numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
+
+            //power of the skills
+            bowPower = hammerPower = armorPower = sandalPower = beltPower = 
+                lsBowPower = lsHammerPower = lsArmorPower = lsSandalPower = lsBeltPower = 1.0f;
 
             bioTrash = plasticTrash = nuclearTrash = 0;
             totalBioTrashProcessed = totalPlasticTrashProcessed = totalNuclearTrashProcessed = 0;
@@ -458,11 +472,11 @@ namespace Poseidon
             skills[3] = true;
             skills[4] = true;
 
-            //goodWillBarActivated = true;
-            //iconActivated[0] = true;
-            //iconActivated[1] = false;
-            //iconActivated[2] = true;
-            //iconActivated[3] = true;
+            goodWillBarActivated = true;
+            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            {
+                iconActivated[index] = true;
+            }
 
             firstPlant = true;
             prevPlantTime = 0;
@@ -517,6 +531,14 @@ namespace Poseidon
             numSeaCowPieces = lsNumSeaCowPieces;
             numTurtlePieces = lsNumTurtlePieces;
 
+            //power of skills
+            bowPower = lsBowPower;
+            hammerPower = lsHammerPower;
+            armorPower = lsArmorPower;
+            sandalPower = lsSandalPower;
+            beltPower = lsBeltPower;
+
+
             currentExperiencePts = lsCurrentExperiencePts;
             nextLevelExperience = lsNextLevelExperience;
             //increaseBy = lsIncreaseBy;
@@ -568,6 +590,12 @@ namespace Poseidon
             lsNumSeaCowPieces = numSeaCowPieces;
             lsNumTurtlePieces = numTurtlePieces;
 
+            //skill powers
+            lsBowPower = bowPower;
+            lsHammerPower = hammerPower;
+            lsArmorPower = armorPower;
+            lsSandalPower = sandalPower;
+            lsBeltPower = beltPower;
 
             lsCurrentExperiencePts = currentExperiencePts;
             lsNextLevelExperience = nextLevelExperience;
@@ -677,7 +705,7 @@ namespace Poseidon
             //if the user click on right mouse button
             //cast the current selected skill
             //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
-            else if (currentMouseState.RightButton == ButtonState.Pressed && !mouseOnInteractiveIcons)
+            else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released && !mouseOnInteractiveIcons)
             {         
                 CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount);
             }

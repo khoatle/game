@@ -775,7 +775,7 @@ namespace Poseidon
                             // play sound to denote building could not be added
                         }
                     }
-                    if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
+                    if (currentMouseState.RightButton == ButtonState.Pressed)
                     {
                         foreach (Factory factory in factories)
                         {

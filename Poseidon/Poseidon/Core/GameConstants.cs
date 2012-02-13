@@ -236,7 +236,7 @@ namespace Poseidon {
         public const int SurvivalModeMaxMutantShark = 15;
         public const int SurvivalModeMaxTerminator = 2;
 
-        public const int NumGoodWillBarIcons = 4;
+        public const int NumGoodWillBarIcons = 13;
         public const int MaxGoodWillPoint = 1000;
         public const int GoodWillPointGainForPlanting = 250;
         public const int GoodWillPointGainForCleaning = 250;

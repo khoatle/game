@@ -658,6 +658,12 @@ namespace Poseidon
                                 if (HydroBot.skills[chest.skillID] == false)
                                 {
                                     HydroBot.skills[chest.skillID] = true;
+                                    //activate the goodwill bar icon too
+                                    if (chest.skillID == 0) HydroBot.iconActivated[IngamePresentation.bowIcon] = true;
+                                    else if (chest.skillID == 1) HydroBot.iconActivated[IngamePresentation.hammerIcon] = true;
+                                    else if (chest.skillID == 2) HydroBot.iconActivated[IngamePresentation.armorIcon] = true;
+                                    else if (chest.skillID == 3) HydroBot.iconActivated[IngamePresentation.sandalIcon] = true;
+                                    else if (chest.skillID == 4) HydroBot.iconActivated[IngamePresentation.beltIcon] = true;
                                     HydroBot.activeSkillID = chest.skillID;
                                     foundRelic[currentShipWreckID] = true;
                                 }

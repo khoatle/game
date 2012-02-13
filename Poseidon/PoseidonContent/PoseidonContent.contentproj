@@ -313,24 +313,24 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlantAndFruitModels\red-fruit.fbx">
-      <Name>red-fruit</Name>
+    <Compile Include="Models\PowerpackResource\strength.fbx">
+      <Name>strength</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlantAndFruitModels\blue-fruit.fbx">
-      <Name>blue-fruit</Name>
+    <Compile Include="Models\PowerpackResource\shootingRate.fbx">
+      <Name>shootingRate</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlantAndFruitModels\green-fruit.fbx">
-      <Name>green-fruit</Name>
+    <Compile Include="Models\PowerpackResource\speed.fbx">
+      <Name>speed</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
@@ -435,7 +435,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlantAndFruitModels\plant1.fbx">
+    <Compile Include="Models\PowerpackResource\plant1.fbx">
       <Name>plant1</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
@@ -807,16 +807,16 @@
     <Folder Include="Image\TerrainTextures\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel1.fbx">
-      <Name>trashModel1</Name>
+    <Compile Include="Models\TrashModels\plasticTrash.fbx">
+      <Name>plasticTrash</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel2.fbx">
-      <Name>trashModel2</Name>
+    <Compile Include="Models\TrashModels\radioactiveTrash.fbx">
+      <Name>radioactiveTrash</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
@@ -852,8 +852,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel3.fbx">
-      <Name>trashModel3</Name>
+    <Compile Include="Models\TrashModels\biodegradableTrash.fbx">
+      <Name>biodegradableTrash</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
@@ -946,8 +946,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PlantAndFruitModels\white-fruit.fbx">
-      <Name>white-fruit</Name>
+    <Compile Include="Models\PowerpackResource\health.fbx">
+      <Name>health</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
@@ -1688,6 +1688,16 @@
       <Name>leopardshark2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\PowerpackResource\strangeRock.fbx">
+      <Name>strangeRock</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\PowerpackResource\resource.fbx">
+      <Name>resource</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

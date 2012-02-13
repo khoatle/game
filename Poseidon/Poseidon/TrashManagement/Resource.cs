@@ -21,10 +21,8 @@ namespace Poseidon
             orientation = 0f;
         }
 
-        public void LoadContent(ContentManager content, Vector3 resourcePosition)
+        public void LoadContent(Vector3 resourcePosition)
         {
-            Model = content.Load<Model>("Models/BulletModels/chasingBullet");
-
             Position = resourcePosition;
             BoundingSphere = CalculateBoundingSphere();
             BoundingSphere scaledSphere;

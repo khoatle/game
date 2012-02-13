@@ -242,7 +242,7 @@ namespace Poseidon
             //resurrected sidekicks stuff
             numStrangeObjCollected = lsNumStrangeObjCollected = 0;
             hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
-            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 1.0f;
+            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
             numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
 
             //power of the skills
@@ -1139,21 +1139,31 @@ namespace Poseidon
             //worn out effect of certain skills
             //worn out effect for invicible mode
             //and related skill combos
-            if (invincibleMode == true)
+            if (invincibleMode == true && autoHipnotizeMode == false)
             {
                 float buffFactor = shootingRate * fireRateUp / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
-                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower)
                 {
                     invincibleMode = false;
                     if (autoHipnotizeMode == true) autoHipnotizeMode = false;
                 }
                 
             }
+            if (autoHipnotizeMode == true)
+            {
+                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower * HydroBot.beltPower)
+                {
+                    autoHipnotizeMode = false;
+                    invincibleMode = false;
+                }
+            }
             //worn out effect of supersonic
             if (supersonicMode == true)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp / GameConstants.BasicStartSpeed)
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp * HydroBot.sandalPower/ GameConstants.BasicStartSpeed)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))

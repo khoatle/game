@@ -111,6 +111,9 @@ namespace Poseidon
         public static float accumulatedHealthLossFromPoisson;
         public static float maxHPLossFromPoisson;
         public static float poissonInterval;
+        public static bool isBeingHealed = false;
+        //for adjusting the intensity of the diffuse light when bot being healed by sea dolphin
+        public static float diffuseIntensity = 10.0f;
 
         // which game mode is this hydrobot in?
         public static GameMode gameMode;
@@ -1475,7 +1478,20 @@ namespace Poseidon
                     if (invincibleMode == true)
                     {
                         effect.Parameters["DiffuseIntensity"].SetValue(3.0f);
+                        //effect.Parameters["DiffuseColor"].SetValue(new Vector4(0, 1, 0, 1));
                     }
+                    else if (isBeingHealed == true)
+                    {
+                        effect.Parameters["DiffuseIntensity"].SetValue(diffuseIntensity);
+                        diffuseIntensity -= 0.015f;
+                        if (diffuseIntensity <= 0)
+                        {
+                            isBeingHealed = false;
+                            diffuseIntensity = 10.0f;
+                        }
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(0, 1, 0, 1));
+                    }
+    
                     //SkinnedEffect.fx
                     //effect.Parameters["ShaderIndex"].SetValue(17);
                     //effect.Parameters["WorldViewProj"].SetValue(view * projection);
@@ -1488,18 +1504,21 @@ namespace Poseidon
 
                 }
                 mesh.Draw();
-                if (invincibleMode == true)
-                {
-                    foreach (Effect effect in mesh.Effects)
-                    {
-                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
-                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
-                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
-                        effect.Parameters["Bones"].SetValue(bones);
-                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
-                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
-                    }
-                }
+                //if (invincibleMode == true)
+                //{
+                //    foreach (Effect effect in mesh.Effects)
+                //    {
+                //        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                //        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                //        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                //        effect.Parameters["Bones"].SetValue(bones);
+                //        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                //        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                //        //effect.Parameters["gInflate"].SetValue(0.07f);
+                //        //effect.Parameters["gGlowColor"].SetValue(new Vector3(0.0f, 1.0f, 0.0f));
+                //        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                //    }
+                //}
                 mesh.Draw();
             }
 

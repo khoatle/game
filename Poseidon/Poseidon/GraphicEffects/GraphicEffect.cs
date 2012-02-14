@@ -20,11 +20,15 @@ namespace Poseidon.GraphicEffects
         SpriteBatch spriteBatch;
         SpriteFont spriteFont;
 
-        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect, customBlurEffect, distortionEffect;
+        Effect underWaterEffect, screenTransitionEffect, edgeDetectionEffect, customBlurEffect, distortionEffect, rippleEffect;
         bool underWaterEffectEnabled = true;
         bool bloomEffectEnabled = true;
-        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget, blurRenderTarget1, blurRenderTarget2, distortionRenderTarget;
+        RenderTarget2D afterUnderWaterTexture, afterBloomTexture, afterEffectsRenderTarget, blurRenderTarget1, blurRenderTarget2, distortionRenderTarget, rippleRenderTarget;
         EffectParameterCollection edgeDetectionParameters;
+        EffectParameter waveParam, distortionParam, centerCoordParam;
+        float distortion = 1.0f;
+        float divisor = 0.001f;
+        float wave = MathHelper.Pi;
 
         PresentationParameters pp;
 
@@ -48,6 +52,7 @@ namespace Poseidon.GraphicEffects
             blurRenderTarget1 = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
             blurRenderTarget2 = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
             distortionRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
+            rippleRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
             afterUnderWaterTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
             afterBloomTexture = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
             afterEffectsRenderTarget = new RenderTarget2D(gameScene.Game.GraphicsDevice, width, height, false, pp.BackBufferFormat, DepthFormat.None);
@@ -57,9 +62,14 @@ namespace Poseidon.GraphicEffects
             edgeDetectionEffect = gameScene.Game.Content.Load<Effect>("Shaders/EdgeDetectionEffect");
             customBlurEffect = gameScene.Game.Content.Load<Effect>("Shaders/CustomBlur");
             distortionEffect = gameScene.Game.Content.Load<Effect>("Shaders/DistortionEffect");
+            rippleEffect = gameScene.Game.Content.Load<Effect>("Shaders/RippleEffect");
 
             edgeDetectionParameters = edgeDetectionEffect.Parameters;
             edgeDetectionEffect.CurrentTechnique = edgeDetectionEffect.Techniques["EdgeDetect"];
+
+            waveParam = rippleEffect.Parameters["wave"];
+            distortionParam = rippleEffect.Parameters["distortion"];
+            centerCoordParam = rippleEffect.Parameters["centerCoord"];
 
             this.spriteBatch = spriteBatch;
             this.spriteFont = spriteFont;
@@ -75,6 +85,12 @@ namespace Poseidon.GraphicEffects
                  lastKeyboardState.IsKeyUp(Keys.U))
             {
                 underWaterEffectEnabled = !underWaterEffectEnabled;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.R) &&
+                lastKeyboardState.IsKeyUp(Keys.R))
+            {
+                divisor = 0.1f;
             }
 
             // Switch to the next bloom settings preset?
@@ -133,7 +149,7 @@ namespace Poseidon.GraphicEffects
                     // Apply the post process shader
                     distortionEffect.CurrentTechnique.Passes[0].Apply();
                     {
-                        distortionEffect.Parameters["fTimer"].SetValue(m_Timer*2);
+                        distortionEffect.Parameters["fTimer"].SetValue(m_Timer * 2);
                         distortionEffect.Parameters["iSeed"].SetValue(1337);
                         distortionEffect.Parameters["fNoiseAmount"].SetValue(0.01f * distortionFactor);
                         spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
@@ -142,24 +158,58 @@ namespace Poseidon.GraphicEffects
                 spriteBatch.End();
             }
 
+            //applying water ripple effect
+            if (HydroBot.ripplingScreen)
+            {
+                graphics.GraphicsDevice.SetRenderTarget(rippleRenderTarget);
+                spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
+                {
+                    rippleEffect.CurrentTechnique.Passes[0].Apply();
+                    {
+
+                        //wave = MathHelper.Pi / divisor;
+                        wave = MathHelper.Pi / divisor;
+                        waveParam.SetValue(wave);
+                        distortionParam.SetValue(distortion);
+                        centerCoordParam.SetValue(HydroBot.rippleCenter);
+                        if (HydroBot.distortingScreen)
+                            spriteBatch.Draw(distortionRenderTarget, Vector2.Zero, Color.White);
+                        else
+                            spriteBatch.Draw(blurRenderTarget2, Vector2.Zero, Color.White);
+                    }
+                }
+                spriteBatch.End();
+                // Change the period.
+                divisor += 0.01f;
+                if (divisor >= 1.0f)
+                {
+                    divisor = 0.001f;
+                    HydroBot.ripplingScreen = false;
+                }
+            }
+
             //apply underwater effect
             graphics.GraphicsDevice.SetRenderTarget(afterUnderWaterTexture);
             if (underWaterEffectEnabled)
             {
                 spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
                 {
-                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer*1.5f);
+                    underWaterEffect.Parameters["fTimer"].SetValue(m_Timer * 1.5f);
                     // Apply the underwater effect post process shader
                     underWaterEffect.CurrentTechnique.Passes[0].Apply();
                     {
-                        if (!HydroBot.distortingScreen)
+                        if (!HydroBot.distortingScreen && !HydroBot.ripplingScreen)
                         {
                             spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
                                 //fix the problem of ugly areas at the edges of the screen
                                  new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
                         }
-                        else
+                        else if (HydroBot.distortingScreen && !HydroBot.ripplingScreen)
                             spriteBatch.Draw(distortionRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                                //fix the problem of ugly areas at the edges of the screen
+                                 new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
+                        else if (HydroBot.ripplingScreen)
+                            spriteBatch.Draw(rippleRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
                                 //fix the problem of ugly areas at the edges of the screen
                                  new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
                     }

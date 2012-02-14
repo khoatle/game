@@ -58,45 +58,46 @@ namespace Poseidon
             }
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
             // Heal
             if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint) {
                 HydroBot.currentHitPoint += healAmount;
                 // Got capped by Max HP
                 HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
-
+                HydroBot.isBeingHealed = true;
                 lastCast = PoseidonGame.playTime;
 
                 Point point = new Point();
                 String point_string = "Health + " + healAmount;
-                point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
+                point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
                 else if (HydroBot.gameMode == GameMode.MainGame)
                     PlayGameScene.points.Add(point);
                 else if (HydroBot.gameMode == GameMode.SurvivalMode)
                     SurvivalGameScene.points.Add(point);
+                PoseidonGame.audio.healingSound.Play();
             }
 
-            Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);
+            Vector3 destination = hydroBot.Position + new Vector3(AfterX, 0, AfterZ);
             if (isWandering == true)
             {
                 // If the fish is far from the point after the bot's back or is the bot moving
-                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius || tank.isMoving())
+                if (Vector3.Distance(hydroBot.Position, Position) > HydroBot.controlRadius || hydroBot.isMoving())
                 {
                     isWandering = false;
                     isReturnBot = true;
                     isChasing = false;
                     isFighting = false;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
                 }
                 else
                 {
                     currentTarget = lookForEnemy(enemies, enemiesSize);
                     if (currentTarget == null) // See no enemy
-                        randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, tank);
+                        randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, hydroBot);
                     else
                     { // Hunt him down
                         isWandering = false;
@@ -104,7 +105,7 @@ namespace Poseidon
                         isChasing = true;
                         isFighting = false;
 
-                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
                     }
                 }
             }// End wandering
@@ -114,22 +115,22 @@ namespace Poseidon
             {
                 // If the fish is near the point after the bot's back, wander
                 if (Vector3.Distance(destination, Position) < HydroBot.controlRadius * 0.75 &&
-                    Vector3.Distance(tank.Position, Position) < HydroBot.controlRadius)
+                    Vector3.Distance(hydroBot.Position, Position) < HydroBot.controlRadius)
                 {
                     isWandering = true;
                     isReturnBot = false;
                     isChasing = false;
                     isFighting = false;
 
-                    randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, tank);
+                    randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, hydroBot);
                 }
                 else
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
             }
             // If the fish is chasing some enemy
             else if (isChasing == true)
             {
-                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius)
+                if (Vector3.Distance(hydroBot.Position, Position) > HydroBot.controlRadius)
                 {  // If too far, return to bot
                     isWandering = false;
                     isReturnBot = true;
@@ -138,7 +139,7 @@ namespace Poseidon
 
                     currentTarget = null;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
                 }
                 else if (Vector3.Distance(Position, currentTarget.Position) <
                     10f + BoundingSphere.Radius + currentTarget.BoundingSphere.Radius) // Too close then attack
@@ -151,7 +152,7 @@ namespace Poseidon
                     attack();
                 }
                 else
-                    seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                    seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
             }
             // If fighting some enemy
             else if (isFighting == true)
@@ -166,13 +167,13 @@ namespace Poseidon
 
                     currentTarget = null;
 
-                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                    seekDestination(destination, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
                 }
                 else
                 {
                     // If the enemy ran away and the fish is not too far from bot
 
-                    if (Vector3.Distance(tank.Position, Position) >= HydroBot.controlRadius)
+                    if (Vector3.Distance(hydroBot.Position, Position) >= HydroBot.controlRadius)
                     {
                         isWandering = false;
                         isReturnBot = true;
@@ -181,7 +182,7 @@ namespace Poseidon
 
                         currentTarget = null;
 
-                        seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                        seekDestination(destination, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
                     }
                     else if (Vector3.Distance(Position, currentTarget.Position) >=
                       5f + BoundingSphere.Radius + currentTarget.BoundingSphere.Radius)
@@ -191,7 +192,7 @@ namespace Poseidon
                         isChasing = true;
                         isFighting = false;
 
-                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
+                        seekDestination(currentTarget.Position, enemies, enemiesSize, fish, fishSize, hydroBot, speedFactor);
                     }
                     else
                         attack();

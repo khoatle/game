@@ -111,6 +111,9 @@ namespace Poseidon
         public static float accumulatedHealthLossFromPoisson;
         public static float maxHPLossFromPoisson;
         public static float poissonInterval;
+        public static bool isBeingHealed = false;
+        //for adjusting the intensity of the diffuse light when bot being healed by sea dolphin
+        public static float diffuseIntensity = 10.0f;
 
         // which game mode is this hydrobot in?
         public static GameMode gameMode;
@@ -164,6 +167,8 @@ namespace Poseidon
         //do not need to be added to save file
         public static bool distortingScreen = false;
         public static double distortionStart = 0;
+        public static bool ripplingScreen = false;
+        public static Vector2 rippleCenter;
 
         //new stuff related to power of skills
         //they are upgraded thru the good will bar
@@ -242,7 +247,7 @@ namespace Poseidon
             //resurrected sidekicks stuff
             numStrangeObjCollected = lsNumStrangeObjCollected = 0;
             hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
-            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 1.0f;
+            dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
             numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
 
             //power of the skills
@@ -1139,21 +1144,31 @@ namespace Poseidon
             //worn out effect of certain skills
             //worn out effect for invicible mode
             //and related skill combos
-            if (invincibleMode == true)
+            if (invincibleMode == true && autoHipnotizeMode == false)
             {
                 float buffFactor = shootingRate * fireRateUp / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
-                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower)
                 {
                     invincibleMode = false;
                     if (autoHipnotizeMode == true) autoHipnotizeMode = false;
                 }
                 
             }
+            if (autoHipnotizeMode == true)
+            {
+                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower * HydroBot.beltPower)
+                {
+                    autoHipnotizeMode = false;
+                    invincibleMode = false;
+                }
+            }
             //worn out effect of supersonic
             if (supersonicMode == true)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp / GameConstants.BasicStartSpeed)
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp * HydroBot.sandalPower/ GameConstants.BasicStartSpeed)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
@@ -1465,7 +1480,20 @@ namespace Poseidon
                     if (invincibleMode == true)
                     {
                         effect.Parameters["DiffuseIntensity"].SetValue(3.0f);
+                        //effect.Parameters["DiffuseColor"].SetValue(new Vector4(0, 1, 0, 1));
                     }
+                    else if (isBeingHealed == true)
+                    {
+                        effect.Parameters["DiffuseIntensity"].SetValue(diffuseIntensity);
+                        diffuseIntensity -= 0.015f;
+                        if (diffuseIntensity <= 0)
+                        {
+                            isBeingHealed = false;
+                            diffuseIntensity = 10.0f;
+                        }
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(0, 1, 0, 1));
+                    }
+    
                     //SkinnedEffect.fx
                     //effect.Parameters["ShaderIndex"].SetValue(17);
                     //effect.Parameters["WorldViewProj"].SetValue(view * projection);
@@ -1478,18 +1506,21 @@ namespace Poseidon
 
                 }
                 mesh.Draw();
-                if (invincibleMode == true)
-                {
-                    foreach (Effect effect in mesh.Effects)
-                    {
-                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
-                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
-                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
-                        effect.Parameters["Bones"].SetValue(bones);
-                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
-                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
-                    }
-                }
+                //if (invincibleMode == true)
+                //{
+                //    foreach (Effect effect in mesh.Effects)
+                //    {
+                //        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                //        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                //        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                //        effect.Parameters["Bones"].SetValue(bones);
+                //        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                //        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                //        //effect.Parameters["gInflate"].SetValue(0.07f);
+                //        //effect.Parameters["gGlowColor"].SetValue(new Vector3(0.0f, 1.0f, 0.0f));
+                //        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                //    }
+                //}
                 mesh.Draw();
             }
 

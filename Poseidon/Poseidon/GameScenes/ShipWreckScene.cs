@@ -85,7 +85,7 @@ namespace Poseidon
         protected Vector2 pausePosition;
         protected Rectangle pauseRect = new Rectangle(1, 120, 200, 44);
         protected Texture2D actionTexture;
-        protected Texture2D stunnedTexture;
+        protected Texture2D stunnedIconTexture, scaredIconTexture;
         protected Texture2D gameObjectiveIconTexture;
         protected Texture2D noKeyScreen;
         protected Texture2D skillFoundScreen;
@@ -142,7 +142,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
-            this.stunnedTexture = stunnedTexture;
+            this.stunnedIconTexture = stunnedTexture;
             random = new Random();
             ground = new GameObject();
             gameCamera = new Camera(GameConstants.ShipCamHeight);
@@ -243,6 +243,7 @@ namespace Poseidon
             noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/no_key");
 
             skillFoundScreen = Content.Load<Texture2D>("Image/SceneTextures/skillFoundBackground");
+            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
 
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
@@ -845,15 +846,6 @@ namespace Poseidon
                 if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
                 {
                     enemies[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    if (enemies[currentShipWreckID][i].stunned == true)
-                    {
-                        Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[currentShipWreckID][i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
-                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
-                        spriteBatch.Begin();
-                        spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
-                        spriteBatch.End();
-                        RestoreGraphicConfig();
-                    }
                 }
             }
             for (int i = 0; i < fishAmount[currentShipWreckID]; i++)
@@ -923,6 +915,30 @@ namespace Poseidon
             afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
+            for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
+            {
+                if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
+                {
+                    if (enemies[currentShipWreckID][i].stunned == true)
+                    {
+                        Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[currentShipWreckID][i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(stunnedIconTexture, drawPos, Color.White);
+                        spriteBatch.End();
+                        RestoreGraphicConfig();
+                    }
+                    if (enemies[currentShipWreckID][i].isFleeing == true)
+                    {
+                        Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[currentShipWreckID][i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(scaredIconTexture, drawPos, Color.White);
+                        spriteBatch.End();
+                        RestoreGraphicConfig();
+                    }
+                }
+            }
             //Draw points gained / lost
             foreach (Point point in points)
             {

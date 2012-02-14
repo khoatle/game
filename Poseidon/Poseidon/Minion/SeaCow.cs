@@ -111,7 +111,30 @@ namespace Poseidon
             // Fleeing stuffs
             if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds) {
                 // giveBuff();
-                
+
+                //tell graphic effects to play ripple effect
+                HydroBot.ripplingScreen = true;
+                Viewport viewPort = new Viewport();
+                if (HydroBot.gameMode == GameMode.ShipWreck)
+                    viewPort = ShipWreckScene.GraphicDevice.Viewport;
+                else if (HydroBot.gameMode == GameMode.MainGame)
+                    viewPort = PlayGameScene.GraphicDevice.Viewport;
+                else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                    viewPort = SurvivalGameScene.GraphicDevice.Viewport;
+                Vector3 screenPos = viewPort.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
+                HydroBot.rippleCenter = new Vector2(screenPos.X / PlayGameScene.GraphicDevice.Viewport.Width, screenPos.Y / PlayGameScene.GraphicDevice.Viewport.Height);
+                PoseidonGame.audio.maneteeRoar.Play();
+
+                // Display some info, will remove later
+                Point point1 = new Point();
+                String point_string1 = "Just roar to scare!";
+                point1.LoadContent(PoseidonGame.contentManager, point_string1, Position, Color.Red);
+                if (HydroBot.gameMode == GameMode.ShipWreck)
+                    ShipWreckScene.points.Add(point1);
+                else if (HydroBot.gameMode == GameMode.MainGame)
+                    PlayGameScene.points.Add(point1);
+                else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                    SurvivalGameScene.points.Add(point1);
                 // All enemies within a radius flee
                 for (int i = 0; i < enemiesSize; i++)
                 {

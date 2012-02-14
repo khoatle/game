@@ -167,6 +167,8 @@ namespace Poseidon
         //do not need to be added to save file
         public static bool distortingScreen = false;
         public static double distortionStart = 0;
+        public static bool ripplingScreen = false;
+        public static Vector2 rippleCenter;
 
         //new stuff related to power of skills
         //they are upgraded thru the good will bar

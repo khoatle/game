@@ -226,7 +226,7 @@ namespace Poseidon
             {
                 newFish = new SeaCow();
                 newFish.Name = "seal";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/seal");
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/manetee");
                 newFish.Load(1, 24, 24);
                 newFish.happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
                 newFish.sad_talk = "We need the arctic ice. Stop global warming.";
@@ -243,7 +243,7 @@ namespace Poseidon
             else {
                 newFish = new SeaDolphin();
                 newFish.Name = "shark";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/normalshark");
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/dolphin");
                 newFish.Load(1, 24, 24);
                 newFish.happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
                 newFish.sad_talk = "Humans kill over 30 million sharks every year. We are the oldest fish, spare us."; 

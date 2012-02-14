@@ -92,7 +92,7 @@ namespace Poseidon
         public BoundingFrustum frustum;
 
 
-        private Texture2D stunnedTexture;
+        private Texture2D stunnedIconTexture, scaredIconTexture;
 
         float m_Timer = 0;
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
@@ -176,7 +176,7 @@ namespace Poseidon
             this.actionTexture = actionTexture;
             this.game = game;
             this.radar = radar;
-            this.stunnedTexture = stunnedTexture;
+            this.stunnedIconTexture = stunnedTexture;
             roundTime = TimeSpan.FromSeconds(2592000);
             random = new Random();
             
@@ -218,6 +218,7 @@ namespace Poseidon
             //loading winning, losing textures
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
+            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
 
             isAncientKilled = false;
 
@@ -1000,15 +1001,6 @@ namespace Poseidon
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
                     enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    if (enemies[i].stunned == true)
-                    {
-                        Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
-                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
-                        spriteBatch.Begin();
-                        spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
-                        spriteBatch.End();
-                        RestoreGraphicConfig();
-                    }
                 }
             }
 
@@ -1121,6 +1113,30 @@ namespace Poseidon
             afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
+            for (int i = 0; i < enemiesAmount; i++)
+            {
+                if (enemies[i].BoundingSphere.Intersects(frustum))
+                {
+                    if (enemies[i].stunned == true)
+                    {
+                        Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(stunnedIconTexture, drawPos, Color.White);
+                        spriteBatch.End();
+                        RestoreGraphicConfig();
+                    }
+                    if (enemies[i].isFleeing == true)
+                    {
+                        Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(scaredIconTexture, drawPos, Color.White);
+                        spriteBatch.End();
+                        RestoreGraphicConfig();
+                    }
+                }
+            }
             //Draw points gained / lost
             foreach (Point point in points)
             {

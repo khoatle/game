@@ -98,7 +98,7 @@ namespace Poseidon
         // Frustum of the camera
         public BoundingFrustum frustum;
 
-        private Texture2D stunnedTexture;
+        private Texture2D stunnedIconTexture, scaredIconTexture;
 
         // to know whether the big boss has been terminated
         // and the level is won
@@ -205,7 +205,7 @@ namespace Poseidon
             this.game = game;
             this.cutSceneDialog = cutSceneDialog;
             this.radar = radar;
-            this.stunnedTexture = stunnedTexture;
+            this.stunnedIconTexture = stunnedTexture;
             roundTime = GameConstants.RoundTime[currentLevel];
             random = new Random();
 
@@ -263,7 +263,7 @@ namespace Poseidon
             else {
                 int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 40, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -305,6 +305,7 @@ namespace Poseidon
             //loading winning, losing textures
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
+            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
 
             // Instantiate the factory Button
             float buttonScale = 1.0f;
@@ -1368,15 +1369,6 @@ namespace Poseidon
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
                     enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    if (enemies[i].stunned == true)
-                    {
-                        Vector3 placeToDraw = game.GraphicsDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
-                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
-                        spriteBatch.Begin();
-                        spriteBatch.Draw(stunnedTexture, drawPos, Color.White);
-                        spriteBatch.End();
-                        RestoreGraphicConfig();
-                    }
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;
@@ -1557,6 +1549,30 @@ namespace Poseidon
             afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
+            for (int i = 0; i < enemiesAmount; i++)
+            {
+                if (enemies[i].BoundingSphere.Intersects(frustum))
+                {
+                    if (enemies[i].stunned == true)
+                    {
+                        Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(stunnedIconTexture, drawPos, Color.White);
+                        spriteBatch.End();
+                        RestoreGraphicConfig();
+                    }
+                    if (enemies[i].isFleeing == true)
+                    {
+                        Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
+                        spriteBatch.Begin();
+                        spriteBatch.Draw(scaredIconTexture, drawPos, Color.White);
+                        spriteBatch.End();
+                        RestoreGraphicConfig();
+                    }
+                }
+            }
             //Draw points gained / lost
             foreach (Point point in points)
             {

@@ -34,6 +34,8 @@ namespace Poseidon {
         //game scenes constants
         public const int MainGameMinRangeX = 100;
         public const int MainGameMinRangeZ = 100;
+        public const int TrashMinRangeX = 10;
+        public const int TrashMinRangeZ = 10;
         public const int ShipWreckMinRangeX = 20;
         public const int ShipWreckMinRangeZ = 10;
         public const int MainGameMaxRangeX = 500;

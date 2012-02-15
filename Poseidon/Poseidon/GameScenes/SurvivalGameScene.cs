@@ -1042,7 +1042,6 @@ namespace Poseidon
                 if (factoryRealSphere.Intersects(frustum))
                 {
                     factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "BalloonShading");
                 }
             }
             if (researchFacility != null)

@@ -55,7 +55,7 @@ namespace Poseidon
             }
         }
 
-        public void roar(SwimmingObject[] enemies, int enemiesSize) {
+        public void FrozenBreathe(SwimmingObject[] enemies, int enemiesSize) {
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
@@ -76,12 +76,13 @@ namespace Poseidon
         {
             // Frozen breathe
             if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds) {
-                roar(enemies, enemiesSize);
+
+                FrozenBreathe(enemies, enemiesSize);
 
                 lastCast = PoseidonGame.playTime;
 
                 Point point = new Point();
-                String point_string = "Just roar";
+                String point_string = "Just frozen breathe";
                 point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);

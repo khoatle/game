@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<XnaContent>
+  <Asset Type="Poseidon.ParticleSettings">
+    <BlendState>Additive</BlendState>
+    <TextureName>Image/ParticleTextures/sand</TextureName>
+    <MaxParticles>100</MaxParticles>
+    <Duration>PT2S</Duration>
+    <DurationRandomness>0</DurationRandomness>
+    <EmitterVelocitySensitivity>0</EmitterVelocitySensitivity>
+    <MinHorizontalVelocity>25</MinHorizontalVelocity>
+    <MaxHorizontalVelocity>50</MaxHorizontalVelocity>
+    <MinVerticalVelocity>20</MinVerticalVelocity>
+    <MaxVerticalVelocity>-20</MaxVerticalVelocity>
+    <Gravity>0 0 0</Gravity>
+    <EndVelocity>0</EndVelocity>
+    <MinColor>FFFFFFFF</MinColor>
+    <MaxColor>FFFFFFFF</MaxColor>
+    <MinRotateSpeed>-2</MinRotateSpeed>
+    <MaxRotateSpeed>2</MaxRotateSpeed>
+    <MinStartSize>20</MinStartSize>
+    <MaxStartSize>30</MaxStartSize>
+    <MinEndSize>60</MinEndSize>
+    <MaxEndSize>75</MaxEndSize>
+  </Asset>
+</XnaContent>

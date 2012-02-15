@@ -506,13 +506,68 @@ namespace Poseidon
 
             // Add in some random amount of horizontal velocity.
             float horizontalVelocity = MathHelper.Lerp(settings.MinHorizontalVelocity,
-                                                       settings.MaxHorizontalVelocity,
-                                                       (float)random.NextDouble());
+                                                        settings.MaxHorizontalVelocity,
+                                                        (float)random.NextDouble());
 
             double horizontalAngle = random.NextDouble() * MathHelper.TwoPi;
 
             velocity.X += horizontalVelocity * (float)Math.Cos(horizontalAngle);
             velocity.Z += horizontalVelocity * (float)Math.Sin(horizontalAngle);
+            
+
+            // Add in some random amount of vertical velocity.
+            velocity.Y += MathHelper.Lerp(settings.MinVerticalVelocity,
+                                          settings.MaxVerticalVelocity,
+                                          (float)random.NextDouble());
+
+            // Choose four random control values. These will be used by the vertex
+            // shader to give each particle a different size, rotation, and color.
+            Color randomValues = new Color((byte)random.Next(255),
+                                           (byte)random.Next(255),
+                                           (byte)random.Next(255),
+                                           (byte)random.Next(255));
+
+            // Fill in the particle vertex structure.
+            for (int i = 0; i < 4; i++)
+            {
+                particles[firstFreeParticle * 4 + i].Position = position;
+                particles[firstFreeParticle * 4 + i].Velocity = velocity;
+                particles[firstFreeParticle * 4 + i].Random = randomValues;
+                particles[firstFreeParticle * 4 + i].Time = currentTime;
+            }
+
+            firstFreeParticle = nextFreeParticle;
+        }
+
+        /// <summary>
+        /// Adds a new particle to the system.
+        /// </summary>
+        public void AddParticle(Vector3 position, Vector3 velocity, float forwardDirection, float angleWidth)
+        {
+            // Figure out where in the circular queue to allocate the new particle.
+            int nextFreeParticle = firstFreeParticle + 1;
+
+            if (nextFreeParticle >= settings.MaxParticles)
+                nextFreeParticle = 0;
+
+            // If there are no free particles, we just have to give up.
+            if (nextFreeParticle == firstRetiredParticle)
+                return;
+
+            // Adjust the input velocity based on how much
+            // this particle system wants to be affected by it.
+            velocity *= settings.EmitterVelocitySensitivity;
+
+            // Add in some random amount of horizontal velocity.
+            float horizontalVelocity = MathHelper.Lerp(settings.MinHorizontalVelocity,
+                                                        settings.MaxHorizontalVelocity,
+                                                        (float)random.NextDouble());
+
+            double horizontalAngle = random.NextDouble() * angleWidth + (forwardDirection - angleWidth / 2);
+
+            velocity.X += horizontalVelocity * (float)Math.Sin(horizontalAngle);
+            velocity.Z += horizontalVelocity * (float)Math.Cos(horizontalAngle);
+
 
             // Add in some random amount of vertical velocity.
             velocity.Y += MathHelper.Lerp(settings.MinVerticalVelocity,

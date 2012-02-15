@@ -140,7 +140,8 @@ namespace Poseidon
                 {
                     BaseEnemy tmp = (BaseEnemy)enemies[i];
                     if (Vector3.Distance(tmp.Position, Position) < roarRadius && !tmp.isFleeing) {
-                        tmp.isFleeing = true;
+                        if (!(tmp is Submarine))
+                            tmp.isFleeing = true;
                         tmp.fleeingStart = PoseidonGame.playTime;
                         
                         // Find the fleeing direction for this guy

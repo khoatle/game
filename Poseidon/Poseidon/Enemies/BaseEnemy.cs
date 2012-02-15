@@ -292,6 +292,12 @@ namespace Poseidon
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
                     }
+                    //being freezed by turtle's frozen breath
+                    if (speedFactor < 1.0f)
+                    {
+                        effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Blue.ToVector3(), 1));
+                    }
+
                     //effect.FogEnabled = true;
                     //effect.FogStart = GameConstants.FogStart;
                     //effect.FogEnd = GameConstants.FogEnd;

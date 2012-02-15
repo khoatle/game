@@ -169,6 +169,8 @@ namespace Poseidon
         public static double distortionStart = 0;
         public static bool ripplingScreen = false;
         public static Vector2 rippleCenter;
+        int numTimeReleaseFrozenBreath = 0;
+        bool doFrozenBreath = false;
 
         //new stuff related to power of skills
         //they are upgraded thru the good will bar
@@ -1066,6 +1068,7 @@ namespace Poseidon
                 HydroBot.goodWillPoint = 0;
             }
             IngamePresentation.UpdateGoodWillBar();
+
         }
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo, HeightMapInfo heightMapInfo)
         {
@@ -1290,6 +1293,27 @@ namespace Poseidon
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);
+            }
+
+            //testing the frozen breath
+            if (lastKeyboardState.IsKeyDown(Keys.F) && currentKeyboardState.IsKeyUp(Keys.F))
+            {
+                doFrozenBreath = true;
+                PoseidonGame.audio.frozenBreathe.Play();
+            }
+            if (doFrozenBreath)
+            {
+                if (PlayGameScene.particleManager.frozenBreathParticles != null)
+                {
+                    for (int k = 0; k < GameConstants.numFrozenBreathParticlesPerUpdate; k++)
+                        PlayGameScene.particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0,0,1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);
+                }
+                numTimeReleaseFrozenBreath += 1;
+                if (numTimeReleaseFrozenBreath >= 120)
+                {
+                    doFrozenBreath = false;
+                    numTimeReleaseFrozenBreath = 0;
+                }
             }
         }
 

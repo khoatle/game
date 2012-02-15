@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 
 namespace Poseidon
 {
@@ -30,6 +31,26 @@ namespace Poseidon
         {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0 && objs[i].gaveExp == false) {
+                    // Delete code is below this
+                    // This snippet does not include deleting
+                    if (objs[i] is SeaCow) {
+                        HydroBot.hasSeaCow = false;
+                        HydroBot.seaCowPower = 0;
+                        HydroBot.iconActivated[IngamePresentation.seaCowIcon] = false;
+                    }
+                    if (objs[i] is SeaTurtle)
+                    {
+                        HydroBot.hasTurtle = false;
+                        HydroBot.turtlePower = 0;
+                        HydroBot.iconActivated[IngamePresentation.turtleIcon] = false;
+                    }
+                    if (objs[i] is SeaDolphin)
+                    {
+                        HydroBot.hasDolphin = false;
+                        HydroBot.dolphinPower = 0;
+                        HydroBot.iconActivated[IngamePresentation.dolphinIcon] = false;
+                    }
+
                     if (objs[i].isBigBoss == true)
                     {
                         if (gameMode == GameMode.MainGame)

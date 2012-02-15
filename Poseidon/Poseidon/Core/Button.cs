@@ -10,7 +10,7 @@ namespace Poseidon.Core
 {
     class Button
     {
-        public enum InteractionState { HOVER, SELECTED, OUT };
+        public enum InteractionState { HOVER, PRESSED, OUT };
         public InteractionState state;
         private int width;
         private int height;
@@ -22,7 +22,6 @@ namespace Poseidon.Core
         private float scale = 1.0f;
         private string name;
         private ButtonState previousRightButtonState;
-        private bool selectSoundPlayed;
 
         public bool Anchored
         {
@@ -63,7 +62,6 @@ namespace Poseidon.Core
             state = InteractionState.OUT;
             cursorPosition = new Vector2();
             previousRightButtonState = ButtonState.Released;
-            selectSoundPlayed = false;
 
             sourceRect = new Rectangle(0, idx * height, width, height);
             destinationRect = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)(width * scale), (int)(height * scale));
@@ -76,47 +74,67 @@ namespace Poseidon.Core
             cursorPosition.X = mouseState.X;
             cursorPosition.Y = mouseState.Y;
             bool onButtonArea = destinationRect.Contains(mouseState.X, mouseState.Y);
-            if (mouseState.LeftButton != ButtonState.Pressed && onButtonArea)
+            switch (state)
             {
-                // HOVER
-                state = InteractionState.HOVER;
-                sourceRect = new Rectangle(width, buttonIndex * height, width, height);
+                case InteractionState.OUT:
+                    if (onButtonArea)
+                    {
+                        state = InteractionState.HOVER;
+                        sourceRect = new Rectangle(width, buttonIndex * height, width, height);
+                    }
+                    else
+                    {
+                        sourceRect = new Rectangle(0, buttonIndex * height, width, height);
+                    }
+                    break;
+                case InteractionState.HOVER:
+                    if (onButtonArea && mouseState.LeftButton == ButtonState.Pressed)
+                    {
+                        state = InteractionState.PRESSED;
+                        sourceRect = new Rectangle(2 * width, buttonIndex * height, width, height);
+                        PoseidonGame.audio.MenuSelect.Play();
+                    }
+                    else if (onButtonArea)
+                    {
+                        // state remains as HOVER
+                        sourceRect = new Rectangle(width, buttonIndex * height, width, height);
+                    }
+                    else
+                    {
+                        state = InteractionState.OUT;
+                        sourceRect = new Rectangle(0, buttonIndex * height, width, height);
+                    }
+                    break;
+                case InteractionState.PRESSED:
+                    if (onButtonArea && mouseState.LeftButton == ButtonState.Released)
+                    {
+                        state = InteractionState.HOVER;
+                        sourceRect = new Rectangle(width, buttonIndex * height, width, height);
+                        anchored = true;
+                    } 
+                    else if (onButtonArea && mouseState.LeftButton == ButtonState.Pressed) 
+                    {
+                        // state remains as pressed
+                        sourceRect = new Rectangle(2 * width, buttonIndex * height, width, height);
+                    } 
+                    else
+                    {
+                        state = InteractionState.OUT;
+                        sourceRect = new Rectangle(0, buttonIndex * height, width, height);
+                    }
+                    break;
             }
-            else if (mouseState.LeftButton == ButtonState.Pressed && onButtonArea)
-            {
-                // SELECTED
-                state = InteractionState.SELECTED;
-                sourceRect = new Rectangle(2 * width, buttonIndex * height, width, height);
-                anchored = true;
 
-                if (!selectSoundPlayed)
-                {
-                    PoseidonGame.audio.MenuSelect.Play();
-                    selectSoundPlayed = true;
-                }
-            }
-            else if (mouseState.LeftButton == ButtonState.Pressed && !onButtonArea)
+            // Store anchor destination rectangle. This will be used only if anchor is on
+            anchorDestinationRect = new Rectangle((int)cursorPosition.X, (int)cursorPosition.Y, width, height);
+
+            // Certain criteria of releasing anchor
+            if (mouseState.LeftButton == ButtonState.Pressed && !onButtonArea && mouseOnPanelArea)
             {
-                // OUT
-                state = InteractionState.OUT;
-                if (mouseOnPanelArea)
-                {
-                    // if mouse is still on panel area, it means another button is selected. So, un-anchor this button
-                    anchored = false;
-                }
-            }
-            else if (!onButtonArea)
-            {
-                // OUT
-                state = InteractionState.OUT;
-                sourceRect = new Rectangle(0, buttonIndex * height, width, height);
-                anchorDestinationRect = new Rectangle((int)cursorPosition.X, (int)cursorPosition.Y, width, height);
+                // if mouse is still on panel area, it means another button is selected. So, un-anchor this button
+                anchored = false;
             }
 
-            if (mouseState.LeftButton == ButtonState.Released)
-            {
-                selectSoundPlayed = false; // reset boolean when leftbutton is released
-            }
 
             if (previousRightButtonState == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released)
             {

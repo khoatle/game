@@ -250,7 +250,7 @@ namespace Poseidon
             numStrangeObjCollected = lsNumStrangeObjCollected = 0;
             hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
             dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
-            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
+            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 8;
 
             //power of the skills
             bowPower = hammerPower = armorPower = sandalPower = beltPower = 

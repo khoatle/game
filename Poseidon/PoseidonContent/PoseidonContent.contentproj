@@ -1904,6 +1904,7 @@
       <Name>FrozenBreathSettings</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1911,6 +1912,18 @@
       <Name>frozenBreathe</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\BackgroundMusics\jigsawbackground1.wav">
+      <Name>jigsawbackground1</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SongProcessor</Processor>
+    </Compile>
+    <Compile Include="Sounds\BackgroundMusics\jigsawbackground2.wav">
+      <Name>jigsawbackground2</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SongProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

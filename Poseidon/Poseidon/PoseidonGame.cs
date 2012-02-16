@@ -436,6 +436,7 @@ namespace Poseidon
             }
             if (jigsawGameScene.timeUp)
             {
+                MediaPlayer.Stop();
                 ShowScene(playGameScene);
                 switch (jigsawType)
                 {

@@ -19,6 +19,7 @@ using SkinnedModel;
 using Poseidon.Core;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.Xna.Framework.Media;
 #endregion
 
 namespace Poseidon
@@ -1300,6 +1301,10 @@ namespace Poseidon
             {
                 doFrozenBreath = true;
                 PoseidonGame.audio.frozenBreathe.Play();
+                //PoseidonGame.audio.frozenBreathe.CreateInstance().Volume = 1.0f;
+                SoundEffect.MasterVolume /= 2f;
+                //PoseidonGame.audio.backgroundMusics[0].
+                MediaPlayer.Volume /= 2;
             }
             if (doFrozenBreath)
             {

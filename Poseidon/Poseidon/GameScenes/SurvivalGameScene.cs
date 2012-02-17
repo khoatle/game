@@ -164,6 +164,9 @@ namespace Poseidon
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
 
+        //for drawing a game boundary
+        GameBoundary gameBoundary;
+
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -231,6 +234,9 @@ namespace Poseidon
             factoryButtonPanel = new ButtonPanel(4, buttonScale);
 
             this.Load();
+
+            gameBoundary = new GameBoundary();
+            gameBoundary.LoadGraphicsContent(GraphicDevice);
 
         }
 
@@ -1136,6 +1142,10 @@ namespace Poseidon
                     }
                 }
             }
+
+            //draw boundary of the game scene
+            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+
             //Draw points gained / lost
             foreach (Point point in points)
             {

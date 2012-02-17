@@ -27,6 +27,7 @@ namespace Poseidon {
         public bool isReturnBot;
         public bool isChasing;
         public bool isFighting;
+        public bool isCasting;
 
         public Fish() : base() {
             basicExperienceReward = GameConstants.BasicExpHealingFish;

@@ -20,6 +20,9 @@ namespace Poseidon
         public TimeSpan lastAttack;
         public TimeSpan timeBetweenAttack;
 
+        public TimeSpan startCasting;
+        public TimeSpan standingTime;
+
         public TimeSpan lastCast;
         public TimeSpan coolDown;
 
@@ -30,8 +33,13 @@ namespace Poseidon
             lastCast = PoseidonGame.playTime;
             timeBetweenAttack = new TimeSpan(0, 0, 1);
             // Cool down 20s
-            coolDown = new TimeSpan(0, 0, 3);
+            coolDown = new TimeSpan(0, 0, 5);
+
+            standingTime = new TimeSpan(0, 0, 1);
             isBigBoss = false;
+            // TODO: Remove soon
+            maxHealth = 1000;
+            health = maxHealth;
         }
 
         public override void attack()
@@ -41,6 +49,9 @@ namespace Poseidon
                 currentTarget.health -= seaCowDamage;
 
                 lastAttack = PoseidonGame.playTime;
+
+                Vector3 facingDirection = currentTarget.Position - Position;
+                ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
                 String point_string = "Enemy Got Biten, health - " + seaCowDamage;
@@ -108,62 +119,83 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
-            // Fleeing stuffs
-            if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds) {
-                // giveBuff();
+            BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
 
-                //tell graphic effects to play ripple effect
-                HydroBot.ripplingScreen = true;
-                Viewport viewPort = new Viewport();
-                if (HydroBot.gameMode == GameMode.ShipWreck)
-                    viewPort = ShipWreckScene.GraphicDevice.Viewport;
-                else if (HydroBot.gameMode == GameMode.MainGame)
-                    viewPort = PlayGameScene.GraphicDevice.Viewport;
-                else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                    viewPort = SurvivalGameScene.GraphicDevice.Viewport;
-                Vector3 screenPos = viewPort.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
-                HydroBot.rippleCenter = new Vector2(screenPos.X / PlayGameScene.GraphicDevice.Viewport.Width, screenPos.Y / PlayGameScene.GraphicDevice.Viewport.Height);
-                PoseidonGame.audio.maneteeRoar.Play();
-
-                // Display some info, will remove later
-                Point point1 = new Point();
-                String point_string1 = "Just roar to scare!";
-                point1.LoadContent(PoseidonGame.contentManager, point_string1, Position, Color.Red);
-                if (HydroBot.gameMode == GameMode.ShipWreck)
-                    ShipWreckScene.points.Add(point1);
-                else if (HydroBot.gameMode == GameMode.MainGame)
-                    PlayGameScene.points.Add(point1);
-                else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                    SurvivalGameScene.points.Add(point1);
-                // All enemies within a radius flee
-                for (int i = 0; i < enemiesSize; i++)
+            if (!isReturnBot && !isCasting && potentialEnemy != null) { 
+                // It is OK to cast?
+                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint)
                 {
-                    BaseEnemy tmp = (BaseEnemy)enemies[i];
-                    if (Vector3.Distance(tmp.Position, Position) < roarRadius && !tmp.isFleeing) {
-                        if (!(tmp is Submarine))
-                            tmp.isFleeing = true;
-                        tmp.fleeingStart = PoseidonGame.playTime;
-                        
-                        // Find the fleeing direction for this guy
-                        Matrix orientationMatrix = Matrix.CreateRotationY(tmp.ForwardDirection);
-                        Vector3 movement = Vector3.Zero;
-                        movement.Z = 1;
-                        tmp.fleeingDirection = -Vector3.Transform(movement, orientationMatrix);
+                    isCasting = true;
+                    isReturnBot = false;
+                    isWandering = false;
+                    isChasing = false;
+                    isFighting = false;
 
-                        // Display some info, will remove later
-                        Point point = new Point();
-                        String point_string = "Fleeing!";
-                        point.LoadContent(PoseidonGame.contentManager, point_string, tmp.Position, Color.Red);
-                        if (HydroBot.gameMode == GameMode.ShipWreck)
-                            ShipWreckScene.points.Add(point);
-                        else if (HydroBot.gameMode == GameMode.MainGame)
-                            PlayGameScene.points.Add(point);
-                        else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                            SurvivalGameScene.points.Add(point);
-                    }
+                    startCasting = PoseidonGame.playTime;
                 }
-                lastCast = PoseidonGame.playTime;
             }
+
+            if (isCasting == true) { 
+                // Casting timeout
+                if (PoseidonGame.playTime.TotalSeconds - startCasting.TotalSeconds > standingTime.TotalSeconds)
+                {
+                    isCasting = false; // Done casting
+                    isWandering = true; // Let the wander state do the wandering task
+
+                    lastCast = PoseidonGame.playTime;
+
+                    //tell graphic effects to play ripple effect
+                    HydroBot.ripplingScreen = true;
+                    Viewport viewPort = new Viewport();
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                        viewPort = ShipWreckScene.GraphicDevice.Viewport;
+                    else if (HydroBot.gameMode == GameMode.MainGame)
+                        viewPort = PlayGameScene.GraphicDevice.Viewport;
+                    else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                        viewPort = SurvivalGameScene.GraphicDevice.Viewport;
+                    Vector3 screenPos = viewPort.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
+                    HydroBot.rippleCenter = new Vector2(screenPos.X / PlayGameScene.GraphicDevice.Viewport.Width, screenPos.Y / PlayGameScene.GraphicDevice.Viewport.Height);
+                    PoseidonGame.audio.maneteeRoar.Play();
+
+                    // Display some info, will remove later
+                    Point point1 = new Point();
+                    String point_string1 = "Just roar to scare!";
+                    point1.LoadContent(PoseidonGame.contentManager, point_string1, Position, Color.Red);
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                        ShipWreckScene.points.Add(point1);
+                    else if (HydroBot.gameMode == GameMode.MainGame)
+                        PlayGameScene.points.Add(point1);
+                    else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point1);
+
+                    // All enemies within a radius flee
+                    for (int i = 0; i < enemiesSize; i++)
+                    {
+                        BaseEnemy tmp = (BaseEnemy)enemies[i];
+                        if (Vector3.Distance(tmp.Position, Position) < GameConstants.SideKick_Look_Radius && !tmp.isFleeing)
+                        {
+                            if (!(tmp is Submarine))
+                                tmp.isFleeing = true;
+                            tmp.fleeingStart = PoseidonGame.playTime;
+
+                            // Find the fleeing direction for this guy
+                            tmp.fleeingDirection = tmp.Position - Position; // Flee from sea cow
+
+                            // Display some info, will remove later
+                            Point point = new Point();
+                            String point_string = "Fleeing!";
+                            point.LoadContent(PoseidonGame.contentManager, point_string, tmp.Position, Color.Red);
+                            if (HydroBot.gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (HydroBot.gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                        }
+                    } // END for()
+                } // End if (PoseidonGame.playTime.TotalSeconds... (timeout), more effect will be added by including an "else"
+                
+            } // End if (isCasting == true)
 
             // Moving, and changing state Logic
             Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);
@@ -180,7 +212,7 @@ namespace Poseidon
                     seekDestination(destination, enemies, enemiesSize, fish, fishSize, tank, speedFactor);
                 }
                 else {
-                    currentTarget = lookForEnemy(enemies, enemiesSize);
+                    currentTarget = potentialEnemy;
                     if (currentTarget == null) // See no enemy
                         randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, tank);
                     else { // Hunt him down

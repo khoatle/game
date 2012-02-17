@@ -24,7 +24,8 @@ namespace Poseidon
     {
         #region Fields
         private Color gridColor;
-
+        private Vector3 diffuseColor;
+        private bool decreasing;
         // Rendering
         private VertexBuffer vertexBuffer;
         private BasicEffect effect;
@@ -35,6 +36,8 @@ namespace Poseidon
         public GameBoundary()
         {
             gridColor = new Color(0xFF, 0xFF, 0xFF, 0xFF);
+            diffuseColor = new Vector3(1, 1, 1);
+            decreasing = true;
         }
 
         public void LoadGraphicsContent(GraphicsDevice graphicsDevice)
@@ -69,9 +72,22 @@ namespace Poseidon
             effect.Projection = projection;
             effect.VertexColorEnabled = true;
             effect.LightingEnabled = false;
+            effect.DiffuseColor = diffuseColor;
+            if (decreasing)
+            {
+                diffuseColor.Y -= 0.01f;
+                diffuseColor.Z -= 0.01f;
+                if (diffuseColor.Y <= 0) decreasing = false;
+            }
+            else
+            {
+                diffuseColor.Y += 0.01f;
+                diffuseColor.Z += 0.01f;
+                if (diffuseColor.Y >= 1) decreasing = true;
+            }
 
             device.SetVertexBuffer(this.vertexBuffer);
-
+            
             for (int i = 0; i < this.effect.CurrentTechnique.Passes.Count; ++i)
             {
                 this.effect.CurrentTechnique.Passes[i].Apply();

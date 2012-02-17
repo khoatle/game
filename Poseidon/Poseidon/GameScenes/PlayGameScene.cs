@@ -1327,7 +1327,6 @@ namespace Poseidon
             graphics.GraphicsDevice.Clear(Color.Black);
 
             terrain.Draw(gameCamera);
-            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
 
             //spriteBatch.Begin();
             //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 1].isWandering, new Vector2(200, 100), Color.White);
@@ -1547,6 +1546,7 @@ namespace Poseidon
 
             //draw particle effects
             particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
+
             //applying edge detection
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
 
@@ -1582,6 +1582,8 @@ namespace Poseidon
                     }
                 }
             }
+            //draw boundary of the game scene
+            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //Draw points gained / lost
             foreach (Point point in points)
             {

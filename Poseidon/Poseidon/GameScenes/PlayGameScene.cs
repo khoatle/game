@@ -192,6 +192,9 @@ namespace Poseidon
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
 
+        //for drawing a game boundary
+        GameBoundary gameBoundary;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -317,6 +320,9 @@ namespace Poseidon
             this.Load();
             //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
             //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
+
+            gameBoundary = new GameBoundary();
+            gameBoundary.LoadGraphicsContent(GraphicDevice);
         }
 
 
@@ -1321,6 +1327,7 @@ namespace Poseidon
             graphics.GraphicsDevice.Clear(Color.Black);
 
             terrain.Draw(gameCamera);
+            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
 
             //spriteBatch.Begin();
             //spriteBatch.DrawString(statsFont, "isWander: " + fish[fishAmount - 1].isWandering, new Vector2(200, 100), Color.White);

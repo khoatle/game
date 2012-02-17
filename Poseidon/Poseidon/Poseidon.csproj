@@ -143,6 +143,7 @@
     <Compile Include="Minion\SeaCow.cs" />
     <Compile Include="Minion\SeaTurtle.cs" />
     <Compile Include="Minion\SeaDolphin.cs" />
+    <Compile Include="Miscellaneous\GameBoundary.cs" />
     <Compile Include="Miscellaneous\Terrain.cs" />
     <Compile Include="ParticleSystem\ParticleManagement.cs" />
     <Compile Include="TrashManagement\Factory.cs" />

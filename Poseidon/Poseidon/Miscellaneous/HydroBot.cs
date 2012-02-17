@@ -1301,10 +1301,6 @@ namespace Poseidon
             {
                 doFrozenBreath = true;
                 PoseidonGame.audio.frozenBreathe.Play();
-                //PoseidonGame.audio.frozenBreathe.CreateInstance().Volume = 1.0f;
-                SoundEffect.MasterVolume /= 2f;
-                //PoseidonGame.audio.backgroundMusics[0].
-                MediaPlayer.Volume /= 2;
             }
             if (doFrozenBreath)
             {

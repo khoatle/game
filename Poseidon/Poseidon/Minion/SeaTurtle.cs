@@ -19,6 +19,11 @@ namespace Poseidon
         // Frozen breathe attack stuff
         public TimeSpan lastCast;
         public TimeSpan coolDown;
+        int numTimeReleaseFrozenBreath = 0;
+
+        public TimeSpan startCasting;
+        public TimeSpan standingTime;
+        public bool firstCast;
 
         public TimeSpan lastAttack;
         public TimeSpan timeBetweenAttack; 
@@ -32,7 +37,13 @@ namespace Poseidon
             coolDown = new TimeSpan(0, 0, 5);
             lastCast = PoseidonGame.playTime;
 
+            // Cool down 20s
+            standingTime = new TimeSpan(0, 0, 1);
+
             isBigBoss = false;
+            // TODO: Remove soon
+            maxHealth = 1000;
+            health = maxHealth;
         }
 
         public override void attack()
@@ -42,6 +53,9 @@ namespace Poseidon
                 currentTarget.health -= turtleDamage;
 
                 lastAttack = PoseidonGame.playTime;
+
+                Vector3 facingDirection = currentTarget.Position - Position;
+                ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
                 String point_string = "Enemy Got Biten, health - " + turtleDamage;
@@ -55,7 +69,7 @@ namespace Poseidon
             }
         }
 
-        public void FrozenBreathe(SwimmingObject[] enemies, int enemiesSize) {
+        public void FrozenBreathe(SwimmingObject[] enemies, int enemiesSize, bool firstCast) {
             Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
             Vector3 movement = Vector3.Zero;
             movement.Z = 1;
@@ -65,32 +79,72 @@ namespace Poseidon
                 Vector3 otherDirection = enemies[i].Position - Position;
                 if (Behavior.isInSight(observerDirection, Position, otherDirection, enemies[i].Position, (float)Math.PI * 4/3, 60f)) {
                 //if (Vector3.Distance(enemies[i].Position, Position) < 60f) {
-                    enemies[i].health -= turtleDamage;
+                    if (firstCast) 
+                        enemies[i].health -= turtleDamage;
                     enemies[i].speedFactor = 0.5f;
                     enemies[i].slowStart = PoseidonGame.playTime;
                 }
             }
+
+            if (PlayGameScene.particleManager.frozenBreathParticles != null)
+            {
+                for (int k = 0; k < GameConstants.numFrozenBreathParticlesPerUpdate; k++)
+                    PlayGameScene.particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0, 0, 1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);
+            }
+            numTimeReleaseFrozenBreath += 1;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, 
             SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
-            // Frozen breathe
-            if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds) {
+            BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
+            if (!isReturnBot && !isCasting && potentialEnemy != null)
+            {
+                // It is OK to cast?
+                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint)
+                {
+                    isCasting = true;
+                    isReturnBot = false;
+                    isWandering = false;
+                    isChasing = false;
+                    isFighting = false;
 
-                FrozenBreathe(enemies, enemiesSize);
+                    // For this case, I choose to set the forward direction statically rather than
+                    // facing different enemy since potentialEnemy may die, run away, etc
+                    Vector3 facingDirection = potentialEnemy.Position - Position;
+                    ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
-                lastCast = PoseidonGame.playTime;
+                    firstCast = true;
 
-                Point point = new Point();
-                String point_string = "Just frozen breathe";
-                point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
-                if (HydroBot.gameMode == GameMode.ShipWreck)
-                    ShipWreckScene.points.Add(point);
-                else if (HydroBot.gameMode == GameMode.MainGame)
-                    PlayGameScene.points.Add(point);
-                else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                    SurvivalGameScene.points.Add(point);
+                    startCasting = PoseidonGame.playTime;
+                }
+            }
+
+            if (isCasting == true)
+            {
+                // Casting timeout
+                if (PoseidonGame.playTime.TotalSeconds - startCasting.TotalSeconds > standingTime.TotalSeconds)
+                {
+                    isCasting = false; // Done casting
+                    isWandering = true; // Let the wander state do the wandering task, (and also lock enemy is potential enemy != null)
+
+                    Point point = new Point();
+                    String point_string = "Just frozen breathe";
+                    point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                        ShipWreckScene.points.Add(point);
+                    else if (HydroBot.gameMode == GameMode.MainGame)
+                        PlayGameScene.points.Add(point);
+                    else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point);
+
+                    lastCast = PoseidonGame.playTime;
+                } // Effect during cast
+                else {
+                    FrozenBreathe(enemies, enemiesSize, firstCast);
+                    firstCast = false;
+                    PoseidonGame.audio.frozenBreathe.Play();
+                }
             }
 
             Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);
@@ -108,7 +162,7 @@ namespace Poseidon
                 }
                 else
                 {
-                    currentTarget = lookForEnemy(enemies, enemiesSize);
+                    currentTarget = potentialEnemy;
                     if (currentTarget == null) // See no enemy
                         randomWalk(changeDirection, enemies, enemiesSize, fish, fishSize, tank);
                     else

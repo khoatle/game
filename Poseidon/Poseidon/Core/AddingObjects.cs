@@ -222,7 +222,7 @@ namespace Poseidon
             
             
             Fish newFish;
-            if (type == 0)
+            if (type == 1)
             {
                 newFish = new SeaCow();
                 newFish.Name = "seal";
@@ -231,7 +231,7 @@ namespace Poseidon
                 newFish.happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
                 newFish.sad_talk = "We need the arctic ice. Stop global warming.";
             }
-            else if (type == 1)
+            else if (type == 0)
             {
                 newFish = new SeaTurtle();
                 newFish.Name = "turtle";
@@ -258,9 +258,9 @@ namespace Poseidon
             BoundingSphere newSphere = new BoundingSphere(new Vector3(), radius);
             float X, Y = bot.Position.Y, Z;
             do {
-                X = (float)random.NextDouble() * (2 * bot.Position.X + 100) - bot.Position.X - 50f;
+                X = (float)random.NextDouble() * (2 * bot.Position.X + 50) - bot.Position.X - 25f;
                 //X = bot.Position.X + (float)random.NextDouble() * 50f;
-                Z = (float)random.NextDouble() * (2 * bot.Position.Z + 100) - bot.Position.Z - 50f;
+                Z = (float)random.NextDouble() * (2 * bot.Position.Z + 50) - bot.Position.Z - 25f;
                 newSphere.Center = new Vector3(X, Y, Z);
             } while (IsSurfaceOccupied(newSphere, enemiesAmount, fishAmount, enemies, fish) || newSphere.Intersects(bot.BoundingSphere));
 

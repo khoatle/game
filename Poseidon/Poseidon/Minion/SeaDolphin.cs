@@ -17,6 +17,9 @@ namespace Poseidon
         public TimeSpan lastCast;
         public TimeSpan coolDown;
 
+        public TimeSpan startCasting;
+        public TimeSpan standingTime;
+
         public TimeSpan lastAttack;
         public TimeSpan timeBetweenAttack; 
 
@@ -31,7 +34,11 @@ namespace Poseidon
             timeBetweenAttack = new TimeSpan(0,0,1);
             // Cool down 5s
             coolDown = new TimeSpan(0, 0, 5);
+            standingTime = new TimeSpan(0, 0, 2);
             isBigBoss = false;
+            // TODO: Remove soon
+            maxHealth = 1000;
+            health = maxHealth;
         }
 
         public bool isTargeting() {
@@ -45,6 +52,9 @@ namespace Poseidon
                 currentTarget.health -= dolphinDamage;
 
                 lastAttack = PoseidonGame.playTime;
+
+                Vector3 facingDirection = currentTarget.Position - Position;
+                ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
                 String point_string = "Enemy Got Biten, health - " + dolphinDamage;
@@ -60,24 +70,45 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
-            // Heal
-            if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint) {
-                HydroBot.currentHitPoint += healAmount;
-                // Got capped by Max HP
-                HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
-                HydroBot.isBeingHealed = true;
-                lastCast = PoseidonGame.playTime;
+            // Only cast skill when there is an enemy near by
+            if (!isReturnBot && !isCasting)
+            {
+                // It is OK to cast?
+                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint) {
+                    isCasting = true;
+                    isReturnBot = false;
+                    isWandering = false;
+                    isChasing = false;
+                    isFighting = false;
 
-                Point point = new Point();
-                String point_string = "Health + " + healAmount;
-                point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
-                if (HydroBot.gameMode == GameMode.ShipWreck)
-                    ShipWreckScene.points.Add(point);
-                else if (HydroBot.gameMode == GameMode.MainGame)
-                    PlayGameScene.points.Add(point);
-                else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                    SurvivalGameScene.points.Add(point);
-                PoseidonGame.audio.healingSound.Play();
+                    HydroBot.isBeingHealed = true;
+
+                    // Start casting
+                    startCasting = PoseidonGame.playTime;
+                }
+            }
+
+            // OK, I'm casting it
+            if (isCasting == true)
+            {
+                // Casting timeout
+                if (PoseidonGame.playTime.TotalSeconds - startCasting.TotalSeconds > standingTime.TotalSeconds)
+                {
+                    isCasting = false; // Done casting
+                    isWandering = true; // Let the wander state do the wandering task
+
+                    HydroBot.isBeingHealed = false;
+
+                    lastCast = PoseidonGame.playTime;
+                    HydroBot.currentHitPoint += healAmount;
+                    HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
+
+                    PoseidonGame.audio.healingSound.Play();
+                } // Else do nothing (all other states are false). Later effect can be added here
+                else {
+                    Vector3 facingDirection = hydroBot.Position - Position;
+                    ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
+                }
             }
 
             Vector3 destination = hydroBot.Position + new Vector3(AfterX, 0, AfterZ);

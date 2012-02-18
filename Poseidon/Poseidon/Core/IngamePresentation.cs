@@ -22,6 +22,8 @@ namespace Poseidon.Core
         //textures for good will bar
         static Texture2D[] iconTextures;
         static Texture2D GoodWillBar;
+        static Texture2D HealthBar;
+        static SpriteFont statsFont, fishTalkFont;
 
         public static int poseidonFace = 0, strengthIcon = 1, speedIcon = 2, shootRateIcon = 3, healthIcon = 4, bowIcon = 5, hammerIcon = 6,
             armorIcon = 7, sandalIcon = 8, beltIcon = 9, dolphinIcon = 10, seaCowIcon = 11, turtleIcon = 12;
@@ -44,6 +46,9 @@ namespace Poseidon.Core
             iconTextures[seaCowIcon] = Content.Load<Texture2D>("Image/SpinningReel/seaCowIcon");
             iconTextures[turtleIcon] = Content.Load<Texture2D>("Image/SpinningReel/turtleIcon");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
+            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
         }
         public static void DrawActiveSkill(GraphicsDevice GraphicDevice, Texture2D[] skillTextures, SpriteBatch spriteBatch)
         {
@@ -334,6 +339,75 @@ namespace Poseidon.Core
                 new Rectangle(0, 0, LevelBar.Width, barHeight),
                 Color.White);
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 11), heightFromTop - 1), typeColor);
+        }
+
+        public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests)
+        {
+            //Display Fish Health
+            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
+            if (fishPointedAt != null)
+            {
+                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                string line;
+                line = "'";
+                if (fishPointedAt.health < 20)
+                {
+                    line += "SAVE ME!!!";
+                }
+                else if (fishPointedAt.health < 60)
+                {
+                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
+                }
+                else
+                {
+                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
+                }
+                line += "'";
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 32), Color.Yellow);
+            }
+            else
+            {
+                //Display Enemy Health
+                BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
+                if (enemyPointedAt != null)
+                    IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                else
+                {
+                    TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
+                    if (chestPointedAt != null)
+                    {
+
+                    }
+                    Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
+                    if (trashPointedAt != null)
+                    {
+
+                    }
+                    else
+                    {
+                        ShipWreck shipPointedAt = CursorManager.MouseOnWhichShipWreck(cursor, gameCamera, shipWrecks);
+                        if (shipPointedAt != null)
+                        {
+
+                        }
+                        else
+                        {
+                            Factory factoryPointedAt = CursorManager.MouseOnWhichFactory(cursor, gameCamera, factories);
+                            if (factoryPointedAt != null)
+                            {
+
+                            }
+                            else
+                            {
+                                if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         public static string wrapLine(string input_line, int width, SpriteFont font)

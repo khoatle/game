@@ -224,6 +224,7 @@ namespace Poseidon {
         public const int NumNormalBackgroundMusics = 4;
         public const int NumBossBackgroundMusics = 1;
         public const int NumMinigameBackgroundMusics = 1;
+        public const int NumJigsawBackgroundMusics = 2;
 
         //attributes
         public static int gainAttributeCost = 1;

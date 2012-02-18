@@ -74,6 +74,8 @@ namespace Poseidon.MiniGames
         private double timeNow;
         public bool timeUp;
 
+        Random random;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -84,6 +86,7 @@ namespace Poseidon.MiniGames
             spriteBatch = (SpriteBatch)Game.Services.GetService(typeof(SpriteBatch));
             cursor = new Cursor(game, spriteBatch);
             //Content.RootDirectory = "Content";
+            random = new Random();
         }
 
         /// <summary>
@@ -180,6 +183,10 @@ namespace Poseidon.MiniGames
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(PoseidonGame.audio.jigsawMusics[random.Next(GameConstants.NumJigsawBackgroundMusics)]);
+            }
             timeNow -= gameTime.ElapsedGameTime.TotalSeconds;
             if (timeNow <= 0)
             {

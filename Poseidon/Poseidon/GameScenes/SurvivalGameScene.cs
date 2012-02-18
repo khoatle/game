@@ -164,6 +164,9 @@ namespace Poseidon
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
 
+        //for drawing a game boundary
+        GameBoundary gameBoundary;
+
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -231,6 +234,9 @@ namespace Poseidon
             factoryButtonPanel = new ButtonPanel(4, buttonScale);
 
             this.Load();
+
+            gameBoundary = new GameBoundary();
+            gameBoundary.LoadGraphicsContent(GraphicDevice);
 
         }
 
@@ -1136,6 +1142,10 @@ namespace Poseidon
                     }
                 }
             }
+
+            //draw boundary of the game scene
+            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+
             //Draw points gained / lost
             foreach (Point point in points)
             {
@@ -1180,70 +1190,8 @@ namespace Poseidon
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
             str1 += ((int)score).ToString();
-            //if (roundTimer.Minutes < 10)
-            //    str1 += "0";
-            //str1 += roundTimer.Minutes + ":";
-            //if (roundTimer.Seconds < 10)
-            //    str1+= "0";
-            //str1 += roundTimer.Seconds;
-            //str1 += "\n Active skill " + Tank.activeSkillID;
-            //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
-            //str1 += "\n Level: " + Tank.level;
-            //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
-            //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
-            //Vector3 mouseDif = pointIntersect - tank.Position;
-            //float distanceFomTank = mouseDif.Length();
-            //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
-            //str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
-            //float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-            //str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
-            //Vector3 posDif = tank.pointToMoveTo - tank.Position;
-            //float distanceToDest = posDif.Length();
-            //str2 += "\nDistance= " + distanceToDest;
-            //str2 += "\nTank Position " + tank.Position;
-            //str2 += "\nEnemy Position " + enemies[0].Position;
-            //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
-            //str2 += "\nFish prevTurnAmount " + fish[0].prevTurnAmount + "Fish pos " +  fish[0].Position + "Stuck " + fish[0].stucked;
-            //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
-            //str2 += "Type " + tank.GetType().Name.ToString();
-            //if (bubbles.Count > 0)
-            //{
-            //    str2 += "Bubbles " + bubbles.Count + " Scale " + bubbles[0].scale + " Time last " + bubbles[0].timeLast;
-            //    //str2 += "\nBub pos " + bubbles[0].bubblePos;
-            //}
-            //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
-            //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
-            //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
-            //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
-            //str2 += "\n" + trashes[0].fogEndValue;
-            //Display Fish Health
-            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
-            if (fishPointedAt != null)
-            {
-                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
-                string line;
-                line = "'";
-                if (fishPointedAt.health < 20)
-                {
-                    line += "SAVE ME!!!";
-                }
-                else if (fishPointedAt.health < 60)
-                {
-                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
-                }
-                else
-                {
-                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
-                }
-                line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 32), Color.Yellow);
-            }
 
-            //Display Enemy Health
-            BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
-            if (enemyPointedAt != null)
-                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);

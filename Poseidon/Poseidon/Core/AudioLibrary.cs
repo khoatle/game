@@ -9,6 +9,7 @@ namespace Poseidon.Core
         public Song[] backgroundMusics;
         public Song[] bossMusics;
         public Song[] minigameMusics;
+        public Song[] jigsawMusics;
         public SoundEffect botNormalShot;
         public SoundEffect herculesShot;
         public SoundEffect hermesSound;
@@ -124,12 +125,15 @@ namespace Poseidon.Core
             backgroundMusics = new Song[GameConstants.NumNormalBackgroundMusics];
             bossMusics = new Song[GameConstants.NumBossBackgroundMusics];
             minigameMusics = new Song[GameConstants.NumMinigameBackgroundMusics];
+            jigsawMusics = new Song[GameConstants.NumJigsawBackgroundMusics];
             backgroundMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground1");
             backgroundMusics[1] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground2");
             backgroundMusics[2] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground3");
             backgroundMusics[3] = Content.Load<Song>("Sounds/BackgroundMusics/normalBackground4");
             bossMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/bossBackground1");
             minigameMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/minigameBackground");
+            jigsawMusics[0] = Content.Load<Song>("Sounds/BackgroundMusics/jigsawbackground1");
+            jigsawMusics[1] = Content.Load<Song>("Sounds/BackgroundMusics/jigsawbackground2");
             botNormalShot = Content.Load<SoundEffect>("Sounds/SoundEffects/hydrobotNormalShot");
             herculesShot = Content.Load<SoundEffect>("Sounds/SoundEffects/herculesShot");
             hermesSound = Content.Load<SoundEffect>("Sounds/SoundEffects/hermesSound");

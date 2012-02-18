@@ -166,6 +166,29 @@ float4 NothingSpecialPixelShader(VertexToPixel input) : COLOR0
     return color; 
 }
 
+// A pixel shader that returns a custom alpha value
+float4 CustomAlphaPixelShader(VertexToPixel input) : COLOR0 
+{ 
+    float3 Normal = normalize(input.NormalWS);
+    float3 LightDir = normalize(DiffuseLightDirection);
+    float3 ViewDir = normalize(EyePosition - input.PositionWS.xyz);   
+    
+    float Diff = saturate(dot(Normal, LightDir));
+	float3 Reflect = normalize(2 * Diff * Normal - LightDir); 
+    float Specular = pow(saturate(dot(Reflect, ViewDir)), Shininess);
+	   
+    float4 color = tex2D(textureSampler, input.TextureCoordinate);
+
+    color *= (AmbientIntensity * AmbientColor + DiffuseIntensity * DiffuseColor * Diff + SpecularColor * Specular);
+	color.a = 1;
+
+	ApplyFog(color, input.PositionWS.w);
+
+	color.a = 0.3f;
+
+    return color; 
+}
+
 // Output structure for the vertex shader that renders normal and depth information.
 struct NormalDepthVertexShaderOutput
 {
@@ -238,6 +261,20 @@ technique NormalShading
 	{
 		VertexShader = compile vs_1_1 NothingSpecialVertexShader(); 
         PixelShader = compile ps_2_0 NothingSpecialPixelShader(); 
+		//CullMode = CCW;
+	}
+}
+
+// Normal here means not abnormal
+technique CustomAlphaShading
+{
+	pass Pass1
+	{
+		VertexShader = compile vs_1_1 NothingSpecialVertexShader(); 
+		AlphaBlendEnable = true;
+		SrcBlend = SrcAlpha;
+		DestBlend = InvSrcAlpha;
+        PixelShader = compile ps_2_0 CustomAlphaPixelShader(); 
 		//CullMode = CCW;
 	}
 }

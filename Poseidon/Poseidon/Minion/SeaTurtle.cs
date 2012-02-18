@@ -57,9 +57,10 @@ namespace Poseidon
 
         public override void attack()
         {
+            float damage = HydroBot.turtlePower * turtleDamage;
             if (PoseidonGame.playTime.TotalSeconds - lastAttack.TotalSeconds > timeBetweenAttack.TotalSeconds)
             {
-                currentTarget.health -= turtleDamage;
+                currentTarget.health -= damage;
 
                 lastAttack = PoseidonGame.playTime;
 
@@ -67,7 +68,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "Enemy Got Biten, health - " + turtleDamage;
+                String point_string = "Enemy Got Biten, health - " + damage;
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);

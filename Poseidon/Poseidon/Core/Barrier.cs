@@ -101,7 +101,7 @@ namespace Poseidon
                         Vector3 push = Position - enemies[i].Position;
 
                         float distance = (Vector3.Distance(Position, enemies[i].Position)) - enemies[i].BoundingSphere.Radius;
-                        if (distance < BoundingSphere.Radius * 3)
+                        if (distance < BoundingSphere.Radius * 5)
                         {
                             contenders++;
                             if (distance < 0.0001f) // prevent divide by 0 
@@ -121,7 +121,7 @@ namespace Poseidon
                         Vector3 push = Position - fishes[i].Position;
 
                         float distance = (Vector3.Distance(Position, fishes[i].Position) - fishes[i].BoundingSphere.Radius) - BoundingSphere.Radius;
-                        if (distance < BoundingSphere.Radius * 3)
+                        if (distance < BoundingSphere.Radius * 5)
                         {
                             contenders++;
                             if (distance < 0.0001f) // prevent divide by 0 

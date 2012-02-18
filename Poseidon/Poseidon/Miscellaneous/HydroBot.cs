@@ -19,6 +19,7 @@ using SkinnedModel;
 using Poseidon.Core;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.Xna.Framework.Media;
 #endregion
 
 namespace Poseidon
@@ -169,8 +170,6 @@ namespace Poseidon
         public static double distortionStart = 0;
         public static bool ripplingScreen = false;
         public static Vector2 rippleCenter;
-        int numTimeReleaseFrozenBreath = 0;
-        bool doFrozenBreath = false;
 
         //new stuff related to power of skills
         //they are upgraded thru the good will bar
@@ -250,7 +249,7 @@ namespace Poseidon
             numStrangeObjCollected = lsNumStrangeObjCollected = 0;
             hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
             dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
-            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
+            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 8;
 
             //power of the skills
             bowPower = hammerPower = armorPower = sandalPower = beltPower = 
@@ -374,6 +373,12 @@ namespace Poseidon
             dolphinPower = lsDolphinPower = (float)info.GetValue("dolphinPower", typeof(float));
             seaCowPower = lsSeaCowPower = (float)info.GetValue("seaCowPower", typeof(float));
             turtlePower = lsTurtlePower = (float)info.GetValue("turtlePower", typeof(float));
+
+            bowPower = lsBowPower = (float)info.GetValue("bowPower", typeof(float));
+            hammerPower = lsHammerPower = (float)info.GetValue("hammerPower", typeof(float));
+            sandalPower = lsSandalPower = (float)info.GetValue("sandalPower", typeof(float));
+            armorPower = lsArmorPower = (float)info.GetValue("armorPower", typeof(float));
+            beltPower = lsBeltPower = (float)info.GetValue("beltPower", typeof(float));
             
         }
 
@@ -433,6 +438,12 @@ namespace Poseidon
             info.AddValue("dolphinPower", dolphinPower);
             info.AddValue("seaCowPower", seaCowPower);
             info.AddValue("turtlePower", turtlePower);
+
+            info.AddValue("bowPower", bowPower);
+            info.AddValue("hammerPower", hammerPower);
+            info.AddValue("sandalPower", sandalPower);
+            info.AddValue("armorPower", armorPower);
+            info.AddValue("beltPower", beltPower);
         }
 
         /// <summary>
@@ -1293,27 +1304,6 @@ namespace Poseidon
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);
-            }
-
-            //testing the frozen breath
-            if (lastKeyboardState.IsKeyDown(Keys.F) && currentKeyboardState.IsKeyUp(Keys.F))
-            {
-                doFrozenBreath = true;
-                PoseidonGame.audio.frozenBreathe.Play();
-            }
-            if (doFrozenBreath)
-            {
-                if (PlayGameScene.particleManager.frozenBreathParticles != null)
-                {
-                    for (int k = 0; k < GameConstants.numFrozenBreathParticlesPerUpdate; k++)
-                        PlayGameScene.particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0,0,1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);
-                }
-                numTimeReleaseFrozenBreath += 1;
-                if (numTimeReleaseFrozenBreath >= 120)
-                {
-                    doFrozenBreath = false;
-                    numTimeReleaseFrozenBreath = 0;
-                }
             }
         }
 

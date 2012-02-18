@@ -49,7 +49,7 @@ namespace Poseidon
         GameObject boundingSphere;
         public int type = 0;
 
-        Terrain terrain;
+        public Terrain terrain;
         public List<ShipWreck> shipWrecks;
 
         public List<DamageBullet> myBullet;
@@ -61,7 +61,9 @@ namespace Poseidon
         List<Resource> resources;
         List<Trash> trashes;
         List<Factory> factories;
+        Factory factoryAnchor;
         public ResearchFacility researchFacility;
+        ResearchFacility researchAnchor;
 
         List<StaticObject> staticObjects;
 
@@ -106,7 +108,6 @@ namespace Poseidon
 
         //stuffs for applying special effects
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
-        Texture2D SceneTexture;
         public RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
         public Texture2D Scene2Texture;
         RenderTarget2D renderTarget3;
@@ -156,6 +157,7 @@ namespace Poseidon
         private SpriteFont factoryFont;
         private Texture2D factoryBackground;
         private Texture2D factoryProduceButton;
+        private Texture2D dummyTexture;
 
         // Texture and font for property window of a research facility
         SpriteFont facilityFont;
@@ -191,6 +193,9 @@ namespace Poseidon
 
         //for edge detection effect
         RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
+
+        //for drawing a game boundary
+        GameBoundary gameBoundary;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -317,6 +322,9 @@ namespace Poseidon
             this.Load();
             //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
             //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
+
+            gameBoundary = new GameBoundary();
+            gameBoundary.LoadGraphicsContent(GraphicDevice);
         }
 
 
@@ -414,6 +422,8 @@ namespace Poseidon
             biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
             plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
             radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
+            dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
+            dummyTexture.SetData(new int[4]);
 
             // Load Trash
             biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrash");
@@ -757,6 +767,7 @@ namespace Poseidon
                     currentMouseState = Mouse.GetState();
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
+                    UpdateAnchor();
                     // if mouse click happened, check for the click position and add new factory
                     if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea && factoryButtonPanel.clickToBuildDetected)
                     {
@@ -770,10 +781,6 @@ namespace Poseidon
                         if (addNewBuilding(newBuildingType, newBuildingPosition))
                         {
                             factoryButtonPanel.removeAnchor();
-                        }
-                        else
-                        {
-                            // play sound to denote building could not be added
                         }
                     }
                     if (currentMouseState.RightButton == ButtonState.Pressed)
@@ -1168,6 +1175,19 @@ namespace Poseidon
                 return false;
             }
 
+            int radius = 60; // need to revise this based on the model for each building
+            BoundingSphere buildingBoundingSphere;
+            if (factoryAnchor != null)
+            {
+                buildingBoundingSphere = factoryAnchor.BoundingSphere;
+                radius = (int)buildingBoundingSphere.Radius;
+            }
+            else if (researchAnchor != null)
+            {
+                buildingBoundingSphere = researchAnchor.BoundingSphere;
+                radius = (int)buildingBoundingSphere.Radius;
+            }
+
             // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
             // Give a lax of 40 units so that if a click happened at the edge of the arena, building is not allowed. This is to prevent the case
             // that power packs might appear above the end of the factory whose edge is just beyond the game arena.
@@ -1179,7 +1199,7 @@ namespace Poseidon
             }
 
             //Verify that current location is available for adding the building
-            int radius = 60; // probably need to calculate this based on the model for each building
+            
             //int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, 0, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
             {
@@ -1202,7 +1222,8 @@ namespace Poseidon
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
                         researchFacility = new ResearchFacility();
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                        orientation = (float)(Math.PI/2) * random.Next(4);
+                        //orientation = (float)(Math.PI/2) * random.Next(4);
+                        orientation = researchAnchor.orientation;
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.LoadContent(game, position, orientation,ref facilityFont,ref facilityFont2,ref facilityBackground,ref facilityUpgradeButton,ref playJigsawButton,ref increaseAttributeButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1213,7 +1234,7 @@ namespace Poseidon
                 case BuildingType.biodegradable:
                     oneFactory = new Factory(FactoryType.biodegradable);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1224,7 +1245,7 @@ namespace Poseidon
                 case BuildingType.plastic:
                     oneFactory = new Factory(FactoryType.plastic);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    orientation = factoryAnchor.orientation;
                     oneFactory.Model = plasticFactoryModel;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1234,7 +1255,7 @@ namespace Poseidon
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
@@ -1249,6 +1270,59 @@ namespace Poseidon
             }
 
             return status;
+        }
+
+        private void UpdateAnchor()
+        {
+            // check if anchor need to be instantiated or updated
+            if (factoryButtonPanel.AnchoredIndex != factoryButtonPanel.PreviousAnchoredIndex)
+            {
+                factoryAnchor = null;
+                researchAnchor = null;
+
+                Vector3 anchorPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                float orientation;
+                if (factoryButtonPanel.anchorIndexToBuildingType() == BuildingType.researchlab)
+                {
+                    researchAnchor = new ResearchFacility();
+                    anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    researchAnchor.Model = researchBuildingModel;
+                    researchAnchor.LoadContent(game, anchorPosition, orientation, ref facilityFont, ref facilityFont2, ref dummyTexture, ref dummyTexture, ref dummyTexture, ref dummyTexture);
+                }
+                else
+                {
+                    FactoryType typeOfFactory = factoryButtonPanel.anchorIndexToFactoryType(factoryButtonPanel.AnchoredIndex);
+                    factoryAnchor = new Factory(typeOfFactory);
+                    anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    switch(typeOfFactory) {
+                        case FactoryType.biodegradable:
+                            factoryAnchor.Model = biodegradableFactoryModel; // need to make it different for each type
+                            break;
+                        case FactoryType.plastic:
+                            factoryAnchor.Model = plasticFactoryModel;
+                            break;
+                        case FactoryType.radioactive:
+                            factoryAnchor.Model = radioactiveFactoryModel;
+                            break;
+                    }
+                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref factoryFont, ref dummyTexture, ref dummyTexture);
+                }
+            }
+            else
+            {
+                if (factoryAnchor != null)
+                {
+                    factoryAnchor.Position = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                    factoryAnchor.Position.Y = terrain.heightMapInfo.GetHeight(new Vector3(factoryAnchor.Position.X, 0, factoryAnchor.Position.Z));
+                }
+                else if (researchAnchor != null)
+                {
+                    researchAnchor.Position = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                    researchAnchor.Position.Y = terrain.heightMapInfo.GetHeight(new Vector3(researchAnchor.Position.X, 0, researchAnchor.Position.Z));
+                }
+            }
         }
 
         public override void Draw(GameTime gameTime)
@@ -1461,9 +1535,12 @@ namespace Poseidon
                 if (factoryRealSphere.Intersects(frustum))
                 {
                     researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "BalloonShading");
+                    //researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "BalloonShading");
                 }
             }
+
+            // Draw anchor if any. The anchor should appear below static interaction button, below the cursor, and below hydrobot
+            DrawAnchor();
 
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects)
@@ -1540,15 +1617,16 @@ namespace Poseidon
 
             //draw particle effects
             particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
+
             //applying edge detection
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
 
-            SceneTexture = edgeDetectionRenderTarget;
+            //SceneTexture = edgeDetectionRenderTarget;
             //graphics.GraphicsDevice.SetRenderTarget(null);
             //spriteBatch.Begin();
             //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             //spriteBatch.End();
-            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, edgeDetectionRenderTarget, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
             for (int i = 0; i < enemiesAmount; i++)
@@ -1575,6 +1653,8 @@ namespace Poseidon
                     }
                 }
             }
+            //draw boundary of the game scene
+            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //Draw points gained / lost
             foreach (Point point in points)
             {
@@ -1588,7 +1668,6 @@ namespace Poseidon
 
             // Draw the factory panel
             factoryButtonPanel.Draw(spriteBatch);
-            factoryButtonPanel.DrawAnchor(spriteBatch);
 
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
@@ -1606,6 +1685,7 @@ namespace Poseidon
 
             cursor.Draw(gameTime);
             spriteBatch.End();
+
             if (screenTransitNow)
             {
                 bool doneTransit = graphicEffect.TransitTwoSceens(Scene2Texture, afterEffectsAppliedRenderTarget, graphics, cutSceneImmediateRenderTarget);
@@ -1622,6 +1702,27 @@ namespace Poseidon
             spriteBatch.Begin();
             spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
+        }
+
+        private void DrawAnchor()
+        {
+            //factoryButtonPanel.DrawAnchor(spriteBatch);
+            //return;
+
+            if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea)
+            {
+                if (factoryButtonPanel.anchorIndexToBuildingType() == BuildingType.researchlab && researchAnchor != null)
+                {
+                    // Static object gameCamera inside PlayGameScene object
+                    //researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                }
+                else if (factoryAnchor != null)
+                {
+                    //factoryAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    factoryAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                }
+            }
         }
 
         private void DrawRadar()
@@ -1667,71 +1768,8 @@ namespace Poseidon
             Rectangle rectSafeArea;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
             str1 += days.ToString();
-            //if (roundTimer.Minutes < 10)
-            //    str1 += "0";
-            //str1 += roundTimer.Minutes + ":";
-            //if (roundTimer.Seconds < 10)
-            //    str1+= "0";
-            //str1 += roundTimer.Seconds;
-            //str1 += "\n Active skill " + Tank.activeSkillID;
-            //str1 += "\n Experience " + Tank.currentExperiencePts + "/" + Tank.nextLevelExperience;
-            //str1 += "\n Level: " + Tank.level;
-            //str2 += "Player's health: " + tank.currentHitPoint + "/" + tank.maxHitPoint; 
-            //Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.FloatHeight);
-            //Vector3 mouseDif = pointIntersect - tank.Position;
-            //float distanceFomTank = mouseDif.Length();
-            //str2 += "Xm= " + pointIntersect.X + " Ym= " + pointIntersect.Y + " Zm= " + pointIntersect.Z + " Distance from tank= " + distanceFomTank;
-            //str2 += "\nXt= " + tank.pointToMoveTo.X + " Yt= " + tank.pointToMoveTo.Y + " Zt= " + tank.pointToMoveTo.Z;
-            //float angle = CursorManager.CalculateAngle(pointIntersect, tank.Position);
-            //str2 += "\nAngle= " + tank.desiredAngle + "Tank FW= " + tank.ForwardDirection;
-            //Vector3 posDif = tank.pointToMoveTo - tank.Position;
-            //float distanceToDest = posDif.Length();
-            //str2 += "\nDistance= " + distanceToDest;
-            //str2 += "\nTank Position " + tank.Position;
-            //str2 += "\nEnemy Position " + enemies[0].Position;
-            //str2 += "\nTank Forward Direction " + tank.ForwardDirection;
-            //str2 += "\nFish prevTurnAmount " + fish[0].prevTurnAmount + "Fish pos " +  fish[0].Position + "Stuck " + fish[0].stucked;
-            //str2 += "\nPrevFIre " + enemies[0].prevFire;
-            //str2 += "Health: " + ((Fish)(fish[0])).health + "\n Size "+ fishAmount;
-            //str2 += "Type " + tank.GetType().Name.ToString();
-            //if (bubbles.Count > 0)
-            //{
-            //    str2 += "Bubbles " + bubbles.Count + " Scale " + bubbles[0].scale + " Time last " + bubbles[0].timeLast;
-            //    //str2 += "\nBub pos " + bubbles[0].bubblePos;
-            //}
-            //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
-            //str2 += "School1 " + schoolOfFish1.flock.flock.Count + " School2 " + schoolOfFish2.flock.flock.Count;
-            //str2 += "\n" + schoolOfFish1.flock.flock[0].Location + "\n" + schoolOfFish2.flock.flock[0].Location;
-            //str2 += "\n" + schoolOfFish1.flock.flock[1].texture.Name.Length + "\n" + schoolOfFish2.flock.flock[1].texture.Name;
-            //str2 += "\n" + trashes[0].fogEndValue;
-            //str2 += "\n" + HydroBot.numStrangeObjCollected;
-            //Display Fish Health
-            Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
-            if (fishPointedAt != null)
-            {
-                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
-                string line;
-                line ="'";
-                if (fishPointedAt.health < 20)
-                {
-                    line += "SAVE ME!!!";
-                }
-                else if (fishPointedAt.health < 60)
-                {
-                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
-                }
-                else
-                {
-                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
-                }
-                line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width/2 - HealthBar.Width/2, 32), Color.Yellow);
-            }
 
-            //Display Enemy Health
-            BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
-            if (fishPointedAt == null && enemyPointedAt != null)
-                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);

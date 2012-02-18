@@ -127,8 +127,9 @@ namespace Poseidon.GraphicEffects
         }
 
 
-        public RenderTarget2D DrawWithEffects(GameTime gameTime, Texture2D originalScene, GraphicsDeviceManager graphics)
+        public RenderTarget2D DrawWithEffects(GameTime gameTime, RenderTarget2D originalScene, GraphicsDeviceManager graphics)
         {
+            if (!GameSettings.SpecialEffectsEnabled) return originalScene;
             //applying blurring effect
             SetBlurEffectParameters(1.0f / (float)blurRenderTarget1.Width, 0);
 
@@ -296,6 +297,8 @@ namespace Poseidon.GraphicEffects
 
         public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
         {
+            if (!GameSettings.SpecialEffectsEnabled) return;
+
             graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
             graphicsDevice.Clear(Color.Black);
             graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
@@ -363,6 +366,8 @@ namespace Poseidon.GraphicEffects
 
         public void ApplyEdgeDetection(RenderTarget2D wholeScene, RenderTarget2D normalDepthRenderTarget, GraphicsDevice graphicsDevice, RenderTarget2D edgeDetectionRenderTarget)
         {
+            Effect effectToUse = null;
+            if (!GameSettings.SpecialEffectsEnabled) effectToUse = edgeDetectionEffect;
             Vector2 resolution = new Vector2(wholeScene.Width, wholeScene.Height);
             Texture2D normalDepthTexture = normalDepthRenderTarget;
             edgeDetectionParameters["ScreenResolution"].SetValue(resolution);

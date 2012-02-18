@@ -29,7 +29,13 @@ namespace Poseidon.Core
         private int anchoredIndex = -1;
         public int AnchoredIndex
         {
-            get { return AnchoredIndex; }
+            get { return anchoredIndex; }
+        }
+
+        private int previousAnchoredIndex = -1;
+        public int PreviousAnchoredIndex
+        {
+            get { return previousAnchoredIndex; }
         }
 
         public ButtonPanel(int buttonCount, float scaleFactor)
@@ -56,14 +62,21 @@ namespace Poseidon.Core
             if (anchoredIndex >= 0)
             {
                 buttons[anchoredIndex].Anchored = false;
+                anchoredIndex = -1;
             }
+            previousAnchoredIndex = -1;
         }
 
         public BuildingType anchorIndexToBuildingType()
         {
+            return anchorIndexToBuildingType(anchoredIndex);
+        }
+
+        public BuildingType anchorIndexToBuildingType(int index)
+        {
             BuildingType anchoredBuildingType = BuildingType.biodegradable;
             // following switch case could be replaced by an array mapping between index and building type
-            switch (anchoredIndex)
+            switch (index)
             {
                 case 0:
                     anchoredBuildingType = BuildingType.researchlab;
@@ -81,7 +94,25 @@ namespace Poseidon.Core
             return anchoredBuildingType;
         }
 
-         public void Initialize(ref Texture2D buttonTexture,ref SpriteFont font, Vector2 position)
+        public FactoryType anchorIndexToFactoryType(int index)
+        {
+            FactoryType anchoredFactoryType = FactoryType.biodegradable;
+            switch (index)
+            {
+                case 1:
+                    anchoredFactoryType = FactoryType.radioactive;
+                    break;
+                case 2:
+                    anchoredFactoryType = FactoryType.biodegradable;
+                    break;
+                case 3:
+                    anchoredFactoryType = FactoryType.plastic;
+                    break;
+            }
+            return anchoredFactoryType;
+        }
+
+        public void Initialize(ref Texture2D buttonTexture,ref SpriteFont font, Vector2 position)
         {
             infoTextFont = font;
             topLeft = position;
@@ -100,6 +131,7 @@ namespace Poseidon.Core
         {
             // this function ensures that only one button has an anchor at one time
             bool cursorInGameArena = true;
+            previousAnchoredIndex = anchoredIndex;
             anchoredIndex = -1;
             for (int i = 0; i < buttons.Count; i++)
             {

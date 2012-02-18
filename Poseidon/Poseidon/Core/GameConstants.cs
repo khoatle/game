@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 
 namespace Poseidon {
     class GameConstants
@@ -224,6 +225,7 @@ namespace Poseidon {
         public const int NumNormalBackgroundMusics = 4;
         public const int NumBossBackgroundMusics = 1;
         public const int NumMinigameBackgroundMusics = 1;
+        public const int NumJigsawBackgroundMusics = 2;
 
         //attributes
         public static int gainAttributeCost = 1;
@@ -245,10 +247,10 @@ namespace Poseidon {
         public const int GoodWillPointGainForHealing = 150;
 
         //const for particle systems
-        public const int numExplosionParticles = 20;
-        public const int numSandParticles = 30;
-        public const float trailParticlesPerSecond = 100;
-        public const int numFrozenBreathParticlesPerUpdate = 2;
+        public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;
+        public static int numSandParticles = (int)(30 * GameSettings.NumParticleLevel);
+        public static float trailParticlesPerSecond = (int)(100 * GameSettings.NumParticleLevel);
+        public static int numFrozenBreathParticlesPerUpdate = (int)(3 * GameSettings.NumParticleLevel);
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;

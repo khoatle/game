@@ -176,7 +176,7 @@ namespace Poseidon
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3()); 
                 }
                 mesh.Draw();
             }

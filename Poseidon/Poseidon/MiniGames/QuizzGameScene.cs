@@ -114,11 +114,11 @@ namespace Poseidon.MiniGames
         /// </summary>
         public override void Show()
         {
-            audio.NewMeteor.Play();
+            MediaPlayer.Stop();
             questionAnswered = 0;
             numRightAnswer = 0;
             introducing = true;
-            MediaPlayer.Stop();
+            //audio.NewMeteor.Play();
             base.Show();
         }
 

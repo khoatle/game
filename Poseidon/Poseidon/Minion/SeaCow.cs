@@ -123,7 +123,7 @@ namespace Poseidon
 
             if (!isReturnBot && !isCasting && potentialEnemy != null) { 
                 // It is OK to cast?
-                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint)
+                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds)// && HydroBot.currentHitPoint < HydroBot.maxHitPoint)
                 {
                     isCasting = true;
                     isReturnBot = false;
@@ -132,17 +132,6 @@ namespace Poseidon
                     isFighting = false;
 
                     startCasting = PoseidonGame.playTime;
-                }
-            }
-
-            if (isCasting == true) { 
-                // Casting timeout
-                if (PoseidonGame.playTime.TotalSeconds - startCasting.TotalSeconds > standingTime.TotalSeconds)
-                {
-                    isCasting = false; // Done casting
-                    isWandering = true; // Let the wander state do the wandering task
-
-                    lastCast = PoseidonGame.playTime;
 
                     //tell graphic effects to play ripple effect
                     HydroBot.ripplingScreen = true;
@@ -156,17 +145,17 @@ namespace Poseidon
                     Vector3 screenPos = viewPort.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
                     HydroBot.rippleCenter = new Vector2(screenPos.X / PlayGameScene.GraphicDevice.Viewport.Width, screenPos.Y / PlayGameScene.GraphicDevice.Viewport.Height);
                     PoseidonGame.audio.maneteeRoar.Play();
+                }
+            }
 
-                    // Display some info, will remove later
-                    Point point1 = new Point();
-                    String point_string1 = "Just roar to scare!";
-                    point1.LoadContent(PoseidonGame.contentManager, point_string1, Position, Color.Red);
-                    if (HydroBot.gameMode == GameMode.ShipWreck)
-                        ShipWreckScene.points.Add(point1);
-                    else if (HydroBot.gameMode == GameMode.MainGame)
-                        PlayGameScene.points.Add(point1);
-                    else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                        SurvivalGameScene.points.Add(point1);
+            if (isCasting == true) { 
+                // Casting timeout
+                if (PoseidonGame.playTime.TotalSeconds - startCasting.TotalSeconds > standingTime.TotalSeconds)
+                {
+                    isCasting = false; // Done casting
+                    isWandering = true; // Let the wander state do the wandering task
+
+                    lastCast = PoseidonGame.playTime;
 
                     // All enemies within a radius flee
                     for (int i = 0; i < enemiesSize; i++)
@@ -180,17 +169,6 @@ namespace Poseidon
 
                             // Find the fleeing direction for this guy
                             tmp.fleeingDirection = tmp.Position - Position; // Flee from sea cow
-
-                            // Display some info, will remove later
-                            Point point = new Point();
-                            String point_string = "Fleeing!";
-                            point.LoadContent(PoseidonGame.contentManager, point_string, tmp.Position, Color.Red);
-                            if (HydroBot.gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.points.Add(point);
-                            else if (HydroBot.gameMode == GameMode.MainGame)
-                                PlayGameScene.points.Add(point);
-                            else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.points.Add(point);
                         }
                     } // END for()
                 } // End if (PoseidonGame.playTime.TotalSeconds... (timeout), more effect will be added by including an "else"

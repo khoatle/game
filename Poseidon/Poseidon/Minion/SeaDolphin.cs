@@ -85,6 +85,21 @@ namespace Poseidon
 
                     // Start casting
                     startCasting = PoseidonGame.playTime;
+
+                    HydroBot.currentHitPoint += healAmount;
+                    HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
+
+                    PoseidonGame.audio.healingSound.Play();
+
+                    Point point = new Point();
+                    String point_string = "Health + " + healAmount;
+                    point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                        ShipWreckScene.points.Add(point);
+                    else if (HydroBot.gameMode == GameMode.MainGame)
+                        PlayGameScene.points.Add(point);
+                    else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point);
                 }
             }
 
@@ -97,13 +112,10 @@ namespace Poseidon
                     isCasting = false; // Done casting
                     isWandering = true; // Let the wander state do the wandering task
 
-                    HydroBot.isBeingHealed = false;
+                    //this got reset in HydroBot.cs too
+                    //HydroBot.isBeingHealed = false;
 
                     lastCast = PoseidonGame.playTime;
-                    HydroBot.currentHitPoint += healAmount;
-                    HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
-
-                    PoseidonGame.audio.healingSound.Play();
                 } // Else do nothing (all other states are false). Later effect can be added here
                 else {
                     Vector3 facingDirection = hydroBot.Position - Position;

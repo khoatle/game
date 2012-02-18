@@ -19,14 +19,16 @@ namespace Poseidon
         // Frozen breathe attack stuff
         public TimeSpan lastCast;
         public TimeSpan coolDown;
-        int numTimeReleaseFrozenBreath = 0;
+        //int numTimeReleaseFrozenBreath = 0;
 
         public TimeSpan startCasting;
         public TimeSpan standingTime;
         public bool firstCast;
 
         public TimeSpan lastAttack;
-        public TimeSpan timeBetweenAttack; 
+        public TimeSpan timeBetweenAttack;
+
+        ParticleManagement particleManager;
 
         public SeaTurtle() : base() {
             lastAttack = PoseidonGame.playTime;
@@ -44,6 +46,13 @@ namespace Poseidon
             // TODO: Remove soon
             maxHealth = 1000;
             health = maxHealth;
+
+            if (HydroBot.gameMode == GameMode.ShipWreck)
+                particleManager = ShipWreckScene.particleManager;
+            else if (HydroBot.gameMode == GameMode.MainGame)
+                particleManager = PlayGameScene.particleManager;
+            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                particleManager = SurvivalGameScene.particleManager;
         }
 
         public override void attack()
@@ -77,7 +86,9 @@ namespace Poseidon
             
             for (int i = 0; i < enemiesSize; i++) {
                 Vector3 otherDirection = enemies[i].Position - Position;
-                if (Behavior.isInSight(observerDirection, Position, otherDirection, enemies[i].Position, (float)Math.PI * 4/3, 60f)) {
+                if (Behavior.isInSight(observerDirection, Position, otherDirection, enemies[i].Position, MathHelper.PiOver4, 
+                    60f * (float)((PoseidonGame.playTime.TotalMilliseconds - startCasting.TotalMilliseconds) / standingTime.TotalMilliseconds)))
+                {
                 //if (Vector3.Distance(enemies[i].Position, Position) < 60f) {
                     if (firstCast) 
                         enemies[i].health -= turtleDamage;
@@ -89,9 +100,9 @@ namespace Poseidon
             if (PlayGameScene.particleManager.frozenBreathParticles != null)
             {
                 for (int k = 0; k < GameConstants.numFrozenBreathParticlesPerUpdate; k++)
-                    PlayGameScene.particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0, 0, 1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);
+                    particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0, 0, 1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);
             }
-            numTimeReleaseFrozenBreath += 1;
+            //numTimeReleaseFrozenBreath += 1;
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, 
@@ -101,7 +112,7 @@ namespace Poseidon
             if (!isReturnBot && !isCasting && potentialEnemy != null)
             {
                 // It is OK to cast?
-                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint)
+                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds)// && HydroBot.currentHitPoint < HydroBot.maxHitPoint)
                 {
                     isCasting = true;
                     isReturnBot = false;
@@ -117,6 +128,7 @@ namespace Poseidon
                     firstCast = true;
 
                     startCasting = PoseidonGame.playTime;
+                    PoseidonGame.audio.frozenBreathe.Play();
                 }
             }
 
@@ -128,22 +140,11 @@ namespace Poseidon
                     isCasting = false; // Done casting
                     isWandering = true; // Let the wander state do the wandering task, (and also lock enemy is potential enemy != null)
 
-                    Point point = new Point();
-                    String point_string = "Just frozen breathe";
-                    point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
-                    if (HydroBot.gameMode == GameMode.ShipWreck)
-                        ShipWreckScene.points.Add(point);
-                    else if (HydroBot.gameMode == GameMode.MainGame)
-                        PlayGameScene.points.Add(point);
-                    else if (HydroBot.gameMode == GameMode.SurvivalMode)
-                        SurvivalGameScene.points.Add(point);
-
                     lastCast = PoseidonGame.playTime;
                 } // Effect during cast
                 else {
                     FrozenBreathe(enemies, enemiesSize, firstCast);
-                    firstCast = false;
-                    PoseidonGame.audio.frozenBreathe.Play();
+                    firstCast = false;   
                 }
             }
 

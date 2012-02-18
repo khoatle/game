@@ -74,7 +74,7 @@ namespace GeneratedGeometryPipeline
         #endregion
 
 
-        private void SetTerrainTextureFilename(string terrain_name)
+        private void SetTerrainTextureFilename()
         {
             Random random = new Random();
             int id = random.Next(6) + 1;
@@ -88,7 +88,7 @@ namespace GeneratedGeometryPipeline
                                              ContentProcessorContext context)
         {
             string terrain_name = context.OutputFilename;
-            SetTerrainTextureFilename(terrain_name);
+            SetTerrainTextureFilename();
 
             MeshBuilder builder = MeshBuilder.StartMesh("terrain");
 

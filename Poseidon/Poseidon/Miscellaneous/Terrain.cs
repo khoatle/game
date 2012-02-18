@@ -19,7 +19,7 @@ namespace Poseidon
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
             int random_level = random.Next(20);
-            string terrain_name = "Image/TerrainHeightMaps/terrain0";// + random_level;
+            string terrain_name = "Image/TerrainHeightMaps/terrain" + random_level;
             terrainModel = Content.Load<Model>(terrain_name);
             heightMapInfo = terrainModel.Tag as HeightMapInfo;
             if (heightMapInfo == null)

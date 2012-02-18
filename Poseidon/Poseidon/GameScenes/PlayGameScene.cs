@@ -1622,12 +1622,12 @@ namespace Poseidon
             //applying edge detection
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
 
-            SceneTexture = edgeDetectionRenderTarget;
+            //SceneTexture = edgeDetectionRenderTarget;
             //graphics.GraphicsDevice.SetRenderTarget(null);
             //spriteBatch.Begin();
             //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             //spriteBatch.End();
-            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
+            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, edgeDetectionRenderTarget, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
             for (int i = 0; i < enemiesAmount; i++)

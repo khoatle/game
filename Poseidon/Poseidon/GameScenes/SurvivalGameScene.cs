@@ -96,7 +96,6 @@ namespace Poseidon
 
         float m_Timer = 0;
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
-        Texture2D SceneTexture;
 
         // Bubbles over characters
         List<Bubble> bubbles;

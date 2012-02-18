@@ -108,7 +108,6 @@ namespace Poseidon
 
         //stuffs for applying special effects
         RenderTarget2D renderTarget, afterEffectsAppliedRenderTarget;
-        Texture2D SceneTexture;
         public RenderTarget2D renderTarget2, cutSceneImmediateRenderTarget, cutSceneFinalRenderTarget;
         public Texture2D Scene2Texture;
         RenderTarget2D renderTarget3;

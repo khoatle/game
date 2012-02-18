@@ -775,7 +775,7 @@ namespace Poseidon
         //    return false;
         //}
 
-        // Finds if seabed place is free within the radius from point xValue,zValue
+        // Finds if seabed place is free within the radius from point xValue, yValue, zValue
         public static bool IsSeaBedPlaceOccupied(int xValue, int yValue, int zValue, int radius, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
         {
             //BoundingSphere objectBoundingSphere = new BoundingSphere(new Vector3(xValue, 0, zValue), radius);

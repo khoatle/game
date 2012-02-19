@@ -373,6 +373,12 @@ namespace Poseidon
             dolphinPower = lsDolphinPower = (float)info.GetValue("dolphinPower", typeof(float));
             seaCowPower = lsSeaCowPower = (float)info.GetValue("seaCowPower", typeof(float));
             turtlePower = lsTurtlePower = (float)info.GetValue("turtlePower", typeof(float));
+
+            bowPower = lsBowPower = (float)info.GetValue("bowPower", typeof(float));
+            hammerPower = lsHammerPower = (float)info.GetValue("hammerPower", typeof(float));
+            sandalPower = lsSandalPower = (float)info.GetValue("sandalPower", typeof(float));
+            armorPower = lsArmorPower = (float)info.GetValue("armorPower", typeof(float));
+            beltPower = lsBeltPower = (float)info.GetValue("beltPower", typeof(float));
             
         }
 
@@ -432,6 +438,12 @@ namespace Poseidon
             info.AddValue("dolphinPower", dolphinPower);
             info.AddValue("seaCowPower", seaCowPower);
             info.AddValue("turtlePower", turtlePower);
+
+            info.AddValue("bowPower", bowPower);
+            info.AddValue("hammerPower", hammerPower);
+            info.AddValue("sandalPower", sandalPower);
+            info.AddValue("armorPower", armorPower);
+            info.AddValue("beltPower", beltPower);
         }
 
         /// <summary>

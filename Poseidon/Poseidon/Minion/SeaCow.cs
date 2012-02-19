@@ -26,7 +26,7 @@ namespace Poseidon
         public TimeSpan lastCast;
         public TimeSpan coolDown;
 
-        public static float seaCowDamage = 20f;
+        public static float seaCowDamage = 10f;
 
         public SeaCow() : base() {
             lastAttack = PoseidonGame.playTime;
@@ -44,9 +44,10 @@ namespace Poseidon
 
         public override void attack()
         {
+            float damage = seaCowDamage * HydroBot.seaCowPower;
             if (PoseidonGame.playTime.TotalSeconds - lastAttack.TotalSeconds > timeBetweenAttack.TotalSeconds)
             {
-                currentTarget.health -= seaCowDamage;
+                currentTarget.health -= damage;
 
                 lastAttack = PoseidonGame.playTime;
 
@@ -54,7 +55,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "Enemy Got Biten, health - " + seaCowDamage;
+                String point_string = "Enemy Got Biten, health - " + damage;
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);

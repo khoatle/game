@@ -26,15 +26,35 @@ namespace Poseidon
         int numRadioActiveProducts = 5;
         int delayRadioActiveProducts = 4; //4sec,1day
 
+        // To decide animation state of some part
+        List<Texture2D> animationTextures;
+        Texture2D currentPartTexture;
+        private int currentTextureIndex;
+        private int partId;
+        private TimeSpan cycleTime;
+        private TimeSpan lastCycledTime;
+
         //For Factory Configuration Screen
         SpriteFont factoryFont;
         Texture2D background, produceButton;
         public Rectangle backgroundRect, produceRect;
         enum Produce { resource, powerpack };
         Produce produce;
+        List<Model> modelStates; // 4 stages of model, the last one is fully constructed one
+        public List<Model> ModelStates {
+            set { modelStates = value; }
+        }
+        private bool underConstruction;
+        public bool UnderConstruction
+        {
+            get { return underConstruction; }
+        }
+        private int constructionIndex;                  // 0, 1, 2, 3 states of constructions. When it reaches index 3, underConstruction is false
+        private TimeSpan constructionSwitchSpan;        // Timespan to switch construction states, 3 secs
+        private TimeSpan lastConstructionSwitchTime;    // Note down last time when construction state switch happened
 
         Random random;
-
+        Vector3 currentFogColor;
         public Factory(FactoryType factorytype)
             : base()
         {
@@ -42,9 +62,25 @@ namespace Poseidon
             numTrashWaiting = 0;
             listTimeTrashProcessing = new List<double>();
             random = new Random();
+            partId = -1; // Logic to Draw animated sprites depends on positive partID
+            cycleTime = TimeSpan.FromMilliseconds(500.0);
+            lastCycledTime = TimeSpan.Zero;
+            currentTextureIndex = 0;
+            currentFogColor = Vector3.One;
+
+            // building construction state management
+            underConstruction = true;
+            constructionIndex = 0;
+            lastConstructionSwitchTime = TimeSpan.Zero;
+            constructionSwitchSpan = TimeSpan.FromSeconds(3);
         }
 
-        public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont font,ref Texture2D backgroundTexture,ref Texture2D produceButtonTexture)
+        public void setIsAnchor()
+        {
+            underConstruction = false;
+        }
+
+        public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont font,ref Texture2D backgroundTexture,ref Texture2D produceButtonTexture, List<Texture2D> animationTextures)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -61,6 +97,11 @@ namespace Poseidon
             tempCenter.Z = Position.Z;
             BoundingSphere = new BoundingSphere(tempCenter,BoundingSphere.Radius);
             this.orientation = orientation;
+            this.animationTextures = animationTextures;
+            if (animationTextures != null)
+            {
+                currentPartTexture = animationTextures[0];
+            }
 
             produce = Produce.resource;
             factoryFont = font;
@@ -72,15 +113,44 @@ namespace Poseidon
             SetUpgradeLevelDependentVariables();
 
             this.game = game;
-
-            //if (orientation > 50) floatUp = true;
-            //else floatUp = false;
-            // Set up the parameters
-            SetupShaderParameters(PoseidonGame.contentManager, Model);
+            // use construction state for only plastic factory for now
+            if (modelStates != null)
+            {
+                foreach (Model model in modelStates)
+                {
+                    SetupShaderParameters(PoseidonGame.contentManager, model);
+                }
+                Model = modelStates[constructionIndex];
+            }
+            else
+            {
+                //if (orientation > 50) floatUp = true;
+                //else floatUp = false;
+                // Set up the parameters
+                underConstruction = false;
+                SetupShaderParameters(PoseidonGame.contentManager, Model);
+            }
         }
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model strangeRockModel)
         {
+            if (lastConstructionSwitchTime == TimeSpan.Zero)
+            {
+                lastConstructionSwitchTime = gameTime.TotalGameTime;
+            }
+
+            if (underConstruction)
+            {
+                Model = modelStates[constructionIndex];
+                underConstruction = (constructionIndex < 3);
+                if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)
+                {
+                    constructionIndex++;
+                    lastConstructionSwitchTime = gameTime.TotalGameTime;
+                }
+                return;
+            }
+
             //Is trash finished processing?
             for (int i = 0; i < listTimeTrashProcessing.Count; i++)
             {
@@ -127,6 +197,51 @@ namespace Poseidon
                     }
                 }
             }
+
+            // If in a processing state, then update parameters for annimation cycles
+            updateCycleTextures(gameTime);
+        }
+
+        private void updateCycleTextures(GameTime gameTime)
+        {
+            if (listTimeTrashProcessing.Count > 0)
+            {
+                if (partId < 0)
+                {
+                    switch (factoryType)
+                    {
+                        // These part id's were found out by experimentation. If we happen to change the model in future, 
+                        // I'll need to find these part ids again. So, I have made them configurable from GameConstant
+                        case FactoryType.biodegradable:
+                            partId = GameConstants.biofactoryPartId;
+                            break;
+                        case FactoryType.radioactive:
+                            partId = GameConstants.nuclearfactoryPartId;
+                            break;
+                        case FactoryType.plastic:
+                            partId = GameConstants.plasticfactoryPartId;
+                            break;
+                    }
+                }
+
+                // see if timespan for change has occurred
+                currentPartTexture = animationTextures[currentTextureIndex];
+                if (gameTime.TotalGameTime - lastCycledTime > cycleTime)
+                {
+                    currentTextureIndex++;
+                    if (currentTextureIndex >= animationTextures.Count)
+                    {
+                        currentTextureIndex = 0;
+                    }
+                    currentFogColor = (currentFogColor == Vector3.One) ? Vector3.Zero : Vector3.One;
+                    lastCycledTime = gameTime.TotalGameTime;
+                }
+            }
+            else
+            {
+                currentTextureIndex = 0;    // texture index set down to zero
+                partId = -1;                // no part to animate
+            }
         }
 
         // our custom shader
@@ -148,6 +263,7 @@ namespace Poseidon
 
             foreach (ModelMesh mesh in Model.Meshes)
             {
+                int effectId = 0;
                 //foreach (BasicEffect effect in mesh.Effects)
                 foreach (Effect effect in mesh.Effects)
                 {
@@ -176,7 +292,13 @@ namespace Poseidon
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3()); 
+                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    if (partId >= 0 && partId == effectId)
+                    {
+                        //effect.texture = currentPartTexture; // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.
+                        effect.Parameters["FogColor"].SetValue(currentFogColor);
+                    }
+                    effectId++;
                 }
                 mesh.Draw();
             }

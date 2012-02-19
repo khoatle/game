@@ -152,7 +152,7 @@ namespace Poseidon.Core
 
             cursorOutsidePanelArea = cursorInGameArena;
             // if cursor in game arena and lbutton down -> up detected, and one of the buildings anchored
-            if (cursorInGameArena && previousLButtonState == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released && anchoredIndex >= 0)
+            if (cursorInGameArena && previousLButtonState == ButtonState.Pressed && mouseState.LeftButton == ButtonState.Released && previousAnchoredIndex >= 0)
             {
                 clickToBuildDetected = true;
                 buildDetectedTime = gameTime.TotalGameTime;

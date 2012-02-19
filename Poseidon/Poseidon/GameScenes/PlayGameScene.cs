@@ -159,6 +159,11 @@ namespace Poseidon
         private Texture2D factoryProduceButton;
         private Texture2D dummyTexture;
 
+        // Textures for animating the processing state of factories.
+        // Plastic factory will use nuclear factory textures
+        private List<Texture2D> biofactoryAnimationTextures;
+        private List<Texture2D> nuclearFactoryAnimationTextures;
+
         // Texture and font for property window of a research facility
         SpriteFont facilityFont;
         SpriteFont facilityFont2;
@@ -175,6 +180,7 @@ namespace Poseidon
         // Models for Factories and buildings
         private Model researchBuildingModel;
         private Model plasticFactoryModel;
+        private List<Model> plasticFactoryModelStates;
         private Model biodegradableFactoryModel;
         private Model radioactiveFactoryModel;
 
@@ -256,7 +262,7 @@ namespace Poseidon
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies =   { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
-                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                int[] numFish = { 0, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
                 GameConstants.NumberMutantShark = numMutantShark;
@@ -268,7 +274,7 @@ namespace Poseidon
             else {
                 int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 10, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -276,7 +282,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = {10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -417,10 +423,24 @@ namespace Poseidon
             playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         
+            // Load textures for partid animation for factories
+            biofactoryAnimationTextures = new List<Texture2D>();
+            nuclearFactoryAnimationTextures = new List<Texture2D>();
+            for (int i=0; i<6; i++) {
+                biofactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/conveyor_bench" + i));
+            }
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/orange"));
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
+
             // Load factory and research lab models
             researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
             biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
             plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
+            plasticFactoryModelStates = new List<Model>();
+            for (int i = 0; i < 4; i++)
+            {
+                plasticFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/PlasticFactory_stage" + i));
+            }
             radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
             dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
@@ -659,6 +679,19 @@ namespace Poseidon
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, terrain.heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+
+            if (HydroBot.hasDolphin)
+            {
+                AddingObjects.placeMinion(Content, 2, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
+            if (HydroBot.hasSeaCow)
+            {
+                AddingObjects.placeMinion(Content, 0, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
+            if (HydroBot.hasTurtle)
+            {
+                AddingObjects.placeMinion(Content, 1, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
         }
 
         /// <summary>
@@ -787,7 +820,7 @@ namespace Poseidon
                     {
                         foreach (Factory factory in factories)
                         {
-                            if (CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                            if (!factory.UnderConstruction && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                             {
                                 openFactoryConfigurationScene = true;
                                 factoryToConfigure = factory;
@@ -882,7 +915,7 @@ namespace Poseidon
                     }
 
                     bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState)
-                        || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor();
+                        || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
@@ -1236,7 +1269,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1246,8 +1279,9 @@ namespace Poseidon
                     oneFactory = new Factory(FactoryType.plastic);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
-                    oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
+                    oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
+                    oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
+                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1257,7 +1291,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1307,7 +1341,7 @@ namespace Poseidon
                             factoryAnchor.Model = radioactiveFactoryModel;
                             break;
                     }
-                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref factoryFont, ref dummyTexture, ref dummyTexture);
+                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref factoryFont, ref dummyTexture, ref dummyTexture, null);
                 }
             }
             else

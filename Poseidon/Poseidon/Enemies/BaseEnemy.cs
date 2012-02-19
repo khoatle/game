@@ -193,7 +193,7 @@ namespace Poseidon
                         Vector3 push = Position - enemies[i].Position;
 
                         float distance = (Vector3.Distance(Position, enemies[i].Position)) - enemies[i].BoundingSphere.Radius;
-                        if (distance < BoundingSphere.Radius * 3)
+                        if (distance < BoundingSphere.Radius * 4)
                         {
                             contenders++;
                             if (distance < 0.0001f) // prevent divide by 0 
@@ -201,6 +201,10 @@ namespace Poseidon
                                 distance = 0.0001f;
                             }
                             float weight = 1 / distance;
+                            // push away from big boss 
+                            //if (enemies[i].isBigBoss) {
+                            //    weight *= 1.5f;
+                            //}
                             totalPush += push * weight;
                         }
                     }
@@ -213,7 +217,7 @@ namespace Poseidon
                         Vector3 push = Position - fishes[i].Position;
 
                         float distance = (Vector3.Distance(Position, fishes[i].Position) - fishes[i].BoundingSphere.Radius) - BoundingSphere.Radius;
-                        if (distance < BoundingSphere.Radius * 3)
+                        if (distance < BoundingSphere.Radius * 4)
                         {
                             contenders++;
                             if (distance < 0.0001f) // prevent divide by 0 
@@ -226,7 +230,7 @@ namespace Poseidon
                     }
                 }
 
-                pull *= Math.Max(1, 4 * contenders);
+                pull *= Math.Max(1, 6 * contenders);
                 pull += totalPush;
                 pull.Normalize();
 

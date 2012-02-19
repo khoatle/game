@@ -44,7 +44,14 @@ namespace Poseidon
         public List<Model> ModelStates {
             set { modelStates = value; }
         }
-        bool underConstruction;
+        private bool underConstruction;
+        public bool UnderConstruction
+        {
+            get { return underConstruction; }
+        }
+        private int constructionIndex;                  // 0, 1, 2, 3 states of constructions. When it reaches index 3, underConstruction is false
+        private TimeSpan constructionSwitchSpan;        // Timespan to switch construction states, 3 secs
+        private TimeSpan lastConstructionSwitchTime;    // Note down last time when construction state switch happened
 
         Random random;
         Vector3 currentFogColor;
@@ -55,12 +62,22 @@ namespace Poseidon
             numTrashWaiting = 0;
             listTimeTrashProcessing = new List<double>();
             random = new Random();
-            underConstruction = true;
             partId = -1; // Logic to Draw animated sprites depends on positive partID
             cycleTime = TimeSpan.FromMilliseconds(500.0);
             lastCycledTime = TimeSpan.Zero;
             currentTextureIndex = 0;
             currentFogColor = Vector3.One;
+
+            // building construction state management
+            underConstruction = true;
+            constructionIndex = 0;
+            lastConstructionSwitchTime = TimeSpan.Zero;
+            constructionSwitchSpan = TimeSpan.FromSeconds(3);
+        }
+
+        public void setIsAnchor()
+        {
+            underConstruction = false;
         }
 
         public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont font,ref Texture2D backgroundTexture,ref Texture2D produceButtonTexture, List<Texture2D> animationTextures)
@@ -96,15 +113,44 @@ namespace Poseidon
             SetUpgradeLevelDependentVariables();
 
             this.game = game;
-
-            //if (orientation > 50) floatUp = true;
-            //else floatUp = false;
-            // Set up the parameters
-            SetupShaderParameters(PoseidonGame.contentManager, Model);
+            // use construction state for only plastic factory for now
+            if (modelStates != null)
+            {
+                foreach (Model model in modelStates)
+                {
+                    SetupShaderParameters(PoseidonGame.contentManager, model);
+                }
+                Model = modelStates[constructionIndex];
+            }
+            else
+            {
+                //if (orientation > 50) floatUp = true;
+                //else floatUp = false;
+                // Set up the parameters
+                underConstruction = false;
+                SetupShaderParameters(PoseidonGame.contentManager, Model);
+            }
         }
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model strangeRockModel)
         {
+            if (lastConstructionSwitchTime == TimeSpan.Zero)
+            {
+                lastConstructionSwitchTime = gameTime.TotalGameTime;
+            }
+
+            if (underConstruction)
+            {
+                Model = modelStates[constructionIndex];
+                underConstruction = (constructionIndex < 3);
+                if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)
+                {
+                    constructionIndex++;
+                    lastConstructionSwitchTime = gameTime.TotalGameTime;
+                }
+                return;
+            }
+
             //Is trash finished processing?
             for (int i = 0; i < listTimeTrashProcessing.Count; i++)
             {

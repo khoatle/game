@@ -180,6 +180,7 @@ namespace Poseidon
         // Models for Factories and buildings
         private Model researchBuildingModel;
         private Model plasticFactoryModel;
+        private List<Model> plasticFactoryModelStates;
         private Model biodegradableFactoryModel;
         private Model radioactiveFactoryModel;
 
@@ -435,6 +436,11 @@ namespace Poseidon
             researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
             biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
             plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
+            plasticFactoryModelStates = new List<Model>();
+            for (int i = 0; i < 4; i++)
+            {
+                plasticFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/PlasticFactory_stage" + i));
+            }
             radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
             dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
@@ -814,7 +820,7 @@ namespace Poseidon
                     {
                         foreach (Factory factory in factories)
                         {
-                            if (CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                            if (!factory.UnderConstruction && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                             {
                                 openFactoryConfigurationScene = true;
                                 factoryToConfigure = factory;
@@ -1273,7 +1279,8 @@ namespace Poseidon
                     oneFactory = new Factory(FactoryType.plastic);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
-                    oneFactory.Model = plasticFactoryModel;
+                    oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
+                    oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
                     oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);

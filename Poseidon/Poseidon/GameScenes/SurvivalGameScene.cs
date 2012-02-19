@@ -540,7 +540,7 @@ namespace Poseidon
                     {
                         foreach (Factory factory in factories)
                         {
-                            if (CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                            if (!factory.UnderConstruction && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                             {
                                 openFactoryConfigurationScene = true;
                                 factoryToConfigure = factory;

@@ -1678,6 +1678,26 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
+    <Compile Include="Models\FactoryModels\PlasticFactory_stage0.fbx">
+      <Name>PlasticFactory_stage0</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\FactoryModels\PlasticFactory_stage1.fbx">
+      <Name>PlasticFactory_stage1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\FactoryModels\PlasticFactory_stage2.fbx">
+      <Name>PlasticFactory_stage2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\FactoryModels\PlasticFactory_stage3.fbx">
+      <Name>PlasticFactory_stage3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>

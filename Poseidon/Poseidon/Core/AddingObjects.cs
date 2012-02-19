@@ -222,7 +222,7 @@ namespace Poseidon
             
             
             Fish newFish;
-            if (type == 1)
+            if (type == 0)
             {
                 newFish = new SeaCow();
                 newFish.Name = "seal";
@@ -231,7 +231,7 @@ namespace Poseidon
                 newFish.happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
                 newFish.sad_talk = "We need the arctic ice. Stop global warming.";
             }
-            else if (type == 0)
+            else if (type == 1)
             {
                 newFish = new SeaTurtle();
                 newFish.Name = "turtle";

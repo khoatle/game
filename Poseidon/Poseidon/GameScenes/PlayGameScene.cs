@@ -729,6 +729,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
+                HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
                 AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
                 type++;
             }

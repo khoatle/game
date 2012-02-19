@@ -659,6 +659,19 @@ namespace Poseidon
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, terrain.heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+
+            if (HydroBot.hasDolphin)
+            {
+                AddingObjects.placeMinion(Content, 2, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
+            if (HydroBot.hasSeaCow)
+            {
+                AddingObjects.placeMinion(Content, 0, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
+            if (HydroBot.hasTurtle)
+            {
+                AddingObjects.placeMinion(Content, 1, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
         }
 
         /// <summary>

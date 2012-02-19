@@ -75,8 +75,8 @@ namespace Poseidon
             if (stunned) return;
 
             // Wear out slow
-            if (speedFactor != 1) 
-                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds) 
+            if (speedFactor != 1)
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds * HydroBot.turtlePower) 
                     speedFactor = 1;
 
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;

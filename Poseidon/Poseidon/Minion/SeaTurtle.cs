@@ -14,7 +14,8 @@ namespace Poseidon
         public static float AfterX = HydroBot.controlRadius / 4;
         public static float AfterZ = - HydroBot.controlRadius * 1.73f / 4 ;
 
-        public static float turtleDamage = 5f;
+        public static float turtleDamage = 30f;
+        public static float frozenBreathDamage = 30f;
 
         // Frozen breathe attack stuff
         public TimeSpan lastCast;
@@ -43,8 +44,8 @@ namespace Poseidon
             standingTime = new TimeSpan(0, 0, 1);
 
             isBigBoss = false;
-            // TODO: Remove soon
-            maxHealth = 1000;
+
+            maxHealth = GameConstants.TurtleStartingHealth;
             health = maxHealth;
 
             if (HydroBot.gameMode == GameMode.ShipWreck)
@@ -92,7 +93,7 @@ namespace Poseidon
                 {
                 //if (Vector3.Distance(enemies[i].Position, Position) < 60f) {
                     if (firstCast) 
-                        enemies[i].health -= turtleDamage;
+                        enemies[i].health -= frozenBreathDamage * HydroBot.turtlePower;
                     enemies[i].speedFactor = 0.5f;
                     enemies[i].slowStart = PoseidonGame.playTime;
                 }
@@ -109,6 +110,10 @@ namespace Poseidon
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, 
             SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
+            float lastMaxHealth = maxHealth;
+            maxHealth = GameConstants.TurtleStartingHealth * HydroBot.turtlePower;
+            health += (maxHealth - lastMaxHealth);
+
             BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
             if (!isReturnBot && !isCasting && potentialEnemy != null)
             {

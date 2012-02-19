@@ -91,9 +91,23 @@ namespace Poseidon
             // do not delete this
             if (stunned) return;
 
+            // Fleeing stuff
+            if (isFleeing == true)
+            {
+                if (PoseidonGame.playTime.TotalSeconds - fleeingStart.TotalSeconds < fleeingDuration.TotalSeconds * HydroBot.seaCowPower)
+                {
+                    flee(enemyList, enemySize, fishList, fishSize, hydroBot);
+                    return;
+                }
+                else
+                {
+                    isFleeing = false;
+                }
+            }
+
             // Wear out slow
-            if (speedFactor != 1) 
-                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds)
+            if (speedFactor != 1)
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds * HydroBot.turtlePower)
                     speedFactor = 1;
 
             float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;

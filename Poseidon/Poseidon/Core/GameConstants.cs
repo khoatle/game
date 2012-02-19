@@ -46,7 +46,9 @@ namespace Poseidon {
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
         public const int jigsawGameMaxTime = 180; //sec
-        public const int boneCountForJigsaw = 8;
+        public const int boneCountForDolphinJigsaw = 8;
+        public const int boneCountForSeaCowJigsaw = 16;
+        public const int boneCountForTurtleJigsaw = 24;
 
         // bullet consts
         public const float BulletSpeed = 2.0f;
@@ -263,5 +265,10 @@ namespace Poseidon {
         public const int biofactoryPartId = 6;
         public const int nuclearfactoryPartId = 2;
         public const int plasticfactoryPartId = 0;
+
+        //constants for animal health
+        public const float DolphinStartingHealth = 500;
+        public const float SeaCowStartingHealth = 1000;
+        public const float TurtleStartingHealth = 2000;
     }
 }

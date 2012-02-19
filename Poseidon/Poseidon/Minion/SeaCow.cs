@@ -16,7 +16,7 @@ namespace Poseidon
         public static float AfterZ = HydroBot.controlRadius * 1.73f / 4;
         public static float roarRadius = 50f;
 
-        public static float cowDamage = 30f;
+        public static float cowDamage = 20f;
         public TimeSpan lastAttack;
         public TimeSpan timeBetweenAttack;
 
@@ -37,8 +37,8 @@ namespace Poseidon
 
             standingTime = new TimeSpan(0, 0, 1);
             isBigBoss = false;
-            // TODO: Remove soon
-            maxHealth = 1000;
+
+            maxHealth = GameConstants.SeaCowStartingHealth;
             health = maxHealth;
         }
 
@@ -120,6 +120,10 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
+            float lastMaxHealth = maxHealth;
+            maxHealth = GameConstants.SeaCowStartingHealth * HydroBot.seaCowPower;
+            health += (maxHealth - lastMaxHealth);
+
             BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
 
             if (!isReturnBot && !isCasting && potentialEnemy != null) { 
@@ -164,7 +168,9 @@ namespace Poseidon
                         BaseEnemy tmp = (BaseEnemy)enemies[i];
                         if (Vector3.Distance(tmp.Position, Position) < GameConstants.SideKick_Look_Radius && !tmp.isFleeing)
                         {
-                            if (!(tmp is Submarine))
+                            //can't scare a boss if its hp is more than 1/3 its max health
+                            //can't scare a submarine too
+                            if (!(tmp is Submarine || (tmp.isBigBoss && tmp.health > 0.33f * tmp.maxHealth)))
                                 tmp.isFleeing = true;
                             tmp.fleeingStart = PoseidonGame.playTime;
 

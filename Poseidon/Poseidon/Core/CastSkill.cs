@@ -115,8 +115,8 @@ namespace Poseidon
             if (HydroBot.activeSkillID == 4)
             {
                 BaseEnemy enemy = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
-
-                if (enemy != null && (HydroBot.firstUse[4] == true || PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
+                //can't hipnotize a submarine
+                if (enemy != null && !(enemy is Submarine) && (HydroBot.firstUse[4] == true || PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise))
                 {
                     HydroBot.firstUse[4] = false;
                     PoseidonGame.audio.hipnotizeSound.Play();
@@ -193,8 +193,12 @@ namespace Poseidon
             {
                 if (InThorRange(Position, enemies[i].Position)){
                     float healthiness = (float) HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
-                    enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
+                    //you can't stun a submarine
+                    if (!(enemies[i] is Submarine))
+                    {
+                        enemies[i].stunned = true;
+                        enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
+                    }
                     int healthloss = (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength * HydroBot.strengthUp * HydroBot.hammerPower);
                     enemies[i].health -= healthloss;
                     PushEnemy(Position, MaxRangeX, MaxRangeZ, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
@@ -261,8 +265,12 @@ namespace Poseidon
                     Vector3 oldPosition = enemies[i].Position;
                     Vector3 pushVector = enemies[i].Position - Position;
                     pushVector.Normalize();
-                    enemies[i].stunned = true;
-                    enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
+                    //can't stun a submarine
+                    if (!(enemies[i] is Submarine))
+                    {
+                        enemies[i].stunned = true;
+                        enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
+                    }
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
                     enemies[i].Position.X = MathHelper.Clamp(enemies[i].Position.X, -MaxRangeX, MaxRangeX);
                     enemies[i].Position.Z = MathHelper.Clamp(enemies[i].Position.Z, -MaxRangeZ, MaxRangeZ);

@@ -36,8 +36,8 @@ namespace Poseidon
             coolDown = new TimeSpan(0, 0, 5);
             standingTime = new TimeSpan(0, 0, 2);
             isBigBoss = false;
-            // TODO: Remove soon
-            maxHealth = 1000;
+
+            maxHealth = GameConstants.DolphinStartingHealth;
             health = maxHealth;
         }
 
@@ -71,6 +71,10 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
+            float lastMaxHealth = maxHealth;
+            maxHealth = GameConstants.DolphinStartingHealth * HydroBot.dolphinPower;
+            health += (maxHealth - lastMaxHealth);
+
             // Only cast skill when there is an enemy near by
             if (!isReturnBot && !isCasting)
             {
@@ -86,6 +90,8 @@ namespace Poseidon
 
                     // Start casting
                     startCasting = PoseidonGame.playTime;
+
+                    healAmount *= HydroBot.dolphinPower;
 
                     HydroBot.currentHitPoint += healAmount;
                     HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);

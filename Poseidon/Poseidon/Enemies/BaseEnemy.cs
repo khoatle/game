@@ -288,9 +288,18 @@ namespace Poseidon
                     //}
                     //else
                     //    effect.DiffuseColor = Color.White.ToVector3();
+                    if (HydroBot.gameMode == GameMode.ShipWreck)
+                    {
+                        effect.Parameters["DiffuseIntensity"].SetValue(0.65f);
+                        effect.Parameters["AmbientIntensity"].SetValue(0.65f);
+                    }
+                    else effect.Parameters["DiffuseIntensity"].SetValue(1.0f);
+
                     if (isHypnotise == true)
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Red.ToVector3(), 1));
+                        //because somehow the red color is very hard to see
+                        effect.Parameters["DiffuseIntensity"].SetValue(3.0f);
                     }
                     else
                     {
@@ -319,12 +328,7 @@ namespace Poseidon
                     Matrix WorldView = Matrix.Identity * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
-                    if (HydroBot.gameMode == GameMode.ShipWreck)
-                    {
-                        effect.Parameters["DiffuseIntensity"].SetValue(0.65f);
-                        effect.Parameters["AmbientIntensity"].SetValue(0.65f);
-                    }
-                    else effect.Parameters["DiffuseIntensity"].SetValue(1.0f);
+
                 }
                 mesh.Draw();
             }

@@ -45,7 +45,8 @@ namespace Poseidon
 
             // Fleeing stuff
             if (isFleeing == true) {
-                if (PoseidonGame.playTime.TotalSeconds - fleeingStart.TotalSeconds < fleeingDuration.TotalSeconds) {
+                if (PoseidonGame.playTime.TotalSeconds - fleeingStart.TotalSeconds < fleeingDuration.TotalSeconds * HydroBot.seaCowPower)
+                {
                     flee(enemyList, enemySize, fishList, fishSize, hydroBot);
                     return;
                 }
@@ -56,7 +57,7 @@ namespace Poseidon
 
             // Wear out slow
             if (speedFactor != 1)
-                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds)
+                if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds * HydroBot.turtlePower)
                     speedFactor = 1;
             
             // Stun stuff

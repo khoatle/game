@@ -258,5 +258,10 @@ namespace Poseidon {
         public const float SideKick_Look_Radius = 60f;
         //constants for certain effects
         public const float distortionDuration = 1000;
+
+        // part id for factory part animation while it's in processing state
+        public const int biofactoryPartId = 6;
+        public const int nuclearfactoryPartId = 2;
+        public const int plasticfactoryPartId = 0;
     }
 }

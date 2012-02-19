@@ -159,6 +159,11 @@ namespace Poseidon
         private Texture2D factoryProduceButton;
         private Texture2D dummyTexture;
 
+        // Textures for animating the processing state of factories.
+        // Plastic factory will use nuclear factory textures
+        private List<Texture2D> biofactoryAnimationTextures;
+        private List<Texture2D> nuclearFactoryAnimationTextures;
+
         // Texture and font for property window of a research facility
         SpriteFont facilityFont;
         SpriteFont facilityFont2;
@@ -417,6 +422,15 @@ namespace Poseidon
             playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         
+            // Load textures for partid animation for factories
+            biofactoryAnimationTextures = new List<Texture2D>();
+            nuclearFactoryAnimationTextures = new List<Texture2D>();
+            for (int i=0; i<6; i++) {
+                biofactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/conveyor_bench" + i));
+            }
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/orange"));
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
+
             // Load factory and research lab models
             researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
             biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
@@ -1249,7 +1263,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1260,7 +1274,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1270,7 +1284,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton);
+                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1320,7 +1334,7 @@ namespace Poseidon
                             factoryAnchor.Model = radioactiveFactoryModel;
                             break;
                     }
-                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref factoryFont, ref dummyTexture, ref dummyTexture);
+                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref factoryFont, ref dummyTexture, ref dummyTexture, null);
                 }
             }
             else

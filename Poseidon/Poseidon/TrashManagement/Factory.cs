@@ -295,8 +295,8 @@ namespace Poseidon
                     effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
                     if (partId >= 0 && partId == effectId)
                     {
-                        //effect.texture = currentPartTexture; // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.
-                        effect.Parameters["FogColor"].SetValue(currentFogColor);
+                        effect.Parameters["Texture"].SetValue(currentPartTexture); // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.
+                        //effect.Parameters["FogColor"].SetValue(currentFogColor);
                     }
                     effectId++;
                 }

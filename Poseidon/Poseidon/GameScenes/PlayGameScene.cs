@@ -274,7 +274,7 @@ namespace Poseidon
             else {
                 int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 10, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -282,7 +282,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = {10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                int[] numSubmarine = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 

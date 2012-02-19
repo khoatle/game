@@ -405,6 +405,7 @@ namespace Poseidon
             if (jigsawGameScene.inOrder)
             {
                 AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                MediaPlayer.Stop();
                 ShowScene(playGameScene);
                 switch (jigsawType)
                 {
@@ -459,6 +460,7 @@ namespace Poseidon
             }
             if (EscPressed)
             {
+                MediaPlayer.Stop();
                 ShowScene(playGameScene);
                 EscPressed = false;
             }

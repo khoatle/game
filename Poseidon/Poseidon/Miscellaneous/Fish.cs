@@ -68,6 +68,7 @@ namespace Poseidon {
 
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public virtual void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet) {
@@ -230,6 +231,9 @@ namespace Poseidon {
                     effect.Parameters["Projection"].SetValue(projection);
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = Matrix.Identity * view;
+                    effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                    effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                    effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
                     if (isPoissoned == true)
                     {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Color.Green.ToVector3(), 1));
@@ -239,7 +243,7 @@ namespace Poseidon {
                         effect.Parameters["DiffuseColor"].SetValue(new Vector4(Vector3.One, 1));
                     }
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
                     effect.Parameters["DiffuseIntensity"].SetValue(0.5f);
                 }
                 mesh.Draw();

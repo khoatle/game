@@ -130,6 +130,7 @@ namespace Poseidon
                 underConstruction = false;
                 SetupShaderParameters(PoseidonGame.contentManager, Model);
             }
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model strangeRockModel)
@@ -283,6 +284,9 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom BasicEffect
+                    effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                    effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                    effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
                     Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);
@@ -292,7 +296,7 @@ namespace Poseidon
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
                     if (partId >= 0 && partId == effectId)
                     {
                         effect.Parameters["Texture"].SetValue(currentPartTexture); // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.

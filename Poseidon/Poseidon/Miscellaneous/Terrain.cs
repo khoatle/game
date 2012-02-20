@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 namespace Poseidon
 {
-    public class Terrain
+    public class Terrain : GameObject
     {
         public Model terrainModel;
         Random random = new Random();
@@ -31,6 +31,7 @@ namespace Poseidon
             }
             // Set up the parameters
             //SetupShaderParameters(PoseidonGame.contentManager, terrainModel);
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public void Update()
@@ -54,18 +55,20 @@ namespace Poseidon
                 foreach (BasicEffect effect in mesh.Effects)
                 //foreach (Effect effect in mesh.Effects)
                 {
-                    //effect.AmbientLightColor = new Vector3(0, 191.0f / 255.0f, 1);
+                    effect.AmbientLightColor = ambientColor.ToVector3();
                     //effect.Alpha = 1.0f;
                     //effect.EnableDefaultLighting();
                     //effect.SpecularColor = Vector3.One;
-                    //effect.DirectionalLight1.Enabled = false;
-                    //effect.DirectionalLight2.Enabled = false;
-                    //effect.DirectionalLight0.Enabled = false;
-                    //effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
-                    //effect.DirectionalLight0.DiffuseColor = new Vector3(0, 1, 1);
-                    //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
-                    //effect.SpecularPower = 1.0f;
-                    //effect.PreferPerPixelLighting = true;
+                    effect.DirectionalLight1.Enabled = false;
+                    effect.DirectionalLight2.Enabled = false;
+                    effect.DirectionalLight0.Enabled = true;
+                    effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
+                    effect.DirectionalLight0.DiffuseColor = diffuseColor.ToVector3();
+                    effect.DiffuseColor = diffuseColor.ToVector3();//new Vector3(0.2f, 0.2f, 0.2f);
+                    effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
+                    
+                    effect.SpecularPower = 1.0f;
+                    effect.PreferPerPixelLighting = true;
                     effect.World = Matrix.Identity;
 
                     // Use the matrices provided by the game camera
@@ -75,7 +78,7 @@ namespace Poseidon
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    effect.FogColor = fogColor.ToVector3();
 
                     //for our custom BasicEffect
                     //effect.CurrentTechnique = effect.Techniques[techniqueName];
@@ -87,6 +90,8 @@ namespace Poseidon
                     //Matrix WorldView = Matrix.Identity * gameCamera.ViewMatrix;
                     //EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     //effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    //effect.Parameters["AmbientColor"].SetValue(Color.Black.ToVector4());
+                    //effect.Parameters["DiffuseColor"].SetValue(Color.Black.ToVector4());
                 }
                 mesh.Draw();
             }

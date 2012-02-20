@@ -508,6 +508,7 @@ namespace Poseidon
 
             // Set up the parameters
             SetupShaderParameters(content, Model);
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public void LoadAnimation(int clipStart, int clipEnd, int fpsRate)
@@ -1476,7 +1477,11 @@ namespace Poseidon
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = Matrix.Identity * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+
+                    effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
+                    effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                    effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                    effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
   
                     if (isPoissoned == true)
                     {

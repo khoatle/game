@@ -52,6 +52,7 @@ namespace Poseidon
             //else floatUp = false;
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
         public void Update(GameTime gameTime)
         {
@@ -119,6 +120,9 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom BasicEffect
+                    effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                    effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                    effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
                     Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);
@@ -128,7 +132,7 @@ namespace Poseidon
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, fogEndValue, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
                     effect.Parameters["Shininess"].SetValue(1);
                 }
                 mesh.Draw();

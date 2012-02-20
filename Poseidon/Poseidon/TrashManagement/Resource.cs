@@ -32,6 +32,8 @@ namespace Poseidon
                 GameConstants.FruitBoundingSphereFactor;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
+
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public void Draw(Matrix view, Matrix projection)
@@ -58,7 +60,11 @@ namespace Poseidon
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    effect.FogColor = fogColor.ToVector3();
+
+                    effect.AmbientLightColor = ambientColor.ToVector3();
+                    effect.DiffuseColor = diffuseColor.ToVector3();
+                    effect.SpecularColor = specularColor.ToVector3();
                 }
                 mesh.Draw();
             }

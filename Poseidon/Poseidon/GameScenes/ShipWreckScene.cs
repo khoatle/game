@@ -768,7 +768,7 @@ namespace Poseidon
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    effect.FogColor = GameConstants.FogColor[PlayGameScene.currentLevel].ToVector3();
                 }
                 mesh.Draw();
             }

@@ -16,6 +16,11 @@ namespace Poseidon
         public Vector3 Position;
         public BoundingSphere BoundingSphere;
 
+        public Color fogColor;
+        public Color ambientColor;
+        public Color diffuseColor;
+        public Color specularColor;
+
         public GameObject()
         {
             Model = null;

@@ -62,7 +62,7 @@ namespace Poseidon
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    effect.FogColor = fogColor.ToVector3();
 
                     //for our custom BasicEffect
                     //effect.CurrentTechnique = effect.Techniques["NormalShading"];

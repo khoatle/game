@@ -314,5 +314,29 @@ namespace Poseidon
             }
         }
 
+        public static void GetEffectConfiguration(ref Color fogColor, ref Color ambientColor, ref Color diffuseColor, ref Color specularColor)
+        {
+            if (HydroBot.gameMode == GameMode.MainGame)
+            {
+                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel];
+                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel];
+                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel];
+                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel];
+            }
+            else if (HydroBot.gameMode == GameMode.ShipWreck)
+            {
+                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel];
+                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel];
+                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel];
+                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel];
+            }
+            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+            {
+                fogColor = GameConstants.FogColor[0];
+                ambientColor = GameConstants.AmbientColor[0];
+                diffuseColor = GameConstants.DiffuseColor[0];
+                specularColor = GameConstants.SpecularColor[0];
+            }
+        }
     }
 }

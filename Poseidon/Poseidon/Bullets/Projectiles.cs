@@ -66,6 +66,7 @@ namespace Poseidon
             //and the mjolnir
             if (this is HerculesBullet) //|| modelName.Contains("mjolnir"))
                 SetupShaderParameters(PoseidonGame.contentManager, Model);
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         // our custom shader
@@ -101,11 +102,15 @@ namespace Poseidon
                     effect.SpecularColor = Vector3.One;
                     effect.PreferPerPixelLighting = true;
 
+                    effect.AmbientLightColor = ambientColor.ToVector3();
+                    effect.DiffuseColor = diffuseColor.ToVector3();
+                    effect.SpecularColor = specularColor.ToVector3();
+
                     //effect.Alpha = 0.7f;
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor.ToVector3();
+                    effect.FogColor = fogColor.ToVector3();
                     
 
                     //effect.AmbientLightColor = Vector3.One;

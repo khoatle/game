@@ -682,6 +682,7 @@ namespace Poseidon
                         ShowScene(helpScene);
                         break;
                     case "Quit":
+                        MediaPlayer.Stop();
                         Exit();
                         break;
                         

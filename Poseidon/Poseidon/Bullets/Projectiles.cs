@@ -64,7 +64,7 @@ namespace Poseidon
             // Set up the parameters
             //currently only applies for herculesBullet
             //and the mjolnir
-            if (modelName.Contains("herculesBullet")) //|| modelName.Contains("mjolnir"))
+            if (this is HerculesBullet) //|| modelName.Contains("mjolnir"))
                 SetupShaderParameters(PoseidonGame.contentManager, Model);
         }
 

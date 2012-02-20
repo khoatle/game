@@ -13,17 +13,19 @@ namespace Poseidon
     {
         public GameObject target;
         public float forwardDir;
+        public float rotation = 0;
         //Texture2D energyBallTexture;
         //Vector2 energyBallPos;
         //SpriteBatch spriteBatch;
         GameMode gameMode;
         Camera gameCamera;
 
-        public HerculesBullet(ContentManager content, SpriteBatch spriteBatch, GameMode gameMode)
+        public HerculesBullet(ContentManager content, SpriteBatch spriteBatch, GameMode gameMode, float forwardDir)
             : base()
         {
             //energyBallTexture = content.Load<Texture2D>("Image/Miscellaneous/energyBall-red");
             //this.spriteBatch = spriteBatch;
+            this.forwardDir = forwardDir;
             this.gameMode = gameMode;
             if (gameMode == GameMode.MainGame)
             {
@@ -45,8 +47,8 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translationMatrix = Matrix.CreateTranslation(Position);
-            forwardDir += MathHelper.PiOver4 ;
-            Matrix rotationMatrix = Matrix.CreateRotationY(forwardDir);
+            rotation += MathHelper.PiOver4 ;
+            Matrix rotationMatrix = Matrix.CreateFromAxisAngle(Vector3.UnitZ, rotation) * Matrix.CreateRotationY(forwardDir);
             Matrix worldMatrix = rotationMatrix * translationMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
@@ -76,26 +78,27 @@ namespace Poseidon
                     effect.Parameters["Projection"].SetValue(projection);
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = readlWorldMatrix * view;
-                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
-                    effect.Parameters["AmbientColor"].SetValue(Vector4.One);
-                    effect.Parameters["DiffuseColor"].SetValue(Vector4.One);
-                    effect.Parameters["SpecularColor"].SetValue(Vector4.One);
+                    //EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                    //effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
+                    //effect.Parameters["AmbientColor"].SetValue(Vector4.One);
+                    effect.Parameters["DiffuseColor"].SetValue(Color.Gold.ToVector4());
+                    effect.Parameters["DiffuseIntensity"].SetValue(30.0f);
+                    //effect.Parameters["SpecularColor"].SetValue(Vector4.One);
 
                 }
                 mesh.Draw();
-                foreach (Effect effect in mesh.Effects)
-                {
-                    effect.CurrentTechnique = effect.Techniques["BalloonShading"];
-                    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
-                    effect.Parameters["gWorldXf"].SetValue(readlWorldMatrix);
-                    effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(readlWorldMatrix));
-                    effect.Parameters["gWvpXf"].SetValue(readlWorldMatrix * view * projection);
-                    effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
-                    effect.Parameters["gInflate"].SetValue(2.0f);
-                    effect.Parameters["gGlowColor"].SetValue(new Vector3(1,0,0));
-                }
-                mesh.Draw();
+                //foreach (Effect effect in mesh.Effects)
+                //{
+                //    effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                //    Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                //    effect.Parameters["gWorldXf"].SetValue(readlWorldMatrix);
+                //    effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(readlWorldMatrix));
+                //    effect.Parameters["gWvpXf"].SetValue(readlWorldMatrix * view * projection);
+                //    effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                //    effect.Parameters["gInflate"].SetValue(0.6f);
+                //    effect.Parameters["gGlowColor"].SetValue(Color.Gold.ToVector3());
+                //}
+                //mesh.Draw();
             }
             //Vector3 screenPos = Vector3.Zero;
             //if (inGameScene.GetType().Name.Equals("PlayGameScene"))

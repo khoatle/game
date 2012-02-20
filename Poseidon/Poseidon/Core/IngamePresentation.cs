@@ -343,6 +343,7 @@ namespace Poseidon.Core
 
         public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests)
         {
+
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
@@ -363,7 +364,7 @@ namespace Poseidon.Core
                     line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
                 }
                 line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 32), Color.Yellow);
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Yellow);
             }
             else
             {
@@ -376,12 +377,21 @@ namespace Poseidon.Core
                     TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
                     if (chestPointedAt != null)
                     {
-
+                        string line;
+                        line = "";
+                        line += "TREASURE CHEST";
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - ((line.Length / 2) * 14), 32), Color.Red);
                     }
                     Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
                     if (trashPointedAt != null)
                     {
-
+                        string line;
+                        line = "";
+                        if (trashPointedAt.trashType == TrashType.biodegradable)
+                        {
+                            line += "BIODEGRADABLE TRASH";
+                        }
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - ((line.Length / 2) * 14), 4), Color.Red);
                     }
                     else
                     {
@@ -408,6 +418,7 @@ namespace Poseidon.Core
                     }
                 }
             }
+            
         }
 
         public static string wrapLine(string input_line, int width, SpriteFont font)

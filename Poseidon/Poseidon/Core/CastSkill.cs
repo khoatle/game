@@ -171,7 +171,7 @@ namespace Poseidon
         public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
-            HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode);
+            HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;
@@ -179,7 +179,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
             d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness * HydroBot.bowPower, HydroBot.strengthUp, gameMode);
-            d.loadContent(Content, "Models/BulletModels/herculesBullet");
+            d.loadContent(Content, "Models/BulletModels/herculesArrow");
             //d.loadContent(Content, "Models/BulletModels/mjolnir");
             PoseidonGame.audio.herculesShot.Play();
             myBullets.Add(d);

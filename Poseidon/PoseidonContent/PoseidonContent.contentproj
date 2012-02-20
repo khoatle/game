@@ -1698,6 +1698,12 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
+    <Compile Include="Models\BulletModels\herculesArrow.fbx">
+      <Name>herculesArrow</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>1.5</ProcessorParameters_Scale>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>

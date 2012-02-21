@@ -70,6 +70,7 @@ namespace Poseidon.MiniGames
         SpriteFont font, timerFont;
 
         public bool inOrder = false;
+        public bool gamePlayed = false;
 
         private double timeNow;
         public bool timeUp;
@@ -215,6 +216,7 @@ namespace Poseidon.MiniGames
                 {
                     isSliding = true;
                     moveBlocks(mouseRow, mouseCol);
+                    if (!gamePlayed) gamePlayed = true;
                 }
             } // Slide otherwise 
             else moveBlocks(mouseRow, mouseCol);

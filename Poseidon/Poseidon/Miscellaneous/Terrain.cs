@@ -50,6 +50,8 @@ namespace Poseidon
 
         public void Draw(Camera gameCamera)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             foreach (ModelMesh mesh in terrainModel.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)

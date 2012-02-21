@@ -56,6 +56,8 @@ namespace Poseidon
         {
             Position += unitDirection * projectionSpeed;
             BoundingSphere = new BoundingSphere(Position, BoundingSphere.Radius);
+
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public override void draw(Matrix view, Matrix projection)

@@ -54,6 +54,8 @@ namespace Poseidon
 
             Position = tmp;
             BoundingSphere = new BoundingSphere(tmp, BoundingSphere.Radius);
+
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public virtual void loadContent(ContentManager content, string modelName)
@@ -65,8 +67,7 @@ namespace Poseidon
             //currently only applies for herculesBullet
             //and the mjolnir
             if (this is HerculesBullet) //|| modelName.Contains("mjolnir"))
-                SetupShaderParameters(PoseidonGame.contentManager, Model);
-            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+                SetupShaderParameters(PoseidonGame.contentManager, Model);     
         }
 
         // our custom shader

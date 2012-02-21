@@ -126,7 +126,7 @@ namespace Poseidon
         KeyboardState currentKeyboardState = new KeyboardState();
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
-
+       
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
@@ -1087,6 +1087,8 @@ namespace Poseidon
         }
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo, HeightMapInfo heightMapInfo)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
                     if (!invincibleMode) {

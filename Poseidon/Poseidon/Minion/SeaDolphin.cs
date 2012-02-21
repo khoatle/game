@@ -71,6 +71,8 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             float lastMaxHealth = maxHealth;
             maxHealth = GameConstants.DolphinStartingHealth * HydroBot.dolphinPower;
             health += (maxHealth - lastMaxHealth);

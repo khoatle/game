@@ -203,7 +203,7 @@
     <Compile Include="Miscellaneous\Fish.cs" />
     <Compile Include="Bullets\Projectiles.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Core\Barrier.cs" />
+    <Compile Include="Core\SwimmingObject.cs" />
     <Compile Include="Core\Camera.cs" />
     <Compile Include="TrashManagement\Powerpack.cs" />
     <Compile Include="PoseidonGame.cs" />

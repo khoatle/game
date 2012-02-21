@@ -135,6 +135,8 @@ namespace Poseidon
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model strangeRockModel)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             if (lastConstructionSwitchTime == TimeSpan.Zero)
             {
                 lastConstructionSwitchTime = gameTime.TotalGameTime;

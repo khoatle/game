@@ -86,8 +86,7 @@ namespace Poseidon
             //experienceReward = 400; //3000
 
             // Set up the parameters
-            SetupShaderParameters(PoseidonGame.contentManager, Model);
-            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+            SetupShaderParameters(PoseidonGame.contentManager, Model);         
         }
 
         public BaseEnemy()

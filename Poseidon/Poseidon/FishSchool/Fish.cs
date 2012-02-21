@@ -25,6 +25,11 @@ namespace Poseidon.FishSchool
     {
         #region Fields
 
+        public Color fogColor;
+        public Color ambientColor;
+        public Color diffuseColor;
+        public Color specularColor;
+
         protected Random random;
         Vector3 aiNewDir;
         int aiNumSeen;
@@ -69,6 +74,8 @@ namespace Poseidon.FishSchool
         /// <param name="gameTime"></param>
         public void Update(GameTime gameTime, ref AIParameters aiParams)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             float elapsedTime = (float)gameTime.ElapsedGameTime.TotalSeconds;
             Vector3 randomDir = Vector3.Zero;
 
@@ -137,7 +144,7 @@ namespace Poseidon.FishSchool
             //orientation and tint color
             //spriteBatch.Draw(texture, location, null, tintColor,
             //    rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
-            spriteBatch.Draw(texture, loc2D, null, Color.White,
+            spriteBatch.Draw(texture, loc2D, null, specularColor,
                 rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
         }
         #endregion

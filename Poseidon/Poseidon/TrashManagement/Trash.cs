@@ -52,10 +52,10 @@ namespace Poseidon
             //else floatUp = false;
             // Set up the parameters
             SetupShaderParameters(PoseidonGame.contentManager, Model);
-            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
         public void Update(GameTime gameTime)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
             //for floating trash
             //if (currentChange >= heightChange)
             //{

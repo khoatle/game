@@ -435,7 +435,7 @@ namespace Poseidon
                         break;
                 }
             }
-            if (jigsawGameScene.timeUp)
+            if (jigsawGameScene.timeUp || (EscPressed && jigsawGameScene.gamePlayed))
             {
                 MediaPlayer.Stop();
                 ShowScene(playGameScene);

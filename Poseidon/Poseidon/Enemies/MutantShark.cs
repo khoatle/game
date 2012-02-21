@@ -80,6 +80,8 @@ namespace Poseidon
         /* scene: 1-playgamescene 2-shipwreckscene */
         public override void Update(SwimmingObject[] enemyList, ref int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             // if clip player has been initialized, update it
             if (clipPlayer != null)
             {
@@ -140,6 +142,8 @@ namespace Poseidon
                 configAction(hydroBot, perceptionID, gameTime);
                 makeAction(changeDirection, enemyList, enemySize, fishList, fishSize, enemyBullets, hydroBot, cameraFrustum, gameTime, gameMode);
             }
+
+
         }
         // Execute the actions. ( scene: 1-playgamescene, 2-shipwreckscene)
         protected override void makeAction(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)

@@ -65,6 +65,8 @@ namespace Poseidon
 
         public void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);

@@ -53,6 +53,8 @@ namespace Poseidon
 
             // Update the particle emitter, which will create our particle trail.
             trailEmitter.Update(gameTime, Position);
+
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public override void draw(Matrix view, Matrix projection)

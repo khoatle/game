@@ -120,6 +120,8 @@ namespace Poseidon
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             float lastMaxHealth = maxHealth;
             maxHealth = GameConstants.SeaCowStartingHealth * HydroBot.seaCowPower;
             health += (maxHealth - lastMaxHealth);

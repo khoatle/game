@@ -82,6 +82,7 @@ namespace Poseidon
 
         public void Update()
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
             orientation += GameConstants.powerpackResourceRotationSpeed;
         }
 

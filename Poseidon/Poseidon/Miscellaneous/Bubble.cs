@@ -19,6 +19,11 @@ namespace Poseidon
         public bool fromSeaBed;
         Random random;
 
+        public Color fogColor;
+        public Color ambientColor;
+        public Color diffuseColor;
+        public Color specularColor;
+
         public void LoadContent(ContentManager Content, Vector3 position, bool fromSeaBed, float startingScale)
         {
             random = new Random();
@@ -32,6 +37,8 @@ namespace Poseidon
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             Vector3 screenPos = graphicDevice.Viewport.Project(bubble3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
             bubble2DPos.X = screenPos.X;
             bubble2DPos.Y = screenPos.Y;
@@ -42,7 +49,7 @@ namespace Poseidon
         public void Draw(SpriteBatch spriteBatch, float scaleUp)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, Color.White, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * scaleUp, SpriteEffects.None, 0);
+            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, specularColor, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * scaleUp, SpriteEffects.None, 0);
             spriteBatch.End();
         }
     }

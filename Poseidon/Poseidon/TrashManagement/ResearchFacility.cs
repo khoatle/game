@@ -87,6 +87,8 @@ namespace Poseidon
 
         public void Update(GameTime gameTime, Vector3 botPosition, ref List<Point> points)
         {
+            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             double processingTime = 8; //2 days
             int fossilType = random.Next(100);
             string point_string = "";

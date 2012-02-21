@@ -316,26 +316,27 @@ namespace Poseidon
 
         public static void GetEffectConfiguration(ref Color fogColor, ref Color ambientColor, ref Color diffuseColor, ref Color specularColor)
         {
+            float envFactor = ((float)(HydroBot.currentEnvPoint) / (float)HydroBot.maxEnvPoint);
             if (HydroBot.gameMode == GameMode.MainGame)
             {
-                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel];
-                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel];
-                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel];
-                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel];
+                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
+                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
+                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
+                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
             }
             else if (HydroBot.gameMode == GameMode.ShipWreck)
             {
-                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel];
-                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel];
-                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel];
-                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel];
+                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
+                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
+                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
+                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
             }
             else if (HydroBot.gameMode == GameMode.SurvivalMode)
             {
-                fogColor = GameConstants.FogColor[0];
-                ambientColor = GameConstants.AmbientColor[0];
-                diffuseColor = GameConstants.DiffuseColor[0];
-                specularColor = GameConstants.SpecularColor[0];
+                fogColor = GameConstants.FogColor[0] * envFactor;
+                ambientColor = GameConstants.AmbientColor[0] * envFactor;
+                diffuseColor = GameConstants.DiffuseColor[0] * envFactor;
+                specularColor = GameConstants.SpecularColor[0] * envFactor;
             }
         }
     }

@@ -364,7 +364,7 @@ namespace Poseidon.Core
                     line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
                 }
                 line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Yellow);
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 32), Color.Yellow);
             }
             else
             {
@@ -380,7 +380,7 @@ namespace Poseidon.Core
                         string line;
                         line = "";
                         line += "TREASURE CHEST";
-                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - ((line.Length / 2) * 14), 32), Color.Red);
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - ((line.Length / 2) * 14), 4), Color.Red);
                     }
                     Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
                     if (trashPointedAt != null)

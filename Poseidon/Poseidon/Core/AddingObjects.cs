@@ -128,7 +128,7 @@ namespace Poseidon
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //type = 7;
+                //type = 5;
                 if (gameMode == GameMode.SurvivalMode)
                 {
                     fish[i].Name = "Ancient ";
@@ -146,7 +146,7 @@ namespace Poseidon
                 }
                 else if (type == 1)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphin");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphinVer3");
                     fish[i].Name += "dolphin";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "We remind you to play, play, play, for you will find great power in play.";
@@ -154,7 +154,7 @@ namespace Poseidon
                 }
                 else if (type == 2)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/manetee");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/maneteeVer2");
                     fish[i].Name += "manetee";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "Do not call me sea-cow. Do I look that fat?";
@@ -170,7 +170,7 @@ namespace Poseidon
                 }
                 else if (type == 4)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/orca");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/orcaVer2");
                     fish[i].Name += "orca";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "Move away, you little bot, here comes the killer whale.";
@@ -179,7 +179,7 @@ namespace Poseidon
                 else if (type == 5)
                 {
 
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/seal");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/sealVer2");
                     fish[i].Name += "seal";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
@@ -187,7 +187,7 @@ namespace Poseidon
                 }
                 else if (type == 6)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalshark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalsharkVer2");
                     fish[i].Name += "shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
@@ -195,7 +195,7 @@ namespace Poseidon
                 }
                 else if (type == 7)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardShark2");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/leopardsharkVer3");
                     fish[i].Name += "leopard shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "No, I am not racist and I date all kinds of shark, not you, dear bot.";
@@ -203,7 +203,7 @@ namespace Poseidon
                 }
                 else if (type == 8)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/hammershark");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/hammersharkVer2");
                     fish[i].Name += "hammer shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "I have 360 degree binocular vision. I can detect an electrical signal of half a billionth of a volt. What superpower you brag about?";
@@ -226,7 +226,7 @@ namespace Poseidon
             {
                 newFish = new SeaCow();
                 newFish.Name = "seal";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/manetee");
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/maneteeVer2");
                 newFish.Load(1, 24, 24);
                 newFish.happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
                 newFish.sad_talk = "We need the arctic ice. Stop global warming.";
@@ -243,7 +243,7 @@ namespace Poseidon
             else {
                 newFish = new SeaDolphin();
                 newFish.Name = "shark";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/dolphin");
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/dolphinVer3");
                 newFish.Load(1, 24, 24);
                 newFish.happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
                 newFish.sad_talk = "Humans kill over 30 million sharks every year. We are the oldest fish, spare us."; 

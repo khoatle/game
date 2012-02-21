@@ -496,8 +496,10 @@ namespace Poseidon
                 iconActivated[index] = true;
             }
 
-            hasTurtle = true;
-            turtlePower = 1.0f;
+            //hasTurtle = true;
+            //turtlePower = 1.0f;
+            hasDolphin = true;
+            dolphinPower = 1.0f;
 
             firstPlant = true;
             prevPlantTime = 0;
@@ -508,7 +510,7 @@ namespace Poseidon
 
             // Set up the parameters
             SetupShaderParameters(content, Model);
-            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+            //EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public void LoadAnimation(int clipStart, int clipEnd, int fpsRate)
@@ -1530,21 +1532,21 @@ namespace Poseidon
 
                 }
                 mesh.Draw();
-                //if (invincibleMode == true)
-                //{
-                //    foreach (Effect effect in mesh.Effects)
-                //    {
-                //        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
-                //        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
-                //        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
-                //        effect.Parameters["Bones"].SetValue(bones);
-                //        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
-                //        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
-                //        //effect.Parameters["gInflate"].SetValue(0.07f);
-                //        //effect.Parameters["gGlowColor"].SetValue(new Vector3(0.0f, 1.0f, 0.0f));
-                //        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
-                //    }
-                //}
+                if (invincibleMode == true)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                        //effect.Parameters["gInflate"].SetValue(0.07f);
+                        //effect.Parameters["gGlowColor"].SetValue(new Vector3(0.0f, 1.0f, 0.0f));
+                        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                    }
+                }
                 mesh.Draw();
             }
 

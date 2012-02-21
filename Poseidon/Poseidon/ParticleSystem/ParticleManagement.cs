@@ -39,7 +39,13 @@ namespace Poseidon
         {
             //update particle systems
             explosionParticles.Update(gameTime);
+
             sandParticles.Update(gameTime);
+            //tint the sand particle to the color of the environment
+            //i.e: dirty sea, red sea, black sea etc.
+            EffectHelpers.GetEffectConfiguration(ref sandParticles.fogColor,ref sandParticles.ambientColor,ref sandParticles.diffuseColor,ref sandParticles.specularColor);
+            sandParticles.TintParticleColor();
+
             projectileTrailParticles.Update(gameTime);
             frozenBreathParticles.Update(gameTime);
         }

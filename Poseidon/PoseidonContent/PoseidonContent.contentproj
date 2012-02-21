@@ -306,13 +306,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\orca.fbx">
-      <Name>orca</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\PowerpackResource\strength.fbx">
       <Name>strength</Name>
       <Importer>FbxImporter</Importer>
@@ -478,20 +471,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\leopardshark.fbx">
-      <Name>leopardshark</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\normalshark.fbx">
-      <Name>normalshark</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBar.png">
       <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
@@ -499,36 +478,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\dolphin.fbx">
-      <Name>dolphin</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\SeaAnimalModels\stingray.fbx">
       <Name>stingray</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\manetee.fbx">
-      <Name>manetee</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\seal.fbx">
-      <Name>seal</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\SeaAnimalModels\hammershark.fbx">
-      <Name>hammershark</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
@@ -1663,11 +1614,6 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
-    <Compile Include="Models\SeaAnimalModels\leopardshark2.fbx">
-      <Name>leopardshark2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\PowerpackResource\strangeRock.fbx">
       <Name>strangeRock</Name>
       <Importer>FbxImporter</Importer>
@@ -1703,6 +1649,41 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>1.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\dolphinVer3.fbx">
+      <Name>dolphinVer3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\hammersharkVer2.fbx">
+      <Name>hammersharkVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\leopardsharkVer3.fbx">
+      <Name>leopardsharkVer3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\maneteeVer2.fbx">
+      <Name>maneteeVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\normalsharkVer2.fbx">
+      <Name>normalsharkVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\orcaVer2.fbx">
+      <Name>orcaVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\sealVer2.fbx">
+      <Name>sealVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

@@ -28,6 +28,7 @@ namespace Poseidon {
         public bool isChasing;
         public bool isFighting;
         public bool isCasting;
+        float turnAmount = 0;
 
         public Fish() : base() {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
@@ -73,7 +74,8 @@ namespace Poseidon {
 
         public virtual void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
-
+            float lastForwardDir = ForwardDirection;
+            float lastTurnAmount = turnAmount;
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
             if (isPoissoned == true) {
@@ -90,18 +92,26 @@ namespace Poseidon {
             Vector3 futurePosition = Position;
             //int barrier_move
             Random random = new Random();
-            float turnAmount = 0;
+            
             //also try to change direction if we are stuck
+            int rightLeft = random.Next(2);
+            turnAmount = 0;
             if (stucked == true)
             {
-                ForwardDirection += MathHelper.PiOver4/2;
+                //ForwardDirection += MathHelper.PiOver4/2;
+                if (lastTurnAmount == 0)
+                {
+                    if (rightLeft == 0)
+                        turnAmount = 5;
+                    else turnAmount = -5;
+                }
+                else turnAmount = lastTurnAmount;
             }
-            else if (changeDirection >= 95)
+            else if (changeDirection >= 99)
             {
-                int rightLeft = random.Next(2);
                 if (rightLeft == 0)
-                    turnAmount = 20;
-                else turnAmount = -20;
+                    turnAmount = 5;
+                else turnAmount = -5;
             }
 
             Matrix orientationMatrix;
@@ -111,9 +121,9 @@ namespace Poseidon {
             movement.Z = 1;
             float prevForwardDir = ForwardDirection;
             Vector3 prevFuturePosition = futurePosition;
-            // try upto 10 times to change direction is there is collision
-            for (int i = 0; i < 4; i++)
-            {
+            // try upto 10 times to change direction if there is collision
+            //for (int i = 0; i < 4; i++)
+            //{
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 Vector3 headingDirection = Vector3.Transform(movement, orientationMatrix);
@@ -134,14 +144,30 @@ namespace Poseidon {
                         updatedSphere.Radius);
 
                     stucked = false;
-                    break;
+                    //break;
                 }
                 else
                 {
                     stucked = true;
                     futurePosition = prevFuturePosition;
                 }
-            }
+
+                if (ForwardDirection - lastForwardDir > 0)
+                {
+                    if (!clipPlayer.inRange(29, 31))
+                        clipPlayer.switchRange(29, 31);
+                }
+                else if (ForwardDirection - lastForwardDir < 0)
+                {
+                    if (!clipPlayer.inRange(40, 42))
+                        clipPlayer.switchRange(40, 42);
+                }
+                else
+                {
+                    if (!clipPlayer.inRange(1, 24))
+                        clipPlayer.switchRange(1, 24);
+                }
+            //}
 
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -265,23 +291,34 @@ namespace Poseidon {
 
         public virtual void attack() {}
 
-        protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
+        public void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {
+            float lastForwardDir = ForwardDirection;
+            float lastTurnAmount = turnAmount;
+
             Vector3 futurePosition = Position;
             //int barrier_move
             Random random = new Random();
-            float turnAmount = 0;
+
             //also try to change direction if we are stuck
+            int rightLeft = random.Next(2);
+            turnAmount = 0;
             if (stucked == true)
             {
-                ForwardDirection += MathHelper.PiOver4;
+                //ForwardDirection += MathHelper.PiOver4/2;
+                if (lastTurnAmount == 0)
+                {
+                    if (rightLeft == 0)
+                        turnAmount = 5;
+                    else turnAmount = -5;
+                }
+                else turnAmount = lastTurnAmount;
             }
-            else if (changeDirection >= 95)
+            else if (changeDirection >= 99)
             {
-                int rightLeft = random.Next(2);
                 if (rightLeft == 0)
-                    turnAmount = 20;
-                else turnAmount = -20;
+                    turnAmount = 5;
+                else turnAmount = -5;
             }
 
             Matrix orientationMatrix;
@@ -292,8 +329,8 @@ namespace Poseidon {
             float prevForwardDir = ForwardDirection;
             Vector3 prevFuturePosition = futurePosition;
             // try upto 10 times to change direction is there is collision
-            for (int i = 0; i < 4; i++)
-            {
+            //for (int i = 0; i < 4; i++)
+            //{
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
                 Vector3 headingDirection = Vector3.Transform(movement, orientationMatrix);
@@ -314,14 +351,30 @@ namespace Poseidon {
                         updatedSphere.Radius);
 
                     stucked = false;
-                    break;
+                    //break;
                 }
                 else
                 {
                     stucked = true;
                     futurePosition = prevFuturePosition;
                 }
-            }
+
+                if (ForwardDirection - lastForwardDir > 0)
+                {
+                    if (!clipPlayer.inRange(29, 31))
+                        clipPlayer.switchRange(29, 31);
+                }
+                else if (ForwardDirection - lastForwardDir < 0)
+                {
+                    if (!clipPlayer.inRange(40, 42))
+                        clipPlayer.switchRange(40, 42);
+                }
+                else
+                {
+                    if (!clipPlayer.inRange(1, 24))
+                        clipPlayer.switchRange(1, 24);
+                }
+            //}
         }
 
         

@@ -24,6 +24,10 @@ namespace Poseidon
     {
         #region Fields
 
+        public Color fogColor = Color.White;
+        public Color ambientColor = Color.White;
+        public Color diffuseColor = Color.White;
+        public Color specularColor = Color.White;
 
         // Name of the XML settings file describing this particle system.
         string settingsName;
@@ -43,6 +47,7 @@ namespace Poseidon
 
 
         // Shortcuts for accessing frequently changed effect parameters.
+        EffectParameterCollection parameters;
         EffectParameter effectViewParameter;
         EffectParameter effectProjectionParameter;
         EffectParameter effectViewportScaleParameter;
@@ -228,7 +233,7 @@ namespace Poseidon
             
             particleEffect = effect.Clone();
 
-            EffectParameterCollection parameters = particleEffect.Parameters;
+            parameters = particleEffect.Parameters;
 
             // Look up shortcuts for parameters that change every frame.
             effectViewParameter = parameters["View"];
@@ -270,6 +275,8 @@ namespace Poseidon
         /// </summary>
         public override void Update(GameTime gameTime)
         {
+            //EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
             if (gameTime == null)
                 throw new ArgumentNullException("gameTime");
 
@@ -352,6 +359,11 @@ namespace Poseidon
             }
         }
 
+        public void TintParticleColor()
+        {
+            parameters["MinColor"].SetValue(specularColor.ToVector4());
+            parameters["MaxColor"].SetValue(specularColor.ToVector4());
+        }
         
         /// <summary>
         /// Draws the particle system.
@@ -376,6 +388,7 @@ namespace Poseidon
             // If there are any active particles, draw them now!
             if (firstActiveParticle != firstFreeParticle)
             {
+                
                 device.BlendState = settings.BlendState;
                 device.DepthStencilState = DepthStencilState.DepthRead;
 

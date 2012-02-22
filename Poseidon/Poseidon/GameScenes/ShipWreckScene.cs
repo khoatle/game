@@ -57,6 +57,7 @@ namespace Poseidon
         int[] fishAmount;
         List<TreasureChest>[] treasureChests;
         List<StaticObject>[] staticObjects;
+        List<Powerpack>[] powerpacks;
         // draw a cutscene when finding a god's relic
         bool[] foundRelic;// = false;
         // has artifact?
@@ -66,7 +67,6 @@ namespace Poseidon
         List<DamageBullet> enemyBullet;
         List<HealthBullet> healthBullet;
         List<DamageBullet> alliesBullets;
-
 
         public int currentShipWreckID;
         public static bool resetShipWreckNow = true;
@@ -119,6 +119,8 @@ namespace Poseidon
         List<Bubble> bubbles;
         float timeNextBubble = 200.0f;
         //float timeNextSeaBedBubble = 3000.0f;
+
+        private Model strangeRockModel;
 
         //Points gained
         public static List<Point> points;
@@ -181,7 +183,8 @@ namespace Poseidon
             fossilTextures[2] = Content.Load<Texture2D>("Image/Fossils/fossil3");
             fossilTextures[3] = Content.Load<Texture2D>("Image/Fossils/fossil4");
 
-            
+            //Load Strange Rock
+            strangeRockModel = Content.Load<Model>("Models/PowerpackResource/strangeRock");
 
             this.Load();
         }
@@ -332,6 +335,7 @@ namespace Poseidon
             fishAmount = new int[GameConstants.maxShipPerLevel];
             treasureChests = new List<TreasureChest>[GameConstants.maxShipPerLevel];
             staticObjects = new List<StaticObject>[GameConstants.maxShipPerLevel];
+            powerpacks = new List<Powerpack>[GameConstants.maxShipPerLevel];
             foundRelic = new bool[GameConstants.maxShipPerLevel];
             for (int index = 0; index < GameConstants.maxShipPerLevel; index++)
             {
@@ -371,6 +375,7 @@ namespace Poseidon
             // Initialize the chests here
             // Put the skill in one of it if this.skillID != -1
             treasureChests[currentShipWreckID] = new List<TreasureChest>(GameConstants.NumberChests);
+            powerpacks[currentShipWreckID] = new List<Powerpack>();
             int randomType = random.Next(3);
             for (int index = 0; index < GameConstants.NumberChests; index++)
             {
@@ -510,7 +515,7 @@ namespace Poseidon
                 bool mouseOnInteractiveIcons = false;
                 //hydrobot update
                 hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID],
-                    Content, spriteBatch, myBullet, this, null, healthBullet, null, null, null, null, null, mouseOnInteractiveIcons);
+                    Content, spriteBatch, myBullet, this, null, healthBullet, powerpacks[currentShipWreckID], null, null, null, null, mouseOnInteractiveIcons);
 
                 //add 1 bubble over tank and each enemy
                 timeNextBubble -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -687,9 +692,19 @@ namespace Poseidon
                             {
                                 if (random.Next(100) <= 2)
                                 {
-                                    showStrangeObjectFound = true;
-                                    HydroBot.numStrangeObjCollected++;
-                                    fossilToDraw = random.Next(4);
+                                    //showStrangeObjectFound = true;
+                                    //HydroBot.numStrangeObjCollected++;
+                                    //fossilToDraw = random.Next(4);
+                                    Vector3 powerpackPosition;
+                                    int powerType = 5; //type 5 for strange rock
+                                    Powerpack powerpack = new Powerpack(powerType);
+                                    powerpackPosition.Y = GameConstants.ShipWreckFloatHeight;
+                                    powerpackPosition.X = chest.Position.X;
+                                    powerpackPosition.Z = chest.Position.Z;
+                                    //powerpackPosition = hydroBot.Position;
+                                    powerpack.Model = strangeRockModel;
+                                    powerpack.LoadContent(powerpackPosition);
+                                    powerpacks[currentShipWreckID].Add(powerpack);
                                 }
                             }
                         }
@@ -753,6 +768,7 @@ namespace Poseidon
         /// <param name="model">Model representing the game playing field.</param>
         private void DrawTerrain(Model model)
         {
+            EffectHelpers.GetEffectConfiguration(ref ground.fogColor, ref ground.ambientColor,ref ground.diffuseColor,ref ground.specularColor);
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -765,10 +781,14 @@ namespace Poseidon
                     effect.View = gameCamera.ViewMatrix;
                     effect.Projection = gameCamera.ProjectionMatrix;
 
+                    effect.AmbientLightColor = ground.ambientColor.ToVector3();
+                    effect.DiffuseColor = ground.diffuseColor.ToVector3();
+                    effect.SpecularColor = ground.specularColor.ToVector3();
+
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = GameConstants.FogColor[PlayGameScene.currentLevel].ToVector3();
+                    effect.FogColor = ground.fogColor.ToVector3();
                 }
                 mesh.Draw();
             }
@@ -803,6 +823,23 @@ namespace Poseidon
             DrawTerrain(ground.Model);
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
+
+            foreach (Powerpack f in powerpacks[currentShipWreckID])
+            {
+                if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
+                {
+                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //f.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
 
             BoundingSphere chestSphere;
             // Drawing ship wrecks

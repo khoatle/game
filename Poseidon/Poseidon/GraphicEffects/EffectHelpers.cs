@@ -314,9 +314,14 @@ namespace Poseidon
             }
         }
 
+        public static float lastEnv = 1000.0f;
         public static void GetEffectConfiguration(ref Color fogColor, ref Color ambientColor, ref Color diffuseColor, ref Color specularColor)
         {
-            float envFactor = ((float)(HydroBot.currentEnvPoint) / (float)HydroBot.maxEnvPoint);
+            if (Math.Abs(HydroBot.currentEnvPoint - lastEnv) >= 150f || Math.Abs(HydroBot.currentEnvPoint - lastEnv) <= 0.3f) lastEnv = HydroBot.currentEnvPoint;
+            else if (HydroBot.currentEnvPoint > lastEnv) lastEnv += 0.001f;
+            else if (HydroBot.currentEnvPoint < lastEnv) lastEnv -= 0.001f;
+            float envFactor = (lastEnv / (float)HydroBot.maxEnvPoint);
+
             if (HydroBot.gameMode == GameMode.MainGame)
             {
                 fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;

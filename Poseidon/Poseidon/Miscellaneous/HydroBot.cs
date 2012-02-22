@@ -498,8 +498,8 @@ namespace Poseidon
 
             //hasTurtle = true;
             //turtlePower = 1.0f;
-            hasDolphin = true;
-            dolphinPower = 1.0f;
+            //hasDolphin = true;
+            //dolphinPower = 1.0f;
 
             firstPlant = true;
             prevPlantTime = 0;

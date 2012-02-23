@@ -19,6 +19,7 @@ namespace Poseidon.Core
         private Texture2D PlasticFactoryDotImage;
         private Texture2D NuclearFactoryDotImage;
         private Texture2D ResearchFacilityDotImage;
+        private Texture2D SideKickDotImage;
 
         // Local coords of the radar image's center, used to offset image when being drawn
         private Vector2 RadarImageCenter;
@@ -44,7 +45,9 @@ namespace Poseidon.Core
             OrganicFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/bioFactoryDot");
             PlasticFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/plasticFactoryDot");
             NuclearFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/nuclearFactoryDot");
-            ResearchFacilityDotImage = Content.Load<Texture2D>("Image/RadarTextures/researchFactoryDot");
+            ResearchFacilityDotImage = Content.Load<Texture2D>("Image/RadarTextures/researchCenterDot");
+            SideKickDotImage = Content.Load<Texture2D>("Image/RadarTextures/sidekickDot");
+
             this.RadarCenterPos = radarCenter;
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
@@ -221,7 +224,9 @@ namespace Poseidon.Core
 
                     if (fishes[i].isBigBoss) scaleHeight *= 1.5f;
                     // Draw fish dot on radar
-                    spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
+                    if (fishes[i] is SeaCow || fishes[i] is SeaDolphin || fishes[i] is SeaTurtle)
+                        spriteBatch.Draw(SideKickDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
+                    else spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
                 }
             }
             

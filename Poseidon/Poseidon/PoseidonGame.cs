@@ -844,7 +844,7 @@ namespace Poseidon
         {
             // Get the Keyboard and GamePad state
             CheckKeyEntered();
-            if (EscPressed) gameState = GameState.DisplayMenu;
+            if (gameState != GameState.DisplayMenu && gameState != GameState.ToMainMenu && EscPressed) gameState = GameState.DisplayMenu;
             if (gameState == GameState.GameStart)
             {
                 videoPlayer.Play(presentScene);

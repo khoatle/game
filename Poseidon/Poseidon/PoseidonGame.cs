@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum FactoryType { biodegradable, plastic, radioactive};
@@ -108,6 +108,10 @@ namespace Poseidon
 
         public static ContentManager contentManager;
 
+        Video presentScene;
+        VideoPlayer videoPlayer;
+        GameState gameState;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -130,6 +134,8 @@ namespace Poseidon
         /// </summary>
         protected override void Initialize()
         {
+            videoPlayer = new VideoPlayer();
+            gameState = GameState.GameStart;
             base.Initialize();
         }
 
@@ -203,12 +209,10 @@ namespace Poseidon
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
             Components.Add(shipWreckScene);
 
-            // Start the game in the start Scene
-            startScene.Show();
-            activeScene = startScene;
-
             //initiate graphic for good will bar
             IngamePresentation.InitiateGoodWillBarGraphic(Content);
+
+            presentScene = Content.Load<Video>("Videos/presentScene");
         }
 
         /// <summary>
@@ -840,6 +844,25 @@ namespace Poseidon
         {
             // Get the Keyboard and GamePad state
             CheckKeyEntered();
+            if (EscPressed) gameState = GameState.DisplayMenu;
+            if (gameState == GameState.GameStart)
+            {
+                videoPlayer.Play(presentScene);
+                gameState = GameState.PlayingPresentScene;
+            }
+            if (gameState == GameState.PlayingPresentScene)
+            {
+                return;
+            }
+            if (gameState == GameState.DisplayMenu)
+            {
+                // Start the game in the start Scene
+                startScene.Show();
+                activeScene = startScene;
+                //just changing to a random state
+                gameState = GameState.ToMainMenu;
+            }
+
             CheckClick(gameTime);
             HandleScenesInput(gameTime);
             base.Update(gameTime);
@@ -852,11 +875,21 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            
-            //graphics.GraphicsDevice.Clear(Color.Black);
-            //spriteBatch.Begin();
+            if (gameState == GameState.PlayingPresentScene)
+            {
+                graphics.GraphicsDevice.Clear(Color.Black);
+                Texture2D playingTexture;
+                if (videoPlayer.State == MediaState.Playing)
+                {
+                    playingTexture = videoPlayer.GetTexture();
+                    spriteBatch.Begin();
+                    spriteBatch.Draw(playingTexture, new Vector2(0, 0), Color.White);
+                    spriteBatch.End();
+                }
+                if (videoPlayer.State == MediaState.Stopped)
+                    gameState = GameState.DisplayMenu;
+            }
             base.Draw(gameTime);
-            //spriteBatch.End();
         }
 
     }

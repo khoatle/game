@@ -152,7 +152,7 @@ namespace Poseidon
 
             //For scene 3
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "I found an old sandal ... and most importantly, there is not even a pair and them, how am I supposed to wear this?", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "I found an old pair of sandals ... but they do not seem to fit, how am I supposed to wear this?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Settle down bot, this sandal is not for wearing. This is the legendary winged sandal of Hermes which enabled him to move at super sonic mode.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);

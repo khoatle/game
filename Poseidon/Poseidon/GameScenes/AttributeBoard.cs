@@ -121,6 +121,7 @@ namespace Poseidon
             }
 
             mouseState = Mouse.GetState();
+
             if (speedIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)) ||
                 hitpointIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)) ||
                 shootrateIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)) ||

@@ -20,14 +20,14 @@ namespace Poseidon
         {
             bool skillUsed = false;
             int healthToLose = 0;
+            int floatHeight;
+            if (gameMode == GameMode.ShipWreck) floatHeight = GameConstants.ShipWreckFloatHeight;
+            else floatHeight = GameConstants.MainGameFloatHeight;
+            pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
+            hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
             // Hercules' Bow!!!
             if (HydroBot.activeSkillID == 0)// && mouseOnLivingObject)
             {
-                int floatHeight;
-                if (gameMode == GameMode.ShipWreck) floatHeight = GameConstants.ShipWreckFloatHeight;
-                else floatHeight = GameConstants.MainGameFloatHeight;
-                pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
-                hydroBot.ForwardDirection = CursorManager.CalculateAngle(pointIntersect, hydroBot.Position);
                 //use skill combo if activated
                 //cooldowns for both skills must be cleared
                 if ((HydroBot.skillComboActivated && HydroBot.secondSkillID == 1) &&
@@ -101,7 +101,19 @@ namespace Poseidon
             //Hermes' Winged Sandal!!!
             if (HydroBot.activeSkillID == 3)
             {
-                if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandle) || HydroBot.firstUse[3] == true)
+                if ((HydroBot.skillComboActivated && HydroBot.secondSkillID == 0) && 
+                    ((HydroBot.firstUse[3] == true && HydroBot.firstUse[0] == true) ||
+                    (PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow &&
+                    PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandal)))
+                {
+                    ShootPiercingArrow(hydroBot, Content, spriteBatch, myBullet, gameMode);
+                    HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.skillPrevUsed[3] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.firstUse[0] = false;
+                    HydroBot.firstUse[3] = false;
+                    skillUsed = true;
+                }
+                else if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandal) || HydroBot.firstUse[3] == true)
                 {
                     HydroBot.firstUse[3] = false;
                     PoseidonGame.audio.hermesSound.Play();
@@ -167,11 +179,28 @@ namespace Poseidon
             PoseidonGame.audio.herculesShot.Play();
             myBullets.Add(f);
         }
+        public static void ShootPiercingArrow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
+        {
+            float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection, true);
+
+            Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
+            Vector3 movement = Vector3.Zero;
+            movement.Z = 1;
+            Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+
+            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness * HydroBot.bowPower, HydroBot.strengthUp, gameMode);
+            d.loadContent(Content, "Models/BulletModels/piercingArrow");
+            //d.loadContent(Content, "Models/BulletModels/mjolnir");
+            PoseidonGame.audio.herculesShot.Play();
+            myBullets.Add(d);
+
+        }
         //=================//single skill casting
         public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
-            HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection);
+            HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection, false);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
             Vector3 movement = Vector3.Zero;

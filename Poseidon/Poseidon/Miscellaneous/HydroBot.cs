@@ -730,7 +730,8 @@ namespace Poseidon
             //cast the current selected skill
             //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
             else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released && !mouseOnInteractiveIcons)
-            {         
+            {
+                //ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
                 CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount);
             }
 

@@ -21,7 +21,10 @@ namespace Poseidon
         Camera gameCamera;
         
         //whether the arrow should pierce through the enemies
-        bool piercingArrow = false;
+        public bool piercingArrow = false;
+        //enemies that have been hit by this piercing arrow
+        //we don't want 1 enemy to get hit twice
+        public List<BaseEnemy> hitEnemies;
 
         public HerculesBullet(ContentManager content, SpriteBatch spriteBatch, GameMode gameMode, float forwardDir, bool piercingArrow)
             : base()
@@ -43,6 +46,7 @@ namespace Poseidon
                 gameCamera = SurvivalGameScene.gameCamera;
             }
             this.piercingArrow = piercingArrow;
+            hitEnemies = new List<BaseEnemy>();
         }
 
         public override void draw(Matrix view, Matrix projection)

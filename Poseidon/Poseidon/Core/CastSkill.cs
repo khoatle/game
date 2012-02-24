@@ -189,7 +189,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness * HydroBot.bowPower, HydroBot.strengthUp, gameMode);
+            d.initialize(hydroBot.Position, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness * HydroBot.bowPower * HydroBot.sandalPower, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/piercingArrow");
             //d.loadContent(Content, "Models/BulletModels/mjolnir");
             PoseidonGame.audio.herculesShot.Play();

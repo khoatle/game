@@ -595,7 +595,7 @@ namespace Poseidon
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
                     enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
                 fishAmount[currentShipWreckID] = refNum;
-                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null);
+                Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], particleManager.explosionParticles, gameCamera, null, fishAmount[currentShipWreckID]);
                 refNum = enemiesAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
                     enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);

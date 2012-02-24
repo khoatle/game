@@ -19,8 +19,14 @@ namespace Poseidon
         //SpriteBatch spriteBatch;
         GameMode gameMode;
         Camera gameCamera;
+        
+        //whether the arrow should pierce through the enemies
+        public bool piercingArrow = false;
+        //enemies that have been hit by this piercing arrow
+        //we don't want 1 enemy to get hit twice
+        public List<BaseEnemy> hitEnemies;
 
-        public HerculesBullet(ContentManager content, SpriteBatch spriteBatch, GameMode gameMode, float forwardDir)
+        public HerculesBullet(ContentManager content, SpriteBatch spriteBatch, GameMode gameMode, float forwardDir, bool piercingArrow)
             : base()
         {
             //energyBallTexture = content.Load<Texture2D>("Image/Miscellaneous/energyBall-red");
@@ -39,7 +45,8 @@ namespace Poseidon
             {
                 gameCamera = SurvivalGameScene.gameCamera;
             }
-
+            this.piercingArrow = piercingArrow;
+            hitEnemies = new List<BaseEnemy>();
         }
 
         public override void draw(Matrix view, Matrix projection)
@@ -81,8 +88,11 @@ namespace Poseidon
                     //EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     //effect.Parameters["FogColor"].SetValue(GameConstants.FogColor.ToVector3());
                     //effect.Parameters["AmbientColor"].SetValue(Vector4.One);
-                    effect.Parameters["DiffuseColor"].SetValue(Color.Gold.ToVector4());
-                    effect.Parameters["DiffuseIntensity"].SetValue(30.0f);
+                    if (!piercingArrow)
+                        effect.Parameters["DiffuseColor"].SetValue(Color.Gold.ToVector4());
+                    else
+                        effect.Parameters["DiffuseColor"].SetValue(Color.Red.ToVector4());
+                    effect.Parameters["DiffuseIntensity"].SetValue(100.0f);
                     //effect.Parameters["SpecularColor"].SetValue(Vector4.One);
 
                 }

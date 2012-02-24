@@ -37,6 +37,7 @@ namespace Poseidon
         Texture2D normalCursorTexture;
         Texture2D shootingCursorTexture;
         Texture2D onFishCursorTexture;
+        Texture2D onAttributeCursorTexture;
         Vector2 textureCenter;
         Game game;
         // Position is the cursor position, and is in screen space. 
@@ -67,6 +68,7 @@ namespace Poseidon
             normalCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
             shootingCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
             onFishCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/fishcursor");
+            onAttributeCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/hammerAndWrench");
 
             cursorTexture = normalCursorTexture;
             textureCenter = new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2);
@@ -113,6 +115,11 @@ namespace Poseidon
         public void SetOnFishMouseImage()
         {
             cursorTexture = onFishCursorTexture;
+        }
+
+        public void SetHammerAndWrenchImage()
+        {
+            cursorTexture = onAttributeCursorTexture;
         }
 
         /// <summary>

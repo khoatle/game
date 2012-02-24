@@ -277,11 +277,31 @@ namespace Poseidon
         public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, GameTime gameTime, HydroBot hydroBot, BaseEnemy[] enemies, int enemiesAmount, Fish[] fishes, int fishAmount, Camera gameCamera) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
+                //special handling for the skill combo FlyingHammer
+                if (bullets[i] is FlyingHammer)
+                {
+                    if (PoseidonGame.playTime.TotalSeconds - ((FlyingHammer)bullets[i]).timeShot > 1.25)
+                    {
+                        ((FlyingHammer)bullets[i]).explodeNow = true;
+                        PoseidonGame.audio.Explo1.Play();
+                        gameCamera.Shake(25f, .4f);
+                        CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
+                    }
+                }
+                if (bullets[i] is FlyingHammer)
+                {
+                    if (((FlyingHammer)bullets[i]).explodeNow)
+                    {
+                        bullets.RemoveAt(i--);
+                        continue;
+                    }
+                }
                 for (int j = 0; j < size; j++) {
                     sphere = barriers[j].BoundingSphere;
                     sphere.Radius *= GameConstants.EasyHitScale;
                     //because Mutant Shark's easy hit sphere is too large
                     if (barriers[j] is MutantShark) sphere.Radius *= 0.7f;
+
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
                         if (barriers[j] is Fish && barriers[j].BoundingSphere.Intersects(cameraFrustum))
@@ -327,25 +347,62 @@ namespace Poseidon
                                     CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
                                 }
                             }
+
                         }
 
-                        barriers[j].health -= bullets[i].damage;
-
-                        if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                        //whether or not to reduce health of the hit object
+                        bool reduceHealth = true;
+                        if (bullets[i] is HerculesBullet)
                         {
-                            Point point = new Point();
-                            String point_string = "-" + bullets[i].damage.ToString() + "HP";
-                            point.LoadContent(PoseidonGame.contentManager, point_string, barriers[j].Position, Color.DarkRed);
-                            if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.points.Add(point);
-                            else if (gameMode == GameMode.MainGame)
-                                PlayGameScene.points.Add(point);
-                            else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.points.Add(point);
+                            if (!((HerculesBullet)bullets[i]).piercingArrow)
+                                reduceHealth = true;
+                            else
+                            {
+                                bool enemyHitBefore = false;
+                                foreach (BaseEnemy hitEnemy in ((HerculesBullet)bullets[i]).hitEnemies)
+                                {
+                                    if (hitEnemy == (BaseEnemy)barriers[j])
+                                        enemyHitBefore = true;
+                                }
+                                if (!enemyHitBefore)
+                                {
+                                    reduceHealth = true;
+                                    ((HerculesBullet)bullets[i]).hitEnemies.Add((BaseEnemy)barriers[j]);
+                                }
+                                else reduceHealth = false;
+                            }
                         }
+                        else reduceHealth = true;
+
+                        if (reduceHealth)
+                        {
+                            barriers[j].health -= bullets[i].damage;
+
+                            if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                            {
+                                Point point = new Point();
+                                String point_string = "-" + bullets[i].damage.ToString() + "HP";
+                                point.LoadContent(PoseidonGame.contentManager, point_string, barriers[j].Position, Color.DarkRed);
+                                if (gameMode == GameMode.ShipWreck)
+                                    ShipWreckScene.points.Add(point);
+                                else if (gameMode == GameMode.MainGame)
+                                    PlayGameScene.points.Add(point);
+                                else if (gameMode == GameMode.SurvivalMode)
+                                    SurvivalGameScene.points.Add(point);
+                            }
+                        }
+
+                        //remove the bullet that hits something
                         if (bullets[i] is FlyingHammer)
                         {
-                            if (((FlyingHammer)bullets[i]).explodeNow) bullets.RemoveAt(i--); 
+                            //if (((FlyingHammer)bullets[i]).explodeNow) bullets.RemoveAt(i--); 
+                        }
+                        //special handling for the skill combo Piercing arrow
+                        //pierce through enemies
+                        else if (bullets[i] is HerculesBullet)
+                        {
+                            if (!((HerculesBullet)bullets[i]).piercingArrow)
+                                bullets.RemoveAt(i--);
                         }
                         else bullets.RemoveAt(i--);
                         break;
@@ -397,7 +454,7 @@ namespace Poseidon
         }
 
 
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount, ParticleSystem explosionParticles)
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount, ParticleSystem explosionParticles, Camera gameCamera, Fish[] fishes, int fishAmount)
         {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
@@ -420,16 +477,14 @@ namespace Poseidon
                     //whoever hits the bot will be hipnotized
                     if (HydroBot.autoHipnotizeMode)
                     {
-                        //for (int k = 0; k < enemiesAmount; k++)
-                        //{
-                        //    if (enemyBullets[i].shooter == enemies[k])
-                        //    {
-                        //        CastSkill.useHypnotise(enemies[k]);
-                        //        break;
-                        //    }
-                        //}
                         if (enemyBullets[i].shooter != null && !enemyBullets[i].shooter.isHypnotise)
                             CastSkill.useHypnotise(enemyBullets[i].shooter);
+                    }
+                    if (HydroBot.autoExplodeMode)
+                    {
+                        PoseidonGame.audio.Explo1.Play();
+                        gameCamera.Shake(25f, .4f);
+                        CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
                     }
 
                     // add particle effect when certain kind of bullet hits

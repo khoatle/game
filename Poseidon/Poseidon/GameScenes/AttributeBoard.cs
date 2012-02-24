@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Media;
 using Poseidon.Core;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
 #endregion
 
@@ -40,6 +41,7 @@ namespace Poseidon
         public Rectangle doneIconRectangle;
         private int centerX;
         private int centerY;
+        MouseState mouseState;
 
         Random random = new Random();
         /// <summary>
@@ -117,6 +119,16 @@ namespace Poseidon
             {
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
             }
+
+            mouseState = Mouse.GetState();
+
+            if (speedIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)) ||
+                hitpointIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)) ||
+                shootrateIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)) ||
+                bulletStrengthIconRectangle.Intersects(new Rectangle(mouseState.X, mouseState.Y, 1, 1)))
+                cursor.SetHammerAndWrenchImage();
+            else cursor.SetNormalMouseImage();
+
             cursor.Update(PlayGameScene.GraphicDevice, PlayGameScene.gameCamera, gameTime, null);
             base.Update(gameTime);
         }

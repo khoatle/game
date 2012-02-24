@@ -88,6 +88,20 @@ namespace Poseidon
                     HydroBot.firstUse[4] = false;
                     skillUsed = true;
                 }
+                else if ((HydroBot.skillComboActivated && HydroBot.secondSkillID == 1) &&
+                    //cooldowns check
+                ((HydroBot.firstUse[2] == true && HydroBot.firstUse[1] == true) ||
+                 (PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[2] > GameConstants.coolDownForArchillesArmor &&
+                  PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[1] > GameConstants.coolDownForThorHammer)))
+                {
+                    HydroBot.invincibleMode = true;
+                    HydroBot.autoExplodeMode = true;
+                    HydroBot.skillPrevUsed[2] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.firstUse[2] = false;
+                    HydroBot.firstUse[1] = false;
+                    skillUsed = true;
+                }
                 else if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[2] > GameConstants.coolDownForArchillesArmor) || HydroBot.firstUse[2] == true)
                 {
                     HydroBot.firstUse[2] = false;

@@ -236,6 +236,18 @@ namespace Poseidon
                         {
                             setHypnotise();
                         }
+                        if (HydroBot.autoExplodeMode)
+                        {
+                            PoseidonGame.audio.Explo1.Play();
+                            if (gameMode == GameMode.MainGame)
+                                PlayGameScene.gameCamera.Shake(25f, .4f);
+                            else if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.gameCamera.Shake(25f, .4f);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.gameCamera.Shake(25f, .4f);
+
+                            CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
+                        }
                     }
                     //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
                     //{

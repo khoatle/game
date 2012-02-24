@@ -454,7 +454,7 @@ namespace Poseidon
         }
 
 
-        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount, ParticleSystem explosionParticles)
+        public static void updateProjectileHitBot(HydroBot hydroBot, List<DamageBullet> enemyBullets, GameMode gameMode, BaseEnemy[] enemies, int enemiesAmount, ParticleSystem explosionParticles, Camera gameCamera, Fish[] fishes, int fishAmount)
         {
             for (int i = 0; i < enemyBullets.Count; ) {
                 if (enemyBullets[i].BoundingSphere.Intersects(hydroBot.BoundingSphere)) {
@@ -477,16 +477,14 @@ namespace Poseidon
                     //whoever hits the bot will be hipnotized
                     if (HydroBot.autoHipnotizeMode)
                     {
-                        //for (int k = 0; k < enemiesAmount; k++)
-                        //{
-                        //    if (enemyBullets[i].shooter == enemies[k])
-                        //    {
-                        //        CastSkill.useHypnotise(enemies[k]);
-                        //        break;
-                        //    }
-                        //}
                         if (enemyBullets[i].shooter != null && !enemyBullets[i].shooter.isHypnotise)
                             CastSkill.useHypnotise(enemyBullets[i].shooter);
+                    }
+                    if (HydroBot.autoExplodeMode)
+                    {
+                        PoseidonGame.audio.Explo1.Play();
+                        gameCamera.Shake(25f, .4f);
+                        CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
                     }
 
                     // add particle effect when certain kind of bullet hits

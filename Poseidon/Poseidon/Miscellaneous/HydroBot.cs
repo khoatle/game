@@ -72,6 +72,8 @@ namespace Poseidon
         public static bool supersonicMode;
         //auto-hipnotize mode when using skill combo: armor - belt
         public static bool autoHipnotizeMode;
+        //auto-explode mode when using skill combo: armor - hammer
+        public static bool autoExplodeMode;
         //if it is the 1st time the user use it
         //let him use it
         public static bool[] firstUse;
@@ -239,6 +241,7 @@ namespace Poseidon
             invincibleMode = false;
             supersonicMode = false;
             autoHipnotizeMode = false;
+            autoExplodeMode = false;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -334,6 +337,7 @@ namespace Poseidon
             invincibleMode = false;
             supersonicMode = false;
             autoHipnotizeMode = false;
+            autoExplodeMode = false;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -478,6 +482,7 @@ namespace Poseidon
             invincibleMode = false;
             supersonicMode = false;
             autoHipnotizeMode = false;
+            autoExplodeMode = false;
 
             //just for testing
             //should be removed
@@ -655,6 +660,7 @@ namespace Poseidon
             invincibleMode = false;
             supersonicMode = false;
             autoHipnotizeMode = false;
+            autoExplodeMode = false;
             // No buff up at the beginning
             speedUp = 1.0f;
             strengthUp = 1.0f;
@@ -1167,7 +1173,7 @@ namespace Poseidon
             //worn out effect of certain skills
             //worn out effect for invicible mode
             //and related skill combos
-            if (invincibleMode == true && autoHipnotizeMode == false)
+            if (invincibleMode == true && autoHipnotizeMode == false && autoExplodeMode == false)
             {
                 float buffFactor = shootingRate * fireRateUp / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
@@ -1185,6 +1191,16 @@ namespace Poseidon
                 if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower * HydroBot.beltPower)
                 {
                     autoHipnotizeMode = false;
+                    invincibleMode = false;
+                }
+            }
+            if (autoExplodeMode == true)
+            {
+                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower * HydroBot.hammerPower)
+                {
+                    autoExplodeMode = false;
                     invincibleMode = false;
                 }
             }

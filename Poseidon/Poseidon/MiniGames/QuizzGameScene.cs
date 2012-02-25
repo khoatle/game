@@ -188,6 +188,7 @@ namespace Poseidon.MiniGames
                     )
                 {
                     questionAnswered++;
+                    quizzesLibrary.quizzesList.RemoveAt(questionID); //remove the old question from the list
                     if (questionAnswered < 4)
                     {          
                         questionID = random.Next(quizzesLibrary.quizzesList.Count);

@@ -43,6 +43,18 @@ namespace Poseidon
                     HydroBot.firstUse[1] = false;
                     skillUsed = true;
                 }
+                else if ((HydroBot.skillComboActivated && HydroBot.secondSkillID == 3) && 
+                    ((HydroBot.firstUse[3] == true && HydroBot.firstUse[0] == true) ||
+                    (PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow &&
+                    PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandal)))
+                {
+                    ShootPiercingArrow(hydroBot, Content, spriteBatch, myBullet, gameMode);
+                    HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.skillPrevUsed[3] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.firstUse[0] = false;
+                    HydroBot.firstUse[3] = false;
+                    skillUsed = true;
+                }
                 //or else use single skill
                 //if the skill has cooled down
                 //or this is the 1st time the user uses it
@@ -54,8 +66,6 @@ namespace Poseidon
                     CastSkill.UseHerculesBow(hydroBot, Content, spriteBatch, myBullet, gameMode);
                     skillUsed = true;
                 }
-
-                
 
             }
             //Thor's Hammer!!!
@@ -106,35 +116,36 @@ namespace Poseidon
                 {
                     HydroBot.firstUse[2] = false;
                     HydroBot.invincibleMode = true;
-                    PoseidonGame.audio.armorSound.Play();
                     HydroBot.skillPrevUsed[2] = PoseidonGame.playTime.TotalSeconds;
                     skillUsed = true;
                 }
+                if (skillUsed) PoseidonGame.audio.armorSound.Play(); 
             }
 
             //Hermes' Winged Sandal!!!
             if (HydroBot.activeSkillID == 3)
             {
-                if ((HydroBot.skillComboActivated && HydroBot.secondSkillID == 0) && 
-                    ((HydroBot.firstUse[3] == true && HydroBot.firstUse[0] == true) ||
-                    (PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[0] > GameConstants.coolDownForHerculesBow &&
+                 if ((HydroBot.skillComboActivated && HydroBot.secondSkillID == 4) && 
+                    ((HydroBot.firstUse[3] == true && HydroBot.firstUse[4] == true) ||
+                    (PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[4] > GameConstants.coolDownForHypnotise &&
                     PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandal)))
                 {
-                    ShootPiercingArrow(hydroBot, Content, spriteBatch, myBullet, gameMode);
-                    HydroBot.skillPrevUsed[0] = PoseidonGame.playTime.TotalSeconds;
+                    HydroBot.sonicHipnotiseMode = true;
+                    HydroBot.supersonicMode = true;
+                    HydroBot.skillPrevUsed[4] = PoseidonGame.playTime.TotalSeconds;
                     HydroBot.skillPrevUsed[3] = PoseidonGame.playTime.TotalSeconds;
-                    HydroBot.firstUse[0] = false;
+                    HydroBot.firstUse[4] = false;
                     HydroBot.firstUse[3] = false;
                     skillUsed = true;
                 }
                 else if ((PoseidonGame.playTime.TotalSeconds - HydroBot.skillPrevUsed[3] > GameConstants.coolDownForHermesSandal) || HydroBot.firstUse[3] == true)
                 {
                     HydroBot.firstUse[3] = false;
-                    PoseidonGame.audio.hermesSound.Play();
                     HydroBot.skillPrevUsed[3] = PoseidonGame.playTime.TotalSeconds;
                     HydroBot.supersonicMode = true;
                     skillUsed = true;
                 }
+                 if (skillUsed) PoseidonGame.audio.hermesSound.Play();
             }
 
             // Hypnotise skill
@@ -313,6 +324,10 @@ namespace Poseidon
                     {
                         enemies[i].stunned = true;
                         enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
+                        if (HydroBot.sonicHipnotiseMode)
+                        {
+                            enemies[i].setHypnotise();
+                        }
                     }
                     enemies[i].Position += (pushVector * GameConstants.ThorPushFactor);
                     enemies[i].Position.X = MathHelper.Clamp(enemies[i].Position.X, -MaxRangeX, MaxRangeX);

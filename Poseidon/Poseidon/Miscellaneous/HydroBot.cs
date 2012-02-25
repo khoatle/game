@@ -74,6 +74,8 @@ namespace Poseidon
         public static bool autoHipnotizeMode;
         //auto-explode mode when using skill combo: armor - hammer
         public static bool autoExplodeMode;
+        //hit-hipnotise mode when using skill combo: sandal - belt
+        public static bool sonicHipnotiseMode;
         //if it is the 1st time the user use it
         //let him use it
         public static bool[] firstUse;
@@ -242,6 +244,7 @@ namespace Poseidon
             supersonicMode = false;
             autoHipnotizeMode = false;
             autoExplodeMode = false;
+            sonicHipnotiseMode = false;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -338,6 +341,7 @@ namespace Poseidon
             supersonicMode = false;
             autoHipnotizeMode = false;
             autoExplodeMode = false;
+            sonicHipnotiseMode = false;
 
             isPoissoned = false;
             poissonInterval = 0;
@@ -483,6 +487,7 @@ namespace Poseidon
             supersonicMode = false;
             autoHipnotizeMode = false;
             autoExplodeMode = false;
+            sonicHipnotiseMode = false;
 
             //just for testing
             //should be removed
@@ -661,6 +666,7 @@ namespace Poseidon
             supersonicMode = false;
             autoHipnotizeMode = false;
             autoExplodeMode = false;
+            sonicHipnotiseMode = false;
             // No buff up at the beginning
             speedUp = 1.0f;
             strengthUp = 1.0f;
@@ -1205,13 +1211,25 @@ namespace Poseidon
                 }
             }
             //worn out effect of supersonic
-            if (supersonicMode == true)
+            if (supersonicMode == true && !sonicHipnotiseMode)
             {
                 if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp * HydroBot.sandalPower/ GameConstants.BasicStartSpeed)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
                     {
+                        supersonicMode = false;
+                    }
+                }
+            }
+            if (sonicHipnotiseMode == true)
+            {
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3] * 1000 >= GameConstants.timeSuperSonicLast * speed * speedUp * HydroBot.sandalPower * HydroBot.beltPower/ GameConstants.BasicStartSpeed)
+                {
+                    // To prevent bot landing on an enemy after using the sandal
+                    if (!Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
+                    {
+                        sonicHipnotiseMode = false;
                         supersonicMode = false;
                     }
                 }
@@ -1549,7 +1567,37 @@ namespace Poseidon
 
                 }
                 mesh.Draw();
-                if (invincibleMode == true)
+                if (autoHipnotizeMode)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                        //effect.Parameters["gInflate"].SetValue(0.07f);
+                        effect.Parameters["gGlowColor"].SetValue(Color.Violet.ToVector3());
+                        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                    }
+                }
+                else if (autoExplodeMode)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                        //effect.Parameters["gInflate"].SetValue(0.07f);
+                        effect.Parameters["gGlowColor"].SetValue(Color.Red.ToVector3());
+                        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                    }
+                }
+                else if (invincibleMode == true)
                 {
                     foreach (Effect effect in mesh.Effects)
                     {

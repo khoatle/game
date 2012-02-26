@@ -32,8 +32,34 @@ namespace Poseidon
         // We only need one Random object no matter how many Cameras we have
         private static readonly Random random = new Random();
 
-        public Camera(float camHeight)
+        private GameMode gameMode;
+        private float camHeight = 0;
+        private float gameFloatHeight = 0;
+        private int MaxRangeX = 0;
+        private int MaxRangeZ = 0;
+        private float HalfScreenX = 0;
+        private float HalfScreenZ = 0;
+        private bool cameraRestrictionCanculated = false;
+
+        public Camera(GameMode gameMode)
         {
+            
+            if (gameMode == GameMode.MainGame || gameMode == GameMode.SurvivalMode)
+            {
+                camHeight = GameConstants.MainCamHeight;
+                gameFloatHeight = GameConstants.MainGameFloatHeight;
+                MaxRangeX = GameConstants.MainGameMaxRangeX;
+                MaxRangeZ = GameConstants.MainGameMaxRangeZ;
+            }
+            else if (gameMode == GameMode.ShipWreck)
+            {
+                camHeight = GameConstants.ShipCamHeight;
+                gameFloatHeight = GameConstants.ShipWreckFloatHeight;
+                MaxRangeX = GameConstants.ShipWreckMaxRangeX;
+                MaxRangeZ = GameConstants.ShipWreckMaxRangeZ;
+            }
+            this.gameMode = gameMode;
+
             AvatarHeadOffset = new Vector3(0, camHeight, 0);
             TargetOffset = new Vector3(0, 0, 0);
             ViewMatrix = Matrix.Identity;
@@ -58,8 +84,27 @@ namespace Poseidon
             shakeTimer = 0f;
         }
 
-        public void Update(float avatarYaw, Vector3 position, float aspectRatio, GameTime gameTime)
+        public void CalculateCameraRestriction(Cursor cursor)
         {
+            Vector2 oldPosition = cursor.Position;
+            cursor.SetPosition(new Vector2(PoseidonGame.graphics.PreferredBackBufferWidth, PoseidonGame.graphics.PreferredBackBufferHeight));
+            Vector3 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, this, gameFloatHeight);
+            HalfScreenX = Math.Abs(pointIntersect.X);
+            HalfScreenZ =  Math.Abs(pointIntersect.Z);
+            cameraRestrictionCanculated = true;
+            cursor.SetPosition(oldPosition);
+        }
+        public void Update(float avatarYaw, Vector3 position, float aspectRatio, GameTime gameTime, Cursor cursor)
+        {
+            if (position.X >= MaxRangeX - HalfScreenX)
+                position.X = MaxRangeX - HalfScreenX;
+            else if (position.X <= -MaxRangeX + HalfScreenX)
+                position.X = -MaxRangeX + HalfScreenX;
+            if (position.Z >= MaxRangeZ - HalfScreenZ)
+                position.Z = MaxRangeZ - HalfScreenZ;
+            else if (position.Z <= -MaxRangeZ + HalfScreenZ)
+                position.Z = -MaxRangeZ + HalfScreenZ;
+
             // If we're shaking...
             if (shaking)
             {
@@ -95,6 +140,7 @@ namespace Poseidon
                 Vector3.Transform(TargetOffset, rotationMatrix);
 
             Vector3 cameraPosition = position + transformedheadOffset;
+
             Vector3 cameraTarget = position + transformedReference;
             Vector3 camRot = Vector3.Transform(Vector3.UnitZ, rotationMatrix);
             // If we're shaking, add our offset to our position and target
@@ -111,6 +157,9 @@ namespace Poseidon
                 Matrix.CreatePerspectiveFieldOfView(
                     MathHelper.ToRadians(GameConstants.ViewAngle), aspectRatio,
                     GameConstants.NearClip, GameConstants.FarClip);
+
+            if (!cameraRestrictionCanculated) CalculateCameraRestriction(cursor);
+
         }
         /// <summary>
         /// Helper to generate a random float in the range of [-1, 1].

@@ -220,7 +220,7 @@ namespace Poseidon
             roundTime = GameConstants.RoundTime[currentLevel];
             random = new Random();
 
-            gameCamera = new Camera(GameConstants.MainCamHeight);
+            gameCamera = new Camera(GameMode.MainGame);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, GameMode.MainGame);
 
@@ -272,9 +272,9 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 0, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -545,7 +545,7 @@ namespace Poseidon
             //else prevTank.CopyAttribute(tank);
 
             gameCamera.Update(hydroBot.ForwardDirection,
-                hydroBot.Position, aspectRatio, gameTime);
+                hydroBot.Position, aspectRatio, gameTime, cursor);
 
             //Clean all powerpacks and resources
             powerpacks.Clear();
@@ -989,7 +989,7 @@ namespace Poseidon
                          point.Update(GraphicDevice, gameCamera, gameTime);
                     }
 
-                    gameCamera.Update(hydroBot.ForwardDirection, hydroBot.Position, aspectRatio, gameTime);
+                    gameCamera.Update(hydroBot.ForwardDirection, hydroBot.Position, aspectRatio, gameTime, cursor);
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
@@ -1689,7 +1689,7 @@ namespace Poseidon
                 }
             }
             //draw boundary of the game scene
-            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            //gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //Draw points gained / lost
             foreach (Point point in points)
             {
@@ -1798,8 +1798,8 @@ namespace Poseidon
             float xOffsetText, yOffsetText;
             int days;
             string str1 = GameConstants.StrTimeRemaining;
-            string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
-            //" of " + fruits.Count;
+            string str2 = "";
+            str2 += hydroBot.Position;
             Rectangle rectSafeArea;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
             str1 += days.ToString();

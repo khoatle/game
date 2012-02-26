@@ -187,7 +187,7 @@ namespace Poseidon
             roundTime = TimeSpan.FromSeconds(2592000);
             random = new Random();
             
-            gameCamera = new Camera(GameConstants.MainCamHeight);
+            gameCamera = new Camera(GameMode.SurvivalMode);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.MainGameMaxRangeX, GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, GameMode.SurvivalMode);
 
@@ -381,7 +381,7 @@ namespace Poseidon
             hydroBot.Reset();
 
             gameCamera.Update(hydroBot.ForwardDirection,
-                hydroBot.Position, aspectRatio, gameTime);
+                hydroBot.Position, aspectRatio, gameTime, cursor);
 
 
             //Clean all fruits and resources
@@ -688,7 +688,7 @@ namespace Poseidon
                         point.Update(GraphicDevice, gameCamera, gameTime);
                     }
 
-                    gameCamera.Update(hydroBot.ForwardDirection, hydroBot.Position, aspectRatio, gameTime);
+                    gameCamera.Update(hydroBot.ForwardDirection, hydroBot.Position, aspectRatio, gameTime, cursor);
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
@@ -1158,7 +1158,7 @@ namespace Poseidon
             }
 
             //draw boundary of the game scene
-            gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+            //gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
 
             //Draw points gained / lost
             foreach (Point point in points)

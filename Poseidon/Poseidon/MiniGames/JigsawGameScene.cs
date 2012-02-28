@@ -20,6 +20,7 @@ namespace Poseidon.MiniGames
         Game game;
         ContentManager content;
         GraphicsDevice graphicsDevice;
+        
 
         public const int DEFAULT_PIECES_PER_ROW = 3;
         public const int DEFAULT_PIECES_PER_COL = 3;
@@ -81,7 +82,7 @@ namespace Poseidon.MiniGames
         private Video dnaAnimation;
         private Video extractDNAVid;
         private Video reconstructDNAVid;
-        private Video[] fillGapsVids;
+        private Video fillGapsVid;
         private Video injectAndGrowVid;
         private enum VideoPlayBackState { ExtractingDNA, ReconstructingDNA, FillingGaps, InjectAndGrow };
         private VideoPlayBackState videoPlayBackState;
@@ -163,10 +164,7 @@ namespace Poseidon.MiniGames
             dnaAnimation = content.Load<Video>("Videos/dnaAnimation");
             extractDNAVid = content.Load<Video>("Videos/extractDNA");
             reconstructDNAVid = content.Load<Video>("Videos/reconstructDNA");
-            fillGapsVids = new Video[3];
-            fillGapsVids[0] = content.Load<Video>("Videos/fillGap1");
-            fillGapsVids[1] = content.Load<Video>("Videos/fillGap2");
-            fillGapsVids[2] = content.Load<Video>("Videos/fillGap3");
+            fillGapsVid = content.Load<Video>("Videos/fillGaps");
             injectAndGrowVid = content.Load<Video>("Videos/injectAndGrow");
         }
 
@@ -252,40 +250,25 @@ namespace Poseidon.MiniGames
             if (GameConstants.jigsawGameMaxTime - timeNow <= 20)
             {
                 videoPlayBackState = VideoPlayBackState.ExtractingDNA;
-                if (videoPlayer.State == MediaState.Stopped)
-                    videoPlayer.Play(extractDNAVid);
+                videoPlayer.Play(extractDNAVid);
                 stepText = "STEP 1: Extract DNA from collected fragments";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
             {
                 videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
-                if (videoPlayer.State == MediaState.Stopped)
-                    videoPlayer.Play(reconstructDNAVid);
+                videoPlayer.Play(reconstructDNAVid);
                 stepText = "STEP 2: Attempting to reconstruct DNA sequence";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
             {
-                if (videoPlayBackState == VideoPlayBackState.FillingGaps)
-                {
-                    if (videoPlayer.State == MediaState.Stopped)
-                    {
-                        vidIndex++;
-                        if (vidIndex == 3) vidIndex = 0;
-                    }
-                }
-                else
-                {
-                    videoPlayBackState = VideoPlayBackState.FillingGaps;
-                }
-                if (videoPlayer.State == MediaState.Stopped)
-                    videoPlayer.Play(fillGapsVids[vidIndex]);
+                videoPlayBackState = VideoPlayBackState.FillingGaps;
+                videoPlayer.Play(fillGapsVid);
                 stepText = "STEP 3: Filling gaps in DNA with prediction techniques";
             }
             else
             {
                 videoPlayBackState = VideoPlayBackState.InjectAndGrow;
-                if (videoPlayer.State == MediaState.Stopped)
-                    videoPlayer.Play(injectAndGrowVid);
+                videoPlayer.Play(injectAndGrowVid);
                 stepText = "STEP 4: Inject DNA into cell and grow cell";
             }
             if (timeNow <= 0)
@@ -314,6 +297,7 @@ namespace Poseidon.MiniGames
                 if (mouseState.LeftButton == ButtonState.Pressed && isSlidable(mouseRow, mouseCol))
                 {
                     isSliding = true;
+                    
                     moveBlocks(mouseRow, mouseCol);
                     if (!gamePlayed) gamePlayed = true;
                 }

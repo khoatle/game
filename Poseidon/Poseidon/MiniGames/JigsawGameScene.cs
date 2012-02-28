@@ -88,7 +88,8 @@ namespace Poseidon.MiniGames
         private VideoPlayer videoPlayer, dnaAnimationVideoPlayer;
         private int vidIndex = 0;
         private string stepText = "";
-        private string generalInfoText = "General Information";
+        private string generalInfoText = "";
+        private string animalName;
 
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
@@ -195,33 +196,38 @@ namespace Poseidon.MiniGames
             {
                 case 0:
                     image = seacowImage[random.Next(2)];
-                    generalInfoText += "Steller's Sea Cow\n";
-                    generalInfoText += "Description: fat, heavy, and possibly ugly\n";
-                    generalInfoText += "Year of Extinction: 1700 something\n";
-                    generalInfoText += "Reason of Extinction: Ate too much!";
+                    animalName = "STELLAR'S SEA COW";
+                    generalInfoText += animalName+":\n";
+                    generalInfoText += "Description: Large herbivorous mammal with black thick skin, small head no teeth.\n";
+                    generalInfoText += "Year of Extinction: Around 1750.\n";
+                    generalInfoText += "Reason of Extinction: Hunting for food and skin.";
                     break;
                 case 1:
                     image = turtleImage[random.Next(2)];
-                    generalInfoText += "Meiolania\n";
-                    generalInfoText += "Description: slow, powerful turtle\n";
-                    generalInfoText += "Year of Extinction: 2,000 years ago only, lmao, not ice age!\n";
-                    generalInfoText += "Reason of Extinction: read Wiki!";
+                    animalName = "MEIOLANIA TURTLE";
+                    generalInfoText += animalName + ":\n";
+                    generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n";
+                    generalInfoText += "Year of Extinction: 2,000 years ago\n";
+                    generalInfoText += "REASON: Excessive hunting.";
                     break;
                 case 2:
                     image = dolphinImage[random.Next(2)];
-                    generalInfoText += "Maui's Dolphin\n";
-                    generalInfoText += "Description: cute, fast etc.\n";
-                    generalInfoText += "Year of Extinction: 2050 something\n";
-                    generalInfoText += "Reason of Extinction: Polluted environment";
+                    animalName = "MAUI'S DOLPHIN";
+                    generalInfoText += animalName + ":\n";
+                    generalInfoText += "DESCRIPTION: Smallest known species of dolphin. Lived near coasts.\n";
+                    generalInfoText += "EXTINCT SINCE: Around 2050\n";
+                    generalInfoText += "REASON: Pollution, injury from nets, boats.";
                     break;
                 default:
                     image = seacowImage[random.Next(2)];
-                    generalInfoText += "Steller's Sea Cow\n";
-                    generalInfoText += "Description: fat, heavy, and possibly ugly\n";
-                    generalInfoText += "Year of Extinction: 1700 something\n";
-                    generalInfoText += "Reason of Extinction: Ate too much!";
+                    animalName = "Steller's Sea Cow";
+                    generalInfoText += animalName + "\n";
+                    generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n";
+                    generalInfoText += "EXTINCT SINCE: 1700 something\n";
+                    generalInfoText += "REASON: Ate too much!";
                     break;
             }
+            generalInfoText = Poseidon.Core.IngamePresentation.wrapLine(generalInfoText, Game.Window.ClientBounds.Width / 2 - 50, font);
         }
 
         /// <summary>
@@ -254,14 +260,14 @@ namespace Poseidon.MiniGames
                 videoPlayBackState = VideoPlayBackState.ExtractingDNA;
                 if (videoPlayer.State == MediaState.Stopped)
                     videoPlayer.Play(extractDNAVid);
-                stepText = "STEP 1: Extract DNA from collected fragments";
+                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
             {
                 videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
                 if (videoPlayer.State == MediaState.Stopped)
                     videoPlayer.Play(reconstructDNAVid);
-                stepText = "STEP 2: Attempting to reconstruct DNA sequence";
+                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
             {
@@ -279,20 +285,21 @@ namespace Poseidon.MiniGames
                 }
                 if (videoPlayer.State == MediaState.Stopped)
                     videoPlayer.Play(fillGapsVids[vidIndex]);
-                stepText = "STEP 3: Filling gaps in DNA with prediction techniques";
+                stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
             }
             else
             {
                 videoPlayBackState = VideoPlayBackState.InjectAndGrow;
                 if (videoPlayer.State == MediaState.Stopped)
                     videoPlayer.Play(injectAndGrowVid);
-                stepText = "STEP 4: Inject DNA into cell and grow cell";
+                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
             }
+            stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, Game.Window.ClientBounds.Width / 2, font);
             if (timeNow <= 0)
             {
                 timeUp = true;
             }
-            timerString = "TIME REMAINING: "+ ((int)timeNow).ToString() + " Seconds";
+            timerString = "RESURRECTING "+animalName+"\nTIME REMAINING: "+ ((int)timeNow).ToString() + " Seconds";
             
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera , gameTime, null);
    
@@ -352,7 +359,7 @@ namespace Poseidon.MiniGames
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(timerFont, timerString, new Vector2(), Color.DarkRed);
+            spriteBatch.DrawString(timerFont, timerString, new Vector2(25,5), Color.White);
             spriteBatch.DrawString(font, stepText, new Vector2(50, 200), Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
@@ -369,7 +376,7 @@ namespace Poseidon.MiniGames
 
             //draw general info about the animal
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, generalInfoText, new Vector2(50, 700), Color.White);
+            spriteBatch.DrawString(font, generalInfoText, new Vector2(50, Game.Window.ClientBounds.Bottom -  font.MeasureString(generalInfoText).Y), Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
 

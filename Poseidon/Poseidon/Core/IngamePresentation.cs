@@ -377,30 +377,37 @@ namespace Poseidon.Core
                     TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
                     if (chestPointedAt != null)
                     {
-                        string line;
-                        line = "TREASURE CHEST\ncontains cool stuff";
-                        line = wrapLine(line, HealthBar.Width + 50, statsFont);
-                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Red);
+                        string line, comment;
+                        line = "TREASURE CHEST";
+                        comment = "contains cool stuff";
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                        comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
+                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
                     }
                     Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
                     if (trashPointedAt != null)
                     {
-                        string line;
+                        string line,comment;
                         line = "";
+                        comment = "";
                         if (trashPointedAt.trashType == TrashType.biodegradable)
                         {
-                            line += "BIODEGRADABLE TRASH\nOrganic, will emit greenhouse gases unless processed in a factory.";
+                            line += "BIODEGRADABLE TRASH";
+                            comment = "Organic, will emit greenhouse gases unless processed in a factory.";
                         }
                         else if (trashPointedAt.trashType == TrashType.plastic)
                         {
-                            line += "PLASTIC TRASH\nIt will take more than 500 years to decompose.";
+                            line += "PLASTIC TRASH";
+                            comment = "It will take more than 500 years to decompose.";
                         }
                         else
                         {
-                            line += "RADIOACTIVE TRASH\nAn invisible speck can cause cancer.";
+                            line += "RADIOACTIVE TRASH";
+                            comment = "An invisible speck can cause cancer.";
                         }
-                        line = wrapLine(line, HealthBar.Width + 50, statsFont);
-                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Red);
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                        comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
+                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
                     }
                     else
                     {
@@ -409,8 +416,7 @@ namespace Poseidon.Core
                         {
                             string line;
                             line = "OLD SHIPWRECK";
-                            line = wrapLine(line, HealthBar.Width + 50, statsFont);
-                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Red);
+                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
                         }
                         else
                         {
@@ -429,16 +435,14 @@ namespace Poseidon.Core
                                 }
                                 else
                                     line += "RADIOACTIVE TRASH PROCESSING FACTORY";
-                                line = wrapLine(line, HealthBar.Width + 50, statsFont);
-                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Red);
+                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
                             }
                             else
                             {
                                 if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
                                 {
                                     string line = "RESEARCH FACILITY";
-                                    line = wrapLine(line, HealthBar.Width + 50, statsFont);
-                                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 4), Color.Red);
+                                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
                                 }
                             }
                         }

@@ -147,7 +147,7 @@ namespace Poseidon
             this.stunnedIconTexture = stunnedTexture;
             random = new Random();
             ground = new GameObject();
-            gameCamera = new Camera(GameConstants.ShipCamHeight);
+            gameCamera = new Camera(GameMode.ShipWreck);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight, GameMode.ShipWreck);
             //fireTime = TimeSpan.FromSeconds(0.3f);
@@ -566,7 +566,7 @@ namespace Poseidon
                 }
 
                 gameCamera.Update(hydroBot.ForwardDirection,
-                    hydroBot.Position, aspectRatio, gameTime);
+                    hydroBot.Position, aspectRatio, gameTime, cursor);
                 // Updating camera's frustum
                 frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 

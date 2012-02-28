@@ -46,6 +46,10 @@ namespace Poseidon
         {
             get { return position; }
         }
+        public void SetPosition(Vector2 position)
+        {
+            this.position = position;
+        }
 
         public SwimmingObject targetToLock = null;
 

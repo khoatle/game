@@ -28,7 +28,7 @@ namespace Poseidon
     /// </summary>
     public class PoseidonGame : Microsoft.Xna.Framework.Game
     {
-        GraphicsDeviceManager graphics;
+        public static GraphicsDeviceManager graphics;
 
         public static TimeSpan playTime = TimeSpan.Zero;
 

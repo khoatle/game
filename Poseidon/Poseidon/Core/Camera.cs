@@ -96,14 +96,17 @@ namespace Poseidon
         }
         public void Update(float avatarYaw, Vector3 position, float aspectRatio, GameTime gameTime, Cursor cursor)
         {
-            if (position.X >= MaxRangeX - HalfScreenX)
-                position.X = MaxRangeX - HalfScreenX;
-            else if (position.X <= -MaxRangeX + HalfScreenX)
-                position.X = -MaxRangeX + HalfScreenX;
-            if (position.Z >= MaxRangeZ - HalfScreenZ)
-                position.Z = MaxRangeZ - HalfScreenZ;
-            else if (position.Z <= -MaxRangeZ + HalfScreenZ)
-                position.Z = -MaxRangeZ + HalfScreenZ;
+            if (gameMode != GameMode.ShipWreck)
+            {
+                if (position.X >= MaxRangeX - HalfScreenX)
+                    position.X = MaxRangeX - HalfScreenX;
+                else if (position.X <= -MaxRangeX + HalfScreenX)
+                    position.X = -MaxRangeX + HalfScreenX;
+                if (position.Z >= MaxRangeZ - HalfScreenZ)
+                    position.Z = MaxRangeZ - HalfScreenZ;
+                else if (position.Z <= -MaxRangeZ + HalfScreenZ)
+                    position.Z = -MaxRangeZ + HalfScreenZ;
+            }
 
             // If we're shaking...
             if (shaking)

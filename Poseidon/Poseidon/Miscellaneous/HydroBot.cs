@@ -500,14 +500,14 @@ namespace Poseidon
             skills[3] = true;
             skills[4] = true;
 
-            goodWillBarActivated = true;
-            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            {
-                iconActivated[index] = true;
-            }
+            //goodWillBarActivated = true;
+            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            //{
+            //    iconActivated[index] = true;
+            //}
 
-            //hasTurtle = true;
-            //turtlePower = 1.0f;
+            hasTurtle = true;
+            turtlePower = 1.0f;
             //hasDolphin = true;
             //dolphinPower = 1.0f;
 

@@ -49,7 +49,7 @@ namespace Poseidon.MiniGames
 
         // The whole picture
         private Texture2D image;
-        private Texture2D frameImg;
+        private Texture2D frameImg, smallFrameImg;
         private Texture2D[] seacowImage, turtleImage, dolphinImage;
         // The empty cell pucture
         private Texture2D blackImage;
@@ -124,12 +124,12 @@ namespace Poseidon.MiniGames
             initializeEmptyCell(0, 0);
 
             // Tweak this
-            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2 + 50, 50);
-            frameTopLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 0);
+            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2 + 50, 100);
+            frameTopLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 20);
 
             // Tweak this
-            desiredWidthOfImage = game.Window.ClientBounds.Width / 2 - 100;
-            desiredHeightOfImage = game.Window.ClientBounds.Height - 100;
+            desiredWidthOfImage = game.Window.ClientBounds.Width / 2 - 115;
+            desiredHeightOfImage = game.Window.ClientBounds.Height - 210;
 
             isSliding = false;
             distanceTraveled = 0;
@@ -159,7 +159,8 @@ namespace Poseidon.MiniGames
             dolphinImage[1] = content.Load<Texture2D>("Image/MinigameTextures/mauiDolphin2");
             
             blackImage = content.Load<Texture2D>("Image/MinigameTextures/BlackBox");
-            frameImg = content.Load<Texture2D>("Image/MinigameTextures/frame");
+            frameImg = content.Load<Texture2D>("Image/MinigameTextures/Frame1");
+            smallFrameImg = content.Load<Texture2D>("Image/MinigameTextures/Frame2");
 
             // Load/Initialize pieces here
             loadPieces();
@@ -261,25 +262,25 @@ namespace Poseidon.MiniGames
             {
                 videoPlayBackState = VideoPlayBackState.ExtractingDNA;
                 videoPlayer.Play(extractDNAVid);
-                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
+                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED\nFRAGMENTS";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
             {
                 videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
                 videoPlayer.Play(reconstructDNAVid);
-                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
+                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT\nDNA SEQUENCE";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
             {
                 videoPlayBackState = VideoPlayBackState.FillingGaps;
                 videoPlayer.Play(fillGapsVid);
-                stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
+                stepText = "STEP 3: FILLING GAPS IN DNA WITH\nPREDICTON TECHNIQUES";
             }
             else
             {
                 videoPlayBackState = VideoPlayBackState.InjectAndGrow;
                 videoPlayer.Play(injectAndGrowVid);
-                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
+                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW\nCELL";
             }
             stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, Game.Window.ClientBounds.Width / 2, font);
             if (timeNow <= 0)
@@ -347,29 +348,39 @@ namespace Poseidon.MiniGames
             // Draw frame
             spriteBatch.Begin();
             spriteBatch.Draw(frameImg, new Rectangle((int)frameTopLeftPosition.X, (int)frameTopLeftPosition.Y, 
-                game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height), Color.White);
+                game.Window.ClientBounds.Width / 2 - 20, game.Window.ClientBounds.Height - 2 * (int)frameTopLeftPosition.Y), Color.White);
             spriteBatch.End();
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
 
             spriteBatch.Begin();
             spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White);
-            spriteBatch.DrawString(font, stepText, new Vector2(50, 200), Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
 
+            //draw the small frame containing animated DNA
+            //and the step
+            spriteBatch.Begin();
+            spriteBatch.Draw(smallFrameImg, new Rectangle(20, 100, 512, 512), Color.White);
+            spriteBatch.DrawString(font, stepText, new Vector2(70, 200), new Color(new Vector3(0, 1 ,0)));
+            spriteBatch.End();
+
             //draw the videos
-            //Texture2D playingTexture;
             if (videoPlayer.State == MediaState.Playing)
             {
                 playingTexture = videoPlayer.GetTexture();
                 spriteBatch.Begin();
-                spriteBatch.Draw(playingTexture, new Vector2(50, 300), Color.White);
+                spriteBatch.Draw(playingTexture, new Vector2(110, 300), Color.White);
                 spriteBatch.End();
             }
 
+            //draw the small frame containing general info
+            spriteBatch.Begin();
+            spriteBatch.Draw(smallFrameImg, new Rectangle(20, Game.Window.ClientBounds.Bottom - (int)font.MeasureString(generalInfoText).Y - 100, game.Window.ClientBounds.Width / 2 - 100, game.Window.ClientBounds.Height / 6), Color.White);
+            spriteBatch.End();
+
             //draw general info about the animal
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, generalInfoText, new Vector2(50, Game.Window.ClientBounds.Bottom -  font.MeasureString(generalInfoText).Y), Color.White);
+            spriteBatch.DrawString(font, generalInfoText, new Vector2(70, Game.Window.ClientBounds.Bottom -  font.MeasureString(generalInfoText).Y - 70), Color.Yellow);
             cursor.Draw(gameTime);
             spriteBatch.End();
 

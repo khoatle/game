@@ -274,7 +274,7 @@ namespace Poseidon
             else {
                 int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -993,7 +993,7 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel])
+                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel]/2)
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.TrashMinRangeZ,

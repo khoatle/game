@@ -201,7 +201,7 @@ namespace Poseidon.MiniGames
                     image = seacowImage[random.Next(2)];
                     animalName = "STELLAR'S SEA COW";
                     generalInfoText += animalName+":\n";
-                    generalInfoText += "Description: Large herbivorous mammal with black thick skin, small head no teeth.\n";
+                    generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n";
                     generalInfoText += "Year of Extinction: Around 1750.\n";
                     generalInfoText += "Reason of Extinction: Hunting for food and skin.";
                     break;
@@ -375,7 +375,7 @@ namespace Poseidon.MiniGames
 
             //draw the small frame containing general info
             spriteBatch.Begin();
-            spriteBatch.Draw(smallFrameImg, new Rectangle(20, Game.Window.ClientBounds.Bottom - (int)font.MeasureString(generalInfoText).Y - 100, game.Window.ClientBounds.Width / 2 - 100, game.Window.ClientBounds.Height / 6), Color.White);
+            spriteBatch.Draw(smallFrameImg, new Rectangle(20, Game.Window.ClientBounds.Bottom - (int)font.MeasureString(generalInfoText).Y - 100, game.Window.ClientBounds.Width / 2 - 100, (int)font.MeasureString(generalInfoText).Y + 100), Color.White);
             spriteBatch.End();
 
             //draw general info about the animal

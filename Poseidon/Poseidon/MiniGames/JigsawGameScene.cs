@@ -20,7 +20,6 @@ namespace Poseidon.MiniGames
         Game game;
         ContentManager content;
         GraphicsDevice graphicsDevice;
-        
 
         public const int DEFAULT_PIECES_PER_ROW = 3;
         public const int DEFAULT_PIECES_PER_COL = 3;
@@ -31,7 +30,7 @@ namespace Poseidon.MiniGames
 
         // the top left position of the (0,0) piece
         public Vector2 topLeftPosition;
-
+        public Vector2 frameTopLeftPosition;
 
         // User defined width and height of the whole image
         public int desiredWidthOfImage;
@@ -50,6 +49,7 @@ namespace Poseidon.MiniGames
 
         // The whole picture
         private Texture2D image;
+        private Texture2D frameImg;
         private Texture2D[] seacowImage, turtleImage, dolphinImage;
         // The empty cell pucture
         private Texture2D blackImage;
@@ -123,10 +123,13 @@ namespace Poseidon.MiniGames
             initializeSizeOfPuzzle(DEFAULT_PIECES_PER_ROW, DEFAULT_PIECES_PER_COL);
             initializeEmptyCell(0, 0);
 
-            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 0);
+            // Tweak this
+            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2 + 50, 50);
+            frameTopLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 0);
 
-            desiredWidthOfImage = game.Window.ClientBounds.Width / 2;
-            desiredHeightOfImage = game.Window.ClientBounds.Height;
+            // Tweak this
+            desiredWidthOfImage = game.Window.ClientBounds.Width / 2 - 100;
+            desiredHeightOfImage = game.Window.ClientBounds.Height - 100;
 
             isSliding = false;
             distanceTraveled = 0;
@@ -156,6 +159,7 @@ namespace Poseidon.MiniGames
             dolphinImage[1] = content.Load<Texture2D>("Image/MinigameTextures/mauiDolphin2");
             
             blackImage = content.Load<Texture2D>("Image/MinigameTextures/BlackBox");
+            frameImg = content.Load<Texture2D>("Image/MinigameTextures/frame");
 
             // Load/Initialize pieces here
             loadPieces();
@@ -340,6 +344,11 @@ namespace Poseidon.MiniGames
             //spriteBatch.Draw(blackImage, new Rectangle((int)topLeftPosition.X, (int)topLeftPosition.Y, desiredWidthOfImage, desiredHeightOfImage), Color.Black);
             //spriteBatch.End();
 
+            // Draw frame
+            spriteBatch.Begin();
+            spriteBatch.Draw(frameImg, new Rectangle((int)frameTopLeftPosition.X, (int)frameTopLeftPosition.Y, 
+                game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height), Color.White);
+            spriteBatch.End();
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
 
             spriteBatch.Begin();

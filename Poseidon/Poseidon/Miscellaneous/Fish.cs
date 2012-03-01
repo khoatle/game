@@ -151,21 +151,24 @@ namespace Poseidon {
                     stucked = true;
                     futurePosition = prevFuturePosition;
                 }
-
-                if (ForwardDirection - lastForwardDir > 0)
+                //normal shark model got deformed when turning
+                if (!(Name == "shark"))
                 {
-                    if (!clipPlayer.inRange(29, 31))
-                        clipPlayer.switchRange(29, 31);
-                }
-                else if (ForwardDirection - lastForwardDir < 0)
-                {
-                    if (!clipPlayer.inRange(40, 42))
-                        clipPlayer.switchRange(40, 42);
-                }
-                else
-                {
-                    if (!clipPlayer.inRange(1, 24))
-                        clipPlayer.switchRange(1, 24);
+                    if (ForwardDirection - lastForwardDir > 0)
+                    {
+                        if (!clipPlayer.inRange(29, 31))
+                            clipPlayer.switchRange(29, 31);
+                    }
+                    else if (ForwardDirection - lastForwardDir < 0)
+                    {
+                        if (!clipPlayer.inRange(40, 42))
+                            clipPlayer.switchRange(40, 42);
+                    }
+                    else
+                    {
+                        if (!clipPlayer.inRange(1, 24))
+                            clipPlayer.switchRange(1, 24);
+                    }
                 }
             //}
 

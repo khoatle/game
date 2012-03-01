@@ -31,7 +31,7 @@ namespace Poseidon
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
-            textAlpha = (byte)Math.Max(textAlpha - 1, 0); // Adjust to make text fade away faster
+            textAlpha = (byte)Math.Max(textAlpha - 2, 0); // Adjust to make text fade away faster
             Vector3 screenPos = graphicDevice.Viewport.Project(point3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
             point2DPos.X = screenPos.X;
             point2DPos.Y = screenPos.Y;
@@ -42,9 +42,10 @@ namespace Poseidon
         public void Draw(SpriteBatch spriteBatch)
         {
             Color textcolor = color;
+            float fadeFactor = ((float)textAlpha) / 255;
             textcolor = new Color(textcolor.R, textcolor.G, textcolor.B, textAlpha);
             spriteBatch.Begin();
-            spriteBatch.DrawString(pointsFont, this.text, point2DPos, textcolor);
+            spriteBatch.DrawString(pointsFont, this.text, point2DPos, color * fadeFactor);
             spriteBatch.End();
         }
     }

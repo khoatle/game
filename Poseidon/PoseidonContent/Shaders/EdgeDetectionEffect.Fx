@@ -141,7 +141,7 @@ float4 PixelShaderFunction(float2 texCoord : TEXCOORD0, uniform bool applyEdgeDe
         float edgeAmount = saturate(normalDelta + depthDelta) * EdgeIntensity;
         
         // Apply the edge detection result to the main scene color.
-		if (1 - edgeAmount == 0) scene = EdgeColor;
+		if (edgeAmount >= 0.1) scene = EdgeColor;
         else scene *= (1 - edgeAmount);
 
 		

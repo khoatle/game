@@ -131,7 +131,7 @@ namespace Poseidon
         public static ParticleManagement particleManager;
 
         //for edge detection effect
-        RenderTarget2D normalDepthRenderTarget, edgeDetectionRenderTarget;
+        RenderTarget2D normalDepthRenderTargetLow, normalDepthRenderTargetHigh, edgeDetectionRenderTarget;
 
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
@@ -253,9 +253,12 @@ namespace Poseidon
                 false, graphics.GraphicsDevice.DisplayMode.Format, DepthFormat.Depth24Stencil8);
 
             //for edge detection effect
-            normalDepthRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
+            normalDepthRenderTargetLow = new RenderTarget2D(graphics.GraphicsDevice,
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
+            normalDepthRenderTargetHigh = new RenderTarget2D(graphics.GraphicsDevice,
+                                             pp.BackBufferWidth, pp.BackBufferHeight, false,
+                                             pp.BackBufferFormat, pp.DepthStencilFormat);
             edgeDetectionRenderTarget = new RenderTarget2D(graphics.GraphicsDevice,
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
@@ -812,55 +815,31 @@ namespace Poseidon
                 return;
             }
 
-            //preparingedge detecting for the object being pointed at
-            graphicEffect.PrepareEdgeDetect(cursor, gameCamera, fishes[currentShipWreckID], fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID],
-                null, null, null, null, treasureChests[currentShipWreckID], graphics.GraphicsDevice, normalDepthRenderTarget);
+            // Updating camera's frustum
+            frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-            //normal drawing of the game scene
+            //preparingedge detecting for the object being pointed at
+            graphicEffect.PrepareEdgeDetect(hydroBot, cursor, gameCamera, fishes[currentShipWreckID], fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID],
+                null, null, null, null, treasureChests[currentShipWreckID], graphics.GraphicsDevice, normalDepthRenderTargetLow, normalDepthRenderTargetHigh);
+
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
             
             DrawTerrain(ground.Model);
-            // Updating camera's frustum
-            frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-            foreach (Powerpack f in powerpacks[currentShipWreckID])
-            {
-                if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
-                {
-                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //f.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
+            //applying edge detection for objects on low layer of the game
+            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTargetLow, graphics.GraphicsDevice, edgeDetectionRenderTarget);
+            RestoreGraphicConfig();
+            DrawObjectsOnLowLayer();
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
-            }
+            DrawLowPriorityObjectsOnHighLayer();
 
-            BoundingSphere chestSphere;
-            // Drawing ship wrecks
-            foreach (TreasureChest treasureChest in treasureChests[currentShipWreckID])
-            {
-                chestSphere = treasureChest.BoundingSphere;
-                chestSphere.Center = treasureChest.Position;
-                if (chestSphere.Intersects(frustum))
-                {
-                    treasureChest.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //treasureChest.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
+            //applying edge detection for objects on high layer of the game
+            graphicEffect.ApplyEdgeDetection(edgeDetectionRenderTarget, normalDepthRenderTargetHigh, graphics.GraphicsDevice, renderTarget);
+            RestoreGraphicConfig();
+            DrawObjectsOnHighLayer();
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
-            }
+
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
             {
@@ -878,61 +857,11 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
-            {
-                if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
-                {
-                    enemies[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                }
-            }
-            for (int i = 0; i < fishAmount[currentShipWreckID]; i++)
-            {
-                if (fishes[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
-                    fishes[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-            }
 
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
-            for (int i = 0; i < myBullet.Count; i++)
-            {
-                if (myBullet[i].BoundingSphere.Intersects(frustum))
-                {
-                    myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
+            DrawProjectTiles();
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
-            }
-
-            for (int i = 0; i < healthBullet.Count; i++)
-            {
-                if (healthBullet[i].BoundingSphere.Intersects(frustum))
-                {
-                    healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                }
-            }
-
-            for (int i = 0; i < enemyBullet.Count; i++)
-            {
-                if (enemyBullet[i].BoundingSphere.Intersects(frustum))
-                {
-                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                }
-            }
-
-            for (int i = 0; i < alliesBullets.Count; i++)
-            {
-                if (alliesBullets[i].BoundingSphere.Intersects(frustum))
-                {
-                    alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                }
-            }
             // draw bubbles
             foreach (Bubble bubble in bubbles)
             {
@@ -941,15 +870,8 @@ namespace Poseidon
 
             //draw particle effects
             particleManager.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameTime);
-            //applying edge detection
-            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTarget, graphics.GraphicsDevice, edgeDetectionRenderTarget);
 
-            //SceneTexture = edgeDetectionRenderTarget;
-            //graphics.GraphicsDevice.SetRenderTarget(null);
-            //spriteBatch.Begin();
-            //spriteBatch.Draw(SceneTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-            //spriteBatch.End();
-            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, edgeDetectionRenderTarget, graphics);
+            afterEffectsAppliedRenderTarget = graphicEffect.DrawWithEffects(gameTime, renderTarget, graphics);
             //graphicEffect.DrawWithEffects(gameTime, SceneTexture, graphics);
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsAppliedRenderTarget);
             for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
@@ -1206,6 +1128,109 @@ namespace Poseidon
             GraphicDevice.DepthStencilState = DepthStencilState.Default;
             GraphicDevice.SamplerStates[0] = SamplerState.LinearWrap;
             return;
+        }
+        public void DrawObjectsOnLowLayer()
+        {
+            BoundingSphere chestSphere;
+            // Drawing ship wrecks
+            foreach (TreasureChest treasureChest in treasureChests[currentShipWreckID])
+            {
+                chestSphere = treasureChest.BoundingSphere;
+                chestSphere.Center = treasureChest.Position;
+                if (chestSphere.Intersects(frustum))
+                {
+                    treasureChest.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //treasureChest.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+        }
+
+        public void DrawObjectsOnHighLayer()
+        {
+            for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
+            {
+                if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
+                {
+                    enemies[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                }
+            }
+            for (int i = 0; i < fishAmount[currentShipWreckID]; i++)
+            {
+                if (fishes[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
+                    fishes[currentShipWreckID][i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+            }
+
+        }
+
+        public void DrawLowPriorityObjectsOnHighLayer()
+        {
+            foreach (Powerpack f in powerpacks[currentShipWreckID])
+            {
+                if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
+                {
+                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //f.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+        }
+        public void DrawProjectTiles()
+        {
+            for (int i = 0; i < myBullet.Count; i++)
+            {
+                if (myBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    myBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //myBullet[i].DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+
+            for (int i = 0; i < healthBullet.Count; i++)
+            {
+                if (healthBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    healthBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+
+            for (int i = 0; i < enemyBullet.Count; i++)
+            {
+                if (enemyBullet[i].BoundingSphere.Intersects(frustum))
+                {
+                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+
+            for (int i = 0; i < alliesBullets.Count; i++)
+            {
+                if (alliesBullets[i].BoundingSphere.Intersects(frustum))
+                {
+                    alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
         }
     }
 }

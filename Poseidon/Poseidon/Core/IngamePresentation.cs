@@ -384,7 +384,8 @@ namespace Poseidon.Core
                         comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
                         spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
                     }
-                    Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
+                    Trash trashPointedAt = null, botOnTrash = null;
+                    CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes,ref trashPointedAt,ref botOnTrash, null);
                     if (trashPointedAt != null)
                     {
                         string line,comment;

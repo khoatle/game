@@ -506,8 +506,8 @@ namespace Poseidon
                 iconActivated[index] = true;
             }
 
-            //hasTurtle = true;
-            //turtlePower = 1.0f;
+            hasTurtle = true;
+            turtlePower = 1.0f;
             //hasDolphin = true;
             //dolphinPower = 1.0f;
 

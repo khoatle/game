@@ -66,8 +66,8 @@ namespace Poseidon
                 increase = false;
             else if (scale <= 1.0f) increase = true;
             spriteBatch.Begin();
-            spriteBatch.Draw(bubbleTexture, point2DPos, null, Color.White * fadeFactor * (1 - pointsFont.MeasureString(this.text).X / bubbleTexture.Width), 0, new Vector2(bubbleTexture.Width / 2, bubbleTexture.Height / 2), pointsFont.MeasureString(this.text).X / bubbleTexture.Width * scale, SpriteEffects.None, 0);
-            spriteBatch.DrawString(pointsFont, this.text, point2DPos, color * fadeFactor, 0, new Vector2(pointsFont.MeasureString(this.text).X/2, pointsFont.MeasureString(this.text).Y/2), scale - 0.3f, SpriteEffects.None, 1);
+            spriteBatch.Draw(bubbleTexture, point2DPos, null, Color.White * fadeFactor * (1 - pointsFont.MeasureString(this.text).X / bubbleTexture.Width) * 0.8f, 0, new Vector2(bubbleTexture.Width / 2, bubbleTexture.Height / 2), pointsFont.MeasureString(this.text).X / bubbleTexture.Width * scale, SpriteEffects.None, 0);
+            spriteBatch.DrawString(pointsFont, this.text, point2DPos, color * fadeFactor * 0.8f, 0, new Vector2(pointsFont.MeasureString(this.text).X/2, pointsFont.MeasureString(this.text).Y/2), scale - 0.3f, SpriteEffects.None, 1);
             //spriteBatch.Draw(bubbleTexture, point2DPos, sourceRectangle, Color.White * fadeFactor, 0, new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2), pointsFont.MeasureString(this.text).X / sourceRectangle.Width * 1.2f, SpriteEffects.None, 0);      
             spriteBatch.End();
         }

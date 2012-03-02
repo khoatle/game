@@ -4,14 +4,14 @@
     <BlendState>Additive</BlendState>
     <TextureName>Image/ParticleTextures/sand</TextureName>
     <MaxParticles>200</MaxParticles>
-    <Duration>PT5S</Duration>
+    <Duration>PT3S</Duration>
     <DurationRandomness>0</DurationRandomness>
     <EmitterVelocitySensitivity>1</EmitterVelocitySensitivity>
-    <MinHorizontalVelocity>-5</MinHorizontalVelocity>
+    <MinHorizontalVelocity>0</MinHorizontalVelocity>
     <MaxHorizontalVelocity>5</MaxHorizontalVelocity>
-    <MinVerticalVelocity>-5</MinVerticalVelocity>
+    <MinVerticalVelocity>0</MinVerticalVelocity>
     <MaxVerticalVelocity>5</MaxVerticalVelocity>
-    <Gravity>0 -20 0</Gravity>
+    <Gravity>0 0 0</Gravity>
     <EndVelocity>0</EndVelocity>
     <MinColor>FFFFFFFF</MinColor>
     <MaxColor>FFFFFFFF</MaxColor>
@@ -19,7 +19,7 @@
     <MaxRotateSpeed>2</MaxRotateSpeed>
     <MinStartSize>40</MinStartSize>
     <MaxStartSize>60</MaxStartSize>
-    <MinEndSize>120</MinEndSize>
-    <MaxEndSize>150</MaxEndSize>
+    <MinEndSize>100</MinEndSize>
+    <MaxEndSize>130</MaxEndSize>
   </Asset>
 </XnaContent>

@@ -128,7 +128,7 @@ namespace Poseidon
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                type = 6;
+                //type = 6;
                 if (gameMode == GameMode.SurvivalMode)
                 {
                     fish[i].Name = "Ancient ";

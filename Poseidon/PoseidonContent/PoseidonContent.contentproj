@@ -1641,11 +1641,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\SeaAnimalModels\normalsharkVer2.fbx">
-      <Name>normalsharkVer2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\SeaAnimalModels\orcaVer2.fbx">
       <Name>orcaVer2</Name>
       <Importer>FbxImporter</Importer>
@@ -2098,6 +2093,13 @@
   <ItemGroup>
     <Compile Include="Image\MinigameTextures\Frame2.png">
       <Name>Frame2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Miscellaneous\Bubble-new.png">
+      <Name>Bubble-new</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

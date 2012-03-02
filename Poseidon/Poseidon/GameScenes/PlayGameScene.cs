@@ -42,11 +42,13 @@ namespace Poseidon
 
         public static Camera gameCamera;
         public static GameState currentGameState = GameState.PlayingCutScene;
+     
         // In order to know we are resetting the level winning or losing
         // winning: keep the current bot
         // losing: reset our bot to the bot at the beginning of the level
         GameState prevGameState;
         GameObject boundingSphere;
+
         public int type = 0;
 
         public Terrain terrain;
@@ -272,9 +274,9 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 30, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 30, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
@@ -1526,7 +1528,7 @@ namespace Poseidon
             if (openResearchFacilityConfigScene)
                 researchFacility.DrawResearchFacilityConfigurationScene(spriteBatch, menuSmall);
 
-            spriteBatch.DrawString(statsFont, "Is bot moving: " + hydroBot.isMoving() + "\n", new Vector2(50, 50), Color.Black);
+            // spriteBatch.DrawString(statsFont, "Is bot moving: " + hydroBot.isMoving() + "\n", new Vector2(50, 50), Color.Black);
 
             cursor.Draw(gameTime);
             spriteBatch.End();

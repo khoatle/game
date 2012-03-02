@@ -71,7 +71,7 @@ namespace Poseidon
         {
             normalCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
             shootingCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
-            onFishCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/fishcursor");
+            onFishCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/fishcursorNew1");
             onAttributeCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/hammerAndWrench");
 
             cursorTexture = normalCursorTexture;

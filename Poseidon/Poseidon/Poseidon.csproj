@@ -147,6 +147,7 @@
     <Compile Include="Miscellaneous\GameBoundary.cs" />
     <Compile Include="Miscellaneous\Terrain.cs" />
     <Compile Include="ParticleSystem\ParticleManagement.cs" />
+    <Compile Include="PerformanceHelper.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />
@@ -238,6 +239,10 @@
     <ProjectReference Include="..\SkinnedModel\SkinnedModelWindows.csproj">
       <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
       <Name>SkinnedModelWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TimeRulerLibrary\TimeRulerLibrary.csproj">
+      <Project>{BDE38033-0722-470B-9F63-E3C9486A4B33}</Project>
+      <Name>TimeRulerLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

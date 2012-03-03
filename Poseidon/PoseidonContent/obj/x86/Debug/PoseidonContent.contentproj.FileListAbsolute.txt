@@ -1,0 +1,2 @@
+C:\Users\Kyle\game\Poseidon\PoseidonContent\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Admin\Desktop\HydrobotAdventure\Poseidon\PoseidonContent\obj\x86\Debug\ResolveAssemblyReference.cache

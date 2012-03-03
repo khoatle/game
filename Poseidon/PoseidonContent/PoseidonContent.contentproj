@@ -1509,6 +1509,7 @@
       <Name>SandSettings</Name>
       <Importer>XmlImporter</Importer>
       <Processor>PassThroughProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
     <Compile Include="ParticleSettings\FireSettings.xml">
       <Name>FireSettings</Name>
@@ -1649,6 +1650,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>1.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Debug\DebugFont.spritefont">
+      <Name>DebugFont</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
     </Compile>
     <Compile Include="Models\SeaAnimalModels\normalsharkVer3.fbx">
       <Name>normalsharkVer3</Name>

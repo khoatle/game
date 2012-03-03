@@ -1,0 +1,12 @@
+C:\Users\Kyle\Downloads\Compressed\0672333457_code\Chapter 11\Code\TimeRulerLibrary\bin\x86\Debug\TimeRulerLibrary.dll
+C:\Users\Kyle\Downloads\Compressed\0672333457_code\Chapter 11\Code\TimeRulerLibrary\bin\x86\Debug\TimeRulerLibrary.pdb
+C:\Users\Kyle\Downloads\Compressed\0672333457_code\Chapter 11\Code\TimeRulerLibrary\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Kyle\Downloads\Compressed\0672333457_code\Chapter 11\Code\TimeRulerLibrary\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Kyle\Downloads\Compressed\0672333457_code\Chapter 11\Code\TimeRulerLibrary\obj\x86\Debug\TimeRulerLibrary.dll
+C:\Users\Kyle\Downloads\Compressed\0672333457_code\Chapter 11\Code\TimeRulerLibrary\obj\x86\Debug\TimeRulerLibrary.pdb
+C:\Users\Kyle\game\Poseidon\TimeRulerLibrary\bin\x86\Debug\TimeRulerLibrary.dll
+C:\Users\Kyle\game\Poseidon\TimeRulerLibrary\bin\x86\Debug\TimeRulerLibrary.pdb
+C:\Users\Kyle\game\Poseidon\TimeRulerLibrary\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Kyle\game\Poseidon\TimeRulerLibrary\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+C:\Users\Kyle\game\Poseidon\TimeRulerLibrary\obj\x86\Debug\TimeRulerLibrary.dll
+C:\Users\Kyle\game\Poseidon\TimeRulerLibrary\obj\x86\Debug\TimeRulerLibrary.pdb

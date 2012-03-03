@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinnedModelPipeline", "Pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleSettings", "ParticleSettings\ParticleSettings.csproj", "{2D9A06FD-F612-4E2B-A08C-341420091EAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeRulerLibrary", "..\Desktop\TimeRulerLibrary\TimeRulerLibrary.csproj", "{BDE38033-0722-470B-9F63-E3C9486A4B33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeRulerLibrary", "Poseidon\TimeRulerLibrary\TimeRulerLibrary.csproj", "{BDE38033-0722-470B-9F63-E3C9486A4B33}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

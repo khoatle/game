@@ -295,17 +295,20 @@ namespace Poseidon.GraphicEffects
             else return false;
         }
 
-        public void PrepareEdgeDetect(Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTarget)
+        public void PrepareEdgeDetect(HydroBot hydroBot, Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTargetLow, RenderTarget2D normalDepthRenderTargetHigh)
         {
             if (!GameSettings.SpecialEffectsEnabled) return;
 
-            graphicsDevice.SetRenderTarget(normalDepthRenderTarget);
+            graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
+            graphicsDevice.Clear(Color.Black);
+            graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
             graphicsDevice.Clear(Color.Black);
             graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
 
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
+                graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
                 fishPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                 edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(0, 1, 0, 1));
                 
@@ -315,6 +318,7 @@ namespace Poseidon.GraphicEffects
                 BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
                 if (enemyPointedAt != null)
                 {
+                    graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
                     enemyPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                     edgeDetectionParameters["EdgeColor"].SetValue(new Vector4(1, 0, 0, 1));
                 }
@@ -323,12 +327,21 @@ namespace Poseidon.GraphicEffects
                     TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
                     if (chestPointedAt != null)
                     {
+                        graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                         chestPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                         edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                     }
-                    Trash trashPointedAt = CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes);
+                    Trash trashPointedAt = null, botOnTrash = null;
+                    CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes,ref trashPointedAt,ref botOnTrash, hydroBot);
+                    if (botOnTrash != null)
+                    {
+                        graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
+                        botOnTrash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
+                        edgeDetectionParameters["EdgeColor"].SetValue(Color.LightGray.ToVector4());
+                    }
                     if (trashPointedAt != null)
                     {
+                        graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                         trashPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                         edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                     }
@@ -337,6 +350,7 @@ namespace Poseidon.GraphicEffects
                         ShipWreck shipPointedAt = CursorManager.MouseOnWhichShipWreck(cursor, gameCamera, shipWrecks);
                         if (shipPointedAt != null)
                         {
+                            graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                             shipPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                             edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                         }
@@ -345,6 +359,7 @@ namespace Poseidon.GraphicEffects
                             Factory factoryPointedAt = CursorManager.MouseOnWhichFactory(cursor, gameCamera, factories);
                             if (factoryPointedAt != null)
                             {
+                                graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                                 factoryPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                                 edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                             }
@@ -352,6 +367,7 @@ namespace Poseidon.GraphicEffects
                             {
                                 if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
                                 {
+                                    graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                                     researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                                     edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                                 }

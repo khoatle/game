@@ -110,9 +110,14 @@ namespace Poseidon
             return null;
         }
 
-        public static Trash MouseOnWhichTrash(Cursor cursor, Camera gameCamera, List<Trash> trashes)
+        public static void MouseOnWhichTrash(Cursor cursor, Camera gameCamera, List<Trash> trashes,ref Trash cursorOnTrash,ref Trash botOnTrash, HydroBot hydroBot)
         {
-            if (trashes == null) return null;
+            bool foundBotOnTrash = false, foundCursorOnTrash = false;
+            if (hydroBot == null) foundBotOnTrash = true;
+            BoundingSphere botTrashBoundingSphere = new BoundingSphere();
+            if (!foundBotOnTrash)
+                botTrashBoundingSphere = new BoundingSphere(hydroBot.BoundingSphere.Center, 20);
+            if (trashes == null) return;
             BoundingSphere trashRealSphere;
             Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (Trash trash in trashes)
@@ -120,13 +125,24 @@ namespace Poseidon
                 trashRealSphere = trash.BoundingSphere;
                 trashRealSphere.Center.Y = trash.Position.Y;
                 trashRealSphere.Radius *= 5;
-                if (RayIntersectsBoundingSphere(cursorRay, trashRealSphere))
+                if (!foundBotOnTrash)
                 {
-                    return trash;
+                    if (trash.BoundingSphere.Intersects(botTrashBoundingSphere))
+                    {
+                        foundBotOnTrash = true;
+                        botOnTrash = trash;
+                    }
                 }
+                if (!foundCursorOnTrash)
+                {
+                    if (RayIntersectsBoundingSphere(cursorRay, trashRealSphere))
+                    {
+                        foundCursorOnTrash = true;
+                        cursorOnTrash = trash;
+                    }
+                }
+                if (foundBotOnTrash && foundCursorOnTrash) return;
             }
-            //cursor.SetNormalMouseImage();
-            return null;
         }
 
         public static ShipWreck MouseOnWhichShipWreck(Cursor cursor, Camera gameCamera, List<ShipWreck> shipWrecks)

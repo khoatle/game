@@ -597,13 +597,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\CursorTextures\fishcursor.png">
-      <Name>fishcursor</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\BulletModels\herculesBullet.fbx">
       <Name>herculesBullet</Name>
       <Importer>FbxImporter</Importer>
@@ -1641,11 +1634,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\SeaAnimalModels\normalsharkVer2.fbx">
-      <Name>normalsharkVer2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\SeaAnimalModels\orcaVer2.fbx">
       <Name>orcaVer2</Name>
       <Importer>FbxImporter</Importer>
@@ -1666,6 +1654,12 @@
       <Name>DebugFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
+      
+    <Compile Include="Models\SeaAnimalModels\normalsharkVer3.fbx">
+      <Name>normalsharkVer3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
@@ -2098,6 +2092,20 @@
   <ItemGroup>
     <Compile Include="Image\MinigameTextures\Frame2.png">
       <Name>Frame2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Miscellaneous\Bubble-new.png">
+      <Name>Bubble-new</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\CursorTextures\fishcursorNew1.png">
+      <Name>fishcursorNew1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

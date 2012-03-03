@@ -227,10 +227,6 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Desktop\TimeRulerLibrary\TimeRulerLibrary.csproj">
-      <Project>{BDE38033-0722-470B-9F63-E3C9486A4B33}</Project>
-      <Name>TimeRulerLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\ParticleSettings\ParticleSettings.csproj">
       <Project>{2D9A06FD-F612-4E2B-A08C-341420091EAB}</Project>
       <Name>ParticleSettings</Name>
@@ -243,6 +239,10 @@
     <ProjectReference Include="..\SkinnedModel\SkinnedModelWindows.csproj">
       <Project>{0D41E29B-829F-4255-BCA5-64DC2677DA6D}</Project>
       <Name>SkinnedModelWindows</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TimeRulerLibrary\TimeRulerLibrary.csproj">
+      <Project>{BDE38033-0722-470B-9F63-E3C9486A4B33}</Project>
+      <Name>TimeRulerLibrary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

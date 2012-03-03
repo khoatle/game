@@ -128,7 +128,7 @@ namespace Poseidon
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //type = 5;
+                //type = 6;
                 if (gameMode == GameMode.SurvivalMode)
                 {
                     fish[i].Name = "Ancient ";
@@ -187,7 +187,7 @@ namespace Poseidon
                 }
                 else if (type == 6)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalsharkVer2");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalsharkVer3");
                     fish[i].Name += "shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";

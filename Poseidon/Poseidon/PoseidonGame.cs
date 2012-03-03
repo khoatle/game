@@ -91,6 +91,8 @@ namespace Poseidon
         bool clicked=false;
         double clickTimer = 0;
 
+        public string perfString = "";
+
         public static bool gamePlus = false;
 
         //jigsaw
@@ -119,7 +121,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -135,6 +137,12 @@ namespace Poseidon
         {
             videoPlayer = new VideoPlayer();
             gameState = GameState.GameStart;
+            // Performance stuff
+            PerformanceHelper.InitializeWithGame(this);
+            graphics.SynchronizeWithVerticalRetrace = false;
+            this.IsFixedTimeStep = false;
+
+
             base.Initialize();
         }
 
@@ -844,31 +852,37 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // Get the Keyboard and GamePad state
-            CheckKeyEntered();
-            if (gameState != GameState.DisplayMenu && gameState != GameState.ToMainMenu && EscPressed) gameState = GameState.DisplayMenu;
-            if (gameState == GameState.GameStart)
+            PerformanceHelper.StartFrame();
+            using (new TimeRulerHelper("Update", Color.Yellow))
             {
-                videoPlayer.Play(presentScene);
-                gameState = GameState.PlayingPresentScene;
-            }
-            if (gameState == GameState.PlayingPresentScene)
-            {
-                return;
-            }
-            if (gameState == GameState.DisplayMenu)
-            {
-                // Start the game in the start Scene
-                startScene.Show();
-                activeScene = startScene;
-                //just changing to a random state
-                gameState = GameState.ToMainMenu;
-            }
+                System.Threading.Thread.Sleep(5);
 
-            CheckClick(gameTime);
-            HandleScenesInput(gameTime);
-            base.Update(gameTime);
-            
+                // Get the Keyboard and GamePad state
+                CheckKeyEntered();
+                if (gameState != GameState.DisplayMenu && gameState != GameState.ToMainMenu && EscPressed) gameState = GameState.DisplayMenu;
+                if (gameState == GameState.GameStart)
+                {
+                    videoPlayer.Play(presentScene);
+                    gameState = GameState.PlayingPresentScene;
+                }
+                if (gameState == GameState.PlayingPresentScene)
+                {
+                    return;
+                }
+                if (gameState == GameState.DisplayMenu)
+                {
+                    // Start the game in the start Scene
+                    startScene.Show();
+                    activeScene = startScene;
+                    //just changing to a random state
+                    gameState = GameState.ToMainMenu;
+                }
+
+                CheckClick(gameTime);
+                HandleScenesInput(gameTime);
+                base.Update(gameTime);
+            }
+            perfString = "FPS: " + PerformanceHelper.FpsCounter.Fps;
         }
 
         /// <summary>
@@ -877,21 +891,29 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            if (gameState == GameState.PlayingPresentScene)
-            {
-                graphics.GraphicsDevice.Clear(Color.Black);
-                Texture2D playingTexture;
-                if (videoPlayer.State == MediaState.Playing)
-                {
-                    playingTexture = videoPlayer.GetTexture();
-                    spriteBatch.Begin();
-                    spriteBatch.Draw(playingTexture, new Vector2(0, 0), Color.White);
-                    spriteBatch.End();
-                }
-                if (videoPlayer.State == MediaState.Stopped)
-                    gameState = GameState.DisplayMenu;
-            }
-            base.Draw(gameTime);
+           using (new TimeRulerHelper("Draw", Color.Blue))
+           {
+               GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+               if (gameState == GameState.PlayingPresentScene)
+               {
+                   graphics.GraphicsDevice.Clear(Color.Black);
+                   Texture2D playingTexture;
+                   if (videoPlayer.State == MediaState.Playing)
+                   {
+                       playingTexture = videoPlayer.GetTexture();
+                       spriteBatch.Begin();
+                       spriteBatch.Draw(playingTexture, new Vector2(0, 0), Color.White);
+                       spriteBatch.End();
+                   }
+                   if (videoPlayer.State == MediaState.Stopped)
+                       gameState = GameState.DisplayMenu;
+               }
+               base.Draw(gameTime);
+           }
+           spriteBatch.Begin();
+           spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
+               + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
+           spriteBatch.End();
         }
 
     }

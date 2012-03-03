@@ -147,6 +147,7 @@
     <Compile Include="Miscellaneous\GameBoundary.cs" />
     <Compile Include="Miscellaneous\Terrain.cs" />
     <Compile Include="ParticleSystem\ParticleManagement.cs" />
+    <Compile Include="PerformanceHelper.cs" />
     <Compile Include="TrashManagement\Factory.cs" />
     <Compile Include="TrashManagement\ResearchFacility.cs" />
     <Compile Include="ParticleSystem\ParticleEmitter.cs" />
@@ -226,6 +227,10 @@
     <Content Include="GameThumbnail.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Desktop\TimeRulerLibrary\TimeRulerLibrary.csproj">
+      <Project>{BDE38033-0722-470B-9F63-E3C9486A4B33}</Project>
+      <Name>TimeRulerLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ParticleSettings\ParticleSettings.csproj">
       <Project>{2D9A06FD-F612-4E2B-A08C-341420091EAB}</Project>
       <Name>ParticleSettings</Name>

@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinnedModelPipeline", "Pos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleSettings", "ParticleSettings\ParticleSettings.csproj", "{2D9A06FD-F612-4E2B-A08C-341420091EAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TimeRulerLibrary", "..\Desktop\TimeRulerLibrary\TimeRulerLibrary.csproj", "{BDE38033-0722-470B-9F63-E3C9486A4B33}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +107,18 @@ Global
 		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|x86.ActiveCfg = Release|x86
 		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|x86.Build.0 = Release|x86
 		{2D9A06FD-F612-4E2B-A08C-341420091EAB}.Release|Xbox 360.ActiveCfg = Release|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Debug|x86.ActiveCfg = Debug|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Debug|x86.Build.0 = Debug|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Debug|Xbox 360.ActiveCfg = Debug|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Release|Any CPU.ActiveCfg = Release|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Release|Mixed Platforms.Build.0 = Release|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Release|x86.ActiveCfg = Release|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Release|x86.Build.0 = Release|x86
+		{BDE38033-0722-470B-9F63-E3C9486A4B33}.Release|Xbox 360.ActiveCfg = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

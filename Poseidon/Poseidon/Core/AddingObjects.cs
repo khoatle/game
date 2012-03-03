@@ -128,7 +128,7 @@ namespace Poseidon
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //type = 5;
+                //type = 6;
                 if (gameMode == GameMode.SurvivalMode)
                 {
                     fish[i].Name = "Ancient ";
@@ -187,7 +187,7 @@ namespace Poseidon
                 }
                 else if (type == 6)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalsharkVer2");
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/normalsharkVer3");
                     fish[i].Name += "shark";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
@@ -514,7 +514,7 @@ namespace Poseidon
                     //        zVal *= -1;
                     //        break;
                     //}
-                } while (IsSeaBedPlaceOccupied(xVal, heightValue, zVal, 20, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
+                } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 10, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
@@ -578,10 +578,10 @@ namespace Poseidon
                         break;
                 }
                 heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
-            } while (IsSeaBedPlaceOccupied(xVal, heightValue, zVal, 20, shipWrecks, staticObjects, trashes, factories, researchFacility));
+            } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 10, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
-            sinkingTrash.Position.X = 0;// xVal;
-            sinkingTrash.Position.Z = 0;// zVal;
+            sinkingTrash.Position.X = xVal;
+            sinkingTrash.Position.Z = zVal;
             sinkingTrash.Position.Y = floatHeight+100;
             sinkingTrash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(sinkingTrash.Position.X, 0, sinkingTrash.Position.Z));//GameConstants.TrashFloatHeight;
             tempCenter = sinkingTrash.BoundingSphere.Center;

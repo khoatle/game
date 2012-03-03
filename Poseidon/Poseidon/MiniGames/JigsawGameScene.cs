@@ -30,7 +30,7 @@ namespace Poseidon.MiniGames
 
         // the top left position of the (0,0) piece
         public Vector2 topLeftPosition;
-
+        public Vector2 frameTopLeftPosition;
 
         // User defined width and height of the whole image
         public int desiredWidthOfImage;
@@ -48,7 +48,9 @@ namespace Poseidon.MiniGames
         private Piece[][] jigsawPieces;
 
         // The whole picture
-        private Texture2D image, seacowImage, turtleImage, dolphinImage;
+        private Texture2D image;
+        private Texture2D frameImg, smallFrameImg;
+        private Texture2D[] seacowImage, turtleImage, dolphinImage;
         // The empty cell pucture
         private Texture2D blackImage;
 
@@ -77,6 +79,19 @@ namespace Poseidon.MiniGames
 
         Random random;
 
+        private Video dnaAnimation;
+        private Video extractDNAVid;
+        private Video reconstructDNAVid;
+        private Video fillGapsVid;
+        private Video injectAndGrowVid;
+        private enum VideoPlayBackState { ExtractingDNA, ReconstructingDNA, FillingGaps, InjectAndGrow };
+        private VideoPlayBackState videoPlayBackState;
+        private VideoPlayer videoPlayer, dnaAnimationVideoPlayer;
+        private int vidIndex = 0;
+        private string stepText = "";
+        private string generalInfoText = "";
+        private string animalName;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -88,6 +103,7 @@ namespace Poseidon.MiniGames
             cursor = new Cursor(game, spriteBatch);
             //Content.RootDirectory = "Content";
             random = new Random();
+
         }
 
         /// <summary>
@@ -107,13 +123,18 @@ namespace Poseidon.MiniGames
             initializeSizeOfPuzzle(DEFAULT_PIECES_PER_ROW, DEFAULT_PIECES_PER_COL);
             initializeEmptyCell(0, 0);
 
-            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 0);
+            // Tweak this
+            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2 + 50, 100);
+            frameTopLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 20);
 
-            desiredWidthOfImage = game.Window.ClientBounds.Width / 2;
-            desiredHeightOfImage = game.Window.ClientBounds.Height;
+            // Tweak this
+            desiredWidthOfImage = game.Window.ClientBounds.Width / 2 - 115;
+            desiredHeightOfImage = game.Window.ClientBounds.Height - 210;
 
             isSliding = false;
             distanceTraveled = 0;
+            videoPlayer = new VideoPlayer();
+            dnaAnimationVideoPlayer = new VideoPlayer();
 
             base.Initialize();
         }
@@ -127,16 +148,37 @@ namespace Poseidon.MiniGames
             font = content.Load<SpriteFont>("Fonts/JigsawFont");
             timerFont = content.Load<SpriteFont>("Fonts/menuSmall");
 
-            seacowImage = content.Load<Texture2D>("Image/MinigameTextures/seaCow");
-            turtleImage = content.Load<Texture2D>("Image/MinigameTextures/seaTurtle");
-            dolphinImage = content.Load<Texture2D>("Image/MinigameTextures/seaDolphin");
+            seacowImage = new Texture2D[2];
+            turtleImage = new Texture2D[2];
+            dolphinImage = new Texture2D[2];
+            seacowImage[0] = content.Load<Texture2D>("Image/MinigameTextures/StellersSeaCow1");
+            turtleImage[0] = content.Load<Texture2D>("Image/MinigameTextures/Meiolania1");
+            dolphinImage[0] = content.Load<Texture2D>("Image/MinigameTextures/mauiDolphin1");
+            seacowImage[1] = content.Load<Texture2D>("Image/MinigameTextures/StellersSeaCow2");
+            turtleImage[1] = content.Load<Texture2D>("Image/MinigameTextures/Meiolania2");
+            dolphinImage[1] = content.Load<Texture2D>("Image/MinigameTextures/mauiDolphin2");
             
             blackImage = content.Load<Texture2D>("Image/MinigameTextures/BlackBox");
+            frameImg = content.Load<Texture2D>("Image/MinigameTextures/Frame1");
+            smallFrameImg = content.Load<Texture2D>("Image/MinigameTextures/Frame2");
 
             // Load/Initialize pieces here
             loadPieces();
             // Shuffle pieces
             shufflePieces();
+
+            dnaAnimation = content.Load<Video>("Videos/dnaAnimation");
+            extractDNAVid = content.Load<Video>("Videos/extractDNA");
+            reconstructDNAVid = content.Load<Video>("Videos/reconstructDNA");
+            fillGapsVid = content.Load<Video>("Videos/fillGaps");
+            injectAndGrowVid = content.Load<Video>("Videos/injectAndGrow");
+        }
+
+
+        public void StopVideoPlayers()
+        {
+            videoPlayer.Stop();
+            dnaAnimationVideoPlayer.Stop();
         }
 
         public override void Show()
@@ -146,6 +188,8 @@ namespace Poseidon.MiniGames
             timeNow = (double)GameConstants.jigsawGameMaxTime;
             inOrder = false;
             shufflePieces();
+            videoPlayBackState = VideoPlayBackState.ExtractingDNA;
+            vidIndex = 0;  
             base.Show();
         }
 
@@ -154,18 +198,39 @@ namespace Poseidon.MiniGames
             switch (imageType)
             {
                 case 0:
-                    image = seacowImage;
+                    image = seacowImage[random.Next(2)];
+                    animalName = "STELLAR'S SEA COW";
+                    generalInfoText += animalName+":\n";
+                    generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n";
+                    generalInfoText += "Year of Extinction: Around 1750.\n";
+                    generalInfoText += "Reason of Extinction: Hunting for food and skin.";
                     break;
                 case 1:
-                    image = turtleImage;
+                    image = turtleImage[random.Next(2)];
+                    animalName = "MEIOLANIA TURTLE";
+                    generalInfoText += animalName + ":\n";
+                    generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n";
+                    generalInfoText += "Year of Extinction: 2,000 years ago\n";
+                    generalInfoText += "REASON: Excessive hunting.";
                     break;
                 case 2:
-                    image = dolphinImage;
+                    image = dolphinImage[random.Next(2)];
+                    animalName = "MAUI'S DOLPHIN";
+                    generalInfoText += animalName + ":\n";
+                    generalInfoText += "DESCRIPTION: Smallest known species of dolphin. Lived near coasts.\n";
+                    generalInfoText += "EXTINCT SINCE: Around 2050\n";
+                    generalInfoText += "REASON: Pollution, injury from nets, boats.";
                     break;
                 default:
-                    image = seacowImage;
+                    image = seacowImage[random.Next(2)];
+                    animalName = "Steller's Sea Cow";
+                    generalInfoText += animalName + "\n";
+                    generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n";
+                    generalInfoText += "EXTINCT SINCE: 1700 something\n";
+                    generalInfoText += "REASON: Ate too much!";
                     break;
             }
+            generalInfoText = Poseidon.Core.IngamePresentation.wrapLine(generalInfoText, Game.Window.ClientBounds.Width / 2 - 50, font);
         }
 
         /// <summary>
@@ -189,11 +254,40 @@ namespace Poseidon.MiniGames
                 MediaPlayer.Play(PoseidonGame.audio.jigsawMusics[random.Next(GameConstants.NumJigsawBackgroundMusics)]);
             }
             timeNow -= gameTime.ElapsedGameTime.TotalSeconds;
+
+            if (dnaAnimationVideoPlayer.State == MediaState.Stopped)
+                dnaAnimationVideoPlayer.Play(dnaAnimation);
+
+            if (GameConstants.jigsawGameMaxTime - timeNow <= 20)
+            {
+                videoPlayBackState = VideoPlayBackState.ExtractingDNA;
+                videoPlayer.Play(extractDNAVid);
+                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED\nFRAGMENTS";
+            }
+            else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
+            {
+                videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
+                videoPlayer.Play(reconstructDNAVid);
+                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT\nDNA SEQUENCE";
+            }
+            else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
+            {
+                videoPlayBackState = VideoPlayBackState.FillingGaps;
+                videoPlayer.Play(fillGapsVid);
+                stepText = "STEP 3: FILLING GAPS IN DNA WITH\nPREDICTON TECHNIQUES";
+            }
+            else
+            {
+                videoPlayBackState = VideoPlayBackState.InjectAndGrow;
+                videoPlayer.Play(injectAndGrowVid);
+                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW\nCELL";
+            }
+            stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, Game.Window.ClientBounds.Width / 2, font);
             if (timeNow <= 0)
             {
                 timeUp = true;
             }
-            timerString = "TIME REMAINING: "+ ((int)timeNow).ToString() + " Seconds";
+            timerString = "RESURRECTING "+animalName+"\nTIME REMAINING: "+ ((int)timeNow).ToString() + " Seconds";
             
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera , gameTime, null);
    
@@ -215,6 +309,7 @@ namespace Poseidon.MiniGames
                 if (mouseState.LeftButton == ButtonState.Pressed && isSlidable(mouseRow, mouseCol))
                 {
                     isSliding = true;
+                    
                     moveBlocks(mouseRow, mouseCol);
                     if (!gamePlayed) gamePlayed = true;
                 }
@@ -235,16 +330,57 @@ namespace Poseidon.MiniGames
             // Store trueWidthOfPiece and trueHeightOfPiece in a vector2, Width first, Height the second
             Vector2 texelSize = calculateSizeOfPiece();
 
-            spriteBatch.Begin();
-            // Draw dark background so it has the illusion of empty cell is drawn
-            spriteBatch.Draw(blackImage, new Rectangle((int)topLeftPosition.X, (int)topLeftPosition.Y, desiredWidthOfImage, desiredHeightOfImage), Color.Black);
-            spriteBatch.End();
+            //draw dna animation on the background
+            Texture2D playingTexture;
+            if (dnaAnimationVideoPlayer.State == MediaState.Playing)
+            {
+                playingTexture = dnaAnimationVideoPlayer.GetTexture();
+                spriteBatch.Begin();
+                spriteBatch.Draw(playingTexture, PoseidonGame.graphics.GraphicsDevice.Viewport.TitleSafeArea, Color.White);
+                spriteBatch.End();
+            }
 
+            //spriteBatch.Begin();
+            //// Draw dark background so it has the illusion of empty cell is drawn
+            //spriteBatch.Draw(blackImage, new Rectangle((int)topLeftPosition.X, (int)topLeftPosition.Y, desiredWidthOfImage, desiredHeightOfImage), Color.Black);
+            //spriteBatch.End();
+
+            // Draw frame
+            spriteBatch.Begin();
+            spriteBatch.Draw(frameImg, new Rectangle((int)frameTopLeftPosition.X, (int)frameTopLeftPosition.Y, 
+                game.Window.ClientBounds.Width / 2 - 20, game.Window.ClientBounds.Height - 2 * (int)frameTopLeftPosition.Y), Color.White);
+            spriteBatch.End();
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(timerFont, timerString, new Vector2(), Color.DarkRed);
-            spriteBatch.DrawString(font, debugString, new Vector2(0,200), Color.Black);
+            spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White);
+            cursor.Draw(gameTime);
+            spriteBatch.End();
+
+            //draw the small frame containing animated DNA
+            //and the step
+            spriteBatch.Begin();
+            spriteBatch.Draw(smallFrameImg, new Rectangle(20, 100, 512, 512), Color.White);
+            spriteBatch.DrawString(font, stepText, new Vector2(70, 200), new Color(new Vector3(0, 1 ,0)));
+            spriteBatch.End();
+
+            //draw the videos
+            if (videoPlayer.State == MediaState.Playing)
+            {
+                playingTexture = videoPlayer.GetTexture();
+                spriteBatch.Begin();
+                spriteBatch.Draw(playingTexture, new Vector2(110, 300), Color.White);
+                spriteBatch.End();
+            }
+
+            //draw the small frame containing general info
+            spriteBatch.Begin();
+            spriteBatch.Draw(smallFrameImg, new Rectangle(20, Game.Window.ClientBounds.Bottom - (int)font.MeasureString(generalInfoText).Y - 100, game.Window.ClientBounds.Width / 2 - 100, (int)font.MeasureString(generalInfoText).Y + 100), Color.White);
+            spriteBatch.End();
+
+            //draw general info about the animal
+            spriteBatch.Begin();
+            spriteBatch.DrawString(font, generalInfoText, new Vector2(70, Game.Window.ClientBounds.Bottom -  font.MeasureString(generalInfoText).Y - 70), Color.Yellow);
             cursor.Draw(gameTime);
             spriteBatch.End();
 

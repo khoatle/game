@@ -491,14 +491,14 @@ namespace Poseidon
 
             //just for testing
             //should be removed
-            skillComboActivated = true;
-            activeSkillID = 4;
-            secondSkillID = -1;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
+            //skillComboActivated = true;
+            //activeSkillID = 4;
+            //secondSkillID = -1;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
             goodWillBarActivated = true;
             for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
@@ -910,7 +910,7 @@ namespace Poseidon
                                 if (trash.trashType == TrashType.biodegradable)
                                 {
                                     bioTrash++;
-                                    display_str = "Organic Trash Collected " + bioTrash;
+                                    display_str = "Organic Trash\nCollected " + bioTrash;
 
                                     IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
 
@@ -985,7 +985,7 @@ namespace Poseidon
                                 else if (trash.trashType == TrashType.plastic)
                                 {
                                     plasticTrash++;
-                                    display_str = "Plastic Trash Collected " + plasticTrash;
+                                    display_str = "Plastic Trash\nCollected " + plasticTrash;
 
                                     //update good will point
                                     IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
@@ -1047,7 +1047,7 @@ namespace Poseidon
                             else //radioactive
                             {
                                 nuclearTrash++;
-                                display_str = "Radioactive Trash Collected " + nuclearTrash;
+                                display_str = "Radioactive Trash\nCollected " + nuclearTrash;
 
                                 //update good will point
                                 IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
@@ -1425,7 +1425,6 @@ namespace Poseidon
                 }
             }
             
-            Point point = new Point();
             if (numResourceCollected > 0)
                 point_string += numResourceCollected + " RESOURCE COLLECTED";
             if (numHealth > 0)
@@ -1438,13 +1437,18 @@ namespace Poseidon
                 point_string += "\nTEMP STRENGTH X 2";
             if (numRocks > 0)
                 point_string += "\n"+numRocks+" STRANGE ROCKS COLLECTED";
-            point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
-            if (gameMode == GameMode.ShipWreck)
-                ShipWreckScene.points.Add(point);
-            else if (gameMode == GameMode.MainGame)
-                PlayGameScene.points.Add(point);
-            else if (gameMode == GameMode.SurvivalMode)
-                SurvivalGameScene.points.Add(point);
+
+            if (point_string != "")
+            {
+                Point point = new Point();
+                point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
+                if (gameMode == GameMode.ShipWreck)
+                    ShipWreckScene.points.Add(point);
+                else if (gameMode == GameMode.MainGame)
+                    PlayGameScene.points.Add(point);
+                else if (gameMode == GameMode.SurvivalMode)
+                    SurvivalGameScene.points.Add(point);
+            }
             return;
         }
 

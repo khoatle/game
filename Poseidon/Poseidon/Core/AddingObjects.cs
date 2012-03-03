@@ -514,7 +514,7 @@ namespace Poseidon
                     //        zVal *= -1;
                     //        break;
                     //}
-                } while (IsSeaBedPlaceOccupied(xVal, heightValue, zVal, 20, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
+                } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 10, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
@@ -578,7 +578,7 @@ namespace Poseidon
                         break;
                 }
                 heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
-            } while (IsSeaBedPlaceOccupied(xVal, heightValue, zVal, 20, shipWrecks, staticObjects, trashes, factories, researchFacility));
+            } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 10, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
             sinkingTrash.Position.X = 0;// xVal;
             sinkingTrash.Position.Z = 0;// zVal;

@@ -45,6 +45,7 @@ namespace Poseidon
             timeLast -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             if (timeLast >= 0)
                 scale = startingScale * (2000.0f / timeLast);
+            scale = MathHelper.Clamp(scale, startingScale, startingScale * 5);
         }
         public void Draw(SpriteBatch spriteBatch, float scaleUp)
         {

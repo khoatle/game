@@ -852,10 +852,10 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            PerformanceHelper.StartFrame();
-            using (new TimeRulerHelper("Update", Color.Yellow))
+            //PerformanceHelper.StartFrame();
+            //using (new TimeRulerHelper("Update", Color.Yellow))
             {
-                System.Threading.Thread.Sleep(5);
+                //System.Threading.Thread.Sleep(5);
 
                 // Get the Keyboard and GamePad state
                 CheckKeyEntered();
@@ -882,7 +882,7 @@ namespace Poseidon
                 HandleScenesInput(gameTime);
                 base.Update(gameTime);
             }
-            perfString = "FPS: " + PerformanceHelper.FpsCounter.Fps;
+            //perfString = "FPS: " + PerformanceHelper.FpsCounter.Fps;
         }
 
         /// <summary>
@@ -891,9 +891,9 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-           using (new TimeRulerHelper("Draw", Color.Blue))
+           //using (new TimeRulerHelper("Draw", Color.Blue))
            {
-               GraphicsDevice.DepthStencilState = DepthStencilState.Default;
+               //GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                if (gameState == GameState.PlayingPresentScene)
                {
                    graphics.GraphicsDevice.Clear(Color.Black);
@@ -910,10 +910,10 @@ namespace Poseidon
                }
                base.Draw(gameTime);
            }
-           spriteBatch.Begin();
-           spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
-               + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
-           spriteBatch.End();
+           //spriteBatch.Begin();
+           //spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
+           //    + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
+           //spriteBatch.End();
         }
 
     }

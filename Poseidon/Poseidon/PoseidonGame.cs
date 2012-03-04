@@ -902,7 +902,7 @@ namespace Poseidon
                    {
                        playingTexture = videoPlayer.GetTexture();
                        spriteBatch.Begin();
-                       spriteBatch.Draw(playingTexture, new Vector2(0, 0), Color.White);
+                       spriteBatch.Draw(playingTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
                        spriteBatch.End();
                    }
                    if (videoPlayer.State == MediaState.Stopped)

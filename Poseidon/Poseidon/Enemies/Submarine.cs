@@ -59,7 +59,7 @@ namespace Poseidon
 
         public void Load()
         {
-            Load(1, 30, 24);
+            Load(21, 30, 24);
         }
 
         public override void Update(SwimmingObject[] enemyList, ref int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)

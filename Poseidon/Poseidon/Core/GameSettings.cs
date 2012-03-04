@@ -9,7 +9,7 @@ namespace Poseidon.Core
     {
         public static float MusicVolume = 1.0f;
         public static float SoundVolume = 1.0f;
-        public static bool SpecialEffectsEnabled = true;
+        public static bool SpecialEffectsEnabled = false;
         public static float NumParticleLevel = 1.0f;
     }
 }

@@ -383,7 +383,7 @@ namespace Poseidon.GraphicEffects
         public void ApplyEdgeDetection(RenderTarget2D wholeScene, RenderTarget2D normalDepthRenderTarget, GraphicsDevice graphicsDevice, RenderTarget2D edgeDetectionRenderTarget)
         {
             Effect effectToUse = null;
-            if (!GameSettings.SpecialEffectsEnabled) effectToUse = edgeDetectionEffect;
+            if (GameSettings.SpecialEffectsEnabled) effectToUse = edgeDetectionEffect;
             Vector2 resolution = new Vector2(wholeScene.Width, wholeScene.Height);
             Texture2D normalDepthTexture = normalDepthRenderTarget;
             edgeDetectionParameters["ScreenResolution"].SetValue(resolution);

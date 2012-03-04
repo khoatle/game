@@ -77,8 +77,8 @@ namespace Poseidon
                 else if (i < numShootingEnemies + numCombatEnemies){
                     enemies[i] = new CombatEnemy();
                     enemies[i].Name = "Combat Enemy";
-                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_knife_orange_yellow");
-                    enemies[i].Load(1, 30, 24);// 31 60 for attack
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/skeletonrigged"); //diver_knife_orange_yellow");
+                    enemies[i].Load(10, 40, 24);//(1, 30, 24);// 31 60 for attack
                 }
                 else if (i < numShootingEnemies + numCombatEnemies + numMutantShark)
                 {
@@ -101,7 +101,7 @@ namespace Poseidon
                     Submarine submarine = new Submarine(gameMode);
                     submarine.LoadContent(Content, "Models/EnemyModels/submarine");
                     submarine.Name = "Shark Submarine";
-                    submarine.Load(31, 60, 24);
+                    submarine.Load(21, 30, 24);
                     enemies[i] = submarine;
                 }
             }

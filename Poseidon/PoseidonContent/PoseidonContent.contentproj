@@ -1661,6 +1661,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
+    <Compile Include="Models\EnemyModels\skeletonrigged.fbx">
+      <Name>skeletonrigged</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>

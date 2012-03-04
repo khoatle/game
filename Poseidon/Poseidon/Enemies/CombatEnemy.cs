@@ -40,7 +40,7 @@ namespace Poseidon
             qRotation = Quaternion.CreateFromAxisAngle(
                             Vector3.Up,
                             ForwardDirection);
-            enemyMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(0.3f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                 Matrix.CreateFromQuaternion(qRotation) *
                                 Matrix.CreateTranslation(Position);
             clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
@@ -213,8 +213,8 @@ namespace Poseidon
 
                 if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / speedFactor)
                 {
-                    if (!clipPlayer.inRange(31, 60))
-                        clipPlayer.switchRange(31, 60);
+                    if (!clipPlayer.inRange(50, 65))//(31, 60))
+                        clipPlayer.switchRange(50, 65);//(31, 60);
                     if (currentHuntingTarget.GetType().Name.Equals("HydroBot"))
                     {
                         if (!(HydroBot.invincibleMode || HydroBot.supersonicMode))

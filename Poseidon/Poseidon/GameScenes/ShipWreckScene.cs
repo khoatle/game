@@ -120,7 +120,7 @@ namespace Poseidon
         float timeNextBubble = 200.0f;
         //float timeNextSeaBedBubble = 3000.0f;
 
-        private Model strangeRockModel;
+        private Model[] strangeRockModels;
 
         //Points gained
         public static List<Point> points;
@@ -184,7 +184,9 @@ namespace Poseidon
             fossilTextures[3] = Content.Load<Texture2D>("Image/Fossils/fossil4");
 
             //Load Strange Rock
-            strangeRockModel = Content.Load<Model>("Models/PowerpackResource/strangeRock");
+            strangeRockModels = new Model[2];
+            strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1");
+            strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2");
 
             this.Load();
         }
@@ -388,9 +390,7 @@ namespace Poseidon
                 else treasureChests[currentShipWreckID][index].LoadContent(Content, randomType, -1);
                 randomType = random.Next(3);
             }
-            if (PlayGameScene.currentLevel >= 4)
-                enemiesAmount[currentShipWreckID] = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
-            else enemiesAmount[currentShipWreckID] = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+            enemiesAmount[currentShipWreckID] = GameConstants.ShipNumberGhostPirate[PlayGameScene.currentLevel];
             enemies[currentShipWreckID] = new BaseEnemy[enemiesAmount[currentShipWreckID]];
             int enemyNum = enemiesAmount[currentShipWreckID];
             int fishNum = 0;// fishAmount[currentShipWreckID];
@@ -705,7 +705,7 @@ namespace Poseidon
                                     powerpackPosition.X = chest.Position.X;
                                     powerpackPosition.Z = chest.Position.Z;
                                     //powerpackPosition = hydroBot.Position;
-                                    powerpack.Model = strangeRockModel;
+                                    powerpack.Model = strangeRockModels[random.Next(2)];
                                     powerpack.LoadContent(powerpackPosition);
                                     powerpacks[currentShipWreckID].Add(powerpack);
                                 }
@@ -1176,7 +1176,7 @@ namespace Poseidon
             {
                 if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
                 {
-                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;

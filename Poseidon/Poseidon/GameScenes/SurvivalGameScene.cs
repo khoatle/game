@@ -162,7 +162,7 @@ namespace Poseidon
 
         //Models for powerpacks, strangeRock and resource
         private Model[] powerpackModels;
-        private Model strangeRockModel;
+        private Model[] strangeRockModels;
         private Model resourceModel;
 
         //for edge detection effect
@@ -212,11 +212,6 @@ namespace Poseidon
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
             //Components.Add(cursor);
-
-            myBullet = new List<DamageBullet>();
-            healthBullet = new List<HealthBullet>();
-            enemyBullet = new List<DamageBullet>();
-            alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
             points = new List<Point>();
@@ -354,7 +349,9 @@ namespace Poseidon
             resourceModel = Content.Load<Model>("Models/PowerpackResource/resource");
 
             //Load Strange Rock
-            strangeRockModel = Content.Load<Model>("Models/PowerpackResource/strangeRock");
+            strangeRockModels = new Model[2];
+            strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1");
+            strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -418,8 +415,8 @@ namespace Poseidon
           
             enemiesAmount = 0;
             fishAmount = 0;
-            enemies = new BaseEnemy[GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
-                + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator];
+            enemies = new BaseEnemy[GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy + GameConstants.SurvivalModeMaxGhostPirate
+                + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator + GameConstants.SurvivalModeMaxSubmarine * (1 + GameConstants.NumEnemiesInSubmarine)];
             fish = new Fish[1];
 
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
@@ -713,7 +710,7 @@ namespace Poseidon
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                     foreach (Factory factory in factories)
                     {
-                        factory.Update(gameTime, ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModel);
+                        factory.Update(gameTime, ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
                         if (doubleClicked && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
                             //Dump Trash
@@ -1286,7 +1283,7 @@ namespace Poseidon
             {
                 if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
                 {
-                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;

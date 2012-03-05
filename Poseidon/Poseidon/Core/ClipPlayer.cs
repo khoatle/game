@@ -22,6 +22,7 @@ namespace Poseidon.Core
         bool isSwitching;
         bool isLooping;
         float blend = 0;
+        public bool donePlayingAnimation = false;
 
         public ClipPlayer(SkinningData skd, float fps)
         {
@@ -30,6 +31,7 @@ namespace Poseidon.Core
             skinTransforms = new Matrix[skd.BindPose.Count];
             worldTransforms = new Matrix[skd.BindPose.Count];
             this.fps = fps;
+            donePlayingAnimation = false;
         }
 
         public void play(AnimationClip clip, float startFrame,
@@ -41,6 +43,7 @@ namespace Poseidon.Core
             currentTime = startTime;
             isLooping = loop;
             keyframeList = currentClip.Keyframes;
+            donePlayingAnimation = false;
         }
 
         public void switchRange(float s, float e)
@@ -48,6 +51,7 @@ namespace Poseidon.Core
             isSwitching = true;
             startTimeSwitch = TimeSpan.FromMilliseconds(s / fps * 1000);
             endTimeSwitch = TimeSpan.FromMilliseconds(e / fps * 1000);
+            donePlayingAnimation = false;
         }
 
         public bool inRange(float s, float e)
@@ -123,6 +127,7 @@ namespace Poseidon.Core
                     currentTime = startTime;
                 else
                     currentTime = endTime;
+                donePlayingAnimation = true;
             }
 
             if (isSwitching)

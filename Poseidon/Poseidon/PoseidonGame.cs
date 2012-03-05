@@ -871,6 +871,7 @@ namespace Poseidon
                 }
                 if (gameState == GameState.DisplayMenu)
                 {
+                    videoPlayer.Stop();
                     // Start the game in the start Scene
                     startScene.Show();
                     activeScene = startScene;

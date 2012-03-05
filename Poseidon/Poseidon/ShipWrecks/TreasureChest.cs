@@ -77,9 +77,9 @@ namespace Poseidon
                     //effect.FogColor = GameConstants.FogColor.ToVector3();
 
                     //for our custom BasicEffect
-                    effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
-                    effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
-                    effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
+                    //effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                    //effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                    //effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);

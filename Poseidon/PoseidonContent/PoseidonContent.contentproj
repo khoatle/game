@@ -1402,6 +1402,7 @@
       <Name>torpedo</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.2</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1579,11 +1580,6 @@
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>
-    <Compile Include="Models\PowerpackResource\strangeRock.fbx">
-      <Name>strangeRock</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
     <Compile Include="Models\PowerpackResource\resource.fbx">
       <Name>resource</Name>
       <Importer>FbxImporter</Importer>
@@ -1665,6 +1661,18 @@
       <Name>skeletonrigged</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Miscellaneous\strangeRock1.fbx">
+      <Name>strangeRock1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\Miscellaneous\strangeRock2.fbx">
+      <Name>strangeRock2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

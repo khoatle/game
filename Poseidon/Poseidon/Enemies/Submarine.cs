@@ -19,13 +19,14 @@ namespace Poseidon
         int numHunterGenerated = 0;
         int numHunterGeneratedAtOnce = 2;
         GameMode gameMode;
+        bool releasingHunter = false;
 
         public Submarine(GameMode gameMode)
             : base()
         {
             speed = (float)(GameConstants.EnemySpeed * 1.2);
             damage = GameConstants.TerminatorShootingDamage;
-            timeBetweenFire = 0.3f;
+            timeBetweenFire = 1.0f;
             isBigBoss = true;
             random = new Random();
             health = 10000 * (HydroBot.gamePlusLevel + 1);
@@ -45,7 +46,7 @@ namespace Poseidon
             skd = Model.Tag as SkinningData;
             clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
-            clipPlayer.play(clip, clipStart, clipEnd, true);
+            clipPlayer.play(clip, clipStart, clipEnd, false);
             enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
@@ -105,27 +106,36 @@ namespace Poseidon
 
         public void ReleaseHunter(BoundingFrustum cameraFrustum, SwimmingObject[] enemies, ref int enemyAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {
-            bool releaseOnRightSide;
-            for (int i = 0; i < numHunterGeneratedAtOnce; i++)
+            if (!clipPlayer.inRange(31, 40))
+                clipPlayer.switchRange(31, 40);
+            if (clipPlayer.donePlayingAnimation)
             {
-                enemies[enemyAmount] = new ShootingEnemy();
-                enemies[enemyAmount].Name = "Shooting Enemy";
-                enemies[enemyAmount].LoadContent(PoseidonGame.contentManager, "Models/EnemyModels/diver_green_ly");
-                ((BaseEnemy)enemies[enemyAmount]).Load(1, 25, 24);
-                if (i % 2 == 0) releaseOnRightSide = true;
-                else releaseOnRightSide = false;
-                if (PlaceHunter(enemies[enemyAmount], hydroBot, (BaseEnemy[])enemies, enemyAmount, (Fish[])fishes, fishAmount, releaseOnRightSide))
+                bool releaseOnRightSide;
+                for (int i = 0; i < numHunterGeneratedAtOnce; i++)
                 {
-                    enemyAmount++;
-                    numHunterGenerated++;
+                    enemies[enemyAmount] = new ShootingEnemy();
+                    enemies[enemyAmount].Name = "Shooting Enemy";
+                    enemies[enemyAmount].LoadContent(PoseidonGame.contentManager, "Models/EnemyModels/diver_green_ly");
+                    ((BaseEnemy)enemies[enemyAmount]).releasedFromSubmarine = true;
+                    ((BaseEnemy)enemies[enemyAmount]).Load(1, 25, 24);
+                    if (i % 2 == 0) releaseOnRightSide = true;
+                    else releaseOnRightSide = false;
+                    if (PlaceHunter(enemies[enemyAmount], hydroBot, (BaseEnemy[])enemies, enemyAmount, (Fish[])fishes, fishAmount, releaseOnRightSide))
+                    {
+                        enemyAmount++;
+                        numHunterGenerated++;
+                    }
+                    else
+                    {
+                        enemies[enemyAmount] = null;
+                        break;
+                    }
                 }
-                else
-                {
-                    enemies[enemyAmount] = null;
-                    break;
-                }
+                if (!clipPlayer.inRange(11, 20))
+                    clipPlayer.switchRange(11, 20);
+                releasingHunter = false;
             }
-   
+
         }
         public bool PlaceHunter(SwimmingObject newHunter, HydroBot hydroBot, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, bool releaseOnRightSide)
         {
@@ -175,6 +185,8 @@ namespace Poseidon
 
         protected override void makeAction(int changeDirection, SwimmingObject[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, List<DamageBullet> bullets, HydroBot hydroBot, BoundingFrustum cameraFrustum, GameTime gameTime)
         {
+            if (releasingHunter) ReleaseHunter(cameraFrustum, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot);
+
             if (configBits[0] == true)
             {
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot, speedFactor);
@@ -214,39 +226,35 @@ namespace Poseidon
                 }
 
 
-                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 1)
+                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 10)
                 {
                     bool powerUsed = false;
                     powerupsType = random.Next(2);
                     //only generate hunters while hunting hydrobot
-                    //if (powerupsType == 0 && numHunterGenerated < GameConstants.NumEnemiesInSubmarine
-                    //    && currentHuntingTarget is HydroBot
-                    //    && this.BoundingSphere.Intersects(cameraFrustum))
-                    //{
-                    //    ReleaseHunter(cameraFrustum, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot);
-                    //    powerUsed = true;
-                    //}
-                    if (powerupsType == 1 && currentHuntingTarget is HydroBot)
+                    if (powerupsType == 0 && numHunterGenerated < GameConstants.NumEnemiesInSubmarine
+                        && currentHuntingTarget is HydroBot
+                        && this.BoundingSphere.Intersects(cameraFrustum))
+                    {
+                        ReleaseHunter(cameraFrustum, enemies, ref enemiesAmount, fishes, fishAmount, hydroBot);
+                        releasingHunter = true;
+                        powerUsed = true;
+                    }
+                    else if (powerupsType == 1 && currentHuntingTarget is HydroBot)
                     {
                         ShootTorpedos(bullets, cameraFrustum);
                         powerUsed = true;
                     }
-                    //else if (powerupsType == 1)
-                    //    crazyMode = true;
-                    //else if (powerupsType == 2)
-                    //{
-                    //    chasingBulletMode = true;
-                    //}
-                    //PlayGameScene.audio.MinigunWindUp.Play();
+
                     if (powerUsed) timePrevPowerUsed = PoseidonGame.playTime.TotalSeconds;
                 }
-                //else if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
-                //{
-                //    //ChasingBullet(bullets, cameraFrustum, gameTime);
-                //    // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
-                //    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                //    prevFire = PoseidonGame.playTime;
-                //}
+                else if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+                {
+                    //ChasingBullet(bullets, cameraFrustum, gameTime);
+                    // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
+                    //AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
+                    ShootLaser(bullets, cameraFrustum);
+                    prevFire = PoseidonGame.playTime;
+                }
             }
         }
     }

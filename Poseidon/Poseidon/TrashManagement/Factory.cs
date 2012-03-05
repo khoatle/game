@@ -133,7 +133,7 @@ namespace Poseidon
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
-        public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model strangeRockModel)
+        public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model[] strangeRockModels)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
@@ -172,7 +172,7 @@ namespace Poseidon
                     //Produce strange rock
                     if (random.Next(100) < 10) //10% probability
                     {
-                        ProduceStrangeRock(ref powerpacks, resources, ref strangeRockModel);
+                        ProduceStrangeRock(ref powerpacks, resources, ref strangeRockModels);
                     }
 
                     if (factoryType == FactoryType.biodegradable)
@@ -488,13 +488,13 @@ namespace Poseidon
             resources.Add(resource);
         }
 
-        void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources, ref Model strangeRockModel)
+        void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources, ref Model[] strangeRockModels)
         {
             Vector3 powerpackPosition;
             int powerType = 5; //type 5 for strange rock
             Powerpack powerpack = new Powerpack(powerType);
             powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
-            powerpack.Model = strangeRockModel;
+            powerpack.Model = strangeRockModels[random.Next(2)];
             powerpack.LoadContent(powerpackPosition);
             powerpacks.Add(powerpack);
         }

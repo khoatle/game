@@ -10,39 +10,17 @@ using SkinnedModel;
 using Poseidon.Core;
 namespace Poseidon
 {
-    class MutantShark : CombatEnemy
+    class GhostPirate : CombatEnemy
     {
-        protected double timeLastRoar = 0; 
-        Random rand = new Random();
-        public MutantShark() : base() {
+        public GhostPirate()
+            : base()
+        {
             speed = (float)(GameConstants.EnemySpeed * 1.5);
-            if(PoseidonGame.gamePlus)
-                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
-            damage = GameConstants.MutantSharkBitingDamage * (HydroBot.gamePlusLevel+1);
-            isBigBoss = true;
-            if (PlayGameScene.currentLevel == 3)
-            {
-                if (PoseidonGame.gamePlus)
-                {
-                    health = maxHealth = 15000;
-                }
-                else
-                {
-                    health = maxHealth = 6000;
-                }
-            }
-            else
-            {
-                health = 5000;
-                maxHealth = 5000;
-            }
             if (PoseidonGame.gamePlus)
-            {
-                health += (HydroBot.gamePlusLevel * 2000);
-                maxHealth = health;
-            }
-            perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 750 + (HydroBot.gamePlusLevel*100);
+                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+            damage = (int)(GameConstants.CombatEnemyDamage * 1.5 * (HydroBot.gamePlusLevel + 1));
+            health = maxHealth = GameConstants.DefaultEnemyHP * 2 * (HydroBot.gamePlusLevel + 1);
+            basicExperienceReward = 120 * (HydroBot.gamePlusLevel + 1);
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)
@@ -51,11 +29,11 @@ namespace Poseidon
             clipPlayer = new ClipPlayer(skd, fpsRate);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, true);
-            enemyMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(0.25f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.6f;
+            scaledSphere.Radius *= 0.25f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
@@ -69,7 +47,7 @@ namespace Poseidon
             BarrierType = modelName;
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
-            this.Load(1, 24, 24);
+            this.Load(10, 40, 24);
         }
 
         public override void ChangeBoundingSphere()
@@ -88,7 +66,7 @@ namespace Poseidon
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                float scale = 1.0f;
+                float scale = 0.25f;
 
                 enemyMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
@@ -99,8 +77,8 @@ namespace Poseidon
             //for mutant shark, idle = swimming normally
             if (stunned)
             {
-                if (!clipPlayer.inRange(1, 24))
-                    clipPlayer.switchRange(1, 24);
+                if (!clipPlayer.inRange(10, 40))
+                    clipPlayer.switchRange(10, 40);
                 return;
             }
 
@@ -151,8 +129,8 @@ namespace Poseidon
             if (configBits[0] == true)
             {
                 // swimming w/o attacking
-                if (!clipPlayer.inRange(1, 24) && !configBits[3])
-                    clipPlayer.switchRange(1, 24);
+                if (!clipPlayer.inRange(10, 40) && !configBits[3])
+                    clipPlayer.switchRange(10, 40);
                 randomWalk(changeDirection, enemies, enemiesAmount, fishes, fishAmount, hydroBot, speedFactor);
                 return;
             }
@@ -164,19 +142,11 @@ namespace Poseidon
             if (configBits[2] == true)
             {
                 // swimming w/o attacking
-                if (!clipPlayer.inRange(1, 24) && !configBits[3])
-                    clipPlayer.switchRange(1, 24);
+                if (!clipPlayer.inRange(10, 40) && !configBits[3])
+                    clipPlayer.switchRange(10, 40);
                 goStraight(enemies, enemiesAmount, fishes, fishAmount, hydroBot);
             }
-            if (!configBits[3] && this.BoundingSphere.Intersects(cameraFrustum))
-            {
-                if (PoseidonGame.playTime.TotalSeconds - timeLastRoar > 10)
-                    if (rand.Next(100) >= 95)
-                    {
-                        timeLastRoar = PoseidonGame.playTime.TotalSeconds;
-                        Roar(gameMode);
-                    }
-            }
+
             if (configBits[3] == true)
             {
                 startChasingTime = PoseidonGame.playTime;
@@ -201,27 +171,18 @@ namespace Poseidon
                     }
                 }
 
-                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire)
+                if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire / speedFactor)
                 {
-                    //if attack and swim both at the same time or not
-                    //just use attacking anim
-                    if (!clipPlayer.inRange(30, 53))
-                        clipPlayer.switchRange(30, 53);
-                    //if (!clipPlayer.inRange(60, 83))
-                    //    clipPlayer.switchRange(60, 83);
-
+                    if (!clipPlayer.inRange(50, 65))
+                        clipPlayer.switchRange(50, 65);
                     if (currentHuntingTarget.GetType().Name.Equals("HydroBot"))
                     {
-                        if (!(HydroBot.invincibleMode || HydroBot.supersonicMode) ){
+                        if (!(HydroBot.invincibleMode || HydroBot.supersonicMode))
+                        {
                             HydroBot.currentHitPoint -= damage;
 
-                            HydroBot.isPoissoned = true;
-                            HydroBot.accumulatedHealthLossFromPoisson = 0;
-
-                            PoseidonGame.audio.botYell.Play();
-
                             Point point = new Point();
-                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            String point_string = "-" + damage.ToString() + "HP";
                             point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.Black);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
@@ -229,6 +190,8 @@ namespace Poseidon
                                 PlayGameScene.points.Add(point);
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
+
+                            PoseidonGame.audio.botYell.Play();
                         }
                         if (HydroBot.autoHipnotizeMode)
                         {
@@ -247,24 +210,15 @@ namespace Poseidon
                             CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
                         }
                     }
-                    //if (currentHuntingTarget.GetType().Name.Equals("Fish"))
-                    //{
-                    //    ((Fish)currentHuntingTarget).health -= damage;
-                    //    if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
-                    //    {
-                    //        PoseidonGame.audio.animalYell.Play();
-                    //    }
-                    //}
                     if (currentHuntingTarget is SwimmingObject)
                     {
                         ((SwimmingObject)currentHuntingTarget).health -= damage;
-                        ((SwimmingObject)currentHuntingTarget).accumulatedHealthLossFromPoison = 0;
-                        ((SwimmingObject)currentHuntingTarget).isPoissoned = true;
-                        
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
+                            if (currentHuntingTarget is Fish)
+                                PoseidonGame.audio.animalYell.Play();
                             Point point = new Point();
-                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            String point_string = "-" + damage.ToString() + "HP";
                             point.LoadContent(PoseidonGame.contentManager, point_string, currentHuntingTarget.Position, Color.Red);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
@@ -272,25 +226,14 @@ namespace Poseidon
                                 PlayGameScene.points.Add(point);
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
-                            if (currentHuntingTarget is Fish)
-                                PoseidonGame.audio.animalYell.Play();
                         }
                     }
                     prevFire = PoseidonGame.playTime;
 
                     if (this.BoundingSphere.Intersects(cameraFrustum))
-                        PoseidonGame.audio.biteSound.Play();
+                        PoseidonGame.audio.slashSound.Play();
                 }
             }
-        }
-
-        protected void Roar(GameMode gameMode)
-        {
-            PoseidonGame.audio.roarSound.Play();
-            if (gameMode == GameMode.MainGame)
-                PlayGameScene.gameCamera.Shake(10f, 1.9f);
-            else if (gameMode == GameMode.SurvivalMode)
-                SurvivalGameScene.gameCamera.Shake(10f, 1.9f);
         }
     }
 }

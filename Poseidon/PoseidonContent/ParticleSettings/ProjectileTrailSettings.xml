@@ -4,7 +4,7 @@
     <BlendState>Additive</BlendState>
     <TextureName>Image/ParticleTextures/explosion</TextureName>
     <MaxParticles>1000</MaxParticles>
-    <Duration>PT0.6S</Duration>
+    <Duration>PT1S</Duration>
     <DurationRandomness>1.5</DurationRandomness>
     <EmitterVelocitySensitivity>0.1</EmitterVelocitySensitivity>
     <MinHorizontalVelocity>0</MinHorizontalVelocity>

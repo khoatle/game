@@ -19,20 +19,19 @@ namespace Poseidon
 
             if (gameMode == GameMode.SurvivalMode)
             {
-                enemiesAmount = GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy
-                + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator;
+                enemiesAmount = GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy + GameConstants.SurvivalModeMaxGhostPirate
+                + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator + GameConstants.SurvivalModeMaxSubmarine;
             }
             else if (gameMode == GameMode.MainGame)
-                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
+                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
                     + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel];
             else if (gameMode == GameMode.ShipWreck)
             {
-                if (PlayGameScene.currentLevel >= 4)
-                    enemiesAmount = GameConstants.ShipHighNumberShootingEnemies + GameConstants.ShipHighNumberCombatEnemies;
-                else enemiesAmount = GameConstants.ShipLowNumberShootingEnemies + GameConstants.ShipLowNumberCombatEnemies;
+                enemiesAmount = GameConstants.ShipNumberGhostPirate[PlayGameScene.currentLevel];
             }
             int numShootingEnemies = 0;
-            int numCombatEnemies= 0;
+            int numCombatEnemies = 0;
+            int numGhostPirates = 0;
             int numMutantShark = 0;
             int numTerminator = 0;
             int numSubmarine = 0;
@@ -41,29 +40,23 @@ namespace Poseidon
             {
                 numShootingEnemies = GameConstants.SurvivalModeMaxShootingEnemy;
                 numCombatEnemies = GameConstants.SurvivalModeMaxCombatEnemy;
+                numGhostPirates = GameConstants.SurvivalModeMaxGhostPirate;
                 numMutantShark = GameConstants.SurvivalModeMaxMutantShark;
                 numTerminator = GameConstants.SurvivalModeMaxTerminator;
+                numSubmarine = GameConstants.SurvivalModeMaxSubmarine;
             }
             else if (gameMode == GameMode.MainGame)
             {
                 numShootingEnemies = GameConstants.NumberShootingEnemies[currentLevel];
                 numCombatEnemies = GameConstants.NumberCombatEnemies[currentLevel];
+                numGhostPirates = GameConstants.NumberGhostPirate[currentLevel];
                 numMutantShark = GameConstants.NumberMutantShark[currentLevel];
                 numTerminator = GameConstants.NumberTerminator[currentLevel];
                 numSubmarine = GameConstants.NumberSubmarine[currentLevel];
             }
             else if (gameMode == GameMode.ShipWreck)
             {
-                if (PlayGameScene.currentLevel >= 4)
-                {
-                    numShootingEnemies = GameConstants.ShipHighNumberShootingEnemies;
-                    numCombatEnemies = GameConstants.ShipHighNumberCombatEnemies;
-                }
-                else
-                {
-                    numShootingEnemies = GameConstants.ShipLowNumberShootingEnemies;
-                    numCombatEnemies = GameConstants.ShipLowNumberCombatEnemies;
-                }
+                numGhostPirates = GameConstants.ShipNumberGhostPirate[PlayGameScene.currentLevel];
             }
             Random rnd = new Random();
             for (int i = 0; i < enemiesAmount; i++) {
@@ -77,17 +70,24 @@ namespace Poseidon
                 else if (i < numShootingEnemies + numCombatEnemies){
                     enemies[i] = new CombatEnemy();
                     enemies[i].Name = "Combat Enemy";
-                    enemies[i].LoadContent(Content, "Models/EnemyModels/skeletonrigged"); //diver_knife_orange_yellow");
-                    enemies[i].Load(10, 40, 24);//(1, 30, 24);// 31 60 for attack
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/diver_knife_orange_yellow");
+                    enemies[i].Load(1, 30, 24);// 31 60 for attack
                 }
-                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark)
+                else if (i < numShootingEnemies + numCombatEnemies + numGhostPirates)
+                {
+                    enemies[i] = new GhostPirate();
+                    enemies[i].Name = "Ghost Pirate";
+                    enemies[i].LoadContent(Content, "Models/EnemyModels/skeletonrigged"); 
+                    enemies[i].Load(10, 40, 24);
+                }
+                else if (i < numShootingEnemies + numCombatEnemies + numGhostPirates + numMutantShark)
                 {
                     MutantShark mutantShark = new MutantShark();
                     mutantShark.LoadContent(Content, "Models/EnemyModels/mutantSharkVer2");
                     mutantShark.Name = "mutant shark";
                     enemies[i] = mutantShark;
                 }
-                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator)
+                else if (i < numShootingEnemies + numCombatEnemies + numGhostPirates + numMutantShark + numTerminator)
                 {
                     Terminator terminator = new Terminator(gameMode);
                     terminator.LoadContent(Content, "Models/EnemyModels/terminator");
@@ -96,7 +96,7 @@ namespace Poseidon
                     terminator.Load(31, 60, 24);
                     enemies[i] = terminator;
                 }
-                else if (i < numShootingEnemies + numCombatEnemies + numMutantShark + numTerminator + numSubmarine)
+                else if (i < numShootingEnemies + numCombatEnemies + numGhostPirates + numMutantShark + numTerminator + numSubmarine)
                 {
                     Submarine submarine = new Submarine(gameMode);
                     submarine.LoadContent(Content, "Models/EnemyModels/submarine");
@@ -881,7 +881,8 @@ namespace Poseidon
             Random random = new Random();
             for (int i = 0; i < enemyAmount; i++)
             {
-                if (enemies[i].health <= 0)
+                //we do not revive enemy release by submarine cuz the sub will get revived
+                if (enemies[i].health <= 0 && !enemies[i].releasedFromSubmarine)
                 {
                     int xValue, zValue;
                     //do
@@ -920,8 +921,8 @@ namespace Poseidon
                         {
                             //if we can not find a spare space to put the revived enemy
                             //temporarily put it somewhere far
-                            enemies[i].Position.X = -1000;
-                            enemies[i].Position.Z = -1000;
+                            enemies[i].Position.X = -5000;
+                            enemies[i].Position.Z = -5000;
                         }
                     }             
                 }

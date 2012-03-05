@@ -62,6 +62,9 @@ namespace Poseidon
         protected TimeSpan startHypnotiseTime;
         public bool justBeingShot = false;
 
+        //is this enemy released from the submarine?
+        public bool releasedFromSubmarine = false;
+
         public virtual void Load(int clipStart, int clipEnd, int fps)
         {
             skd = Model.Tag as SkinningData;

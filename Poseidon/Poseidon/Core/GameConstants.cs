@@ -65,7 +65,7 @@ namespace Poseidon {
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
         public const int maxTrashCarryingCapacity = 15;
-        public const float powerpackResourceRotationSpeed = 0.25f;
+        public const float powerpackResourceRotationSpeed = 0.08f;
 
         //Environment Const
         public const int PlayerStartingEnv = 300;
@@ -120,6 +120,7 @@ namespace Poseidon {
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
+        public static int[] NumberGhostPirate = new int[maxLevel];
         public static int[] NumberFish = new int[maxLevel];
         public static int[] NumberMutantShark = new int[maxLevel];
         public static int[] NumberTerminator = new int[maxLevel];
@@ -128,10 +129,7 @@ namespace Poseidon {
         public static double[] LevelObjective = new double[maxLevel];
 
         //number of enemy and fish for ship wreck
-        public const int ShipHighNumberShootingEnemies = 5;
-        public const int ShipHighNumberCombatEnemies = 5;
-        public const int ShipLowNumberShootingEnemies = 2;
-        public const int ShipLowNumberCombatEnemies = 2;
+        public static int[] ShipNumberGhostPirate = { 10, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
         public const int ShipNumberFish = 0;
         public const int NumberChests = 10;
         public const int NumStaticObjectsMain = 0;
@@ -245,10 +243,12 @@ namespace Poseidon {
         public static int gainHitPoint = 20;
 
         //consts for the survival mode
-        public const int SurvivalModeMaxShootingEnemy = 50;
-        public const int SurvivalModeMaxCombatEnemy = 50;
+        public const int SurvivalModeMaxShootingEnemy = 35;
+        public const int SurvivalModeMaxCombatEnemy = 35;
+        public const int SurvivalModeMaxGhostPirate = 30;
         public const int SurvivalModeMaxMutantShark = 15;
         public const int SurvivalModeMaxTerminator = 2;
+        public const int SurvivalModeMaxSubmarine = 2;
 
         public const int NumGoodWillBarIcons = 13;
         public const int MaxGoodWillPoint = 1000;

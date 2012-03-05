@@ -131,6 +131,7 @@
     <Compile Include="Core\GameSettings.cs" />
     <Compile Include="Core\IngamePresentation.cs" />
     <Compile Include="Enemies\BaseEnemy.cs" />
+    <Compile Include="Enemies\GhostPirate.cs" />
     <Compile Include="Enemies\Submarine.cs" />
     <Compile Include="GameScenes\LoadingScene.cs" />
     <Compile Include="GameScenes\SelectLoadingLevelScene.cs" />

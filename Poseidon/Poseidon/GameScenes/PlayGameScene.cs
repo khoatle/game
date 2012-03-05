@@ -191,7 +191,7 @@ namespace Poseidon
 
         //Models for powerpacks, strangeRock and resource
         private Model[] powerpackModels;
-        private Model strangeRockModel;
+        private Model[] strangeRockModels;
         private Model resourceModel;
 
         // For applying graphic effects
@@ -201,9 +201,6 @@ namespace Poseidon
 
         //for edge detection effect
         RenderTarget2D normalDepthRenderTargetLow, normalDepthRenderTargetHigh, edgeDetectionRenderTarget;
-
-        //for drawing a game boundary
-        GameBoundary gameBoundary;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -264,6 +261,8 @@ namespace Poseidon
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies =   { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
+                int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.NumberGhostPirate = numGhostPirates;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
@@ -274,10 +273,12 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
+                int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+                GameConstants.NumberGhostPirate = numGhostPirates;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 3, 4, 5, 10, 0, 0 };
@@ -288,22 +289,12 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
-            //fireTime = TimeSpan.FromSeconds(0.3f);
-
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]];
-            fish = new Fish[GameConstants.NumberFish[currentLevel] + 50]; // Possible 10 sidekicks
-
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
 
             // for the mouse or touch
             cursor = new Cursor(game, spriteBatch);
             //Components.Add(cursor);
-
-            myBullet = new List<DamageBullet>();
-            healthBullet = new List<HealthBullet>();
-            enemyBullet = new List<DamageBullet>();
-            alliesBullets = new List<DamageBullet>();
 
             bubbles = new List<Bubble>();
             points = new List<Point>();
@@ -330,9 +321,6 @@ namespace Poseidon
             this.Load();
             //System.Diagnostics.Debug.WriteLine("In playgamescene init CurrentExp:" + HydroBot.currentExperiencePts);
             //System.Diagnostics.Debug.WriteLine("In playgamescene init NextExp:" + HydroBot.nextLevelExperience);
-
-            gameBoundary = new GameBoundary();
-            gameBoundary.LoadGraphicsContent(GraphicDevice);
         }
 
 
@@ -466,7 +454,9 @@ namespace Poseidon
             resourceModel = Content.Load<Model>("Models/PowerpackResource/resource");
 
             //Load Strange Rock
-            strangeRockModel = Content.Load<Model>("Models/PowerpackResource/strangeRock");
+            strangeRockModels = new Model[2];
+            strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1");
+            strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -487,9 +477,6 @@ namespace Poseidon
         {
             paused = false;
             HydroBot.gameMode = GameMode.MainGame;
-            //MediaPlayer.Play(audio.BackMusic);
-            //PlaceFuelCellsAndBarriers();
-            //MediaPlayer.Stop();
             base.Show();
         }
 
@@ -617,7 +604,7 @@ namespace Poseidon
             }
             enemiesAmount = 0;
             fishAmount = 0;
-            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
+            enemies = new BaseEnemy[GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel] + GameConstants.NumberGhostPirate[currentLevel]
                 + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel]*(1 + GameConstants.NumEnemiesInSubmarine)];
             fish = new Fish[GameConstants.NumberFish[currentLevel] + 50]; // Possible 10 sidekicks
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, shipWrecks,
@@ -1021,7 +1008,7 @@ namespace Poseidon
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                     foreach (Factory factory in factories)
                     {
-                        factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModel);
+                        factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
                         if(doubleClicked && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
                                 //Dump Trash
@@ -2022,7 +2009,7 @@ namespace Poseidon
             {
                 if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
                 {
-                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;

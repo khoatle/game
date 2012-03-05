@@ -767,14 +767,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TrashModels\biodegradableTrash.fbx">
-      <Name>biodegradableTrash</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\MinigameTextures\quizButton.png">
       <Name>quizButton</Name>
       <Importer>TextureImporter</Importer>
@@ -1662,12 +1654,6 @@
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\Miscellaneous\strangeRock2.fbx">
-      <Name>strangeRock2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
-    </Compile>
     <Compile Include="Models\Miscellaneous\strangeRock1Ver2.fbx">
       <Name>strangeRock1Ver2</Name>
       <Importer>FbxImporter</Importer>
@@ -1678,6 +1664,13 @@
       <Name>strangeRock2Ver2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\TrashModels\biodegradableTrashVer2.fbx">
+      <Name>biodegradableTrashVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

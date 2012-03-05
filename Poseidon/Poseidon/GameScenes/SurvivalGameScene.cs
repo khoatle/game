@@ -334,7 +334,7 @@ namespace Poseidon
             radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
 
             // Load Trash
-            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrash");
+            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer2");
             plasticTrash = Content.Load<Model>("Models/TrashModels/plasticTrash");
             radioactiveTrash = Content.Load<Model>("Models/TrashModels/radioactiveTrash");
 
@@ -350,8 +350,8 @@ namespace Poseidon
 
             //Load Strange Rock
             strangeRockModels = new Model[2];
-            strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1");
-            strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2");
+            strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1Ver2");
+            strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2Ver2");
 
             //Initialize the game field
             InitializeGameField(Content);

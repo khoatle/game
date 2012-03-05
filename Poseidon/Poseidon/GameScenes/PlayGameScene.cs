@@ -439,7 +439,7 @@ namespace Poseidon
             dummyTexture.SetData(new int[4]);
 
             // Load Trash
-            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrash");
+            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer2");
             plasticTrash = Content.Load<Model>("Models/TrashModels/plasticTrash");
             radioactiveTrash = Content.Load<Model>("Models/TrashModels/radioactiveTrash");
 

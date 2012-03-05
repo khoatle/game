@@ -40,6 +40,7 @@ float4 SpecularColor = float4(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f,
 float Shininess = 15.0f;
   
 //--------------------------- FOG PROPERTIES ------------------------------ 
+bool FogEnabled = true;
 float3 FogColor;   
 float4 FogVector;
  
@@ -182,7 +183,7 @@ float4 CustomAlphaPixelShader(VertexToPixel input) : COLOR0
     color *= (AmbientIntensity * AmbientColor + DiffuseIntensity * DiffuseColor * Diff + SpecularColor * Specular);
 	color.a = 1;
 
-	ApplyFog(color, input.PositionWS.w);
+	if (FogEnabled) ApplyFog(color, input.PositionWS.w);
 
 	color.a = 0.3f;
 

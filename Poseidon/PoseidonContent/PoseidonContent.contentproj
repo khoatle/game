@@ -306,30 +306,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PowerpackResource\strength.fbx">
-      <Name>strength</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\PowerpackResource\shootingRate.fbx">
-      <Name>shootingRate</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\PowerpackResource\speed.fbx">
-      <Name>speed</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Sounds\SoundEffects\Explo1.wav">
       <Name>Explo1</Name>
       <Importer>WavImporter</Importer>
@@ -850,14 +826,6 @@
       <Name>no_key</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\PowerpackResource\health.fbx">
-      <Name>health</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1576,6 +1544,7 @@
       <Name>resource</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
     </Compile>
     <Compile Include="Models\FactoryModels\PlasticFactory_stage0.fbx">
       <Name>PlasticFactory_stage0</Name>
@@ -1671,6 +1640,30 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\PowerpackResource\strengthPowerPack.fbx">
+      <Name>strengthPowerPack</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\PowerpackResource\speedPowerPack.fbx">
+      <Name>speedPowerPack</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\PowerpackResource\shootratePowerPack.fbx">
+      <Name>shootratePowerPack</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\PowerpackResource\healthPowerPack.fbx">
+      <Name>healthPowerPack</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

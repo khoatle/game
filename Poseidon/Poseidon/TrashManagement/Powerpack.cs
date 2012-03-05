@@ -89,9 +89,24 @@ namespace Poseidon
                     //effect.FogColor = fogColor.ToVector3();
 
                     //for our custom BasicEffect
-                    effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4() * 0.6f); //(ambientColor.ToVector4());
-                    effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4() * 0.6f); //(diffuseColor.ToVector4());
-                    effect.Parameters["SpecularColor"].SetValue(Color.White.ToVector4() * 0.6f);//specularColor.ToVector4());
+                    effect.Parameters["FogEnabled"].SetValue(false);
+                    if (powerType == 5)
+                    {
+                        effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4() * 0.6f); //(ambientColor.ToVector4());
+                        effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4() * 0.6f); //(diffuseColor.ToVector4());
+                        effect.Parameters["SpecularColor"].SetValue(Color.White.ToVector4() * 0.6f);//specularColor.ToVector4());
+                        //effect.Parameters["FogColor"].SetValue(Color.White.ToVector3());//(fogColor.ToVector3());
+                    }
+                    else
+                    {
+                        effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4() * 0.6f); //(ambientColor.ToVector4());
+                        effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4() * 0.6f); //(diffuseColor.ToVector4());
+                        effect.Parameters["SpecularColor"].SetValue(Color.White.ToVector4() * 0.6f);//specularColor.ToVector4());
+                        //effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                        //effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                        //effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
+                        //effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
+                    }
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);
@@ -100,8 +115,7 @@ namespace Poseidon
                     effect.Parameters["Projection"].SetValue(projection);
                     effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
                     Matrix WorldView = readlWorldMatrix * view;
-                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
-                    effect.Parameters["FogColor"].SetValue(Color.White.ToVector3());//(fogColor.ToVector3());
+                    EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);         
                     effect.Parameters["AmbientIntensity"].SetValue(1.0f);
                     effect.Parameters["DiffuseIntensity"].SetValue(0.2f);
                     effect.Parameters["Shininess"].SetValue(1.0f);

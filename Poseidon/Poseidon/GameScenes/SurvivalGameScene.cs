@@ -340,10 +340,10 @@ namespace Poseidon
 
             //Load Powerpacks
             powerpackModels = new Model[5];
-            powerpackModels[1] = Content.Load<Model>("Models/PowerpackResource/speed");
-            powerpackModels[2] = Content.Load<Model>("Models/PowerpackResource/strength");
-            powerpackModels[3] = Content.Load<Model>("Models/PowerpackResource/shootingRate");
-            powerpackModels[4] = Content.Load<Model>("Models/PowerpackResource/health");
+            powerpackModels[1] = Content.Load<Model>("Models/PowerpackResource/speedPowerPack");
+            powerpackModels[2] = Content.Load<Model>("Models/PowerpackResource/strengthPowerPack");
+            powerpackModels[3] = Content.Load<Model>("Models/PowerpackResource/shootratePowerPack");
+            powerpackModels[4] = Content.Load<Model>("Models/PowerpackResource/healthPowerPack");
 
             //Load Resource
             resourceModel = Content.Load<Model>("Models/PowerpackResource/resource");
@@ -1299,7 +1299,7 @@ namespace Poseidon
             {
                 if (!r.Retrieved && r.BoundingSphere.Intersects(frustum))
                 {
-                    r.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    r.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                 }
             }
         }

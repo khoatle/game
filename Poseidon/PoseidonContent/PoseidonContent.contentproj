@@ -1662,17 +1662,22 @@
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>
-    <Compile Include="Models\Miscellaneous\strangeRock1.fbx">
-      <Name>strangeRock1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
-    </Compile>
     <Compile Include="Models\Miscellaneous\strangeRock2.fbx">
       <Name>strangeRock2</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\Miscellaneous\strangeRock1Ver2.fbx">
+      <Name>strangeRock1Ver2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\Miscellaneous\strangeRock2Ver2.fbx">
+      <Name>strangeRock2Ver2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

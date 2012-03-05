@@ -170,7 +170,7 @@ namespace Poseidon
                     }
 
                     //Produce strange rock
-                    if (random.Next(100) < 10) //10% probability
+                    if (random.Next(100) < 100) //10% probability
                     {
                         ProduceStrangeRock(ref powerpacks, resources, ref strangeRockModels);
                     }

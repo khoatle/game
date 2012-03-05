@@ -1665,6 +1665,11 @@
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
     </Compile>
+    <Compile Include="Models\SeaAnimalModels\mauiDolphin.fbx">
+      <Name>mauiDolphin</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>

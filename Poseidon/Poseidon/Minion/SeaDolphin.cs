@@ -262,6 +262,12 @@ namespace Poseidon
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
+                fishMatrix.Left *= 1.2f;
+                fishMatrix.Right *= 1.2f;
+                fishMatrix.Up *= 1.2f;
+                fishMatrix.Down *= 1.2f;
+                fishMatrix.Forward *= 0.8f;
+                fishMatrix.Backward *= 0.8f;
                 clipPlayer.update(gameTime.ElapsedGameTime, true, fishMatrix);
             }
         }

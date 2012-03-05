@@ -56,6 +56,7 @@ namespace Poseidon {
             if (Name.Contains("orca")) scale = 0.5f;
             if (Name.Contains("seal")) scale = 0.5f;
             if (Name.Contains("shark")) scale = 0.5f;
+            if (Name.Contains("Maui")) scale = 0.5f;
             if (isBigBoss)
             {
                 scale *= 2.0f;

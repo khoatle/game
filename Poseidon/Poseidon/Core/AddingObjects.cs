@@ -242,11 +242,11 @@ namespace Poseidon
             }
             else {
                 newFish = new SeaDolphin();
-                newFish.Name = "shark";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/dolphinVer3");
+                newFish.Name = "Maui's Dolphin";
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/mauiDolphin");
                 newFish.Load(1, 24, 24);
-                newFish.happy_talk = "You stink like a rusty metal. I can smell it. I also hear a prey far away. I'll go 15mph this time.";
-                newFish.sad_talk = "Humans kill over 30 million sharks every year. We are the oldest fish, spare us."; 
+                newFish.happy_talk = "I am the world's rarest and smallest known species of dolphin!";
+                newFish.sad_talk = "If only human did not fish us."; 
             }
             newFish.Position = newFish.BoundingSphere.Center = calculatePlacingPosition(newFish.BoundingSphere.Radius, bot, enemies, enemiesAmount, fish, fishAmount);
             fish[fishAmount] = newFish;

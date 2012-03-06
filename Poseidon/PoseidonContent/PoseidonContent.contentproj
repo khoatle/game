@@ -698,14 +698,6 @@
     <Folder Include="Image\TerrainTextures\" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\TrashModels\plasticTrash.fbx">
-      <Name>plasticTrash</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Models\TrashModels\radioactiveTrash.fbx">
       <Name>radioactiveTrash</Name>
       <Importer>FbxImporter</Importer>
@@ -1667,6 +1659,17 @@
     </Compile>
     <Compile Include="Models\SeaAnimalModels\mauiDolphin.fbx">
       <Name>mauiDolphin</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TrashModels\plasticTrashVer2.fbx">
+      <Name>plasticTrashVer2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\SeaAnimalModels\stellarSeaCow.fbx">
+      <Name>stellarSeaCow</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
     </Compile>

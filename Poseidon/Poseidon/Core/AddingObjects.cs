@@ -128,7 +128,7 @@ namespace Poseidon
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //type = 6;
+                type = 2;
                 if (gameMode == GameMode.SurvivalMode)
                 {
                     fish[i].Name = "Ancient ";
@@ -225,11 +225,11 @@ namespace Poseidon
             if (type == 0)
             {
                 newFish = new SeaCow();
-                newFish.Name = "seal";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/maneteeVer2");
+                newFish.Name = "Steller's Sea Cow";
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/stellarSeaCow");
                 newFish.Load(1, 24, 24);
-                newFish.happy_talk = "See how I swim, with a swerve and a twist, a flip of the flipper, a flick of the wrist!";
-                newFish.sad_talk = "We need the arctic ice. Stop global warming.";
+                newFish.happy_talk = "I am much larger than manetee or dugong.";
+                newFish.sad_talk = "I was too slow to escape the hunters.";
             }
             else if (type == 1)
             {

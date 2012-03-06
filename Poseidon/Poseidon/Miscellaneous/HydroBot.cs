@@ -954,6 +954,7 @@ namespace Poseidon
                                 else if (gameMode == GameMode.SurvivalMode)
                                     SurvivalGameScene.points.Add(point);
                                 trashes.Remove(trash);
+                                i -= 1;
                             }
                         }
                     }
@@ -1025,6 +1026,7 @@ namespace Poseidon
                                 else if (gameMode == GameMode.SurvivalMode)
                                     SurvivalGameScene.points.Add(point);
                                 trashes.Remove(trash);
+                                i -= 1;
                             }
                         }
                     }
@@ -1083,6 +1085,7 @@ namespace Poseidon
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
                             trashes.Remove(trash);
+                            i -= 1;
                         }
                     }
                 }
@@ -1369,29 +1372,28 @@ namespace Poseidon
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 5);
                 for (int curCell = 0; curCell < powerpacks.Count; curCell++)
                 {
-                    if (powerpacks[curCell].Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(
+                    if (Trash_Fruit_BoundingSphere.Intersects(
                         powerpacks[curCell].BoundingSphere))
                     {
-                        powerpacks[curCell].Retrieved = true;
-                        if (powerpacks[curCell].powerType == 1)
+                        if (powerpacks[curCell].powerType == PowerPackType.Speed)
                         {
                             speedUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             speedUp = 2.0f;
                             incrSpeed = true;
                         }
-                        else if (powerpacks[curCell].powerType == 2)
+                        else if (powerpacks[curCell].powerType == PowerPackType.Strength)
                         {
                             strengthUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             strengthUp = 2.0f;
                             incrStrength = true;
                         }
-                        else if (powerpacks[curCell].powerType == 3)
+                        else if (powerpacks[curCell].powerType == PowerPackType.FireRate)
                         {
                             fireRateUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             fireRateUp = 2.0f;
                             incrShootRate = true;
                         }
-                        else if (powerpacks[curCell].powerType == 4)
+                        else if (powerpacks[curCell].powerType == PowerPackType.Health)
                         {
                             float hitpointAdded = maxHitPoint - currentHitPoint;
                             currentHitPoint += 100;
@@ -1405,13 +1407,15 @@ namespace Poseidon
                                 numHealth += 100;
                             }
                         }
-                        else if (powerpacks[curCell].powerType == 5)
+                        else if (powerpacks[curCell].powerType == PowerPackType.StrangeRock)
                         {
                             numStrangeObjCollected++;
                             numRocks += 1;
                         }
                         //RetrievedSound.Play();
                         PoseidonGame.audio.retrieveSound.Play();
+                        powerpacks.RemoveAt(curCell);
+                        curCell -= 1;
                     }
                 }
             }
@@ -1419,15 +1423,16 @@ namespace Poseidon
             {
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center,
                     25);
-                foreach (Resource resource in resources)
+                //foreach (Resource resource in resources)
+                for (int curCell = 0; curCell < resources.Count; curCell++)
                 {
-                    if (resource.Retrieved == false && Trash_Fruit_BoundingSphere.Intersects(resource.BoundingSphere))
+                    if (Trash_Fruit_BoundingSphere.Intersects(resources[curCell].BoundingSphere))
                     {
-                        resource.Retrieved = true;
                         numResources++;
                         numResourceCollected++;
-                    }
-                     
+                        resources.RemoveAt(curCell);
+                        curCell -= 1;
+                    }       
                 }
             }
             

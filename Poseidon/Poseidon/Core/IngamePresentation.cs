@@ -341,7 +341,7 @@ namespace Poseidon.Core
             spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 11), heightFromTop - 1), typeColor);
         }
 
-        public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests)
+        public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources)
         {
 
             //Display Fish Health
@@ -374,37 +374,37 @@ namespace Poseidon.Core
                     IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
                 else
                 {
-                    TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
-                    if (chestPointedAt != null)
+                    Powerpack powerPackPointedAt = null, botOnPowerPack = null;
+                    CursorManager.MouseOnWhichPowerPack(cursor, gameCamera, powerPacks, ref powerPackPointedAt, ref botOnPowerPack, null);
+                    if (powerPackPointedAt != null)
                     {
                         string line, comment;
-                        line = "TREASURE CHEST";
-                        comment = "contains cool stuff";
-                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
-                        comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
-                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
-                    }
-                    Trash trashPointedAt = null, botOnTrash = null;
-                    CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes,ref trashPointedAt,ref botOnTrash, null);
-                    if (trashPointedAt != null)
-                    {
-                        string line,comment;
                         line = "";
                         comment = "";
-                        if (trashPointedAt.trashType == TrashType.biodegradable)
+                        if (powerPackPointedAt.powerType == PowerPackType.Speed)
                         {
-                            line += "BIODEGRADABLE TRASH";
-                            comment = "Organic, will emit greenhouse gases unless processed in a factory.";
+                            line += "Speed Boost Powerpack";
+                            comment = "Temporarily doubles your movement speed.";
                         }
-                        else if (trashPointedAt.trashType == TrashType.plastic)
+                        else if (powerPackPointedAt.powerType == PowerPackType.Strength)
                         {
-                            line += "PLASTIC TRASH";
-                            comment = "It will take more than 500 years to decompose.";
+                            line += "Strength Boost Powerpack";
+                            comment = "Temporarily doubles your power.";
                         }
-                        else
+                        else if (powerPackPointedAt.powerType == PowerPackType.FireRate)
                         {
-                            line += "RADIOACTIVE TRASH";
-                            comment = "An invisible speck can cause cancer.";
+                            line += "Fire Rate Boost Powerpack";
+                            comment = "Temporarily doubles your shooting speed.";
+                        }
+                        else if (powerPackPointedAt.powerType == PowerPackType.Health)
+                        {
+                            line += "Health Boost Powerpack";
+                            comment = "Adds health.";
+                        }
+                        else if (powerPackPointedAt.powerType == PowerPackType.StrangeRock)
+                        {
+                            line += "Strange Rock";
+                            comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.";
                         }
                         spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
                         comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
@@ -412,38 +412,91 @@ namespace Poseidon.Core
                     }
                     else
                     {
-                        ShipWreck shipPointedAt = CursorManager.MouseOnWhichShipWreck(cursor, gameCamera, shipWrecks);
-                        if (shipPointedAt != null)
+                        Resource resourcePointedAt = null, botOnResource = null;
+                        CursorManager.MouseOnWhichResource(cursor, gameCamera, resources, ref resourcePointedAt, ref botOnResource, null);
+                        if (resourcePointedAt != null)
                         {
-                            string line;
-                            line = "OLD SHIPWRECK";
+                            string line, comment;
+                            line = "Recycled Resource Box";
+                            comment = "A box contains recycled resource produced by the factory. Recycled resources can be used to construct new factories.";
                             spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                            comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
+                            spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
                         }
                         else
                         {
-                            Factory factoryPointedAt = CursorManager.MouseOnWhichFactory(cursor, gameCamera, factories);
-                            if (factoryPointedAt != null)
+                            TreasureChest chestPointedAt = CursorManager.MouseOnWhichChest(cursor, gameCamera, treasureChests);
+                            if (chestPointedAt != null)
                             {
-                                string line;
+                                string line, comment;
+                                line = "TREASURE CHEST";
+                                comment = "contains cool stuff";
+                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                                comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
+                                spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
+                            }
+                            Trash trashPointedAt = null, botOnTrash = null;
+                            CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes, ref trashPointedAt, ref botOnTrash, null);
+                            if (trashPointedAt != null)
+                            {
+                                string line, comment;
                                 line = "";
-                                if (factoryPointedAt.factoryType == FactoryType.biodegradable)
+                                comment = "";
+                                if (trashPointedAt.trashType == TrashType.biodegradable)
                                 {
-                                    line += "BIODEGRADABLE TRASH PROCESSING FACTORY";
+                                    line += "BIODEGRADABLE TRASH";
+                                    comment = "Organic, will emit greenhouse gases unless processed in a factory.";
                                 }
-                                else if (factoryPointedAt.factoryType == FactoryType.plastic)
+                                else if (trashPointedAt.trashType == TrashType.plastic)
                                 {
-                                    line += "PLASTIC TRASH PROCESSING FACTORY";
+                                    line += "PLASTIC TRASH";
+                                    comment = "It will take more than 500 years to decompose.";
                                 }
                                 else
-                                    line += "RADIOACTIVE TRASH PROCESSING FACTORY";
+                                {
+                                    line += "RADIOACTIVE TRASH";
+                                    comment = "An invisible speck can cause cancer.";
+                                }
                                 spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                                comment = wrapLine(comment, HealthBar.Width + 50, statsFont);
+                                spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
                             }
                             else
                             {
-                                if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
+                                ShipWreck shipPointedAt = CursorManager.MouseOnWhichShipWreck(cursor, gameCamera, shipWrecks);
+                                if (shipPointedAt != null)
                                 {
-                                    string line = "RESEARCH FACILITY";
+                                    string line;
+                                    line = "OLD SHIPWRECK";
                                     spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                                }
+                                else
+                                {
+                                    Factory factoryPointedAt = CursorManager.MouseOnWhichFactory(cursor, gameCamera, factories);
+                                    if (factoryPointedAt != null)
+                                    {
+                                        string line;
+                                        line = "";
+                                        if (factoryPointedAt.factoryType == FactoryType.biodegradable)
+                                        {
+                                            line += "BIODEGRADABLE TRASH PROCESSING FACTORY";
+                                        }
+                                        else if (factoryPointedAt.factoryType == FactoryType.plastic)
+                                        {
+                                            line += "PLASTIC TRASH PROCESSING FACTORY";
+                                        }
+                                        else
+                                            line += "RADIOACTIVE TRASH PROCESSING FACTORY";
+                                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                                    }
+                                    else
+                                    {
+                                        if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
+                                        {
+                                            string line = "RESEARCH FACILITY";
+                                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Red);
+                                        }
+                                    }
                                 }
                             }
                         }

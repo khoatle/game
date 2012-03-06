@@ -450,8 +450,8 @@ namespace Poseidon
             }
 
             AddingObjects.placeTrash(ref trashes, Content, random, null, null,
-                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.TrashMinRangeZ,
-                GameConstants.MainGameMaxRangeZ, GameMode.MainGame, GameConstants.MainGameFloatHeight, terrain.heightMapInfo); 
+                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 80, GameConstants.TrashMinRangeZ,
+                GameConstants.MainGameMaxRangeZ - 60, GameMode.MainGame, GameConstants.MainGameFloatHeight, terrain.heightMapInfo); 
 
            //Initialize a list of factories
             factories = new List<Factory>();
@@ -695,8 +695,8 @@ namespace Poseidon
                     if (trashes != null && trashes.Count < numTrash)
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, null, null, factories, researchFacility,
-                                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.TrashMinRangeZ,
-                                GameConstants.MainGameMaxRangeZ, GameConstants.MainGameFloatHeight, terrain.heightMapInfo,ref biodegradableTrash,ref plasticTrash,ref radioactiveTrash);
+                                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 80, GameConstants.TrashMinRangeZ,
+                                GameConstants.MainGameMaxRangeZ - 60, GameConstants.MainGameFloatHeight, terrain.heightMapInfo,ref biodegradableTrash,ref plasticTrash,ref radioactiveTrash);
                         Point point = new Point();
                         point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
                         points.Add(point);
@@ -994,7 +994,8 @@ namespace Poseidon
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
             //preparing edge detecting for the object being pointed at
-            graphicEffect.PrepareEdgeDetect(hydroBot, cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, graphics.GraphicsDevice, normalDepthRenderTargetLow, normalDepthRenderTargetHigh);
+            graphicEffect.PrepareEdgeDetect(hydroBot, cursor, gameCamera, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null,
+                powerpacks, resources, graphics.GraphicsDevice, normalDepthRenderTargetLow, normalDepthRenderTargetHigh);
             //normal drawing of the game scene
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
@@ -1105,7 +1106,7 @@ namespace Poseidon
             Rectangle rectSafeArea;
             str1 += ((int)score).ToString();
 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null);
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
@@ -1281,7 +1282,7 @@ namespace Poseidon
         {
             foreach (Powerpack f in powerpacks)
             {
-                if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
+                if (f.BoundingSphere.Intersects(frustum))
                 {
                     f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();

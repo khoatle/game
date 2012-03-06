@@ -145,6 +145,69 @@ namespace Poseidon
             }
         }
 
+        public static void MouseOnWhichPowerPack(Cursor cursor, Camera gameCamera, List<Powerpack> powerPacks, ref Powerpack cursorOnPowerPack, ref Powerpack botOnPowerPack, HydroBot hydroBot)
+        {
+            bool foundBotOnPowerpack = false, foundCursorOnPowerpack = false;
+            if (hydroBot == null) foundBotOnPowerpack = true;
+            BoundingSphere botPowerPackBoundingSphere = new BoundingSphere();
+            if (!foundBotOnPowerpack)
+                botPowerPackBoundingSphere = new BoundingSphere(hydroBot.BoundingSphere.Center, 5);
+            if (powerPacks == null) return;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (Powerpack powerPack in powerPacks)
+            {
+                if (!foundBotOnPowerpack)
+                {
+                    if (powerPack.BoundingSphere.Intersects(botPowerPackBoundingSphere))
+                    {
+                        foundBotOnPowerpack = true;
+                        botOnPowerPack = powerPack;
+                    }
+                }
+                if (!foundCursorOnPowerpack)
+                {
+                    if (RayIntersectsBoundingSphere(cursorRay, powerPack.BoundingSphere))
+                    {
+                        foundCursorOnPowerpack = true;
+                        cursorOnPowerPack = powerPack;
+                    }
+                }
+                if (foundBotOnPowerpack && foundCursorOnPowerpack) return;
+            }
+        }
+
+        public static void MouseOnWhichResource(Cursor cursor, Camera gameCamera, List<Resource> resources, ref Resource cursorOnResource, ref Resource botOnResource, HydroBot hydroBot)
+        {
+            bool foundBotOnResource = false, foundCursorOnResource = false;
+            if (hydroBot == null) foundBotOnResource = true;
+            BoundingSphere botPowerPackBoundingSphere = new BoundingSphere();
+            if (!foundBotOnResource)
+                botPowerPackBoundingSphere = new BoundingSphere(hydroBot.BoundingSphere.Center, 5);
+            if (resources == null) return;
+            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            foreach (Resource resource in resources)
+            {
+                if (!foundBotOnResource)
+                {
+                    if (resource.BoundingSphere.Intersects(botPowerPackBoundingSphere))
+                    {
+                        foundBotOnResource = true;
+                        botOnResource = resource;
+                    }
+                }
+                if (!foundCursorOnResource)
+                {
+                    if (RayIntersectsBoundingSphere(cursorRay, resource.BoundingSphere))
+                    {
+                        foundCursorOnResource = true;
+                        cursorOnResource = resource;
+                    }
+                }
+                if (foundBotOnResource && foundCursorOnResource) return;
+            }
+        }
+
+
         public static ShipWreck MouseOnWhichShipWreck(Cursor cursor, Camera gameCamera, List<ShipWreck> shipWrecks)
         {
             if (shipWrecks == null) return null;

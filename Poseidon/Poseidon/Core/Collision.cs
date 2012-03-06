@@ -151,7 +151,7 @@ namespace Poseidon
         {
             for (int i = 0; i < powerpacks.Count; i++)
             {
-                if (!powerpacks[i].Retrieved && thisBoundingSphere.Intersects(powerpacks[i].BoundingSphere))
+                if (thisBoundingSphere.Intersects(powerpacks[i].BoundingSphere))
                     return true;
             }
             return false;

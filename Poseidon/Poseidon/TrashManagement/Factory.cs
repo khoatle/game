@@ -491,7 +491,7 @@ namespace Poseidon
         void ProduceStrangeRock(ref List<Powerpack> powerpacks, List<Resource> resources, ref Model[] strangeRockModels)
         {
             Vector3 powerpackPosition;
-            int powerType = 5; //type 5 for strange rock
+            PowerPackType powerType = PowerPackType.StrangeRock; //type 5 for strange rock
             Powerpack powerpack = new Powerpack(powerType);
             powerpackPosition = findResourcePowerpackPosition(Position, resources, powerpacks);
             powerpack.Model = strangeRockModels[random.Next(2)];

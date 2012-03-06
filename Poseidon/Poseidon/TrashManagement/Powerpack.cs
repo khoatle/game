@@ -14,20 +14,32 @@ namespace Poseidon
         public bool Retrieved { get; set; }
         //SoundEffect RetrievedSound;
         //Temporary power-up types
-        //1: speed
-        //2: power
-        //3: fire rate
-        //4: health point
-        //5: Strange Rock
-        public int powerType;
+        public PowerPackType powerType;
         private float orientation; //rotation in radians
+
+        public Powerpack(PowerPackType powerType)
+            : base()
+        {
+            Retrieved = false;
+            orientation = 0f;
+            this.powerType = powerType;
+        }
 
         public Powerpack(int powerType)
             : base()
         {
             Retrieved = false;
             orientation = 0f;
-            this.powerType = powerType;
+            if (powerType == 1)
+                this.powerType = PowerPackType.Speed;
+            else if (powerType == 2)
+                this.powerType = PowerPackType.Strength;
+            else if (powerType == 3)
+                this.powerType = PowerPackType.FireRate;
+            else if (powerType == 4)
+                this.powerType = PowerPackType.Health;
+            else if (powerType == 5)
+                this.powerType = PowerPackType.StrangeRock;
         }
 
         public void LoadContent(Vector3 powerpackPosition)
@@ -90,23 +102,11 @@ namespace Poseidon
 
                     //for our custom BasicEffect
                     effect.Parameters["FogEnabled"].SetValue(false);
-                    if (powerType == 5)
-                    {
-                        effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4() * 0.6f); //(ambientColor.ToVector4());
-                        effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4() * 0.6f); //(diffuseColor.ToVector4());
-                        effect.Parameters["SpecularColor"].SetValue(Color.White.ToVector4() * 0.6f);//specularColor.ToVector4());
-                        //effect.Parameters["FogColor"].SetValue(Color.White.ToVector3());//(fogColor.ToVector3());
-                    }
-                    else
-                    {
-                        effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4() * 0.6f); //(ambientColor.ToVector4());
-                        effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4() * 0.6f); //(diffuseColor.ToVector4());
-                        effect.Parameters["SpecularColor"].SetValue(Color.White.ToVector4() * 0.6f);//specularColor.ToVector4());
-                        //effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
-                        //effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
-                        //effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
-                        //effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
-                    }
+
+                    effect.Parameters["AmbientColor"].SetValue(Color.White.ToVector4() * 0.6f); //(ambientColor.ToVector4());
+                    effect.Parameters["DiffuseColor"].SetValue(Color.White.ToVector4() * 0.6f); //(diffuseColor.ToVector4());
+                    effect.Parameters["SpecularColor"].SetValue(Color.White.ToVector4() * 0.6f);//specularColor.ToVector4());
+
                     effect.CurrentTechnique = effect.Techniques[techniqueName];
                     Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.Parameters["World"].SetValue(readlWorldMatrix);

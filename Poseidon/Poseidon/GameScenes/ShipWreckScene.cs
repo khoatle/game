@@ -699,7 +699,7 @@ namespace Poseidon
                                     //HydroBot.numStrangeObjCollected++;
                                     //fossilToDraw = random.Next(4);
                                     Vector3 powerpackPosition;
-                                    int powerType = 5; //type 5 for strange rock
+                                    PowerPackType powerType = PowerPackType.StrangeRock; //type 5 for strange rock
                                     Powerpack powerpack = new Powerpack(powerType);
                                     powerpackPosition.Y = GameConstants.ShipWreckFloatHeight;
                                     powerpackPosition.X = chest.Position.X;
@@ -820,7 +820,7 @@ namespace Poseidon
 
             //preparingedge detecting for the object being pointed at
             graphicEffect.PrepareEdgeDetect(hydroBot, cursor, gameCamera, fishes[currentShipWreckID], fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID],
-                null, null, null, null, treasureChests[currentShipWreckID], graphics.GraphicsDevice, normalDepthRenderTargetLow, normalDepthRenderTargetHigh);
+                null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null, graphics.GraphicsDevice, normalDepthRenderTargetLow, normalDepthRenderTargetHigh);
 
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
@@ -1088,7 +1088,7 @@ namespace Poseidon
             str1 += days.ToString();
             Rectangle rectSafeArea;
 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID]);
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
@@ -1174,7 +1174,7 @@ namespace Poseidon
         {
             foreach (Powerpack f in powerpacks[currentShipWreckID])
             {
-                if (!f.Retrieved && f.BoundingSphere.Intersects(frustum))
+                if (f.BoundingSphere.Intersects(frustum))
                 {
                     f.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     //RasterizerState rs = new RasterizerState();

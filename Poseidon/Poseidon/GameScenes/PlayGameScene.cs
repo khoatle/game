@@ -1599,7 +1599,7 @@ namespace Poseidon
             int days;
             string str1 = GameConstants.StrTimeRemaining;
             string str2 = "";
-            str2 += hydroBot.Position;
+            //str2 += hydroBot.Position;
             Rectangle rectSafeArea;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
             str1 += days.ToString();
@@ -1630,8 +1630,8 @@ namespace Poseidon
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
             spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
-            strPosition.Y += strSize.Y;
-            spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
+            //strPosition.Y += strSize.Y;
+            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
         }
 
         // Draw the currently selected bullet type

@@ -702,7 +702,6 @@
       <Name>radioactiveTrash</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>1.3</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>

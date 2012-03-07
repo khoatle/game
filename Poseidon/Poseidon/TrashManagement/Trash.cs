@@ -69,7 +69,6 @@ namespace Poseidon
                     particleManager.sandParticles.AddParticle(Position, Vector3.Zero);
                 particleAnimationPlayed = true;
             }
-
             //toxic air around radioactive trash
             if (trashType == TrashType.radioactive && PoseidonGame.playTime.TotalMilliseconds - lastAddToxicParticle >= 1000)
             {

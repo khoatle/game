@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Poseidon
 {
@@ -58,6 +59,7 @@ namespace Poseidon
 
         public bool sandDirturbedAnimationPlayed;
         ParticleManagement particleManager;
+        SoundEffectInstance buildingSoundInstance;
 
         public Factory(FactoryType factorytype, ParticleManagement particleManager)
             : base()
@@ -78,6 +80,7 @@ namespace Poseidon
             lastConstructionSwitchTime = TimeSpan.Zero;
             constructionSwitchSpan = TimeSpan.FromSeconds(3);
             this.particleManager = particleManager;
+            buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
         }
 
         public void setIsAnchor()
@@ -149,6 +152,11 @@ namespace Poseidon
 
             if (underConstruction)
             {
+
+                if (buildingSoundInstance.State != SoundState.Playing)
+                {
+                    buildingSoundInstance.Play();
+                }
                 //environment disturbance because of factory building
                 if (!sandDirturbedAnimationPlayed)
                 {
@@ -159,6 +167,7 @@ namespace Poseidon
 
                 Model = modelStates[constructionIndex];
                 underConstruction = (constructionIndex < 3);
+                if (!underConstruction && buildingSoundInstance.State == SoundState.Playing) buildingSoundInstance.Stop();
                 if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)
                 {
                     constructionIndex++;

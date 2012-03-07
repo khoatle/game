@@ -40,6 +40,7 @@ namespace Poseidon.Core
         public SoundEffect healingSound;
         public SoundEffect maneteeRoar;
         public SoundEffect frozenBreathe;
+        public SoundEffect buildingSound;
 
         private SoundEffect explosion;
         private SoundEffect newMeteor;
@@ -164,6 +165,7 @@ namespace Poseidon.Core
             healingSound = Content.Load<SoundEffect>("Sounds/SoundEffects/healingSound");
             maneteeRoar = Content.Load<SoundEffect>("Sounds/SoundEffects/maneteeRoar");
             frozenBreathe = Content.Load<SoundEffect>("Sounds/SoundEffects/frozenBreathe");
+            buildingSound = Content.Load<SoundEffect>("Sounds/SoundEffects/buildingSound");
 
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");

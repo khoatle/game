@@ -55,6 +55,9 @@ namespace Poseidon
 
         Random random;
         Vector3 currentFogColor;
+
+        public bool sandDirturbedAnimationPlayed;
+
         public Factory(FactoryType factorytype)
             : base()
         {
@@ -130,7 +133,7 @@ namespace Poseidon
                 underConstruction = false;
                 SetupShaderParameters(PoseidonGame.contentManager, Model);
             }
-            EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+            //EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
         public void Update(GameTime gameTime, ref List<Powerpack> powerpacks,ref List<Resource> resources, ref Model[] powerpackModels, ref Model resourceModel, ref Model[] strangeRockModels)

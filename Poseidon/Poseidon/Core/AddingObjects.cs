@@ -558,7 +558,7 @@ namespace Poseidon
                 sinkingTrash.sinkingRotationRate = 0.025f;
             }
             sinkingTrash.sinking = true;
-            
+            sinkingTrash.sinkableTrash = true;
             do
             {
                 positionSign = random.Next(4);

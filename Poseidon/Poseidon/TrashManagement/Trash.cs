@@ -13,6 +13,7 @@ namespace Poseidon
         public TrashType trashType;
 
         public bool sinking;
+        public bool sinkableTrash;
         public float sinkingRate;
         public float sinkingRotationRate;
         public float seaFloorHeight;
@@ -33,6 +34,7 @@ namespace Poseidon
             : base()
         {
             sinking = false;
+            sinkableTrash = false;
             trashType = trashtype;
         }
 

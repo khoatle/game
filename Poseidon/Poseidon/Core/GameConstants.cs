@@ -259,6 +259,7 @@ namespace Poseidon {
         //const for particle systems
         public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;
         public static int numSandParticles = (int)(30 * GameSettings.NumParticleLevel);
+        public static int numSandParticlesForFactory = (int)(80 * GameSettings.NumParticleLevel);
         public static float trailParticlesPerSecond = (int)(100 * GameSettings.NumParticleLevel);
         public static int numFrozenBreathParticlesPerUpdate = (int)(3 * GameSettings.NumParticleLevel);
 

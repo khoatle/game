@@ -997,7 +997,7 @@ namespace Poseidon
                     foreach (Trash trash in trashes)
                     {
                         trash.Update(gameTime);
-                        if (trash.sinking == false && trash.particleAnimationPlayed == false)
+                        if (trash.sinking == false && trash.sinkableTrash && trash.particleAnimationPlayed == false)
                         {
                             for (int k = 0; k < GameConstants.numSandParticles; k++)
                                 particleManager.sandParticles.AddParticle(trash.Position, Vector3.Zero);
@@ -1009,7 +1009,14 @@ namespace Poseidon
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
-                        if(doubleClicked && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
+                        //environment disturbance because of factory building
+                        if (factory.UnderConstruction && !factory.sandDirturbedAnimationPlayed)
+                        {
+                            for (int k = 0; k < GameConstants.numSandParticles; k++)
+                                particleManager.sandParticlesForFactory.AddParticle(factory.Position, Vector3.Zero);
+                            factory.sandDirturbedAnimationPlayed = true;
+                        }
+                        if(doubleClicked && !factory.UnderConstruction && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
                                 //Dump Trash
                                 switch (factory.factoryType)

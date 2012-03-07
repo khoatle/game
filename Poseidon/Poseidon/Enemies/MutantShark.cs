@@ -221,7 +221,7 @@ namespace Poseidon
                             PoseidonGame.audio.botYell.Play();
 
                             Point point = new Point();
-                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            String point_string = "-" + damage.ToString() + "HP\nCorroded";
                             point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.Black);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
@@ -264,7 +264,7 @@ namespace Poseidon
                         if (currentHuntingTarget.BoundingSphere.Intersects(cameraFrustum))
                         {
                             Point point = new Point();
-                            String point_string = "-" + damage.ToString() + "HP (POISONED)";
+                            String point_string = "-" + damage.ToString() + "HP\nPoisoned";
                             point.LoadContent(PoseidonGame.contentManager, point_string, currentHuntingTarget.Position, Color.Red);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);

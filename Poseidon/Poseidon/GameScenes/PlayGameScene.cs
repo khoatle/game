@@ -990,9 +990,9 @@ namespace Poseidon
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 80, GameConstants.TrashMinRangeZ,
                                 GameConstants.MainGameMaxRangeZ - 60, GameConstants.MainGameFloatHeight, terrain.heightMapInfo,ref biodegradableTrash,ref plasticTrash,ref radioactiveTrash);
-                        Point point = new Point();
-                        point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
-                        points.Add(point);
+                        //Point point = new Point();
+                        //point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
+                        //points.Add(point);
                     }
                     foreach (Trash trash in trashes)
                     {
@@ -1045,13 +1045,16 @@ namespace Poseidon
                         researchFacility.Update(gameTime, hydroBot.Position, ref points);
                         if (doubleClicked && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera) )
                         {
-                            string point_string = HydroBot.numStrangeObjCollected + " strange rocks deposited for inspection";
-                            for (int i = 0; i < HydroBot.numStrangeObjCollected; i++)
-                                researchFacility.listTimeRockProcessing.Add(PoseidonGame.playTime.TotalSeconds + (i*GameConstants.DaysPerSecond));
-                            Point point = new Point();
-                            point.LoadContent(PoseidonGame.contentManager, point_string, researchFacility.Position, Color.LawnGreen);
-                            points.Add(point);
-                            HydroBot.numStrangeObjCollected = 0;
+                            if (HydroBot.numStrangeObjCollected > 0)
+                            {
+                                string point_string = HydroBot.numStrangeObjCollected + " strange rocks\ndeposited";
+                                for (int i = 0; i < HydroBot.numStrangeObjCollected; i++)
+                                    researchFacility.listTimeRockProcessing.Add(PoseidonGame.playTime.TotalSeconds + (i * GameConstants.DaysPerSecond));
+                                Point point = new Point();
+                                point.LoadContent(PoseidonGame.contentManager, point_string, researchFacility.Position, Color.LawnGreen);
+                                points.Add(point);
+                                HydroBot.numStrangeObjCollected = 0;
+                            }
                         }
                     }
                     doubleClicked = false;
@@ -1865,15 +1868,15 @@ namespace Poseidon
             switch (factory.factoryType)
             {
                 case FactoryType.biodegradable:
-                    point_string = HydroBot.bioTrash + " Biodegradable Trash Dumped.\n";
+                    point_string = HydroBot.bioTrash + " biodegradable\ntrash dumped";
                     factory.numTrashWaiting += HydroBot.bioTrash;
                     break;
                 case FactoryType.plastic:
-                    point_string = HydroBot.plasticTrash + " Plastic Trash Dumped.\n";
+                    point_string = HydroBot.plasticTrash + " plastic\ntrash dumped";
                     factory.numTrashWaiting += HydroBot.plasticTrash;
                     break;
                 case FactoryType.radioactive:
-                    point_string = HydroBot.nuclearTrash + " Radioactive Trash Dumped.\n";
+                    point_string = HydroBot.nuclearTrash + " radioactive\ntrash dumped";
                     factory.numTrashWaiting += HydroBot.nuclearTrash;
                     break;
             }

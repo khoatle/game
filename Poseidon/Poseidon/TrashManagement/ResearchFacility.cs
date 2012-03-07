@@ -104,20 +104,20 @@ namespace Poseidon
                     if (fossilType >= 80)
                     {
                         HydroBot.numTurtlePieces++;
-                        point_string = "Research Centre found a Meiolania Turtle\nfossil from the strange rock";
+                        point_string = "Research Centre found\na Meiolania Turtle fossil\nfrom the strange rock";
                         boneFound = true;
                     }
                     else if (fossilType >= 60)
                     {
                         HydroBot.numDolphinPieces++;
-                        point_string = "Research Centre found a Maui's Dolphin\nbone from the strange rock";
+                        point_string = "Research Centre found\na Maui's Dolphin bone\nfrom the strange rock";
                         boneFound = true;
                     }
                     else if (fossilType >= 40)
                     {
                         HydroBot.numSeaCowPieces++;
                         boneFound = true;
-                        point_string = "Research Centre found a Stellar's SeaCow\nbone from the strange rock";
+                        point_string = "Research Centre found\na Stellar's SeaCow bone\nfrom the strange rock";
                     }
                 }
                 if (boneFound)

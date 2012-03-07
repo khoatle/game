@@ -55,7 +55,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "Enemy Got Biten, health - " + damage;
+                String point_string = "-" + damage.ToString() + "HP";
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -76,7 +76,7 @@ namespace Poseidon
                 HydroBot.strengthUp = 2f;
 
                 Point point = new Point();
-                String point_string = "TEMP-STRENGTH X 2";
+                String point_string = "Strength X 2\ntemporarily";
                 point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -92,7 +92,7 @@ namespace Poseidon
                 HydroBot.speedUp = 2f;
 
                 Point point = new Point();
-                String point_string = "TEMP-SPEED X 2";
+                String point_string = "Speed X 2\ntemporarily";
                 point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -107,7 +107,7 @@ namespace Poseidon
                 HydroBot.fireRateUp = 2f;
 
                 Point point = new Point();
-                String point_string = "TEMP-FIRE_RATE X 2";
+                String point_string = "Fire rate X 2\ntemporarily"; ;
                 point.LoadContent(PoseidonGame.contentManager, point_string, Position, Color.LawnGreen);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);

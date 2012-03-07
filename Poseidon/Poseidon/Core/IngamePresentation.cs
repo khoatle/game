@@ -78,14 +78,17 @@ namespace Poseidon.Core
         }
         public static void DrawHealthBar(Texture2D HealthBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
         {
-            int barX = game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2;
-            int barY = heightFromTop;
+            int barLength = (int)(statsFont.MeasureString(type).X * 1.5f);
+            if (barLength < HealthBar.Width) barLength = HealthBar.Width;
             int barHeight = 22;
+            int barX = game.Window.ClientBounds.Width / 2 - barLength / 2;
+            int barY = heightFromTop;
+
             double healthiness = (double)currentHealth / maxHealth;
 
             //Draw the negative space for the health bar
             spriteBatch.Draw(HealthBar,
-                new Rectangle(barX, barY, HealthBar.Width, barHeight),
+                new Rectangle(barX, barY, barLength, barHeight),
                 new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
                 Color.Transparent);
             //Draw the current health level based on the current Health
@@ -95,15 +98,15 @@ namespace Poseidon.Core
             else if (healthiness < 0.5)
                 healthColor = Color.Orange;
             spriteBatch.Draw(HealthBar,
-                new Rectangle(barX, barY, (int)(HealthBar.Width * healthiness), barHeight),
+                new Rectangle(barX, barY, (int)(barLength * healthiness), barHeight),
                 new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
                 healthColor);
             //Draw the box around the health bar
             spriteBatch.Draw(HealthBar,
-                new Rectangle(barX, barY, HealthBar.Width, barHeight),
+                new Rectangle(barX, barY, barLength, barHeight),
                 new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
+            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2, heightFromTop - 1), typeColor);
         }
 
         public static void DrawEnvironmentBar(Texture2D Bar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)

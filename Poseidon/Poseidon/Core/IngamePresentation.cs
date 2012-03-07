@@ -78,6 +78,7 @@ namespace Poseidon.Core
         }
         public static void DrawHealthBar(Texture2D HealthBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
         {
+            type = type.ToUpper();
             int barLength = (int)(statsFont.MeasureString(type).X * 1.5f);
             if (barLength < HealthBar.Width) barLength = HealthBar.Width;
             int barHeight = 22;
@@ -106,7 +107,7 @@ namespace Poseidon.Core
                 new Rectangle(barX, barY, barLength, barHeight),
                 new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2, heightFromTop - 1), typeColor);
+            spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2, heightFromTop - 1), typeColor);
         }
 
         public static void DrawEnvironmentBar(Texture2D Bar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)
@@ -114,7 +115,7 @@ namespace Poseidon.Core
             int barX = game.Window.ClientBounds.Width - 50;
             int barY = game.Window.ClientBounds.Height / 2 - Bar.Height / 2;
             string type = "ENVIRONMENT";
-            Color typeColor = Color.Black;
+            Color typeColor = Color.IndianRed;
             int barWidth = Bar.Width / 2;
             double healthiness = (double)currentEnvironment / maxEnvironemnt;
             //Draw the negative space for the health bar
@@ -361,14 +362,14 @@ namespace Poseidon.Core
                 }
                 else if (fishPointedAt.health < 60)
                 {
-                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, HealthBar.Width + 20, fishTalkFont);
+                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, commentMaxLength, fishTalkFont);
                 }
                 else
                 {
-                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, HealthBar.Width + 20, fishTalkFont);
+                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, commentMaxLength, fishTalkFont);
                 }
                 line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2, 32), Color.Yellow);
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - fishTalkFont.MeasureString(line).X / 2, 32), Color.Yellow);
             }
             else
             {

@@ -623,19 +623,19 @@ namespace Poseidon
             for (bioIndex = 0; bioIndex < GameConstants.NumberBioTrash[currentLevel]; bioIndex++)
             {
                 orientation = random.Next(100);
-                trashes.Add(new Trash(TrashType.biodegradable));
+                trashes.Add(new Trash(TrashType.biodegradable, particleManager));
                 trashes[bioIndex].Load(Content,ref biodegradableTrash, orientation);
             }
             for (plasticIndex = bioIndex; plasticIndex < bioIndex+GameConstants.NumberPlasticTrash[currentLevel]; plasticIndex++)
             {
                 orientation = random.Next(100);
-                trashes.Add(new Trash(TrashType.plastic));
+                trashes.Add(new Trash(TrashType.plastic, particleManager));
                 trashes[plasticIndex].Load(Content,ref plasticTrash, orientation); //nuclear model
             }
             for (nuclearIndex = plasticIndex; nuclearIndex< plasticIndex + GameConstants.NumberNuclearTrash[currentLevel]; nuclearIndex++)
             {
                 orientation = random.Next(100);
-                trashes.Add(new Trash(TrashType.radioactive));
+                trashes.Add(new Trash(TrashType.radioactive, particleManager));
                 trashes[nuclearIndex].Load(Content,ref radioactiveTrash, orientation); //organic model
             }
 
@@ -989,7 +989,7 @@ namespace Poseidon
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 80, GameConstants.TrashMinRangeZ,
-                                GameConstants.MainGameMaxRangeZ - 60, GameConstants.MainGameFloatHeight, terrain.heightMapInfo,ref biodegradableTrash,ref plasticTrash,ref radioactiveTrash);
+                                GameConstants.MainGameMaxRangeZ - 60, GameConstants.MainGameFloatHeight, terrain.heightMapInfo, ref biodegradableTrash, ref plasticTrash, ref radioactiveTrash, particleManager);
                         //Point point = new Point();
                         //point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
                         //points.Add(point);
@@ -997,25 +997,13 @@ namespace Poseidon
                     foreach (Trash trash in trashes)
                     {
                         trash.Update(gameTime);
-                        if (trash.sinking == false && trash.sinkableTrash && trash.particleAnimationPlayed == false)
-                        {
-                            for (int k = 0; k < GameConstants.numSandParticles; k++)
-                                particleManager.sandParticles.AddParticle(trash.Position, Vector3.Zero);
-                            trash.particleAnimationPlayed = true;
-                        }
                     }
 
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
-                        //environment disturbance because of factory building
-                        if (factory.UnderConstruction && !factory.sandDirturbedAnimationPlayed)
-                        {
-                            for (int k = 0; k < GameConstants.numSandParticles; k++)
-                                particleManager.sandParticlesForFactory.AddParticle(factory.Position, Vector3.Zero);
-                            factory.sandDirturbedAnimationPlayed = true;
-                        }
+
                         if(doubleClicked && !factory.UnderConstruction && hydroBot.BoundingSphere.Intersects(factory.BoundingSphere) && CursorManager.MouseOnObject(cursor, factory.BoundingSphere, factory.Position, gameCamera))
                         {
                                 //Dump Trash
@@ -1268,7 +1256,7 @@ namespace Poseidon
                     break;
 
                 case BuildingType.biodegradable:
-                    oneFactory = new Factory(FactoryType.biodegradable);
+                    oneFactory = new Factory(FactoryType.biodegradable, particleManager);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
@@ -1279,7 +1267,7 @@ namespace Poseidon
                     break;
 
                 case BuildingType.plastic:
-                    oneFactory = new Factory(FactoryType.plastic);
+                    oneFactory = new Factory(FactoryType.plastic, particleManager);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
@@ -1290,7 +1278,7 @@ namespace Poseidon
                     status = true;
                     break;
                 case BuildingType.radioactive:
-                    oneFactory = new Factory(FactoryType.radioactive);
+                    oneFactory = new Factory(FactoryType.radioactive, particleManager);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
@@ -1330,7 +1318,7 @@ namespace Poseidon
                 else
                 {
                     FactoryType typeOfFactory = factoryButtonPanel.anchorIndexToFactoryType(factoryButtonPanel.AnchoredIndex);
-                    factoryAnchor = new Factory(typeOfFactory);
+                    factoryAnchor = new Factory(typeOfFactory, particleManager);
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     switch(typeOfFactory) {

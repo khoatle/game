@@ -13,6 +13,7 @@ namespace Poseidon
         public ParticleSystem sandParticles, sandParticlesForFactory;
         public ParticleSystem projectileTrailParticles;
         public ParticleSystem frozenBreathParticles;
+        public ParticleSystem toxicAirParticles;
 
 
         public ParticleManagement(Game game, GraphicsDevice graphicsDevice)
@@ -23,18 +24,21 @@ namespace Poseidon
             sandParticlesForFactory = new ParticleSystem(game, PoseidonGame.contentManager, "SandSettingsForFactory", graphicsDevice);
             projectileTrailParticles = new ParticleSystem(game, PoseidonGame.contentManager, "ProjectileTrailSettings", graphicsDevice);
             frozenBreathParticles = new ParticleSystem(game, PoseidonGame.contentManager, "FrozenBreathSettings", graphicsDevice);
+            toxicAirParticles = new ParticleSystem(game, PoseidonGame.contentManager, "ToxicAirSettings", graphicsDevice);
 
             sandParticles.DrawOrder = 200;
             sandParticlesForFactory.DrawOrder = 200;
             explosionParticles.DrawOrder = 400;
             projectileTrailParticles.DrawOrder = 300;
             frozenBreathParticles.DrawOrder = 400;
+            toxicAirParticles.DrawOrder = 200;
 
             explosionParticles.Load();
             sandParticles.Load();
             sandParticlesForFactory.Load();
             projectileTrailParticles.Load();
             frozenBreathParticles.Load();
+            toxicAirParticles.Load();
        
         }
 
@@ -48,9 +52,13 @@ namespace Poseidon
             //tint the sand particle to the color of the environment
             //i.e: dirty sea, red sea, black sea etc.
             EffectHelpers.GetEffectConfiguration(ref sandParticles.fogColor,ref sandParticles.ambientColor,ref sandParticles.diffuseColor,ref sandParticles.specularColor);
-            sandParticles.TintParticleColor();
+            sandParticles.TintParticleColor(1.0f);
             EffectHelpers.GetEffectConfiguration(ref sandParticlesForFactory.fogColor, ref sandParticlesForFactory.ambientColor, ref sandParticlesForFactory.diffuseColor, ref sandParticlesForFactory.specularColor);
-            sandParticlesForFactory.TintParticleColor();
+            sandParticlesForFactory.TintParticleColor(1.0f);
+
+            toxicAirParticles.Update(gameTime);
+            EffectHelpers.GetEffectConfiguration(ref toxicAirParticles.fogColor, ref toxicAirParticles.ambientColor, ref toxicAirParticles.diffuseColor, ref toxicAirParticles.specularColor);
+            toxicAirParticles.TintParticleColor(1.3f);
 
             projectileTrailParticles.Update(gameTime);
             frozenBreathParticles.Update(gameTime);
@@ -65,12 +73,14 @@ namespace Poseidon
             sandParticlesForFactory.SetCamera(view, projection);
             projectileTrailParticles.SetCamera(view, projection);
             frozenBreathParticles.SetCamera(view, projection);
+            toxicAirParticles.SetCamera(view, projection);
 
             explosionParticles.Draw(gameTime);
             sandParticles.Draw(gameTime);
             sandParticlesForFactory.Draw(gameTime);
             projectileTrailParticles.Draw(gameTime);
             frozenBreathParticles.Draw(gameTime);
+            toxicAirParticles.Draw(gameTime);
         }
     }
 }

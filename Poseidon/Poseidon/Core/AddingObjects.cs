@@ -529,7 +529,7 @@ namespace Poseidon
         }
 
         public static Vector3 createSinkingTrash(
-            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Factory> factories, ResearchFacility researchFacility, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo,ref Model bioTrash,ref Model plasticTrash,ref Model nukeTrash)
+            ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Factory> factories, ResearchFacility researchFacility, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo,ref Model bioTrash,ref Model plasticTrash,ref Model nukeTrash, ParticleManagement particleManager)
         {
             Vector3 tempCenter;
             int positionSign, xVal, zVal, heightValue;
@@ -538,21 +538,21 @@ namespace Poseidon
             Trash sinkingTrash;
             if (trash_type < 48)
             {
-                sinkingTrash = new Trash(TrashType.biodegradable);
+                sinkingTrash = new Trash(TrashType.biodegradable, particleManager);
                 sinkingTrash.Load(Content,ref bioTrash, orientation);
                 sinkingTrash.sinkingRate = 2;// 0.25f;
                 sinkingTrash.sinkingRotationRate = 0.015f;
             }
             else if (trash_type < 96)
             {
-                sinkingTrash = new Trash(TrashType.plastic);
+                sinkingTrash = new Trash(TrashType.plastic, particleManager);
                 sinkingTrash.Load(Content,ref plasticTrash, orientation); //nuclear model
                 sinkingTrash.sinkingRate = 2;// 0.35f;
                 sinkingTrash.sinkingRotationRate = -0.015f;
             }
             else
             {
-                sinkingTrash = new Trash(TrashType.radioactive);
+                sinkingTrash = new Trash(TrashType.radioactive, particleManager);
                 sinkingTrash.Load(Content,ref nukeTrash, orientation); //nuclear model
                 sinkingTrash.sinkingRate = 2;// 0.6f;
                 sinkingTrash.sinkingRotationRate = 0.025f;

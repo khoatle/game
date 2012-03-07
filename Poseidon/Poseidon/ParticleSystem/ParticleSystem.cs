@@ -359,10 +359,10 @@ namespace Poseidon
             }
         }
 
-        public void TintParticleColor()
+        public void TintParticleColor(float variationFactor)
         {
-            parameters["MinColor"].SetValue(specularColor.ToVector4());
-            parameters["MaxColor"].SetValue(specularColor.ToVector4());
+            parameters["MinColor"].SetValue(specularColor.ToVector4() * variationFactor);
+            parameters["MaxColor"].SetValue(specularColor.ToVector4() * variationFactor);
         }
         
         /// <summary>

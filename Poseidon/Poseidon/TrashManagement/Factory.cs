@@ -57,8 +57,9 @@ namespace Poseidon
         Vector3 currentFogColor;
 
         public bool sandDirturbedAnimationPlayed;
+        ParticleManagement particleManager;
 
-        public Factory(FactoryType factorytype)
+        public Factory(FactoryType factorytype, ParticleManagement particleManager)
             : base()
         {
             this.factoryType = factorytype;
@@ -76,6 +77,7 @@ namespace Poseidon
             constructionIndex = 0;
             lastConstructionSwitchTime = TimeSpan.Zero;
             constructionSwitchSpan = TimeSpan.FromSeconds(3);
+            this.particleManager = particleManager;
         }
 
         public void setIsAnchor()
@@ -147,6 +149,14 @@ namespace Poseidon
 
             if (underConstruction)
             {
+                //environment disturbance because of factory building
+                if (!sandDirturbedAnimationPlayed)
+                {
+                    for (int k = 0; k < GameConstants.numSandParticles; k++)
+                        particleManager.sandParticlesForFactory.AddParticle(Position, Vector3.Zero);
+                    sandDirturbedAnimationPlayed = true;
+                }
+
                 Model = modelStates[constructionIndex];
                 underConstruction = (constructionIndex < 3);
                 if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)

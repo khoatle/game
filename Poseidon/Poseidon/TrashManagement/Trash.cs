@@ -30,12 +30,17 @@ namespace Poseidon
         //public float heightChange = 0.5f;
         //public float currentChange = 0.0f;
         //public bool floatUp;
-        public Trash( TrashType trashtype)
+        ParticleManagement particleManager;
+        public double lastAddToxicParticle;
+
+        public Trash( TrashType trashtype, ParticleManagement particleManager)
             : base()
         {
             sinking = false;
             sinkableTrash = false;
             trashType = trashtype;
+            this.particleManager = particleManager;
+            lastAddToxicParticle = PoseidonGame.playTime.TotalMilliseconds;
         }
 
         public void Load(ContentManager content,ref Model model, float orientation)
@@ -58,6 +63,21 @@ namespace Poseidon
         public void Update(GameTime gameTime)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+            if (sinking == false && sinkableTrash && particleAnimationPlayed == false)
+            {
+                for (int k = 0; k < GameConstants.numSandParticles; k++)
+                    particleManager.sandParticles.AddParticle(Position, Vector3.Zero);
+                particleAnimationPlayed = true;
+            }
+
+            //toxic air around radioactive trash
+            if (trashType == TrashType.radioactive && PoseidonGame.playTime.TotalMilliseconds - lastAddToxicParticle >= 1000)
+            {
+                for (int k = 0; k < 2; k++)
+                    particleManager.toxicAirParticles.AddParticle(Position, Vector3.Zero);
+                lastAddToxicParticle = PoseidonGame.playTime.TotalMilliseconds;
+            }
+
             //for floating trash
             //if (currentChange >= heightChange)
             //{

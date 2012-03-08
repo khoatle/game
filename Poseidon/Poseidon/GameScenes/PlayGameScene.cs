@@ -202,6 +202,12 @@ namespace Poseidon
         //for edge detection effect
         RenderTarget2D normalDepthRenderTargetLow, normalDepthRenderTargetHigh, edgeDetectionRenderTarget;
 
+        //for level statistics
+        public static int numNormalKills = 0;
+        public static int numBossKills = 0;
+        public static int healthLost = 0;
+        public static int numTrashCollected = 0;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -482,6 +488,9 @@ namespace Poseidon
 
         private void ResetGame(GameTime gameTime, float aspectRatio)
         {
+            currentSentence = 0;
+            currentGameState = GameState.PlayingCutScene;
+
             string filenamePrefix;
             if (PoseidonGame.gamePlus)
                 filenamePrefix = "GamePlusLevel";
@@ -526,6 +535,7 @@ namespace Poseidon
             firstShow = true;
             showFoundKey = false;
             hadkey = false;
+
             screenTransitNow = false;
             graphicEffect.resetTransitTimer();
 
@@ -545,8 +555,6 @@ namespace Poseidon
 
             startTime = gameTime.TotalGameTime;
             
-            currentSentence = 0;
-            currentGameState = GameState.PlayingCutScene;
             schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
             schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
@@ -558,6 +566,12 @@ namespace Poseidon
             ShipWreckScene.resetShipWreckNow = true;
 
             InitializeGameField(Content);
+
+            //level statistics reset
+            numNormalKills = 0;
+            numBossKills = 0;
+            healthLost = 0;
+            numTrashCollected = 0;
         }
 
         private void InitializeGameField(ContentManager Content)
@@ -1405,7 +1419,45 @@ namespace Poseidon
         {
             spriteBatch.Begin();
             if (currentGameState == GameState.Won)
+            {
                 spriteBatch.Draw(winningTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+                //draw level statistics to feedback player
+                float xOffsetText, yOffsetText;
+                string bossDefeatRank = "";
+                string enemyDefeatRank = "";
+                string healthLostRank = "";
+                string fishSaveRank = "";
+                string trashCollectRank = "";
+                string overallRank = "";
+                string comment = "";
+
+                LevelRanking(ref bossDefeatRank, ref enemyDefeatRank, ref healthLostRank, ref fishSaveRank, ref trashCollectRank, ref overallRank, ref comment);
+
+                int realNumFish = fishAmount;
+                if (HydroBot.hasDolphin) realNumFish -= 1;
+                if (HydroBot.hasSeaCow) realNumFish -= 1;
+                if (HydroBot.hasTurtle) realNumFish -= 1;
+
+                string str1 = "LEVEL STATISTICS\n";
+                str1 += "Number of boss defeated: " + numBossKills + "-" + bossDefeatRank + "\n";
+                str1 += "Number of enemies defeated: " + numNormalKills + "-" + enemyDefeatRank + "\n";
+                str1 += "Health lost: " + healthLost + "-" + healthLostRank + "\n";
+                str1 += "Number of fishes saved: " + realNumFish + "-" + fishSaveRank + "\n";
+                str1 += "Number of trash collected: " + numTrashCollected + "-" + trashCollectRank + "\n";
+                str1 += "Overall rank: " + overallRank + "\n";
+                str1 += comment;
+
+                Rectangle rectSafeArea;
+
+                //Calculate str1 position
+                rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+                xOffsetText = rectSafeArea.X;
+                yOffsetText = rectSafeArea.Y;
+
+                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 2, 20), Color.Red);
+
+            }
             else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
             spriteBatch.End();
         }
@@ -1835,7 +1887,6 @@ namespace Poseidon
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             {
                 spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-
             }
             spriteBatch.End();
             Scene2Texture = cutSceneFinalRenderTarget;
@@ -1844,7 +1895,6 @@ namespace Poseidon
             spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.Opaque);
             {
                 spriteBatch.Draw(cutSceneFinalRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
-
             }
             spriteBatch.End();
         }

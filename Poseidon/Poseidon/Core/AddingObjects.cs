@@ -23,7 +23,7 @@ namespace Poseidon
                 + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator + GameConstants.SurvivalModeMaxSubmarine;
             }
             else if (gameMode == GameMode.MainGame)
-                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel]
+                enemiesAmount = GameConstants.NumberShootingEnemies[currentLevel] + GameConstants.NumberCombatEnemies[currentLevel] + GameConstants.NumberGhostPirate[currentLevel]
                     + GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberTerminator[currentLevel] + GameConstants.NumberSubmarine[currentLevel];
             else if (gameMode == GameMode.ShipWreck)
             {
@@ -660,6 +660,7 @@ namespace Poseidon
                 //    ((int)(MathHelper.Distance(
                 //    zValue, enemies[i].Position.Z)) < optimalDistance))
                 //    return true;
+                
                 if (prospectiveBoundingSphere.Intersects(enemies[i].BoundingSphere)) return true;
             }
 

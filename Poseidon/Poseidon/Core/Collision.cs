@@ -53,10 +53,20 @@ namespace Poseidon
 
                     if (objs[i].isBigBoss == true)
                     {
-                        if (gameMode == GameMode.MainGame)
+                        if (gameMode == GameMode.MainGame || gameMode == GameMode.ShipWreck)
+                        {
                             PlayGameScene.isBossKilled = true;
+                            PlayGameScene.numBossKills += 1;
+                        }
                         else if (gameMode == GameMode.SurvivalMode && objs[i] is Fish)
                             SurvivalGameScene.isAncientKilled = true;
+                    }
+                    else
+                    {
+                        if (gameMode == GameMode.MainGame || gameMode == GameMode.ShipWreck)
+                        {
+                            PlayGameScene.numNormalKills += 1;
+                        }
                     }
                     if (objs[i] is BaseEnemy) {
                         HydroBot.currentExperiencePts += objs[i].basicExperienceReward;
@@ -461,6 +471,9 @@ namespace Poseidon
                     if (!HydroBot.invincibleMode)
                     {
                         HydroBot.currentHitPoint -= enemyBullets[i].damage;
+                        if (gameMode == GameMode.MainGame || gameMode == GameMode.ShipWreck)
+                            PlayGameScene.healthLost += enemyBullets[i].damage;
+
                         PoseidonGame.audio.botYell.Play();
 
                         Point point = new Point();

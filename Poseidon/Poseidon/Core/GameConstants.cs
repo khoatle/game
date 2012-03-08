@@ -112,10 +112,10 @@ namespace Poseidon {
         //general
         //number of trash, enemy and fish per level for main game
         public static int maxShipPerLevel = 9;
-        public static int[] NumberTrash =           {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
-        public static int[] NumberBioTrash =        {  24,  24,  24,   0,  24,  24,  24,  24,  24,   0,   0,   0  };
-        public static int[] NumberPlasticTrash =    {  24,  24,  24,   0,  24,  24,  24,  24,  24,   0,   0,   0  };
-        public static int[] NumberNuclearTrash =    {   2,   2,   2,   0,   2,   2,   2,   2,   2,   0,   0,   0  };
+        public static int[] NumberTrash =           {  50,  50,  50,   50,  50,  50,  50,  50,  50,   50,   50,   50  };
+        public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
+        public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
+        public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
         public static int[] NumberShipWreck = { 9, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
@@ -129,7 +129,7 @@ namespace Poseidon {
         public static double[] LevelObjective = new double[maxLevel];
 
         //number of enemy and fish for ship wreck
-        public static int[] ShipNumberGhostPirate = { 10, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
+        public static int[] ShipNumberGhostPirate = { 0, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
         public const int ShipNumberFish = 0;
         public const int NumberChests = 10;
         public const int NumStaticObjectsMain = 0;
@@ -140,7 +140,7 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(480), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
+        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 

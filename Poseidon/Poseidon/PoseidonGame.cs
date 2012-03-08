@@ -895,6 +895,7 @@ namespace Poseidon
         {
            //using (new TimeRulerHelper("Draw", Color.Blue))
            {
+              
                //GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                if (gameState == GameState.PlayingPresentScene)
                {
@@ -910,6 +911,8 @@ namespace Poseidon
                    if (videoPlayer.State == MediaState.Stopped)
                        gameState = GameState.DisplayMenu;
                }
+               //Draw loading scene to mask long loading time
+               if (PlayGameScene.currentGameState == GameState.ToNextLevel) loadingScene.Draw(gameTime);
                base.Draw(gameTime);
            }
            //spriteBatch.Begin();

@@ -501,21 +501,21 @@ namespace Poseidon
             skills[4] = true;
 
             //for testing survival mode
-            currentHitPoint = maxHitPoint = 50000;
-            strength = 10000;
+            //currentHitPoint = maxHitPoint = 50000;
+            //strength = 10000;
 
-            goodWillBarActivated = true;
-            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            {
-                iconActivated[index] = true;
-            }
+            //goodWillBarActivated = true;
+            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            //{
+            //    iconActivated[index] = true;
+            //}
 
             //hasTurtle = true;
             //turtlePower = 1.0f;
             //hasDolphin = true;
             //dolphinPower = 1.0f;
-            hasSeaCow = true;
-            seaCowPower = 1.0f;
+            //hasSeaCow = true;
+            //seaCowPower = 1.0f;
 
             firstPlant = true;
             prevPlantTime = 0;
@@ -918,6 +918,8 @@ namespace Poseidon
                                     bioTrash++;
                                     display_str = "Organic trash\ncollected " + bioTrash;
 
+                                    if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
+
                                     IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
 
                                     //Increase Environment and experience points
@@ -994,6 +996,8 @@ namespace Poseidon
                                     plasticTrash++;
                                     display_str = "Plastic trash\ncollected " + plasticTrash;
 
+                                    if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
+
                                     //update good will point
                                     IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
 
@@ -1069,6 +1073,8 @@ namespace Poseidon
                                 {
                                     nuclearTrash++;
                                     display_str = "Radioactive trash\ncollected " + nuclearTrash;
+
+                                    if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
 
                                     //update good will point
                                     IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);

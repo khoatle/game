@@ -121,7 +121,7 @@ namespace Poseidon
             SetUpgradeLevelDependentVariables();
 
             this.game = game;
-            // use construction state for only plastic factory for now
+            // use construction state
             if (modelStates != null)
             {
                 foreach (Model model in modelStates)

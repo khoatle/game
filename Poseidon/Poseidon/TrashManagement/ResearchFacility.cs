@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 
 namespace Poseidon
 {
@@ -32,15 +33,40 @@ namespace Poseidon
         //Rock Processing
         public List<double> listTimeRockProcessing;
 
+        List<Model> modelStates; // 4 stages of model, the last one is fully constructed one
+        public List<Model> ModelStates
+        {
+            set { modelStates = value; }
+        }
+
+        private bool underConstruction;
+        public bool UnderConstruction
+        {
+            get { return underConstruction; }
+        }
+        private int constructionIndex;                  // 0, 1, 2, 3 states of constructions. When it reaches index 3, underConstruction is false
+        private TimeSpan constructionSwitchSpan;        // Timespan to switch construction states, 3 secs
+        private TimeSpan lastConstructionSwitchTime;    // Note down last time when construction state switch happened
+
         Random random;
 
-        public ResearchFacility()
+        public bool sandDirturbedAnimationPlayed;
+        ParticleManagement particleManager;
+        SoundEffectInstance buildingSoundInstance;
+
+        public ResearchFacility(ParticleManagement particleManager)
             : base()
         {
             facilityCreationTime = PoseidonGame.playTime.TotalSeconds;
             random = new Random();
             bioUpgrade = plasticUpgrade = false;
             listTimeRockProcessing = new List<double>();
+            underConstruction = true;
+            constructionIndex = 0;
+            lastConstructionSwitchTime = TimeSpan.Zero;
+            constructionSwitchSpan = TimeSpan.FromSeconds(3);
+            this.particleManager = particleManager;
+            buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
         }
 
         public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont facilityFont,ref SpriteFont facilityFont2,ref Texture2D background,ref Texture2D upgradeButton,ref Texture2D playJigsawButton,ref Texture2D increaseAttributeButton)
@@ -79,8 +105,20 @@ namespace Poseidon
 
             this.game = game;
 
-            // Set up the parameters
-            SetupShaderParameters(PoseidonGame.contentManager, Model);
+            if (modelStates != null)
+            {
+                foreach (Model model in modelStates)
+                {
+                    SetupShaderParameters(PoseidonGame.contentManager, model);
+                }
+                Model = modelStates[constructionIndex];
+            }
+            else
+            {
+                // Set up the parameters
+                underConstruction = false;
+                SetupShaderParameters(PoseidonGame.contentManager, Model);
+            }
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
         }
@@ -88,6 +126,37 @@ namespace Poseidon
         public void Update(GameTime gameTime, Vector3 botPosition, ref List<Point> points)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
+            if (lastConstructionSwitchTime == TimeSpan.Zero)
+            {
+                lastConstructionSwitchTime = gameTime.TotalGameTime;
+            }
+
+            if (underConstruction)
+            {
+
+                if (buildingSoundInstance.State != SoundState.Playing)
+                {
+                    buildingSoundInstance.Play();
+                }
+                //environment disturbance because of factory building
+                if (!sandDirturbedAnimationPlayed)
+                {
+                    for (int k = 0; k < GameConstants.numSandParticles; k++)
+                        particleManager.sandParticlesForFactory.AddParticle(Position, Vector3.Zero);
+                    sandDirturbedAnimationPlayed = true;
+                }
+
+                Model = modelStates[constructionIndex];
+                underConstruction = (constructionIndex < 3);
+                if (!underConstruction && buildingSoundInstance.State == SoundState.Playing) buildingSoundInstance.Stop();
+                if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)
+                {
+                    constructionIndex++;
+                    lastConstructionSwitchTime = gameTime.TotalGameTime;
+                }
+                return;
+            }
 
             double processingTime = 8; //2 days
             int fossilType = random.Next(100);

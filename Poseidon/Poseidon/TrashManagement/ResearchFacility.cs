@@ -129,7 +129,7 @@ namespace Poseidon
 
             if (lastConstructionSwitchTime == TimeSpan.Zero)
             {
-                lastConstructionSwitchTime = gameTime.TotalGameTime;
+                lastConstructionSwitchTime = PoseidonGame.playTime;
             }
 
             if (underConstruction)
@@ -150,10 +150,10 @@ namespace Poseidon
                 Model = modelStates[constructionIndex];
                 underConstruction = (constructionIndex < 3);
                 if (!underConstruction && buildingSoundInstance.State == SoundState.Playing) buildingSoundInstance.Stop();
-                if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)
+                if (PoseidonGame.playTime - lastConstructionSwitchTime >= constructionSwitchSpan)
                 {
                     constructionIndex++;
-                    lastConstructionSwitchTime = gameTime.TotalGameTime;
+                    lastConstructionSwitchTime = PoseidonGame.playTime;
                 }
                 return;
             }

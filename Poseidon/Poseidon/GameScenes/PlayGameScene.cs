@@ -1438,12 +1438,27 @@ namespace Poseidon
                 if (HydroBot.hasSeaCow) realNumFish -= 1;
                 if (HydroBot.hasTurtle) realNumFish -= 1;
 
-                string str1 = "LEVEL STATISTICS\n";
-                str1 += "Number of boss defeated: " + numBossKills + "-" + bossDefeatRank + "\n";
-                str1 += "Number of enemies defeated: " + numNormalKills + "-" + enemyDefeatRank + "\n";
-                str1 += "Health lost: " + healthLost + "-" + healthLostRank + "\n";
-                str1 += "Number of fishes saved: " + realNumFish + "-" + fishSaveRank + "\n";
-                str1 += "Number of trash collected: " + numTrashCollected + "-" + trashCollectRank + "\n";
+                string str1 = "LEVEL STATISTICS (temporary graphic)\n";
+                if (bossDefeatRank != "")
+                {
+                    str1 += "Number of boss defeated: " + numBossKills + "-" + bossDefeatRank + "\n";
+                }
+                if (enemyDefeatRank != "")
+                {
+                    str1 += "Number of enemies defeated: " + numNormalKills + "-" + enemyDefeatRank + "\n";
+                }
+                if (healthLostRank != "")
+                {
+                    str1 += "Health lost: " + healthLost + "-" + healthLostRank + "\n";
+                }
+                if (fishSaveRank != "")
+                {
+                    str1 += "Number of fishes saved: " + realNumFish + "-" + fishSaveRank + "\n";
+                }
+                if (trashCollectRank != "")
+                {
+                    str1 += "Number of trash collected: " + numTrashCollected + "-" + trashCollectRank + "\n";
+                }
                 str1 += "Overall rank: " + overallRank + "\n";
                 str1 += comment;
 
@@ -1455,7 +1470,7 @@ namespace Poseidon
                 xOffsetText = rectSafeArea.X;
                 yOffsetText = rectSafeArea.Y;
 
-                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 2, 20), Color.Red);
+                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 2), Color.Red, 0, new Vector2(statsFont.MeasureString(str1).X/2, statsFont.MeasureString(str1).Y/2), 2.0f, SpriteEffects.None, 0);
 
             }
             else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);

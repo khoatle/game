@@ -491,18 +491,19 @@ namespace Poseidon
 
             //just for testing
             //should be removed
-            skillComboActivated = true;
-            activeSkillID = 4;
-            secondSkillID = -1;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
+            //skillComboActivated = true;
+            //activeSkillID = 4;
+            //secondSkillID = -1;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
             //for testing survival mode
-            //currentHitPoint = maxHitPoint = 50000;
-            //strength = 10000;
+            //currentHitPoint = maxHitPoint = 300;
+            //strength = 2;
+            //speed = 1;
 
             //goodWillBarActivated = true;
             //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
@@ -1450,6 +1451,7 @@ namespace Poseidon
                     {
                         numResources++;
                         numResourceCollected++;
+                        PoseidonGame.audio.retrieveSound.Play();
                         resources.RemoveAt(curCell);
                         curCell -= 1;
                     }       

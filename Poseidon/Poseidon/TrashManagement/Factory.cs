@@ -35,6 +35,15 @@ namespace Poseidon
         private TimeSpan cycleTime;
         private TimeSpan lastCycledTime;
 
+        // Textures used for factory levels
+        private List<Texture2D> levelTextures;
+        public List<Texture2D> LevelTextures
+        {
+            set { levelTextures = value; }
+        }
+        private Texture2D currentLevelTexture;
+        private int levelPartId;
+
         //For Factory Configuration Screen
         SpriteFont factoryFont;
         Texture2D background, produceButton;
@@ -42,7 +51,8 @@ namespace Poseidon
         enum Produce { resource, powerpack };
         Produce produce;
         List<Model> modelStates; // 4 stages of model, the last one is fully constructed one
-        public List<Model> ModelStates {
+        public List<Model> ModelStates 
+        {
             set { modelStates = value; }
         }
         private bool underConstruction;
@@ -180,6 +190,8 @@ namespace Poseidon
                 return;
             }
 
+            updateFactoryLevelTexture();
+
             //Is trash finished processing?
             for (int i = 0; i < listTimeTrashProcessing.Count; i++)
             {
@@ -229,6 +241,31 @@ namespace Poseidon
 
             // If in a processing state, then update parameters for annimation cycles
             updateCycleTextures(gameTime);
+        }
+
+        private void updateFactoryLevelTexture()
+        {
+            int levelIndex = 0;
+            if (levelTextures != null)
+            {
+                switch (factoryType)
+                {
+                    case FactoryType.biodegradable:
+                        levelIndex = HydroBot.bioPlantLevel - 1;
+                        levelPartId = GameConstants.biofactoryLevelPartId;
+                        break;
+                    case FactoryType.plastic:
+                        levelIndex = HydroBot.plasticPlantLevel - 1;
+                        levelPartId = GameConstants.plasticfactoryLevelPartId;
+                        break;
+                }
+                currentLevelTexture = levelTextures[levelIndex];
+            }
+            else
+            {
+                levelPartId = -1;
+                currentLevelTexture = null;
+            }
         }
 
         private void updateCycleTextures(GameTime gameTime)
@@ -329,6 +366,12 @@ namespace Poseidon
                     {
                         effect.Parameters["Texture"].SetValue(currentPartTexture); // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.
                         //effect.Parameters["FogColor"].SetValue(currentFogColor);
+                    }
+
+                    // set texture for factory level if any
+                    if (levelPartId >= 0 && levelPartId == effectId && currentLevelTexture != null)
+                    {
+                        effect.Parameters["Texture"].SetValue(currentLevelTexture);
                     }
                     effectId++;
                 }

@@ -179,13 +179,15 @@ namespace Poseidon
         SpriteFont factoryPanelFont;
         ButtonPanel factoryButtonPanel;
 
-        // Models for Factories and buildings
+        // Models and textures for Factories and buildings
         private Model researchBuildingModel;
         private List<Model> researchBuildingModelStates;
         private Model plasticFactoryModel;
         private List<Model> plasticFactoryModelStates;
+        private List<Texture2D> plasticFactoryLevelTextures;
         private Model biodegradableFactoryModel;
         private List<Model> biodegradableFactoryModelStates;
+        private List<Texture2D> biodegradableFactoryLevelTextures;
         private Model radioactiveFactoryModel;
         private List<Model> radioactiveFactoryModelStates;
 
@@ -453,6 +455,17 @@ namespace Poseidon
             plasticFactoryModel = plasticFactoryModelStates[plasticFactoryModelStates.Count - 1];
             dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
+
+            // Factory level textures
+            plasticFactoryLevelTextures = new List<Texture2D>();
+            biodegradableFactoryLevelTextures = new List<Texture2D>();
+            for (int i = 0; i < 3; i++)
+            {
+                // using same level textures for both factories
+                Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
+                plasticFactoryLevelTextures.Add(loadedTexture);
+                biodegradableFactoryLevelTextures.Add(loadedTexture);
+            }
 
             // Load Trash
             biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer2");
@@ -1286,6 +1299,7 @@ namespace Poseidon
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
                     oneFactory.ModelStates = biodegradableFactoryModelStates;
+                    oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
@@ -1298,6 +1312,7 @@ namespace Poseidon
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
                     oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
+                    oneFactory.LevelTextures = plasticFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);

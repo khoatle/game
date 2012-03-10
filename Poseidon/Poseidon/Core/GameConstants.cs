@@ -272,8 +272,10 @@ namespace Poseidon {
 
         // part id for factory part animation while it's in processing state
         public const int biofactoryPartId = 6;
+        public const int biofactoryLevelPartId = 3;
         public const int nuclearfactoryPartId = 2;
         public const int plasticfactoryPartId = 0;
+        public const int plasticfactoryLevelPartId = 5;
 
         //constants for animal health
         public const float DolphinStartingHealth = 500;

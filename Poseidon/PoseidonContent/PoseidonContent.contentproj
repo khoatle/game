@@ -1733,6 +1733,11 @@
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
     </Compile>
+    <Compile Include="Models\SeaAnimalModels\MeiolaniaWithAnim.fbx">
+      <Name>MeiolaniaWithAnim</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>
@@ -2113,13 +2118,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\MinigameTextures\StellersSeaCow1.jpg">
-      <Name>StellersSeaCow1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\MinigameTextures\Meiolania1.jpg">
       <Name>Meiolania1</Name>
       <Importer>TextureImporter</Importer>
@@ -2210,6 +2208,13 @@
       <Name>buildingSound</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\MinigameTextures\StellersSeaCow3.jpg">
+      <Name>StellersSeaCow3</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

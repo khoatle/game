@@ -57,6 +57,7 @@ namespace Poseidon {
             if (Name.Contains("seal")) scale = 0.5f;
             if (Name.Contains("shark")) scale = 0.5f;
             if (Name.Contains("Maui")) scale = 0.5f;
+            if (Name.Contains("Meiolania")) scale = 0.5f;
             if (isBigBoss)
             {
                 scale *= 2.0f;
@@ -153,7 +154,7 @@ namespace Poseidon {
                     futurePosition = prevFuturePosition;
                 }
                 //normal shark model got deformed when turning
-                if (!(Name == "shark"))
+                if (!(Name == "shark") && !(Name == "Meiolania"))
                 {
                     if (ForwardDirection - lastForwardDir > 0)
                     {
@@ -363,20 +364,23 @@ namespace Poseidon {
                     futurePosition = prevFuturePosition;
                 }
 
-                if (ForwardDirection - lastForwardDir > 0)
+                if (!(Name == "shark") && !(Name == "Meiolania"))
                 {
-                    if (!clipPlayer.inRange(29, 31))
-                        clipPlayer.switchRange(29, 31);
-                }
-                else if (ForwardDirection - lastForwardDir < 0)
-                {
-                    if (!clipPlayer.inRange(40, 42))
-                        clipPlayer.switchRange(40, 42);
-                }
-                else
-                {
-                    if (!clipPlayer.inRange(1, 24))
-                        clipPlayer.switchRange(1, 24);
+                    if (ForwardDirection - lastForwardDir > 0)
+                    {
+                        if (!clipPlayer.inRange(29, 31))
+                            clipPlayer.switchRange(29, 31);
+                    }
+                    else if (ForwardDirection - lastForwardDir < 0)
+                    {
+                        if (!clipPlayer.inRange(40, 42))
+                            clipPlayer.switchRange(40, 42);
+                    }
+                    else
+                    {
+                        if (!clipPlayer.inRange(1, 24))
+                            clipPlayer.switchRange(1, 24);
+                    }
                 }
             //}
         }

@@ -142,7 +142,7 @@ namespace Poseidon
                     fish[i].Name += "turtle";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "We are reptiles from much before the Jurassic age. Oh, I cry not for sorrow, just to get the salt out.";
-                    fish[i].sad_talk = "I need to go to the beach to lay eggs. Can you ask the humans not to kill me?";  
+                    fish[i].sad_talk = "I need to go to the beach to lay eggs. Can you ask the humans not to hunt me?";  
                 }
                 else if (type == 1)
                 {
@@ -234,11 +234,11 @@ namespace Poseidon
             else if (type == 1)
             {
                 newFish = new SeaTurtle();
-                newFish.Name = "turtle";
-                newFish.LoadContent(Content, "Models/SeaAnimalModels/turtle");
+                newFish.Name = "Meiolania";
+                newFish.LoadContent(Content, "Models/SeaAnimalModels/MeiolaniaWithAnim");
                 newFish.Load(1, 24, 24);
-                newFish.happy_talk = "We are reptiles from much before the Jurassic age. Oh, I cry not for sorrow, just to get the salt out.";
-                newFish.sad_talk = "I need to go to the beach to lay eggs. Can you ask the humans not to kill me?";
+                newFish.happy_talk = "Huge, hard shell, armored head and spiked tail ... anything else about me?";
+                newFish.sad_talk = "I actually ... have never swum before ^^!";
             }
             else {
                 newFish = new SeaDolphin();

@@ -77,6 +77,8 @@ namespace Poseidon
                     PlayGameScene.points.Add(point);
                 else if (HydroBot.gameMode == GameMode.SurvivalMode)
                     SurvivalGameScene.points.Add(point);
+                //if (this.BoundingSphere.Intersects(cameraFrustum))
+                PoseidonGame.audio.slashSound.Play();
             }
         }
 
@@ -283,7 +285,7 @@ namespace Poseidon
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                float scale = 1f;
+                float scale = 0.7f;
                 if (isBigBoss) scale *= 2.0f;
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *

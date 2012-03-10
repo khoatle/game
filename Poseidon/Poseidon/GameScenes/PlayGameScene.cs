@@ -181,10 +181,13 @@ namespace Poseidon
 
         // Models for Factories and buildings
         private Model researchBuildingModel;
+        private List<Model> researchBuildingModelStates;
         private Model plasticFactoryModel;
         private List<Model> plasticFactoryModelStates;
         private Model biodegradableFactoryModel;
+        private List<Model> biodegradableFactoryModelStates;
         private Model radioactiveFactoryModel;
+        private List<Model> radioactiveFactoryModelStates;
 
         //Models for Trash
         private Model biodegradableTrash, plasticTrash, radioactiveTrash;
@@ -432,15 +435,22 @@ namespace Poseidon
             nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
 
             // Load factory and research lab models
-            researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
-            biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
-            plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
             plasticFactoryModelStates = new List<Model>();
-            for (int i = 0; i < 4; i++)
+            biodegradableFactoryModelStates = new List<Model>();
+            radioactiveFactoryModelStates = new List<Model>();
+            researchBuildingModelStates = new List<Model>();
+            int totalStates = 4;
+            for (int i = 0; i < totalStates; i++)
             {
                 plasticFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/PlasticFactory_stage" + i));
+                biodegradableFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/BiodegradableFactory_stage" + i));
+                radioactiveFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/NuclearFactory_stage" + i));
+                researchBuildingModelStates.Add(Content.Load<Model>("Models/FactoryModels/ResearchFacility_stage" + i));
             }
-            radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
+            radioactiveFactoryModel = radioactiveFactoryModelStates[radioactiveFactoryModelStates.Count - 1];
+            researchBuildingModel = researchBuildingModelStates[researchBuildingModelStates.Count - 1];
+            biodegradableFactoryModel = biodegradableFactoryModelStates[biodegradableFactoryModelStates.Count - 1];
+            plasticFactoryModel = plasticFactoryModelStates[plasticFactoryModelStates.Count - 1];
             dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
 
@@ -1258,11 +1268,12 @@ namespace Poseidon
                     else
                     {
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
-                        researchFacility = new ResearchFacility();
+                        researchFacility = new ResearchFacility(particleManager);
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         //orientation = (float)(Math.PI/2) * random.Next(4);
                         orientation = researchAnchor.orientation;
                         researchFacility.Model = researchBuildingModel;
+                        researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation,ref facilityFont,ref facilityFont2,ref facilityBackground,ref facilityUpgradeButton,ref playJigsawButton,ref increaseAttributeButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
@@ -1274,6 +1285,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
+                    oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
@@ -1296,6 +1308,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
+                    oneFactory.ModelStates = radioactiveFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
@@ -1323,7 +1336,7 @@ namespace Poseidon
                 float orientation;
                 if (factoryButtonPanel.anchorIndexToBuildingType() == BuildingType.researchlab)
                 {
-                    researchAnchor = new ResearchFacility();
+                    researchAnchor = new ResearchFacility(particleManager);
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     researchAnchor.Model = researchBuildingModel;

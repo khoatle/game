@@ -121,7 +121,7 @@ namespace Poseidon
             SetUpgradeLevelDependentVariables();
 
             this.game = game;
-            // use construction state for only plastic factory for now
+            // use construction state
             if (modelStates != null)
             {
                 foreach (Model model in modelStates)
@@ -147,7 +147,7 @@ namespace Poseidon
 
             if (lastConstructionSwitchTime == TimeSpan.Zero)
             {
-                lastConstructionSwitchTime = gameTime.TotalGameTime;
+                lastConstructionSwitchTime = PoseidonGame.playTime;
             }
 
             if (underConstruction)
@@ -168,10 +168,10 @@ namespace Poseidon
                 Model = modelStates[constructionIndex];
                 underConstruction = (constructionIndex < 3);
                 if (!underConstruction && buildingSoundInstance.State == SoundState.Playing) buildingSoundInstance.Stop();
-                if (gameTime.TotalGameTime - lastConstructionSwitchTime >= constructionSwitchSpan)
+                if (PoseidonGame.playTime - lastConstructionSwitchTime >= constructionSwitchSpan)
                 {
                     constructionIndex++;
-                    lastConstructionSwitchTime = gameTime.TotalGameTime;
+                    lastConstructionSwitchTime = PoseidonGame.playTime;
                 }
                 return;
             }

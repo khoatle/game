@@ -151,10 +151,10 @@ namespace Poseidon.MiniGames
             seacowImage = new Texture2D[2];
             turtleImage = new Texture2D[2];
             dolphinImage = new Texture2D[2];
-            seacowImage[0] = content.Load<Texture2D>("Image/MinigameTextures/StellersSeaCow1");
+            seacowImage[0] = content.Load<Texture2D>("Image/MinigameTextures/StellersSeaCow2");
             turtleImage[0] = content.Load<Texture2D>("Image/MinigameTextures/Meiolania1");
             dolphinImage[0] = content.Load<Texture2D>("Image/MinigameTextures/mauiDolphin1");
-            seacowImage[1] = content.Load<Texture2D>("Image/MinigameTextures/StellersSeaCow2");
+            seacowImage[1] = content.Load<Texture2D>("Image/MinigameTextures/StellersSeaCow3");
             turtleImage[1] = content.Load<Texture2D>("Image/MinigameTextures/Meiolania2");
             dolphinImage[1] = content.Load<Texture2D>("Image/MinigameTextures/mauiDolphin2");
             

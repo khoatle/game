@@ -181,10 +181,13 @@ namespace Poseidon
 
         // Models for Factories and buildings
         private Model researchBuildingModel;
+        private List<Model> researchBuildingModelStates;
         private Model plasticFactoryModel;
         private List<Model> plasticFactoryModelStates;
         private Model biodegradableFactoryModel;
+        private List<Model> biodegradableFactoryModelStates;
         private Model radioactiveFactoryModel;
+        private List<Model> radioactiveFactoryModelStates;
 
         //Models for Trash
         private Model biodegradableTrash, plasticTrash, radioactiveTrash;
@@ -281,11 +284,11 @@ namespace Poseidon
             else {
                 int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 30, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
-                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                int[] numFish = { 0, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 3, 4, 5, 10, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
@@ -432,15 +435,22 @@ namespace Poseidon
             nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
 
             // Load factory and research lab models
-            researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
-            biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
-            plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
             plasticFactoryModelStates = new List<Model>();
-            for (int i = 0; i < 4; i++)
+            biodegradableFactoryModelStates = new List<Model>();
+            radioactiveFactoryModelStates = new List<Model>();
+            researchBuildingModelStates = new List<Model>();
+            int totalStates = 4;
+            for (int i = 0; i < totalStates; i++)
             {
                 plasticFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/PlasticFactory_stage" + i));
+                biodegradableFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/BiodegradableFactory_stage" + i));
+                radioactiveFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/NuclearFactory_stage" + i));
+                researchBuildingModelStates.Add(Content.Load<Model>("Models/FactoryModels/ResearchFacility_stage" + i));
             }
-            radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
+            radioactiveFactoryModel = radioactiveFactoryModelStates[radioactiveFactoryModelStates.Count - 1];
+            researchBuildingModel = researchBuildingModelStates[researchBuildingModelStates.Count - 1];
+            biodegradableFactoryModel = biodegradableFactoryModelStates[biodegradableFactoryModelStates.Count - 1];
+            plasticFactoryModel = plasticFactoryModelStates[plasticFactoryModelStates.Count - 1];
             dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
 
@@ -1258,11 +1268,12 @@ namespace Poseidon
                     else
                     {
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
-                        researchFacility = new ResearchFacility();
+                        researchFacility = new ResearchFacility(particleManager);
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         //orientation = (float)(Math.PI/2) * random.Next(4);
                         orientation = researchAnchor.orientation;
                         researchFacility.Model = researchBuildingModel;
+                        researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation,ref facilityFont,ref facilityFont2,ref facilityBackground,ref facilityUpgradeButton,ref playJigsawButton,ref increaseAttributeButton);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
@@ -1274,6 +1285,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
+                    oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
@@ -1296,6 +1308,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
+                    oneFactory.ModelStates = radioactiveFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
@@ -1323,7 +1336,7 @@ namespace Poseidon
                 float orientation;
                 if (factoryButtonPanel.anchorIndexToBuildingType() == BuildingType.researchlab)
                 {
-                    researchAnchor = new ResearchFacility();
+                    researchAnchor = new ResearchFacility(particleManager);
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     researchAnchor.Model = researchBuildingModel;
@@ -1438,12 +1451,27 @@ namespace Poseidon
                 if (HydroBot.hasSeaCow) realNumFish -= 1;
                 if (HydroBot.hasTurtle) realNumFish -= 1;
 
-                string str1 = "LEVEL STATISTICS\n";
-                str1 += "Number of boss defeated: " + numBossKills + "-" + bossDefeatRank + "\n";
-                str1 += "Number of enemies defeated: " + numNormalKills + "-" + enemyDefeatRank + "\n";
-                str1 += "Health lost: " + healthLost + "-" + healthLostRank + "\n";
-                str1 += "Number of fishes saved: " + realNumFish + "-" + fishSaveRank + "\n";
-                str1 += "Number of trash collected: " + numTrashCollected + "-" + trashCollectRank + "\n";
+                string str1 = "LEVEL STATISTICS (temporary graphic)\n";
+                if (bossDefeatRank != "")
+                {
+                    str1 += "Number of boss defeated: " + numBossKills + "-" + bossDefeatRank + "\n";
+                }
+                if (enemyDefeatRank != "")
+                {
+                    str1 += "Number of enemies defeated: " + numNormalKills + "-" + enemyDefeatRank + "\n";
+                }
+                if (healthLostRank != "")
+                {
+                    str1 += "Health lost: " + healthLost + "-" + healthLostRank + "\n";
+                }
+                if (fishSaveRank != "")
+                {
+                    str1 += "Number of fishes saved: " + realNumFish + "-" + fishSaveRank + "\n";
+                }
+                if (trashCollectRank != "")
+                {
+                    str1 += "Number of trash collected: " + numTrashCollected + "-" + trashCollectRank + "\n";
+                }
                 str1 += "Overall rank: " + overallRank + "\n";
                 str1 += comment;
 
@@ -1455,7 +1483,7 @@ namespace Poseidon
                 xOffsetText = rectSafeArea.X;
                 yOffsetText = rectSafeArea.Y;
 
-                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 2, 20), Color.Red);
+                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 2), Color.Red, 0, new Vector2(statsFont.MeasureString(str1).X/2, statsFont.MeasureString(str1).Y/2), 2.0f, SpriteEffects.None, 0);
 
             }
             else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);

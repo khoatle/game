@@ -900,7 +900,7 @@ namespace Poseidon
                     else
                     {
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
-                        researchFacility = new ResearchFacility();
+                        researchFacility = new ResearchFacility(particleManager);
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = (float)(Math.PI / 2) * random.Next(4);
                         researchFacility.Model = researchBuildingModel;

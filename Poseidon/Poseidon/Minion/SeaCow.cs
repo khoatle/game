@@ -63,6 +63,10 @@ namespace Poseidon
                     PlayGameScene.points.Add(point);
                 else if (HydroBot.gameMode == GameMode.SurvivalMode)
                     SurvivalGameScene.points.Add(point);
+
+
+                //if (this.BoundingSphere.Intersects(cameraFrustum))
+                    PoseidonGame.audio.slashSound.Play();
             }
         }
 

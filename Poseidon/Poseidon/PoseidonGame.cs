@@ -44,7 +44,7 @@ namespace Poseidon
         SpriteFont statsFont;
         CutSceneDialog cutSceneDialog;
         // Textures for help scene
-        protected Texture2D helpBackgroundTexture, helpForegroundTexture;
+        protected Texture2D helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton;
         HelpScene helpScene;
         protected GameScene activeScene;
         protected GameScene prevScene;
@@ -180,8 +180,13 @@ namespace Poseidon
 
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");
-            helpForegroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpForeground");
-            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture, spriteBatch);
+            helpForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
+            helpForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_shoot_2");
+            helpForegroundTexture3 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
+            helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground");
+            helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
+            nextHelpButton = Content.Load<Texture2D>("Image/ButtonTextures/nextHelpButton");
+            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice);
             Components.Add(helpScene);
 
             // Create the Start Scene

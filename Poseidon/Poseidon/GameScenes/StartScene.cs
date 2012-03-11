@@ -62,12 +62,12 @@ namespace Poseidon
             // Create the Menu
             if (File.Exists("SurvivalMode"))
             {
-                string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Help", "Quit" };
+                string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Help", "Credits", "Quit" };
                 menuItems = items;
             }
             else
             {
-                string[] items = { "New Game", "Load Saved Level", "Help", "Quit" };
+                string[] items = { "New Game", "Load Saved Level", "Help", "Credits", "Quit" };
                 menuItems = items;
             }
            
@@ -104,24 +104,24 @@ namespace Poseidon
                 {
                     if (File.Exists("SurvivalMode"))
                     {
-                        string[] items = { "Resume Game", "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Help", "Quit" };
+                        string[] items = { "Resume Game", "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Help", "Credits", "Quit" };
                         menuItems = items;
                     }
                     else
                     {
-                        string[] items = { "Resume Game", "New Game", "Load Saved Level", "Help", "Quit" };
+                        string[] items = { "Resume Game", "New Game", "Load Saved Level", "Help", "Credits", "Quit" };
                         menuItems = items;
                     }
                 }
                 else {
                     if (File.Exists("SurvivalMode"))
                     {
-                        string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Help", "Quit" };
+                        string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Help", "Credits", "Quit" };
                         menuItems = items;
                     }
                     else
                     {
-                        string[] items = { "New Game", "Load Saved Level", "Help", "Quit" };
+                        string[] items = { "New Game", "Load Saved Level", "Help", "Credits", "Quit" };
                         menuItems = items;
                     }
                 }

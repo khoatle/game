@@ -46,6 +46,9 @@ namespace Poseidon
         // Textures for help scene
         protected Texture2D helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton;
         HelpScene helpScene;
+        //Textures for the credit scene
+        protected Texture2D creditBackgroundTexture, creditForegroundTexture;
+        CreditScene creditScene;
         protected GameScene activeScene;
         protected GameScene prevScene;
         // For the Start scene
@@ -139,9 +142,9 @@ namespace Poseidon
             videoPlayer = new VideoPlayer();
             gameState = GameState.GameStart;
             // Performance stuff
-            PerformanceHelper.InitializeWithGame(this);
-            graphics.SynchronizeWithVerticalRetrace = false;
-            this.IsFixedTimeStep = false;
+            //PerformanceHelper.InitializeWithGame(this);
+            //graphics.SynchronizeWithVerticalRetrace = false;
+            //this.IsFixedTimeStep = false;
 
 
             base.Initialize();
@@ -182,12 +185,18 @@ namespace Poseidon
             helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");
             helpForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
             helpForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_shoot_2");
-            helpForegroundTexture3 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
-            helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground");
-            helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
+            helpForegroundTexture3 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_trash_3");
+            helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_skills_4");
+            helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_otherKeys_5");
             nextHelpButton = Content.Load<Texture2D>("Image/ButtonTextures/nextHelpButton");
             helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice);
             Components.Add(helpScene);
+
+            //For Credit scene
+            creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            creditForegroundTexture = Content.Load<Texture2D>("Image/SceneTextures/Credits");
+            creditScene = new CreditScene(this, creditBackgroundTexture, creditForegroundTexture, spriteBatch, GraphicsDevice);
+            Components.Add(creditScene);
 
             // Create the Start Scene
             startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
@@ -314,6 +323,13 @@ namespace Poseidon
             }
             // Handle Help Scene input
             else if (activeScene == helpScene)
+            {
+                if (enterPressed || EscPressed)
+                {
+                    ShowScene(startScene);
+                }
+            }
+            else if (activeScene == creditScene)
             {
                 if (enterPressed || EscPressed)
                 {
@@ -700,6 +716,9 @@ namespace Poseidon
                         break;
                     case "Help":
                         ShowScene(helpScene);
+                        break;
+                    case "Credits":
+                        ShowScene(creditScene);
                         break;
                     case "Quit":
                         MediaPlayer.Stop();

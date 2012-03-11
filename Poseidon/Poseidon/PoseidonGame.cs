@@ -140,8 +140,8 @@ namespace Poseidon
             gameState = GameState.GameStart;
             // Performance stuff
             PerformanceHelper.InitializeWithGame(this);
-            graphics.SynchronizeWithVerticalRetrace = false;
-            this.IsFixedTimeStep = false;
+            //graphics.SynchronizeWithVerticalRetrace = false;
+            //this.IsFixedTimeStep = false;
 
 
             base.Initialize();

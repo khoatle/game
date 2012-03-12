@@ -128,7 +128,7 @@ namespace Poseidon
             graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
-            MediaPlayer.Volume = 0;
+            //MediaPlayer.Volume = 0;
         }
 
         /// <summary>

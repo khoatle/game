@@ -168,7 +168,7 @@ namespace Poseidon
             if (MediaPlayer.State.Equals(MediaState.Stopped))
             {
                 
-                MediaPlayer.Play(audio.backgroundMusics[rand.Next(GameConstants.NumNormalBackgroundMusics)]);
+                MediaPlayer.Play(audio.mainMenuMusic);
             }
             if (!menu.Visible)
             {

@@ -231,7 +231,7 @@ namespace Poseidon {
         
         //for playing background musics
         public const int NumNormalBackgroundMusics = 4;
-        public const int NumBossBackgroundMusics = 1;
+        public const int NumBossBackgroundMusics = 2;
         public const int NumMinigameBackgroundMusics = 1;
         public const int NumJigsawBackgroundMusics = 2;
 

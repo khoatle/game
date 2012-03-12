@@ -47,8 +47,8 @@ namespace Poseidon
         protected Texture2D helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton;
         HelpScene helpScene;
         //Textures for the credit scene
-        protected Texture2D creditBackgroundTexture, creditForegroundTexture;
-        //CreditScene creditScene;
+        protected Texture2D creditBackgroundTexture, creditForegroundTexture1, creditForegroundTexture2, nextCreditButton;
+        CreditScene creditScene;
         protected GameScene activeScene;
         protected GameScene prevScene;
         // For the Start scene
@@ -194,9 +194,11 @@ namespace Poseidon
 
             //For Credit scene
             creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
-            creditForegroundTexture = Content.Load<Texture2D>("Image/SceneTextures/Credits");
-            //creditScene = new CreditScene(this, creditBackgroundTexture, creditForegroundTexture, spriteBatch, GraphicsDevice);
-            //Components.Add(creditScene);
+            creditForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/Credits");
+            creditForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/Credits_Soundtracks");
+            nextCreditButton = Content.Load<Texture2D>("Image/ButtonTextures/nextCreditButton");
+            creditScene = new CreditScene(this, creditBackgroundTexture, creditForegroundTexture1, creditForegroundTexture2, nextCreditButton, spriteBatch, GraphicsDevice);
+            Components.Add(creditScene);
 
             // Create the Start Scene
             startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
@@ -329,13 +331,14 @@ namespace Poseidon
                     ShowScene(startScene);
                 }
             }
-            //else if (activeScene == creditScene)
-            //{
-            //    if (enterPressed || EscPressed)
-            //    {
-            //        ShowScene(startScene);
-            //    }
-            //}
+            else if (activeScene == creditScene)
+            {
+                if (enterPressed || EscPressed)
+                {
+                    creditScene.nextPressed = false;
+                    ShowScene(startScene);
+                }
+            }
             // Handle Action Scene Input
             else if (activeScene == playGameScene)
             {
@@ -717,9 +720,9 @@ namespace Poseidon
                     case "Help":
                         ShowScene(helpScene);
                         break;
-                    //case "Credits":
-                    //    ShowScene(creditScene);
-                    //    break;
+                    case "Credits":
+                        ShowScene(creditScene);
+                        break;
                     case "Quit":
                         MediaPlayer.Stop();
                         Exit();

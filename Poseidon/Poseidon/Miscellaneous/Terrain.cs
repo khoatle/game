@@ -67,8 +67,8 @@ namespace Poseidon
                     effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
                     effect.DirectionalLight0.DiffuseColor = diffuseColor.ToVector3();
                     effect.DiffuseColor = diffuseColor.ToVector3();//new Vector3(0.2f, 0.2f, 0.2f);
-                    effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
-                    
+                    //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
+                    effect.SpecularColor = specularColor.ToVector3();
                     effect.SpecularPower = 1.0f;
                     effect.PreferPerPixelLighting = true;
                     effect.World = Matrix.Identity;

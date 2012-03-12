@@ -1024,10 +1024,10 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel])
+                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel]/2)
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
-                                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 80, GameConstants.TrashMinRangeZ,
+                                GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 100, GameConstants.TrashMinRangeZ,
                                 GameConstants.MainGameMaxRangeZ - 60, GameConstants.MainGameFloatHeight, terrain.heightMapInfo, ref biodegradableTrash, ref plasticTrash, ref radioactiveTrash, particleManager);
                         //Point point = new Point();
                         //point.LoadContent(PoseidonGame.contentManager, "New Trash Dropped", pos, Color.LawnGreen);
@@ -1512,9 +1512,9 @@ namespace Poseidon
                 }
                 if (healthLostRank != "")
                 {
-                    str1 += "Health lost: " + (int)healthLost + "\n";
+                    str1 += "Health lost: " + (int)curHealthLost + "\n";
                     curHealthLost++;
-                    if (curHealthLost > healthLost) curTrashCollected = healthLost;
+                    if (curHealthLost > healthLost) curHealthLost = healthLost;
                     if (curHealthLost == healthLost)
                         str2 += healthLostRank;
                     else somethingIncreasing = true;

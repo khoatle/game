@@ -52,7 +52,13 @@ namespace Poseidon
                     effect.View = view;
                     effect.Projection = projection;
 
-                    effect.EnableDefaultLighting();
+                    //effect.EnableDefaultLighting();
+                    effect.DirectionalLight1.Enabled = false;
+                    effect.DirectionalLight2.Enabled = false;
+                    effect.DirectionalLight0.Enabled = true;
+                    effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
+                    effect.DirectionalLight0.DiffuseColor = diffuseColor.ToVector3();
+                    //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
                     effect.PreferPerPixelLighting = true;
 
                     effect.AmbientLightColor = ambientColor.ToVector3();

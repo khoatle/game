@@ -776,7 +776,13 @@ namespace Poseidon
             {
                 foreach (BasicEffect effect in mesh.Effects)
                 {
-                    effect.EnableDefaultLighting();
+                    //effect.EnableDefaultLighting();
+                    effect.DirectionalLight1.Enabled = false;
+                    effect.DirectionalLight2.Enabled = false;
+                    effect.DirectionalLight0.Enabled = true;
+                    effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
+                    effect.DirectionalLight0.DiffuseColor = ground.diffuseColor.ToVector3();
+                    //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
                     effect.PreferPerPixelLighting = true;
                     effect.World = Matrix.Identity;
 

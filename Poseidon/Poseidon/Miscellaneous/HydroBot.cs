@@ -255,7 +255,7 @@ namespace Poseidon
             numStrangeObjCollected = lsNumStrangeObjCollected = 0;
             hasDolphin = hasSeaCow = hasTurtle = lsHasDolphin = lsHasSeaCow = lsHasTurtle = false;
             dolphinPower = seaCowPower = turtlePower = lsDolphinPower = lsSeaCowPower = lsTurtlePower = 0;
-            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 8;
+            numDolphinPieces = lsNumDolphinPieces = numSeaCowPieces = lsNumSeaCowPieces = numTurtlePieces = lsNumTurtlePieces = 0;
 
             //power of the skills
             bowPower = hammerPower = armorPower = sandalPower = beltPower = 
@@ -511,8 +511,8 @@ namespace Poseidon
             //    iconActivated[index] = true;
             //}
 
-            hasTurtle = true;
-            turtlePower = 1.0f;
+            //hasTurtle = true;
+            //turtlePower = 1.0f;
             //hasDolphin = true;
             //dolphinPower = 1.0f;
             //hasSeaCow = true;

@@ -714,6 +714,8 @@ namespace Poseidon
                         SurvivalGameScene.score = 0;
                         ShowScene(survivalGameScene);
                         break;
+                    case "Config":
+                        break;
                     case "Help":
                         ShowScene(helpScene);
                         break;

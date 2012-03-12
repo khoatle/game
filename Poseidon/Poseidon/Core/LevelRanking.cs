@@ -10,6 +10,11 @@ namespace Poseidon
     {
         public void LevelRanking(ref string bossDefeatRank, ref string enemyDefeatRank, ref string healthLostRank, ref string fishSaveRank, ref string trashCollectRank, ref string overallRank, ref string comment)
         {
+            string lowestRank = "Beginner";
+            string lowerRank = "Apprentice";
+            string averageRank = "Adept";
+            string higherRank = "Expert";
+            string highestRank = "Exceptional";
             //boss defeat ranking
             int totalNumberOfBosses = GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberSubmarine[currentLevel] + GameConstants.NumberTerminator[currentLevel];
             int bossRankPoint = 0;
@@ -18,27 +23,27 @@ namespace Poseidon
                 float percentBossKill = (float)numBossKills / (float)totalNumberOfBosses;
                 if (percentBossKill <= 0.20f)
                 {
-                    bossDefeatRank = "Novice";
+                    bossDefeatRank = lowestRank;
                     bossRankPoint = 1;
                 }
                 else if (percentBossKill <= 0.40f)
                 {
-                    bossDefeatRank = "Apprentice";
+                    bossDefeatRank = lowerRank;
                     bossRankPoint = 2;
                 }
                 else if (percentBossKill <= 0.60f)
                 {
-                    bossDefeatRank = "Adept";
+                    bossDefeatRank = averageRank;
                     bossRankPoint = 3;
                 }
                 else if (percentBossKill <= 0.80f)
                 {
-                    bossDefeatRank = "Expert";
+                    bossDefeatRank = higherRank;
                     bossRankPoint = 4;
                 }
                 else
                 {
-                    bossDefeatRank = "Exceptional";
+                    bossDefeatRank = highestRank;
                     bossRankPoint = 5;
                 }
             }
@@ -52,27 +57,27 @@ namespace Poseidon
                 float percentEnemyKilled = (float)numNormalKills / (float)totalNumberOfEnemies;
                 if (percentEnemyKilled <= 0.30f)
                 {
-                    enemyDefeatRank = "Novice";
+                    enemyDefeatRank = lowestRank;
                     enemyRankPoint = 1;
                 }
                 else if (percentEnemyKilled <= 0.60f)
                 {
-                    enemyDefeatRank = "Apprentice";
+                    enemyDefeatRank = lowerRank;
                     enemyRankPoint = 2;
                 }
                 else if (percentEnemyKilled <= 0.80f)
                 {
-                    enemyDefeatRank = "Adept";
+                    enemyDefeatRank = averageRank;
                     enemyRankPoint = 3;
                 }
                 else if (percentEnemyKilled <= 0.95f)
                 {
-                    enemyDefeatRank = "Expert";
+                    enemyDefeatRank = higherRank;
                     enemyRankPoint = 4;
                 }
                 else
                 {
-                    enemyDefeatRank = "Exceptional";
+                    enemyDefeatRank = highestRank;
                     enemyRankPoint = 5;
                 }
             }
@@ -84,27 +89,27 @@ namespace Poseidon
             {
                 if (healthLost >= 2 * healthLostNormal)
                 {
-                    healthLostRank = "Novice";
+                    healthLostRank = lowestRank;
                     healthLostPoint = 1;
                 }
                 else if (healthLost >= 1.5 * healthLostNormal)
                 {
-                    healthLostRank = "Apprentice";
+                    healthLostRank = lowerRank;
                     healthLostPoint = 2;
                 }
                 else if (healthLost >= healthLostNormal)
                 {
-                    healthLostRank = "Adept";
+                    healthLostRank = averageRank;
                     healthLostPoint = 3;
                 }
                 else if (healthLost >= 0.5 * healthLostNormal)
                 {
-                    healthLostRank = "Expert";
+                    healthLostRank = higherRank;
                     healthLostPoint = 4;
                 }
                 else
                 {
-                    healthLostRank = "Exceptional";
+                    healthLostRank = highestRank;
                     healthLostPoint = 5;
                 }
 
@@ -121,27 +126,27 @@ namespace Poseidon
                 float fishSavePercent = (float)realNumFish / (float)GameConstants.NumberFish[currentLevel];
                 if (fishSavePercent <= 0.30f)
                 {
-                    fishSaveRank = "Novice";
+                    fishSaveRank = lowestRank;
                     fishSavePoint = 1;
                 }
                 else if (fishSavePercent <= 0.60f)
                 {
-                    fishSaveRank = "Apprentice";
+                    fishSaveRank = lowerRank;
                     fishSavePoint = 2;
                 }
                 else if (fishSavePercent <= 0.80f)
                 {
-                    fishSaveRank = "Adept";
+                    fishSaveRank = averageRank;
                     fishSavePoint = 3;
                 }
                 else if (fishSavePercent <= 0.95f)
                 {
-                    fishSaveRank = "Expert";
+                    fishSaveRank = higherRank;
                     fishSavePoint = 4;
                 }
                 else
                 {
-                    fishSaveRank = "Exceptional";
+                    fishSaveRank = highestRank;
                     fishSavePoint = 5;
                 }
             }
@@ -151,27 +156,27 @@ namespace Poseidon
             int trashNormalThreshold = 15;
             if (numTrashCollected <= 0.5 * trashNormalThreshold)
             {
-                trashCollectRank = "Novice";
+                trashCollectRank = lowestRank;
                 trashRankPoint = 1;
             }
             else if (numTrashCollected <= trashNormalThreshold)
             {
-                trashCollectRank = "Apprentice";
+                trashCollectRank = lowerRank;
                 trashRankPoint = 2;
             }
             else if (numTrashCollected <= 1.5 * trashNormalThreshold)
             {
-                trashCollectRank = "Adept";
+                trashCollectRank = averageRank;
                 trashRankPoint = 3;
             }
             else if (numTrashCollected <= 2 * trashNormalThreshold)
             {
-                trashCollectRank = "Expert";
+                trashCollectRank = higherRank;
                 trashRankPoint = 4;
             }
             else
             {
-                trashCollectRank = "Exceptional";
+                trashCollectRank = highestRank;
                 trashRankPoint = 5;
             }
 
@@ -207,27 +212,27 @@ namespace Poseidon
 
             if (overallRankingPoint >= 5)
             {
-                overallRank = "Exceptional";
+                overallRank = highestRank;
                 comment = "Speechless ...";
             }
             else if (overallRankingPoint >= 4)
             {
-                overallRank = "Expert";
+                overallRank = higherRank;
                 comment = "The sea environment really needs someone like you!";
             }
             else if (overallRankingPoint >= 3)
             {
-                overallRank = "Adept";
+                overallRank = averageRank;
                 comment = "You are good enough to save the sea environment.";
             }
             else if (overallRankingPoint >= 2)
             {
-                overallRank = "Apprentice";
+                overallRank = lowerRank;
                 comment = "Try harder and you will play better.";
             }
             else if (overallRankingPoint >= 1)
             {
-                overallRank = "Novice";
+                overallRank = lowestRank;
                 comment = "Your skill needs to be improved.";
             }
         }

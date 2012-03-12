@@ -591,10 +591,10 @@ namespace Poseidon
             InitializeGameField(Content);
 
             //level statistics reset
-            numNormalKills = 0;
-            numBossKills = 0;
-            healthLost = 0;
-            numTrashCollected = 0;
+            ResetStatisticCounters();
+
+            //reset particles
+            particleManager.ResetParticles();
         }
 
         private void InitializeGameField(ContentManager Content)
@@ -764,7 +764,9 @@ namespace Poseidon
             }
 
             // play the boss fight music for certain levels
-            if (currentLevel == 3 || currentLevel == 11)
+            if (currentGameState == GameState.Won)
+                MediaPlayer.Stop();
+            else if (currentLevel == 3 || currentLevel == 11)
             {
 
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
@@ -857,7 +859,7 @@ namespace Poseidon
                                 break;
                             }
                         }
-                        if (researchFacility != null && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
+                        if (researchFacility != null && !researchFacility.UnderConstruction && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             openResearchFacilityConfigScene = true;
                             ResearchFacility.dolphinLost = ResearchFacility.seaCowLost = ResearchFacility.turtleLost = false;
@@ -1075,7 +1077,7 @@ namespace Poseidon
                     if (researchFacility != null)
                     {
                         researchFacility.Update(gameTime, hydroBot.Position, ref points);
-                        if (doubleClicked && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera) )
+                        if (doubleClicked && !researchFacility.UnderConstruction && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera) )
                         {
                             if (HydroBot.numStrangeObjCollected > 0)
                             {
@@ -1443,6 +1445,22 @@ namespace Poseidon
             spriteBatch.End();
         }
 
+        private void ResetStatisticCounters()
+        {
+            curNumBossDeaf = 0;
+            curNumEnemyDeaf = 0;
+            curHealthLost = 0;
+            curNumFishSaved = 0;
+            curTrashCollected = 0;
+            numNormalKills = 0;
+            numBossKills = 0;
+            healthLost = 0;
+            numTrashCollected = 0;
+            concludeMusicPlayed = false;
+        }
+
+        private float curNumBossDeaf = 0, curNumEnemyDeaf = 0, curHealthLost = 0, curNumFishSaved = 0, curTrashCollected = 0;
+        private bool concludeMusicPlayed = false;
         private void DrawWinOrLossScreen()
         {
             spriteBatch.Begin();
@@ -1465,30 +1483,76 @@ namespace Poseidon
                 if (HydroBot.hasDolphin) realNumFish -= 1;
                 if (HydroBot.hasSeaCow) realNumFish -= 1;
                 if (HydroBot.hasTurtle) realNumFish -= 1;
+                bool somethingIncreasing = false;
 
-                string str1 = "LEVEL STATISTICS (temporary graphic)\n";
+                string strTitle = "LEVEL STATISTICS (temporary graphic)\n";
+                string str1 = "";
+                string str2 = "";
+                string strComment = "";
                 if (bossDefeatRank != "")
                 {
-                    str1 += "Number of boss defeated: " + numBossKills + "-" + bossDefeatRank + "\n";
+                    str1 += "Number of boss defeated: " + (int)curNumBossDeaf + "\n";
+                    curNumBossDeaf += 0.2f;
+                    if (curNumBossDeaf > numBossKills) curNumBossDeaf = numBossKills;
+                    if (curNumBossDeaf == numBossKills)
+                        str2 += bossDefeatRank;
+                    else
+                        somethingIncreasing = true;
+                    str2 += "\n"; 
                 }
                 if (enemyDefeatRank != "")
                 {
-                    str1 += "Number of enemies defeated: " + numNormalKills + "-" + enemyDefeatRank + "\n";
+                    str1 += "Number of enemies defeated: " + (int)curNumEnemyDeaf + "\n";
+                    curNumEnemyDeaf += 0.2f;
+                    if (curNumEnemyDeaf > numNormalKills) curNumEnemyDeaf = numNormalKills;
+                    if (curNumEnemyDeaf == numNormalKills)
+                        str2 += enemyDefeatRank;
+                    else somethingIncreasing = true;
+                    str2 += "\n"; 
                 }
                 if (healthLostRank != "")
                 {
-                    str1 += "Health lost: " + healthLost + "-" + healthLostRank + "\n";
+                    str1 += "Health lost: " + (int)healthLost + "\n";
+                    curHealthLost++;
+                    if (curHealthLost > healthLost) curTrashCollected = healthLost;
+                    if (curHealthLost == healthLost)
+                        str2 += healthLostRank;
+                    else somethingIncreasing = true;
+                    str2 += "\n"; 
                 }
                 if (fishSaveRank != "")
                 {
-                    str1 += "Number of fishes saved: " + realNumFish + "-" + fishSaveRank + "\n";
+                    str1 += "Number of fishes saved: " + (int)curNumFishSaved + "\n";
+                    curNumFishSaved += 0.2f;
+                    if (curNumFishSaved > realNumFish) curNumFishSaved = realNumFish;
+                    if (curNumFishSaved == realNumFish)
+                        str2 += fishSaveRank;
+                    else somethingIncreasing = true;
+                    str2 += "\n"; 
                 }
                 if (trashCollectRank != "")
                 {
-                    str1 += "Number of trash collected: " + numTrashCollected + "-" + trashCollectRank + "\n";
+                    str1 += "Number of trash collected: " + (int)curTrashCollected + "\n";
+                    curTrashCollected += 0.2f;
+                    if (curTrashCollected > numTrashCollected) curTrashCollected = numTrashCollected;
+                    if (curTrashCollected == numTrashCollected)
+                        str2 += trashCollectRank;
+                    else somethingIncreasing = true;
+                    str2 += "\n"; 
                 }
-                str1 += "Overall rank: " + overallRank + "\n";
-                str1 += comment;
+
+                if (!somethingIncreasing)
+                {
+                    str1 += "Overall rank: \n";
+                    str2 += overallRank + "\n";
+                    strComment = comment;
+                    if (!concludeMusicPlayed)
+                    {
+                        PoseidonGame.audio.bodyHit.Play();
+                        concludeMusicPlayed = true;
+                    }
+                }
+                else PoseidonGame.audio.reelHit.Play();
 
                 Rectangle rectSafeArea;
 
@@ -1498,8 +1562,11 @@ namespace Poseidon
                 xOffsetText = rectSafeArea.X;
                 yOffsetText = rectSafeArea.Y;
 
-                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 2), Color.Red, 0, new Vector2(statsFont.MeasureString(str1).X/2, statsFont.MeasureString(str1).Y/2), 2.0f, SpriteEffects.None, 0);
-
+                
+                spriteBatch.DrawString(statsFont, strTitle, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statsFont.MeasureString(strTitle).X / 2, statsFont.MeasureString(strTitle).Y / 2), 3.0f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statsFont.MeasureString(strTitle).Y), Color.Yellow, 0, Vector2.Zero, 2.0f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statsFont, str2, new Vector2(3 * game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statsFont.MeasureString(strTitle).Y), Color.Red, 0, Vector2.Zero, 2.0f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statsFont, strComment, new Vector2(game.Window.ClientBounds.Width / 2, 3 * game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statsFont.MeasureString(strComment).X/2,statsFont.MeasureString(strComment).Y/2), 3.0f, SpriteEffects.None, 0);
             }
             else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
             spriteBatch.End();

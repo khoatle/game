@@ -329,6 +329,23 @@ namespace Poseidon
             }
         }
 
+        public void RetireAllParticles()
+        {
+            float particleDuration = (float)settings.Duration.TotalSeconds;
+
+            while (firstActiveParticle != firstNewParticle)
+            {
+                // Remember the time at which we retired this particle.
+                particles[firstActiveParticle * 4].Time = drawCounter;
+
+                // Move the particle from the active to the retired queue.
+                firstActiveParticle++;
+
+                if (firstActiveParticle >= settings.MaxParticles)
+                    firstActiveParticle = 0;
+            }
+        }
+
 
         /// <summary>
         /// Helper for checking when retired particles have been kept around long

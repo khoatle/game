@@ -42,6 +42,15 @@ namespace Poseidon
        
         }
 
+        public void ResetParticles()
+        {
+            explosionParticles.RetireAllParticles();
+            sandParticles.RetireAllParticles();
+            sandParticlesForFactory.RetireAllParticles();
+            projectileTrailParticles.RetireAllParticles();
+            frozenBreathParticles.RetireAllParticles();
+            toxicAirParticles.RetireAllParticles();
+        }
         public void Update(GameTime gameTime)
         {
             //update particle systems

@@ -547,7 +547,7 @@ namespace Poseidon
                                 break;
                             }
                         }
-                        if (researchFacility != null && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
+                        if (researchFacility != null && !researchFacility.UnderConstruction && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             openResearchFacilityConfigScene = true;
                             ResearchFacility.dolphinLost = ResearchFacility.seaCowLost = ResearchFacility.turtleLost = false;
@@ -745,7 +745,7 @@ namespace Poseidon
                     if (researchFacility != null)
                     {
                         researchFacility.Update(gameTime, hydroBot.Position, ref points);
-                        if (doubleClicked && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
+                        if (doubleClicked && !researchFacility.UnderConstruction && hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere) && CursorManager.MouseOnObject(cursor, researchFacility.BoundingSphere, researchFacility.Position, gameCamera))
                         {
                             string point_string = HydroBot.numStrangeObjCollected + " strange rocks\ndeposited";
                             for (int i = 0; i < HydroBot.numStrangeObjCollected; i++)

@@ -322,6 +322,9 @@ namespace Poseidon
             else if (HydroBot.currentEnvPoint < lastEnv) lastEnv -= 0.001f;
             float envFactor = (lastEnv / (float)HydroBot.maxEnvPoint);
 
+            //we don't want the screen to be too dark
+            if (envFactor < 0.35f) envFactor = 0.35f;
+
             if (HydroBot.gameMode == GameMode.MainGame)
             {
                 fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;

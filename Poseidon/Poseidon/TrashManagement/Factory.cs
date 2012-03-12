@@ -91,6 +91,22 @@ namespace Poseidon
             constructionSwitchSpan = TimeSpan.FromSeconds(3);
             this.particleManager = particleManager;
             buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
+
+            //for animating trash processing
+            switch (factoryType)
+            {
+                // These part id's were found out by experimentation. If we happen to change the model in future, 
+                // I'll need to find these part ids again. So, I have made them configurable from GameConstant
+                case FactoryType.biodegradable:
+                    partId = GameConstants.biofactoryPartId;
+                    break;
+                case FactoryType.radioactive:
+                    partId = GameConstants.nuclearfactoryPartId;
+                    break;
+                case FactoryType.plastic:
+                    partId = GameConstants.plasticfactoryPartId;
+                    break;
+            }
         }
 
         public void setIsAnchor()
@@ -272,26 +288,8 @@ namespace Poseidon
         {
             if (listTimeTrashProcessing.Count > 0)
             {
-                if (partId < 0)
-                {
-                    switch (factoryType)
-                    {
-                        // These part id's were found out by experimentation. If we happen to change the model in future, 
-                        // I'll need to find these part ids again. So, I have made them configurable from GameConstant
-                        case FactoryType.biodegradable:
-                            partId = GameConstants.biofactoryPartId;
-                            break;
-                        case FactoryType.radioactive:
-                            partId = GameConstants.nuclearfactoryPartId;
-                            break;
-                        case FactoryType.plastic:
-                            partId = GameConstants.plasticfactoryPartId;
-                            break;
-                    }
-                }
-
                 // see if timespan for change has occurred
-                currentPartTexture = animationTextures[currentTextureIndex];
+                
                 if (gameTime.TotalGameTime - lastCycledTime > cycleTime)
                 {
                     currentTextureIndex++;
@@ -306,8 +304,8 @@ namespace Poseidon
             else
             {
                 currentTextureIndex = 0;    // texture index set down to zero
-                partId = -1;                // no part to animate
             }
+            currentPartTexture = animationTextures[currentTextureIndex];
         }
 
         // our custom shader
@@ -362,12 +360,14 @@ namespace Poseidon
                     Matrix WorldView = readlWorldMatrix * view;
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
-                    if (partId >= 0 && partId == effectId)
+                    if (partId == effectId)
                     {
-                        effect.Parameters["Texture"].SetValue(currentPartTexture); // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.
+                        //if (listTimeTrashProcessing.Count > 0)
+                            effect.Parameters["Texture"].SetValue(currentPartTexture); // If execution enters this block, currentPartTexture has been already put in place in Update function. Just need to find a way to set texture here.
                         //effect.Parameters["FogColor"].SetValue(currentFogColor);
+                        //else
+                        //    effect.Parameters["Texture"].SetValue(animationTextures[0]);
                     }
-
                     // set texture for factory level if any
                     if (levelPartId >= 0 && levelPartId == effectId && currentLevelTexture != null)
                     {

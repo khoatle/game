@@ -134,7 +134,6 @@
     <Compile Include="Enemies\BaseEnemy.cs" />
     <Compile Include="Enemies\GhostPirate.cs" />
     <Compile Include="Enemies\Submarine.cs" />
-    <Compile Include="GameScenes\CreditScene.cs" />
     <Compile Include="GameScenes\LoadingScene.cs" />
     <Compile Include="GameScenes\SelectLoadingLevelScene.cs" />
     <Compile Include="GameScenes\SurvivalGameScene.cs" />

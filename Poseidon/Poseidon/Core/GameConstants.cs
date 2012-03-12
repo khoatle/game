@@ -140,7 +140,7 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
+        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
@@ -231,7 +231,7 @@ namespace Poseidon {
         
         //for playing background musics
         public const int NumNormalBackgroundMusics = 4;
-        public const int NumBossBackgroundMusics = 1;
+        public const int NumBossBackgroundMusics = 2;
         public const int NumMinigameBackgroundMusics = 1;
         public const int NumJigsawBackgroundMusics = 2;
 

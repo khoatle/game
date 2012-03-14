@@ -21,7 +21,7 @@ namespace Poseidon.Core
         static Random random = new Random();
         //textures for good will bar
         static Texture2D[] iconTextures;
-        static Texture2D GoodWillBar;
+        static Texture2D GoodWillBar, EnvironmentBar;
         static Texture2D HealthBar;
         static SpriteFont statsFont, fishTalkFont;
 
@@ -45,8 +45,9 @@ namespace Poseidon.Core
             iconTextures[dolphinIcon] = Content.Load<Texture2D>("Image/SpinningReel/dolphinIcon");
             iconTextures[seaCowIcon] = Content.Load<Texture2D>("Image/SpinningReel/seaCowIcon");
             iconTextures[turtleIcon] = Content.Load<Texture2D>("Image/SpinningReel/turtleIcon");
-            GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBar");
-            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBar");
+            GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
+            EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBarNew");
+            HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBarNew");
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
         }
@@ -76,7 +77,7 @@ namespace Poseidon.Core
                 spriteBatch.Draw(skillTextures[HydroBot.secondSkillID], destRectangle, Color.White);
             }
         }
-        public static void DrawHealthBar(Texture2D HealthBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
+        public static void DrawHealthBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
         {
             type = type.ToUpper();
             int barLength = (int)(statsFont.MeasureString(type).X * 1.5f);
@@ -88,10 +89,10 @@ namespace Poseidon.Core
             double healthiness = (double)currentHealth / maxHealth;
 
             //Draw the negative space for the health bar
-            spriteBatch.Draw(HealthBar,
-                new Rectangle(barX, barY, barLength, barHeight),
-                new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
-                Color.Transparent);
+            //spriteBatch.Draw(HealthBar,
+            //    new Rectangle(barX, barY, barLength, barHeight),
+            //    new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
+            //    Color.Transparent);
             //Draw the current health level based on the current Health
             Color healthColor = Color.LawnGreen;
             if (healthiness < 0.2)
@@ -100,29 +101,29 @@ namespace Poseidon.Core
                 healthColor = Color.Orange;
             spriteBatch.Draw(HealthBar,
                 new Rectangle(barX, barY, (int)(barLength * healthiness), barHeight),
-                new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, (int)(HealthBar.Width * healthiness), barHeight),
                 healthColor);
             //Draw the box around the health bar
             spriteBatch.Draw(HealthBar,
                 new Rectangle(barX, barY, barLength, barHeight),
                 new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
-            spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2, heightFromTop - 1), typeColor);
+            spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2, heightFromTop - 1), Color.MediumVioletRed);
         }
 
-        public static void DrawEnvironmentBar(Texture2D Bar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)
+        public static void DrawEnvironmentBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)
         {
             int barX = game.Window.ClientBounds.Width - 50;
-            int barY = game.Window.ClientBounds.Height / 2 - Bar.Height / 2;
+            int barY = game.Window.ClientBounds.Height / 2 - EnvironmentBar.Height / 2;
             string type = "ENVIRONMENT";
             Color typeColor = Color.IndianRed;
-            int barWidth = Bar.Width / 2;
+            int barWidth = 41;// EnvironmentBar.Width / 2;
             double healthiness = (double)currentEnvironment / maxEnvironemnt;
             //Draw the negative space for the health bar
-            spriteBatch.Draw(Bar,
-                new Rectangle(barX, barY, barWidth, Bar.Height),
-                new Rectangle(barWidth + 1, 0, barWidth, Bar.Height),
-                Color.Transparent);
+            //spriteBatch.Draw(EnvironmentBar,
+            //    new Rectangle(barX, barY, barWidth, EnvironmentBar.Height),
+            //    new Rectangle(barWidth + 1, 0, barWidth, EnvironmentBar.Height),
+            //    Color.Transparent);
             //Draw the current health level based on the current Health
             Color healthColor = Color.Gold;
             if (healthiness < 0.2)
@@ -131,18 +132,20 @@ namespace Poseidon.Core
                 healthColor = Color.Red;
             else if (healthiness < 0.8)
                 healthColor = Color.LawnGreen;
-            spriteBatch.Draw(Bar,
-                new Rectangle(barX, barY + (Bar.Height - (int)(Bar.Height * healthiness)), barWidth, (int)(Bar.Height * healthiness)),
-                new Rectangle(barWidth + 1, 0, barWidth, Bar.Height),
+            spriteBatch.Draw(EnvironmentBar,
+                new Rectangle(barX, barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)), barWidth, (int)(EnvironmentBar.Height * healthiness)),
+                new Rectangle(45, EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness), 43, (int)(EnvironmentBar.Height * healthiness)),
                 healthColor);
             //Draw the box around the health bar
-            spriteBatch.Draw(Bar,
-                new Rectangle(barX, barY, barWidth, Bar.Height),
-                new Rectangle(0, 0, barWidth, Bar.Height),
+            spriteBatch.Draw(EnvironmentBar,
+                new Rectangle(barX, barY, barWidth, EnvironmentBar.Height),
+                new Rectangle(0, 0, barWidth, EnvironmentBar.Height),
                 Color.White);
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 20), typeColor, 90.0f, new Vector2(barX + 10, barY + 20), 1, SpriteEffects.FlipVertically, 0);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 35, barY + 70), typeColor, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+            type = type.ToUpper();
+            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 35, barY + 70), typeColor, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+            spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2 + statsFont.MeasureString(type).Y / 2, game.Window.ClientBounds.Height / 2 - statsFont.MeasureString(type).X / 2), Color.Gold, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
         }
 
         public static void UpdateGoodWillBar()
@@ -274,18 +277,14 @@ namespace Poseidon.Core
         public static void DrawGoodWillBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont)
         {
             if (!HydroBot.goodWillBarActivated) return;
-            // draw the bar
-            int barX = game.Window.ClientBounds.Left + 50;
-            int barY = game.Window.ClientBounds.Center.Y - GoodWillBar.Height / 2;
+
+            int barX = 50;
+            int barY = game.Window.ClientBounds.Height / 2 - GoodWillBar.Height / 2;
             string type = "GOOD WILL";
             Color typeColor = Color.Gold;
-            int barWidth = GoodWillBar.Width / 2;
+            int barWidth = 42;// EnvironmentBar.Width / 2;
             double healthiness = (double)HydroBot.goodWillPoint / HydroBot.maxGoodWillPoint;
-            //Draw the negative space for the health bar
-            spriteBatch.Draw(GoodWillBar,
-                new Rectangle(barX, barY, barWidth, GoodWillBar.Height),
-                new Rectangle(barWidth + 1, 0, barWidth, GoodWillBar.Height),
-                Color.Transparent);
+
             //Draw the current health level based on the current Health
             Color healthColor = Color.Gold;
             if (healthiness < 0.2)
@@ -296,16 +295,20 @@ namespace Poseidon.Core
                 healthColor = Color.LawnGreen;
             spriteBatch.Draw(GoodWillBar,
                 new Rectangle(barX, barY + (GoodWillBar.Height - (int)(GoodWillBar.Height * healthiness)), barWidth, (int)(GoodWillBar.Height * healthiness)),
-                new Rectangle(barWidth + 1, 0, barWidth, GoodWillBar.Height),
+                new Rectangle(45, GoodWillBar.Height - (int)(GoodWillBar.Height * healthiness), 43, (int)(GoodWillBar.Height * healthiness)),
                 healthColor);
+
             //Draw the box around the health bar
             spriteBatch.Draw(GoodWillBar,
-                new Rectangle(barX, barY, barWidth, GoodWillBar.Height),
-                new Rectangle(0, 0, barWidth, GoodWillBar.Height),
+                new Rectangle(barX, barY, barWidth, EnvironmentBar.Height),
+                new Rectangle(0, 0, barWidth, EnvironmentBar.Height),
                 Color.White);
+
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 20), typeColor, 90.0f, new Vector2(barX + 10, barY + 20), 1, SpriteEffects.FlipVertically, 0);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 200), typeColor, -3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+            type = type.ToUpper();
+            //spriteBatch.DrawString(statsFont, type, new Vector2(barX + 10, barY + 200), typeColor, -3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+            spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2 - statsFont.MeasureString(type).Y / 2, game.Window.ClientBounds.Height / 2 + statsFont.MeasureString(type).X / 2), Color.Gold, -3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
 
             //draw the spinning reel on top of the bar
             Color colorToDraw;
@@ -320,29 +323,30 @@ namespace Poseidon.Core
             
         }
 
-        public static void DrawLevelBar(Texture2D LevelBar, Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
+        public static void DrawLevelBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
         {
-            int barX = game.Window.ClientBounds.Width / 2 - LevelBar.Width / 2;
+            int barX = game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2;
             int barY = heightFromTop;
             int barHeight = 22;
             double experience = (double)currentExperience / nextLevelExp;
             type += " " + level.ToString();
             //Draw the negative space for the health bar
-            spriteBatch.Draw(LevelBar,
-                new Rectangle(barX, barY, LevelBar.Width, barHeight),
-                new Rectangle(0, barHeight + 1, LevelBar.Width, barHeight),
-                Color.Transparent);
+            //spriteBatch.Draw(HealthBar,
+            //    new Rectangle(barX, barY, HealthBar.Width, barHeight),
+            //    new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
+            //    Color.Transparent);
             //Draw the current health level based on the current Health
-            spriteBatch.Draw(LevelBar,
-                new Rectangle(barX, barY, (int)(LevelBar.Width * experience), barHeight),
-                new Rectangle(0, barHeight + 1, LevelBar.Width, barHeight),
-                Color.Aqua);
+            spriteBatch.Draw(HealthBar,
+                new Rectangle(barX, barY, (int)(HealthBar.Width * experience), barHeight),
+                new Rectangle(0, barHeight + 1, (int)(HealthBar.Width * experience), barHeight),
+                Color.CornflowerBlue);
             //Draw the box around the health bar
-            spriteBatch.Draw(LevelBar,
-                new Rectangle(barX, barY, LevelBar.Width, barHeight),
-                new Rectangle(0, 0, LevelBar.Width, barHeight),
+            spriteBatch.Draw(HealthBar,
+                new Rectangle(barX, barY, HealthBar.Width, barHeight),
+                new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
-            spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 11), heightFromTop - 1), typeColor);
+            type = type.ToUpper();
+            spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X/2, heightFromTop - 1), Color.Gold);
         }
 
         public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources)
@@ -353,7 +357,7 @@ namespace Poseidon.Core
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
-                IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
+                IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
                 string line;
                 line = "'";
                 if (fishPointedAt.health < 20)
@@ -376,7 +380,7 @@ namespace Poseidon.Core
                 //Display Enemy Health
                 BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
                 if (enemyPointedAt != null)
-                    IngamePresentation.DrawHealthBar(HealthBar, game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
                 else
                 {
                     Powerpack powerPackPointedAt = null, botOnPowerPack = null;

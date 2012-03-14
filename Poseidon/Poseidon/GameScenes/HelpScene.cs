@@ -52,7 +52,7 @@ namespace Poseidon
         {
             if (MediaPlayer.State.Equals(MediaState.Stopped))
             {
-                MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
+                MediaPlayer.Play(audio.mainMenuMusic);
             }
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
             //Check Click on next button

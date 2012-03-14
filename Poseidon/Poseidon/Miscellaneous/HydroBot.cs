@@ -505,11 +505,11 @@ namespace Poseidon
             //strength = 2;
             //speed = 1;
 
-            //goodWillBarActivated = true;
-            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            //{
-            //    iconActivated[index] = true;
-            //}
+            goodWillBarActivated = true;
+            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            {
+                iconActivated[index] = true;
+            }
 
             //hasTurtle = true;
             //turtlePower = 1.0f;

@@ -42,6 +42,7 @@ namespace Poseidon.Core
         public SoundEffect maneteeRoar;
         public SoundEffect frozenBreathe;
         public SoundEffect buildingSound;
+        public SoundEffect superPunch;
 
         private SoundEffect explosion;
         private SoundEffect newMeteor;
@@ -169,6 +170,7 @@ namespace Poseidon.Core
             maneteeRoar = Content.Load<SoundEffect>("Sounds/SoundEffects/maneteeRoar");
             frozenBreathe = Content.Load<SoundEffect>("Sounds/SoundEffects/frozenBreathe");
             buildingSound = Content.Load<SoundEffect>("Sounds/SoundEffects/buildingSound");
+            superPunch = Content.Load<SoundEffect>("Sounds/SoundEffects/superPunch");
 
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");

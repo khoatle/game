@@ -18,10 +18,15 @@ namespace Poseidon.Core
         static float spinningSpeed = 0.1f;
         static bool goingToStopSpinning = false;
         static bool stoppedSpinning = true;
+        static bool displayResult = false;
+        static double timeStartDisplay;
+        static float startingDisplayScale = 0.55f;
+        static float resultDisplayScale = startingDisplayScale;
+        static bool displayMusicPlayed = false, buzzNow = false;
         static Random random = new Random();
         //textures for good will bar
-        static Texture2D[] iconTextures;
-        static Texture2D GoodWillBar, EnvironmentBar;
+        static Texture2D[] iconTextures, resultTextures;
+        static Texture2D GoodWillBar, EnvironmentBar, lobsterTexture, crabTexture, iconFrame;
         static Texture2D HealthBar;
         static SpriteFont statsFont, fishTalkFont;
 
@@ -45,9 +50,26 @@ namespace Poseidon.Core
             iconTextures[dolphinIcon] = Content.Load<Texture2D>("Image/SpinningReel/dolphinIcon");
             iconTextures[seaCowIcon] = Content.Load<Texture2D>("Image/SpinningReel/seaCowIcon");
             iconTextures[turtleIcon] = Content.Load<Texture2D>("Image/SpinningReel/turtleIcon");
+            resultTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
+            resultTextures[poseidonFace] = Content.Load<Texture2D>("Image/SpinningReel/poseiResult");
+            resultTextures[strengthIcon] = Content.Load<Texture2D>("Image/SpinningReel/attributeIncreased");
+            resultTextures[speedIcon] = Content.Load<Texture2D>("Image/SpinningReel/attributeIncreased");
+            resultTextures[shootRateIcon] = Content.Load<Texture2D>("Image/SpinningReel/attributeIncreased");
+            resultTextures[bowIcon] = Content.Load<Texture2D>("Image/SpinningReel/skillIncreased");
+            resultTextures[hammerIcon] = Content.Load<Texture2D>("Image/SpinningReel/skillIncreased");
+            resultTextures[armorIcon] = Content.Load<Texture2D>("Image/SpinningReel/skillIncreased");
+            resultTextures[sandalIcon] = Content.Load<Texture2D>("Image/SpinningReel/skillIncreased");
+            resultTextures[beltIcon] = Content.Load<Texture2D>("Image/SpinningReel/skillIncreased");
+            resultTextures[healthIcon] = Content.Load<Texture2D>("Image/SpinningReel/attributeIncreased");
+            resultTextures[dolphinIcon] = Content.Load<Texture2D>("Image/SpinningReel/friendshipIncreased");
+            resultTextures[seaCowIcon] = Content.Load<Texture2D>("Image/SpinningReel/friendshipIncreased");
+            resultTextures[turtleIcon] = Content.Load<Texture2D>("Image/SpinningReel/friendshipIncreased");
+            iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBarNew");
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBarNew");
+            lobsterTexture = Content.Load<Texture2D>("Image/Miscellaneous/lobster");
+            crabTexture = Content.Load<Texture2D>("Image/Miscellaneous/crab");
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
         }
@@ -94,7 +116,7 @@ namespace Poseidon.Core
             //    new Rectangle(0, barHeight + 1, HealthBar.Width, barHeight),
             //    Color.Transparent);
             //Draw the current health level based on the current Health
-            Color healthColor = Color.LawnGreen;
+            Color healthColor = Color.LimeGreen;
             if (healthiness < 0.2)
                 healthColor = Color.DarkRed;
             else if (healthiness < 0.5)
@@ -146,6 +168,9 @@ namespace Poseidon.Core
             type = type.ToUpper();
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 35, barY + 70), typeColor, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
             spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2 + statsFont.MeasureString(type).Y / 2, game.Window.ClientBounds.Height / 2 - statsFont.MeasureString(type).X / 2), Color.Gold, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+
+            //draw the lobster on bottom
+            spriteBatch.Draw(lobsterTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + EnvironmentBar.Height / 2 - 30), null, Color.White, 0, new Vector2(lobsterTexture.Width / 2, lobsterTexture.Height / 2), 1, SpriteEffects.None, 0);
         }
 
         public static void UpdateGoodWillBar()
@@ -185,11 +210,17 @@ namespace Poseidon.Core
                         stoppedSpinning = true;
                         PoseidonGame.audio.reelHit.Play();
 
+
                         //miracles happen here
                         //the face drawn on the screen is actually faceToDraw + 1
                         faceBeingShown = HydroBot.faceToDraw + 1;
                         if (faceBeingShown == GameConstants.NumGoodWillBarIcons) faceBeingShown = 0;
                         if (HydroBot.iconActivated[faceBeingShown]){
+
+                            //display result of the spin
+                            displayResult = true;
+                            timeStartDisplay = PoseidonGame.playTime.TotalMilliseconds;
+
                             if (faceBeingShown == poseidonFace)
                             {
                                 //fill up the hitpoint
@@ -258,6 +289,33 @@ namespace Poseidon.Core
                 if (HydroBot.faceToDraw == iconTextures.Length) HydroBot.faceToDraw = 0;
                 lastChangeTime = PoseidonGame.playTime;
             }
+            if (displayResult)
+            {
+                if (PoseidonGame.playTime.TotalMilliseconds - timeStartDisplay <= 500)
+                {
+                    resultDisplayScale -= 0.01f;
+                }
+                else if (PoseidonGame.playTime.TotalMilliseconds - timeStartDisplay <= 1000)
+                {
+                    if (resultDisplayScale > 0.26f) resultDisplayScale = 0.26f;
+                    if (!displayMusicPlayed)
+                    {
+                        PoseidonGame.audio.superPunch.Play();
+                        displayMusicPlayed = true;
+                    }
+                    buzzNow = true;
+                }
+                else if (PoseidonGame.playTime.TotalMilliseconds - timeStartDisplay <= 2500)
+                {
+                    buzzNow = false;
+                }
+                else
+                {
+                    displayResult = false;
+                    resultDisplayScale = startingDisplayScale;
+                    displayMusicPlayed = false;
+                }
+            }
         }
         public static void StopSpinning()
         {
@@ -278,7 +336,7 @@ namespace Poseidon.Core
         {
             if (!HydroBot.goodWillBarActivated) return;
 
-            int barX = 50;
+            int barX = iconFrame.Width/2 - GoodWillBar.Width/4;
             int barY = game.Window.ClientBounds.Height / 2 - GoodWillBar.Height / 2;
             string type = "GOOD WILL";
             Color typeColor = Color.Gold;
@@ -316,11 +374,25 @@ namespace Poseidon.Core
             if (faceDrawNext == iconTextures.Length) faceDrawNext = 0;
             if (HydroBot.iconActivated[faceDrawNext]) colorToDraw = Color.White;
             else colorToDraw = Color.Black;
-            spriteBatch.Draw(iconTextures[faceDrawNext], new Vector2(barX - 32, barY - iconTextures[faceDrawNext].Height - 20), new Rectangle(0, (int)(iconTextures[faceDrawNext].Height * (1.0f - partialDraw)), iconTextures[faceDrawNext].Width, (int)(iconTextures[faceDrawNext].Height * partialDraw)), colorToDraw);
+            spriteBatch.Draw(iconTextures[faceDrawNext], new Vector2(0, barY - iconTextures[faceDrawNext].Height - 20), new Rectangle(0, (int)(iconTextures[faceDrawNext].Height * (1.0f - partialDraw)), iconTextures[faceDrawNext].Width, (int)(iconTextures[faceDrawNext].Height * partialDraw)), colorToDraw);
             if (HydroBot.iconActivated[HydroBot.faceToDraw]) colorToDraw = Color.White;
             else colorToDraw = Color.Black;
-            spriteBatch.Draw(iconTextures[HydroBot.faceToDraw], new Vector2(barX - 32, barY - iconTextures[faceDrawNext].Height - 20 + iconTextures[HydroBot.faceToDraw].Height * partialDraw), new Rectangle(0, 0, iconTextures[HydroBot.faceToDraw].Width, (int)(iconTextures[HydroBot.faceToDraw].Height * (1.0f - partialDraw))), colorToDraw);
-            
+            spriteBatch.Draw(iconTextures[HydroBot.faceToDraw], new Vector2(0, barY - iconTextures[faceDrawNext].Height - 20 + iconTextures[HydroBot.faceToDraw].Height * partialDraw), new Rectangle(0, 0, iconTextures[HydroBot.faceToDraw].Width, (int)(iconTextures[HydroBot.faceToDraw].Height * (1.0f - partialDraw))), colorToDraw);
+
+            //draw the frame
+            spriteBatch.Draw(iconFrame, new Vector2(0, barY - iconFrame.Height - 20), null, Color.White);
+
+            //draw the crab on bottom
+            //spriteBatch.Draw(crabTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + GoodWillBar.Height / 2 - 30), null, Color.White, 0, new Vector2(crabTexture.Width / 2, crabTexture.Height / 2), 1, SpriteEffects.None, 0);
+
+            //display the result of the spin
+            if (displayResult)
+            {
+                Vector2 posToDraw = new Vector2(iconFrame.Width / 2, barY - iconFrame.Height - 20);
+                if (buzzNow) posToDraw += new Vector2(random.Next(-5, 5), random.Next(-5, 5));
+                spriteBatch.Draw(resultTextures[faceDrawNext], posToDraw, null, Color.White, 0,
+                    new Vector2(resultTextures[faceDrawNext].Width / 2, resultTextures[faceDrawNext].Height / 2), resultDisplayScale, SpriteEffects.None, 0);
+            }
         }
 
         public static void DrawLevelBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)

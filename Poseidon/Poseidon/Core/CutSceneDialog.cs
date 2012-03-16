@@ -128,7 +128,9 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Teleportation! Wow, that's exciting. Thank you so much. I will not disappoint you.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "And from now on, for all the good deeds that you do for the ocean, I will repay you handsomely, pay attention to the good will indicator.", "Image/Cutscenes/backgroundDialog", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days to accomplish this mission.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
  
@@ -154,9 +156,9 @@ namespace Poseidon
             cutScene = new List<Sentence>();
             sentence = new Sentence(0, "I found an old pair of sandals ... but they do not seem to fit, how am I supposed to wear this?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Settle down bot, this sandal is not for wearing. This is the legendary winged sandal of Hermes which enabled him to move at super sonic mode.", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(1, "Settle down bot, these sandals are not for wearing. They are the legendary winged sandals of Hermes which enabled him to move at super sonic speeed.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "And can I use its power too?", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Awesome, can I use that power too?", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Unfortunately, an ancient relic's power can not be used by either a human or a bot. But I can help you to extract the power of this relic and use it periodically. However, everything has its price, using the relic will also hurt you a little bit.", "Image/Cutscenes/backgroundDialog", 0);
             cutScene.Add(sentence);

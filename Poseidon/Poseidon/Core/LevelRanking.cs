@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 
 using Poseidon.Core;
+using Microsoft.Xna.Framework.Graphics;
 namespace Poseidon
 {
     public partial class PlayGameScene : GameScene
     {
-        public void LevelRanking(ref string bossDefeatRank, ref string enemyDefeatRank, ref string healthLostRank, ref string fishSaveRank, ref string trashCollectRank, ref string overallRank, ref string comment)
+        public void LevelRanking(ref string bossDefeatRank, ref string enemyDefeatRank, ref string healthLostRank, ref string fishSaveRank, ref string trashCollectRank, ref Texture2D overallTexture, ref string comment)
         {
             string lowestRank = "Beginner";
             string lowerRank = "Apprentice";
@@ -121,7 +122,7 @@ namespace Poseidon
             if (HydroBot.hasSeaCow) realNumFish -= 1;
             if (HydroBot.hasTurtle) realNumFish -= 1;
 
-            if (GameConstants.NumberFish[currentLevel] > 0)
+            if (GameConstants.NumberFish[currentLevel] > 0 && totalNumberOfEnemies > 0)
             {
                 float fishSavePercent = (float)realNumFish / (float)GameConstants.NumberFish[currentLevel];
                 if (fishSavePercent <= 0.30f)
@@ -154,6 +155,7 @@ namespace Poseidon
             //trash collect rank
             int trashRankPoint = 0;
             int trashNormalThreshold = 15;
+            if (currentLevel == 0) trashNormalThreshold *= 2;
             if (numTrashCollected <= 0.5 * trashNormalThreshold)
             {
                 trashCollectRank = lowestRank;
@@ -212,27 +214,27 @@ namespace Poseidon
 
             if (overallRankingPoint >= 5)
             {
-                overallRank = highestRank;
+                overallTexture = rankTextures[4];
                 comment = "Speechless ...";
             }
             else if (overallRankingPoint >= 4)
             {
-                overallRank = higherRank;
+                overallTexture = rankTextures[3];
                 comment = "The sea environment really needs someone like you!";
             }
             else if (overallRankingPoint >= 3)
             {
-                overallRank = averageRank;
+                overallTexture = rankTextures[2];
                 comment = "You are good enough to save the sea environment.";
             }
             else if (overallRankingPoint >= 2)
             {
-                overallRank = lowerRank;
+                overallTexture = rankTextures[1];
                 comment = "Try harder and you will play better.";
             }
             else if (overallRankingPoint >= 1)
             {
-                overallRank = lowestRank;
+                overallTexture = rankTextures[0];
                 comment = "Your skill needs to be improved.";
             }
         }

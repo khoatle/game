@@ -33,7 +33,7 @@ namespace Poseidon
         public TimeSpan startTime, roundTimer, roundTime;
         Random random;
         SpriteBatch spriteBatch;
-        SpriteFont statsFont;
+        SpriteFont statsFont, statisticFont;
         SpriteFont fishTalkFont;
         SpriteFont keyFoundFont;
         SpriteFont menuSmall;
@@ -206,10 +206,15 @@ namespace Poseidon
         RenderTarget2D normalDepthRenderTargetLow, normalDepthRenderTargetHigh, edgeDetectionRenderTarget;
 
         //for level statistics
-        public static int numNormalKills = 0;
-        public static int numBossKills = 0;
-        public static int healthLost = 0;
-        public static int numTrashCollected = 0;
+        public static int numNormalKills = 50;
+        public static int numBossKills = 50;
+        public static int healthLost = 150;
+        public static int numTrashCollected = 50;
+        public bool displayStatisticsNow = false;
+
+        //textures for level statistics display
+        private Texture2D statisticLogoTexture;
+        private Texture2D[] rankTextures;
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -284,11 +289,11 @@ namespace Poseidon
             else {
                 int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 20, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 50, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
-                int[] numFish = { 0, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
+                int[] numFish = { 50, 50, 50, 0, 50, 50, 50, 50, 50, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 3, 4, 5, 10, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
@@ -320,6 +325,15 @@ namespace Poseidon
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
             scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
 
+            //load texture for statistics screen
+            statisticLogoTexture = Content.Load<Texture2D>("Image/LevelStatistics/levelstatistics");
+            rankTextures = new Texture2D[5];
+            rankTextures[0] = Content.Load<Texture2D>("Image/LevelStatistics/beginnerRank");
+            rankTextures[1] = Content.Load<Texture2D>("Image/LevelStatistics/apprenticeRank");
+            rankTextures[2] = Content.Load<Texture2D>("Image/LevelStatistics/adeptRank");
+            rankTextures[3] = Content.Load<Texture2D>("Image/LevelStatistics/expertRank");
+            rankTextures[4] = Content.Load<Texture2D>("Image/LevelStatistics/exceptionalRank");
+
             // Instantiate the factory Button
             float buttonScale = 1.0f;
             if (game.Window.ClientBounds.Width <= 900) {
@@ -336,6 +350,7 @@ namespace Poseidon
         public void Load()
         {
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            statisticFont = Content.Load<SpriteFont>("Fonts/StatisticsFont");
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             keyFoundFont = Content.Load<SpriteFont>("Fonts/painting");
@@ -1196,19 +1211,23 @@ namespace Poseidon
                     if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
                         currentKeyboardState.IsKeyUp(Keys.Enter))
                     {
-                        currentLevel++;
-                        if (currentLevel < 11)
-                            currentGameState = GameState.ToMiniGame;
-                        //play the last cutscene if the game has been completed
+                        if (!displayStatisticsNow) displayStatisticsNow = true;
                         else
                         {
-                            currentGameState = GameState.PlayingCutScene;
-                            currentSentence = 0;
+                            currentLevel++;
+                            if (currentLevel < 11)
+                                currentGameState = GameState.ToMiniGame;
+                            //play the last cutscene if the game has been completed
+                            else
+                            {
+                                currentGameState = GameState.PlayingCutScene;
+                                currentSentence = 0;
+                            }
+                            // no minigame for 1st level
+                            if (currentLevel == 1)
+                                currentGameState = GameState.ToNextLevel;
+                            //ResetGame(gameTime, aspectRatio);
                         }
-                        // no minigame for 1st level
-                        if (currentLevel == 1)
-                            currentGameState = GameState.ToNextLevel;
-                        //ResetGame(gameTime, aspectRatio);
                     }
                 }
                 base.Update(gameTime);
@@ -1451,6 +1470,7 @@ namespace Poseidon
             healthLost = 0;
             numTrashCollected = 0;
             concludeMusicPlayed = false;
+            displayStatisticsNow = false;
         }
 
         private float curNumBossDeaf = 0, curNumEnemyDeaf = 0, curHealthLost = 0, curNumFishSaved = 0, curTrashCollected = 0;
@@ -1468,10 +1488,11 @@ namespace Poseidon
                 string healthLostRank = "";
                 string fishSaveRank = "";
                 string trashCollectRank = "";
-                string overallRank = "";
+                Texture2D overallRankTexture = null;
+                string overallRank = "Overall rank:";
                 string comment = "";
 
-                LevelRanking(ref bossDefeatRank, ref enemyDefeatRank, ref healthLostRank, ref fishSaveRank, ref trashCollectRank, ref overallRank, ref comment);
+                LevelRanking(ref bossDefeatRank, ref enemyDefeatRank, ref healthLostRank, ref fishSaveRank, ref trashCollectRank, ref overallRankTexture, ref comment);
 
                 int realNumFish = fishAmount;
                 if (HydroBot.hasDolphin) realNumFish -= 1;
@@ -1479,10 +1500,18 @@ namespace Poseidon
                 if (HydroBot.hasTurtle) realNumFish -= 1;
                 bool somethingIncreasing = false;
 
-                string strTitle = "LEVEL STATISTICS (temporary graphic)\n";
                 string str1 = "";
                 string str2 = "";
                 string strComment = "";
+                //the player wants to skip the counting and see the result rightaway
+                if (displayStatisticsNow)
+                {
+                    curNumBossDeaf = numBossKills;
+                    curNumEnemyDeaf = numNormalKills;
+                    curHealthLost = healthLost;
+                    curNumFishSaved = realNumFish;
+                    curTrashCollected = numTrashCollected;
+                }
                 if (bossDefeatRank != "")
                 {
                     str1 += "Number of boss defeated: " + (int)curNumBossDeaf + "\n";
@@ -1537,8 +1566,6 @@ namespace Poseidon
 
                 if (!somethingIncreasing)
                 {
-                    str1 += "Overall rank: \n";
-                    str2 += overallRank + "\n";
                     strComment = comment;
                     if (!concludeMusicPlayed)
                     {
@@ -1556,11 +1583,17 @@ namespace Poseidon
                 xOffsetText = rectSafeArea.X;
                 yOffsetText = rectSafeArea.Y;
 
-                
-                spriteBatch.DrawString(statsFont, strTitle, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statsFont.MeasureString(strTitle).X / 2, statsFont.MeasureString(strTitle).Y / 2), 3.0f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(statsFont, str1, new Vector2(game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statsFont.MeasureString(strTitle).Y), Color.Yellow, 0, Vector2.Zero, 2.0f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(statsFont, str2, new Vector2(3 * game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statsFont.MeasureString(strTitle).Y), Color.Red, 0, Vector2.Zero, 2.0f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(statsFont, strComment, new Vector2(game.Window.ClientBounds.Width / 2, 3 * game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statsFont.MeasureString(strComment).X/2,statsFont.MeasureString(strComment).Y/2), 3.0f, SpriteEffects.None, 0);
+                spriteBatch.Draw(statisticLogoTexture, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4 + 20), null, Color.White, 0, new Vector2(statisticLogoTexture.Width / 2, statisticLogoTexture.Height / 2), 1.0f, SpriteEffects.None, 0);
+                //spriteBatch.DrawString(statsFont, strTitle, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statsFont.MeasureString(strTitle).X / 2, statsFont.MeasureString(strTitle).Y / 2), 3.0f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statisticFont, str1, new Vector2(game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statisticLogoTexture.Height/2), Color.Yellow, 0, Vector2.Zero, 0.6f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statisticFont, str2, new Vector2(3 * game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statisticLogoTexture.Height/2), Color.Red, 0, Vector2.Zero, 0.6f, SpriteEffects.None, 0);
+                if (!somethingIncreasing)
+                {
+                    Vector2 overallRankTextPos = new Vector2(game.Window.ClientBounds.Width / 2 - statisticFont.MeasureString(overallRank).X/2, game.Window.ClientBounds.Height / 4 + statisticLogoTexture.Height / 2 + statisticFont.MeasureString(str1).Y * 0.6f);
+                    spriteBatch.DrawString(statisticFont, overallRank, overallRankTextPos, Color.Red, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+                    spriteBatch.Draw(overallRankTexture, new Vector2(game.Window.ClientBounds.Width / 2 - overallRankTexture.Width / 2, overallRankTextPos.Y + statisticFont.MeasureString(overallRank).Y), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
+                }
+                spriteBatch.DrawString(statisticFont, strComment, new Vector2(game.Window.ClientBounds.Width / 2, 3 * game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statisticFont.MeasureString(strComment).X / 2, statisticFont.MeasureString(strComment).Y / 2), 1.0f, SpriteEffects.None, 0);
             }
             else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
             spriteBatch.End();

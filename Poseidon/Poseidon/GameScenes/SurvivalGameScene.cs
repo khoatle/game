@@ -327,8 +327,8 @@ namespace Poseidon
             radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
 
             // Load Trash
-            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer2");
-            plasticTrash = Content.Load<Model>("Models/TrashModels/plasticTrashVer2");
+            biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer4");
+            plasticTrash = Content.Load<Model>("Models/TrashModels/plasticTrashVer3");
             radioactiveTrash = Content.Load<Model>("Models/TrashModels/radioactiveTrash");
 
             //Load Powerpacks

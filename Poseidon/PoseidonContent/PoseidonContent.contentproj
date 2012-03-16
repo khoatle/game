@@ -1627,12 +1627,6 @@
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
-    <Compile Include="Models\TrashModels\biodegradableTrashVer2.fbx">
-      <Name>biodegradableTrashVer2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
-    </Compile>
     <Compile Include="Models\PowerpackResource\strengthPowerPack.fbx">
       <Name>strengthPowerPack</Name>
       <Importer>FbxImporter</Importer>
@@ -1661,12 +1655,6 @@
       <Name>mauiDolphin</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
-    </Compile>
-    <Compile Include="Models\TrashModels\plasticTrashVer2.fbx">
-      <Name>plasticTrashVer2</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
     </Compile>
     <Compile Include="Models\SeaAnimalModels\stellarSeaCow.fbx">
       <Name>stellarSeaCow</Name>
@@ -1737,6 +1725,16 @@
       <Name>MeiolaniaWithAnim</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TrashModels\biodegradableTrashVer4.fbx">
+      <Name>biodegradableTrashVer4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\TrashModels\plasticTrashVer3.fbx">
+      <Name>plasticTrashVer3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

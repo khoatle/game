@@ -1033,7 +1033,7 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel])
+                    if (trashes!=null)// && trashes.Count < GameConstants.NumberTrash[currentLevel])
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 100, GameConstants.TrashMinRangeZ,

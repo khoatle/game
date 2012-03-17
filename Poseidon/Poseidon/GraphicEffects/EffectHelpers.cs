@@ -324,13 +324,19 @@ namespace Poseidon
 
             //we don't want the screen to be too dark
             if (envFactor < 0.35f) envFactor = 0.35f;
+            //or too bright
+            if (envFactor > 0.90f) envFactor = 0.90f;
             //envFactor = 1.0f;
             if (HydroBot.gameMode == GameMode.MainGame)
             {
-                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
-                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
-                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
-                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
+                fogColor = LerpColor(GameConstants.FogColor[PlayGameScene.currentLevel], Color.Blue, envFactor) * envFactor;
+                ambientColor = LerpColor(GameConstants.AmbientColor[PlayGameScene.currentLevel], new Color(0, 191.0f / 255.0f, 1), envFactor) * envFactor;
+                diffuseColor = LerpColor(GameConstants.DiffuseColor[PlayGameScene.currentLevel], new Color(0, 255, 255), envFactor) * envFactor;
+                specularColor = LerpColor(GameConstants.SpecularColor[PlayGameScene.currentLevel], new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), envFactor) * envFactor;
+                //fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
+                //ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
+                //diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
+                //specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
             }
             else if (HydroBot.gameMode == GameMode.ShipWreck)
             {
@@ -346,6 +352,17 @@ namespace Poseidon
                 diffuseColor = GameConstants.DiffuseColor[0] * envFactor;
                 specularColor = GameConstants.SpecularColor[0] * envFactor;
             }
+        }
+        public static Color LerpColor(Color color1, Color color2, float amount)
+        {
+            //if (amount < 0.5) return color1;
+            Color resultColor = new Color();
+            resultColor.R = (byte)MathHelper.Lerp(color1.R, color2.R, amount);
+            resultColor.G = (byte)MathHelper.Lerp(color1.G, color2.G, amount);
+            resultColor.B = (byte)MathHelper.Lerp(color1.B, color2.B, amount);
+            //important for specular color
+            resultColor.A = (byte)MathHelper.Lerp(color1.A, color2.A, amount);
+            return resultColor;
         }
     }
 }

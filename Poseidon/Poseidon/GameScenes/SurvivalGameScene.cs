@@ -904,7 +904,7 @@ namespace Poseidon
                     break;
 
                 case BuildingType.biodegradable:
-                    oneFactory = new Factory(FactoryType.biodegradable, particleManager);
+                    oneFactory = new Factory(FactoryType.biodegradable, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = biodegradableFactoryModel;
@@ -915,7 +915,7 @@ namespace Poseidon
                     break;
 
                 case BuildingType.plastic:
-                    oneFactory = new Factory(FactoryType.plastic, particleManager);
+                    oneFactory = new Factory(FactoryType.plastic, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = plasticFactoryModel;
@@ -925,7 +925,7 @@ namespace Poseidon
                     status = true;
                     break;
                 case BuildingType.radioactive:
-                    oneFactory = new Factory(FactoryType.radioactive, particleManager);
+                    oneFactory = new Factory(FactoryType.radioactive, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = radioactiveFactoryModel;

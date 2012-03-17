@@ -44,8 +44,15 @@ namespace Poseidon
             cursor = new Cursor(game, spriteBatch);
             cursor.targetToLock = null;
             this.graphicsDevice = GraphicDevice;
-            textureFrontRectangle = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - 400, graphicsDevice.Viewport.TitleSafeArea.Center.Y - 300, 800, 600);
-            nextRectangle = new Rectangle(textureFrontRectangle.Right - 100, textureFrontRectangle.Center.Y - 35, 70, 70);
+            //System.Diagnostics.Debug.WriteLine("Viewport Width: " + graphicsDevice.Viewport.TitleSafeArea.Width + " Viewport Height: " + graphicsDevice.Viewport.TitleSafeArea.Height + " center " + graphicsDevice.Viewport.TitleSafeArea.Center);
+            //System.Diagnostics.Debug.WriteLine("GameWindow Width: " + game.Window.ClientBounds.Width + " Viewport Height: " + game.Window.ClientBounds.Height + " Center "+game.Window.ClientBounds.Center.X);
+            int textureWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.625);
+            int textureHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.75);
+            textureFrontRectangle = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - textureWidth / 2, graphicsDevice.Viewport.TitleSafeArea.Center.Y - textureHeight / 2, textureWidth, textureHeight);
+                        
+            int nextRectangleWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.05);
+            int nextRectangleHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.0875);
+            nextRectangle = new Rectangle(textureFrontRectangle.Right - (nextRectangleWidth+30), textureFrontRectangle.Center.Y - nextRectangleHeight/2, nextRectangleWidth, nextRectangleHeight);
             sceneCount = 1;
         }
         public override void Update(GameTime gameTime)

@@ -122,10 +122,10 @@ namespace Poseidon
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
-            graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             //MediaPlayer.Volume = 0;

@@ -1309,7 +1309,7 @@ namespace Poseidon
                     break;
 
                 case BuildingType.biodegradable:
-                    oneFactory = new Factory(FactoryType.biodegradable, particleManager);
+                    oneFactory = new Factory(FactoryType.biodegradable, particleManager, GraphicsDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
@@ -1322,7 +1322,7 @@ namespace Poseidon
                     break;
 
                 case BuildingType.plastic:
-                    oneFactory = new Factory(FactoryType.plastic, particleManager);
+                    oneFactory = new Factory(FactoryType.plastic, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
@@ -1334,7 +1334,7 @@ namespace Poseidon
                     status = true;
                     break;
                 case BuildingType.radioactive:
-                    oneFactory = new Factory(FactoryType.radioactive, particleManager);
+                    oneFactory = new Factory(FactoryType.radioactive, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
@@ -1375,7 +1375,7 @@ namespace Poseidon
                 else
                 {
                     FactoryType typeOfFactory = factoryButtonPanel.anchorIndexToFactoryType(factoryButtonPanel.AnchoredIndex);
-                    factoryAnchor = new Factory(typeOfFactory, particleManager);
+                    factoryAnchor = new Factory(typeOfFactory, particleManager, GraphicDevice);
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     switch(typeOfFactory) {
@@ -1447,8 +1447,10 @@ namespace Poseidon
         {
             string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help!!";
             message = IngamePresentation.wrapLine(message, 800, keyFoundFont);
+            int foundKeyScreenHeight = (int)(GraphicDevice.Viewport.TitleSafeArea.Height);
+            int foundKeyScreenWidth = (int)(GraphicDevice.Viewport.TitleSafeArea.Width);
             spriteBatch.Begin();
-            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreen.Width/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreen.Height/2, foundKeyScreen.Width, foundKeyScreen.Height), Color.White);
+            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreenWidth/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreenHeight/2, foundKeyScreenWidth, foundKeyScreenHeight), Color.White);
             spriteBatch.DrawString(keyFoundFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X-400, 20), Color.DarkRed);
 
             string nextText = "Press Enter to continue";

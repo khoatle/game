@@ -39,8 +39,14 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
             cursor = new Cursor(game, spriteBatch);
-            textureFrontRectangle = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - 400, graphicsDevice.Viewport.TitleSafeArea.Center.Y - 300, 800, 600);
-            nextRectangle = new Rectangle(textureFrontRectangle.Center.X - 35, textureFrontRectangle.Bottom - 70, 70, 70);
+
+            int creditSceneWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.65);
+            int creditSceneHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.75);
+            textureFrontRectangle = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - creditSceneWidth/2, graphicsDevice.Viewport.TitleSafeArea.Center.Y - creditSceneHeight/2, creditSceneWidth, creditSceneHeight);
+         
+            int nextRectangleWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.05);
+            int nextRectangleHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.0875);
+            nextRectangle = new Rectangle(textureFrontRectangle.Center.X - nextRectangleWidth/2, textureFrontRectangle.Bottom - nextRectangleHeight, nextRectangleWidth, nextRectangleHeight);
             nextPressed = false;
         }
         public override void Update(GameTime gameTime)
@@ -61,7 +67,6 @@ namespace Poseidon
         }
         public override void Draw(GameTime gameTime)
         {
-            System.Diagnostics.Debug.WriteLine("Inside draw function in credits");
             spriteBatch.Begin();
             base.Draw(gameTime);
             spriteBatch.Draw(backgroundTexture, new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Top, graphicsDevice.Viewport.TitleSafeArea.Left, graphicsDevice.Viewport.TitleSafeArea.Width, graphicsDevice.Viewport.TitleSafeArea.Height), Color.White);

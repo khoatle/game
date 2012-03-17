@@ -13,6 +13,8 @@ namespace Poseidon
     {
         public FactoryType factoryType;
 
+        GraphicsDevice graphicsDevice;
+
         public float orientation;
 
         Game game;
@@ -71,10 +73,11 @@ namespace Poseidon
         ParticleManagement particleManager;
         SoundEffectInstance buildingSoundInstance;
 
-        public Factory(FactoryType factorytype, ParticleManagement particleManager)
+        public Factory(FactoryType factorytype, ParticleManagement particleManager, GraphicsDevice graphicsDevice)
             : base()
         {
             this.factoryType = factorytype;
+            this.graphicsDevice = graphicsDevice;
             numTrashWaiting = 0;
             listTimeTrashProcessing = new List<double>();
             random = new Random();
@@ -141,9 +144,10 @@ namespace Poseidon
             factoryFont = font;
             background = backgroundTexture;
             produceButton = produceButtonTexture;
-            int rectWidth=(int)(game.Window.ClientBounds.Width * 0.9f);
-            int rectHeight = (int)(game.Window.ClientBounds.Height * 0.9f);
-            backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - rectWidth/2, game.Window.ClientBounds.Center.Y - rectHeight/2, rectWidth, rectHeight);
+
+            int rectWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.9f);
+            int rectHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height);
+            backgroundRect = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - rectWidth / 2, graphicsDevice.Viewport.TitleSafeArea.Center.Y - rectHeight / 2, rectWidth, rectHeight);
             produceRect = new Rectangle(backgroundRect.Center.X - 250, backgroundRect.Top + 120, 500, 65);
 
             SetUpgradeLevelDependentVariables();

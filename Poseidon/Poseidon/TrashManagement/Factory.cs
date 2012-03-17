@@ -141,7 +141,9 @@ namespace Poseidon
             factoryFont = font;
             background = backgroundTexture;
             produceButton = produceButtonTexture;
-            backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - 500, game.Window.ClientBounds.Center.Y - 400, 1000, 800);
+            int rectWidth=(int)(game.Window.ClientBounds.Width * 0.9f);
+            int rectHeight = (int)(game.Window.ClientBounds.Height * 0.9f);
+            backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - rectWidth/2, game.Window.ClientBounds.Center.Y - rectHeight/2, rectWidth, rectHeight);
             produceRect = new Rectangle(backgroundRect.Center.X - 250, backgroundRect.Top + 120, 500, 65);
 
             SetUpgradeLevelDependentVariables();

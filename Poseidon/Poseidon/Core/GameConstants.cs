@@ -215,14 +215,18 @@ namespace Poseidon {
         //const for the fog effect
         public const float FogStart = 10;
         public const float FogEnd = 450;
-        public static Color[] FogColor = { Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue };//Color.CornflowerBlue;
-        public static Color[] AmbientColor = { new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1),
+        //red sea: darkred - darkred - IndianRed - IndianRed
+        //dead sea: black - black - gray - gray
+        //polar sea: dodgerblue - dodgerblue - cyan - cyan
+        //seagrass meadow: all gray
+        public static Color[] FogColor = { Color.Gray, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue, Color.Blue };//Color.CornflowerBlue;
+        public static Color[] AmbientColor = { Color.Gray, new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1),
                                                  new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1),
                                                  new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1), new Color(0, 191.0f / 255.0f, 1) };
-        public static Color[] DiffuseColor = { new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255),
+        public static Color[] DiffuseColor = { Color.Gray, new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255),
                                                  new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255),
                                                  new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255), new Color(0, 255, 255) };
-        public static Color[] SpecularColor = { new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f),
+        public static Color[] SpecularColor = {  Color.Gray, new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f),
                                                   new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f),new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), 
                                                   new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f) };
         //so that it is easier to aim and hit

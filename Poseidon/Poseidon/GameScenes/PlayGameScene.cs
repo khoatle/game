@@ -206,10 +206,10 @@ namespace Poseidon
         RenderTarget2D normalDepthRenderTargetLow, normalDepthRenderTargetHigh, edgeDetectionRenderTarget;
 
         //for level statistics
-        public static int numNormalKills = 50;
-        public static int numBossKills = 50;
-        public static int healthLost = 150;
-        public static int numTrashCollected = 50;
+        public static int numNormalKills = 0;
+        public static int numBossKills = 0;
+        public static int healthLost = 0;
+        public static int numTrashCollected = 0;
         public bool displayStatisticsNow = false;
 
         //textures for level statistics display
@@ -1033,7 +1033,7 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel]/2)
+                    if (trashes!=null && trashes.Count < GameConstants.NumberTrash[currentLevel])
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, shipWrecks, staticObjects, factories, researchFacility,
                                 GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 100, GameConstants.TrashMinRangeZ,
@@ -1721,6 +1721,7 @@ namespace Poseidon
                 spriteBatch.End();
             }
             graphics.GraphicsDevice.SetRenderTarget(null);
+            //graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
             spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();

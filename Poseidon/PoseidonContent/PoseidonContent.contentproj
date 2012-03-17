@@ -1740,6 +1740,7 @@
       <Name>StatisticsFont</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
+      <SubType>Designer</SubType>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
@@ -2417,6 +2418,13 @@
     </Compile>
     <Compile Include="Image\LevelStatistics\expertRank.png">
       <Name>expertRank</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ParticleTextures\whiteSand.png">
+      <Name>whiteSand</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

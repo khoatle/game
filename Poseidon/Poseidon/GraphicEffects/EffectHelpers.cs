@@ -324,7 +324,7 @@ namespace Poseidon
 
             //we don't want the screen to be too dark
             if (envFactor < 0.35f) envFactor = 0.35f;
-
+            //envFactor = 1.0f;
             if (HydroBot.gameMode == GameMode.MainGame)
             {
                 fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;

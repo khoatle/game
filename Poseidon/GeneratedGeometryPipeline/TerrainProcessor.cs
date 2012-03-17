@@ -74,11 +74,35 @@ namespace GeneratedGeometryPipeline
         #endregion
 
 
-        private void SetTerrainTextureFilename()
+        private void SetTerrainTextureFilename(string terrainName)
         {
-            Random random = new Random();
-            int id = random.Next(6) + 1;
-            terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain" + id + ".jpg";       
+            //Random random = new Random();
+            //int id = random.Next(6) + 1;
+            if (terrainName == "terrain0.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
+            else if (terrainName == "terrain1.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";
+            else if (terrainName == "terrain2.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
+            else if (terrainName == "terrain3.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
+            else if (terrainName == "terrain4.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain5.jpg";
+            else if (terrainName == "terrain5.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";
+            else if (terrainName == "terrain6.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
+            else if (terrainName == "terrain7.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";
+            else if (terrainName == "terrain8.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
+            else if (terrainName == "terrain9.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
+            else if (terrainName == "terrain10.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain5.jpg";
+            else if (terrainName == "terrain11.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";
+            else terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";   
         }
 
         /// <summary>
@@ -87,8 +111,8 @@ namespace GeneratedGeometryPipeline
         public override ModelContent Process(Texture2DContent input,
                                              ContentProcessorContext context)
         {
-            string terrain_name = context.OutputFilename;
-            SetTerrainTextureFilename();
+            string terrain_name = Path.GetFileName(input.Identity.SourceFilename);
+            SetTerrainTextureFilename(terrain_name);
 
             MeshBuilder builder = MeshBuilder.StartMesh("terrain");
 

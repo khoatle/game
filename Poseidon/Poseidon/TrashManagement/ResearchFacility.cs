@@ -94,8 +94,10 @@ namespace Poseidon
             this.upgradeButton = upgradeButton;
             this.playJigsawButton = playJigsawButton;
             this.increaseAttributeButton = increaseAttributeButton;
-            
-            backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - 500, game.Window.ClientBounds.Center.Y - 400, 1000, 800);
+
+            int backgroundWidth = (int)(game.Window.ClientBounds.Width * 0.78);
+            int backgroundHeight = game.Window.ClientBounds.Height;
+            backgroundRect = new Rectangle(game.Window.ClientBounds.Center.X - backgroundWidth/2, game.Window.ClientBounds.Top, backgroundWidth, backgroundHeight);
             bioUpgradeRect = new Rectangle(game.Window.ClientBounds.Center.X - 300, backgroundRect.Top + 400, 200, 50);
             plasticUpgradeRect = new Rectangle(game.Window.ClientBounds.Center.X + 100, backgroundRect.Top + 400, 200, 50);
             playSeaCowJigsawRect = new Rectangle(backgroundRect.Center.X - 400, backgroundRect.Bottom - 250, 200, 50);
@@ -266,6 +268,8 @@ namespace Poseidon
 
         public void DrawResearchFacilityConfigurationScene(SpriteBatch spriteBatch, SpriteFont menuSmall)
         {
+            //HydroBot.numTurtlePieces = 30; //REMOVE - JUST fOR TESTING
+
             string title = "RESEARCH FACILITY";
             string description = "Welcome to the research facility. Scientists work here to upgrade processing factories. State of the art genetic engineering will help you resurrect extinct animals. You can also use your experience points to increase the bot's attributes.";
             title = Poseidon.Core.IngamePresentation.wrapLine(title, backgroundRect.Width, facilityFont, 1.5f);

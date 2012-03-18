@@ -53,8 +53,6 @@ namespace Poseidon
             levelObjFont = Content.Load<SpriteFont>("Fonts/levelObj");
             objectiveBox = Content.Load<Texture2D>("Image/Miscellaneous/levelObjectiveBox");
             achievedBox = Content.Load<Texture2D>("Image/Miscellaneous/achievedObjectiveBox");
-            objectiveBoxRect = new Rectangle(game.Window.ClientBounds.Center.X-350, game.Window.ClientBounds.Center.Y-300 , 700, 250);
-            achievedBoxRect = new Rectangle(game.Window.ClientBounds.Center.X - 350, game.Window.ClientBounds.Center.Y + 50, 700, 250);
             this.playgamescene = playgamescene;
             this.game = game;
         }
@@ -65,6 +63,15 @@ namespace Poseidon
         /// </summary>
         public override void Show()
         {
+
+            int objectiveBoxWidth = (int)(GraphicsDevice.Viewport.TitleSafeArea.Width * 0.55);
+            int objectiveBoxHeight = (int)(GraphicsDevice.Viewport.TitleSafeArea.Height * 0.3);
+            objectiveBoxRect = new Rectangle(GraphicsDevice.Viewport.TitleSafeArea.Center.X - objectiveBoxWidth / 2, GraphicsDevice.Viewport.TitleSafeArea.Center.Y - (int)(objectiveBoxHeight * 1.2), objectiveBoxWidth, objectiveBoxHeight);
+            int achievedBoxWidth = (int)(GraphicsDevice.Viewport.TitleSafeArea.Width * 0.55);
+            int achievedBoxHeight = (int)(GraphicsDevice.Viewport.TitleSafeArea.Height * 0.3);
+            achievedBoxRect = new Rectangle(GraphicsDevice.Viewport.TitleSafeArea.Center.X - achievedBoxWidth / 2, GraphicsDevice.Viewport.TitleSafeArea.Center.Y + (int)(achievedBoxHeight * 0.2), achievedBoxWidth, achievedBoxHeight);
+            
+
             audio.NewMeteor.Play();
             base.Show();
         }
@@ -238,8 +245,8 @@ namespace Poseidon
            // objectiveStringPosition = new Vector2(objectiveBoxRect.Left + 60, objectiveBoxRect.Top+100);
            // achievedStringPostion = new Vector2(achievedBoxRect.Left + 60, achievedBoxRect.Top+100);
 
-            objectiveStringPosition = new Vector2(objectiveBoxRect.Center.X - levelObjFont.MeasureString(level_objective).X/2, objectiveBoxRect.Top + 100);
-            achievedStringPostion = new Vector2(achievedBoxRect.Center.X - levelObjFont.MeasureString(achieved_status).X / 2, achievedBoxRect.Top + 100);
+            objectiveStringPosition = new Vector2(objectiveBoxRect.Center.X - levelObjFont.MeasureString(level_objective).X/2, objectiveBoxRect.Center.Y - levelObjFont.MeasureString(level_objective).Y/2);
+            achievedStringPostion = new Vector2(achievedBoxRect.Center.X - levelObjFont.MeasureString(achieved_status).X / 2, achievedBoxRect.Center.Y - levelObjFont.MeasureString(achieved_status).Y/2);
 
             spriteBatch.DrawString(levelObjFont, level_objective, objectiveStringPosition, Color.Blue);
 

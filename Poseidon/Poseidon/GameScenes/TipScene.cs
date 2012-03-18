@@ -51,7 +51,7 @@ namespace Poseidon
 
             tipFont = Content.Load<SpriteFont>("Fonts/tip");
             tipBox = Content.Load<Texture2D>("Image/Miscellaneous/tipBox");
-            tipBoxRect = new Rectangle(game.Window.ClientBounds.Center.X - 500, game.Window.ClientBounds.Center.Y - 300, 1000, 600);
+            
             this.game = game;
         }
 
@@ -61,6 +61,10 @@ namespace Poseidon
         /// </summary>
         public override void Show()
         {
+            int tipBoxWidth = (int)(GraphicsDevice.Viewport.TitleSafeArea.Width * 0.78);
+            int tipBoxHeight = (int)(GraphicsDevice.Viewport.TitleSafeArea.Height * 0.75);
+            tipBoxRect = new Rectangle(GraphicsDevice.Viewport.TitleSafeArea.Center.X - tipBoxWidth / 2, game.Window.ClientBounds.Center.Y - tipBoxHeight / 2, tipBoxWidth, tipBoxHeight);
+
             audio.NewMeteor.Play();
             base.Show();
         }
@@ -111,10 +115,10 @@ namespace Poseidon
 
             if (currentLevel == 0)
             {
-                text = "Press 'z' to clean trash & 'X' to drop seeds. Click on fish to heal them.";
-                text += "\n\nPoint on a fish and press 'CapsLock' to lock the cursor on it.";
-                text += "\n\nHold 'ctrl' to shoot without moving.";
-                text += "\n\nEnvironment at the end of a level effects the next level.";
+                text = "Build research labs and trash processing plant.";
+                text += "\n\nPress 'z'/'x'/'c' to collect bio/plastic/nuke trash.";
+                text += "\n\nDouble click on a plant to drop trash for processing.";
+                text += "\n\nClick on fish to heal them.";
             }
             else if (currentLevel == 1)
             {
@@ -128,7 +132,7 @@ namespace Poseidon
                 text = "There are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted.";
                 text += "\n\nDouble click on a ship wreck to get into it. Press 'esc' to get out.";
                 text += "\n\nCleaning the environment and healing make the fish happy.";
-                text += "\n\nDrop seeds near the shipwreck so that you can eat health fruits when you come out of it.";
+                text += "\n\nChange plant settings (right click) to produce powerpacks.";
             }
             else if (currentLevel == 3)
             {
@@ -154,7 +158,7 @@ namespace Poseidon
             {
                 text = "Hercules's bow deals an enormous amount of damage to a single enemy.";
                 text += "\n\nRead the writing on the paintings. They help you in the quiz.";
-                text += "\n\nFruits can help a lot in battle.";
+                text += "\n\nPowerpacks can help a lot in battle.";
                 text += "\n\nYour skills are linked to your attributes.";
             }
             else if (currentLevel == 7)
@@ -180,7 +184,7 @@ namespace Poseidon
             }
             else if (currentLevel == 10)
             {
-                text = "Plant enough trees so that you get the fruits when you need it.";
+                text = "Build factories at right places so that you get the powerpacks when you need it.";
                 text += "\n\nRemember, your skills are linked to your attributes.";
                 text += "\n\nRunning in a circular motion can help evade the deadly bullets.";
                 text += "\n\nUse all your skills. Press 1-5.";
@@ -190,7 +194,7 @@ namespace Poseidon
                 text = "There is less chance to get hit by a bullet when you run in a spiral motion.";
                 text += "\n\nUse all your skills. Press 1-5.";
                 text += "\n\nRemember to use your experience points.";
-                text += "\n\nDrop seeds. You need the fruits.";
+                text += "\n\nProcess trash. You need the powerpacks.";
             }
 
             spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X - tipFont.MeasureString(title).X, 2), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);

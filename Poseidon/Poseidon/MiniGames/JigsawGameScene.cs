@@ -92,6 +92,9 @@ namespace Poseidon.MiniGames
         private string generalInfoText = "";
         private string animalName;
 
+        Rectangle videoRectangle, descriptionRectangle;
+        int startWidth, tabSpace;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -104,6 +107,17 @@ namespace Poseidon.MiniGames
             //Content.RootDirectory = "Content";
             random = new Random();
 
+            startWidth = (int)(game.Window.ClientBounds.Width*0.02); //25
+            tabSpace = (int)(game.Window.ClientBounds.Width * 0.04); //50
+
+            int videoRectWidth = (int)(game.Window.ClientBounds.Width * 0.46); //600
+            int videoRectHeight = (int)(game.Window.ClientBounds.Height * 0.6); //480
+            int topTextHeight = (int)(game.Window.ClientBounds.Height * 0.125); //100
+            videoRectangle = new Rectangle(startWidth, topTextHeight , videoRectWidth, videoRectHeight);//(20,100,600,480)
+
+            int descRectWidth = videoRectWidth;
+            int descRectHeight = game.Window.ClientBounds.Height - videoRectHeight - topTextHeight;
+            descriptionRectangle = new Rectangle(startWidth, videoRectangle.Bottom+10, descRectWidth, descRectHeight);
         }
 
         /// <summary>
@@ -164,6 +178,7 @@ namespace Poseidon.MiniGames
 
             // Load/Initialize pieces here
             loadPieces();
+
             // Shuffle pieces
             shufflePieces();
 
@@ -230,7 +245,7 @@ namespace Poseidon.MiniGames
                     generalInfoText += "REASON: Ate too much!";
                     break;
             }
-            generalInfoText = Poseidon.Core.IngamePresentation.wrapLine(generalInfoText, Game.Window.ClientBounds.Width / 2 - 50, font);
+            generalInfoText = Poseidon.Core.IngamePresentation.wrapLine(generalInfoText, descriptionRectangle.Width-(tabSpace*2), font);
         }
 
         /// <summary>
@@ -282,7 +297,7 @@ namespace Poseidon.MiniGames
                 videoPlayer.Play(injectAndGrowVid);
                 stepText = "STEP 4: INJECT DNA INTO CELL AND GROW\nCELL";
             }
-            stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, Game.Window.ClientBounds.Width / 2, font);
+            stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, videoRectangle.Width - (tabSpace*2) , font);
             if (timeNow <= 0)
             {
                 timeUp = true;
@@ -360,8 +375,11 @@ namespace Poseidon.MiniGames
             //draw the small frame containing animated DNA
             //and the step
             spriteBatch.Begin();
-            spriteBatch.Draw(smallFrameImg, new Rectangle(20, 100, 512, 512), Color.White);
-            spriteBatch.DrawString(font, stepText, new Vector2(70, 200), new Color(new Vector3(0, 1 ,0)));
+            //spriteBatch.Draw(smallFrameImg, new Rectangle(20, 100, 512, 512), Color.White);
+            spriteBatch.Draw(smallFrameImg, videoRectangle, Color.White);
+            //spriteBatch.DrawString(font, stepText, new Vector2(70, 200), new Color(new Vector3(0, 1 ,0)));
+            int topSpace = (int)(game.Window.ClientBounds.Height*0.063); //50
+            spriteBatch.DrawString(font, stepText, new Vector2( videoRectangle.Left + tabSpace, videoRectangle.Top + topSpace) , new Color(new Vector3(0, 1, 0)));
             spriteBatch.End();
 
             //draw the videos
@@ -369,18 +387,22 @@ namespace Poseidon.MiniGames
             {
                 playingTexture = videoPlayer.GetTexture();
                 spriteBatch.Begin();
-                spriteBatch.Draw(playingTexture, new Vector2(110, 300), Color.White);
+                //spriteBatch.Draw(playingTexture, new Vector2(110, 300), Color.White);
+                int textSpace = (int)(font.MeasureString(stepText).Y)+topSpace+10;
+                spriteBatch.Draw(playingTexture, new Vector2(videoRectangle.Center.X - playingTexture.Width / 2, videoRectangle.Top + textSpace + topSpace), Color.White);
                 spriteBatch.End();
             }
 
             //draw the small frame containing general info
             spriteBatch.Begin();
-            spriteBatch.Draw(smallFrameImg, new Rectangle(20, Game.Window.ClientBounds.Bottom - (int)font.MeasureString(generalInfoText).Y - 100, game.Window.ClientBounds.Width / 2 - 100, (int)font.MeasureString(generalInfoText).Y + 100), Color.White);
+            //spriteBatch.Draw(smallFrameImg, new Rectangle(20, Game.Window.ClientBounds.Bottom - (int)font.MeasureString(generalInfoText).Y - 100, game.Window.ClientBounds.Width / 2 - 100, (int)font.MeasureString(generalInfoText).Y + 100), Color.White);
+            spriteBatch.Draw(smallFrameImg, descriptionRectangle, Color.White);
             spriteBatch.End();
 
             //draw general info about the animal
             spriteBatch.Begin();
-            spriteBatch.DrawString(font, generalInfoText, new Vector2(70, Game.Window.ClientBounds.Bottom -  font.MeasureString(generalInfoText).Y - 70), Color.Yellow);
+            //spriteBatch.DrawString(font, generalInfoText, new Vector2(70, Game.Window.ClientBounds.Bottom -  font.MeasureString(generalInfoText).Y - 70), Color.Yellow);
+            spriteBatch.DrawString(font, generalInfoText, new Vector2(descriptionRectangle.Left+tabSpace, descriptionRectangle.Center.Y - font.MeasureString(generalInfoText).Y / 2), Color.Yellow);
             cursor.Draw(gameTime);
             spriteBatch.End();
 

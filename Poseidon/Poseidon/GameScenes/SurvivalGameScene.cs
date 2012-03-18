@@ -622,7 +622,7 @@ namespace Poseidon
                         bubbles.Add(bubble);
                         for (int i = 0; i < enemiesAmount; i++)
                         {
-                            if (enemies[i].BoundingSphere.Intersects(frustum) && !(enemies[i] is MutantShark))
+                            if (enemies[i].BoundingSphere.Intersects(frustum) && !(enemies[i] is MutantShark) && !(enemies[i] is Submarine) && !(enemies[i] is GhostPirate))
                             {
                                 Bubble aBubble = new Bubble();
                                 aBubble.LoadContent(Content, enemies[i].Position, false, 0.025f);
@@ -685,7 +685,7 @@ namespace Poseidon
                     // Updating camera's frustum
                     frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
 
-                    if (trashes != null && trashes.Count < numTrash)
+                    if (trashes != null)// && trashes.Count < numTrash)
                     {
                         Vector3 pos = AddingObjects.createSinkingTrash(ref trashes, Content, random, null, null, factories, researchFacility,
                                 GameConstants.TrashMinRangeX, GameConstants.MainGameMaxRangeX - 100, GameConstants.TrashMinRangeZ,

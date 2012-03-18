@@ -2,7 +2,7 @@
 <XnaContent>
   <Asset Type="Poseidon.ParticleSettings">
     <BlendState>Additive</BlendState>
-    <TextureName>Image/ParticleTextures/sand</TextureName>
+    <TextureName>Image/ParticleTextures/whiteSand</TextureName>
     <MaxParticles>1000</MaxParticles>
     <Duration>PT15S</Duration>
     <DurationRandomness>0</DurationRandomness>

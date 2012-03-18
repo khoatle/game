@@ -528,9 +528,14 @@ namespace Poseidon
             }
         }
 
+        public static double lastTrashDrop = 0;
         public static Vector3 createSinkingTrash(
             ref List<Trash> trashes, ContentManager Content, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Factory> factories, ResearchFacility researchFacility, int minX, int maxX, int minZ, int maxZ, float floatHeight, HeightMapInfo heightMapInfo,ref Model bioTrash,ref Model plasticTrash,ref Model nukeTrash, ParticleManagement particleManager)
         {
+            if (PoseidonGame.playTime.TotalSeconds - lastTrashDrop <= 10)
+                return Vector3.Zero;
+            else lastTrashDrop = PoseidonGame.playTime.TotalSeconds;
+
             Vector3 tempCenter;
             int positionSign, xVal, zVal, heightValue;
             float orientation = random.Next(100);
@@ -590,6 +595,10 @@ namespace Poseidon
             tempCenter.Z = sinkingTrash.Position.Z;
             sinkingTrash.BoundingSphere = new BoundingSphere(tempCenter,sinkingTrash.BoundingSphere.Radius);
             trashes.Add(sinkingTrash);
+
+            //degrade environment
+            HydroBot.currentEnvPoint -= GameConstants.envLossPerTrashAdd;
+
             return sinkingTrash.Position;
         }
 

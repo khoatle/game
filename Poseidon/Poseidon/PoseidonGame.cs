@@ -234,7 +234,7 @@ namespace Poseidon
             Components.Add(shipWreckScene);
 
             //initiate graphic for good will bar
-            IngamePresentation.InitiateGoodWillBarGraphic(Content);
+            IngamePresentation.Initiate2DGraphics(Content);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
         }

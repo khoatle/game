@@ -30,10 +30,13 @@ namespace Poseidon.Core
         static Texture2D HealthBar;
         static SpriteFont statsFont, fishTalkFont;
 
+        public static List<Bubble> bubbles;
+        public static double lastBubbleCreated = 0;
+
         public static int poseidonFace = 0, strengthIcon = 1, speedIcon = 2, shootRateIcon = 3, healthIcon = 4, bowIcon = 5, hammerIcon = 6,
             armorIcon = 7, sandalIcon = 8, beltIcon = 9, dolphinIcon = 10, seaCowIcon = 11, turtleIcon = 12;
 
-        public static void InitiateGoodWillBarGraphic(ContentManager Content)
+        public static void Initiate2DGraphics(ContentManager Content)
         {
             //load icons for good will bar
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
@@ -72,6 +75,7 @@ namespace Poseidon.Core
             crabTexture = Content.Load<Texture2D>("Image/Miscellaneous/crab");
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            bubbles = new List<Bubble>();
         }
         public static void DrawActiveSkill(GraphicsDevice GraphicDevice, Texture2D[] skillTextures, SpriteBatch spriteBatch)
         {
@@ -170,7 +174,27 @@ namespace Poseidon.Core
             spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2 + statsFont.MeasureString(type).Y / 2, game.Window.ClientBounds.Height / 2 - statsFont.MeasureString(type).X / 2), Color.Gold, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
 
             //draw the lobster on bottom
-            spriteBatch.Draw(lobsterTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + EnvironmentBar.Height / 2 - 30), null, Color.White, 0, new Vector2(lobsterTexture.Width / 2, lobsterTexture.Height / 2), 1, SpriteEffects.None, 0);
+            //spriteBatch.Draw(lobsterTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + EnvironmentBar.Height / 2 - 30), null, Color.White, 0, new Vector2(lobsterTexture.Width / 2, lobsterTexture.Height / 2), 1, SpriteEffects.None, 0);
+
+            //draw floating bubbles inside tube
+            if (PoseidonGame.playTime.TotalMilliseconds - lastBubbleCreated >= 250)
+            {
+                Bubble bubble = new Bubble();
+                bubble.LoadContentBubbleSmall(PoseidonGame.contentManager, new Vector2(barX + barWidth / 2, barY + EnvironmentBar.Height - 7), barX, barX + barWidth - 3);
+                bubbles.Add(bubble);
+                lastBubbleCreated = PoseidonGame.playTime.TotalMilliseconds;
+            }
+            for (int i = 0; i < bubbles.Count; i++)
+            {
+                if (bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)))
+                    bubbles.RemoveAt(i--);
+
+            }
+            foreach (Bubble aBubble in bubbles)
+            {
+                aBubble.UpdateBubbleSmall();
+                aBubble.DrawBubbleSmall(spriteBatch);
+            }
         }
 
         public static void UpdateGoodWillBar()

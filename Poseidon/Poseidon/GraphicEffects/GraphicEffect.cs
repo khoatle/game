@@ -238,8 +238,9 @@ namespace Poseidon.GraphicEffects
                 spriteBatch.End();
             }
             graphics.GraphicsDevice.SetRenderTarget(afterEffectsRenderTarget);
+            graphics.GraphicsDevice.Clear(Color.Black);
             spriteBatch.Begin();
-            spriteBatch.Draw(afterBloomTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+            spriteBatch.Draw(afterBloomTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);// * ((float)HydroBot.currentEnvPoint / (float)HydroBot.maxEnvPoint));
             spriteBatch.End();
             //graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
             //graphics.GraphicsDevice.Textures[1] = afterBloomTexture;          

@@ -26,11 +26,14 @@ namespace Poseidon
         protected AudioLibrary audio;
         // Spritebatch
         protected SpriteBatch spriteBatch = null;
-        // Gui Stuff
-        protected Rectangle rockRect = new Rectangle(0, 0, 588, 126);
-        protected Vector2 rockPosition;
-        protected Rectangle rainRect = new Rectangle(90, 169, 620, 126);
-        protected Vector2 rainPosition;
+
+        Game game;
+
+        protected Rectangle titleLine1Rect;
+        protected Vector2 titleLine1Position;
+        protected Rectangle titleLine2Rect;
+        protected Vector2 titleLine2Position;
+
 
         public bool gameStarted = false;
         //protected Rectangle enhancedRect = new Rectangle(8, 304, 375, 144);
@@ -55,6 +58,13 @@ namespace Poseidon
         {
             this.elements = elements;
             this.teamLogo = teamLogo;
+            this.game = game;
+
+            int rectWidth = (int)(game.Window.ClientBounds.Width * 0.48);
+            int rectHeight = (int)(game.Window.ClientBounds.Height * 0.1575);
+            titleLine1Rect = new Rectangle(0, 0, rectWidth, rectHeight);//Hydrobot (0,0, 588, 126)
+            titleLine2Rect = new Rectangle(rectWidth / 6, (int)(rectHeight * 1.5), rectWidth, rectHeight); //Adventure (90, 169, 620, 126)
+            
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
 
@@ -93,10 +103,11 @@ namespace Poseidon
         {
             audio.NewMeteor.Play();
 
-            rockPosition.X = -1 * rockRect.Width;
-            rockPosition.Y = 40;
-            rainPosition.X = Game.Window.ClientBounds.Width;
-            rainPosition.Y = 180;
+
+            titleLine1Position.X = -1 * titleLine1Rect.Width;
+            titleLine1Position.Y = titleLine1Rect.Height/3;
+            titleLine2Position.X = game.Window.ClientBounds.Width;
+            titleLine2Position.Y = (int)(titleLine1Rect.Height*1.5);
             if (gameStarted)
             {
                 // Create the Menu
@@ -172,14 +183,14 @@ namespace Poseidon
             }
             if (!menu.Visible)
             {
-                if (rainPosition.X >= (Game.Window.ClientBounds.Width - 595) / 2)
+                if (titleLine2Position.X >= (game.Window.ClientBounds.Width*0.25))
                 {
-                    rainPosition.X -= 15;
+                    titleLine2Position.X -= (game.Window.ClientBounds.Width*0.0117f);
                 }
 
-                if (rockPosition.X <= (Game.Window.ClientBounds.Width - 715) / 2)
+                if (titleLine1Position.X <= (game.Window.ClientBounds.Width*0.25))
                 {
-                    rockPosition.X += 15;
+                    titleLine1Position.X += (game.Window.ClientBounds.Width * 0.0117f);
                 }
                 else
                 {
@@ -221,9 +232,13 @@ namespace Poseidon
             spriteBatch.Begin();
             base.Draw(gameTime);
 
-            spriteBatch.Draw(teamLogo, new Rectangle(Game.Window.ClientBounds.Right - 250, Game.Window.ClientBounds.Bottom-260, 300, 300), Color.White);
-            spriteBatch.Draw(elements, rockPosition, rockRect, Color.White);
-            spriteBatch.Draw(elements, rainPosition, rainRect, Color.White);
+            int logoWidth = (int)(game.Window.ClientBounds.Width * 0.234); //300
+            int logoHeight = (int)(game.Window.ClientBounds.Height * 0.375); //300
+            Rectangle teamLogoRectangle = new Rectangle(game.Window.ClientBounds.Right - (logoWidth-(logoWidth/10)), game.Window.ClientBounds.Bottom - (logoHeight-(logoHeight/10)), logoWidth, logoHeight);
+            spriteBatch.Draw(teamLogo, teamLogoRectangle, Color.White);
+            System.Diagnostics.Debug.WriteLine(titleLine1Position + "Rect" + titleLine1Rect);
+            spriteBatch.Draw(elements, titleLine1Position, titleLine1Rect, Color.White);
+            spriteBatch.Draw(elements, titleLine2Position, titleLine2Rect, Color.White);
             
             //if (showEnhanced)
             //{

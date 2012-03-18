@@ -2430,13 +2430,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\Miscellaneous\Bubble-small.png">
-      <Name>Bubble-small</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\Miscellaneous\bubble-small2.png">
       <Name>bubble-small2</Name>
       <Importer>TextureImporter</Importer>

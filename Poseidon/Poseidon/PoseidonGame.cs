@@ -125,7 +125,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             //MediaPlayer.Volume = 0;
@@ -234,7 +234,7 @@ namespace Poseidon
             Components.Add(shipWreckScene);
 
             //initiate graphic for good will bar
-            IngamePresentation.InitiateGoodWillBarGraphic(Content);
+            IngamePresentation.Initiate2DGraphics(Content);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
         }

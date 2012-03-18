@@ -524,7 +524,7 @@ namespace Poseidon
                     bubbles.Add(bubble);
                     for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
                     {
-                        if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum))
+                        if (enemies[currentShipWreckID][i].BoundingSphere.Intersects(frustum) && !(enemies[currentShipWreckID][i] is MutantShark) && !(enemies[currentShipWreckID][i] is Submarine) && !(enemies[currentShipWreckID][i] is GhostPirate))
                         {
                             Bubble aBubble = new Bubble();
                             aBubble.LoadContent(Content, enemies[currentShipWreckID][i].Position, false, 0.025f);

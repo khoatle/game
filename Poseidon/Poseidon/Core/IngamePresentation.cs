@@ -186,7 +186,8 @@ namespace Poseidon.Core
             }
             for (int i = 0; i < bubbles.Count; i++)
             {
-                if (bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)))
+                if (bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)) ||
+                    bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + 4)
                     bubbles.RemoveAt(i--);
 
             }

@@ -41,6 +41,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Image\TerrainHeightMaps\terrain2.bmp">
+      <Name>terrain2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TerrainProcessor</Processor>
+    </Compile>
     <Compile Include="Models\Miscellaneous\sphere1uR.x">
       <Name>sphere1uR</Name>
       <Importer>XImporter</Importer>
@@ -149,6 +154,7 @@
       <Name>terrain0</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
+      <ProcessorParameters_TerrainTextureFilename>Image/TerrainTextures/SeaBedTerrain1.jpg</ProcessorParameters_TerrainTextureFilename>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -190,17 +196,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\TerrainHeightMaps\terrain2.bmp">
-      <Name>terrain2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\TerrainHeightMaps\terrain1.bmp">
       <Name>terrain1</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
+      <ProcessorParameters_TerrainTextureFilename>Image/TerrainTextures/seagrassFinal.jpg</ProcessorParameters_TerrainTextureFilename>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -694,9 +694,7 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Image\TerrainTextures\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Compile Include="Models\TrashModels\radioactiveTrash.fbx">
       <Name>radioactiveTrash</Name>
@@ -2432,6 +2430,13 @@
   <ItemGroup>
     <Compile Include="Image\Miscellaneous\bubble-small2.png">
       <Name>bubble-small2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\TerrainTextures\seagrassFinal.jpg">
+      <Name>seagrassFinal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

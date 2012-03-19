@@ -329,21 +329,37 @@ namespace Poseidon
             //envFactor = 1.0f;
             if (HydroBot.gameMode == GameMode.MainGame)
             {
-                fogColor = LerpColor(GameConstants.FogColor[PlayGameScene.currentLevel], Color.Blue, envFactor) * envFactor;
-                ambientColor = LerpColor(GameConstants.AmbientColor[PlayGameScene.currentLevel], new Color(0, 191.0f / 255.0f, 1), envFactor) * envFactor;
-                diffuseColor = LerpColor(GameConstants.DiffuseColor[PlayGameScene.currentLevel], new Color(0, 255, 255), envFactor) * envFactor;
-                specularColor = LerpColor(GameConstants.SpecularColor[PlayGameScene.currentLevel], new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), envFactor) * envFactor;
-                //fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
-                //ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
-                //diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
-                //specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
+                if (GameConstants.PreferBlueColor[PlayGameScene.currentLevel])
+                {
+                    fogColor = LerpColor(GameConstants.FogColor[PlayGameScene.currentLevel], Color.Blue, envFactor) * envFactor;
+                    ambientColor = LerpColor(GameConstants.AmbientColor[PlayGameScene.currentLevel], new Color(0, 191.0f / 255.0f, 1), envFactor) * envFactor;
+                    diffuseColor = LerpColor(GameConstants.DiffuseColor[PlayGameScene.currentLevel], new Color(0, 255, 255), envFactor) * envFactor;
+                    specularColor = LerpColor(GameConstants.SpecularColor[PlayGameScene.currentLevel], new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), envFactor) * envFactor;
+                }
+                else
+                {
+                    fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
+                    ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
+                    diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
+                    specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
+                }
             }
             else if (HydroBot.gameMode == GameMode.ShipWreck)
             {
-                fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
-                ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
-                diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
-                specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
+                if (GameConstants.PreferBlueColor[PlayGameScene.currentLevel])
+                {
+                    fogColor = LerpColor(GameConstants.FogColor[PlayGameScene.currentLevel], Color.Blue, envFactor) * envFactor;
+                    ambientColor = LerpColor(GameConstants.AmbientColor[PlayGameScene.currentLevel], new Color(0, 191.0f / 255.0f, 1), envFactor) * envFactor;
+                    diffuseColor = LerpColor(GameConstants.DiffuseColor[PlayGameScene.currentLevel], new Color(0, 255, 255), envFactor) * envFactor;
+                    specularColor = LerpColor(GameConstants.SpecularColor[PlayGameScene.currentLevel], new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), envFactor) * envFactor;
+                }
+                else
+                {
+                    fogColor = GameConstants.FogColor[PlayGameScene.currentLevel] * envFactor;
+                    ambientColor = GameConstants.AmbientColor[PlayGameScene.currentLevel] * envFactor;
+                    diffuseColor = GameConstants.DiffuseColor[PlayGameScene.currentLevel] * envFactor;
+                    specularColor = GameConstants.SpecularColor[PlayGameScene.currentLevel] * envFactor;
+                }
             }
             else if (HydroBot.gameMode == GameMode.SurvivalMode)
             {

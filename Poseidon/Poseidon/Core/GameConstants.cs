@@ -231,6 +231,10 @@ namespace Poseidon {
         public static Color[] SpecularColor = {   Color.LightSkyBlue, Color.Gray, Color.LightSkyBlue, Color.LightSkyBlue,
                                                   Color.LightSkyBlue, Color.Cyan, Color.Black, Color.LightSkyBlue, 
                                                   Color.IndianRed, Color.LightSkyBlue, Color.LightSkyBlue, Color.LightSkyBlue };
+
+        public static bool[] PreferBlueColor = { false, false, false, false,
+                                                 false, false, true, false,
+                                                 true, false, false, false };
         //so that it is easier to aim and hit
         public const float EasyAimScale = 2.0f;
         public const float EasyHitScale = 1.5f;

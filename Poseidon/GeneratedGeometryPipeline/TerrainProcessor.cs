@@ -62,7 +62,7 @@ namespace GeneratedGeometryPipeline
 
         private string terrainTextureFilename;
         [DisplayName("Terrain Texture")]
-        [DefaultValue("rockmoss.jpg")]
+        [DefaultValue("Image/TerrainTextures/seagrassFinal.jpg")]
         [Description("The name of the terrain texture.")]
         public string TerrainTextureFilename
         {
@@ -81,21 +81,21 @@ namespace GeneratedGeometryPipeline
             if (terrainName == "terrain0.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
             else if (terrainName == "terrain1.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";
+                terrainTextureFilename = "Image/TerrainTextures/seagrassFinal.jpg";//seagrass meadow
             else if (terrainName == "terrain2.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
-            else if (terrainName == "terrain3.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
-            else if (terrainName == "terrain4.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain5.jpg";
-            else if (terrainName == "terrain5.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";
-            else if (terrainName == "terrain6.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
-            else if (terrainName == "terrain7.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";
-            else if (terrainName == "terrain8.bmp")
+            else if (terrainName == "terrain3.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
+            else if (terrainName == "terrain4.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
+            else if (terrainName == "terrain5.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";//polar sea
+            else if (terrainName == "terrain6.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";//dead sea
+            else if (terrainName == "terrain7.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";//kelp forest sea
+            else if (terrainName == "terrain8.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";//red sea
             else if (terrainName == "terrain9.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
             else if (terrainName == "terrain10.bmp")

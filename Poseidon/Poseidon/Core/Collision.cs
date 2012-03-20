@@ -21,10 +21,25 @@ namespace Poseidon
             return true;
         }
 
-        public static bool isOutOfMap(Vector3 futurePosition, int MaxRangeX, int MaxRangeZ)
+        public static bool isOutOfMap(Vector3 futurePosition, int MaxRangeX, int MaxRangeZ, BoundingSphere objBoudingSphere)
         {
-            return Math.Abs(futurePosition.X) > MaxRangeX ||
-                Math.Abs(futurePosition.Z) > MaxRangeZ;
+            if (HydroBot.gameMode != GameMode.ShipWreck)
+            {
+                return Math.Abs(futurePosition.X) > MaxRangeX ||
+                    Math.Abs(futurePosition.Z) > MaxRangeZ;
+            }
+            else
+            {
+                foreach (BoundingBox bbox in ShipWreckScene.bbLevel[ShipWreckScene.shipSceneType[PoseidonGame.currentShipWreckID]])
+                {
+                    if (bbox.Intersects(objBoudingSphere))
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            
         }
 
         public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, Cursor cursor)
@@ -187,7 +202,8 @@ namespace Poseidon
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ)) {
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, futureBoundingSphere))
+            {
                 return false;
             }
 
@@ -237,7 +253,7 @@ namespace Poseidon
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
             //Don't allow off-terrain driving
-            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ))
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, futureBoundingSphere))
             {
                 return false;
             }
@@ -257,11 +273,11 @@ namespace Poseidon
                 return false;
             }
 
-            if (heightMapInfo != null)
-            {
-                if (heightMapInfo.GetHeight(futurePosition) >= -10)
-                    return false;
-            }
+            //if (heightMapInfo != null)
+            //{
+            //    if (heightMapInfo.GetHeight(futurePosition) >= -10)
+            //        return false;
+            //}
             return true;
         }
 
@@ -520,7 +536,7 @@ namespace Poseidon
         public static void updateBulletOutOfBound(int MaxRangeX, int MaxRangeZ, List<HealthBullet> healBullets, List<DamageBullet> botBullets, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBulleys, BoundingFrustum frustum)
         {
             for (int i = 0; i < healBullets.Count; ) {
-                if (isOutOfMap(healBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(healBullets[i].BoundingSphere, frustum)) {
+                if (isOutOfMap(healBullets[i].Position, MaxRangeX, MaxRangeZ, healBullets[i].BoundingSphere) || isOutOfView(healBullets[i].BoundingSphere, frustum)) {
                     healBullets.RemoveAt(i);
                 }
                 else {
@@ -529,7 +545,7 @@ namespace Poseidon
             }
 
             for (int i = 0; i < botBullets.Count; ) {
-                if (isOutOfMap(botBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(botBullets[i].BoundingSphere, frustum))
+                if (isOutOfMap(botBullets[i].Position, MaxRangeX, MaxRangeZ, botBullets[i].BoundingSphere) || isOutOfView(botBullets[i].BoundingSphere, frustum))
                 {
                     botBullets.RemoveAt(i);
                 }
@@ -539,7 +555,7 @@ namespace Poseidon
             }
 
             for (int i = 0; i < enemyBullets.Count; ) {
-                if (isOutOfMap(enemyBullets[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(enemyBullets[i].BoundingSphere, frustum)) {
+                if (isOutOfMap(enemyBullets[i].Position, MaxRangeX, MaxRangeZ, enemyBullets[i].BoundingSphere) || isOutOfView(enemyBullets[i].BoundingSphere, frustum)) {
                     enemyBullets.RemoveAt(i);
                 } else {
                     i++;
@@ -547,7 +563,7 @@ namespace Poseidon
             }
 
             for (int i = 0; i < alliesBulleys.Count; ) {
-                if (isOutOfMap(alliesBulleys[i].Position, MaxRangeX, MaxRangeZ) || isOutOfView(alliesBulleys[i].BoundingSphere, frustum)) {
+                if (isOutOfMap(alliesBulleys[i].Position, MaxRangeX, MaxRangeZ, alliesBulleys[i].BoundingSphere) || isOutOfView(alliesBulleys[i].BoundingSphere, frustum)) {
                     alliesBulleys.RemoveAt(i);
                 } else {
                     i++;

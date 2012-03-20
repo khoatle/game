@@ -118,6 +118,8 @@ namespace Poseidon
         VideoPlayer videoPlayer;
         GameState gameState;
 
+        public static int currentShipWreckID;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -128,7 +130,7 @@ namespace Poseidon
             graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
-            //MediaPlayer.Volume = 0;
+            MediaPlayer.Volume = 0;
         }
 
         /// <summary>
@@ -645,6 +647,7 @@ namespace Poseidon
                     // put the skill into one of the chest if skillID != 0
                     shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
+                    currentShipWreckID = curWreck;
                     return true;
                 }
             }

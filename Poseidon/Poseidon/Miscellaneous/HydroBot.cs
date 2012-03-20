@@ -1286,7 +1286,7 @@ namespace Poseidon
             //ForwardDirection = WrapAngle(ForwardDirection);
             Vector3 movement = Vector3.Zero;
 
-            if (pointMoveTo != Vector3.Zero && Math.Abs(pointMoveTo.X)<MaxRangeX && Math.Abs(pointMoveTo.Z) < MaxRangeZ)
+            if (pointMoveTo != Vector3.Zero)// && Math.Abs(pointMoveTo.X)<MaxRangeX && Math.Abs(pointMoveTo.Z) < MaxRangeZ)
             {
                 //desiredAngle = angle;
                 this.pointToMoveTo = pointMoveTo;

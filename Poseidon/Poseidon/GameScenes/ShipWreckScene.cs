@@ -131,6 +131,11 @@ namespace Poseidon
         //for edge detection effect
         RenderTarget2D normalDepthRenderTargetLow, normalDepthRenderTargetHigh, edgeDetectionRenderTarget;
 
+        //for bounding box collision with level
+        public static BoundingBox[][] bbLevel;
+        public static BoundingBox[][] levelContainBoxes;
+        public static int[] shipSceneType;
+
         public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
             : base(game)
         {
@@ -186,6 +191,7 @@ namespace Poseidon
             strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1Ver2");
             strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2Ver2");
 
+
             this.Load();
         }
 
@@ -204,7 +210,7 @@ namespace Poseidon
             //string wood_terrain_name = "Image/wood-terrain" + random_terrain;
 
             //ground.Model = Content.Load<Model>(wood_terrain_name);
-            ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene");
+            
             boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
             //heightMapInfo = ground.Model.Tag as HeightMapInfo;
             //if (heightMapInfo == null)
@@ -266,6 +272,156 @@ namespace Poseidon
             graphicEffect.fadeTransitAmount = 0.025f;
             // Construct our particle system components.
             particleManager = new ParticleManagement(this.game, GraphicDevice);
+
+            float scaleFactor = 3.0f;
+            bbLevel = new BoundingBox[GameConstants.NumTypeShipScence][];
+            bbLevel[0] = new BoundingBox[] {
+                //ship scene 1
+                new BoundingBox( new Vector3(-92,-1,15), new Vector3(-12,20,176) ), 
+                new BoundingBox( new Vector3(-13,-1,175), new Vector3(11,20,176) ), 
+                new BoundingBox( new Vector3(11,-1,95), new Vector3(91,20,176) ), 
+                new BoundingBox( new Vector3(90,-1,-64), new Vector3(91,20,96) ), 
+                new BoundingBox( new Vector3(11,-1,-184), new Vector3(90,20,-63) ), 
+                new BoundingBox( new Vector3(-93,-1,-184), new Vector3(-13,20,-143) ), 
+                new BoundingBox( new Vector3(-13,-1,-184), new Vector3(12,20,-183) ), 
+                new BoundingBox( new Vector3(-94,-1,-143), new Vector3(-91,20,17) ), 
+                new BoundingBox( new Vector3(-54,-1,-105), new Vector3(-13,20,-23) ), 
+                new BoundingBox( new Vector3(11,-1,-25), new Vector3(52,20,57) )
+            };
+            bbLevel[1] = new BoundingBox[] {
+                //ship scene 2
+                new BoundingBox( new Vector3(-13,-1,-184), new Vector3(12,20,-183) ), 
+                new BoundingBox( new Vector3(-13,-1,175), new Vector3(11,20,176) ), 
+                new BoundingBox( new Vector3(131,-1,136), new Vector3(132,20,176) ), 
+                new BoundingBox( new Vector3(-134,-1,-104), new Vector3(-133,20,-64) ), 
+                new BoundingBox( new Vector3(-14,-1,-64), new Vector3(-13,20,176) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(-13,20,-104) ), 
+                new BoundingBox( new Vector3(11,-1,-184), new Vector3(13,20,136) ), 
+                new BoundingBox( new Vector3(11,-1,136), new Vector3(131,20,137) ), 
+                new BoundingBox( new Vector3(11,-1,175), new Vector3(131,20,176) ), 
+                new BoundingBox( new Vector3(-134,-1,-65), new Vector3(-13,20,-64) ), 
+                new BoundingBox( new Vector3(-134,-1,-104), new Vector3(-13,20,-103) ) 
+            };
+            bbLevel[2] = new BoundingBox[] {
+                //ship scene 3
+                new BoundingBox( new Vector3(11,-1,95), new Vector3(131,20,176) ), 
+                new BoundingBox( new Vector3(-13,-1,175), new Vector3(11,20,176) ), 
+                new BoundingBox( new Vector3(-53,-1,-65), new Vector3(-13,20,176) ), 
+                new BoundingBox( new Vector3(-54,-1,-104), new Vector3(-52,20,-64) ), 
+                new BoundingBox( new Vector3(-53,-1,-184), new Vector3(-13,20,-103) ), 
+                new BoundingBox( new Vector3(-13,-1,-184), new Vector3(12,20,-183) ), 
+                new BoundingBox( new Vector3(11,-1,-184), new Vector3(52,20,57) ), 
+                new BoundingBox( new Vector3(51,-1,15), new Vector3(91,20,17) ), 
+                new BoundingBox( new Vector3(90,-1,16), new Vector3(131,20,57) ), 
+                new BoundingBox( new Vector3(131,-1,55), new Vector3(132,20,96) )
+            };
+            bbLevel[3] = new BoundingBox[] {
+                //ship scene 4
+                new BoundingBox( new Vector3(11,-1,-25), new Vector3(52,20,57) ), 
+                new BoundingBox( new Vector3(11,-1,95), new Vector3(91,20,176) ), 
+                new BoundingBox( new Vector3(-13,-1,175), new Vector3(11,20,176) ), 
+                new BoundingBox( new Vector3(-53,-1,-65), new Vector3(-13,20,176) ), 
+                new BoundingBox( new Vector3(-54,-1,-104), new Vector3(-52,20,-64) ), 
+                new BoundingBox( new Vector3(-53,-1,-184), new Vector3(-13,20,-103) ), 
+                new BoundingBox( new Vector3(-13,-1,-184), new Vector3(12,20,-183) ), 
+                new BoundingBox( new Vector3(11,-1,-184), new Vector3(90,20,-63) ), 
+                new BoundingBox( new Vector3(90,-1,-64), new Vector3(91,20,96) )
+            };
+            bbLevel[4] = new BoundingBox[] {
+                //ship scene 5
+                new BoundingBox( new Vector3(90,-1,14), new Vector3(131,20,96) ), 
+                new BoundingBox( new Vector3(11,-1,95), new Vector3(91,20,176) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(-13,20,176) ), 
+                new BoundingBox( new Vector3(-13,-1,175), new Vector3(11,20,176) ), 
+                new BoundingBox( new Vector3(-13,-1,-184), new Vector3(12,20,-183) ), 
+                new BoundingBox( new Vector3(11,-1,-184), new Vector3(90,20,-63) ), 
+                new BoundingBox( new Vector3(90,-1,-64), new Vector3(130,20,-24) ), 
+                new BoundingBox( new Vector3(130,-1,-25), new Vector3(131,20,15) ), 
+                new BoundingBox( new Vector3(11,-1,-25), new Vector3(52,20,57) )
+
+            };
+             bbLevel[5] = new BoundingBox[] {
+                //ship scene 6
+                new BoundingBox( new Vector3(-13,-1,-184), new Vector3(51,20,-183) ), 
+                new BoundingBox( new Vector3(-53,-1,-184), new Vector3(-13,20,-103) ), 
+                new BoundingBox( new Vector3(51,-1,-184), new Vector3(52,20,-144) ), 
+                new BoundingBox( new Vector3(11,-1,-145), new Vector3(52,20,-23) ), 
+                new BoundingBox( new Vector3(-54,-1,-104), new Vector3(-52,20,-64) ), 
+                new BoundingBox( new Vector3(-53,-1,-65), new Vector3(-13,20,17) ), 
+                new BoundingBox( new Vector3(-54,-1,16), new Vector3(-52,20,56) ), 
+                new BoundingBox( new Vector3(-53,-1,55), new Vector3(-13,20,176) ), 
+                new BoundingBox( new Vector3(11,-1,134), new Vector3(51,20,176) ), 
+                new BoundingBox( new Vector3(-13,-1,175), new Vector3(11,20,176) ), 
+                new BoundingBox( new Vector3(51,-1,95), new Vector3(51,20,135) ), 
+                new BoundingBox( new Vector3(11,-1,14), new Vector3(51,20,96) ), 
+                new BoundingBox( new Vector3(51,-1,-25), new Vector3(51,20,15) )
+            };
+
+            levelContainBoxes = new BoundingBox[GameConstants.NumTypeShipScence][];
+
+            levelContainBoxes[0] = new BoundingBox[]{
+
+                //ship scene 1
+                new BoundingBox( new Vector3(51,-1,-24), new Vector3(91,20,56) ), 
+                new BoundingBox( new Vector3(-94,-1,-104), new Vector3(-53,20,-23) ), 
+                new BoundingBox( new Vector3(-93,-1,-24), new Vector3(-12,20,17) ), 
+                new BoundingBox( new Vector3(-94,-1,-144), new Vector3(-13,20,-103) ), 
+                new BoundingBox( new Vector3(11,-1,-64), new Vector3(91,20,-24) ), 
+                new BoundingBox( new Vector3(11,-1,55), new Vector3(91,20,96) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(13,20,176) )
+            };
+            levelContainBoxes[1] = new BoundingBox[]{
+                //ship scene 2
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(13,20,176) ), 
+                new BoundingBox( new Vector3(-134,-1,-104), new Vector3(-13,20,-64) ), 
+                new BoundingBox( new Vector3(11,-1,136), new Vector3(132,20,177) )
+            };
+            levelContainBoxes[2] = new BoundingBox[]{
+
+                //ship scene 3
+                new BoundingBox( new Vector3(51,-1,15), new Vector3(91,20,56) ), 
+                new BoundingBox( new Vector3(11,-1,55), new Vector3(132,20,96) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(13,20,176) ), 
+                new BoundingBox( new Vector3(-54,-1,-104), new Vector3(-13,20,-64) )
+            };
+            levelContainBoxes[3] = new BoundingBox[]{
+                //ship scene 4
+                new BoundingBox( new Vector3(11,-1,55), new Vector3(91,20,96) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(13,20,176) ), 
+                new BoundingBox( new Vector3(-54,-1,-104), new Vector3(-13,20,-64) ), 
+                new BoundingBox( new Vector3(11,-1,-64), new Vector3(91,20,-24) ), 
+                new BoundingBox( new Vector3(51,-1,-24), new Vector3(91,20,56) )
+            };
+            levelContainBoxes[4] = new BoundingBox[]{
+                //ship scene 5
+                new BoundingBox( new Vector3(90,-1,-25), new Vector3(131,20,17) ), 
+                new BoundingBox( new Vector3(11,-1,55), new Vector3(91,20,96) ), 
+                new BoundingBox( new Vector3(51,-1,-24), new Vector3(91,20,56) ), 
+                new BoundingBox( new Vector3(11,-1,-64), new Vector3(91,20,-24) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(13,20,176) )
+            };
+            levelContainBoxes[5] = new BoundingBox[]{
+                //ship scene 6
+                new BoundingBox( new Vector3(11,-1,95), new Vector3(51,20,136) ), 
+                new BoundingBox( new Vector3(11,-1,-25), new Vector3(51,20,16) ), 
+                new BoundingBox( new Vector3(11,-1,-184), new Vector3(52,20,-144) ), 
+                new BoundingBox( new Vector3(-54,-1,-104), new Vector3(-13,20,-64) ), 
+                new BoundingBox( new Vector3(-54,-1,16), new Vector3(-13,20,56) ), 
+                new BoundingBox( new Vector3(-14,-1,-184), new Vector3(13,20,176) ),
+            };
+            for (int index = 0; index < GameConstants.NumTypeShipScence; index ++ )
+            {
+                for (int jIndex = 0; jIndex < bbLevel[index].Length; jIndex++)
+                {
+                    bbLevel[index][jIndex].Min *= scaleFactor;
+                    bbLevel[index][jIndex].Max *= scaleFactor;
+                }
+                for (int jIndex = 0; jIndex < levelContainBoxes[index].Length; jIndex++)
+                {
+                    levelContainBoxes[index][jIndex].Min *= scaleFactor;
+                    levelContainBoxes[index][jIndex].Max *= scaleFactor;
+                }
+            }
         }
 
         /// <summary>
@@ -299,6 +455,8 @@ namespace Poseidon
             }
             if (shipAccessed[currentShipWreckID] == false)
             {
+                shipSceneType[currentShipWreckID] = random.Next(6);
+                ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene" + (shipSceneType[currentShipWreckID] + 1));
                 InitializeShipField(Content);
                 shipAccessed[currentShipWreckID] = true;
             }
@@ -337,11 +495,13 @@ namespace Poseidon
             staticObjects = new List<StaticObject>[GameConstants.maxShipPerLevel];
             powerpacks = new List<Powerpack>[GameConstants.maxShipPerLevel];
             foundRelic = new bool[GameConstants.maxShipPerLevel];
+            shipSceneType = new int[GameConstants.maxShipPerLevel];
             for (int index = 0; index < GameConstants.maxShipPerLevel; index++)
             {
                 shipAccessed[index] = false;
                 foundRelic[index] = false;
             }
+            
         }
 
         private void ResetShipWreckGeneralVariables()//(GameTime gameTime, float aspectRatio)
@@ -767,6 +927,7 @@ namespace Poseidon
         private void DrawTerrain(Model model)
         {
             EffectHelpers.GetEffectConfiguration(ref ground.fogColor, ref ground.ambientColor,ref ground.diffuseColor,ref ground.specularColor);
+            Matrix levelWorld = model.Meshes[0].ParentBone.Transform * Matrix.CreateTranslation(ground.Position);
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -779,7 +940,7 @@ namespace Poseidon
                     effect.DirectionalLight0.DiffuseColor = ground.diffuseColor.ToVector3();
                     //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
                     effect.PreferPerPixelLighting = true;
-                    effect.World = Matrix.Identity;
+                    effect.World = levelWorld;
 
                     // Use the matrices provided by the game camera
                     effect.View = gameCamera.ViewMatrix;
@@ -1087,6 +1248,7 @@ namespace Poseidon
             string str1 = GameConstants.StrTimeRemaining;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
             str1 += days.ToString();
+            //str1 += "\n" + HydroBot.gameMode.ToString();
             Rectangle rectSafeArea;
 
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null);

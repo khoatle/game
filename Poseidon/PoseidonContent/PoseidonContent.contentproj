@@ -327,14 +327,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\ShipWreckModels\shipwreckscene.fbx">
-      <Name>shipwreckscene</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\Miscellaneous\HealthBar.png">
       <Name>HealthBar</Name>
       <Importer>TextureImporter</Importer>
@@ -694,7 +686,9 @@
       <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Image\TerrainTextures\" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\TrashModels\radioactiveTrash.fbx">
       <Name>radioactiveTrash</Name>
@@ -1740,6 +1734,42 @@
       <Processor>FontDescriptionProcessor</Processor>
       <SubType>Designer</SubType>
     </Compile>
+    <Compile Include="Models\ShipWreckModels\shipwreckscene2.fbx">
+      <Name>shipwreckscene2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\ShipWreckModels\shipwreckscene3.fbx">
+      <Name>shipwreckscene3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\ShipWreckModels\shipwreckscene4.fbx">
+      <Name>shipwreckscene4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\ShipWreckModels\shipwreckscene5.fbx">
+      <Name>shipwreckscene5</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\ShipWreckModels\shipwreckscene1.fbx">
+      <Name>shipwreckscene1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\ShipWreckModels\shipwreckscene6.fbx">
+      <Name>shipwreckscene6</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>
@@ -2430,13 +2460,6 @@
   <ItemGroup>
     <Compile Include="Image\Miscellaneous\bubble-small2.png">
       <Name>bubble-small2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\TerrainTextures\seagrassFinal.jpg">
-      <Name>seagrassFinal</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

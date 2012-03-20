@@ -38,11 +38,11 @@ namespace Poseidon {
         public const int TrashMinRangeX = 10;
         public const int TrashMinRangeZ = 10;
         public const int ShipWreckMinRangeX = 20;
-        public const int ShipWreckMinRangeZ = 10;
+        public const int ShipWreckMinRangeZ = 20;
         public const int MainGameMaxRangeX = 500;
         public const int MainGameMaxRangeZ = 500;
-        public const int ShipWreckMaxRangeX = 28;
-        public const int ShipWreckMaxRangeZ = 800;
+        public const int ShipWreckMaxRangeX = 600;
+        public const int ShipWreckMaxRangeZ = 600;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
         public const int jigsawGameMaxTime = 180; //sec
@@ -111,12 +111,12 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        public static int maxShipPerLevel = 3;
+        public static int maxShipPerLevel = 9;
         public static int[] NumberTrash =           {  50,  50,  50,   50,  50,  50,  50,  50,  50,   50,   50,   50  };
         public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
-        public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
+        public static int[] NumberShipWreck = { 9, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
@@ -134,6 +134,7 @@ namespace Poseidon {
         public const int NumberChests = 10;
         public const int NumStaticObjectsMain = 0;
         public const int NumStaticObjectsShip = 10;
+        public const int NumTypeShipScence = 6;
 
         public const int MaxRangeTerrain = 98;
         public const int NumBarriers = 40;

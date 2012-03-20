@@ -209,6 +209,7 @@ namespace Poseidon
                     fish[i].happy_talk = "I have 360 degree binocular vision. I can detect an electrical signal of half a billionth of a volt. What superpower you brag about?";
                     fish[i].sad_talk = "Why do humans like our fins so much. Does 'delicacy' mean genocide?";
                 }
+                fish[i].ForwardDirection = random.Next(0, 314) / 100;
                 //fish[i].LoadContent(Content, "Models/orca");
                 //fish[i].Load(1, 24, 24);
                 //fish[i].Name = "hammer shark";
@@ -344,7 +345,7 @@ namespace Poseidon
             //place treasure chests
             foreach (TreasureChest chest in treasureChests)
             {
-                chest.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests, staticObjects);
+                chest.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests, staticObjects, chest.BoundingSphere);
                 //ship wreck should not be floating
                 chest.Position.Y = 0;// heightMapInfo.GetHeight(chest.Position);
                 tempCenter = chest.BoundingSphere.Center;
@@ -620,9 +621,10 @@ namespace Poseidon
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
-        public static Vector3 GenerateShipFloorRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, List<TreasureChest> treasureChests, List<StaticObject> staticObjects)
+        public static Vector3 GenerateShipFloorRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, List<TreasureChest> treasureChests, List<StaticObject> staticObjects, BoundingSphere objBoundingSphere)
         {
             int xValue, zValue;
+            BoundingSphere prospectiveBoundingSphere = objBoundingSphere;
             do
             {
                 xValue = random.Next(minX, maxX);
@@ -631,10 +633,13 @@ namespace Poseidon
                     xValue *= -1;
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
+                prospectiveBoundingSphere.Center.X = xValue;
+                prospectiveBoundingSphere.Center.Y = 0 + prospectiveBoundingSphere.Radius;
+                prospectiveBoundingSphere.Center.Z = zValue;
 
-            } while (IsShipFloorPlaceOccupied(xValue, zValue, treasureChests, staticObjects));
-            if (xValue > 0) xValue = maxX - 8;
-            else xValue = -maxX + 8;
+            } while (IsShipFloorPlaceInvalid(xValue, zValue, treasureChests, staticObjects, prospectiveBoundingSphere));
+            //if (xValue > 0) xValue = maxX - 8;
+            //else xValue = -maxX + 8;
             return new Vector3(xValue, 0, zValue);
         }
         // Helper
@@ -684,11 +689,21 @@ namespace Poseidon
                 //    return true;
                 if (prospectiveBoundingSphere.Intersects(fish[i].BoundingSphere)) return true;
             }
-           
+
+            if (HydroBot.gameMode == GameMode.ShipWreck)
+            {
+                bool objInsideShip = false;
+                foreach (BoundingBox bbox in ShipWreckScene.levelContainBoxes[ShipWreckScene.shipSceneType[PoseidonGame.currentShipWreckID]])
+                {
+                    if (bbox.Contains(prospectiveBoundingSphere) == ContainmentType.Contains)
+                        objInsideShip = true;
+                }
+                return !objInsideShip;
+            }
             return false;
         }
         // Helper
-        public static bool IsShipFloorPlaceOccupied(int xValue, int zValue, List<TreasureChest> treasureChests, List<StaticObject> staticObjects)
+        public static bool IsShipFloorPlaceInvalid(int xValue, int zValue, List<TreasureChest> treasureChests, List<StaticObject> staticObjects, BoundingSphere prospectiveBoundingSphere)
         {
 
             if (treasureChests != null)
@@ -713,7 +728,13 @@ namespace Poseidon
                         return true;
                 }
             }
-            return false;
+            bool objInsideShip = false;
+            foreach (BoundingBox bbox in ShipWreckScene.levelContainBoxes[ShipWreckScene.shipSceneType[PoseidonGame.currentShipWreckID]])
+            {
+                if (bbox.Contains(prospectiveBoundingSphere) == ContainmentType.Contains)
+                    objInsideShip = true;
+            }
+            return !objInsideShip;
         }
         // Helper
         //public static bool IsSeaBedPlaceOccupied(int xValue, int zValue, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
@@ -867,7 +888,7 @@ namespace Poseidon
             //place ship wrecks
             foreach (StaticObject staticObject in staticObjects)
             {
-                staticObject.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests, staticObjects);
+                staticObject.Position = GenerateShipFloorRandomPosition(minX, maxX, minZ, maxZ, random, treasureChests, staticObjects, staticObject.BoundingSphere);
                 //ship wreck should not be floating
                 staticObject.Position.Y = 0;// heightMapInfo.GetHeight(staticObject.Position);
                 tempCenter = staticObject.BoundingSphere.Center;

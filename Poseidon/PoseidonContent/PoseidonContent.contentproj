@@ -41,6 +41,11 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
+    <Compile Include="Image\Miscellaneous\tipIcon.png">
+      <Name>tipIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain2.bmp">
       <Name>terrain2</Name>
       <Importer>TextureImporter</Importer>
@@ -1230,13 +1235,6 @@
   <ItemGroup>
     <Compile Include="Image\AttributeBoardTextures\shooting_rate.png">
       <Name>shooting_rate</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\Miscellaneous\tipIcon.png">
-      <Name>tipIcon</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -2491,6 +2489,18 @@
   <ItemGroup>
     <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBarNew.png">
       <Name>UnassignedPtsBarNew</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Miscellaneous\LevelObjectiveIconHover.png">
+      <Name>LevelObjectiveIconHover</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\Miscellaneous\tipIconHover.png">
+      <Name>tipIconHover</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

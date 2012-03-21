@@ -86,10 +86,12 @@ namespace Poseidon
         // For drawing the currently selected bullet type
         protected Texture2D[] bulletTypeTextures;
 
-        protected Texture2D levelObjectiveIconTexture;
+        protected Texture2D levelObjectiveIconTexture, levelObjectiveNormalIconTexture, levelObjectiveHoverIconTexture;
+        protected bool levelObjHover = false;
         Rectangle levelObjectiveIconRectangle;
 
-        protected Texture2D tipIconTexture;
+        protected Texture2D tipIconTexture, tipNormalIconTexture, tipHoverIconTexture;
+        protected bool tipHover = false;
         Rectangle tipIconRectangle;
 
         // Current game level
@@ -375,8 +377,10 @@ namespace Poseidon
                 bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
             }
 
-            levelObjectiveIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
-            tipIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
+            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
+            tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
+            tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
 
             foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
 
@@ -955,8 +959,9 @@ namespace Poseidon
                         return;
                     }
 
-                    bool mouseOnInteractiveIcons = mouseOnLevelObjectiveIcon(currentMouseState) || mouseOnTipIcon(currentMouseState)
-                        || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
+                    tipHover = mouseOnTipIcon(currentMouseState);
+                    levelObjHover =  mouseOnLevelObjectiveIcon(currentMouseState);
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
@@ -1853,6 +1858,9 @@ namespace Poseidon
         //Draw level objective icon
         private void DrawLevelObjectiveIcon()
         {
+            if (levelObjHover) levelObjectiveIconTexture = levelObjectiveHoverIconTexture;
+            else levelObjectiveIconTexture = levelObjectiveNormalIconTexture;
+
             int xOffsetText, yOffsetText;
             Rectangle rectSafeArea;
 
@@ -1871,12 +1879,14 @@ namespace Poseidon
         //Draw level tip icon
         private void DrawTipIcon()
         {
+            if (tipHover) tipIconTexture = tipHoverIconTexture;
+            else tipIconTexture = tipNormalIconTexture;
             int xOffsetText, yOffsetText;
 
-            xOffsetText = levelObjectiveIconRectangle.Center.X - 25;
-            yOffsetText = levelObjectiveIconRectangle.Bottom + 10;
+            xOffsetText = levelObjectiveIconRectangle.Center.X - 37;
+            yOffsetText = levelObjectiveIconRectangle.Bottom + 15;
 
-            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, 50, 50);
+            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, 75, 75);
 
             spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
 

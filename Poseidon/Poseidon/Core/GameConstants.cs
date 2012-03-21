@@ -111,12 +111,12 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        public static int maxShipPerLevel = 9;
+        public static int maxShipPerLevel = 3;
         public static int[] NumberTrash =           {  50,  50,  50,   50,  50,  50,  50,  50,  50,   50,   50,   50  };
         public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
-        public static int[] NumberShipWreck = { 9, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
+        public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];

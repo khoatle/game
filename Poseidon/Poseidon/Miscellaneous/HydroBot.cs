@@ -500,6 +500,8 @@ namespace Poseidon
             skills[3] = true;
             skills[4] = true;
 
+            unassignedPts = 5;
+
             //for testing survival mode
             //currentHitPoint = maxHitPoint = 300;
             //strength = 2;

@@ -127,7 +127,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0;
@@ -842,11 +842,17 @@ namespace Poseidon
                     HydroBot.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }
-            if ((AttributeScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1,1))
+
+            bool mouseOnDoneButton = AttributeScene.doneIconRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 1, 1));
+            AttributeBoard.doneButtonHover = mouseOnDoneButton;
+
+            if ((mouseOnDoneButton
                 && lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released)
                 || EscPressed || enterPressed)
             {
+                AttributeBoard.doneButtonPressed = true;
+                audio.MenuScroll.Play();
                 if (prevScene is ShipWreckScene)
                 {
                     shipWreckScene.backFromAttributeBoard = true;
@@ -857,6 +863,7 @@ namespace Poseidon
                     shipWreckScene.screenTransitNow = false;
                 }
             }
+            else AttributeBoard.doneButtonPressed = false;
 
         }
 

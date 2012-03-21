@@ -27,7 +27,9 @@ namespace Poseidon.Core
         //textures for good will bar
         static Texture2D[] iconTextures, resultTextures;
         static Texture2D GoodWillBar, EnvironmentBar, lobsterTexture, crabTexture, iconFrame;
+        public static Texture2D buttonNormalTexture, buttonHoverTexture, buttonPressedTexture;
         static Texture2D HealthBar;
+
         static SpriteFont statsFont, fishTalkFont;
 
         public static List<Bubble> bubbles;
@@ -38,7 +40,6 @@ namespace Poseidon.Core
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
-            //load icons for good will bar
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
             iconTextures[poseidonFace] = Content.Load<Texture2D>("Image/SpinningReel/poseidonFace");
             iconTextures[strengthIcon] = Content.Load<Texture2D>("Image/SpinningReel/strengthIcon");
@@ -67,6 +68,11 @@ namespace Poseidon.Core
             resultTextures[dolphinIcon] = Content.Load<Texture2D>("Image/SpinningReel/friendshipIncreased");
             resultTextures[seaCowIcon] = Content.Load<Texture2D>("Image/SpinningReel/friendshipIncreased");
             resultTextures[turtleIcon] = Content.Load<Texture2D>("Image/SpinningReel/friendshipIncreased");
+
+            buttonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrame");
+            buttonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
+            buttonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
+
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBarNew");

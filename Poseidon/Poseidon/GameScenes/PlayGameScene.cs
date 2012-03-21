@@ -425,7 +425,7 @@ namespace Poseidon
 
             // Load Textures and fonts for factory property dialog
             factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
+            factoryBackground = Content.Load<Texture2D>("Image/MinigameTextures/frame2");//TrashManagement/factory_config_background");
             factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
 
             // Load Textures and fonts for research facility property dialog

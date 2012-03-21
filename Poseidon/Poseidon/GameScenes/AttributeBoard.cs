@@ -33,7 +33,8 @@ namespace Poseidon
         private Texture2D hitpointTexture;
         private Texture2D shootrateTexture;
         private Texture2D bulletStrengthTexture;
-        private Texture2D doneTexture;
+        private Texture2D buttonTexture;
+        public static bool doneButtonHover = false, doneButtonPressed = false;
         public Rectangle speedIconRectangle;
         public Rectangle hitpointIconRectangle;
         public Rectangle shootrateIconRectangle;
@@ -69,14 +70,14 @@ namespace Poseidon
             cursor.targetToLock = null;
             //Components.Add(cursor);
 
-            UnassignedPtsBar = Content.Load<Texture2D>("Image/AttributeBoardTextures/UnassignedPtsBar");
+            UnassignedPtsBar = Content.Load<Texture2D>("Image/AttributeBoardTextures/UnassignedPtsBarNew");
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             menuLarge = Content.Load<SpriteFont>("Fonts/menuLarge");
             speedTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/speed");
             hitpointTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/hit_point");
             shootrateTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/shooting_rate");
             bulletStrengthTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/strength");
-            doneTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/done");
+
             this.game = game;            
         }
 
@@ -217,17 +218,21 @@ namespace Poseidon
 
         private void DrawDoneIcon()
         {
+            if (doneButtonHover) buttonTexture = IngamePresentation.buttonHoverTexture;
+            if (doneButtonPressed) buttonTexture = IngamePresentation.buttonPressedTexture;
+            if (!doneButtonHover && !doneButtonPressed) buttonTexture = IngamePresentation.buttonNormalTexture;
             int xOffsetText, yOffsetText;
 
             //xOffsetText = game.Window.ClientBounds.Center.X - 100;
             //yOffsetText = game.Window.ClientBounds.Bottom - 100;
             xOffsetText = centerX - 100;
-            yOffsetText = centerY + 250;
+            yOffsetText = centerY + 300;
 
-            doneIconRectangle = new Rectangle(xOffsetText, yOffsetText, 200, 100);
+            doneIconRectangle = new Rectangle(centerX - buttonTexture.Width / 2, yOffsetText - buttonTexture.Height / 2, buttonTexture.Width, buttonTexture.Height);
 
-            spriteBatch.Draw(doneTexture, doneIconRectangle, Color.White);
-            
+            spriteBatch.Draw(buttonTexture, new Vector2(centerX - buttonTexture.Width / 2, yOffsetText - buttonTexture.Height / 2), Color.White);
+            string doneTxt = "DONE";
+            spriteBatch.DrawString(statsFont, doneTxt, new Vector2(centerX - statsFont.MeasureString(doneTxt).X / 2, yOffsetText - statsFont.MeasureString(doneTxt).Y / 2), Color.White);
         }
 
         public void DrawUnassignedPtsBar(int currentUnassignedPts, int heightFromTop, string type, Color typeColor)
@@ -277,14 +282,14 @@ namespace Poseidon
                     break;
             }
             //Draw the negative space for the UnassignedPts bar
-            spriteBatch.Draw(UnassignedPtsBar,
-                new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),
-                new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
-                BackupColor);
+            //spriteBatch.Draw(UnassignedPtsBar,
+            //    new Rectangle(barX, barY, UnassignedPtsBar.Width, barHeight),
+            //    new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
+            //    BackupColor);
             //Draw the current UnassignedPts level based on the current UnassignedPts
             spriteBatch.Draw(UnassignedPtsBar,
                 new Rectangle(barX, barY, (int)(UnassignedPtsBar.Width * UnassignedPtsiness), barHeight),
-                new Rectangle(0, barHeight + 1, UnassignedPtsBar.Width, barHeight),
+                new Rectangle(0, barHeight + 1, (int)(UnassignedPtsBar.Width * UnassignedPtsiness), barHeight),
                 UnassignedPtsColor);
             //Draw the box around the UnassignedPts bar
             spriteBatch.Draw(UnassignedPtsBar,

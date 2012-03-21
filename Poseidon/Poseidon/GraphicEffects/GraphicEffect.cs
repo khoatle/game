@@ -368,13 +368,17 @@ namespace Poseidon.GraphicEffects
                             CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes, ref trashPointedAt, ref botOnTrash, hydroBot);
                             if (botOnTrash != null)
                             {
-                                graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
+                                if (botOnTrash.sinking)
+                                    graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
+                                else graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                                 botOnTrash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                                 edgeDetectionParameters["EdgeColor"].SetValue(Color.LightGray.ToVector4());
                             }
                             if (trashPointedAt != null)
                             {
-                                graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
+                                if (trashPointedAt.sinking)
+                                    graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
+                                else graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
                                 trashPointedAt.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
                                 edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                             }

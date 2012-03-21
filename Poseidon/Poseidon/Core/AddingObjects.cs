@@ -608,8 +608,8 @@ namespace Poseidon
                 heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
             } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, factories, researchFacility));
 
-            sinkingTrash.Position.X = xVal;
-            sinkingTrash.Position.Z = zVal;
+            sinkingTrash.Position.X = 0;// xVal;
+            sinkingTrash.Position.Z = 0;// zVal;
             sinkingTrash.Position.Y = floatHeight+100;
             sinkingTrash.seaFloorHeight = heightMapInfo.GetHeight(new Vector3(sinkingTrash.Position.X, 0, sinkingTrash.Position.Z));//GameConstants.TrashFloatHeight;
             tempCenter = sinkingTrash.BoundingSphere.Center;

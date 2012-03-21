@@ -2094,24 +2094,27 @@ namespace Poseidon
                 }
             }
 
-            // Drawing trash
+            // Drawing sinked trash
             BoundingSphere trashRealSphere;
             foreach (Trash trash in trashes)
             {
-                trashRealSphere = trash.BoundingSphere;
-                trashRealSphere.Center.Y = trash.Position.Y;
-                if (trashRealSphere.Intersects(frustum))
+                if (!trash.sinking)
                 {
-                    trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //trash.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
+                    trashRealSphere = trash.BoundingSphere;
+                    trashRealSphere.Center.Y = trash.Position.Y;
+                    if (trashRealSphere.Intersects(frustum))
+                    {
+                        trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                        //RasterizerState rs = new RasterizerState();
+                        //rs.FillMode = FillMode.WireFrame;
+                        //GraphicDevice.RasterizerState = rs;
+                        //trash.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
+                        //rs = new RasterizerState();
+                        //rs.FillMode = FillMode.Solid;
+                        //GraphicDevice.RasterizerState = rs;
+                    }
                 }
             }
             // Drawing Factories
@@ -2189,7 +2192,29 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
+            // Drawing sinking trash
+            BoundingSphere trashRealSphere;
+            foreach (Trash trash in trashes)
+            {
+                if (trash.sinking)
+                {
+                    trashRealSphere = trash.BoundingSphere;
+                    trashRealSphere.Center.Y = trash.Position.Y;
+                    if (trashRealSphere.Intersects(frustum))
+                    {
+                        trash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                        //RasterizerState rs = new RasterizerState();
+                        //rs.FillMode = FillMode.WireFrame;
+                        //GraphicDevice.RasterizerState = rs;
+                        //trash.DrawBoundingSphere(gameCamera.ViewMatrix,
+                        //    gameCamera.ProjectionMatrix, boundingSphere);
 
+                        //rs = new RasterizerState();
+                        //rs.FillMode = FillMode.Solid;
+                        //GraphicDevice.RasterizerState = rs;
+                    }
+                }
+            }
         }
 
         public void DrawLowPriorityObjectsOnHighLayer()

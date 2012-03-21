@@ -121,14 +121,21 @@ namespace Poseidon
             else fishAmount = 0;
             Random random = new Random();
             int type;
+            
+            //level 1: seagrass meadow is turtle and manetee only
+            if (currentLevel == 1)
+                type = random.Next(2);
             //Level 4 is shark only
             if (currentLevel == 4)
                 type = random.Next(6, 9);
+            //level 5: polar sea, we have penguin
+            else if (currentLevel == 5)
+                type = random.Next(10);
             else type = random.Next(9);
 
             for (int i = 0; i < fishAmount; i++) {
                 fish[i] = new Fish();
-                //type = 2;
+                //type = 9;
                 if (gameMode == GameMode.SurvivalMode)
                 {
                     fish[i].Name = "Ancient ";
@@ -146,19 +153,20 @@ namespace Poseidon
                 }
                 else if (type == 1)
                 {
-                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphinVer3");
-                    fish[i].Name += "dolphin";
-                    fish[i].Load(1, 24, 24);
-                    fish[i].happy_talk = "We remind you to play, play, play, for you will find great power in play.";
-                    fish[i].sad_talk = "Though we try to be friends with humans, they always hurt us with their pollution, propellers and what not!";
-                }
-                else if (type == 2)
-                {
                     fish[i].LoadContent(Content, "Models/SeaAnimalModels/maneteeVer2");
                     fish[i].Name += "manetee";
                     fish[i].Load(1, 24, 24);
                     fish[i].happy_talk = "Do not call me sea-cow. Do I look that fat?";
                     fish[i].sad_talk = "I am a vegeterian. Why are they killing me?";
+
+                }
+                else if (type == 2)
+                {
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/dolphinVer3");
+                    fish[i].Name += "dolphin";
+                    fish[i].Load(1, 24, 24);
+                    fish[i].happy_talk = "We remind you to play, play, play, for you will find great power in play.";
+                    fish[i].sad_talk = "Though we try to be friends with humans, they always hurt us with their pollution, propellers and what not!";
                 }
                 else if (type == 3)
                 {
@@ -209,12 +217,26 @@ namespace Poseidon
                     fish[i].happy_talk = "I have 360 degree binocular vision. I can detect an electrical signal of half a billionth of a volt. What superpower you brag about?";
                     fish[i].sad_talk = "Why do humans like our fins so much. Does 'delicacy' mean genocide?";
                 }
+                else if (type == 9)
+                {
+                    fish[i].LoadContent(Content, "Models/SeaAnimalModels/penguin");
+                    fish[i].Name += "Penguin";
+                    fish[i].Load(1, 24, 24);
+                    fish[i].happy_talk = "I am an aquatic, flightless bird that lives almost exclusively in the southern hemisphere, especially in Antarctica.";
+                    fish[i].sad_talk = "Why humans can not be as friendly as us?";
+                }
+
                 fish[i].ForwardDirection = random.Next(0, 314) / 100;
-                //fish[i].LoadContent(Content, "Models/orca");
-                //fish[i].Load(1, 24, 24);
-                //fish[i].Name = "hammer shark";
+
+                //level 1: seagrass meadow is turtle and manetee only
+                if (currentLevel == 1)
+                    type = random.Next(2);
+                //Level 4 is shark only
                 if (currentLevel == 4)
                     type = random.Next(6, 9);
+                //level 5: polar sea, we have penguin
+                else if (currentLevel == 5)
+                    type = random.Next(10);
                 else type = random.Next(9);
             }
         }

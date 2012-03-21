@@ -403,20 +403,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\BulletIcons\damageBullet.png">
-      <Name>damageBullet</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\BulletIcons\healthBullet.png">
-      <Name>healthBullet</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBar.png">
       <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
@@ -1770,6 +1756,11 @@
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>3</ProcessorParameters_Scale>
     </Compile>
+    <Compile Include="Models\SeaAnimalModels\penguin.fbx">
+      <Name>penguin</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>
@@ -2460,6 +2451,18 @@
   <ItemGroup>
     <Compile Include="Image\Miscellaneous\bubble-small2.png">
       <Name>bubble-small2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\BulletIcons\damageBulletIcon.png">
+      <Name>damageBulletIcon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\BulletIcons\healthBulletIcon.png">
+      <Name>healthBulletIcon</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

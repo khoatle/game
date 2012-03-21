@@ -208,7 +208,7 @@ namespace Poseidon {
         public const float timeSuperSonicLast = 500;
         public static string[] iconNames = { "Image/SkillIcons/BowVer2", "Image/SkillIcons/HammerVer2", "Image/SkillIcons/armorVer2", 
                                                "Image/SkillIcons/sandalVer2", "Image/SkillIcons/AphroBeltVer2" };
-        public static string[] bulletNames = { "Image/BulletIcons/damageBullet", "Image/BulletIcons/healthBullet" };
+        public static string[] bulletNames = { "Image/BulletIcons/damageBulletIcon", "Image/BulletIcons/healthBulletIcon" };
         public static int skillHealthLoss = 10;
 
         public const float coolDownForPlant = 5;

@@ -58,6 +58,7 @@ namespace Poseidon {
             if (Name.Contains("shark")) scale = 0.5f;
             if (Name.Contains("Maui")) scale = 0.5f;
             if (Name.Contains("Meiolania")) scale = 0.5f;
+            if (Name.Contains("penguin")) scale = 2.0f;
             if (isBigBoss)
             {
                 scale *= 2.0f;
@@ -154,7 +155,7 @@ namespace Poseidon {
                     futurePosition = prevFuturePosition;
                 }
                 //normal shark model got deformed when turning
-                if (!(Name == "shark") && !(Name == "Meiolania"))
+                if (!(Name == "shark") && !(Name == "Meiolania") && !(Name == "penguin"))
                 {
                     if (ForwardDirection - lastForwardDir > 0)
                     {
@@ -184,6 +185,7 @@ namespace Poseidon {
                 if (Name.Contains("dolphin") || Name.Contains("turtle")) scale = 0.5f;
                 if (Name.Contains("manetee")) scale = 0.6f;
                 if (Name.Contains("seal")) scale = 1.1f;
+                if (Name.Contains("penguin")) scale = 2.0f;
                 if (isBigBoss) scale *= 2.0f;
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
@@ -364,7 +366,7 @@ namespace Poseidon {
                     futurePosition = prevFuturePosition;
                 }
 
-                if (!(Name == "shark") && !(Name == "Meiolania"))
+                if (!(Name == "shark") && !(Name == "Meiolania") && !(Name == "penguin"))
                 {
                     if (ForwardDirection - lastForwardDir > 0)
                     {

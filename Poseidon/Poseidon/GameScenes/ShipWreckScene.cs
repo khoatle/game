@@ -96,6 +96,7 @@ namespace Poseidon
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
+        bool notYetReleased = false;
         double clickTimer = 0;
 
         float m_Timer = 0;
@@ -668,7 +669,7 @@ namespace Poseidon
             if (!paused && !returnToMain)
             {   
              
-                CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
 
                 bool mouseOnInteractiveIcons = false;
                 //hydrobot update

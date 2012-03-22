@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Poseidon.Core;
 
 namespace Poseidon
 {
@@ -50,6 +51,7 @@ namespace Poseidon
         SpriteFont factoryFont;
         Texture2D background, produceButton;
         public Rectangle backgroundRect, produceRect;
+        public bool produceButtonHover = false, produceButtonPress = false;
         enum Produce { resource, powerpack };
         Produce produce;
         List<Model> modelStates; // 4 stages of model, the last one is fully constructed one
@@ -72,6 +74,7 @@ namespace Poseidon
         public bool sandDirturbedAnimationPlayed;
         ParticleManagement particleManager;
         SoundEffectInstance buildingSoundInstance;
+
 
         public Factory(FactoryType factorytype, ParticleManagement particleManager, GraphicsDevice graphicsDevice)
             : base()
@@ -117,7 +120,7 @@ namespace Poseidon
             underConstruction = false;
         }
 
-        public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont font,ref Texture2D backgroundTexture,ref Texture2D produceButtonTexture, List<Texture2D> animationTextures)
+        public void LoadContent(Game game, Vector3 position, float orientation,ref SpriteFont font,ref Texture2D backgroundTexture, List<Texture2D> animationTextures)
         {
             Position = position;
             BoundingSphere = CalculateBoundingSphere();
@@ -143,12 +146,11 @@ namespace Poseidon
             produce = Produce.resource;
             factoryFont = font;
             background = backgroundTexture;
-            produceButton = produceButtonTexture;
 
             int rectWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.9f);
             int rectHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height);
             backgroundRect = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - rectWidth / 2, graphicsDevice.Viewport.TitleSafeArea.Center.Y - rectHeight / 2, rectWidth, rectHeight);
-            produceRect = new Rectangle(backgroundRect.Center.X - 250, backgroundRect.Top + 120, 500, 65);
+            produceRect = new Rectangle(backgroundRect.Center.X - 150, backgroundRect.Top + 120, 300, 65);
 
             SetUpgradeLevelDependentVariables();
 
@@ -458,15 +460,18 @@ namespace Poseidon
             //draw production string
             spriteBatch.DrawString(menuSmall, production_str, new Vector2(produceRect.Center.X - menuSmall.MeasureString(production_str).X / 2, produceRect.Top - menuSmall.MeasureString(production_str).Y+2), Color.Red);
 
+            if (produceButtonHover) produceButton = IngamePresentation.factoryProduceButtonHoverTexture;
+            if (produceButtonPress) produceButton = IngamePresentation.factoryProduceButtonPressedTexture;
+            if (!produceButtonHover && !produceButtonPress) produceButton = IngamePresentation.factoryProduceButtonNormalTexture;
             //draw change_produce button
             spriteBatch.Draw(produceButton, produceRect, Color.White);
 
             //draw change_produce text
             string changeProduceButtonText;
             if (produce == Produce.resource)
-                changeProduceButtonText = "CLICK TO PRODUCE POWERPACKS";
+                changeProduceButtonText = "PRODUCE POWERPACKS";
             else
-                changeProduceButtonText = "CLICK TO PRODUCE RESOURCES";
+                changeProduceButtonText = "PRODUCE RESOURCES";
             spriteBatch.DrawString(factoryFont, changeProduceButtonText, new Vector2(produceRect.Center.X - factoryFont.MeasureString(changeProduceButtonText).X / 2, produceRect.Center.Y - factoryFont.MeasureString(changeProduceButtonText).Y / 2), Color.White);
             
             //draw how many resources are being processed

@@ -271,7 +271,7 @@ namespace Poseidon
             //HydroBot.numTurtlePieces = 30; //REMOVE - JUST fOR TESTING
 
             string title = "RESEARCH FACILITY";
-            string description = "Welcome to the research facility. Scientists work here to upgrade processing factories. State of the art genetic engineering will help you resurrect extinct animals. You can also use your experience points to increase the bot's attributes.";
+            string description = "Welcome to the research facility. Scientists work here to upgrade processing plants. State of the art genetic engineering will help you resurrect extinct animals. You can also use your experience points to increase the bot's attributes.";
             title = Poseidon.Core.IngamePresentation.wrapLine(title, backgroundRect.Width, facilityFont, 1.5f);
 
             //draw background
@@ -286,7 +286,7 @@ namespace Poseidon
 
 
             //draw factory upgrade heading:
-            string upgradeTitle = "FACTORY UPGRADATION";
+            string upgradeTitle = "PROCESSING PLANT UPGRADATION";
             spriteBatch.DrawString(facilityFont2, upgradeTitle, new Vector2(backgroundRect.Center.X - facilityFont2.MeasureString(upgradeTitle).X / 2, bioUpgradeRect.Top - 100), Color.White);
 
             string bioButtonText, plasticButtonText;
@@ -299,9 +299,9 @@ namespace Poseidon
             }
             else
             {
-                string button_title_text = "ORGANIC FACTORY";
+                string button_title_text = "ORGANIC PROCESSING PLANT";
                 spriteBatch.DrawString(menuSmall, button_title_text, new Vector2(bioUpgradeRect.Center.X - menuSmall.MeasureString(button_title_text).X / 2, bioUpgradeRect.Top - 50), Color.White);
-                button_title_text = "PLASTIC FACTORY";
+                button_title_text = "PLASTIC PROCESSING PLANT";
                 spriteBatch.DrawString(menuSmall, button_title_text, new Vector2(plasticUpgradeRect.Center.X - menuSmall.MeasureString(button_title_text).X / 2, plasticUpgradeRect.Top - 50), Color.White);
                 if (HydroBot.bioPlantLevel == 1 && HydroBot.totalBioTrashProcessed >= GameConstants.numTrashForUpgrade)
                 {

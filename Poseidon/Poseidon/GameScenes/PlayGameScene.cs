@@ -149,17 +149,14 @@ namespace Poseidon
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
+        bool notYetRealeased = false;
         double clickTimer = 0;
 
         private bool openFactoryConfigurationScene = false;
         private bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
 
-        // Texture and font for property window of a factory
-        private SpriteFont factoryFont;
-        private Texture2D factoryBackground;
-        private Texture2D factoryProduceButton;
-        private Texture2D dummyTexture;
+
 
         // Textures for animating the processing state of factories.
         // Plastic factory will use nuclear factory textures
@@ -427,15 +424,11 @@ namespace Poseidon
             // Load Font for displaying extra information on factory panel
             factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
 
-            // Load Textures and fonts for factory property dialog
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            factoryBackground = Content.Load<Texture2D>("Image/MinigameTextures/frame2");//TrashManagement/factory_config_background");
-            factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
 
             // Load Textures and fonts for research facility property dialog
             facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
             facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
-            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
+            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");// ResearchFacilityBackground");
             facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
@@ -466,8 +459,7 @@ namespace Poseidon
             researchBuildingModel = researchBuildingModelStates[researchBuildingModelStates.Count - 1];
             biodegradableFactoryModel = biodegradableFactoryModelStates[biodegradableFactoryModelStates.Count - 1];
             plasticFactoryModel = plasticFactoryModelStates[plasticFactoryModelStates.Count - 1];
-            dummyTexture = new Texture2D(game.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
-            dummyTexture.SetData(new int[4]);
+
 
             // Factory level textures
             plasticFactoryLevelTextures = new List<Texture2D>();
@@ -893,13 +885,28 @@ namespace Poseidon
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
                             clicked = false;
-                            CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                            notYetRealeased = false;
+                            if (openFactoryConfigurationScene)
+                            {
+                                factoryToConfigure.produceButtonHover = factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10));
+                                CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
+                                if (notYetRealeased && openFactoryConfigurationScene && factoryToConfigure.produceButtonHover)
+                                {
+                                    factoryToConfigure.produceButtonPress = true;
+
+                                }
+                                else factoryToConfigure.produceButtonPress = false;
+                            }
+
                             if (clicked)
                             {
                                 if (openFactoryConfigurationScene)
                                 {
-                                    if (factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    if (factoryToConfigure.produceButtonHover)
+                                    {
                                         factoryToConfigure.SwitchProductionItem();
+                                        PoseidonGame.audio.MenuScroll.Play();
+                                    }
                                 }
                                 else
                                 {
@@ -1051,8 +1058,8 @@ namespace Poseidon
                     {
                         trash.Update(gameTime);
                     }
-
-                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                   
+                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
@@ -1320,7 +1327,7 @@ namespace Poseidon
                     oneFactory.Model = biodegradableFactoryModel;
                     oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, biofactoryAnimationTextures);
+                    oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1333,7 +1340,7 @@ namespace Poseidon
                     oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
                     oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
                     oneFactory.LevelTextures = plasticFactoryLevelTextures;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
+                    oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1344,7 +1351,7 @@ namespace Poseidon
                     orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
                     oneFactory.ModelStates = radioactiveFactoryModelStates;
-                    oneFactory.LoadContent(game, position, orientation,ref factoryFont,ref factoryBackground,ref factoryProduceButton, nuclearFactoryAnimationTextures);
+                    oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1375,7 +1382,7 @@ namespace Poseidon
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     researchAnchor.Model = researchBuildingModel;
-                    researchAnchor.LoadContent(game, anchorPosition, orientation, ref facilityFont, ref facilityFont2, ref dummyTexture, ref dummyTexture, ref dummyTexture, ref dummyTexture);
+                    researchAnchor.LoadContent(game, anchorPosition, orientation, ref facilityFont, ref facilityFont2, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture);
                 }
                 else
                 {
@@ -1394,7 +1401,7 @@ namespace Poseidon
                             factoryAnchor.Model = radioactiveFactoryModel;
                             break;
                     }
-                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref factoryFont, ref dummyTexture, ref dummyTexture, null);
+                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.dummyTexture, null);
                 }
             }
             else

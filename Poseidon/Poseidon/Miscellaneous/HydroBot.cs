@@ -134,6 +134,7 @@ namespace Poseidon
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
+        bool notYetReleased = false;
         double clickTimer = 0;
 
         //monitoring time between fire
@@ -702,7 +703,7 @@ namespace Poseidon
         {
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
-            CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+            CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
             Vector3 pointIntersect = Vector3.Zero;
             int floatHeight;
             if (gameMode == GameMode.ShipWreck) floatHeight = GameConstants.ShipWreckFloatHeight;

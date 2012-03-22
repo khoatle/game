@@ -114,6 +114,7 @@ namespace Poseidon
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
+        bool notYetReleased = false;
         double clickTimer = 0;
 
         private bool openFactoryConfigurationScene = false;
@@ -561,13 +562,28 @@ namespace Poseidon
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
                             clicked = false;
-                            CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                            notYetReleased = false;
+                            if (openFactoryConfigurationScene)
+                            {
+                                factoryToConfigure.produceButtonHover = factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10));
+                                CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
+                                if (notYetReleased && openFactoryConfigurationScene && factoryToConfigure.produceButtonHover)
+                                {
+                                    factoryToConfigure.produceButtonPress = true;
+
+                                }
+                                else factoryToConfigure.produceButtonPress = false;
+                            }
+
                             if (clicked)
                             {
                                 if (openFactoryConfigurationScene)
                                 {
-                                    if (factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
+                                    if (factoryToConfigure.produceButtonHover)
+                                    {
                                         factoryToConfigure.SwitchProductionItem();
+                                        PoseidonGame.audio.MenuScroll.Play();
+                                    }
                                 }
                                 else
                                 {
@@ -700,7 +716,7 @@ namespace Poseidon
                         trash.Update(gameTime);
                     }
 
-                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked);
+                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime, ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
@@ -908,7 +924,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, biofactoryAnimationTextures);
+                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -919,7 +935,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures);
+                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -929,7 +945,7 @@ namespace Poseidon
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, ref factoryProduceButton, nuclearFactoryAnimationTextures);
+                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;

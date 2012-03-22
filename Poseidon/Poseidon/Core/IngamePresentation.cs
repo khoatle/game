@@ -38,6 +38,12 @@ namespace Poseidon.Core
         public static int poseidonFace = 0, strengthIcon = 1, speedIcon = 2, shootRateIcon = 3, healthIcon = 4, bowIcon = 5, hammerIcon = 6,
             armorIcon = 7, sandalIcon = 8, beltIcon = 9, dolphinIcon = 10, seaCowIcon = 11, turtleIcon = 12;
 
+        // Texture and font for property window of a factory
+        public static SpriteFont factoryFont;
+        public static Texture2D factoryBackground;
+        public static Texture2D factoryProduceButtonNormalTexture, factoryProduceButtonHoverTexture, factoryProduceButtonPressedTexture;
+        public static Texture2D dummyTexture;
+
         public static void Initiate2DGraphics(ContentManager Content)
         {
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
@@ -72,6 +78,15 @@ namespace Poseidon.Core
             buttonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrame");
             buttonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
             buttonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
+
+            // Load Textures and fonts for factory property dialog
+            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel");
+            factoryProduceButtonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonLargeFrame"); //("Image/TrashManagement/ChangeFactoryProduceBox");
+            factoryProduceButtonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
+            factoryProduceButtonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
+            dummyTexture = new Texture2D(PoseidonGame.graphics.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
+            dummyTexture.SetData(new int[4]);
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
@@ -530,7 +545,7 @@ namespace Poseidon.Core
                         {
                             string line, comment;
                             line = "RECYCLED RESOURCE BOX";
-                            comment = "A box contains recycled resource produced by the factory. Recycled resources can be used to construct new factories.";
+                            comment = "A box contains recycled resource produced by the processing plant. Recycled resources can be used to construct new facilities.";
                             spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Yellow);
                             comment = wrapLine(comment, commentMaxLength, statsFont);
                             spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(line).Y + 2), Color.Red);
@@ -557,7 +572,7 @@ namespace Poseidon.Core
                                 if (trashPointedAt.trashType == TrashType.biodegradable)
                                 {
                                     line += "BIODEGRADABLE TRASH";
-                                    comment = "Organic, will emit greenhouse gases unless processed in a factory.";
+                                    comment = "Organic, will emit greenhouse gases unless processed in a processing plant.";
                                 }
                                 else if (trashPointedAt.trashType == TrashType.plastic)
                                 {
@@ -597,17 +612,17 @@ namespace Poseidon.Core
                                         comment = "";
                                         if (factoryPointedAt.factoryType == FactoryType.biodegradable)
                                         {
-                                            line += "BIODEGRADABLE TRASH PROCESSING FACTORY";
+                                            line += "BIODEGRADABLE TRASH PROCESSING PLANT";
                                             comment = "Organic trashes can be dropped here for processing.";
                                         }
                                         else if (factoryPointedAt.factoryType == FactoryType.plastic)
                                         {
-                                            line += "PLASTIC TRASH PROCESSING FACTORY";
+                                            line += "PLASTIC TRASH PROCESSING PLANT";
                                             comment = "Plastic trashes can be dropped here for processing.";
                                         }
                                         else
                                         {
-                                            line += "RADIOACTIVE TRASH PROCESSING FACTORY";
+                                            line += "RADIOACTIVE TRASH PROCESSING PLANT";
                                             comment = "Radioactive trashes can be dropped here for processing.";
                                         }
                                         spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Yellow);

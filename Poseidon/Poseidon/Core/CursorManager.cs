@@ -278,7 +278,7 @@ namespace Poseidon
             else return false;
         }
 
-        public static void CheckClick(ref MouseState lastMouseState, ref MouseState currentMouseState, GameTime gameTime, ref double clickTimer, ref bool clicked, ref bool doubleClicked)
+        public static void CheckClick(ref MouseState lastMouseState, ref MouseState currentMouseState, GameTime gameTime, ref double clickTimer, ref bool clicked, ref bool doubleClicked, ref bool notYetReleased)
         {
             lastMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
@@ -299,6 +299,8 @@ namespace Poseidon
                 }
                 clickTimer = 0;
             }
+            else if (currentMouseState.LeftButton == ButtonState.Pressed)
+                notYetReleased = true;
         }
         public static float CalculateAngle(Vector3 point2, Vector3 point1)
         {

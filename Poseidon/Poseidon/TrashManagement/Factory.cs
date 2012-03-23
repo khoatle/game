@@ -147,7 +147,7 @@ namespace Poseidon
             factoryFont = font;
             background = backgroundTexture;
 
-            int rectWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.9f);
+            int rectWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width);
             int rectHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height);
             backgroundRect = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - rectWidth / 2, graphicsDevice.Viewport.TitleSafeArea.Center.Y - rectHeight / 2, rectWidth, rectHeight);
             produceRect = new Rectangle(backgroundRect.Center.X - 150, backgroundRect.Top + 120, 300, 65);
@@ -389,35 +389,38 @@ namespace Poseidon
 
         public void DrawFactoryConfigurationScene(SpriteBatch spriteBatch, SpriteFont menuSmall)
         {
+            float fadeFactor = 0.65f;
             string title = "";
             string production_str = "PRODUCT: "+produce.ToString().ToUpper();
             string plant_basic_description = "";
             string plant_upgradeLevel_description = "";
+            string technologyLevel = "";
             float numDays;
             switch (factoryType)
             {
                 case FactoryType.biodegradable:
-                    plant_basic_description = "\nBiodegradable trash decompose naturally. The organic matter in these great mounds of waste is consumed by bacteria that give off gas rich in methane, which is a harmful greenhouse gas. However, Methane's risk to global warming is also a great opportunity to supplying us with a bounty of fuel to take care of our social needs. Therefore these trashes must be processed in a factory not only to prevent these gases from escaping into the atmosphere, but also to use them to generate energy. In fact, power from landfill methane exceeds solar power in New York and New Jersey, and landfill methane in those states and in Connecticut powers generators that produce a total of 169 megawatts of electricity - almost as much as a small conventional generating station. The methane also provides 16.7 million cubic feet of gas daily for heating and other direct uses.\n";
+                    plant_basic_description = "Biodegradable trash decompose naturally. The organic matter in these great mounds of waste is consumed by bacteria that give off gas rich in methane, which is a harmful greenhouse gas.\n\nHowever, Methane's risk to global warming is also a great opportunity to supplying us with a bounty of fuel to take care of our social needs. Therefore these trashes must be processed in a factory not only to prevent these gases from escaping into the atmosphere, but also to use them to generate energy.\n\nIn fact, power from landfill methane exceeds solar power in New York and New Jersey, and landfill methane in those states and in Connecticut powers generators that produce a total of 169 megawatts of electricity - almost as much as a small conventional generating station. The methane also provides 16.7 million cubic feet of gas daily for heating and other direct uses.";
                     numDays = (float)processingTime / GameConstants.DaysPerSecond;
                     production_str += " for "+trashBlockSize+" trash in " + numDays.ToString();
+                    title = "Biodegradable Trash Processing Plant";
                     if(numDays > 1)
                         production_str += " days";
                     else
                         production_str += " day";
                     if (HydroBot.bioPlantLevel == 1)
                     {
-                        title = "Biodegradable Trash Processing Plant (Basic technology)";
-                        plant_upgradeLevel_description = "\n\nIn this plant the trash decompose naturally to produce methane. Some chemicals like fertilizers are used to quicken the decomposition.";
+                        technologyLevel = "Basic technology";
+                        plant_upgradeLevel_description = "In this plant the trash decompose naturally to produce methane. Some chemicals like fertilizers are used to quicken the decomposition.";
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
-                        title = "Biodegradable Trash Processing Plant (Advanced)";
-                        plant_upgradeLevel_description = "\n\nIn this plant the trash is mixed at temperatures of up to 2000 degrees Fahrenheit. The heat then makes steam, which runs a turbine and produces electricity.";
+                        technologyLevel = "Advanced technology";
+                        plant_upgradeLevel_description = "In this plant the trash is mixed at temperatures of up to 2000 degrees Fahrenheit. The heat then makes steam, which runs a turbine and produces electricity.";
                     }
                     else
                     {
-                        title = "Biodegradable Trash Processing Plant (State of the Art)";
-                        plant_upgradeLevel_description = "\n\nThis plant uses flash carbonization to produce charcoal from biomass. This process involves the ignition of a flash fire at elevated pressure in a packed bed of biomass. Because of the elevated pressure, the fire quickly spreads through the bed, triggering the transformation of biomass to biocarbon.";
+                        technologyLevel = "State of the Art technology";
+                        plant_upgradeLevel_description = "This plant uses flash carbonization to produce charcoal from biomass. This process involves the ignition of a flash fire at elevated pressure in a packed bed of biomass. Because of the elevated pressure, the fire quickly spreads through the bed, triggering the transformation of biomass to biocarbon.";
                     }
                     break;
                 case FactoryType.plastic:
@@ -427,23 +430,23 @@ namespace Poseidon
                     production_str += " for " + trashBlockSize + " trash in "+ numDays.ToString() +" day";
                     if (HydroBot.plasticPlantLevel == 1)
                     {
-                        title += " (Basic technology)";
-                        plant_upgradeLevel_description = " Usually only type 1 and 2 are recycled. Recycled PET is usually used to make threads which are used to make shoes, jackets, hats. Recycled HDPE is used to make durable products like tables, rulers, trashcans, etc. Other types are not recycled due to lack of incentive to invest in equipments required.";
+                        technologyLevel = "Basic technology";
+                        plant_upgradeLevel_description = "Usually only type 1 and 2 are recycled. Recycled PET is usually used to make threads which are used to make shoes, jackets, hats. Recycled HDPE is used to make durable products like tables, rulers, trashcans, etc. Other types are not recycled due to lack of incentive to invest in equipments required.";
                     }
                     else if (HydroBot.plasticPlantLevel == 2)
                     {
-                        title += " (Advanced)";
-                        plant_upgradeLevel_description = " Monomer Recycling: The polymers undergoes inverse of the polymerization reaction which is used during manufacturing. This creates same mix of chemicals that formed the original polymer, which can be purified and used to synthesize new polymer chains of the same type.";
+                        technologyLevel += "Advanced technology";
+                        plant_upgradeLevel_description = "Monomer Recycling: The polymers undergoes inverse of the polymerization reaction which is used during manufacturing. This creates same mix of chemicals that formed the original polymer, which can be purified and used to synthesize new polymer chains of the same type.";
                     }
                     else
                     {
-                        title += " (State of the Art)";
-                        plant_upgradeLevel_description = " Thermal Depolymerization: Melts plastic into petroleum that can be remade into a variety of products.\nBiodegradable plastics can also be produced which can decompose in composting plants where it is placed in a heated environment with moisture and oxygen for months.";
+                        technologyLevel = "State of the Art technology";
+                        plant_upgradeLevel_description = "Thermal Depolymerization: Melts plastic into petroleum that can be remade into a variety of products.\nBiodegradable plastics can also be produced which can decompose in composting plants where it is placed in a heated environment with moisture and oxygen for months.";
                     }
                     break;
                 case FactoryType.radioactive:
                     title = "Radioactive Trash Processing Plant";
-                    plant_basic_description = "\nSpent nuclear fuel from nuclear energy plants are illegally trashed in the ocean in steel casks. These containers will start leaking within 1 year as the radioactive waste is highly corrosive. Such toxic waste will cause cancer and birth defects to sea creatures. Hence, these casks need to be brought into this facility for safe storage.\n\nThis plant reprocesses the trash to recover fissionable plutonium, which is used to build resources and powerpacks for the hydrobot.\n\nRadioactive waste takes thousands of years to become non-radioactive. Hence these are stored in containers designed to withstand corrosion, radiation and temperature extremes. These containers are sealed tightly and stored deep underground.\n\nThese waste also contain low-level radioactive materials like machinery, tools, clothing, air masks etc which got exposed to radiation. These are burried near the surface of the earth as they are not very dangerous and usually lose their radioactivity within a couple hundred years.";
+                    plant_basic_description = "Spent nuclear fuel from nuclear energy plants are illegally trashed in the ocean in steel casks. These containers will start leaking within 1 year as the radioactive waste is highly corrosive. Such toxic waste will cause cancer and birth defects to sea creatures. Hence, these casks need to be brought into this facility for safe storage.\n\nThis plant reprocesses the trash to recover fissionable plutonium, which is used to build resources and powerpacks for the hydrobot.\n\nRadioactive waste takes thousands of years to become non-radioactive. Hence these are stored in containers designed to withstand corrosion, radiation and temperature extremes. These containers are sealed tightly and stored deep underground.\n\nThese waste also contain low-level radioactive materials like machinery, tools, clothing, air masks etc which got exposed to radiation. These are burried near the surface of the earth as they are not very dangerous and usually lose their radioactivity within a couple hundred years.";
                     production_str = "PRODUCT: "+ numRadioActiveProducts +" "+produce.ToString().ToUpper()+ "S for 1 trash in 1 day";
                     break;
             }
@@ -453,26 +456,32 @@ namespace Poseidon
             //draw background
             spriteBatch.Draw(background, backgroundRect, Color.White);
 
+            Vector2 titlePos = new Vector2(backgroundRect.Center.X, backgroundRect.Top + 120);
             //draw title string
-            spriteBatch.DrawString(factoryFont, title, new Vector2(backgroundRect.Center.X - factoryFont.MeasureString(title).X * 0.75f, backgroundRect.Top + 30), Color.Red, 0, new Vector2(0, 0), 1.5f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(factoryFont, title, titlePos, Color.Yellow * fadeFactor, 0, new Vector2(factoryFont.MeasureString(title).X/2, factoryFont.MeasureString(title).Y/2), 1.5f, SpriteEffects.None, 0);
 
+            Vector2 technologyPos = titlePos + new Vector2(0, factoryFont.MeasureString(title).Y / 2 * 1.5f + 10 + factoryFont.MeasureString(technologyLevel).Y/2);
+            //draw current technology string
+            spriteBatch.DrawString(factoryFont, technologyLevel, technologyPos, Color.Red * fadeFactor, 0, new Vector2(factoryFont.MeasureString(technologyLevel).X / 2, factoryFont.MeasureString(technologyLevel).Y / 2), 1.0f, SpriteEffects.None, 0);
 
+            Vector2 productionPos = technologyPos + new Vector2(0, factoryFont.MeasureString(technologyLevel).Y / 2 + 10 + factoryFont.MeasureString(production_str).Y / 2);
             //draw production string
-            spriteBatch.DrawString(menuSmall, production_str, new Vector2(produceRect.Center.X - menuSmall.MeasureString(production_str).X / 2, produceRect.Top - menuSmall.MeasureString(production_str).Y+2), Color.Red);
+            spriteBatch.DrawString(factoryFont, production_str, productionPos, Color.LawnGreen * fadeFactor, 0, new Vector2(factoryFont.MeasureString(production_str).X / 2, factoryFont.MeasureString(production_str).Y / 2), 1.0f, SpriteEffects.None, 0);
 
             if (produceButtonHover) produceButton = IngamePresentation.factoryProduceButtonHoverTexture;
             if (produceButtonPress) produceButton = IngamePresentation.factoryProduceButtonPressedTexture;
             if (!produceButtonHover && !produceButtonPress) produceButton = IngamePresentation.factoryProduceButtonNormalTexture;
             //draw change_produce button
-            spriteBatch.Draw(produceButton, produceRect, Color.White);
+            spriteBatch.Draw(produceButton, produceRect, Color.White * fadeFactor);
 
+            produceRect.Y = (int)(productionPos.Y + 10 + factoryFont.MeasureString(production_str).Y / 2);
             //draw change_produce text
             string changeProduceButtonText;
             if (produce == Produce.resource)
                 changeProduceButtonText = "PRODUCE POWERPACKS";
             else
                 changeProduceButtonText = "PRODUCE RESOURCES";
-            spriteBatch.DrawString(factoryFont, changeProduceButtonText, new Vector2(produceRect.Center.X - factoryFont.MeasureString(changeProduceButtonText).X / 2, produceRect.Center.Y - factoryFont.MeasureString(changeProduceButtonText).Y / 2), Color.White);
+            spriteBatch.DrawString(factoryFont, changeProduceButtonText, new Vector2(produceRect.Center.X - factoryFont.MeasureString(changeProduceButtonText).X / 2, produceRect.Center.Y - factoryFont.MeasureString(changeProduceButtonText).Y / 2), Color.White * fadeFactor);
             
             //draw how many resources are being processed
             string beingProcessedStr;
@@ -485,15 +494,27 @@ namespace Poseidon
             else
                 beingProcessedStr = "CURRENT STATUS: " + numTrashWaiting.ToString() + " TRASH WAITING TO BE PROCESSED.";
             beingProcessedStr = Poseidon.Core.IngamePresentation.wrapLine(beingProcessedStr, backgroundRect.Width - 100, factoryFont);
-            spriteBatch.DrawString(factoryFont, beingProcessedStr, new Vector2(backgroundRect.Center.X - factoryFont.MeasureString(beingProcessedStr).X/2, produceRect.Bottom + 5), Color.Black);
+            spriteBatch.DrawString(factoryFont, beingProcessedStr, new Vector2(backgroundRect.Center.X - factoryFont.MeasureString(beingProcessedStr).X / 2, produceRect.Bottom + 5), Color.Black * fadeFactor);
 
             //draw description
-            string text = Poseidon.Core.IngamePresentation.wrapLine(plant_basic_description + plant_upgradeLevel_description, backgroundRect.Width - 100, factoryFont);
-            spriteBatch.DrawString(factoryFont, text, new Vector2(backgroundRect.Left + 50, produceRect.Bottom + 35), Color.DarkRed);
+            plant_basic_description = Poseidon.Core.IngamePresentation.wrapLine(plant_basic_description, backgroundRect.Width - 130, factoryFont);
+            Vector2 basicDescPos = new Vector2(backgroundRect.Left + 65, produceRect.Bottom + 45);
+            spriteBatch.DrawString(factoryFont, plant_basic_description, basicDescPos, Color.Purple * fadeFactor);
+
+            if (factoryType != FactoryType.radioactive)
+            {
+                string text = "Current technology:";
+                Vector2 textPos = basicDescPos + new Vector2(0, factoryFont.MeasureString(plant_basic_description).Y + 10);
+                spriteBatch.DrawString(factoryFont, text, textPos, Color.Red * fadeFactor);
+
+                Vector2 upgradePos = textPos + new Vector2(0, factoryFont.MeasureString(text).Y + 10);
+                plant_upgradeLevel_description = IngamePresentation.wrapLine(plant_upgradeLevel_description, backgroundRect.Width - 130, factoryFont);
+                spriteBatch.DrawString(factoryFont, plant_upgradeLevel_description, upgradePos, Color.LawnGreen * fadeFactor);
+            }
 
             string nextText = "Press Enter to continue";
-            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Orange);
+            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X - 70, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y - 50);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Orange * fadeFactor);
 
         }
 

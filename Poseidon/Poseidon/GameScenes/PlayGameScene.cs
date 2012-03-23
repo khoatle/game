@@ -1806,7 +1806,9 @@ namespace Poseidon
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
             str1 += days.ToString();
 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
+            //too much texts on screen 
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
+                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);

@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
+using Poseidon.Core;
 
 namespace Poseidon
 {
@@ -92,7 +93,7 @@ namespace Poseidon
             this.facilityFont2 = facilityFont2;
             this.background = background;
             this.upgradeButton = upgradeButton;
-            this.playJigsawButton = playJigsawButton;
+            this.playJigsawButton = IngamePresentation.factoryProduceButtonNormalTexture;// playJigsawButton;
             this.increaseAttributeButton = increaseAttributeButton;
 
             int backgroundWidth = (int)(game.Window.ClientBounds.Width * 0.78);
@@ -541,7 +542,7 @@ namespace Poseidon
                     //Draw Sea Dolphin Jigsaw Button
                     playDolphinJigsaw = true;
                     string dolphinJigsawButtonText = "RESURRECT MAUI'S\nDOLPHIN";
-                    spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White);
+                    spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White * 0.5f);
                     spriteBatch.DrawString(menuSmall, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - menuSmall.MeasureString(dolphinJigsawButtonText).X / 4, playDolphinJigsawRect.Center.Y - menuSmall.MeasureString(dolphinJigsawButtonText).Y / 4), Color.Red, 0, new Vector2(0, 0), 0.5f, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numDolphinPieces > 0)

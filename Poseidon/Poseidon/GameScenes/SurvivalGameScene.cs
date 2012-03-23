@@ -1115,7 +1115,9 @@ namespace Poseidon
             Rectangle rectSafeArea;
             str1 += ((int)score).ToString();
 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
+            //too much texts on screen 
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
+                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);

@@ -514,6 +514,9 @@ namespace Poseidon
                 iconActivated[index] = true;
             }
 
+            numDolphinPieces = 30;
+            bioPlantLevel = plasticPlantLevel = 2;
+
             //hasTurtle = true;
             //turtlePower = 1.0f;
             //hasDolphin = true;

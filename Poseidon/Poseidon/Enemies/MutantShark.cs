@@ -83,7 +83,7 @@ namespace Poseidon
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
             // if clip player has been initialized, update it
-            if (clipPlayer != null || BoundingSphere.Intersects(cameraFrustum))
+            if (clipPlayer != null && BoundingSphere.Intersects(cameraFrustum))
             {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,

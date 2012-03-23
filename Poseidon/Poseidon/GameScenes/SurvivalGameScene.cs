@@ -814,7 +814,7 @@ namespace Poseidon
 
                     for (int i = 0; i < fishAmount; i++)
                     {
-                        fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
+                        fish[i].Update(gameTime, frustum, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
                     }
                     //Checking win/lost condition for this level
                     if (HydroBot.currentHitPoint <= 0 || isAncientKilled)

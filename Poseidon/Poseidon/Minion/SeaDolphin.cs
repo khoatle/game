@@ -72,7 +72,7 @@ namespace Poseidon
             }
         }
 
-        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
+        public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
@@ -255,7 +255,7 @@ namespace Poseidon
             }
 
             // if clip player has been initialized, update it
-            if (clipPlayer != null)
+            if (clipPlayer != null || BoundingSphere.Intersects(cameraFrustum))
             {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,

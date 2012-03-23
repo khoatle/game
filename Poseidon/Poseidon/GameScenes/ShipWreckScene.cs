@@ -873,7 +873,7 @@ namespace Poseidon
 
                 for (int i = 0; i < fishAmount[currentShipWreckID]; i++)
                 {
-                    fishes[currentShipWreckID][i].Update(gameTime, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], random.Next(100), hydroBot, enemyBullet);
+                    fishes[currentShipWreckID][i].Update(gameTime, frustum, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], random.Next(100), hydroBot, enemyBullet);
                 }
 
                 //for the shader

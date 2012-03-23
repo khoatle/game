@@ -83,7 +83,7 @@ namespace Poseidon
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
             // if clip player has been initialized, update it
-            if (clipPlayer != null)
+            if (clipPlayer != null && BoundingSphere.Intersects(cameraFrustum))
             {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
@@ -95,6 +95,7 @@ namespace Poseidon
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
             }
+
             //if stunned, switch to idle anim
             //for mutant shark, idle = swimming normally
             if (stunned)

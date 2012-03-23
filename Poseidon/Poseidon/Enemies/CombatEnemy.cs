@@ -36,14 +36,14 @@ namespace Poseidon
         public override void Update(SwimmingObject[] enemyList, ref int enemySize, SwimmingObject[] fishList, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullets, List<DamageBullet> alliesBullets, BoundingFrustum cameraFrustum, GameTime gameTime, GameMode gameMode)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
-
-            qRotation = Quaternion.CreateFromAxisAngle(
-                            Vector3.Up,
-                            ForwardDirection);
-            enemyMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
-                                Matrix.CreateFromQuaternion(qRotation) *
-                                Matrix.CreateTranslation(Position);
-            clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
+            if (BoundingSphere.Intersects(cameraFrustum))
+                qRotation = Quaternion.CreateFromAxisAngle(
+                                Vector3.Up,
+                                ForwardDirection);
+                enemyMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                                    Matrix.CreateFromQuaternion(qRotation) *
+                                    Matrix.CreateTranslation(Position);
+                clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
 
             // Fleeing stuff
             if (isFleeing == true) {

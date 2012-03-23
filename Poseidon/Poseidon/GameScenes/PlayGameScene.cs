@@ -286,7 +286,7 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
+                int[] numShootingEnemies = { 70, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
@@ -1164,7 +1164,7 @@ namespace Poseidon
 
                     for (int i = 0; i < fishAmount; i++)
                     {
-                        fish[i].Update(gameTime, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
+                        fish[i].Update(gameTime, frustum, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
                     }
 
                     //Checking win/lost condition for this level

@@ -75,7 +75,7 @@ namespace Poseidon {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
-        public virtual void Update(GameTime gameTime, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
+        public virtual void Update(GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
             float lastForwardDir = ForwardDirection;
             float lastTurnAmount = turnAmount;
@@ -176,7 +176,7 @@ namespace Poseidon {
             //}
 
             // if clip player has been initialized, update it
-            if (clipPlayer != null)
+            if (clipPlayer != null && BoundingSphere.Intersects(cameraFrustum))
             {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,

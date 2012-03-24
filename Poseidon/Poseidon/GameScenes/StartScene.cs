@@ -60,8 +60,8 @@ namespace Poseidon
             this.teamLogo = teamLogo;
             this.game = game;
 
-            int rectWidth = (int)(game.Window.ClientBounds.Width * 0.48);
-            int rectHeight = (int)(game.Window.ClientBounds.Height * 0.1575);
+            int rectWidth = (int)(game.Window.ClientBounds.Width * 0.48); //600
+            int rectHeight = (int)(game.Window.ClientBounds.Height * 0.1575); //126
             titleLine1Rect = new Rectangle(0, 0, rectWidth, rectHeight);//Hydrobot (0,0, 588, 126)
             titleLine2Rect = new Rectangle(rectWidth / 6, (int)(rectHeight * 1.5), rectWidth, rectHeight); //Adventure (90, 169, 620, 126)
             
@@ -141,7 +141,7 @@ namespace Poseidon
             //if (PlayGameScen
             // Put the menu centered in screen
             menu.Position = new Vector2(Game.Window.ClientBounds.Width / 2
-                                          , 300);
+                                          , titleLine2Rect.Bottom+5);
 
             // These elements will be visible when the 'Rock Rain' title
             // is done.

@@ -514,15 +514,16 @@ namespace Poseidon
                 iconActivated[index] = true;
             }
 
-            numDolphinPieces = 30;
-            bioPlantLevel = plasticPlantLevel = 2;
+            numDolphinPieces = numSeaCowPieces = numTurtlePieces = 30;
+            bioPlantLevel = plasticPlantLevel = 1;
+            totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
 
-            //hasTurtle = true;
-            //turtlePower = 1.0f;
-            //hasDolphin = true;
-            //dolphinPower = 1.0f;
-            //hasSeaCow = true;
-            //seaCowPower = 1.0f;
+            hasTurtle = true;
+            turtlePower = 2.0f;
+            hasDolphin = true;
+            dolphinPower = 2.0f;
+            hasSeaCow = true;
+            seaCowPower = 2.0f;
 
             firstPlant = true;
             prevPlantTime = 0;

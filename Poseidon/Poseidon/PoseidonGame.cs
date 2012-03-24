@@ -89,7 +89,7 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool AttributePressed;
-        public static bool AttributeButtonPressed;
+        public static bool AttributeButtonPressed = false;
         bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
@@ -127,10 +127,11 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0;
+            SoundEffect.MasterVolume = 0.5f;
         }
 
         /// <summary>

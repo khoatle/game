@@ -44,6 +44,15 @@ namespace Poseidon.Core
         public static Texture2D factoryProduceButtonNormalTexture, factoryProduceButtonHoverTexture, factoryProduceButtonPressedTexture;
         public static Texture2D dummyTexture;
 
+        // Texture and font for property window of a research facility
+        public static SpriteFont facilityFont;
+        public static SpriteFont facilityFont2;
+        public static Texture2D facilityBackground;
+        public static Texture2D facilityUpgradeButton;
+        public static Texture2D playJigsawButton;
+        public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
+
+
         public static void Initiate2DGraphics(ContentManager Content)
         {
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
@@ -79,7 +88,7 @@ namespace Poseidon.Core
             buttonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
             buttonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
 
-            // Load Textures and fonts for factory property dialog
+            // Load Textures and fonts for factory control panel
             factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
             factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel");
             factoryProduceButtonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonLargeFrame"); //("Image/TrashManagement/ChangeFactoryProduceBox");
@@ -87,6 +96,17 @@ namespace Poseidon.Core
             factoryProduceButtonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
             dummyTexture = new Texture2D(PoseidonGame.graphics.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
+
+
+            // Load Textures and fonts for research facility property dialog
+            facilityFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");
+            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
+            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
+            increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
+            increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");

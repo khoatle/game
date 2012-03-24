@@ -326,5 +326,109 @@ namespace Poseidon
             return false;
         }
 
+        public static void MouseInteractWithControlPanel(ref bool clicked, ref bool doubleClicked, ref bool notYetRealeased, ref MouseState lastMouseState, ref MouseState currentMouseState,
+            GameTime gameTime, ref double clickTimer, bool openFactoryConfigurationScene, Factory factoryToConfigure, ResearchFacility researchFacility, List<Factory> factories)
+        {
+            clicked = false;
+            notYetRealeased = false;
+            CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
+            if (openFactoryConfigurationScene)
+            {
+                factoryToConfigure.produceButtonHover = factoryToConfigure.produceRect.Contains(lastMouseState.X, lastMouseState.Y);
+
+                if (notYetRealeased && factoryToConfigure.produceButtonHover)
+                {
+                    factoryToConfigure.produceButtonPress = true;
+                }
+                else factoryToConfigure.produceButtonPress = false;
+            }
+            else
+            {
+                researchFacility.upgradeBotButtonHover = (HydroBot.unassignedPts > 0 && researchFacility.increaseAttributeRect.Contains(lastMouseState.X, lastMouseState.Y));
+                if (notYetRealeased && researchFacility.upgradeBotButtonHover)
+                {
+                    researchFacility.upgradeBotButtonPressed = true;
+                }
+                else  researchFacility.upgradeBotButtonPressed = false;
+                researchFacility.upgradeBioFacButtonHover = (researchFacility.bioUpgrade && researchFacility.bioUpgradeRect.Contains(lastMouseState.X, lastMouseState.Y));
+                if (notYetRealeased && researchFacility.upgradeBioFacButtonHover)
+                {
+                    researchFacility.upgradeBioFacButtonPressed = true;
+                }
+                else researchFacility.upgradeBioFacButtonPressed = false;
+                researchFacility.upgradePlasFacButtonHover = (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Contains(lastMouseState.X, lastMouseState.Y));
+                if (notYetRealeased && researchFacility.upgradePlasFacButtonHover)
+                {
+                    researchFacility.upgradePlasFacButtonPressed = true;
+                }
+                else researchFacility.upgradePlasFacButtonPressed = false;
+                researchFacility.seacowButtonHover = (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Contains(lastMouseState.X, lastMouseState.Y));
+                if (notYetRealeased && researchFacility.seacowButtonHover)
+                {
+                    researchFacility.seacowBotButtonPressed = true;
+                }
+                else researchFacility.seacowBotButtonPressed = false;
+                researchFacility.dolphinButtonHover = (ResearchFacility.playSeaCowJigsaw && researchFacility.playDolphinJigsawRect.Contains(lastMouseState.X, lastMouseState.Y));
+                if (notYetRealeased && researchFacility.dolphinButtonHover)
+                {
+                    researchFacility.dolphinButtonPressed = true;
+                }
+                else researchFacility.dolphinButtonPressed = false;
+                researchFacility.turtleButtonHover = (ResearchFacility.playSeaCowJigsaw && researchFacility.playTurtleJigsawRect.Contains(lastMouseState.X, lastMouseState.Y));
+                if (notYetRealeased && researchFacility.turtleButtonHover)
+                {
+                    researchFacility.turtleButtonPressed = true;
+                }
+                else researchFacility.turtleButtonPressed = false;
+            }
+            if (clicked)
+            {
+                if (openFactoryConfigurationScene)
+                {
+                    if (factoryToConfigure.produceButtonHover)
+                    {
+                        factoryToConfigure.SwitchProductionItem();
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                }
+                else
+                {
+                    if (researchFacility.bioUpgrade && researchFacility.bioUpgradeRect.Contains(lastMouseState.X, lastMouseState.Y))
+                    {
+                        researchFacility.UpgradeBioFactory(factories);
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                    if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Contains(lastMouseState.X, lastMouseState.Y))
+                    {
+                        researchFacility.UpgradePlasticFactory(factories);
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                    if (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Contains(lastMouseState.X, lastMouseState.Y))
+                    {
+                        PoseidonGame.playJigsaw = true;
+                        PoseidonGame.jigsawType = 0; //seacow
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                    if (ResearchFacility.playTurtleJigsaw && researchFacility.playTurtleJigsawRect.Contains(lastMouseState.X, lastMouseState.Y))
+                    {
+                        PoseidonGame.playJigsaw = true;
+                        PoseidonGame.jigsawType = 1; //turtle
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                    if (ResearchFacility.playDolphinJigsaw && researchFacility.playDolphinJigsawRect.Contains(lastMouseState.X, lastMouseState.Y))
+                    {
+                        PoseidonGame.playJigsaw = true;
+                        PoseidonGame.jigsawType = 2; //dolphin
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                    if (HydroBot.unassignedPts > 0 && researchFacility.increaseAttributeRect.Contains(lastMouseState.X, lastMouseState.Y))
+                    {
+                        PoseidonGame.AttributeButtonPressed = true;
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
+                }
+                clicked = false;
+            }
+        }
     }
 }

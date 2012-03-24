@@ -149,7 +149,7 @@ namespace Poseidon
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
-        bool notYetRealeased = false;
+        bool notYetReleased = false;
         double clickTimer = 0;
 
         private bool openFactoryConfigurationScene = false;
@@ -162,14 +162,6 @@ namespace Poseidon
         // Plastic factory will use nuclear factory textures
         private List<Texture2D> biofactoryAnimationTextures;
         private List<Texture2D> nuclearFactoryAnimationTextures;
-
-        // Texture and font for property window of a research facility
-        SpriteFont facilityFont;
-        SpriteFont facilityFont2;
-        Texture2D facilityBackground;
-        Texture2D facilityUpgradeButton;
-        Texture2D playJigsawButton;
-        Texture2D increaseAttributeButton;
 
         // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
@@ -286,7 +278,7 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 70, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
                 int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
@@ -423,15 +415,6 @@ namespace Poseidon
             factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
             // Load Font for displaying extra information on factory panel
             factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
-
-
-            // Load Textures and fonts for research facility property dialog
-            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
-            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
-            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");// ResearchFacilityBackground");
-            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         
             // Load textures for partid animation for factories
             biofactoryAnimationTextures = new List<Texture2D>();
@@ -762,11 +745,11 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
-                HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
-                AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
-                type++;
-            }
+            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
+            //    HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
+            //    AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            //    type++;
+            //}
 
             // play the boss fight music for certain levels
             if (currentGameState == GameState.Won)
@@ -884,65 +867,8 @@ namespace Poseidon
                         {
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
-                            clicked = false;
-                            notYetRealeased = false;
-                            if (openFactoryConfigurationScene)
-                            {
-                                factoryToConfigure.produceButtonHover = factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10));
-                                CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
-                                if (notYetRealeased && openFactoryConfigurationScene && factoryToConfigure.produceButtonHover)
-                                {
-                                    factoryToConfigure.produceButtonPress = true;
-
-                                }
-                                else factoryToConfigure.produceButtonPress = false;
-                            }
-
-                            if (clicked)
-                            {
-                                if (openFactoryConfigurationScene)
-                                {
-                                    if (factoryToConfigure.produceButtonHover)
-                                    {
-                                        factoryToConfigure.SwitchProductionItem();
-                                        PoseidonGame.audio.MenuScroll.Play();
-                                    }
-                                }
-                                else
-                                {
-                                    if (researchFacility.bioUpgrade && researchFacility.bioUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                        researchFacility.UpgradeBioFactory(factories);
-                                    if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                        researchFacility.UpgradePlasticFactory(factories);
-                                    if (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 0; //seacow
-                                    }
-                                    if (ResearchFacility.playTurtleJigsaw && researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 1; //turtle
-                                    }
-                                    if (ResearchFacility.playDolphinJigsaw && researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 2; //dolphin
-                                    }
-                                    if (HydroBot.unassignedPts>0 && researchFacility.increaseAttributeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.AttributeButtonPressed = true;
-                                    }
-                                }
-                                clicked = false;
-                            }
-                            else if (openResearchFacilityConfigScene)
-                            {
-                                if (researchFacility.increaseAttributeRect.Contains(lastMouseState.X, lastMouseState.Y))
-                                    researchFacility.mouseOnIncreaseAttributeIcon = true;
-                                else
-                                    researchFacility.mouseOnIncreaseAttributeIcon = false;
-                            }
+                            CursorManager.MouseInteractWithControlPanel(ref clicked, ref doubleClicked, ref notYetReleased, ref this.lastMouseState, ref this.currentMouseState, gameTime,
+                                ref clickTimer, openFactoryConfigurationScene, factoryToConfigure, researchFacility, factories);
                             return;
                         }
                     }
@@ -1059,7 +985,7 @@ namespace Poseidon
                         trash.Update(gameTime);
                     }
                    
-                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
+                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
@@ -1314,7 +1240,7 @@ namespace Poseidon
                         orientation = researchAnchor.orientation;
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.ModelStates = researchBuildingModelStates;
-                        researchFacility.LoadContent(game, position, orientation,ref facilityFont,ref facilityFont2,ref facilityBackground,ref facilityUpgradeButton,ref playJigsawButton,ref increaseAttributeButton);
+                        researchFacility.LoadContent(game, position, orientation);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1382,7 +1308,7 @@ namespace Poseidon
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     researchAnchor.Model = researchBuildingModel;
-                    researchAnchor.LoadContent(game, anchorPosition, orientation, ref facilityFont, ref facilityFont2, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture);
+                    researchAnchor.LoadContent(game, anchorPosition, orientation);
                 }
                 else
                 {

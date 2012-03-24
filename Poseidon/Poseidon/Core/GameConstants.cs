@@ -61,7 +61,7 @@ namespace Poseidon {
 
         //Trash
         public const int numTrashForUpgrade = 25;
-        public const int numDaysForUpgrade = 15;
+        public const int numDaysForUpgrade = 3;//15;
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
         public const int maxTrashCarryingCapacity = 15;

@@ -215,6 +215,7 @@ namespace Poseidon.MiniGames
                 case 0:
                     image = seacowImage[random.Next(2)];
                     animalName = "STELLAR'S SEA COW";
+                    generalInfoText = "";
                     generalInfoText += animalName+":\n";
                     generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n";
                     generalInfoText += "Year of Extinction: Around 1750.\n";
@@ -222,22 +223,25 @@ namespace Poseidon.MiniGames
                     break;
                 case 1:
                     image = turtleImage[random.Next(2)];
-                    animalName = "MEIOLANIA TURTLE";
+                    animalName = "MEIOLANIA";
+                    generalInfoText = "";
                     generalInfoText += animalName + ":\n";
                     generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n";
-                    generalInfoText += "Year of Extinction: 2,000 years ago\n";
+                    generalInfoText += "Year of Extinction: more than 2,000 years ago.\n";
                     generalInfoText += "REASON: Excessive hunting.";
                     break;
                 case 2:
                     image = dolphinImage[random.Next(2)];
                     animalName = "MAUI'S DOLPHIN";
+                    generalInfoText = "";
                     generalInfoText += animalName + ":\n";
-                    generalInfoText += "DESCRIPTION: Smallest known species of dolphin. Lived near coasts.\n";
-                    generalInfoText += "EXTINCT SINCE: Around 2050\n";
-                    generalInfoText += "REASON: Pollution, injury from nets, boats.";
+                    generalInfoText += "Description: Smallest known species of dolphin. Lived near coasts.\n";
+                    generalInfoText += "Year of Extinction: Around 2050.\n";
+                    generalInfoText += "Reason of Extinction: Pollution, injury from nets, boats.";
                     break;
                 default:
                     image = seacowImage[random.Next(2)];
+                    generalInfoText = "";
                     animalName = "Steller's Sea Cow";
                     generalInfoText += animalName + "\n";
                     generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n";

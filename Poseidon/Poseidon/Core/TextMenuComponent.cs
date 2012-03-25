@@ -25,13 +25,15 @@ namespace Poseidon.Core
         // Items
         protected int selectedIndex = 0;
         private readonly List<string> menuItems;
-        // Used for handle input
-        protected KeyboardState oldKeyboardState;
-        protected GamePadState oldGamePadState;
+        private List<Rectangle> rectMenuItems;
         // Size of menu in pixels
         protected int width, height;
         // For audio effects
         protected AudioLibrary audio;
+        
+        MouseState currentMouseState = new MouseState();
+        MouseState lastMouseState = new MouseState();
+        public static bool clicked = false;
 
         /// <summary>
         /// Default constructor
@@ -46,6 +48,7 @@ namespace Poseidon.Core
             regularFont = normalFont;
             this.selectedFont = selectedFont;
             menuItems = new List<string>();
+            rectMenuItems = new List<Rectangle>();
 
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)
@@ -55,9 +58,6 @@ namespace Poseidon.Core
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            // Used for input handling
-            oldKeyboardState = Keyboard.GetState();
-            oldGamePadState = GamePad.GetState(PlayerIndex.One);
         }
 
         /// <summary>
@@ -68,7 +68,71 @@ namespace Poseidon.Core
         {
             menuItems.Clear();
             menuItems.AddRange(items);
+
             CalculateBounds();
+
+            rectMenuItems.Clear();
+
+            int x,y, width, height;
+            y = (int)position.Y;
+            if (((menuItems.Count * regularFont.LineSpacing) + position.Y) < Game.Window.ClientBounds.Height) // 1 column
+            {
+
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    width = (int)(regularFont.MeasureString(menuItems[i]).X);
+                    height = (int)(regularFont.MeasureString(menuItems[i]).Y);
+                    x = (int)(position.X - (width / 2));
+                    
+                    Rectangle itemRectangle = new Rectangle(x,y, width, height);
+                    rectMenuItems.Add(itemRectangle);
+                    
+                    y += regularFont.LineSpacing;
+                }
+            }
+            else if (((menuItems.Count * regularFont.LineSpacing) + position.Y) < Game.Window.ClientBounds.Height * 2)  // Need to draw 2 columns
+            {
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    width = (int)(regularFont.MeasureString(menuItems[i]).X);
+                    height = (int)(regularFont.MeasureString(menuItems[i]).Y);
+                    if (i <= menuItems.Count / 2)
+                        x = (int)(position.X - (position.X / 2) - (width / 2));
+                    else
+                        x = (int)(position.X + (position.X / 2) - (width/ 2));
+
+                    Rectangle itemRectangle = new Rectangle(x, y, width, height);
+                    rectMenuItems.Add(itemRectangle);
+
+                    if (i == (int)menuItems.Count / 2)
+                        y = (int)position.Y;
+                    else
+                        y += regularFont.LineSpacing;
+                }
+            }
+            else // Need to draw 3 columns
+            {
+                for (int i = 0; i < menuItems.Count; i++)
+                {
+                    width = (int)(regularFont.MeasureString(menuItems[i]).X);
+                    height = (int)(regularFont.MeasureString(menuItems[i]).Y);
+                    if (i <= menuItems.Count / 3)
+                        x = (int)(position.X - (Game.Window.ClientBounds.Width / 3) - (width / 2));
+                    else if (i <= menuItems.Count * 2 / 3)
+                        x = (int)(position.X - (width / 2));
+                    else
+                        x = (int)(position.X + (Game.Window.ClientBounds.Width / 3) - (width / 2));
+
+                    Rectangle itemRectangle = new Rectangle(x, y, width, height);
+                    rectMenuItems.Add(itemRectangle);
+                    
+                    if ((i == (int)menuItems.Count / 3) || (i == (int)menuItems.Count * 2 / 3))
+                        y = (int)position.Y;
+                    else
+                        y += regularFont.LineSpacing;
+                }
+            }
+
         }
 
         /// <summary>
@@ -147,45 +211,24 @@ namespace Poseidon.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
-            GamePadState gamepadState = GamePad.GetState(PlayerIndex.One);
-            KeyboardState keyboardState = Keyboard.GetState();
+            int prevselectedIndex = selectedIndex;
+            lastMouseState = currentMouseState;
+            currentMouseState = Mouse.GetState();
 
-            bool down, up;
-            // Handle the keyboard
-            down = (oldKeyboardState.IsKeyDown(Keys.Down) &&
-                (keyboardState.IsKeyUp(Keys.Down)));
-            up = (oldKeyboardState.IsKeyDown(Keys.Up) &&
-                (keyboardState.IsKeyUp(Keys.Up)));
-            // Handle the D-Pad
-            down |= (oldGamePadState.DPad.Down == ButtonState.Pressed) &&
-                    (gamepadState.DPad.Down == ButtonState.Released);
-            up |= (oldGamePadState.DPad.Up == ButtonState.Pressed) &&
-                (gamepadState.DPad.Up == ButtonState.Released);
-
-            if (down || up)
+            for(int i=0; i<menuItems.Count; i++)
             {
+                if (rectMenuItems[i].Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)))
+                {
+                    selectedIndex = i;
+                    break;
+                }
+            }
+            
+            if(prevselectedIndex != selectedIndex)
                 audio.MenuScroll.Play();
-            }
 
-            if (down)
-            {
-                selectedIndex++;
-                if (selectedIndex == menuItems.Count)
-                {
-                    selectedIndex = 0;
-                }
-            }
-            if (up)
-            {
-                selectedIndex--;
-                if (selectedIndex == -1)
-                {
-                    selectedIndex = menuItems.Count - 1;
-                }
-            }
-
-            oldKeyboardState = keyboardState;
-            oldGamePadState = gamepadState;
+            if(lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
+                clicked = true;
 
             base.Update(gameTime);
         }
@@ -196,102 +239,22 @@ namespace Poseidon.Core
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
-            float y = position.Y;
-            float x;
-            if (((menuItems.Count * regularFont.LineSpacing)+position.Y) < Game.Window.ClientBounds.Height)
+            for (int i = 0; i < menuItems.Count; i++)
             {
-                for (int i = 0; i < menuItems.Count; i++)
+                SpriteFont font;
+                Color theColor;
+                if (i == SelectedIndex)
                 {
-                    SpriteFont font;
-                    Color theColor;
-                    //x = position.X - ((menuItems[i].Length*45)/2);
-                    if (i == SelectedIndex)
-                    {
-                        font = selectedFont;
-                        theColor = selectedColor;
-                    }
-                    else
-                    {
-                        font = regularFont;
-                        theColor = regularColor;
-                    }
-                    x = position.X - (font.MeasureString(menuItems[i]).X / 2);
-                    // Draw the text shadow
-                    spriteBatch.DrawString(font, menuItems[i],
-                        new Vector2(x + 1, y + 1), Color.Black);
-                    // Draw the text item
-                    spriteBatch.DrawString(font, menuItems[i],
-                        new Vector2(x, y), theColor);
-                    y += font.LineSpacing;
+                    font = selectedFont;
+                    theColor = selectedColor;
                 }
-            }
-            else if (((menuItems.Count * regularFont.LineSpacing) + position.Y) < Game.Window.ClientBounds.Height*2)  // Need to draw 2 columns
-            {
-                for (int i = 0; i < menuItems.Count; i++)
+                else
                 {
-                    SpriteFont font;
-                    Color theColor;
-                    //x = position.X - ((menuItems[i].Length*45)/2);
-                    if (i == SelectedIndex)
-                    {
-                        font = selectedFont;
-                        theColor = selectedColor;
-                    }
-                    else
-                    {
-                        font = regularFont;
-                        theColor = regularColor;
-                    }
-                    if (i <= menuItems.Count / 2)
-                        x = position.X - position.X/2 - (font.MeasureString(menuItems[i]).X / 2);
-                    else
-                        x = position.X + position.X/2 - (font.MeasureString(menuItems[i]).X / 2);
-                    // Draw the text shadow
-                    spriteBatch.DrawString(font, menuItems[i],
-                        new Vector2(x + 1, y + 1), Color.Black);
-                    // Draw the text item
-                    spriteBatch.DrawString(font, menuItems[i],
-                        new Vector2(x, y), theColor);
-                    if (i == (int)menuItems.Count / 2)
-                        y = position.Y;
-                    else
-                        y += font.LineSpacing;
+                    font = regularFont;
+                    theColor = regularColor;
                 }
-            }
-            else // Need to draw 3 columns
-            {
-                for (int i = 0; i < menuItems.Count; i++)
-                {
-                    SpriteFont font;
-                    Color theColor;
-                    //x = position.X - ((menuItems[i].Length*45)/2);
-                    if (i == SelectedIndex)
-                    {
-                        font = selectedFont;
-                        theColor = selectedColor;
-                    }
-                    else
-                    {
-                        font = regularFont;
-                        theColor = regularColor;
-                    }
-                    if (i <= menuItems.Count / 3)
-                        x = position.X - (Game.Window.ClientBounds.Width / 3) - (font.MeasureString(menuItems[i]).X / 2);
-                    else if ( i <= menuItems.Count*2/3)
-                        x = position.X - (font.MeasureString(menuItems[i]).X / 2);
-                    else
-                        x = position.X + (Game.Window.ClientBounds.Width / 3) - (font.MeasureString(menuItems[i]).X / 2);
-                    // Draw the text shadow
-                    spriteBatch.DrawString(font, menuItems[i],
-                        new Vector2(x + 1, y + 1), Color.Black);
-                    // Draw the text item
-                    spriteBatch.DrawString(font, menuItems[i],
-                        new Vector2(x, y), theColor);
-                    if ((i == (int)menuItems.Count / 3) || (i == (int)menuItems.Count*2/3))
-                        y = position.Y;
-                    else
-                        y += font.LineSpacing;
-                }
+                spriteBatch.DrawString(font, menuItems[i], new Vector2(rectMenuItems[i].Left+1, rectMenuItems[i].Top+1), theColor); //shadow
+                spriteBatch.DrawString(font, menuItems[i], new Vector2(rectMenuItems[i].Left, rectMenuItems[i].Top), theColor);
             }
 
             base.Draw(gameTime);

@@ -51,10 +51,17 @@ namespace Poseidon
             textureFrontRectangle = new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Center.X - textureWidth / 2, graphicsDevice.Viewport.TitleSafeArea.Center.Y - textureHeight / 2, textureWidth, textureHeight);
                         
             int nextRectangleWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.05);
-            int nextRectangleHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.0875);
+            int nextRectangleHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.125);
             nextRectangle = new Rectangle(textureFrontRectangle.Right - (nextRectangleWidth+30), textureFrontRectangle.Center.Y - nextRectangleHeight/2, nextRectangleWidth, nextRectangleHeight);
             sceneCount = 1;
         }
+
+        public override void Show()
+        {
+            cursor.SetMenuCursorImage();
+            base.Show();
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (MediaPlayer.State.Equals(MediaState.Stopped))

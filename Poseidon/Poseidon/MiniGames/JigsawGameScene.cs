@@ -218,8 +218,8 @@ namespace Poseidon.MiniGames
                     generalInfoText = "";
                     generalInfoText += animalName+":\n";
                     generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n";
-                    generalInfoText += "Year of Extinction: Around 1750.\n";
-                    generalInfoText += "Reason of Extinction: Hunting for food and skin.";
+                    generalInfoText += "Extinct Since: ~1750.\n";
+                    generalInfoText += "Reason: Hunting for food and skin.";
                     break;
                 case 1:
                     image = turtleImage[random.Next(2)];
@@ -227,8 +227,8 @@ namespace Poseidon.MiniGames
                     generalInfoText = "";
                     generalInfoText += animalName + ":\n";
                     generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n";
-                    generalInfoText += "Year of Extinction: more than 2,000 years ago.\n";
-                    generalInfoText += "REASON: Excessive hunting.";
+                    generalInfoText += "Extinct: >2,000yrs.\n";
+                    generalInfoText += "Reason: Excessive hunting.";
                     break;
                 case 2:
                     image = dolphinImage[random.Next(2)];
@@ -236,7 +236,7 @@ namespace Poseidon.MiniGames
                     generalInfoText = "";
                     generalInfoText += animalName + ":\n";
                     generalInfoText += "Description: Smallest known species of dolphin. Lived near coasts.\n";
-                    generalInfoText += "Year of Extinction: Around 2050.\n";
+                    generalInfoText += "Extinct Since: ~2050.\n";
                     generalInfoText += "Reason of Extinction: Pollution, injury from nets, boats.";
                     break;
                 default:

@@ -1638,6 +1638,7 @@ namespace Poseidon
             }
             spriteBatch.Begin();
             DrawStats();
+            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
             DrawBulletType();
             DrawHeight();
             DrawRadar();
@@ -1680,6 +1681,8 @@ namespace Poseidon
             spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
         }
+
+
 
         private void DrawAnchor()
         {

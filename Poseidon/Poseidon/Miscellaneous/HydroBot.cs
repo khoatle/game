@@ -492,38 +492,38 @@ namespace Poseidon
 
             //just for testing
             //should be removed
-            skillComboActivated = true;
-            activeSkillID = 4;
-            secondSkillID = -1;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
+            //skillComboActivated = true;
+            //activeSkillID = 4;
+            //secondSkillID = -1;
+            //skills[0] = true;
+            //skills[1] = true;
+            //skills[2] = true;
+            //skills[3] = true;
+            //skills[4] = true;
 
-            unassignedPts = 5;
+            //unassignedPts = 5;
 
             //for testing survival mode
             //currentHitPoint = maxHitPoint = 300;
             //strength = 2;
             //speed = 1;
 
-            goodWillBarActivated = true;
-            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            {
-                iconActivated[index] = true;
-            }
+            //goodWillBarActivated = true;
+            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            //{
+            //    iconActivated[index] = true;
+            //}
 
-            numDolphinPieces = numSeaCowPieces = numTurtlePieces = 30;
-            bioPlantLevel = plasticPlantLevel = 1;
-            totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
+            //numDolphinPieces = numSeaCowPieces = numTurtlePieces = 30;
+            //bioPlantLevel = plasticPlantLevel = 1;
+            //totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
 
-            hasTurtle = true;
-            turtlePower = 2.0f;
-            hasDolphin = true;
-            dolphinPower = 2.0f;
-            hasSeaCow = true;
-            seaCowPower = 2.0f;
+            //hasTurtle = true;
+            //turtlePower = 2.0f;
+            //hasDolphin = true;
+            //dolphinPower = 2.0f;
+            //hasSeaCow = true;
+            //seaCowPower = 2.0f;
 
             firstPlant = true;
             prevPlantTime = 0;

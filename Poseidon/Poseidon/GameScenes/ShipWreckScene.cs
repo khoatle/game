@@ -1068,6 +1068,7 @@ namespace Poseidon
             }
             spriteBatch.Begin();
             DrawStats();
+            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
             DrawBulletType();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);

@@ -55,6 +55,13 @@ namespace Poseidon.Core
         //level winning/losing screen
         public static Texture2D winningTexture, losingTexture;
 
+        //for displaying tip on screen
+        public static int currentTipID = 0;
+        public static double lastTipChange = 0;
+        public static int lastCurrentLevel = 0;
+        public static float fadeFactorBeginValue = 4.0f;
+        public static float fadeFactorReduceStep = 0.01f;
+        public static float fadeFactor = fadeFactorBeginValue;
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
@@ -124,6 +131,37 @@ namespace Poseidon.Core
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             bubbles = new List<Bubble>();
         }
+        
+        public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
+        {
+            Rectangle rectSafeArea;
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            float xOffsetText, yOffsetText;
+            xOffsetText = rectSafeArea.X + 10;
+            yOffsetText = rectSafeArea.Y + 50;
+
+            if (lastCurrentLevel != PlayGameScene.currentLevel)
+            {
+                currentTipID = 0;
+                lastCurrentLevel = PlayGameScene.currentLevel;
+                lastTipChange = PoseidonGame.playTime.TotalSeconds;
+                fadeFactor = fadeFactorBeginValue;
+            }
+            string tipStr = "Tip: " + PoseidonGame.liveTipManager.allTips[PlayGameScene.currentLevel][currentTipID].tipItemStr;
+            tipStr = wrapLine(tipStr, rectSafeArea.Width / 4, statsFont);
+            spriteBatch.DrawString(statsFont, tipStr, new Vector2(xOffsetText, yOffsetText), Color.White * fadeFactor);
+            fadeFactor -= fadeFactorReduceStep;
+
+            if (PoseidonGame.playTime.TotalSeconds - lastTipChange >= 15)
+            {
+                currentTipID++;
+                if (currentTipID == PoseidonGame.liveTipManager.allTips[PlayGameScene.currentLevel].Count) currentTipID = 0;
+                lastTipChange = PoseidonGame.playTime.TotalSeconds;
+                fadeFactor = fadeFactorBeginValue;
+                PoseidonGame.audio.PowerGet.Play();
+            }
+        }
+
         public static void DrawActiveSkill(GraphicsDevice GraphicDevice, Texture2D[] skillTextures, SpriteBatch spriteBatch)
         {
             int xOffsetText, yOffsetText;

@@ -134,7 +134,7 @@ namespace Poseidon
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0;
-            SoundEffect.MasterVolume = 0f;
+            SoundEffect.MasterVolume = 0.5f;
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace Poseidon
             liveTipManager = new LiveTipManager();
 
             //For the Help scene
-            helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");
+            helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             helpForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
             helpForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_shoot_2");
             helpForegroundTexture3 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_trash_3");
@@ -215,7 +215,7 @@ namespace Poseidon
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
-            startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             teamLogo = Content.Load<Texture2D>("Image/Miscellaneous/TeamLogo");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,

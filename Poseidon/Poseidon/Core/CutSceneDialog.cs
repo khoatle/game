@@ -141,11 +141,11 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Don't worry about them. They will be released when they learn their lesson. But there is something else to worry about. They took away a leopard shark and modified it's genes. It is a fierce creature now capable of poisonous bites.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Oh, no! How can I defeat such a ferocious creature?", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Oh, no! How can I defeat such a ferocious creature?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "There are ancient relics left forgotten inside the shipwrecks hundreds or thousands years ago. Their powers are incredible. Perhaps, obtaining them will give us some hope", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Ancient Relics??", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Ancient Relics??", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, " Just find the relic in " + ((GameConstants.RoundTime[2].Minutes * 60) + GameConstants.RoundTime[2].Seconds) / GameConstants.DaysPerSecond + " days in one of the shipwrecks and I will explain it further.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
@@ -158,7 +158,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Settle down bot, these sandals are not for wearing. They are the legendary winged sandals of Hermes which enabled him to move at super sonic speeed.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Awesome, can I use that power too?", "Image/Cutscenes/backgroundDialog", 0);
+            sentence = new Sentence(0, "Awesome, can I use that power too?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Unfortunately, an ancient relic's power can not be used by either a human or a bot. But I can help you to extract the power of this relic and use it periodically. However, everything has its price, using the relic will also hurt you a little bit.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);

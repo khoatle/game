@@ -30,7 +30,7 @@ namespace Poseidon.Core
         public static Texture2D buttonNormalTexture, buttonHoverTexture, buttonPressedTexture;
         static Texture2D HealthBar;
 
-        static SpriteFont statsFont, fishTalkFont;
+        public static SpriteFont statsFont, statisticFont, fishTalkFont;
 
         public static List<Bubble> bubbles;
         public static double lastBubbleCreated = 0;
@@ -130,6 +130,8 @@ namespace Poseidon.Core
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             bubbles = new List<Bubble>();
+
+            statisticFont = Content.Load<SpriteFont>("Fonts/statisticsfont");
         }
         
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)

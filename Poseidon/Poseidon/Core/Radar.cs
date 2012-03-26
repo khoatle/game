@@ -20,6 +20,7 @@ namespace Poseidon.Core
         private Texture2D NuclearFactoryDotImage;
         private Texture2D ResearchFacilityDotImage;
         private Texture2D SideKickDotImage;
+        private Texture2D GoldenKeyDot;
 
         // Local coords of the radar image's center, used to offset image when being drawn
         private Vector2 RadarImageCenter;
@@ -47,12 +48,13 @@ namespace Poseidon.Core
             NuclearFactoryDotImage = Content.Load<Texture2D>("Image/RadarTextures/nuclearFactoryDot");
             ResearchFacilityDotImage = Content.Load<Texture2D>("Image/RadarTextures/researchCenterDot");
             SideKickDotImage = Content.Load<Texture2D>("Image/RadarTextures/sidekickDot");
+            GoldenKeyDot = Content.Load<Texture2D>("Image/RadarTextures/keydot");
 
             this.RadarCenterPos = radarCenter;
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<Powerpack> powerPacks)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / ((RadarImage.Height) * 0.5f), SpriteEffects.None, 0.0f);
@@ -229,8 +231,41 @@ namespace Poseidon.Core
                     else spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
                 }
             }
-            
 
+            // display golden key on the map
+            if (powerPacks != null)
+            {
+                foreach (Powerpack powerPack in powerPacks)
+                {
+                    if (powerPack.powerType == PowerPackType.GoldenKey)
+                    {
+                        Vector2 diffVect = new Vector2(powerPack.Position.X - playerPos.X, powerPack.Position.Z - playerPos.Z);
+                        float distance = diffVect.LengthSquared();
+
+                        // Check if enemy is within RadarRange
+                        //if (distance < RadarRangeSquared)
+                        //{
+                        if (distance > RadarRangeSquared)
+                            diffVect *= RadarRange / diffVect.Length();
+                        // Scale the distance from world coords to radar coords
+                        diffVect *= RadarScreenRadius / RadarRange;
+
+                        // We rotate each point on the radar so that the player is always facing UP on the radar
+                        //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                        // Offset coords from radar's center
+                        diffVect = -diffVect;
+                        diffVect += RadarCenterPos;
+
+                        // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                        // at lower elevations have smaller dots.
+                        float scaleHeight = 1.0f;
+
+                        spriteBatch.Draw(GoldenKeyDot, diffVect, null, Color.White, 0.0f, new Vector2(GoldenKeyDot.Width / 2, GoldenKeyDot.Height / 2), scaleHeight * 0.4f, SpriteEffects.None, 0.0f);
+                        //}
+                    }
+                }
+            }
             // Draw player's dot last
             //spriteBatch.Draw(PlayerDotImage, RadarCenterPos, Color.White);
             spriteBatch.Draw(PlayerDotImage, RadarCenterPos, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width / 2, PlayerDotImage.Height / 2), 1.0f, SpriteEffects.None, 0.0f); 

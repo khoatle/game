@@ -186,6 +186,7 @@ namespace Poseidon
         //Models for powerpacks, strangeRock and resource
         private Model[] powerpackModels;
         private Model[] strangeRockModels;
+        private Model goldenKey;
         private Model resourceModel;
 
         // For applying graphic effects
@@ -340,11 +341,11 @@ namespace Poseidon
 
         public void Load()
         {
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            statisticFont = Content.Load<SpriteFont>("Fonts/StatisticsFont");
+            statsFont = IngamePresentation.statsFont;
+            statisticFont = IngamePresentation.statisticFont;
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
-            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
-            keyFoundFont = Content.Load<SpriteFont>("Fonts/painting");
+            fishTalkFont = IngamePresentation.fishTalkFont;
+            keyFoundFont = statisticFont;// Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -371,7 +372,7 @@ namespace Poseidon
             tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
             tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
 
-            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
+            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/goldkey");
 
             powerpacks = new List<Powerpack>();
             resources = new List<Resource>();
@@ -474,6 +475,9 @@ namespace Poseidon
             strangeRockModels = new Model[2];
             strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1Ver2");
             strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2Ver2");
+
+            //golden key
+            goldenKey = Content.Load<Model>("Models/Miscellaneous/Goldenkey");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -877,7 +881,7 @@ namespace Poseidon
                         if ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint > GameConstants.EnvThresholdForKey)
                         {
                             showFoundKey = true;
-                            hadkey = true;
+                            //hadkey = true;
                         }
                     }
                     if (showFoundKey && firstShow)
@@ -888,6 +892,17 @@ namespace Poseidon
                         {
                             showFoundKey = false;
                             firstShow = false;
+                            //generate the key
+                            Vector3 powerpackPosition = Vector3.Zero;
+                            PowerPackType powerType = PowerPackType.GoldenKey; //type 5 for strange rock
+                            Powerpack powerpack = new Powerpack(powerType);
+                            powerpackPosition.Y = GameConstants.MainGameFloatHeight + 10;
+                            powerpackPosition.X = random.Next(0, (int)(2 * GameConstants.MainGameMaxRangeX * 0.8f)) - GameConstants.MainGameMaxRangeX * 0.8f;
+                            powerpackPosition.Z = random.Next(0, (int)(2 * GameConstants.MainGameMaxRangeZ * 0.8f)) - GameConstants.MainGameMaxRangeZ * 0.8f;
+                            //powerpackPosition = hydroBot.Position;
+                            powerpack.Model = goldenKey;
+                            powerpack.LoadContent(powerpackPosition);
+                            powerpacks.Add(powerpack);
                         }
                         return;
                     }
@@ -1347,12 +1362,6 @@ namespace Poseidon
 
         public override void Draw(GameTime gameTime)
         {
-
-            if (showFoundKey && firstShow)
-            {
-                DrawFoundKey();
-                return;
-            }
             
             switch (currentGameState)
             {
@@ -1383,13 +1392,14 @@ namespace Poseidon
         }
         private void DrawFoundKey()
         {
-            string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help!!";
-            message = IngamePresentation.wrapLine(message, 800, keyFoundFont);
+            string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help. Position of they key will be displayed on the radar.";
+            message = IngamePresentation.wrapLine(message, GraphicDevice.Viewport.TitleSafeArea.Width - 20, keyFoundFont);
             int foundKeyScreenHeight = (int)(GraphicDevice.Viewport.TitleSafeArea.Height);
             int foundKeyScreenWidth = (int)(GraphicDevice.Viewport.TitleSafeArea.Width);
             spriteBatch.Begin();
-            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreenWidth/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreenHeight/2, foundKeyScreenWidth, foundKeyScreenHeight), Color.White);
-            spriteBatch.DrawString(keyFoundFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X-400, 20), Color.DarkRed);
+            //spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreenWidth/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreenHeight/2, foundKeyScreenWidth, foundKeyScreenHeight), Color.White);
+            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - foundKeyScreen.Height / 2, foundKeyScreen.Width, foundKeyScreen.Height), Color.White);
+            spriteBatch.DrawString(keyFoundFont, message, new Vector2(10, 100), Color.Gold);
 
             string nextText = "Press Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
@@ -1662,7 +1672,11 @@ namespace Poseidon
 
             cursor.Draw(gameTime);
             spriteBatch.End();
-
+            if (showFoundKey && firstShow)
+            {
+                DrawFoundKey();
+                //return;
+            }
             if (screenTransitNow)
             {
                 bool doneTransit = graphicEffect.TransitTwoSceens(Scene2Texture, afterEffectsAppliedRenderTarget, graphics, cutSceneImmediateRenderTarget);
@@ -1707,7 +1721,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)

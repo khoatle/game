@@ -20,7 +20,7 @@ namespace Poseidon
     public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
-    public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock };
+    public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };
     public enum FactoryType { biodegradable, plastic, radioactive};
     public enum BuildingType { biodegradable, plastic, radioactive, researchlab }; // as a super type for factory-type (including researchlab)
 
@@ -165,6 +165,10 @@ namespace Poseidon
             contentManager = Content;
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
+
+            //initiate all 2D graphics and fonts for the game
+            IngamePresentation.Initiate2DGraphics(Content);
+
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
 
             //For pausing the game
@@ -241,9 +245,6 @@ namespace Poseidon
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
             Components.Add(shipWreckScene);
-
-            //initiate graphic for good will bar
-            IngamePresentation.Initiate2DGraphics(Content);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
         }

@@ -1400,6 +1400,7 @@ namespace Poseidon
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 5);
                 for (int curCell = 0; curCell < powerpacks.Count; curCell++)
                 {
+                    powerpacks[curCell].BoundingSphere.Center.Y = Position.Y;
                     if (Trash_Fruit_BoundingSphere.Intersects(
                         powerpacks[curCell].BoundingSphere))
                     {
@@ -1439,6 +1440,10 @@ namespace Poseidon
                         {
                             numStrangeObjCollected++;
                             numRocks += 1;
+                        }
+                        else if (powerpacks[curCell].powerType == PowerPackType.GoldenKey)
+                        {
+                            PlayGameScene.hadkey = true;
                         }
                         //RetrievedSound.Play();
                         PoseidonGame.audio.retrieveSound.Play();

@@ -135,8 +135,7 @@ namespace Poseidon
                         menuItems = items;
                     }
                 }
-                menu.Position = new Vector2(game.Window.ClientBounds.Width / 2
-                                          , titleLine2Rect.Bottom + 5);
+                menu.Position = new Vector2((game.Window.ClientBounds.Width / 2), (titleLine2Position.Y + titleLine2Rect.Height));
                 menu.SetMenuItems(menuItems);
             }
             

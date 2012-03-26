@@ -34,36 +34,25 @@ namespace Poseidon
         protected Rectangle titleLine2Rect;
         protected Vector2 titleLine2Position;
 
+        GraphicsDevice graphicsDevice;
 
         public bool gameStarted = false;
-        //protected Rectangle enhancedRect = new Rectangle(8, 304, 375, 144);
-        //protected Vector2 enhancedPosition;
-        //protected bool showEnhanced;
-        //protected TimeSpan elapsedTime = TimeSpan.Zero;
         
         //for continously playing random background musics
         Random rand= new Random();
         public string[] menuItems;
-        /// <summary>
-        /// Default Constructor
-        /// </summary>
-        /// <param name="game">Main game object</param>
-        /// <param name="smallFont">Font for the menu items</param>
-        /// <param name="largeFont">Font for the menu selcted item</param>
-        /// <param name="background">Texture for background image</param>
-        /// <param name="elements">Texture with the foreground elements</param>
+
         public StartScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                            Texture2D background, Texture2D elements, Texture2D teamLogo)
+                            Texture2D background, Texture2D elements, Texture2D teamLogo, GraphicsDevice graphicDevice)
             : base(game)
         {
             this.elements = elements;
             this.teamLogo = teamLogo;
             this.game = game;
+            this.graphicsDevice = graphicDevice;
 
-            int rectWidth = (int)(game.Window.ClientBounds.Width * 0.48); //600
-            int rectHeight = (int)(game.Window.ClientBounds.Height * 0.1575); //126
-            titleLine1Rect = new Rectangle(0, 0, rectWidth, rectHeight);//Hydrobot (0,0, 588, 126)
-            titleLine2Rect = new Rectangle(rectWidth / 6, (int)(rectHeight * 1.5), rectWidth, rectHeight); //Adventure (90, 169, 620, 126)
+            titleLine1Rect = new Rectangle(0, 0, 588, 126);//Hydrobot (0,0, 588, 126)
+            titleLine2Rect = new Rectangle(90, 169, 620, 126); //Adventure (90, 169, 620, 126)
             
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
@@ -82,6 +71,15 @@ namespace Poseidon
             }
            
             menu = new TextMenuComponent(game, smallFont, largeFont);
+
+            //starting values
+            titleLine1Position.X = -1 * titleLine1Rect.Width;
+            titleLine1Position.Y = titleLine1Rect.Height / 3;
+            titleLine2Position.X = game.Window.ClientBounds.Width;
+            titleLine2Position.Y = (int)(titleLine1Rect.Height * 1.5);
+
+            menu.Position = new Vector2((game.Window.ClientBounds.Width / 2) , (titleLine2Position.Y + titleLine2Rect.Height));
+
             menu.SetMenuItems(menuItems);
             Components.Add(menu);
 
@@ -93,7 +91,7 @@ namespace Poseidon
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            
+            cursor = new Cursor(game, spriteBatch);
         }
 
         /// <summary>
@@ -101,13 +99,14 @@ namespace Poseidon
         /// </summary>
         public override void Show()
         {
+            titleLine1Position.X = -1 * titleLine1Rect.Width;
+            titleLine2Position.X = game.Window.ClientBounds.Width;
+
             audio.NewMeteor.Play();
 
+            cursor.SetMenuCursorImage();
 
-            titleLine1Position.X = -1 * titleLine1Rect.Width;
-            titleLine1Position.Y = titleLine1Rect.Height/3;
-            titleLine2Position.X = game.Window.ClientBounds.Width;
-            titleLine2Position.Y = (int)(titleLine1Rect.Height*1.5);
+            
             if (gameStarted)
             {
                 // Create the Menu
@@ -136,12 +135,10 @@ namespace Poseidon
                         menuItems = items;
                     }
                 }
+                menu.Position = new Vector2((game.Window.ClientBounds.Width / 2), (titleLine2Position.Y + titleLine2Rect.Height));
                 menu.SetMenuItems(menuItems);
             }
-            //if (PlayGameScen
-            // Put the menu centered in screen
-            menu.Position = new Vector2(Game.Window.ClientBounds.Width / 2
-                                          , titleLine2Rect.Bottom+5);
+            
 
             // These elements will be visible when the 'Rock Rain' title
             // is done.
@@ -158,7 +155,6 @@ namespace Poseidon
         public override void Hide()
         {
             //MediaPlayer.Stop();
-
             base.Hide();
         }
 
@@ -183,12 +179,12 @@ namespace Poseidon
             }
             if (!menu.Visible)
             {
-                if (titleLine2Position.X >= (game.Window.ClientBounds.Width*0.25))
+                if (titleLine2Position.X >= (game.Window.ClientBounds.Center.X - titleLine2Rect.Width/2))
                 {
                     titleLine2Position.X -= (game.Window.ClientBounds.Width*0.0117f);
                 }
 
-                if (titleLine1Position.X <= (game.Window.ClientBounds.Width*0.25))
+                if (titleLine1Position.X <= (game.Window.ClientBounds.Center.X - titleLine1Rect.Width/2))
                 {
                     titleLine1Position.X += (game.Window.ClientBounds.Width * 0.0117f);
                 }
@@ -219,7 +215,7 @@ namespace Poseidon
             //        showEnhanced = !showEnhanced;
             //    }
             //}
-
+            cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
             base.Update(gameTime);
         }
 
@@ -245,6 +241,8 @@ namespace Poseidon
             //    spriteBatch.Draw(elements, enhancedPosition, enhancedRect,
             //                     Color.White);
             //}
+
+            cursor.Draw(gameTime);
             spriteBatch.End();
         }
     }

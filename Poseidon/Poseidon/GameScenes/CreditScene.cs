@@ -49,6 +49,14 @@ namespace Poseidon
             nextRectangle = new Rectangle(textureFrontRectangle.Center.X - nextRectangleWidth/2, textureFrontRectangle.Bottom - nextRectangleHeight, nextRectangleWidth, nextRectangleHeight);
             nextPressed = false;
         }
+
+
+        public override void Show()
+        {
+            cursor.SetMenuCursorImage();
+            base.Show();
+        }
+
         public override void Update(GameTime gameTime)
         {
             if (MediaPlayer.State.Equals(MediaState.Stopped))

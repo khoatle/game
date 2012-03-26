@@ -130,7 +130,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0;
@@ -219,7 +219,7 @@ namespace Poseidon
             startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             teamLogo = Content.Load<Texture2D>("Image/Miscellaneous/TeamLogo");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,
-                startBackgroundTexture, startElementsTexture, teamLogo);
+                startBackgroundTexture, startElementsTexture, teamLogo, GraphicsDevice);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
@@ -235,7 +235,7 @@ namespace Poseidon
             Components.Add(loadingScene);
 
             //Loading the select loading level scene
-            selectLoadingLevelScene = new SelectLoadingLevelScene(this, startSceneLarge, startBackgroundTexture, teamLogo);
+            selectLoadingLevelScene = new SelectLoadingLevelScene(this, startSceneLarge, startBackgroundTexture, teamLogo, GraphicsDevice);
             Components.Add(selectLoadingLevelScene);
 
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
@@ -395,8 +395,9 @@ namespace Poseidon
         public void HandleSelectLoadingLevelSceneInput()
         {
             int i=0, lvl;
-            if (enterPressed)
+            if (TextMenuComponent.clicked)
             {
+                TextMenuComponent.clicked = false;
                 foreach( int level in selectLoadingLevelScene.savedlevels)
                 {
                     if (selectLoadingLevelScene.SelectedMenuIndex == i)
@@ -691,8 +692,9 @@ namespace Poseidon
         /// </summary>
         private void HandleStartSceneInput()
         {
-            if (enterPressed)
+            if (TextMenuComponent.clicked)
             {
+                TextMenuComponent.clicked = false;
                 audio.MenuSelect.Play();
 
                 switch (startScene.menuItems[startScene.SelectedMenuIndex])

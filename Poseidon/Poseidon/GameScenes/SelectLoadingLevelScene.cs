@@ -23,13 +23,15 @@ namespace Poseidon
         private SpriteFont font;
         protected TextMenuComponent menu;
         public List<int> savedlevels = new List<int>();
+        GraphicsDevice graphicsDevice;
 
         public SelectLoadingLevelScene(Game game, SpriteFont font,
-                            Texture2D background, Texture2D teamLogo)
+                            Texture2D background, Texture2D teamLogo, GraphicsDevice graphicDevice)
             : base(game)
         {
             this.teamLogo = teamLogo;
             this.font = font;
+            this.graphicsDevice = graphicDevice;
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
 
@@ -39,6 +41,7 @@ namespace Poseidon
 
             menu = new TextMenuComponent(game, font, font);
             Components.Add(menu);
+            cursor = new Cursor(game, spriteBatch);
         }
 
         /// <summary>
@@ -46,6 +49,7 @@ namespace Poseidon
         /// </summary>
         public override void Show()
         {
+            cursor.SetMenuCursorImage();
             menu.Position = new Vector2(Game.Window.ClientBounds.Width / 2
                                           , 50);
             menu.Visible = true;
@@ -105,6 +109,7 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
             base.Update(gameTime);
         }
 
@@ -123,6 +128,7 @@ namespace Poseidon
                 Vector2 textPosition = new Vector2(Game.Window.ClientBounds.Center.X - (font.MeasureString(text).X / 2), Game.Window.ClientBounds.Center.Y);
                 spriteBatch.DrawString(font, text, textPosition, Color.Black);
             }
+            cursor.Draw(gameTime);
             spriteBatch.End();
         }
 

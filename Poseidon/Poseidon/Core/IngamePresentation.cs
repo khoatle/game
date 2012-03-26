@@ -52,6 +52,9 @@ namespace Poseidon.Core
         public static Texture2D playJigsawButton;
         public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
 
+        //level winning/losing screen
+        public static Texture2D winningTexture, losingTexture;
+
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
@@ -107,6 +110,9 @@ namespace Poseidon.Core
             increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
             increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
+
+            winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWinNew");
+            losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOverNew");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");

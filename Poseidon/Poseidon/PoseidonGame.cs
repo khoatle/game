@@ -120,6 +120,9 @@ namespace Poseidon
 
         public static int currentShipWreckID;
 
+        //for displaying tips
+        public static LiveTipManager liveTipManager;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -131,7 +134,7 @@ namespace Poseidon
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0;
-            SoundEffect.MasterVolume = 0.5f;
+            SoundEffect.MasterVolume = 0f;
         }
 
         /// <summary>
@@ -183,6 +186,9 @@ namespace Poseidon
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
             radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
+
+            //load the tips
+            liveTipManager = new LiveTipManager();
 
             //For the Help scene
             helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");

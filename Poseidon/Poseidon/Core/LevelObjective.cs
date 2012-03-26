@@ -122,6 +122,7 @@ namespace Poseidon
         }
         public bool CheckLoseCondition()
         {
+            //if (HydroBot.currentEnvPoint <= 10000) return true;
             //Always lose when the environment is completely destroyed
             if (HydroBot.currentEnvPoint <= 0)   return true;
 

@@ -202,8 +202,10 @@ namespace Poseidon
             helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_skills_4");
             helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_otherKeys_5");
             nextHelpButton = Content.Load<Texture2D>("Image/ButtonTextures/nextHelpButton");
-            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice);
+            SpriteFont menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice, menuSmall);
             Components.Add(helpScene);
+
 
             //For Credit scene
             creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
@@ -698,51 +700,56 @@ namespace Poseidon
                 TextMenuComponent.clicked = false;
                 audio.MenuSelect.Play();
 
-                switch (startScene.menuItems[startScene.SelectedMenuIndex])
+                int selectedMenuIndex = startScene.SelectedMenuIndex;
+
+                if (selectedMenuIndex != -1)
                 {
-                    case "New Game":
-                        MediaPlayer.Stop();
-                        gamePlus = false;
-                        HydroBot.gamePlusLevel = 0;
-                        PlayGameScene.currentLevel = 0;
-                        PlayGameScene.currentGameState = GameState.PlayingCutScene;
-                        ShowScene(loadingScene);
-                        break;
-                    case "New Game Plus":
-                        MediaPlayer.Stop();
-                        gamePlus = true;
-                        PlayGameScene.currentLevel = 0;
-                        PlayGameScene.currentGameState = GameState.PlayingCutScene;
-                        ShowScene(loadingScene);
-                        break;
-                    case "Resume Game":
-                        MediaPlayer.Stop();
-                        ShowScene(playGameScene);
-                        break;
-                    case "Load Saved Level":
-                        MediaPlayer.Stop();
-                        ShowScene(selectLoadingLevelScene);
-                        break;
-                    case "Survival Mode":
-                        MediaPlayer.Stop();
-                        gamePlus = false;
-                        CreateSurvivalDependentScenes();
-                        SurvivalGameScene.score = 0;
-                        ShowScene(survivalGameScene);
-                        break;
-                    case "Config":
-                        break;
-                    case "Help":
-                        ShowScene(helpScene);
-                        break;
-                    case "Credits":
-                        ShowScene(creditScene);
-                        break;
-                    case "Quit":
-                        MediaPlayer.Stop();
-                        Exit();
-                        break;
-                        
+                    switch (startScene.menuItems[startScene.SelectedMenuIndex])
+                    {
+                        case "New Game":
+                            MediaPlayer.Stop();
+                            gamePlus = false;
+                            HydroBot.gamePlusLevel = 0;
+                            PlayGameScene.currentLevel = 0;
+                            PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                            ShowScene(loadingScene);
+                            break;
+                        case "New Game Plus":
+                            MediaPlayer.Stop();
+                            gamePlus = true;
+                            PlayGameScene.currentLevel = 0;
+                            PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                            ShowScene(loadingScene);
+                            break;
+                        case "Resume Game":
+                            MediaPlayer.Stop();
+                            ShowScene(playGameScene);
+                            break;
+                        case "Load Saved Level":
+                            MediaPlayer.Stop();
+                            ShowScene(selectLoadingLevelScene);
+                            break;
+                        case "Survival Mode":
+                            MediaPlayer.Stop();
+                            gamePlus = false;
+                            CreateSurvivalDependentScenes();
+                            SurvivalGameScene.score = 0;
+                            ShowScene(survivalGameScene);
+                            break;
+                        case "Config":
+                            break;
+                        case "Help":
+                            ShowScene(helpScene);
+                            break;
+                        case "Credits":
+                            ShowScene(creditScene);
+                            break;
+                        case "Quit":
+                            MediaPlayer.Stop();
+                            Exit();
+                            break;
+
+                    }
                 }
             }
         }

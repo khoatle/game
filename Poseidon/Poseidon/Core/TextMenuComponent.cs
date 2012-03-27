@@ -19,7 +19,7 @@ namespace Poseidon.Core
         // Fonts
         protected readonly SpriteFont regularFont, selectedFont;
         // Colors
-        protected Color regularColor = Color.Orange, selectedColor = Color.Red;
+        protected Color regularColor = Color.Khaki, selectedColor = Color.FloralWhite;
         // Menu Position
         protected Vector2 position = new Vector2();
         // Items

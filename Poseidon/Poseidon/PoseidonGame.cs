@@ -210,7 +210,7 @@ namespace Poseidon
 
 
             //For Credit scene
-            creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             creditForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/Credits");
             creditForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/Credits_Soundtracks");
             nextCreditButton = Content.Load<Texture2D>("Image/ButtonTextures/nextCreditButton");

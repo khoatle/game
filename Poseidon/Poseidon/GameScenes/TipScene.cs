@@ -49,7 +49,7 @@ namespace Poseidon
             //cursor = new Cursor(game, spriteBatch);
             //Components.Add(cursor);
 
-            tipFont = Content.Load<SpriteFont>("Fonts/tip");
+            tipFont = IngamePresentation.statisticFont;//Content.Load<SpriteFont>("Fonts/tip");
             tipBox = Content.Load<Texture2D>("Image/Miscellaneous/tipBox");
             
             this.game = game;

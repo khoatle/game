@@ -23,7 +23,7 @@ namespace Poseidon.Core
         // Menu Position
         protected Vector2 position = new Vector2();
         // Items
-        protected int selectedIndex = 0;
+        protected int selectedIndex = -1;
         private readonly List<string> menuItems;
         private List<Rectangle> rectMenuItems;
         // Size of menu in pixels
@@ -223,13 +223,16 @@ namespace Poseidon.Core
                     break;
                 }
             }
-            
-            if(prevselectedIndex != selectedIndex)
-                audio.MenuScroll.Play();
 
-            if(lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
-                clicked = true;
+            if (selectedIndex >= 0)
+            {
 
+                if (prevselectedIndex != selectedIndex)
+                    audio.MenuScroll.Play();
+
+                if (rectMenuItems[selectedIndex].Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
+                    clicked = true;
+            }
             base.Update(gameTime);
         }
 

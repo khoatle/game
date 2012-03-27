@@ -26,7 +26,9 @@ namespace Poseidon
         protected AudioLibrary audio;
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
-        public HelpScene(Game game, Texture2D textureBack, Texture2D textureFront1, Texture2D textureFront2, Texture2D textureFront3, Texture2D textureFront4, Texture2D textureFront5, Texture2D nextButton, SpriteBatch spriteBatch, GraphicsDevice GraphicDevice)
+        SpriteFont menuSmall;
+
+        public HelpScene(Game game, Texture2D textureBack, Texture2D textureFront1, Texture2D textureFront2, Texture2D textureFront3, Texture2D textureFront4, Texture2D textureFront5, Texture2D nextButton, SpriteBatch spriteBatch, GraphicsDevice GraphicDevice, SpriteFont font)
             : base(game)
         {
             Components.Add(new ImageComponent(game, textureBack,
@@ -54,6 +56,7 @@ namespace Poseidon
             int nextRectangleHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.125);
             nextRectangle = new Rectangle(textureFrontRectangle.Right - (nextRectangleWidth+30), textureFrontRectangle.Center.Y - nextRectangleHeight/2, nextRectangleWidth, nextRectangleHeight);
             sceneCount = 1;
+            menuSmall = font;
         }
 
         public override void Show()
@@ -109,6 +112,11 @@ namespace Poseidon
             }
             spriteBatch.Draw(textureFront, textureFrontRectangle, Color.White);
             spriteBatch.Draw(textureNextButton, nextRectangle, Color.White);
+
+            string nextText = "Press Enter/Esc to return";
+            Vector2 nextTextPosition = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, graphicsDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Black);
+
             cursor.Draw(gameTime);
             spriteBatch.End();
         }

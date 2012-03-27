@@ -169,6 +169,9 @@ namespace Poseidon
         //for drawing a game boundary
         GameBoundary gameBoundary;
 
+        protected bool levelObjHover = false;
+        protected bool tipHover = false;
+
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -530,7 +533,7 @@ namespace Poseidon
                             // play sound to denote building could not be added
                         }
                     }
-                    if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
                     {
                         foreach (Factory factory in factories)
                         {
@@ -556,6 +559,7 @@ namespace Poseidon
                         {
                             openFactoryConfigurationScene = false;
                             openResearchFacilityConfigScene = false;
+                            PoseidonGame.justCloseControlPanel = true;
                         }
                         else
                         {
@@ -567,7 +571,9 @@ namespace Poseidon
                         }
                     }
 
-                    bool mouseOnInteractiveIcons = false;
+                    //tipHover = mouseOnTipIcon(currentMouseState);
+                    //levelObjHover = mouseOnLevelObjectiveIcon(currentMouseState);
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, null,null, mouseOnInteractiveIcons);

@@ -214,46 +214,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain12.bmp">
-      <Name>terrain12</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain13.bmp">
-      <Name>terrain13</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain14.bmp">
-      <Name>terrain14</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain15.bmp">
-      <Name>terrain15</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain16.bmp">
-      <Name>terrain16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain17.bmp">
-      <Name>terrain17</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain18.bmp">
-      <Name>terrain18</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain19.bmp">
-      <Name>terrain19</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain3.bmp">
       <Name>terrain3</Name>
       <Importer>TextureImporter</Importer>

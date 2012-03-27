@@ -123,6 +123,8 @@ namespace Poseidon
         //for displaying tips
         public static LiveTipManager liveTipManager;
 
+        public static bool justCloseControlPanel = false;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -130,10 +132,10 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
-            MediaPlayer.Volume = 0;
+            MediaPlayer.Volume = 0.5f;
             SoundEffect.MasterVolume = 0.5f;
         }
 
@@ -549,14 +551,13 @@ namespace Poseidon
                 ShowScene(playGameScene);
                 doubleClicked = false;
             }
-            //do not let the player to open the attribute board in shipwreck now
-            //because it will reset the shipwreck
-            if (AttributePressed || AttributeButtonPressed)
-            {
-                prevScene = shipWreckScene;
-                ShowScene(AttributeScene);
-                AttributeButtonPressed = false;
-            }
+ 
+            //if (AttributeButtonPressed)// || AttributePressed)
+            //{
+            //    prevScene = shipWreckScene;
+            //    ShowScene(AttributeScene);
+            //    AttributeButtonPressed = false;
+            //}
         }
         /// <summary>
         /// Handle update for the main game
@@ -582,7 +583,7 @@ namespace Poseidon
                     ShowScene(startScene);
                 }
             }
-            if (AttributePressed || AttributeButtonPressed)
+            if (AttributeButtonPressed)// || AttributePressed)
             {
                 prevScene = playGameScene;
                 ShowScene(AttributeScene);
@@ -681,7 +682,7 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (AttributePressed || AttributeButtonPressed)
+            if (AttributeButtonPressed)// || AttributePressed)
             {
                 prevScene = survivalGameScene;
                 ShowScene(AttributeScene);
@@ -950,7 +951,7 @@ namespace Poseidon
         protected override void Draw(GameTime gameTime)
         {
             using (new TimeRulerHelper("Draw", Color.Blue))
-           {
+            {
 
                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                if (gameState == GameState.PlayingPresentScene)
@@ -970,11 +971,11 @@ namespace Poseidon
                //Draw loading scene to mask long loading time
                if (PlayGameScene.currentGameState == GameState.ToNextLevel) loadingScene.Draw(gameTime);
                base.Draw(gameTime);
-           }
-            spriteBatch.Begin();
-            spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
-                + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
-            spriteBatch.End();
+            }
+            //spriteBatch.Begin();
+            //spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
+            //    + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
+            //spriteBatch.End();
         }
 
     }

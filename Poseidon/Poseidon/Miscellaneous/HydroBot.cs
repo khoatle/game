@@ -713,44 +713,47 @@ namespace Poseidon
             if (gameMode == GameMode.ShipWreck) floatHeight = GameConstants.ShipWreckFloatHeight;
             else floatHeight = GameConstants.MainGameFloatHeight;
             bool mouseOnLivingObject = CursorManager.MouseOnEnemy(cursor, gameCamera, enemies, enemiesAmount) || CursorManager.MouseOnFish(cursor, gameCamera, fish, fishAmount);
+
             //if the user holds down Shift button
             //let him change current bullet or skill type w/o moving
             if (currentKeyboardState.IsKeyDown(Keys.RightShift) || currentKeyboardState.IsKeyDown(Keys.LeftShift))
             {
-                // changing bullet type
-                if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
-                        && currentKeyboardState.IsKeyUp(Keys.L)) || (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)))
-                {
-                    //at level 0, player is only able to heal
-                    if (!(gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0))
-                    {
-                        HydroBot.bulletType++;
-                        if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;
-                        PoseidonGame.audio.ChangeBullet.Play();
-                    }
+                pointIntersect = Vector3.Zero;
+                reachDestination = true;
+            //    // changing bullet type
+            //    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.L)
+            //            && currentKeyboardState.IsKeyUp(Keys.L)) || (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)))
+            //    {
+            //        //at level 0, player is only able to heal
+            //        if (!(gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0))
+            //        {
+            //            HydroBot.bulletType++;
+            //            if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;
+            //            PoseidonGame.audio.ChangeBullet.Play();
+            //        }
 
-                }
-                // changing active skill
-                //if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
-                //        && currentKeyboardState.IsKeyUp(Keys.K)) || (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)))
-                //{
-                //    if (HydroBot.activeSkillID != -1)
-                //    {
-                //        HydroBot.activeSkillID++;
-                //        if (HydroBot.activeSkillID == GameConstants.numberOfSkills) HydroBot.activeSkillID = 0;
-                //        while (HydroBot.skills[HydroBot.activeSkillID] == false)
-                //        {
-                //            HydroBot.activeSkillID++;
-                //            if (HydroBot.activeSkillID == GameConstants.numberOfSkills) HydroBot.activeSkillID = 0;
-                //        }
-                //    }
-                //}
-                //if the user wants to move when changing skill or bullet, let him
-                //because this is better for fast action game
-                if (currentMouseState.LeftButton == ButtonState.Pressed)
-                {
-                    pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
-                }
+            //    }
+            //    // changing active skill
+            //    //if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && ((lastKeyboardState.IsKeyDown(Keys.K)
+            //    //        && currentKeyboardState.IsKeyUp(Keys.K)) || (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)))
+            //    //{
+            //    //    if (HydroBot.activeSkillID != -1)
+            //    //    {
+            //    //        HydroBot.activeSkillID++;
+            //    //        if (HydroBot.activeSkillID == GameConstants.numberOfSkills) HydroBot.activeSkillID = 0;
+            //    //        while (HydroBot.skills[HydroBot.activeSkillID] == false)
+            //    //        {
+            //    //            HydroBot.activeSkillID++;
+            //    //            if (HydroBot.activeSkillID == GameConstants.numberOfSkills) HydroBot.activeSkillID = 0;
+            //    //        }
+            //    //    }
+            //    //}
+            //    //if the user wants to move when changing skill or bullet, let him
+            //    //because this is better for fast action game
+            //    if (currentMouseState.LeftButton == ButtonState.Pressed)
+            //    {
+            //        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
+            //    }
             }
             //if the user click on right mouse button
             //cast the current selected skill
@@ -882,6 +885,12 @@ namespace Poseidon
             //let the user change active skill/bullet too when he presses on number
             //this is better for fast action
             InputManager.ChangeSkillBulletWithKeyBoard(lastKeyboardState, currentKeyboardState, gameMode);
+            if (PoseidonGame.justCloseControlPanel)
+            {
+                reachDestination = true;
+                pointIntersect = Vector3.Zero;
+                PoseidonGame.justCloseControlPanel = false;
+            }
 
             if (HydroBot.supersonicMode == true)
             {       
@@ -1140,6 +1149,25 @@ namespace Poseidon
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo, HeightMapInfo heightMapInfo)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
+
+            
+            if (gameMode == GameMode.MainGame)
+            {
+                //red sea level has the corrosive effect
+                if (PlayGameScene.currentLevel == 8)
+                {
+                    if (!invincibleMode)
+                    {
+                        currentHitPoint -= 0.02f;
+                    }
+                }
+                //disable goodwill bar in level 1
+                if (PlayGameScene.currentLevel == 0)
+                {
+                    goodWillBarActivated = false;
+                }
+                else goodWillBarActivated = true;
+            }
 
             if (isPoissoned == true) {
                 if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {

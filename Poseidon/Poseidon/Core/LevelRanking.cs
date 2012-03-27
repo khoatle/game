@@ -154,7 +154,7 @@ namespace Poseidon
 
             //trash collect rank
             int trashRankPoint = 0;
-            int trashNormalThreshold = 15;
+            int trashNormalThreshold = 10;
             if (currentLevel == 0) trashNormalThreshold *= 2;
             if (numTrashCollected <= 0.5 * trashNormalThreshold)
             {

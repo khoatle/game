@@ -604,6 +604,7 @@ namespace Poseidon
         {
             Vector3 floatPosition = factoryPosition;
             float radius = 5f;
+            //cuz this only appears in main game or survival mode
             floatPosition.Y = GameConstants.MainGameFloatHeight;
             for(int i=0; i<20; i++) // try 20 times
             {

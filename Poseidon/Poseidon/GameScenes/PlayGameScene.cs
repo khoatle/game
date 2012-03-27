@@ -208,6 +208,8 @@ namespace Poseidon
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
 
+        
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -840,7 +842,7 @@ namespace Poseidon
                             factoryButtonPanel.removeAnchor();
                         }
                     }
-                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
                     {
                         foreach (Factory factory in factories)
                         {
@@ -866,6 +868,7 @@ namespace Poseidon
                         {
                             openFactoryConfigurationScene = false;
                             openResearchFacilityConfigScene = false;
+                            PoseidonGame.justCloseControlPanel = true;
                         }
                         else
                         {
@@ -1201,6 +1204,10 @@ namespace Poseidon
             {
                 // Play some sound hinting no sufficient resource
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Not enough\nresources";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
@@ -1224,16 +1231,24 @@ namespace Poseidon
             {
                 // Play some sound hinting position selected is outside game arena
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Can not\nbuild here";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
             //Verify that current location is available for adding the building
-            
-            //int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, 0, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
+
+            int heightValue = GameConstants.MainGameFloatHeight;//(int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Can not\nbuild here";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
@@ -1243,6 +1258,10 @@ namespace Poseidon
                     if (researchFacility != null)
                     {
                         // do not allow addition of more than one research facility
+                        Point point = new Point();
+                        String point_string = "Can only build\n1 research center";
+                        point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                        PlayGameScene.points.Add(point);
                         audio.MenuScroll.Play();
                         status = false;
                     }

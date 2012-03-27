@@ -89,13 +89,13 @@ namespace GeneratedGeometryPipeline
             else if (terrainName == "terrain4.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
             else if (terrainName == "terrain5.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";//polar sea
+                terrainTextureFilename = "Image/TerrainTextures/arctic2.jpg";//polar sea
             else if (terrainName == "terrain6.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";//dead sea
+                terrainTextureFilename = "Image/TerrainTextures/deadsea.jpg";//dead sea
             else if (terrainName == "terrain7.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";//kelp forest sea
+                terrainTextureFilename = "Image/TerrainTextures/kelp.jpg";//kelp forest sea
             else if (terrainName == "terrain8.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";//red sea
+                terrainTextureFilename = "Image/TerrainTextures/redsea.jpg";//red sea
             else if (terrainName == "terrain9.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
             else if (terrainName == "terrain10.bmp")

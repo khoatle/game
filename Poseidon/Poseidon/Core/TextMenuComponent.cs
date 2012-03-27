@@ -222,6 +222,7 @@ namespace Poseidon.Core
                     selectedIndex = i;
                     break;
                 }
+                selectedIndex = -1;
             }
 
             if (selectedIndex >= 0)

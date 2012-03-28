@@ -177,7 +177,7 @@ namespace Poseidon
                 return;
             }
 
-            double processingTime = 8; //2 days
+            double processingTime = 12; //3 days
             int fossilType = random.Next(100);
             string point_string = "";
             bool boneFound = false;

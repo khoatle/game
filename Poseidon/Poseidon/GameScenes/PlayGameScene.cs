@@ -94,6 +94,10 @@ namespace Poseidon
         protected bool tipHover = false;
         Rectangle tipIconRectangle;
 
+        protected Texture2D toNextLevelTexture;
+        protected bool toNextLevelHover = false;
+        Rectangle toNextLevelIconRectangle;
+
         // Current game level
         public static int currentLevel;
 
@@ -293,7 +297,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 10, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -537,6 +541,10 @@ namespace Poseidon
                 serializer.SerializeObjects(filenamePrefix + currentLevel.ToString(), objectsToSerialize);
 
                 hydroBot.SetLevelStartValues();
+
+                //return all strange rocks that are not yet processed to bot
+                if (researchFacility != null)
+                    HydroBot.numStrangeObjCollected += researchFacility.listTimeRockProcessing.Count;
             }
 
             hydroBot.Reset();
@@ -820,9 +828,9 @@ namespace Poseidon
                 {
                     ResetGame(gameTime, aspectRatio);
                 }
-                if ((currentGameState == GameState.Running))
+                if (currentGameState == GameState.Running || currentGameState == GameState.WonButStaying)
                 {
-                    MouseState currentMouseState;
+                    MouseState currentMouseState = new MouseState();
                     currentMouseState = Mouse.GetState();
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
@@ -912,7 +920,8 @@ namespace Poseidon
 
                     tipHover = mouseOnTipIcon(currentMouseState);
                     levelObjHover =  mouseOnLevelObjectiveIcon(currentMouseState);
-                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || toNextLevelHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() 
+                        || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
@@ -1121,16 +1130,31 @@ namespace Poseidon
                     roundTimer -= gameTime.ElapsedGameTime;
                     PoseidonGame.playTime += gameTime.ElapsedGameTime;
 
-                    if (CheckWinCondition())
+                    if (!(currentGameState == GameState.WonButStaying))
                     {
-                        currentGameState = GameState.Won;
-                        audio.gameWon.Play();
+                        if (CheckWinCondition())
+                        {
+                            if (!GameConstants.haveToStayTillEnd[currentLevel])
+                                currentGameState = GameState.WonButStaying;
+                            else currentGameState = GameState.Won;
+                            audio.gameWon.Play();
+                        }
+                        if (CheckLoseCondition())
+                        {
+                            currentGameState = GameState.Lost;
+                            audio.gameOver.Play();
+                        }
                     }
-                    if (CheckLoseCondition())
+                    else
                     {
-                        currentGameState = GameState.Lost;
-                        audio.gameOver.Play();
+                        //time = 0, move to next level now
+                        if (HydroBot.currentHitPoint <= 0) currentGameState = GameState.Lost;
+                        if (roundTimer <= TimeSpan.Zero) currentGameState = GameState.Won;
+                        toNextLevelHover = mouseOnNextLevelIcon(lastMouseState);
+                        if (toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
+                            currentGameState = GameState.Won;
                     }
+                    
                    
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
@@ -1147,6 +1171,7 @@ namespace Poseidon
                 }
 
                 prevGameState = currentGameState;
+
                 if (currentGameState == GameState.Lost)
                 {
                     // Reset the world for a new game
@@ -1162,6 +1187,7 @@ namespace Poseidon
                         ResetGame(gameTime, aspectRatio);
                     }
                 }
+
                 if (currentGameState == GameState.Won)
                 {
                     if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
@@ -1388,6 +1414,10 @@ namespace Poseidon
                     DrawCutScene();
                     break;
                 case GameState.Running:
+                    RestoreGraphicConfig();
+                    DrawGameplayScreen(gameTime);
+                    break;
+                case GameState.WonButStaying:
                     RestoreGraphicConfig();
                     DrawGameplayScreen(gameTime);
                     break;
@@ -1677,6 +1707,7 @@ namespace Poseidon
 
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
+            if (currentGameState == GameState.WonButStaying) DrawToNextLevelButton();
             if (PoseidonGame.gamePlus)
                 DrawGamePlusLevel();
             else
@@ -1891,7 +1922,7 @@ namespace Poseidon
 
         public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
         {
-            if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+            if (levelObjectiveIconRectangle.Contains(lmouseState.X, lmouseState.Y))
                 return true;
             else
                 return false;
@@ -1899,7 +1930,15 @@ namespace Poseidon
 
         public bool mouseOnTipIcon(MouseState lmouseState)
         {
-            if ( tipIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+            if (tipIconRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
+        }
+
+        public bool mouseOnNextLevelIcon(MouseState lmouseState)
+        {
+            if (toNextLevelIconRectangle.Contains(lmouseState.X, lmouseState.Y))
                 return true;
             else
                 return false;
@@ -2283,6 +2322,19 @@ namespace Poseidon
                     alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
+        }
+        public void DrawToNextLevelButton()
+        {
+            if (toNextLevelHover) toNextLevelTexture = IngamePresentation.toNextLevelHoverTexture;
+            else toNextLevelTexture = IngamePresentation.toNextLevelNormalTexture;
+            int xOffsetText, yOffsetText;
+
+            xOffsetText = levelObjectiveIconRectangle.X - toNextLevelTexture.Width - 20;
+            yOffsetText = levelObjectiveIconRectangle.Center.Y - toNextLevelTexture.Height/2;
+
+            toNextLevelIconRectangle = new Rectangle(xOffsetText, yOffsetText, toNextLevelTexture.Width, toNextLevelTexture.Height);
+
+            spriteBatch.Draw(toNextLevelTexture, toNextLevelIconRectangle, Color.White);
         }
     }
 }

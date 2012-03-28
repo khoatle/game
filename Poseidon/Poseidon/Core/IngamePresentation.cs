@@ -63,6 +63,9 @@ namespace Poseidon.Core
         public static float fadeFactorReduceStep = 0.01f;
         public static float fadeFactor = fadeFactorBeginValue;
 
+        //to next level button
+        public static Texture2D toNextLevelNormalTexture, toNextLevelHoverTexture;
+
         public static void Initiate2DGraphics(ContentManager Content)
         {
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
@@ -132,6 +135,9 @@ namespace Poseidon.Core
             bubbles = new List<Bubble>();
 
             statisticFont = Content.Load<SpriteFont>("Fonts/statisticsfont");
+
+            toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
+            toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");
         }
         
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)

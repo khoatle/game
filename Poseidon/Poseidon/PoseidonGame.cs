@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };

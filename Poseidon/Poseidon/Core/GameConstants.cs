@@ -35,8 +35,8 @@ namespace Poseidon {
         //game scenes constants
         public const int MainGameMinRangeX = 100;
         public const int MainGameMinRangeZ = 100;
-        public const int TrashMinRangeX = 10;
-        public const int TrashMinRangeZ = 10;
+        public const int TrashMinRangeX = 0;
+        public const int TrashMinRangeZ = 0;
         public const int ShipWreckMinRangeX = 20;
         public const int ShipWreckMinRangeZ = 20;
         public const int MainGameMaxRangeX = 500;
@@ -111,7 +111,7 @@ namespace Poseidon {
 
         //general
         //number of trash, enemy and fish per level for main game
-        public static int maxShipPerLevel = 3;
+        public static int maxShipPerLevel = 9;
         public static int[] NumberTrash =           {  50,  50,  50,   50,  50,  50,  50,  50,  50,   50,   50,   50  };
         public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
@@ -141,7 +141,7 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
+        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(360), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
@@ -292,5 +292,7 @@ namespace Poseidon {
         public const float DolphinStartingHealth = 500;
         public const float SeaCowStartingHealth = 1000;
         public const float TurtleStartingHealth = 2000;
+
+        public const int MaxNumTries = 200;
     }
 }

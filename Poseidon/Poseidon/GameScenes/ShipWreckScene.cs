@@ -749,23 +749,23 @@ namespace Poseidon
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                 int refNum = enemiesAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera, particleManager.explosionParticles);
                 enemiesAmount[currentShipWreckID] = refNum;
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fishes[currentShipWreckID], fishAmount[currentShipWreckID], frustum, GameMode.ShipWreck);
                 refNum = fishAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera, particleManager.explosionParticles);
                 fishAmount[currentShipWreckID] = refNum;
                 Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], particleManager.explosionParticles, gameCamera, null, fishAmount[currentShipWreckID]);
                 refNum = enemiesAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera, particleManager.explosionParticles);
                 enemiesAmount[currentShipWreckID] = refNum;
                 refNum = enemiesAmount[currentShipWreckID];
-                Collision.deleteSmallerThanZero(enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor);
+                Collision.deleteSmallerThanZero(enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor, particleManager.explosionParticles);
                 enemiesAmount[currentShipWreckID] = refNum;
                 refNum = fishAmount[currentShipWreckID];
-                Collision.deleteSmallerThanZero(fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor);
+                Collision.deleteSmallerThanZero(fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor, particleManager.explosionParticles);
                 fishAmount[currentShipWreckID] = refNum;
 
                 for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)

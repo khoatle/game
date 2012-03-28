@@ -599,6 +599,11 @@ namespace Poseidon.Core
                             line += "STRANGE ROCK";
                             comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.";
                         }
+                        else if (powerPackPointedAt.powerType == PowerPackType.GoldenKey)
+                        {
+                            line += "GOLDEN KEY";
+                            comment = "Can open any treasure chest.";
+                        }
                         spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Yellow);
                         comment = wrapLine(comment, commentMaxLength, statsFont);
                         spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(comment).X / 2 , statsFont.MeasureString(line).Y + 2), Color.Red);

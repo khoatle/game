@@ -132,7 +132,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0.5f;
@@ -418,6 +418,7 @@ namespace Poseidon
                             lvl = level;
                         }
                         PlayGameScene.currentLevel = lvl;
+                        MediaPlayer.Stop();
                         ShowScene(loadingScene);
                     }
                     i++;
@@ -648,14 +649,10 @@ namespace Poseidon
 
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
-                if (!playGameScene.shipWrecks[curWreck].accessed
-                    && CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
+                if (CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
-                    // no re-explore a ship wreck
-                    // no, let the user re-explore now because he would miss a relic -> lose
-                    //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
                     shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
@@ -727,7 +724,7 @@ namespace Poseidon
                             ShowScene(playGameScene);
                             break;
                         case "Load Saved Level":
-                            MediaPlayer.Stop();
+                            //MediaPlayer.Stop();
                             ShowScene(selectLoadingLevelScene);
                             break;
                         case "Survival Mode":

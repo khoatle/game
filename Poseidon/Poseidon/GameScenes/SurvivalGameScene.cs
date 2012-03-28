@@ -736,16 +736,16 @@ namespace Poseidon
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.SurvivalMode);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.SurvivalMode, enemies, enemiesAmount, particleManager.explosionParticles, gameCamera, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, cursor);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.SurvivalMode, cursor);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, cursor, particleManager.explosionLargeParticles);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.SurvivalMode, cursor, particleManager.explosionLargeParticles);
                     
                     //revive the dead enemies to maintain their number
                     AddingObjects.ReviveDeadEnemy(enemies, enemiesAmount, fish, fishAmount, hydroBot);
@@ -1320,7 +1320,9 @@ namespace Poseidon
             {
                 if (enemyBullet[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    if (enemyBullet[i] is Torpedo)
+                        enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    else enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
 

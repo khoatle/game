@@ -293,7 +293,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
+                int[] numSubmarine = { 0, 10, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -644,7 +644,7 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight);
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, staticObjects, random, terrain.heightMapInfo,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+                0, GameConstants.MainGameMaxRangeX, 0, GameConstants.MainGameMaxRangeZ);
             
             //Initialize trash
             //int random_model;
@@ -1084,16 +1084,16 @@ namespace Poseidon
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, particleManager.explosionParticles, gameCamera, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor, particleManager.explosionLargeParticles);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor, particleManager.explosionLargeParticles);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -2270,7 +2270,9 @@ namespace Poseidon
             {
                 if (enemyBullet[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    if (enemyBullet[i] is Torpedo)
+                        enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    else enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
 

@@ -109,6 +109,10 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Update(GameTime gameTime)
         {
+            if (MediaPlayer.State.Equals(MediaState.Stopped))
+            {
+                MediaPlayer.Play(PoseidonGame.audio.mainMenuMusic);
+            }
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
             base.Update(gameTime);
         }

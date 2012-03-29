@@ -97,8 +97,9 @@ namespace Poseidon.FishSchool
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="cat"></param>
-        public void Update(GameTime gameTime, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
+        public void Update(GameTime gameTime, HydroBot tank, BoundingFrustum frustum, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
         {
+            BoundingSphere boundingSphere;
             foreach (Fish thisFish in flock)
             {
                 thisFish.ResetThink();
@@ -112,17 +113,21 @@ namespace Poseidon.FishSchool
                     }
                 }
 
+                boundingSphere = new BoundingSphere(thisFish.Location, 1.0f);
                 //Look for the main character
                 thisFish.ReactToMainCharacter(tank, ref flockParams);
-                //React to enemies and other big fishes
-                for (int i = 0; i < enemyAmount; i++)
-                {
-                    thisFish.ReactToSwimmingObject(enemies[i], ref flockParams);
-                }
-                for (int i = 0; i < fishAmount; i++)
-                {
-                    thisFish.ReactToSwimmingObject(fishes[i], ref flockParams);
-                }
+
+                //if (frustum.Intersects(boundingSphere)) {
+                    //React to enemies and other big fishes
+                    for (int i = 0; i < enemyAmount; i++)
+                    {
+                        thisFish.ReactToSwimmingObject(enemies[i], ref flockParams);
+                    }
+                    for (int i = 0; i < fishAmount; i++)
+                    {
+                        thisFish.ReactToSwimmingObject(fishes[i], ref flockParams);
+                    }
+                //}
                 thisFish.Update(gameTime, ref flockParams);
             }
         }
@@ -132,13 +137,13 @@ namespace Poseidon.FishSchool
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="gameTime"></param>
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, BoundingFrustum frustum)
         {
-            //BoundingSphere boundingSphere;
+            BoundingSphere boundingSphere;
             foreach (Fish theFish in flock)
             {
-                //boundingSphere = new BoundingSphere(theBird.Location, 1.0f);
-                //if (PlayGameScene.frustum.Intersects(boundingSphere))
+                boundingSphere = new BoundingSphere(theFish.Location, 1.0f);
+                if (frustum.Intersects(boundingSphere))
                     theFish.Draw(spriteBatch, gameTime);
             }
         }

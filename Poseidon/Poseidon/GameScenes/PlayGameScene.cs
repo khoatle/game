@@ -276,7 +276,7 @@ namespace Poseidon
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
-                int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
+                int[] numFish = { 0, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
                 int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
                 GameConstants.NumberMutantShark = numMutantShark;
@@ -286,9 +286,9 @@ namespace Poseidon
                 GameConstants.NumberSubmarine = numSubmarine;
             } 
             else {
-                int[] numShootingEnemies = { 70, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
+                int[] numShootingEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
+                int[] numCombatEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
@@ -1192,9 +1192,9 @@ namespace Poseidon
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
                     //update the school of fish
-                    schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
-                    schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
-                    schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish1.Update(gameTime, frustum, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish2.Update(gameTime, frustum, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish3.Update(gameTime, frustum, hydroBot, enemies, enemiesAmount, fish, fishAmount);
 
                     //update graphic effects
                     graphicEffect.UpdateInput(gameTime);
@@ -1654,9 +1654,9 @@ namespace Poseidon
 
             //draw schools of fish
             spriteBatch.Begin();
-            schoolOfFish1.Draw(gameTime, spriteBatch);
-            schoolOfFish2.Draw(gameTime, spriteBatch);
-            schoolOfFish3.Draw(gameTime, spriteBatch);
+            schoolOfFish1.Draw(gameTime, spriteBatch, frustum);
+            schoolOfFish2.Draw(gameTime, spriteBatch, frustum);
+            schoolOfFish3.Draw(gameTime, spriteBatch, frustum);
             spriteBatch.End();
 
             //draw particle effects

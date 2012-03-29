@@ -394,19 +394,17 @@ namespace Poseidon
                 else turnAmount = -20;
             }
 
-            Matrix orientationMatrix;
-            // Vector3 speed;
-            Vector3 movement = Vector3.Zero;
-
-            movement.Z = 1;
             float prevForwardDir = ForwardDirection;
             Vector3 prevFuturePosition = futurePosition;
             // try upto 10 times to change direction is there is collision
             for (int i = 0; i < 4; i++)
             {
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
-                orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
-                headingDirection = Vector3.Transform(movement, orientationMatrix);
+                Vector3 headingDirection = Vector3.Zero;
+                headingDirection.X = (float)Math.Sin(ForwardDirection);
+                headingDirection.Z = (float)Math.Cos(ForwardDirection);
+                headingDirection.Normalize();
+
                 headingDirection *= GameConstants.EnemySpeed * speedFactor;
                 futurePosition = Position + headingDirection;
 

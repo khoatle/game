@@ -84,22 +84,22 @@ namespace Poseidon.FishSchool
             maxValueZ = maxZ;
         }
 
-        public void Update(GameTime gameTime, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
+        public void Update(GameTime gameTime, BoundingFrustum frustum, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
         {
             if (flock != null)
             {
-                flock.Update(gameTime, tank, enemies, enemyAmount, fishes, fishAmount);//, cat);
+                flock.Update(gameTime, tank, frustum, enemies, enemyAmount, fishes, fishAmount);//, cat);
             }
             else
             {
                 SpawnFlock(gameMaxX, gameMaxZ, minValueX, maxValueX, minValueZ, maxValueZ);
             }
         }
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, BoundingFrustum frustum)
         {
             if (flock != null)
             {
-                flock.Draw(spriteBatch, gameTime);
+                flock.Draw(spriteBatch, gameTime, frustum);
             }
         }
         /// <summary>

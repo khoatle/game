@@ -30,7 +30,7 @@ namespace Poseidon.Core
         public static Texture2D buttonNormalTexture, buttonHoverTexture, buttonPressedTexture;
         static Texture2D HealthBar;
 
-        static SpriteFont statsFont, fishTalkFont;
+        public static SpriteFont statsFont, statisticFont, fishTalkFont;
 
         public static List<Bubble> bubbles;
         public static double lastBubbleCreated = 0;
@@ -43,6 +43,28 @@ namespace Poseidon.Core
         public static Texture2D factoryBackground;
         public static Texture2D factoryProduceButtonNormalTexture, factoryProduceButtonHoverTexture, factoryProduceButtonPressedTexture;
         public static Texture2D dummyTexture;
+
+        // Texture and font for property window of a research facility
+        public static SpriteFont facilityFont;
+        public static SpriteFont facilityFont2;
+        public static Texture2D facilityBackground;
+        public static Texture2D facilityUpgradeButton;
+        public static Texture2D playJigsawButton;
+        public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
+
+        //level winning/losing screen
+        public static Texture2D winningTexture, losingTexture;
+
+        //for displaying tip on screen
+        public static int currentTipID = 0;
+        public static double lastTipChange = 0;
+        public static int lastCurrentLevel = 0;
+        public static float fadeFactorBeginValue = 4.0f;
+        public static float fadeFactorReduceStep = 0.01f;
+        public static float fadeFactor = fadeFactorBeginValue;
+
+        //to next level button
+        public static Texture2D toNextLevelNormalTexture, toNextLevelHoverTexture;
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
@@ -79,7 +101,7 @@ namespace Poseidon.Core
             buttonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
             buttonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
 
-            // Load Textures and fonts for factory property dialog
+            // Load Textures and fonts for factory control panel
             factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
             factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel");
             factoryProduceButtonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonLargeFrame"); //("Image/TrashManagement/ChangeFactoryProduceBox");
@@ -87,6 +109,20 @@ namespace Poseidon.Core
             factoryProduceButtonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
             dummyTexture = new Texture2D(PoseidonGame.graphics.GraphicsDevice, 2, 2); // create a dummy 2x2 texture
             dummyTexture.SetData(new int[4]);
+
+
+            // Load Textures and fonts for research facility property dialog
+            facilityFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");
+            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
+            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
+            increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
+            increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
+            increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
+
+            winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWinNew");
+            losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOverNew");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
@@ -97,7 +133,43 @@ namespace Poseidon.Core
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             bubbles = new List<Bubble>();
+
+            statisticFont = Content.Load<SpriteFont>("Fonts/statisticsfont");
+
+            toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
+            toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");
         }
+        
+        public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
+        {
+            Rectangle rectSafeArea;
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            float xOffsetText, yOffsetText;
+            xOffsetText = rectSafeArea.X + 10;
+            yOffsetText = rectSafeArea.Y + 50;
+
+            if (lastCurrentLevel != PlayGameScene.currentLevel)
+            {
+                currentTipID = 0;
+                lastCurrentLevel = PlayGameScene.currentLevel;
+                lastTipChange = PoseidonGame.playTime.TotalSeconds;
+                fadeFactor = fadeFactorBeginValue;
+            }
+            string tipStr = "Tip: " + PoseidonGame.liveTipManager.allTips[PlayGameScene.currentLevel][currentTipID].tipItemStr;
+            tipStr = wrapLine(tipStr, rectSafeArea.Width / 4, statsFont);
+            spriteBatch.DrawString(statsFont, tipStr, new Vector2(xOffsetText, yOffsetText), Color.White * fadeFactor);
+            fadeFactor -= fadeFactorReduceStep;
+
+            if (PoseidonGame.playTime.TotalSeconds - lastTipChange >= 15)
+            {
+                currentTipID++;
+                if (currentTipID == PoseidonGame.liveTipManager.allTips[PlayGameScene.currentLevel].Count) currentTipID = 0;
+                lastTipChange = PoseidonGame.playTime.TotalSeconds;
+                fadeFactor = fadeFactorBeginValue;
+                PoseidonGame.audio.PowerGet.Play();
+            }
+        }
+
         public static void DrawActiveSkill(GraphicsDevice GraphicDevice, Texture2D[] skillTextures, SpriteBatch spriteBatch)
         {
             int xOffsetText, yOffsetText;
@@ -532,6 +604,11 @@ namespace Poseidon.Core
                         {
                             line += "STRANGE ROCK";
                             comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.";
+                        }
+                        else if (powerPackPointedAt.powerType == PowerPackType.GoldenKey)
+                        {
+                            line += "GOLDEN KEY";
+                            comment = "Can open any treasure chest.";
                         }
                         spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Yellow);
                         comment = wrapLine(comment, commentMaxLength, statsFont);

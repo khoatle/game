@@ -35,8 +35,8 @@ namespace Poseidon {
         //game scenes constants
         public const int MainGameMinRangeX = 100;
         public const int MainGameMinRangeZ = 100;
-        public const int TrashMinRangeX = 10;
-        public const int TrashMinRangeZ = 10;
+        public const int TrashMinRangeX = 0;
+        public const int TrashMinRangeZ = 0;
         public const int ShipWreckMinRangeX = 20;
         public const int ShipWreckMinRangeZ = 20;
         public const int MainGameMaxRangeX = 500;
@@ -61,7 +61,7 @@ namespace Poseidon {
 
         //Trash
         public const int numTrashForUpgrade = 25;
-        public const int numDaysForUpgrade = 15;
+        public const int numDaysForUpgrade = 3;//15;
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
         public const int maxTrashCarryingCapacity = 15;
@@ -127,6 +127,8 @@ namespace Poseidon {
         public static int[] NumberSubmarine = new int[maxLevel];
         public static int NumEnemiesInSubmarine = 20;
         public static double[] LevelObjective = new double[maxLevel];
+        //does the player have to play till time = 0?
+        public static bool[] haveToStayTillEnd = { true, true, false, false, true, false, false, false, false, true, false, false };
 
         //number of enemy and fish for ship wreck
         public static int[] ShipNumberGhostPirate = { 0, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
@@ -141,7 +143,7 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360), 
+        public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
                                                        TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
@@ -263,9 +265,9 @@ namespace Poseidon {
 
         public const int NumGoodWillBarIcons = 13;
         public const int MaxGoodWillPoint = 1000;
-        public const int GoodWillPointGainForPlanting = 250;
-        public const int GoodWillPointGainForCleaning = 250;
-        public const int GoodWillPointGainForHealing = 150;
+        public const int GoodWillPointGainForPlanting = 25;
+        public const int GoodWillPointGainForCleaning = 50;
+        public const int GoodWillPointGainForHealing = 25;
 
         //const for particle systems
         public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;
@@ -292,5 +294,7 @@ namespace Poseidon {
         public const float DolphinStartingHealth = 500;
         public const float SeaCowStartingHealth = 1000;
         public const float TurtleStartingHealth = 2000;
+
+        public const int MaxNumTries = 200;
     }
 }

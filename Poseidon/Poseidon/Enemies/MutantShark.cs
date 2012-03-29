@@ -230,6 +230,7 @@ namespace Poseidon
                                 PlayGameScene.points.Add(point);
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.points.Add(point);
+                            PlayGameScene.healthLost += damage;
                         }
                         if (HydroBot.autoHipnotizeMode)
                         {

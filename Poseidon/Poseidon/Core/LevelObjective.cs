@@ -38,7 +38,7 @@ namespace Poseidon
             else if (currentLevel == 2)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[3] == true)
+                if (HydroBot.skills[3] == true)
                 {
                     return true;
                 }
@@ -63,7 +63,7 @@ namespace Poseidon
             else if (currentLevel == 5)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[0] == true)
+                if (HydroBot.skills[0] == true)
                 {
                     return true;
                 }
@@ -71,7 +71,7 @@ namespace Poseidon
             else if (currentLevel == 6)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[1] == true)
+                if (HydroBot.skills[1] == true)
                 {
                     return true;
                 }
@@ -79,7 +79,7 @@ namespace Poseidon
             else if (currentLevel == 7)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[2] == true)
+                if (HydroBot.skills[2] == true)
                 {
                     return true;
                 }
@@ -87,7 +87,7 @@ namespace Poseidon
             else if (currentLevel == 8)
             {
                 //Level Obj: Find the relic in 3 months.
-                if (roundTimer <= TimeSpan.Zero && HydroBot.skills[4] == true)
+                if (HydroBot.skills[4] == true)
                 {
                     return true;
                 }
@@ -122,6 +122,7 @@ namespace Poseidon
         }
         public bool CheckLoseCondition()
         {
+            //if (HydroBot.currentEnvPoint <= 10000) return true;
             //Always lose when the environment is completely destroyed
             if (HydroBot.currentEnvPoint <= 0)   return true;
 

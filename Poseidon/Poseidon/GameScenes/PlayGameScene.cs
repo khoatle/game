@@ -94,6 +94,10 @@ namespace Poseidon
         protected bool tipHover = false;
         Rectangle tipIconRectangle;
 
+        protected Texture2D toNextLevelTexture;
+        protected bool toNextLevelHover = false;
+        Rectangle toNextLevelIconRectangle;
+
         // Current game level
         public static int currentLevel;
 
@@ -149,7 +153,7 @@ namespace Poseidon
         // For mouse inputs
         bool doubleClicked = false;
         bool clicked = false;
-        bool notYetRealeased = false;
+        bool notYetReleased = false;
         double clickTimer = 0;
 
         private bool openFactoryConfigurationScene = false;
@@ -162,14 +166,6 @@ namespace Poseidon
         // Plastic factory will use nuclear factory textures
         private List<Texture2D> biofactoryAnimationTextures;
         private List<Texture2D> nuclearFactoryAnimationTextures;
-
-        // Texture and font for property window of a research facility
-        SpriteFont facilityFont;
-        SpriteFont facilityFont2;
-        Texture2D facilityBackground;
-        Texture2D facilityUpgradeButton;
-        Texture2D playJigsawButton;
-        Texture2D increaseAttributeButton;
 
         // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
@@ -194,6 +190,7 @@ namespace Poseidon
         //Models for powerpacks, strangeRock and resource
         private Model[] powerpackModels;
         private Model[] strangeRockModels;
+        private Model goldenKey;
         private Model resourceModel;
 
         // For applying graphic effects
@@ -214,6 +211,8 @@ namespace Poseidon
         //textures for level statistics display
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
+
+        
 
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -298,7 +297,7 @@ namespace Poseidon
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
             }
 
@@ -319,10 +318,10 @@ namespace Poseidon
             schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
 
-            //loading winning, losing textures
-            winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
-            losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
             scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
+
+            winningTexture = IngamePresentation.winningTexture;
+            losingTexture = IngamePresentation.losingTexture;
 
             //load texture for statistics screen
             statisticLogoTexture = Content.Load<Texture2D>("Image/LevelStatistics/levelstatistics");
@@ -348,11 +347,11 @@ namespace Poseidon
 
         public void Load()
         {
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            statisticFont = Content.Load<SpriteFont>("Fonts/StatisticsFont");
+            statsFont = IngamePresentation.statsFont;
+            statisticFont = IngamePresentation.statisticFont;
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
-            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
-            keyFoundFont = Content.Load<SpriteFont>("Fonts/painting");
+            fishTalkFont = IngamePresentation.fishTalkFont;
+            keyFoundFont = statisticFont;// Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -379,7 +378,7 @@ namespace Poseidon
             tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
             tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
 
-            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/keyfound");
+            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/goldkey");
 
             powerpacks = new List<Powerpack>();
             resources = new List<Resource>();
@@ -423,15 +422,6 @@ namespace Poseidon
             factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
             // Load Font for displaying extra information on factory panel
             factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
-
-
-            // Load Textures and fonts for research facility property dialog
-            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
-            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
-            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");// ResearchFacilityBackground");
-            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
         
             // Load textures for partid animation for factories
             biofactoryAnimationTextures = new List<Texture2D>();
@@ -492,6 +482,9 @@ namespace Poseidon
             strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1Ver2");
             strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2Ver2");
 
+            //golden key
+            goldenKey = Content.Load<Model>("Models/Miscellaneous/Goldenkey");
+
             //Initialize the game field
             InitializeGameField(Content);
 
@@ -548,6 +541,10 @@ namespace Poseidon
                 serializer.SerializeObjects(filenamePrefix + currentLevel.ToString(), objectsToSerialize);
 
                 hydroBot.SetLevelStartValues();
+
+                //return all strange rocks that are not yet processed to bot
+                if (researchFacility != null)
+                    HydroBot.numStrangeObjCollected += researchFacility.listTimeRockProcessing.Count;
             }
 
             hydroBot.Reset();
@@ -655,7 +652,7 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight);
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, staticObjects, random, terrain.heightMapInfo,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+                0, GameConstants.MainGameMaxRangeX, 0, GameConstants.MainGameMaxRangeZ);
             
             //Initialize trash
             //int random_model;
@@ -762,11 +759,11 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
-                HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
-                AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
-                type++;
-            }
+            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
+            //    HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
+            //    AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            //    type++;
+            //}
 
             // play the boss fight music for certain levels
             if (currentGameState == GameState.Won)
@@ -831,9 +828,9 @@ namespace Poseidon
                 {
                     ResetGame(gameTime, aspectRatio);
                 }
-                if ((currentGameState == GameState.Running))
+                if (currentGameState == GameState.Running || currentGameState == GameState.WonButStaying)
                 {
-                    MouseState currentMouseState;
+                    MouseState currentMouseState = new MouseState();
                     currentMouseState = Mouse.GetState();
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
@@ -853,7 +850,7 @@ namespace Poseidon
                             factoryButtonPanel.removeAnchor();
                         }
                     }
-                    if (currentMouseState.RightButton == ButtonState.Pressed)
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
                     {
                         foreach (Factory factory in factories)
                         {
@@ -879,70 +876,14 @@ namespace Poseidon
                         {
                             openFactoryConfigurationScene = false;
                             openResearchFacilityConfigScene = false;
+                            PoseidonGame.justCloseControlPanel = true;
                         }
                         else
                         {
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
-                            clicked = false;
-                            notYetRealeased = false;
-                            if (openFactoryConfigurationScene)
-                            {
-                                factoryToConfigure.produceButtonHover = factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10));
-                                CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
-                                if (notYetRealeased && openFactoryConfigurationScene && factoryToConfigure.produceButtonHover)
-                                {
-                                    factoryToConfigure.produceButtonPress = true;
-
-                                }
-                                else factoryToConfigure.produceButtonPress = false;
-                            }
-
-                            if (clicked)
-                            {
-                                if (openFactoryConfigurationScene)
-                                {
-                                    if (factoryToConfigure.produceButtonHover)
-                                    {
-                                        factoryToConfigure.SwitchProductionItem();
-                                        PoseidonGame.audio.MenuScroll.Play();
-                                    }
-                                }
-                                else
-                                {
-                                    if (researchFacility.bioUpgrade && researchFacility.bioUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                        researchFacility.UpgradeBioFactory(factories);
-                                    if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                        researchFacility.UpgradePlasticFactory(factories);
-                                    if (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 0; //seacow
-                                    }
-                                    if (ResearchFacility.playTurtleJigsaw && researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 1; //turtle
-                                    }
-                                    if (ResearchFacility.playDolphinJigsaw && researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 2; //dolphin
-                                    }
-                                    if (HydroBot.unassignedPts>0 && researchFacility.increaseAttributeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.AttributeButtonPressed = true;
-                                    }
-                                }
-                                clicked = false;
-                            }
-                            else if (openResearchFacilityConfigScene)
-                            {
-                                if (researchFacility.increaseAttributeRect.Contains(lastMouseState.X, lastMouseState.Y))
-                                    researchFacility.mouseOnIncreaseAttributeIcon = true;
-                                else
-                                    researchFacility.mouseOnIncreaseAttributeIcon = false;
-                            }
+                            CursorManager.MouseInteractWithControlPanel(ref clicked, ref doubleClicked, ref notYetReleased, ref this.lastMouseState, ref this.currentMouseState, gameTime,
+                                ref clickTimer, openFactoryConfigurationScene, factoryToConfigure, researchFacility, factories);
                             return;
                         }
                     }
@@ -951,7 +892,7 @@ namespace Poseidon
                         if ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint > GameConstants.EnvThresholdForKey)
                         {
                             showFoundKey = true;
-                            hadkey = true;
+                            //hadkey = true;
                         }
                     }
                     if (showFoundKey && firstShow)
@@ -962,13 +903,25 @@ namespace Poseidon
                         {
                             showFoundKey = false;
                             firstShow = false;
+                            //generate the key
+                            Vector3 powerpackPosition = Vector3.Zero;
+                            PowerPackType powerType = PowerPackType.GoldenKey; //type 5 for strange rock
+                            Powerpack powerpack = new Powerpack(powerType);
+                            powerpackPosition.Y = GameConstants.MainGameFloatHeight + 10;
+                            powerpackPosition.X = random.Next(0, (int)(2 * GameConstants.MainGameMaxRangeX * 0.8f)) - GameConstants.MainGameMaxRangeX * 0.8f;
+                            powerpackPosition.Z = random.Next(0, (int)(2 * GameConstants.MainGameMaxRangeZ * 0.8f)) - GameConstants.MainGameMaxRangeZ * 0.8f;
+                            //powerpackPosition = hydroBot.Position;
+                            powerpack.Model = goldenKey;
+                            powerpack.LoadContent(powerpackPosition);
+                            powerpacks.Add(powerpack);
                         }
                         return;
                     }
 
                     tipHover = mouseOnTipIcon(currentMouseState);
                     levelObjHover =  mouseOnLevelObjectiveIcon(currentMouseState);
-                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || toNextLevelHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() 
+                        || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
@@ -1059,7 +1012,7 @@ namespace Poseidon
                         trash.Update(gameTime);
                     }
                    
-                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetRealeased);
+                    CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
                     foreach (Factory factory in factories)
                     {
                         factory.Update(gameTime,ref powerpacks, ref resources, ref powerpackModels, ref resourceModel, ref strangeRockModels);
@@ -1140,16 +1093,16 @@ namespace Poseidon
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, particleManager.explosionParticles, gameCamera, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor, particleManager.explosionLargeParticles);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor, particleManager.explosionLargeParticles);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -1177,16 +1130,31 @@ namespace Poseidon
                     roundTimer -= gameTime.ElapsedGameTime;
                     PoseidonGame.playTime += gameTime.ElapsedGameTime;
 
-                    if (CheckWinCondition())
+                    if (!(currentGameState == GameState.WonButStaying))
                     {
-                        currentGameState = GameState.Won;
-                        audio.gameWon.Play();
+                        if (CheckWinCondition())
+                        {
+                            if (!GameConstants.haveToStayTillEnd[currentLevel])
+                                currentGameState = GameState.WonButStaying;
+                            else currentGameState = GameState.Won;
+                            audio.gameWon.Play();
+                        }
+                        if (CheckLoseCondition())
+                        {
+                            currentGameState = GameState.Lost;
+                            audio.gameOver.Play();
+                        }
                     }
-                    if (CheckLoseCondition())
+                    else
                     {
-                        currentGameState = GameState.Lost;
-                        audio.gameOver.Play();
+                        //time = 0, move to next level now
+                        if (HydroBot.currentHitPoint <= 0) currentGameState = GameState.Lost;
+                        if (roundTimer <= TimeSpan.Zero) currentGameState = GameState.Won;
+                        toNextLevelHover = mouseOnNextLevelIcon(lastMouseState);
+                        if (toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
+                            currentGameState = GameState.Won;
                     }
+                    
                    
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
@@ -1203,6 +1171,7 @@ namespace Poseidon
                 }
 
                 prevGameState = currentGameState;
+
                 if (currentGameState == GameState.Lost)
                 {
                     // Reset the world for a new game
@@ -1218,6 +1187,7 @@ namespace Poseidon
                         ResetGame(gameTime, aspectRatio);
                     }
                 }
+
                 if (currentGameState == GameState.Won)
                 {
                     if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
@@ -1260,6 +1230,10 @@ namespace Poseidon
             {
                 // Play some sound hinting no sufficient resource
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Not enough\nresources";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
@@ -1283,16 +1257,24 @@ namespace Poseidon
             {
                 // Play some sound hinting position selected is outside game arena
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Can not\nbuild here";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
             //Verify that current location is available for adding the building
-            
-            //int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, 0, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
+
+            int heightValue = GameConstants.MainGameFloatHeight;//(int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Can not\nbuild here";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
@@ -1302,6 +1284,10 @@ namespace Poseidon
                     if (researchFacility != null)
                     {
                         // do not allow addition of more than one research facility
+                        Point point = new Point();
+                        String point_string = "Can only build\n1 research center";
+                        point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                        PlayGameScene.points.Add(point);
                         audio.MenuScroll.Play();
                         status = false;
                     }
@@ -1314,7 +1300,7 @@ namespace Poseidon
                         orientation = researchAnchor.orientation;
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.ModelStates = researchBuildingModelStates;
-                        researchFacility.LoadContent(game, position, orientation,ref facilityFont,ref facilityFont2,ref facilityBackground,ref facilityUpgradeButton,ref playJigsawButton,ref increaseAttributeButton);
+                        researchFacility.LoadContent(game, position, orientation);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1382,7 +1368,7 @@ namespace Poseidon
                     anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
                     orientation = (float)(Math.PI / 2) * random.Next(4);
                     researchAnchor.Model = researchBuildingModel;
-                    researchAnchor.LoadContent(game, anchorPosition, orientation, ref facilityFont, ref facilityFont2, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture, ref IngamePresentation.dummyTexture);
+                    researchAnchor.LoadContent(game, anchorPosition, orientation);
                 }
                 else
                 {
@@ -1421,12 +1407,6 @@ namespace Poseidon
 
         public override void Draw(GameTime gameTime)
         {
-
-            if (showFoundKey && firstShow)
-            {
-                DrawFoundKey();
-                return;
-            }
             
             switch (currentGameState)
             {
@@ -1434,6 +1414,10 @@ namespace Poseidon
                     DrawCutScene();
                     break;
                 case GameState.Running:
+                    RestoreGraphicConfig();
+                    DrawGameplayScreen(gameTime);
+                    break;
+                case GameState.WonButStaying:
                     RestoreGraphicConfig();
                     DrawGameplayScreen(gameTime);
                     break;
@@ -1457,13 +1441,14 @@ namespace Poseidon
         }
         private void DrawFoundKey()
         {
-            string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help!!";
-            message = IngamePresentation.wrapLine(message, 800, keyFoundFont);
+            string message = "The fishes have helped you to find the hidden key to treasure chests in return for your help. Position of they key will be displayed on the radar.";
+            message = IngamePresentation.wrapLine(message, GraphicDevice.Viewport.TitleSafeArea.Width - 20, keyFoundFont);
             int foundKeyScreenHeight = (int)(GraphicDevice.Viewport.TitleSafeArea.Height);
             int foundKeyScreenWidth = (int)(GraphicDevice.Viewport.TitleSafeArea.Width);
             spriteBatch.Begin();
-            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreenWidth/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreenHeight/2, foundKeyScreenWidth, foundKeyScreenHeight), Color.White);
-            spriteBatch.DrawString(keyFoundFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X-400, 20), Color.DarkRed);
+            //spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreenWidth/2, GraphicDevice.Viewport.TitleSafeArea.Center.Y-foundKeyScreenHeight/2, foundKeyScreenWidth, foundKeyScreenHeight), Color.White);
+            spriteBatch.Draw(foundKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - foundKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - foundKeyScreen.Height / 2, foundKeyScreen.Width, foundKeyScreen.Height), Color.White);
+            spriteBatch.DrawString(keyFoundFont, message, new Vector2(10, 100), Color.Gold);
 
             string nextText = "Press Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
@@ -1491,12 +1476,18 @@ namespace Poseidon
         private bool concludeMusicPlayed = false;
         private void DrawWinOrLossScreen()
         {
+            float xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
             spriteBatch.Begin();
             if (currentGameState == GameState.Won)
             {
                 spriteBatch.Draw(winningTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
                 //draw level statistics to feedback player
-                float xOffsetText, yOffsetText;
+
                 string bossDefeatRank = "";
                 string enemyDefeatRank = "";
                 string healthLostRank = "";
@@ -1535,7 +1526,7 @@ namespace Poseidon
                         str2 += bossDefeatRank;
                     else
                         somethingIncreasing = true;
-                    str2 += "\n"; 
+                    str2 += "\n";
                 }
                 if (enemyDefeatRank != "")
                 {
@@ -1545,7 +1536,7 @@ namespace Poseidon
                     if (curNumEnemyDeaf == numNormalKills)
                         str2 += enemyDefeatRank;
                     else somethingIncreasing = true;
-                    str2 += "\n"; 
+                    str2 += "\n";
                 }
                 if (healthLostRank != "")
                 {
@@ -1555,7 +1546,7 @@ namespace Poseidon
                     if (curHealthLost == healthLost)
                         str2 += healthLostRank;
                     else somethingIncreasing = true;
-                    str2 += "\n"; 
+                    str2 += "\n";
                 }
                 if (fishSaveRank != "")
                 {
@@ -1565,7 +1556,7 @@ namespace Poseidon
                     if (curNumFishSaved == realNumFish)
                         str2 += fishSaveRank;
                     else somethingIncreasing = true;
-                    str2 += "\n"; 
+                    str2 += "\n";
                 }
                 if (trashCollectRank != "")
                 {
@@ -1575,7 +1566,7 @@ namespace Poseidon
                     if (curTrashCollected == numTrashCollected)
                         str2 += trashCollectRank;
                     else somethingIncreasing = true;
-                    str2 += "\n"; 
+                    str2 += "\n";
                 }
 
                 if (!somethingIncreasing)
@@ -1589,27 +1580,35 @@ namespace Poseidon
                 }
                 else PoseidonGame.audio.reelHit.Play();
 
-                Rectangle rectSafeArea;
 
-                //Calculate str1 position
-                rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-
-                xOffsetText = rectSafeArea.X;
-                yOffsetText = rectSafeArea.Y;
-
-                spriteBatch.Draw(statisticLogoTexture, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4 + 20), null, Color.White, 0, new Vector2(statisticLogoTexture.Width / 2, statisticLogoTexture.Height / 2), 1.0f, SpriteEffects.None, 0);
+                string winningText = "JUSTICE ALWAYS WIN!";
+                Vector2 winningTextPos = new Vector2(game.Window.ClientBounds.Width / 2, 10 + statisticFont.MeasureString(winningText).Y / 2);
+                spriteBatch.DrawString(statisticFont, winningText, winningTextPos, Color.Gold, 0, new Vector2(statisticFont.MeasureString(winningText).X / 2, statisticFont.MeasureString(winningText).Y / 2), 1.5f, SpriteEffects.None, 0);
+                string levelStatsString = "Level Statistics";
+                Vector2 levelStatsPos = winningTextPos + new Vector2(0, statisticFont.MeasureString(winningText).Y / 2 * 1.5f + 30 + statisticFont.MeasureString(levelStatsString).Y / 2);
+                spriteBatch.DrawString(statisticFont, levelStatsString, levelStatsPos, Color.Red, 0, new Vector2(statisticFont.MeasureString(levelStatsString).X / 2, statisticFont.MeasureString(levelStatsString).Y / 2), 1.0f, SpriteEffects.None, 0);
+                //spriteBatch.Draw(statisticLogoTexture, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4 + 20), null, Color.White, 0, new Vector2(statisticLogoTexture.Width / 2, statisticLogoTexture.Height / 2), 1.0f, SpriteEffects.None, 0);
                 //spriteBatch.DrawString(statsFont, strTitle, new Vector2(game.Window.ClientBounds.Width / 2, game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statsFont.MeasureString(strTitle).X / 2, statsFont.MeasureString(strTitle).Y / 2), 3.0f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(statisticFont, str1, new Vector2(game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statisticLogoTexture.Height/2), Color.Yellow, 0, Vector2.Zero, 0.6f, SpriteEffects.None, 0);
-                spriteBatch.DrawString(statisticFont, str2, new Vector2(3 * game.Window.ClientBounds.Width / 4, game.Window.ClientBounds.Height / 4 + statisticLogoTexture.Height/2), Color.Red, 0, Vector2.Zero, 0.6f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statisticFont, str1, new Vector2(game.Window.ClientBounds.Width / 4, levelStatsPos.Y + statisticFont.MeasureString(levelStatsString).Y / 2 + 20), Color.Yellow, 0, Vector2.Zero, 0.6f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(statisticFont, str2, new Vector2(3 * game.Window.ClientBounds.Width / 4, levelStatsPos.Y + statisticFont.MeasureString(levelStatsString).Y / 2 + 20), Color.Red, 0, Vector2.Zero, 0.6f, SpriteEffects.None, 0);
                 if (!somethingIncreasing)
                 {
-                    Vector2 overallRankTextPos = new Vector2(game.Window.ClientBounds.Width / 2 - statisticFont.MeasureString(overallRank).X/2, game.Window.ClientBounds.Height / 4 + statisticLogoTexture.Height / 2 + statisticFont.MeasureString(str1).Y * 0.6f);
+                    Vector2 overallRankTextPos = new Vector2(game.Window.ClientBounds.Width / 2 - statisticFont.MeasureString(overallRank).X / 2, levelStatsPos.Y + statisticFont.MeasureString(levelStatsString).Y / 2 + 20 + statisticFont.MeasureString(str1).Y * 0.6f);
                     spriteBatch.DrawString(statisticFont, overallRank, overallRankTextPos, Color.Red, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
                     spriteBatch.Draw(overallRankTexture, new Vector2(game.Window.ClientBounds.Width / 2 - overallRankTexture.Width / 2, overallRankTextPos.Y + statisticFont.MeasureString(overallRank).Y), null, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0);
                 }
                 spriteBatch.DrawString(statisticFont, strComment, new Vector2(game.Window.ClientBounds.Width / 2, 3 * game.Window.ClientBounds.Height / 4), Color.Red, 0, new Vector2(statisticFont.MeasureString(strComment).X / 2, statisticFont.MeasureString(strComment).Y / 2), 1.0f, SpriteEffects.None, 0);
             }
-            else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+            else
+            {
+                spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+                string losingText = "Sorry everyone, I could not do it...";
+                Vector2 losingTextPos = new Vector2(game.Window.ClientBounds.Width / 2, 10 + statisticFont.MeasureString(losingText).Y / 2);
+                spriteBatch.DrawString(statisticFont, losingText, losingTextPos, Color.Red, 0, new Vector2(statisticFont.MeasureString(losingText).X / 2, statisticFont.MeasureString(losingText).Y / 2), 1.5f, SpriteEffects.None, 0);      
+            }
+            string nextText = "Press Enter to continue";
+            Vector2 nextTextPosition = new Vector2(rectSafeArea.Right - menuSmall.MeasureString(nextText).X - 70, rectSafeArea.Bottom - menuSmall.MeasureString(nextText).Y - 50);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
             spriteBatch.End();
         }
 
@@ -1698,6 +1697,7 @@ namespace Poseidon
             }
             spriteBatch.Begin();
             DrawStats();
+            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
             DrawBulletType();
             DrawHeight();
             DrawRadar();
@@ -1707,6 +1707,7 @@ namespace Poseidon
 
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
+            if (currentGameState == GameState.WonButStaying) DrawToNextLevelButton();
             if (PoseidonGame.gamePlus)
                 DrawGamePlusLevel();
             else
@@ -1721,7 +1722,11 @@ namespace Poseidon
 
             cursor.Draw(gameTime);
             spriteBatch.End();
-
+            if (showFoundKey && firstShow)
+            {
+                DrawFoundKey();
+                //return;
+            }
             if (screenTransitNow)
             {
                 bool doneTransit = graphicEffect.TransitTwoSceens(Scene2Texture, afterEffectsAppliedRenderTarget, graphics, cutSceneImmediateRenderTarget);
@@ -1740,6 +1745,8 @@ namespace Poseidon
             spriteBatch.Draw(cutSceneImmediateRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
             spriteBatch.End();
         }
+
+
 
         private void DrawAnchor()
         {
@@ -1764,7 +1771,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)
@@ -1806,7 +1813,9 @@ namespace Poseidon
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
             str1 += days.ToString();
 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
+            //too much texts on screen 
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
+                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
@@ -1913,7 +1922,7 @@ namespace Poseidon
 
         public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
         {
-            if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+            if (levelObjectiveIconRectangle.Contains(lmouseState.X, lmouseState.Y))
                 return true;
             else
                 return false;
@@ -1921,7 +1930,15 @@ namespace Poseidon
 
         public bool mouseOnTipIcon(MouseState lmouseState)
         {
-            if ( tipIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+            if (tipIconRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
+        }
+
+        public bool mouseOnNextLevelIcon(MouseState lmouseState)
+        {
+            if (toNextLevelIconRectangle.Contains(lmouseState.X, lmouseState.Y))
                 return true;
             else
                 return false;
@@ -2292,7 +2309,9 @@ namespace Poseidon
             {
                 if (enemyBullet[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    if (enemyBullet[i] is Torpedo)
+                        enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    else enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
 
@@ -2303,6 +2322,19 @@ namespace Poseidon
                     alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
+        }
+        public void DrawToNextLevelButton()
+        {
+            if (toNextLevelHover) toNextLevelTexture = IngamePresentation.toNextLevelHoverTexture;
+            else toNextLevelTexture = IngamePresentation.toNextLevelNormalTexture;
+            int xOffsetText, yOffsetText;
+
+            xOffsetText = levelObjectiveIconRectangle.X - toNextLevelTexture.Width - 20;
+            yOffsetText = levelObjectiveIconRectangle.Center.Y - toNextLevelTexture.Height/2;
+
+            toNextLevelIconRectangle = new Rectangle(xOffsetText, yOffsetText, toNextLevelTexture.Width, toNextLevelTexture.Height);
+
+            spriteBatch.Draw(toNextLevelTexture, toNextLevelIconRectangle, Color.White);
         }
     }
 }

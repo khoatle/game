@@ -169,6 +169,9 @@ namespace Poseidon
         //for drawing a game boundary
         GameBoundary gameBoundary;
 
+        protected bool levelObjHover = false;
+        protected bool tipHover = false;
+
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
         {
@@ -530,7 +533,7 @@ namespace Poseidon
                             // play sound to denote building could not be added
                         }
                     }
-                    if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
                     {
                         foreach (Factory factory in factories)
                         {
@@ -556,75 +559,21 @@ namespace Poseidon
                         {
                             openFactoryConfigurationScene = false;
                             openResearchFacilityConfigScene = false;
+                            PoseidonGame.justCloseControlPanel = true;
                         }
                         else
                         {
                             //cursor update
                             cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
-                            clicked = false;
-                            notYetReleased = false;
-                            if (openFactoryConfigurationScene)
-                            {
-                                factoryToConfigure.produceButtonHover = factoryToConfigure.produceRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10));
-                                CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
-                                if (notYetReleased && openFactoryConfigurationScene && factoryToConfigure.produceButtonHover)
-                                {
-                                    factoryToConfigure.produceButtonPress = true;
-
-                                }
-                                else factoryToConfigure.produceButtonPress = false;
-                            }
-
-                            if (clicked)
-                            {
-                                if (openFactoryConfigurationScene)
-                                {
-                                    if (factoryToConfigure.produceButtonHover)
-                                    {
-                                        factoryToConfigure.SwitchProductionItem();
-                                        PoseidonGame.audio.MenuScroll.Play();
-                                    }
-                                }
-                                else
-                                {
-                                    if (researchFacility.bioUpgrade && researchFacility.bioUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                        researchFacility.UpgradeBioFactory(factories);
-                                    if (researchFacility.plasticUpgrade && researchFacility.plasticUpgradeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                        researchFacility.UpgradePlasticFactory(factories);
-                                    if (ResearchFacility.playSeaCowJigsaw && researchFacility.playSeaCowJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 0; //seacow
-                                    }
-                                    if (ResearchFacility.playTurtleJigsaw && researchFacility.playTurtleJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 1; //turtle
-                                    }
-                                    if (ResearchFacility.playDolphinJigsaw && researchFacility.playDolphinJigsawRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.playJigsaw = true;
-                                        PoseidonGame.jigsawType = 2; //dolphin
-                                    }
-                                    if (HydroBot.unassignedPts > 0 && researchFacility.increaseAttributeRect.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 10, 10)))
-                                    {
-                                        PoseidonGame.AttributeButtonPressed = true;
-                                    }
-                                }
-                                clicked = false;
-                            }
-                            else if (openResearchFacilityConfigScene)
-                            {
-                                if (researchFacility.increaseAttributeRect.Contains(lastMouseState.X, lastMouseState.Y))
-                                    researchFacility.mouseOnIncreaseAttributeIcon = true;
-                                else
-                                    researchFacility.mouseOnIncreaseAttributeIcon = false;
-                            }
+                            CursorManager.MouseInteractWithControlPanel(ref clicked, ref doubleClicked, ref notYetReleased, ref this.lastMouseState, ref this.currentMouseState, gameTime,
+                                ref clickTimer, openFactoryConfigurationScene, factoryToConfigure, researchFacility, factories);
                             return;
                         }
                     }
 
-                    bool mouseOnInteractiveIcons = false;
+                    //tipHover = mouseOnTipIcon(currentMouseState);
+                    //levelObjHover = mouseOnLevelObjectiveIcon(currentMouseState);
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, null,null, mouseOnInteractiveIcons);
@@ -787,16 +736,16 @@ namespace Poseidon
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.SurvivalMode);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.SurvivalMode, enemies, enemiesAmount, particleManager.explosionParticles, gameCamera, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, cursor);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.SurvivalMode, cursor);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.SurvivalMode, cursor, particleManager.explosionLargeParticles);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.SurvivalMode, cursor, particleManager.explosionLargeParticles);
                     
                     //revive the dead enemies to maintain their number
                     AddingObjects.ReviveDeadEnemy(enemies, enemiesAmount, fish, fishAmount, hydroBot);
@@ -913,7 +862,7 @@ namespace Poseidon
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
                         orientation = (float)(Math.PI / 2) * random.Next(4);
                         researchFacility.Model = researchBuildingModel;
-                        researchFacility.LoadContent(game, position, orientation, ref facilityFont, ref facilityFont2, ref facilityBackground, ref facilityUpgradeButton, ref playJigsawButton, ref increaseAttributeButton);
+                        researchFacility.LoadContent(game, position, orientation);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
                     }
@@ -1101,7 +1050,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, null, factories, researchFacility);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, null, factories, researchFacility, powerpacks);
         }
 
 
@@ -1115,7 +1064,9 @@ namespace Poseidon
             Rectangle rectSafeArea;
             str1 += ((int)score).ToString();
 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
+            //too much texts on screen 
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
+                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
@@ -1369,7 +1320,9 @@ namespace Poseidon
             {
                 if (enemyBullet[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    if (enemyBullet[i] is Torpedo)
+                        enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    else enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
 

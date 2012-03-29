@@ -9,7 +9,7 @@ namespace Poseidon
 {
     public class ParticleManagement
     {
-        public ParticleSystem explosionParticles;
+        public ParticleSystem explosionParticles, explosionLargeParticles;
         public ParticleSystem sandParticles, sandParticlesForFactory;
         public ParticleSystem projectileTrailParticles;
         public ParticleSystem frozenBreathParticles;
@@ -20,6 +20,7 @@ namespace Poseidon
         {
             // Construct our particle system components.
             explosionParticles = new ParticleSystem(game, PoseidonGame.contentManager, "ExplosionSettings", graphicsDevice);
+            explosionLargeParticles = new ParticleSystem(game, PoseidonGame.contentManager, "ExplosionSettingsLarge", graphicsDevice);
             sandParticles = new ParticleSystem(game, PoseidonGame.contentManager, "SandSettings", graphicsDevice);
             sandParticlesForFactory = new ParticleSystem(game, PoseidonGame.contentManager, "SandSettingsForFactory", graphicsDevice);
             projectileTrailParticles = new ParticleSystem(game, PoseidonGame.contentManager, "ProjectileTrailSettings", graphicsDevice);
@@ -29,11 +30,13 @@ namespace Poseidon
             sandParticles.DrawOrder = 200;
             sandParticlesForFactory.DrawOrder = 200;
             explosionParticles.DrawOrder = 400;
+            explosionLargeParticles.DrawOrder = 400;
             projectileTrailParticles.DrawOrder = 300;
             frozenBreathParticles.DrawOrder = 400;
             toxicAirParticles.DrawOrder = 200;
 
             explosionParticles.Load();
+            explosionLargeParticles.Load();
             sandParticles.Load();
             sandParticlesForFactory.Load();
             projectileTrailParticles.Load();
@@ -45,6 +48,7 @@ namespace Poseidon
         public void ResetParticles()
         {
             explosionParticles.RetireAllParticles();
+            explosionLargeParticles.RetireAllParticles();
             sandParticles.RetireAllParticles();
             sandParticlesForFactory.RetireAllParticles();
             projectileTrailParticles.RetireAllParticles();
@@ -55,6 +59,7 @@ namespace Poseidon
         {
             //update particle systems
             explosionParticles.Update(gameTime);
+            explosionLargeParticles.Update(gameTime);
 
             sandParticles.Update(gameTime);
             sandParticlesForFactory.Update(gameTime);
@@ -78,6 +83,7 @@ namespace Poseidon
             //draw particle effects
             // Pass camera matrices through to the particle system components.
             explosionParticles.SetCamera(view, projection);
+            explosionLargeParticles.SetCamera(view, projection);
             sandParticles.SetCamera(view, projection);
             sandParticlesForFactory.SetCamera(view, projection);
             projectileTrailParticles.SetCamera(view, projection);
@@ -85,6 +91,7 @@ namespace Poseidon
             toxicAirParticles.SetCamera(view, projection);
 
             explosionParticles.Draw(gameTime);
+            explosionLargeParticles.Draw(gameTime);
             sandParticles.Draw(gameTime);
             sandParticlesForFactory.Draw(gameTime);
             projectileTrailParticles.Draw(gameTime);

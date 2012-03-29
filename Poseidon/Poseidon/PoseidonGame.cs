@@ -17,10 +17,10 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
-    public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock };
+    public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };
     public enum FactoryType { biodegradable, plastic, radioactive};
     public enum BuildingType { biodegradable, plastic, radioactive, researchlab }; // as a super type for factory-type (including researchlab)
 
@@ -89,7 +89,7 @@ namespace Poseidon
         bool backPressed;
         bool zPressed;
         bool AttributePressed;
-        public static bool AttributeButtonPressed;
+        public static bool AttributeButtonPressed = false;
         bool EscPressed;
         bool doubleClicked = false;
         bool clicked=false;
@@ -120,6 +120,11 @@ namespace Poseidon
 
         public static int currentShipWreckID;
 
+        //for displaying tips
+        public static LiveTipManager liveTipManager;
+
+        public static bool justCloseControlPanel = false;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -130,7 +135,8 @@ namespace Poseidon
             graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
-            MediaPlayer.Volume = 0;
+            MediaPlayer.Volume = 0.5f;
+            SoundEffect.MasterVolume = 0.5f;
         }
 
         /// <summary>
@@ -161,6 +167,10 @@ namespace Poseidon
             contentManager = Content;
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
+
+            //initiate all 2D graphics and fonts for the game
+            IngamePresentation.Initiate2DGraphics(Content);
+
             statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
 
             //For pausing the game
@@ -183,19 +193,24 @@ namespace Poseidon
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
             radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
 
+            //load the tips
+            liveTipManager = new LiveTipManager();
+
             //For the Help scene
-            helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/helpbackground");
+            helpBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             helpForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_move_1");
             helpForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_shoot_2");
             helpForegroundTexture3 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_trash_3");
             helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_skills_4");
             helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_otherKeys_5");
             nextHelpButton = Content.Load<Texture2D>("Image/ButtonTextures/nextHelpButton");
-            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice);
+            SpriteFont menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice, menuSmall);
             Components.Add(helpScene);
 
+
             //For Credit scene
-            creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             creditForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/Credits");
             creditForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/Credits_Soundtracks");
             nextCreditButton = Content.Load<Texture2D>("Image/ButtonTextures/nextCreditButton");
@@ -208,11 +223,11 @@ namespace Poseidon
             smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
-            startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackground");
+            startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             teamLogo = Content.Load<Texture2D>("Image/Miscellaneous/TeamLogo");
             startScene = new StartScene(this, startSceneSmall, startSceneLarge,
-                startBackgroundTexture, startElementsTexture, teamLogo);
+                startBackgroundTexture, startElementsTexture, teamLogo, GraphicsDevice);
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
@@ -228,15 +243,12 @@ namespace Poseidon
             Components.Add(loadingScene);
 
             //Loading the select loading level scene
-            selectLoadingLevelScene = new SelectLoadingLevelScene(this, startSceneLarge, startBackgroundTexture, teamLogo);
+            selectLoadingLevelScene = new SelectLoadingLevelScene(this, startSceneLarge, startBackgroundTexture, teamLogo, GraphicsDevice);
             Components.Add(selectLoadingLevelScene);
 
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
             Components.Add(shipWreckScene);
-
-            //initiate graphic for good will bar
-            IngamePresentation.Initiate2DGraphics(Content);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
         }
@@ -388,8 +400,9 @@ namespace Poseidon
         public void HandleSelectLoadingLevelSceneInput()
         {
             int i=0, lvl;
-            if (enterPressed)
+            if (TextMenuComponent.clicked)
             {
+                TextMenuComponent.clicked = false;
                 foreach( int level in selectLoadingLevelScene.savedlevels)
                 {
                     if (selectLoadingLevelScene.SelectedMenuIndex == i)
@@ -405,6 +418,7 @@ namespace Poseidon
                             lvl = level;
                         }
                         PlayGameScene.currentLevel = lvl;
+                        MediaPlayer.Stop();
                         ShowScene(loadingScene);
                     }
                     i++;
@@ -538,14 +552,13 @@ namespace Poseidon
                 ShowScene(playGameScene);
                 doubleClicked = false;
             }
-            //do not let the player to open the attribute board in shipwreck now
-            //because it will reset the shipwreck
-            if (AttributePressed || AttributeButtonPressed)
-            {
-                prevScene = shipWreckScene;
-                ShowScene(AttributeScene);
-                AttributeButtonPressed = false;
-            }
+ 
+            //if (AttributeButtonPressed)// || AttributePressed)
+            //{
+            //    prevScene = shipWreckScene;
+            //    ShowScene(AttributeScene);
+            //    AttributeButtonPressed = false;
+            //}
         }
         /// <summary>
         /// Handle update for the main game
@@ -571,7 +584,7 @@ namespace Poseidon
                     ShowScene(startScene);
                 }
             }
-            if (AttributePressed || AttributeButtonPressed)
+            if (AttributeButtonPressed)// || AttributePressed)
             {
                 prevScene = playGameScene;
                 ShowScene(AttributeScene);
@@ -636,14 +649,10 @@ namespace Poseidon
 
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
-                if (!playGameScene.shipWrecks[curWreck].accessed
-                    && CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
+                if (CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
-                    // no re-explore a ship wreck
-                    // no, let the user re-explore now because he would miss a relic -> lose
-                    //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
                     shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
@@ -670,7 +679,7 @@ namespace Poseidon
                 MediaPlayer.Stop();
                 ShowScene(startScene);
             }
-            if (AttributePressed || AttributeButtonPressed)
+            if (AttributeButtonPressed)// || AttributePressed)
             {
                 prevScene = survivalGameScene;
                 ShowScene(AttributeScene);
@@ -684,55 +693,61 @@ namespace Poseidon
         /// </summary>
         private void HandleStartSceneInput()
         {
-            if (enterPressed)
+            if (TextMenuComponent.clicked)
             {
+                TextMenuComponent.clicked = false;
                 audio.MenuSelect.Play();
 
-                switch (startScene.menuItems[startScene.SelectedMenuIndex])
+                int selectedMenuIndex = startScene.SelectedMenuIndex;
+
+                if (selectedMenuIndex != -1)
                 {
-                    case "New Game":
-                        MediaPlayer.Stop();
-                        gamePlus = false;
-                        HydroBot.gamePlusLevel = 0;
-                        PlayGameScene.currentLevel = 0;
-                        PlayGameScene.currentGameState = GameState.PlayingCutScene;
-                        ShowScene(loadingScene);
-                        break;
-                    case "New Game Plus":
-                        MediaPlayer.Stop();
-                        gamePlus = true;
-                        PlayGameScene.currentLevel = 0;
-                        PlayGameScene.currentGameState = GameState.PlayingCutScene;
-                        ShowScene(loadingScene);
-                        break;
-                    case "Resume Game":
-                        MediaPlayer.Stop();
-                        ShowScene(playGameScene);
-                        break;
-                    case "Load Saved Level":
-                        MediaPlayer.Stop();
-                        ShowScene(selectLoadingLevelScene);
-                        break;
-                    case "Survival Mode":
-                        MediaPlayer.Stop();
-                        gamePlus = false;
-                        CreateSurvivalDependentScenes();
-                        SurvivalGameScene.score = 0;
-                        ShowScene(survivalGameScene);
-                        break;
-                    case "Config":
-                        break;
-                    case "Help":
-                        ShowScene(helpScene);
-                        break;
-                    case "Credits":
-                        ShowScene(creditScene);
-                        break;
-                    case "Quit":
-                        MediaPlayer.Stop();
-                        Exit();
-                        break;
-                        
+                    switch (startScene.menuItems[startScene.SelectedMenuIndex])
+                    {
+                        case "New Game":
+                            MediaPlayer.Stop();
+                            gamePlus = false;
+                            HydroBot.gamePlusLevel = 0;
+                            PlayGameScene.currentLevel = 0;
+                            PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                            ShowScene(loadingScene);
+                            break;
+                        case "New Game Plus":
+                            MediaPlayer.Stop();
+                            gamePlus = true;
+                            PlayGameScene.currentLevel = 0;
+                            PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                            ShowScene(loadingScene);
+                            break;
+                        case "Resume Game":
+                            MediaPlayer.Stop();
+                            ShowScene(playGameScene);
+                            break;
+                        case "Load Saved Level":
+                            //MediaPlayer.Stop();
+                            ShowScene(selectLoadingLevelScene);
+                            break;
+                        case "Survival Mode":
+                            MediaPlayer.Stop();
+                            gamePlus = false;
+                            CreateSurvivalDependentScenes();
+                            SurvivalGameScene.score = 0;
+                            ShowScene(survivalGameScene);
+                            break;
+                        case "Config":
+                            break;
+                        case "Help":
+                            ShowScene(helpScene);
+                            break;
+                        case "Credits":
+                            ShowScene(creditScene);
+                            break;
+                        case "Quit":
+                            MediaPlayer.Stop();
+                            Exit();
+                            break;
+
+                    }
                 }
             }
         }
@@ -933,7 +948,7 @@ namespace Poseidon
         protected override void Draw(GameTime gameTime)
         {
             using (new TimeRulerHelper("Draw", Color.Blue))
-           {
+            {
 
                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                if (gameState == GameState.PlayingPresentScene)
@@ -953,11 +968,11 @@ namespace Poseidon
                //Draw loading scene to mask long loading time
                if (PlayGameScene.currentGameState == GameState.ToNextLevel) loadingScene.Draw(gameTime);
                base.Draw(gameTime);
-           }
-            spriteBatch.Begin();
-            spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
-                + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
-            spriteBatch.End();
+            }
+            //spriteBatch.Begin();
+            //spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
+            //    + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
+            //spriteBatch.End();
         }
 
     }

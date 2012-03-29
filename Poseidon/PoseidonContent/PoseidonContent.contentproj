@@ -77,11 +77,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\SceneTextures\helpforeground.jpg">
-      <Name>helpforeground</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Sounds\BackgroundMusics\backmusic.mp3">
@@ -216,46 +211,6 @@
     </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain11.bmp">
       <Name>terrain11</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain12.bmp">
-      <Name>terrain12</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain13.bmp">
-      <Name>terrain13</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain14.bmp">
-      <Name>terrain14</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain15.bmp">
-      <Name>terrain15</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain16.bmp">
-      <Name>terrain16</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain17.bmp">
-      <Name>terrain17</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain18.bmp">
-      <Name>terrain18</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TerrainProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\TerrainHeightMaps\terrain19.bmp">
-      <Name>terrain19</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
@@ -1330,7 +1285,7 @@
       <Name>torpedo</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.2</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>0.4</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1758,6 +1713,12 @@
       <Name>penguin</Name>
       <Importer>FbxImporter</Importer>
       <Processor>SkinnedModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\Miscellaneous\goldenkey.fbx">
+      <Name>goldenkey</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.4</ProcessorParameters_Scale>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
@@ -2534,6 +2495,97 @@
   <ItemGroup>
     <Compile Include="Image\TrashManagement\futuristicControlPanel2.png">
       <Name>futuristicControlPanel2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\TrashManagement\increaseAttributeButtonHover.png">
+      <Name>increaseAttributeButtonHover</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\TrashManagement\increaseAttributeButtonPressed.png">
+      <Name>increaseAttributeButtonPressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\GameOverNew.jpg">
+      <Name>GameOverNew</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SceneTextures\LevelWinNew.jpg">
+      <Name>LevelWinNew</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\CursorTextures\menuCursor.png">
+      <Name>menuCursor</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\startbackgroundNew.jpg">
+      <Name>startbackgroundNew</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\goldkey.png">
+      <Name>goldkey</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Paintings\transparentBackground.png">
+      <Name>transparentBackground</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\RadarTextures\keyDot.png">
+      <Name>keyDot</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\skeletonDie.wav">
+      <Name>skeletonDie</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ParticleSettings\ExplosionSettingsLarge.xml">
+      <SubType>Designer</SubType>
+      <Name>ExplosionSettingsLarge</Name>
+      <Importer>XmlImporter</Importer>
+      <Processor>PassThroughProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Sounds\SoundEffects\explosionSmall.wav">
+      <Name>explosionSmall</Name>
+      <Importer>WavImporter</Importer>
+      <Processor>SoundEffectProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\Miscellaneous\tonextlevel.png">
+      <Name>tonextlevel</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\Miscellaneous\tonextlevelHover.png">
+      <Name>tonextlevelHover</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

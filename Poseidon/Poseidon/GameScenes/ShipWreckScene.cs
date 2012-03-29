@@ -29,7 +29,7 @@ namespace Poseidon
 
         Random random;
         SpriteBatch spriteBatch;
-        SpriteFont statsFont;
+        SpriteFont statsFont, statisticFont;
         SpriteFont paintingFont;
         SpriteFont menuSmall;
         GameObject ground;
@@ -199,9 +199,10 @@ namespace Poseidon
 
         public void Load()
         {
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            statsFont = IngamePresentation.statsFont;
+            statisticFont = IngamePresentation.statisticFont;
             menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
-            paintingFont = Content.Load<SpriteFont>("Fonts/painting");
+            paintingFont = statisticFont;// Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -247,7 +248,7 @@ namespace Poseidon
 
             hydroBot.Load(Content);
 
-            noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/no_key");
+            noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/goldkey");//no_key");
 
             skillFoundScreen = Content.Load<Texture2D>("Image/SceneTextures/skillFoundBackground");
             scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
@@ -659,6 +660,7 @@ namespace Poseidon
             }
             if (showNoKey)
             {
+                //cursor.Update(gameTime);
                 // return to game if enter pressed
                 if (chestExitPressed)
                 {
@@ -747,23 +749,23 @@ namespace Poseidon
                 Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                 int refNum = enemiesAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera, particleManager.explosionParticles);
                 enemiesAmount[currentShipWreckID] = refNum;
                 Collision.updateHealingBulletVsBarrierCollision(healthBullet, fishes[currentShipWreckID], fishAmount[currentShipWreckID], frustum, GameMode.ShipWreck);
                 refNum = fishAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera, particleManager.explosionParticles);
                 fishAmount[currentShipWreckID] = refNum;
                 Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.ShipWreck, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], particleManager.explosionParticles, gameCamera, null, fishAmount[currentShipWreckID]);
                 refNum = enemiesAmount[currentShipWreckID];
                 Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, gameTime, hydroBot,
-                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera);
+                    enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], gameCamera, particleManager.explosionParticles);
                 enemiesAmount[currentShipWreckID] = refNum;
                 refNum = enemiesAmount[currentShipWreckID];
-                Collision.deleteSmallerThanZero(enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor);
+                Collision.deleteSmallerThanZero(enemies[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor, particleManager.explosionParticles);
                 enemiesAmount[currentShipWreckID] = refNum;
                 refNum = fishAmount[currentShipWreckID];
-                Collision.deleteSmallerThanZero(fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor);
+                Collision.deleteSmallerThanZero(fishes[currentShipWreckID], ref refNum, frustum, GameMode.ShipWreck, cursor, particleManager.explosionParticles);
                 fishAmount[currentShipWreckID] = refNum;
 
                 for (int i = 0; i < enemiesAmount[currentShipWreckID]; i++)
@@ -849,7 +851,7 @@ namespace Poseidon
                             }
                             if (showPainting == true)
                             {
-                                if (random.Next(100) <= 2)
+                                if (random.Next(100) <= 10)
                                 {
                                     //showStrangeObjectFound = true;
                                     //HydroBot.numStrangeObjCollected++;
@@ -857,7 +859,7 @@ namespace Poseidon
                                     Vector3 powerpackPosition;
                                     PowerPackType powerType = PowerPackType.StrangeRock; //type 5 for strange rock
                                     Powerpack powerpack = new Powerpack(powerType);
-                                    powerpackPosition.Y = GameConstants.ShipWreckFloatHeight;
+                                    powerpackPosition.Y = GameConstants.ShipWreckFloatHeight + 10;
                                     powerpackPosition.X = chest.Position.X;
                                     powerpackPosition.Z = chest.Position.Z;
                                     //powerpackPosition = hydroBot.Position;
@@ -970,13 +972,6 @@ namespace Poseidon
                 spriteBatch.End();
                 return;
             }
-            if (showNoKey)
-            {
-                spriteBatch.Begin();
-                DrawNoKey();
-                spriteBatch.End();
-                return;
-            }
 
             // Updating camera's frustum
             frustum = new BoundingFrustum(gameCamera.ViewMatrix * gameCamera.ProjectionMatrix);
@@ -1068,6 +1063,7 @@ namespace Poseidon
             }
             spriteBatch.Begin();
             DrawStats();
+            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
             DrawBulletType();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);
@@ -1084,6 +1080,14 @@ namespace Poseidon
             {
                 spriteBatch.Begin();
                 DrawFoundStrangeObjScene();
+                spriteBatch.End();
+                RestoreGraphicConfig();
+                //return;
+            }
+            if (showNoKey)
+            {
+                spriteBatch.Begin();
+                DrawNoKey();
                 spriteBatch.End();
                 RestoreGraphicConfig();
                 //return;
@@ -1140,9 +1144,9 @@ namespace Poseidon
         private void DrawNoKey()
         {
             string message = "You have not had the key to treasure chests yet, try to help the fish first so that they will help you find the key in return";
-            message = IngamePresentation.wrapLine(message, 800, paintingFont);
-            spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.SandyBrown);
-            spriteBatch.DrawString(paintingFont, message, new Vector2(GraphicDevice.Viewport.TitleSafeArea.Center.X - 400, 20), Color.White);
+            message = IngamePresentation.wrapLine(message, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);
+            spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.White);
+            spriteBatch.DrawString(paintingFont, message, new Vector2(10, 100), Color.Red);
             
             string nextText = "Press Alt/Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
@@ -1152,13 +1156,14 @@ namespace Poseidon
         {
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
-            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(0, 0), oceanPaintings.paintings[paintingToShow].color);
-            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
+            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(10, 0), oceanPaintings.paintings[paintingToShow].color);
+            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
                 oceanPaintings.paintings[paintingToShow].color);
 
-            String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width, paintingFont);
+            String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);
+            spriteBatch.Draw(oceanPaintings.backgroundBox, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y - 10, GraphicDevice.Viewport.TitleSafeArea.Width, (int)paintingFont.MeasureString(line).Y * 2), Color.White);
             spriteBatch.DrawString(paintingFont, line,
-                new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
+                new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
             string nextText = "Press Alt/Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
@@ -1172,7 +1177,7 @@ namespace Poseidon
             switch (skill_id)
             {
                 case 0:
-                    skill_name = "Hercules' bow. A mighty bow whose arrows are sure dealers of death, for they had been dipped in the blood of the great dragon of Lerna. Aim well, for it eats up your strength too. Press 1 to select and right click to use.";
+                    skill_name = "Hercules' bow. A mighty bow whose arrows are sure dealers of death, for they had been dipped in the blood of the great dragon of Lerna. Aim well, for it eats up your health too. Press 1 to select and right click to use.";
                     break;
                 case 1:
                     skill_name = "Mjolnir, the mighty hammer of Thor. It is one of the most fearsome weapons capable of destroying everyone around you if you are strong. But if you're weak, it is will hardly dent an armour. Press 2 to select it and right click to use it.";
@@ -1198,7 +1203,7 @@ namespace Poseidon
 
             //Vector2 strSize = statsFont.MeasureString(str1);
             Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText+20);
+                new Vector2((int)xOffsetText + 10, (int)yOffsetText+100);
 
             //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
 

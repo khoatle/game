@@ -260,6 +260,10 @@ namespace Poseidon.MiniGames
                 spriteBatch.DrawString(font, str + (int)(maxTime - elapsedSeconds.TotalSeconds), new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(str).X, 10), Color.Red);
             }
 
+            string skipText = "Press Esc to skip minigame.";
+            Vector2 skipTextPosition = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - IngamePresentation.menuSmall.MeasureString(skipText).X, game.GraphicsDevice.Viewport.TitleSafeArea.Bottom - IngamePresentation.menuSmall.MeasureString(skipText).Y);
+            spriteBatch.DrawString(IngamePresentation.menuSmall, skipText, skipTextPosition, Color.Red);
+
             if (isOver) {
                 spriteBatch.End();
                 return;

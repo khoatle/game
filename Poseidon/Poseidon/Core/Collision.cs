@@ -215,7 +215,8 @@ namespace Poseidon
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, futureBoundingSphere))
+            //don't let the living object to swim completely out of the screen reach
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX - 30, hydroBot.MaxRangeZ - 30, futureBoundingSphere))
             {
                 return false;
             }
@@ -470,17 +471,18 @@ namespace Poseidon
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
 
                             int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * barriers[j].basicExperienceReward);
-                            int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
+                            //int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
                             int goodWillReward = (int)(((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.GoodWillPointGainForHealing);
 
                             HydroBot.currentExperiencePts += expReward;
-                            HydroBot.currentEnvPoint += envReward;
+                            //HydroBot.currentEnvPoint += envReward;
 
                             //update good will point
                             HydroBot.IncreaseGoodWillPoint(goodWillReward);
 
                             Point point = new Point();
-                            String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
+                            //String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
+                            String point_string = "+" + expReward.ToString() + "EXP";
                             point.LoadContent(PoseidonGame.contentManager, point_string, barriers[j].Position, Color.LawnGreen);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);

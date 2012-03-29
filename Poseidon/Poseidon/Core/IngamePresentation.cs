@@ -51,6 +51,7 @@ namespace Poseidon.Core
         public static Texture2D facilityUpgradeButton;
         public static Texture2D playJigsawButton;
         public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
+        public static SpriteFont menuSmall;
 
         //level winning/losing screen
         public static Texture2D winningTexture, losingTexture;
@@ -120,6 +121,7 @@ namespace Poseidon.Core
             increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
             increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
 
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWinNew");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOverNew");

@@ -149,11 +149,17 @@ namespace Poseidon
         SpriteFont factoryPanelFont;
         ButtonPanel factoryButtonPanel;
 
-        // Models for Factories and buildings
+        // Models and textures for Factories and buildings
         private Model researchBuildingModel;
+        private List<Model> researchBuildingModelStates;
         private Model plasticFactoryModel;
+        private List<Model> plasticFactoryModelStates;
+        private List<Texture2D> plasticFactoryLevelTextures;
         private Model biodegradableFactoryModel;
+        private List<Model> biodegradableFactoryModelStates;
+        private List<Texture2D> biodegradableFactoryLevelTextures;
         private Model radioactiveFactoryModel;
+        private List<Model> radioactiveFactoryModelStates;
 
         //Models for Trash
         private Model biodegradableTrash, plasticTrash, radioactiveTrash;
@@ -171,6 +177,9 @@ namespace Poseidon
 
         protected bool levelObjHover = false;
         protected bool tipHover = false;
+
+        Factory factoryAnchor;
+        ResearchFacility researchAnchor;
 
         public SurvivalGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
             : base(game)
@@ -301,19 +310,6 @@ namespace Poseidon
             // Load Font for displaying extra information on factory panel
             factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
 
-            // Load Textures and fonts for factory property dialog
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/factory_config_background");
-            factoryProduceButton = Content.Load<Texture2D>("Image/TrashManagement/ChangeFactoryProduceBox");
-
-            // Load Textures and fonts for research facility property dialog
-            facilityFont = Content.Load<SpriteFont>("Fonts/researchFacilityConfig");
-            facilityFont2 = Content.Load<SpriteFont>("Fonts/researchFacilityConfig2");
-            facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/ResearchFacilityBackground");
-            facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
-            increaseAttributeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
-
             // Load textures for partid animation for factories
             biofactoryAnimationTextures = new List<Texture2D>();
             nuclearFactoryAnimationTextures = new List<Texture2D>();
@@ -325,10 +321,34 @@ namespace Poseidon
             nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
 
             // Load factory and research lab models
-            researchBuildingModel = Content.Load<Model>("Models/FactoryModels/ResearchFacility");
-            biodegradableFactoryModel = Content.Load<Model>("Models/FactoryModels/BiodegradableFactory");
-            plasticFactoryModel = Content.Load<Model>("Models/FactoryModels/PlasticFactory");
-            radioactiveFactoryModel = Content.Load<Model>("Models/FactoryModels/NuclearFactory");
+            plasticFactoryModelStates = new List<Model>();
+            biodegradableFactoryModelStates = new List<Model>();
+            radioactiveFactoryModelStates = new List<Model>();
+            researchBuildingModelStates = new List<Model>();
+            int totalStates = 4;
+            for (int i = 0; i < totalStates; i++)
+            {
+                plasticFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/PlasticFactory_stage" + i));
+                biodegradableFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/BiodegradableFactory_stage" + i));
+                radioactiveFactoryModelStates.Add(Content.Load<Model>("Models/FactoryModels/NuclearFactory_stage" + i));
+                researchBuildingModelStates.Add(Content.Load<Model>("Models/FactoryModels/ResearchFacility_stage" + i));
+            }
+            radioactiveFactoryModel = radioactiveFactoryModelStates[radioactiveFactoryModelStates.Count - 1];
+            researchBuildingModel = researchBuildingModelStates[researchBuildingModelStates.Count - 1];
+            biodegradableFactoryModel = biodegradableFactoryModelStates[biodegradableFactoryModelStates.Count - 1];
+            plasticFactoryModel = plasticFactoryModelStates[plasticFactoryModelStates.Count - 1];
+
+
+            // Factory level textures
+            plasticFactoryLevelTextures = new List<Texture2D>();
+            biodegradableFactoryLevelTextures = new List<Texture2D>();
+            for (int i = 0; i < 3; i++)
+            {
+                // using same level textures for both factories
+                Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
+                plasticFactoryLevelTextures.Add(loadedTexture);
+                biodegradableFactoryLevelTextures.Add(loadedTexture);
+            }
 
             // Load Trash
             biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer4");
@@ -349,6 +369,9 @@ namespace Poseidon
             strangeRockModels = new Model[2];
             strangeRockModels[0] = Content.Load<Model>("Models/Miscellaneous/strangeRock1Ver2");
             strangeRockModels[1] = Content.Load<Model>("Models/Miscellaneous/strangeRock2Ver2");
+
+            //golden key
+            //goldenKey = Content.Load<Model>("Models/Miscellaneous/Goldenkey");
 
             //Initialize the game field
             InitializeGameField(Content);
@@ -414,7 +437,7 @@ namespace Poseidon
             fishAmount = 0;
             enemies = new BaseEnemy[GameConstants.SurvivalModeMaxShootingEnemy + GameConstants.SurvivalModeMaxCombatEnemy + GameConstants.SurvivalModeMaxGhostPirate
                 + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator + GameConstants.SurvivalModeMaxSubmarine * (1 + GameConstants.NumEnemiesInSubmarine)];
-            fish = new Fish[1];
+            fish = new Fish[4];
 
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, -1, GameMode.SurvivalMode, GameConstants.MainGameFloatHeight);
@@ -455,6 +478,19 @@ namespace Poseidon
 
             //create research facility
             researchFacility = null;
+
+            if (HydroBot.hasDolphin)
+            {
+                AddingObjects.placeMinion(Content, 2, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
+            if (HydroBot.hasSeaCow)
+            {
+                AddingObjects.placeMinion(Content, 0, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
+            if (HydroBot.hasTurtle)
+            {
+                AddingObjects.placeMinion(Content, 1, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            }
         }
 
         /// <summary>
@@ -495,6 +531,15 @@ namespace Poseidon
             {
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
             }
+            //skill combo unlock
+            if (score >= 50000 && !HydroBot.skillComboActivated)
+            {
+                HydroBot.skillComboActivated = true;
+                Point point = new Point();
+                point.LoadContent(PoseidonGame.contentManager, "CONGRATULATIONS\nSKILL COMBO UNLOCKED", hydroBot.Position, Color.LawnGreen);
+                points.Add(point);
+                PoseidonGame.audio.levelUpSound.Play();
+            }
             if (!paused)
             {
                 //timming = gameTime;
@@ -510,10 +555,11 @@ namespace Poseidon
 
                 if ((currentGameState == GameState.Running))
                 {
-                    MouseState currentMouseState;
+                    MouseState currentMouseState = new MouseState();
                     currentMouseState = Mouse.GetState();
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
+                    UpdateAnchor();
                     // if mouse click happened, check for the click position and add new factory
                     if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea && factoryButtonPanel.clickToBuildDetected)
                     {
@@ -527,10 +573,6 @@ namespace Poseidon
                         if (addNewBuilding(newBuildingType, newBuildingPosition))
                         {
                             factoryButtonPanel.removeAnchor();
-                        }
-                        else
-                        {
-                            // play sound to denote building could not be added
                         }
                     }
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
@@ -812,6 +854,7 @@ namespace Poseidon
             }
         }
 
+
         // Add new factory in the game arena if conditions for adding them satisty
         // Research Facility: Only one
         // Uses class variables factories, researchFacility, HydroBot
@@ -826,24 +869,51 @@ namespace Poseidon
             {
                 // Play some sound hinting no sufficient resource
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Not enough\nresources";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
+            int radius = 60; // need to revise this based on the model for each building
+            BoundingSphere buildingBoundingSphere;
+            if (factoryAnchor != null)
+            {
+                buildingBoundingSphere = factoryAnchor.BoundingSphere;
+                radius = (int)buildingBoundingSphere.Radius;
+            }
+            else if (researchAnchor != null)
+            {
+                buildingBoundingSphere = researchAnchor.BoundingSphere;
+                radius = (int)buildingBoundingSphere.Radius;
+            }
+
             // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
-            if (Math.Abs(position.X) > (float)GameConstants.MainGameMaxRangeX || Math.Abs(position.Z) > (float)GameConstants.MainGameMaxRangeZ)
+            // Give a lax of 40 units so that if a click happened at the edge of the arena, building is not allowed. This is to prevent the case
+            // that power packs might appear above the end of the factory whose edge is just beyond the game arena.
+            if (Math.Abs(position.X) > (float)(GameConstants.MainGameMaxRangeX - 40) || Math.Abs(position.Z) > (float)(GameConstants.MainGameMaxRangeZ - 40))
             {
                 // Play some sound hinting position selected is outside game arena
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Can not\nbuild here";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
             //Verify that current location is available for adding the building
-            int radius = 60; // probably need to calculate this based on the model for each building
-            //int heightValue = (int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, 0, (int)position.Z, radius, null, null, trashes, factories, researchFacility))
+
+            int heightValue = GameConstants.MainGameFloatHeight;//(int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
+            if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, null, null, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Can not\nbuild here";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
                 return false;
             }
 
@@ -853,6 +923,10 @@ namespace Poseidon
                     if (researchFacility != null)
                     {
                         // do not allow addition of more than one research facility
+                        Point point = new Point();
+                        String point_string = "Can only build\n1 research center";
+                        point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                        PlayGameScene.points.Add(point);
                         audio.MenuScroll.Play();
                         status = false;
                     }
@@ -861,8 +935,10 @@ namespace Poseidon
                         //create research facility.. Only one is allowed, hence using a separate variable for this purpose.
                         researchFacility = new ResearchFacility(particleManager);
                         position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                        orientation = (float)(Math.PI / 2) * random.Next(4);
+                        //orientation = (float)(Math.PI/2) * random.Next(4);
+                        orientation = researchAnchor.orientation;
                         researchFacility.Model = researchBuildingModel;
+                        researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation);
                         HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                         status = true;
@@ -870,11 +946,13 @@ namespace Poseidon
                     break;
 
                 case BuildingType.biodegradable:
-                    oneFactory = new Factory(FactoryType.biodegradable, particleManager, GraphicDevice);
+                    oneFactory = new Factory(FactoryType.biodegradable, particleManager, GraphicsDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    orientation = factoryAnchor.orientation;
                     oneFactory.Model = biodegradableFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, biofactoryAnimationTextures);
+                    oneFactory.ModelStates = biodegradableFactoryModelStates;
+                    oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
+                    oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, biofactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -883,9 +961,11 @@ namespace Poseidon
                 case BuildingType.plastic:
                     oneFactory = new Factory(FactoryType.plastic, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = (float)(Math.PI / 2) * random.Next(4);
-                    oneFactory.Model = plasticFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, nuclearFactoryAnimationTextures);
+                    orientation = factoryAnchor.orientation;
+                    oneFactory.Model = plasticFactoryModel;                 // set the model so that bounding sphere calculation happens based on fully blown model
+                    oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
+                    oneFactory.LevelTextures = plasticFactoryLevelTextures;
+                    oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -893,9 +973,10 @@ namespace Poseidon
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive, particleManager, GraphicDevice);
                     position.Y = terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
-                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    orientation = factoryAnchor.orientation;
                     oneFactory.Model = radioactiveFactoryModel;
-                    oneFactory.LoadContent(game, position, orientation, ref factoryFont, ref factoryBackground, nuclearFactoryAnimationTextures);
+                    oneFactory.ModelStates = radioactiveFactoryModelStates;
+                    oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -974,7 +1055,7 @@ namespace Poseidon
             DrawObjectsOnHighLayer();
 
             // Draw anchor if any. The anchor should appear below static interaction button, below the cursor, and below hydrobot
-            //DrawAnchor();
+            DrawAnchor();
 
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
@@ -1032,7 +1113,7 @@ namespace Poseidon
             DrawRadar();
             // Draw the factory panel
             factoryButtonPanel.Draw(spriteBatch);
-            factoryButtonPanel.DrawAnchor(spriteBatch);
+            //factoryButtonPanel.DrawAnchor(spriteBatch);
 
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
 
@@ -1332,6 +1413,79 @@ namespace Poseidon
                 if (alliesBullets[i].BoundingSphere.Intersects(frustum))
                 {
                     alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                }
+            }
+        }
+        private void UpdateAnchor()
+        {
+            // check if anchor need to be instantiated or updated
+            if (factoryButtonPanel.AnchoredIndex != factoryButtonPanel.PreviousAnchoredIndex)
+            {
+                factoryAnchor = null;
+                researchAnchor = null;
+
+                Vector3 anchorPosition = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                float orientation;
+                if (factoryButtonPanel.anchorIndexToBuildingType() == BuildingType.researchlab)
+                {
+                    researchAnchor = new ResearchFacility(particleManager);
+                    anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    researchAnchor.Model = researchBuildingModel;
+                    researchAnchor.LoadContent(game, anchorPosition, orientation);
+                }
+                else
+                {
+                    FactoryType typeOfFactory = factoryButtonPanel.anchorIndexToFactoryType(factoryButtonPanel.AnchoredIndex);
+                    factoryAnchor = new Factory(typeOfFactory, particleManager, GraphicDevice);
+                    anchorPosition.Y = terrain.heightMapInfo.GetHeight(new Vector3(anchorPosition.X, 0, anchorPosition.Z));
+                    orientation = (float)(Math.PI / 2) * random.Next(4);
+                    switch (typeOfFactory)
+                    {
+                        case FactoryType.biodegradable:
+                            factoryAnchor.Model = biodegradableFactoryModel; // need to make it different for each type
+                            break;
+                        case FactoryType.plastic:
+                            factoryAnchor.Model = plasticFactoryModel;
+                            break;
+                        case FactoryType.radioactive:
+                            factoryAnchor.Model = radioactiveFactoryModel;
+                            break;
+                    }
+                    factoryAnchor.LoadContent(game, anchorPosition, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.dummyTexture, null);
+                }
+            }
+            else
+            {
+                if (factoryAnchor != null)
+                {
+                    factoryAnchor.Position = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                    factoryAnchor.Position.Y = terrain.heightMapInfo.GetHeight(new Vector3(factoryAnchor.Position.X, 0, factoryAnchor.Position.Z));
+                }
+                else if (researchAnchor != null)
+                {
+                    researchAnchor.Position = CursorManager.IntersectPointWithPlane(cursor, gameCamera, GameConstants.MainGameFloatHeight);
+                    researchAnchor.Position.Y = terrain.heightMapInfo.GetHeight(new Vector3(researchAnchor.Position.X, 0, researchAnchor.Position.Z));
+                }
+            }
+        }
+        private void DrawAnchor()
+        {
+            //factoryButtonPanel.DrawAnchor(spriteBatch);
+            //return;
+
+            if (factoryButtonPanel.hasAnyAnchor() && factoryButtonPanel.cursorOutsidePanelArea)
+            {
+                if (factoryButtonPanel.anchorIndexToBuildingType() == BuildingType.researchlab && researchAnchor != null)
+                {
+                    // Static object gameCamera inside PlayGameScene object
+                    //researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                }
+                else if (factoryAnchor != null)
+                {
+                    //factoryAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    factoryAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
                 }
             }
         }

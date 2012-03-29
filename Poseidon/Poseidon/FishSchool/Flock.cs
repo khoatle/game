@@ -103,21 +103,26 @@ namespace Poseidon.FishSchool
             foreach (Fish thisFish in flock)
             {
                 thisFish.ResetThink();
-
-                foreach (Fish otherFish in flock)
+                
+                //can't reduce the workload here cuz of unreal fish formation (they don't regroup if out of screen)
+                //if (frustum.Intersects(boundingSphere))
                 {
-                    //this check is so we don't try to fly to ourself!
-                    if (thisFish != otherFish)
+                    foreach (Fish otherFish in flock)
                     {
-                        thisFish.ReactTo(otherFish, ref flockParams);
+                        //this check is so we don't try to fly to ourself!
+                        if (thisFish != otherFish)
+                        {
+                            thisFish.ReactTo(otherFish, ref flockParams);
+                        }
                     }
                 }
-
                 boundingSphere = new BoundingSphere(thisFish.Location, 1.0f);
                 //Look for the main character
                 thisFish.ReactToMainCharacter(tank, ref flockParams);
 
-                //if (frustum.Intersects(boundingSphere)) {
+                //reduce workload of update
+                if (frustum.Intersects(boundingSphere)) 
+                {
                     //React to enemies and other big fishes
                     for (int i = 0; i < enemyAmount; i++)
                     {
@@ -127,7 +132,7 @@ namespace Poseidon.FishSchool
                     {
                         thisFish.ReactToSwimmingObject(fishes[i], ref flockParams);
                     }
-                //}
+                }
                 thisFish.Update(gameTime, ref flockParams);
             }
         }

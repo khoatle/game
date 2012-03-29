@@ -17,7 +17,10 @@ namespace Poseidon
             string higherRank = "Expert";
             string highestRank = "Exceptional";
             //boss defeat ranking
-            int totalNumberOfBosses = GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberSubmarine[currentLevel] + GameConstants.NumberTerminator[currentLevel];
+            int totalNumberOfBosses = 0;
+            if (currentLevel == 11)
+                totalNumberOfBosses = GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberSubmarine[currentLevel] + GameConstants.NumberTerminator[currentLevel];
+            else totalNumberOfBosses = GameConstants.NumberMutantShark[currentLevel] + GameConstants.NumberSubmarine[currentLevel];
             int bossRankPoint = 0;
             if (totalNumberOfBosses > 0)
             {

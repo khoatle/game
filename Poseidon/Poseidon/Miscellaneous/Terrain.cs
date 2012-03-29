@@ -19,7 +19,10 @@ namespace Poseidon
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
             //int random_level = random.Next(20);
-            string terrain_name = "Image/TerrainHeightMaps/terrain" + PlayGameScene.currentLevel;
+            string terrain_name = "";
+            if (HydroBot.gameMode == GameMode.MainGame)
+                terrain_name = "Image/TerrainHeightMaps/terrain" + PlayGameScene.currentLevel;
+            else terrain_name = "Image/TerrainHeightMaps/terrain0";
             terrainModel = Content.Load<Model>(terrain_name);
             heightMapInfo = terrainModel.Tag as HeightMapInfo;
             if (heightMapInfo == null)

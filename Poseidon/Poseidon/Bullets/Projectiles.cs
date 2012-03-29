@@ -66,7 +66,7 @@ namespace Poseidon
             // Set up the parameters
             //currently only applies for herculesBullet
             //and the mjolnir
-            if (this is HerculesBullet || this is Torpedo)
+            if (this is HerculesBullet)// || this is Torpedo)
                 SetupShaderParameters(PoseidonGame.contentManager, Model);     
         }
 

@@ -188,20 +188,20 @@ namespace Poseidon
                 if (PoseidonGame.playTime.TotalSeconds - listTimeRockProcessing[i] >= processingTime)
                 {
                     listTimeRockProcessing.RemoveAt(i);
-                    //produce fossil/bone 60% of the times.
-                    if (fossilType >= 80)
+                    //produce fossil/bone 75% of the times.
+                    if (fossilType >= 74)
                     {
                         HydroBot.numTurtlePieces++;
                         point_string = "Research Centre found\na Meiolania Turtle fossil\nfrom the strange rock";
                         boneFound = true;
                     }
-                    else if (fossilType >= 60)
+                    else if (fossilType >= 49)
                     {
                         HydroBot.numDolphinPieces++;
                         point_string = "Research Centre found\na Maui's Dolphin bone\nfrom the strange rock";
                         boneFound = true;
                     }
-                    else if (fossilType >= 40)
+                    else if (fossilType >= 24)
                     {
                         HydroBot.numSeaCowPieces++;
                         boneFound = true;

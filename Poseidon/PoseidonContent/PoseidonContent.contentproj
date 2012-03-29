@@ -36,6 +36,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Fonts\menuSmall.spritefont">
+      <Name>menuSmall</Name>
+      <Importer>FontDescriptionImporter</Importer>
+      <Processor>FontDescriptionProcessor</Processor>
+    </Compile>
     <Compile Include="Image\Miscellaneous\actionTextures.png">
       <Name>actionTextures</Name>
       <Importer>TextureImporter</Importer>
@@ -128,11 +133,6 @@
   <ItemGroup>
     <Compile Include="Fonts\menuLarge.spritefont">
       <Name>menuLarge</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
-    </Compile>
-    <Compile Include="Fonts\menuSmall.spritefont">
-      <Name>menuSmall</Name>
       <Importer>FontDescriptionImporter</Importer>
       <Processor>FontDescriptionProcessor</Processor>
     </Compile>

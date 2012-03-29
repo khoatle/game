@@ -204,7 +204,7 @@ namespace Poseidon
             helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_skills_4");
             helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_otherKeys_5");
             nextHelpButton = Content.Load<Texture2D>("Image/ButtonTextures/nextHelpButton");
-            SpriteFont menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            SpriteFont menuSmall = IngamePresentation.menuSmall;
             helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice, menuSmall);
             Components.Add(helpScene);
 
@@ -220,7 +220,7 @@ namespace Poseidon
             // Create the Start Scene
             startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
-            smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
+            smallFont = IngamePresentation.menuSmall;
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
             startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
@@ -434,7 +434,7 @@ namespace Poseidon
 
         public void HandleQuizzGameInput()
         {
-            if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
+            if (quizzGameScene.questionAnswered >= 4 || EscPressed)// || enterPressed)
             {
                 //each right answer give 5% environment boost
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
@@ -446,7 +446,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isOver && enterPressed)
+            if (typeGameScene.isOver && enterPressed || EscPressed)
             {
                 PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);

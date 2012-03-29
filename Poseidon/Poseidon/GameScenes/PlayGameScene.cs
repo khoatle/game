@@ -267,39 +267,39 @@ namespace Poseidon
             //stop spinning the bar
             IngamePresentation.StopSpinning();
 
-            if (PoseidonGame.gamePlus)
-            {
-                int[] numShootingEnemies = { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+            //if (PoseidonGame.gamePlus)
+            //{
+            //    int[] numShootingEnemies = { 0, 5, 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+            //    GameConstants.NumberShootingEnemies = numShootingEnemies;
+            //    int[] numCombatEnemies =   { 0, 5, 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+            //    GameConstants.NumberCombatEnemies = numCombatEnemies;
+            //    int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //    GameConstants.NumberGhostPirate = numGhostPirates;
+            //    int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
+            //    GameConstants.NumberFish = numFish;
+            //    int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
+            //    GameConstants.NumberMutantShark = numMutantShark;
+            //    int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
+            //    GameConstants.NumberTerminator = numTerminator;
+            //    int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //    GameConstants.NumberSubmarine = numSubmarine;
+            //} 
+            //else {
+                int[] numShootingEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies =   { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
-                GameConstants.NumberCombatEnemies = numCombatEnemies;
-                int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                GameConstants.NumberGhostPirate = numGhostPirates;
-                int[] numFish = { 0, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
-                GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
-                GameConstants.NumberMutantShark = numMutantShark;
-                int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
-                GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                GameConstants.NumberSubmarine = numSubmarine;
-            } 
-            else {
-                int[] numShootingEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
-                GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 50, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 2, 3, 3, 10, 0, 0 };
+                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 1, 2, 2, 10, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
-            }
+            //}
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -534,9 +534,7 @@ namespace Poseidon
             }
             else // Level won
             {
-                //return all strange rocks that are not yet processed to bot
-                if (researchFacility != null)
-                    HydroBot.numStrangeObjCollected += researchFacility.listTimeRockProcessing.Count;
+
 
                 ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                 objectsToSerialize.hydrobot = hydroBot;
@@ -1196,6 +1194,9 @@ namespace Poseidon
                         if (!displayStatisticsNow) displayStatisticsNow = true;
                         else
                         {
+                            //return all strange rocks that are not yet processed to bot
+                            if (researchFacility != null)
+                                HydroBot.numStrangeObjCollected += researchFacility.listTimeRockProcessing.Count;
                             currentLevel++;
                             if (currentLevel < 11)
                                 currentGameState = GameState.ToMiniGame;
@@ -2043,6 +2044,10 @@ namespace Poseidon
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black);
             }
+            string nextText = "Enter to continue.Esc to skip.";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.DarkViolet);
+
             spriteBatch.End();
             if (screenTransitNow)
             {

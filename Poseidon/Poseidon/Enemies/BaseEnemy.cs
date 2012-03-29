@@ -65,6 +65,8 @@ namespace Poseidon
         //is this enemy released from the submarine?
         public bool releasedFromSubmarine = false;
 
+        float turnAmount = 0;
+
         public virtual void Load(int clipStart, int clipEnd, int fps)
         {
             skd = Model.Tag as SkinningData;
@@ -102,7 +104,7 @@ namespace Poseidon
 
             giveupTime = new TimeSpan(0, 0, 3);
             perceptionRadius = GameConstants.EnemyPerceptionRadius;// *(HydroBot.gamePlusLevel + 1);
-            timeBetweenFire = 0.5f;
+            timeBetweenFire = 1.0f;
             stunned = false;
             prevFire = new TimeSpan();
             health = GameConstants.DefaultEnemyHP * (HydroBot.gamePlusLevel + 1); //+1 as it starts from 0
@@ -377,28 +379,39 @@ namespace Poseidon
         // Go randomly is default move
         protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot, float speedFactor)
         {
+            float lastForwardDir = ForwardDirection;
+            float lastTurnAmount = turnAmount;
+
             Vector3 futurePosition = Position;
             //int barrier_move
             Random random = new Random();
-            float turnAmount = 0;
+            
             //also try to change direction if we are stuck
+            int rightLeft = random.Next(2);
+            turnAmount = 0;
             if (stucked == true)
             {
-                ForwardDirection += MathHelper.PiOver4;
+                //ForwardDirection += MathHelper.PiOver4/2;
+                if (lastTurnAmount == 0)
+                {
+                    if (rightLeft == 0)
+                        turnAmount = 5;
+                    else turnAmount = -5;
+                }
+                else turnAmount = lastTurnAmount;
             }
-            else if (changeDirection >= 95)
+            else if (changeDirection >= 99)
             {
-                int rightLeft = random.Next(2);
                 if (rightLeft == 0)
-                    turnAmount = 20;
-                else turnAmount = -20;
+                    turnAmount = 5;
+                else turnAmount = -5;
             }
 
             float prevForwardDir = ForwardDirection;
             Vector3 prevFuturePosition = futurePosition;
             // try upto 10 times to change direction is there is collision
-            for (int i = 0; i < 4; i++)
-            {
+            //for (int i = 0; i < 4; i++)
+            //{
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
                 Vector3 headingDirection = Vector3.Zero;
                 headingDirection.X = (float)Math.Sin(ForwardDirection);
@@ -422,14 +435,14 @@ namespace Poseidon
                         updatedSphere.Radius);
 
                     stucked = false;
-                    break;
+                    //break;
                 }
                 else
                 {
                     stucked = true;
                     futurePosition = prevFuturePosition;
                 }
-            }
+            //}
         }
     }
 }

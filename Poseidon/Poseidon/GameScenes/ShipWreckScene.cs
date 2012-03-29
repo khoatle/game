@@ -201,7 +201,7 @@ namespace Poseidon
         {
             statsFont = IngamePresentation.statsFont;
             statisticFont = IngamePresentation.statisticFont;
-            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            menuSmall = IngamePresentation.menuSmall;
             paintingFont = statisticFont;// Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
             audio = (AudioLibrary)

@@ -1151,14 +1151,14 @@ namespace Poseidon
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
             
-            if (gameMode == GameMode.MainGame)
+            if (gameMode == GameMode.MainGame || gameMode == GameMode.ShipWreck)
             {
                 //red sea level has the corrosive effect
                 if (PlayGameScene.currentLevel == 8)
                 {
                     if (!invincibleMode)
                     {
-                        currentHitPoint -= 0.02f;
+                        currentHitPoint -= 0.01f;
                     }
                 }
                 //disable goodwill bar in level 1

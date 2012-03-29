@@ -31,7 +31,7 @@ namespace Poseidon {
 
         //experience reward
         public const int ExpPainting = 35;
-        public const int BasicExpHealingFish = 8;
+        public const int BasicExpHealingFish = 16;
         //game scenes constants
         public const int MainGameMinRangeX = 100;
         public const int MainGameMinRangeZ = 100;
@@ -56,7 +56,7 @@ namespace Poseidon {
                          
         // HP const
         public const int DefaultEnemyHP = 100;
-        public const int DefaultFishHP = 100;
+        public const int DefaultFishHP = 200;
         //public const int FishHP = 50;
 
         //Trash
@@ -68,7 +68,7 @@ namespace Poseidon {
         public const float powerpackResourceRotationSpeed = 0.08f;
 
         //Environment Const
-        public const int PlayerStartingEnv = 900;
+        public const int PlayerStartingEnv = 300;
         public const int MaxEnv = 1000;
         public const int EachLevelMinEnv = 200;
         public const int envLossForFishDeath = 15;
@@ -94,8 +94,8 @@ namespace Poseidon {
         public const int TerminatorShootingDamage = 25;
         public const int ChasingBulletDamage = 80;
         public const int StopBulletChasing = 3;
-        public const int TorpedoDamage = 2;
-        public const int LaserBeamDamage = 2;
+        public const int TorpedoDamage = 100;
+        public const int LaserBeamDamage = 25;
 
         // Enemy configuration
         public const float EnemyShootingRate = 0.6f;
@@ -144,9 +144,9 @@ namespace Poseidon {
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
-                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(360),
-                                                       TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(360),
-                                                       TimeSpan.FromSeconds(360), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(180)}; 
+                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
+                                                       TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
+                                                       TimeSpan.FromSeconds(450), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days

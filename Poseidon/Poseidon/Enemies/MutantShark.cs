@@ -171,7 +171,7 @@ namespace Poseidon
             }
             if (!configBits[3] && this.BoundingSphere.Intersects(cameraFrustum))
             {
-                if (PoseidonGame.playTime.TotalSeconds - timeLastRoar > 10)
+                if (PoseidonGame.playTime.TotalSeconds - timeLastRoar > 20)
                     if (rand.Next(100) >= 95)
                     {
                         timeLastRoar = PoseidonGame.playTime.TotalSeconds;

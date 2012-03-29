@@ -573,7 +573,8 @@ namespace Poseidon
 
                     //tipHover = mouseOnTipIcon(currentMouseState);
                     //levelObjHover = mouseOnLevelObjectiveIcon(currentMouseState);
-                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor()
+                        || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, null,null, mouseOnInteractiveIcons);
@@ -1076,7 +1077,7 @@ namespace Poseidon
             IngamePresentation.DrawEnvironmentBar(game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);

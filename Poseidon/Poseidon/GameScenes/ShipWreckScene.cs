@@ -555,6 +555,8 @@ namespace Poseidon
                 GameConstants.ShipWreckMinRangeX,GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0 , GameMode.ShipWreck, GameConstants.ShipWreckFloatHeight);
             AddingObjects.placeFish(ref fishNum, fishes[currentShipWreckID], Content, random, enemiesAmount[currentShipWreckID], enemies[currentShipWreckID], null,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ, 0, GameMode.ShipWreck, GameConstants.ShipWreckFloatHeight);
+            
+            //give priority for treasure chests over static objects
             AddingObjects.placeTreasureChests(treasureChests[currentShipWreckID], staticObjects[currentShipWreckID], random,
                 GameConstants.ShipWreckMinRangeX, GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMinRangeZ, GameConstants.ShipWreckMaxRangeZ);
             
@@ -1263,7 +1265,7 @@ namespace Poseidon
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, statsFont, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(game, spriteBatch, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);

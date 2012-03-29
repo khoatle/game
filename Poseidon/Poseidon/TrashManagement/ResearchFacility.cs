@@ -437,7 +437,7 @@ namespace Poseidon
 
             //Draw resurrection title:
             string resurrectTitle = "EXTINCT ANIMAL RESURRECTION";
-            Vector2 resurTitlePos = new Vector2(screenWidth/2, bioUpgradeRect.Bottom + 10 + facilityFont.MeasureString(resurrectTitle).Y/2);
+            Vector2 resurTitlePos = new Vector2(screenWidth / 2, upgradeFacTitlePos.Y + 200 + facilityFont.MeasureString(resurrectTitle).Y / 2);
             spriteBatch.DrawString(facilityFont, resurrectTitle, resurTitlePos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(resurrectTitle).X / 2, facilityFont.MeasureString(resurrectTitle).Y / 2), 1, SpriteEffects.None, 0);
 
             Vector2 dolphinTextPos = new Vector2(2 * screenWidth/4, resurTitlePos.Y + 10);

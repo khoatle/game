@@ -513,7 +513,7 @@ namespace Poseidon.Core
             }
         }
 
-        public static void DrawLevelBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
+        public static void DrawLevelBar(Game game, SpriteBatch spriteBatch, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
         {
             int barX = game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2;
             int barY = heightFromTop;
@@ -535,7 +535,7 @@ namespace Poseidon.Core
                 new Rectangle(barX, barY, HealthBar.Width, barHeight),
                 new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
-            type = type.ToUpper();
+            //type = type.ToUpper();
             spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X/2, heightFromTop - 1), Color.Gold);
         }
 

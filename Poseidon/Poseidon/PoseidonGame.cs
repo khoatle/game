@@ -910,7 +910,7 @@ namespace Poseidon
             PerformanceHelper.StartFrame();
             using (new TimeRulerHelper("Update", Color.Yellow))
             {
-                System.Threading.Thread.Sleep(5);
+                // System.Threading.Thread.Sleep(5);
 
                 // Get the Keyboard and GamePad state
                 CheckKeyEntered();

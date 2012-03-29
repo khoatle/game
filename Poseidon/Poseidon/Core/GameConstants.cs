@@ -68,7 +68,7 @@ namespace Poseidon {
         public const float powerpackResourceRotationSpeed = 0.08f;
 
         //Environment Const
-        public const int PlayerStartingEnv = 300;
+        public const int PlayerStartingEnv = 900;
         public const int MaxEnv = 1000;
         public const int EachLevelMinEnv = 200;
         public const int envLossForFishDeath = 15;
@@ -116,7 +116,7 @@ namespace Poseidon {
         public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
-        public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
+        public static int[] NumberShipWreck = { 5, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];

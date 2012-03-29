@@ -25,6 +25,8 @@ namespace Poseidon
         public float poissonInterval;
         public int basicExperienceReward;
 
+        public Vector3 velocity;
+
         // Slow down stuff
         public float speedFactor;
         public TimeSpan slowStart;
@@ -53,6 +55,9 @@ namespace Poseidon
             accumulatedHealthLossFromPoison = 0;
             gaveExp = false;
             speedFactor = 1f;
+
+            velocity = new Vector3();
+            velocity.Y = GameConstants.MainGameFloatHeight;
 
             // Slow duration is init as 5
             slowDuration = new TimeSpan(0, 0, 5);

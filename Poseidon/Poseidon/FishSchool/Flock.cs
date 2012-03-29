@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 #endregion
 
 namespace Poseidon.FishSchool
@@ -26,7 +27,7 @@ namespace Poseidon.FishSchool
     {
         #region Constants
         //Number of FLock members
-        int flockSize = GameConstants.FishInSchool[PlayGameScene.currentLevel];
+        int flockSize = (int)(GameConstants.FishInSchool[PlayGameScene.currentLevel] * GameSettings.SchoolOfFishDetail);
         #endregion
 
         #region Fields

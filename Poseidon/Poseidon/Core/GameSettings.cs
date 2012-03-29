@@ -12,5 +12,6 @@ namespace Poseidon.Core
         public static bool SpecialEffectsEnabled = true;
         public static float NumParticleLevel = 1.0f;
         public static bool ShowLiveTip = true;
+        public static float SchoolOfFishDetail = 1.0f;
     }
 }

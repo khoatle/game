@@ -281,27 +281,36 @@ namespace Poseidon
 
         public void DrawResearchFacilityConfigurationScene(SpriteBatch spriteBatch, SpriteFont menuSmall)
         {
+            if (GameConstants.textScaleFactor == 0)
+            {
+                GameConstants.textScaleFactor = (float)game.Window.ClientBounds.Width / 1280 * (float)game.Window.ClientBounds.Height / 800;
+                //GameConstants.lineSpacing = (int)(GameConstants.lineSpacing * GameConstants.textScaleFactor);
+            }
+
+            float textScaleFactor = GameConstants.textScaleFactor;
+            float lineSpacing = GameConstants.lineSpacing;
+                
             //HydroBot.numTurtlePieces = 30; //REMOVE - JUST fOR TESTING
             float fadeFactor = 0.65f;
             string title = "RESEARCH FACILITY";
             string description = "Welcome to the Research Facility. Processing techniques are analyzed by AI here for processing plant upgradation. State of the art genetic engineering will help you resurrect extinct animals. You can also use experience points to upgrade your own parts here.";
-            title = Poseidon.Core.IngamePresentation.wrapLine(title, backgroundRect.Width, facilityFont, 1.5f);
+            title = Poseidon.Core.IngamePresentation.wrapLine(title, backgroundRect.Width, facilityFont, 1.5f * textScaleFactor);
 
             //draw background
             spriteBatch.Draw(background, backgroundRect, Color.White);
 
             //draw title string
-            Vector2 titlePos = new Vector2(backgroundRect.Center.X, backgroundRect.Top + 120);
-            spriteBatch.DrawString(facilityFont, title, titlePos, Color.Yellow * fadeFactor, 0, new Vector2(facilityFont.MeasureString(title).X / 2, facilityFont.MeasureString(title).Y / 2), 1.5f, SpriteEffects.None, 0);
+            Vector2 titlePos = new Vector2(backgroundRect.Center.X, backgroundRect.Top + 70 * textScaleFactor);
+            spriteBatch.DrawString(facilityFont, title, titlePos, Color.Yellow * fadeFactor, 0, new Vector2(facilityFont.MeasureString(title).X / 2, facilityFont.MeasureString(title).Y / 2), 1.5f * textScaleFactor, SpriteEffects.None, 0);
 
             //draw description
-            description = Poseidon.Core.IngamePresentation.wrapLine(description, backgroundRect.Width - 130, facilityFont);
-            Vector2 descPos = titlePos + new Vector2(0, facilityFont.MeasureString(title).Y / 2 * 1.5f + 10 + facilityFont.MeasureString(description).Y / 2);
-            spriteBatch.DrawString(facilityFont, description, descPos, Color.Purple * fadeFactor, 0, new Vector2(facilityFont.MeasureString(description).X / 2, facilityFont.MeasureString(description).Y / 2), 1, SpriteEffects.None, 0);
+            description = Poseidon.Core.IngamePresentation.wrapLine(description, backgroundRect.Width - 130, facilityFont, textScaleFactor);
+            Vector2 descPos = titlePos + new Vector2(0, facilityFont.MeasureString(title).Y / 2 * 1.5f + lineSpacing + facilityFont.MeasureString(description).Y / 2) * textScaleFactor;
+            spriteBatch.DrawString(facilityFont, description, descPos, Color.Purple * fadeFactor, 0, new Vector2(facilityFont.MeasureString(description).X / 2, facilityFont.MeasureString(description).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
             string botUpgradeTxt = "HYDROBOT UPGRADATION";
-            Vector2 botUpgradeTxtPos = descPos + new Vector2(0, facilityFont.MeasureString(description).Y / 2 + 10 + facilityFont.MeasureString(botUpgradeTxt).Y / 2);
-            spriteBatch.DrawString(facilityFont, botUpgradeTxt, botUpgradeTxtPos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(botUpgradeTxt).X / 2, facilityFont.MeasureString(botUpgradeTxt).Y / 2), 1, SpriteEffects.None, 0);
+            Vector2 botUpgradeTxtPos = descPos + new Vector2(0, facilityFont.MeasureString(description).Y / 2 + lineSpacing + facilityFont.MeasureString(botUpgradeTxt).Y / 2) * textScaleFactor;
+            spriteBatch.DrawString(facilityFont, botUpgradeTxt, botUpgradeTxtPos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(botUpgradeTxt).X / 2, facilityFont.MeasureString(botUpgradeTxt).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             //Draw Increase Attribute Button
             if (HydroBot.unassignedPts > 0)
             {
@@ -309,20 +318,20 @@ namespace Poseidon
                 else if (upgradeBotButtonHover) increaseAttributeButton = IngamePresentation.increaseAttributeButtonHoverTexture;
                 else increaseAttributeButton = IngamePresentation.increaseAttributeButtonNormalTexture;
                 increaseAttributeRect.X = (int)(botUpgradeTxtPos.X - increaseAttributeRect.Width / 2);
-                increaseAttributeRect.Y = (int)(botUpgradeTxtPos.Y + facilityFont.MeasureString(botUpgradeTxt).Y / 2 + 5);
+                increaseAttributeRect.Y = (int)(botUpgradeTxtPos.Y + facilityFont.MeasureString(botUpgradeTxt).Y / 2 + lineSpacing/2);
                 spriteBatch.Draw(increaseAttributeButton, increaseAttributeRect, Color.White * fadeFactor);
             }
             else
             {
                 string noUpgrade = "No upgrade currently available. Accumulate experience points for more upgrades.";
-                Vector2 noUpgradePos = botUpgradeTxtPos + new Vector2(0, facilityFont.MeasureString(botUpgradeTxt).Y / 2 + 10 + facilityFont.MeasureString(noUpgrade).Y / 2);
-                spriteBatch.DrawString(facilityFont, noUpgrade, noUpgradePos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(noUpgrade).X / 2, facilityFont.MeasureString(noUpgrade).Y / 2), 1, SpriteEffects.None, 0);
+                Vector2 noUpgradePos = botUpgradeTxtPos + new Vector2(0, facilityFont.MeasureString(botUpgradeTxt).Y / 2 + lineSpacing + facilityFont.MeasureString(noUpgrade).Y / 2) * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, noUpgrade, noUpgradePos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(noUpgrade).X / 2, facilityFont.MeasureString(noUpgrade).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
 
             //draw factory upgrade heading:
             string upgradeTitle = "PROCESSING PLANT UPGRADATION";
-            Vector2 upgradeFacTitlePos = botUpgradeTxtPos + new Vector2(0, facilityFont.MeasureString(description).Y / 2 + 50 + facilityFont.MeasureString(upgradeTitle).Y / 2);
-            spriteBatch.DrawString(facilityFont, upgradeTitle, upgradeFacTitlePos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(upgradeTitle).X / 2, facilityFont.MeasureString(upgradeTitle).Y / 2), 1, SpriteEffects.None, 0);
+            Vector2 upgradeFacTitlePos = botUpgradeTxtPos + new Vector2(0, facilityFont.MeasureString(description).Y / 2 + 50 + facilityFont.MeasureString(upgradeTitle).Y / 2) * textScaleFactor;
+            spriteBatch.DrawString(facilityFont, upgradeTitle, upgradeFacTitlePos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(upgradeTitle).X / 2, facilityFont.MeasureString(upgradeTitle).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
             string bioButtonText, plasticButtonText;
             Vector2 bioButtonPos = Vector2.Zero;
@@ -330,21 +339,21 @@ namespace Poseidon
             if ((PoseidonGame.playTime.TotalSeconds - facilityCreationTime) < GameConstants.numDaysForUpgrade * GameConstants.DaysPerSecond)
             {
                 bioButtonText = "No upgrades available. Research Facility takes atleast " + GameConstants.numDaysForUpgrade + " days to develop upgrades";
-                bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width-130, facilityFont);
-                bioButtonPos = upgradeFacTitlePos + new Vector2(0, facilityFont.MeasureString(upgradeTitle).Y / 2 + 10 + facilityFont.MeasureString(bioButtonText).Y / 2);
-                spriteBatch.DrawString(facilityFont, bioButtonText, bioButtonPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width-130, facilityFont, textScaleFactor);
+                bioButtonPos = upgradeFacTitlePos + new Vector2(0, facilityFont.MeasureString(upgradeTitle).Y / 2 + lineSpacing + facilityFont.MeasureString(bioButtonText).Y / 2) * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, bioButtonText, bioButtonPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else
             {           
                 string button_title_text = "ORGANIC PROCESSING PLANT";
                 Vector2 organicUpgradePos = new Vector2();
                 organicUpgradePos.X = (float)screenWidth / 3;
-                organicUpgradePos.Y = upgradeFacTitlePos.Y + facilityFont.MeasureString(upgradeTitle).Y / 2 + 10 + facilityFont.MeasureString(button_title_text).Y / 2;
+                organicUpgradePos.Y = upgradeFacTitlePos.Y + (facilityFont.MeasureString(upgradeTitle).Y / 2 + lineSpacing + facilityFont.MeasureString(button_title_text).Y / 2) * textScaleFactor;
                 Vector2 plasticUpgradePos = organicUpgradePos;
                 plasticUpgradePos.X = (float)2 * screenWidth / 3;
-                spriteBatch.DrawString(facilityFont, button_title_text, organicUpgradePos, Color.White * fadeFactor, 0, new Vector2(facilityFont.MeasureString(button_title_text).X / 2, facilityFont.MeasureString(button_title_text).Y / 2), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(facilityFont, button_title_text, organicUpgradePos, Color.White * fadeFactor, 0, new Vector2(facilityFont.MeasureString(button_title_text).X / 2, facilityFont.MeasureString(button_title_text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 button_title_text = "PLASTIC PROCESSING PLANT";
-                spriteBatch.DrawString(facilityFont, button_title_text, plasticUpgradePos, Color.White * fadeFactor, 0, new Vector2(facilityFont.MeasureString(button_title_text).X / 2, facilityFont.MeasureString(button_title_text).Y / 2), 1, SpriteEffects.None, 0);
+                spriteBatch.DrawString(facilityFont, button_title_text, plasticUpgradePos, Color.White * fadeFactor, 0, new Vector2(facilityFont.MeasureString(button_title_text).X / 2, facilityFont.MeasureString(button_title_text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 if (HydroBot.bioPlantLevel == 1 && HydroBot.totalBioTrashProcessed >= GameConstants.numTrashForUpgrade)
                 {
                     bioUpgrade = true;
@@ -377,16 +386,16 @@ namespace Poseidon
                     plasticButtonText = "";
                 }
 
-                Vector2 bioTextPos = organicUpgradePos + new Vector2(0, facilityFont.MeasureString(button_title_text).Y / 2 + 10);// + facilityFont.MeasureString(bioButtonText).Y / 2);
-                Vector2 plasticTextPos = plasticUpgradePos + new Vector2(0, facilityFont.MeasureString(button_title_text).Y / 2 + 10);// + facilityFont.MeasureString(plasticButtonText).Y / 2);
+                Vector2 bioTextPos = organicUpgradePos + new Vector2(0, facilityFont.MeasureString(button_title_text).Y / 2 + lineSpacing) * textScaleFactor;// + facilityFont.MeasureString(bioButtonText).Y / 2);
+                Vector2 plasticTextPos = plasticUpgradePos + new Vector2(0, facilityFont.MeasureString(button_title_text).Y / 2 + lineSpacing) * textScaleFactor;// + facilityFont.MeasureString(plasticButtonText).Y / 2);
 
                 if(bioUpgrade)
-                {     
-                    bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                {
+                    bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     //draw bio upgrade buttons
                     bioUpgradeRect.X = (int)(bioTextPos.X - bioUpgradeRect.Width / 2);
-                    bioUpgradeRect.Y = (int)(bioTextPos.Y + facilityFont.MeasureString(bioButtonText).Y / 2 + 10);
+                    bioUpgradeRect.Y = (int)(bioTextPos.Y + (facilityFont.MeasureString(bioButtonText).Y / 2 + lineSpacing) * textScaleFactor);
                     if (upgradeBioFacButtonPressed) upgradeButton = IngamePresentation.increaseAttributeButtonPressedTexture;
                     else if (upgradeBioFacButtonHover) upgradeButton = IngamePresentation.increaseAttributeButtonHoverTexture;
                     else upgradeButton = IngamePresentation.increaseAttributeButtonNormalTexture;
@@ -395,24 +404,24 @@ namespace Poseidon
                 else if (HydroBot.bioPlantLevel == 3)
                 {
                     bioButtonText = "Congratulations! You've got the best technology.";
-                    bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width / 3, facilityFont2); 
-                    bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                    bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width / 3, facilityFont2, textScaleFactor);
+                    bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else
                 {
                     bioButtonText = "You need to process " + (HydroBot.bioPlantLevel * GameConstants.numTrashForUpgrade - HydroBot.totalBioTrashProcessed).ToString() + " more trash for upgrade to level " + (HydroBot.bioPlantLevel + 1).ToString();
-                    bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width/3, facilityFont2);
-                    bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                    bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width/3, facilityFont2, textScaleFactor);
+                    bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
 
                 if(plasticUpgrade)
                 {
-                    plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                    plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     plasticUpgradeRect.X = (int)(plasticTextPos.X - plasticUpgradeRect.Width / 2);
-                    plasticUpgradeRect.Y = (int)(plasticTextPos.Y + facilityFont.MeasureString(plasticButtonText).Y / 2 + 10);      
+                    plasticUpgradeRect.Y = (int)(plasticTextPos.Y + (facilityFont.MeasureString(plasticButtonText).Y / 2 + lineSpacing) * textScaleFactor);      
                     if (upgradePlasFacButtonPressed) upgradeButton = IngamePresentation.increaseAttributeButtonPressedTexture;
                     else if (upgradePlasFacButtonHover) upgradeButton = IngamePresentation.increaseAttributeButtonHoverTexture;
                     else upgradeButton = IngamePresentation.increaseAttributeButtonNormalTexture;
@@ -421,51 +430,51 @@ namespace Poseidon
                 else if (HydroBot.plasticPlantLevel == 3)
                 {
                     plasticButtonText = "Congratulations! You've got the best technology.";
-                    plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, backgroundRect.Width / 3, facilityFont2);
-                    plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                    plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, backgroundRect.Width / 3, facilityFont2, textScaleFactor);
+                    plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else
                 {
                     plasticButtonText = "You need to process " + (HydroBot.bioPlantLevel * GameConstants.numTrashForUpgrade - HydroBot.totalPlasticTrashProcessed).ToString() + " more trash for upgrade to level " + (HydroBot.plasticPlantLevel + 1).ToString();
-                    plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, backgroundRect.Width / 3, facilityFont2);
-                    plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), 1, SpriteEffects.None, 0);
+                    plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, backgroundRect.Width / 3, facilityFont2, textScaleFactor);
+                    plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                    
                 }
             }
 
             //Draw resurrection title:
             string resurrectTitle = "EXTINCT ANIMAL RESURRECTION";
-            Vector2 resurTitlePos = new Vector2(screenWidth / 2, upgradeFacTitlePos.Y + 200 + facilityFont.MeasureString(resurrectTitle).Y / 2);
-            spriteBatch.DrawString(facilityFont, resurrectTitle, resurTitlePos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(resurrectTitle).X / 2, facilityFont.MeasureString(resurrectTitle).Y / 2), 1, SpriteEffects.None, 0);
+            Vector2 resurTitlePos = new Vector2(screenWidth / 2, upgradeFacTitlePos.Y + (170 + facilityFont.MeasureString(resurrectTitle).Y / 2) * textScaleFactor);
+            spriteBatch.DrawString(facilityFont, resurrectTitle, resurTitlePos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(resurrectTitle).X / 2, facilityFont.MeasureString(resurrectTitle).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
-            Vector2 dolphinTextPos = new Vector2(2 * screenWidth/4, resurTitlePos.Y + 10);
-            Vector2 seacowTextPos = new Vector2(screenWidth / 4, resurTitlePos.Y + 10);
-            Vector2 turtleTextPos = new Vector2(3 * screenWidth / 4, resurTitlePos.Y + 10);
+            Vector2 dolphinTextPos = new Vector2(2 * screenWidth / 4, resurTitlePos.Y + lineSpacing * textScaleFactor);
+            Vector2 seacowTextPos = new Vector2(screenWidth / 4, resurTitlePos.Y + lineSpacing * textScaleFactor);
+            Vector2 turtleTextPos = new Vector2(3 * screenWidth / 4, resurTitlePos.Y + lineSpacing * textScaleFactor);
 
             //seaCowWon = dolphinWon = turtleWon = true;
 
             if (seaCowLost)
             {
                 string lost_Str = "Sorry, resurrection unsuccessful, the collected fragments can not be reused.";//"SORRY, RESURRECTION TIMED OUT. THE BONES CANNOT BE REUSED.";
-                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, screenWidth/4, facilityFont);
-                seacowTextPos.Y += facilityFont.MeasureString(lost_Str).Y / 2;
-                spriteBatch.DrawString(facilityFont, lost_Str, seacowTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(lost_Str).X / 2, facilityFont.MeasureString(lost_Str).Y / 2), 1, SpriteEffects.None, 0);
+                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, screenWidth/4, facilityFont, textScaleFactor);
+                seacowTextPos.Y += facilityFont.MeasureString(lost_Str).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, lost_Str, seacowTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(lost_Str).X / 2, facilityFont.MeasureString(lost_Str).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (seaCowWon && HydroBot.seaCowPower > 1f)
             {
                 string seacowText = "With more understanding, you have become better friends!";
-                seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth / 4, facilityFont2);
-                seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2;
-                spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), 1, SpriteEffects.None, 0);
+                seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth / 4, facilityFont2, textScaleFactor);
+                seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (seaCowWon)
             {
                 string seacowText = "Congrats! You have successfully resurrected the Stellar's SeaCow. It will join you in your adventure.";
-                seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth/4, facilityFont2);
-                seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2;
-                spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), 1, SpriteEffects.None, 0);
+                seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth/4, facilityFont2, textScaleFactor);
+                seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (HydroBot.hasSeaCow)
             {
@@ -477,16 +486,16 @@ namespace Poseidon
                     playSeaCowJigsaw = true;
                     string seacowJigsawButtonText = "Research Stellar's seacow";//"RESURRECT STELLAR'S SEACOW";
                     playSeaCowJigsawRect.X = (int)(seacowTextPos.X - playSeaCowJigsawRect.Width / 2);
-                    playSeaCowJigsawRect.Y = (int)(seacowTextPos.Y + 10);
+                    playSeaCowJigsawRect.Y = (int)(seacowTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playSeaCowJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else
                 {
                     string seacowText = "You need " + (GameConstants.boneCountForSeaCowJigsaw - HydroBot.numSeaCowPieces).ToString() + " more bones to research more on Stellar's Seacow";
-                    seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth / 4, facilityFont2);
-                    seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), 1, SpriteEffects.None, 0);
+                    seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth / 4, facilityFont2, textScaleFactor);
+                    seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
             }
             else
@@ -500,39 +509,39 @@ namespace Poseidon
                     playSeaCowJigsaw = true;
                     string seacowJigsawButtonText = "Resurrect Stellar's seacow";//"RESURRECT STELLAR'S SEACOW";
                     playSeaCowJigsawRect.X = (int)(seacowTextPos.X - playSeaCowJigsawRect.Width / 2);
-                    playSeaCowJigsawRect.Y = (int)(seacowTextPos.Y + 10);
+                    playSeaCowJigsawRect.Y = (int)(seacowTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playSeaCowJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numSeaCowPieces > 0)
                 {
                     string seacowText = "You need " + (GameConstants.boneCountForSeaCowJigsaw - HydroBot.numSeaCowPieces).ToString() + " more bones to resurrect Stellar's Seacow";
-                    seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth/4, facilityFont2);
-                    seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), 1, SpriteEffects.None, 0);
+                    seacowText = Poseidon.Core.IngamePresentation.wrapLine(seacowText, screenWidth/4, facilityFont2, textScaleFactor);
+                    seacowTextPos.Y += facilityFont.MeasureString(seacowText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, seacowText, seacowTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(seacowText).X / 2, facilityFont.MeasureString(seacowText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
             }
 
             if (turtleLost)
             {
                 string lost_Str = "Sorry, resurrection unsuccessful, the collected fragments can not be reused.";//"SORRY, RESURRECTION TIMED OUT. THE BONES CANNOT BE REUSED.";
-                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, screenWidth / 4, facilityFont);
-                turtleTextPos.Y += facilityFont.MeasureString(lost_Str).Y / 2;
-                spriteBatch.DrawString(facilityFont, lost_Str, turtleTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(lost_Str).X / 2, facilityFont.MeasureString(lost_Str).Y / 2), 1, SpriteEffects.None, 0);
+                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, screenWidth / 4, facilityFont, textScaleFactor);
+                turtleTextPos.Y += facilityFont.MeasureString(lost_Str).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, lost_Str, turtleTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(lost_Str).X / 2, facilityFont.MeasureString(lost_Str).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (turtleWon && HydroBot.turtlePower>1f)
             {
                 string turtleText = "With more understanding, you have become better friends!";
-                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth / 4, facilityFont2);
-                turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2;
-                spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), 1, SpriteEffects.None, 0);
+                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth / 4, facilityFont2, textScaleFactor);
+                turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (turtleWon)
             {
                 string turtleText = "Congrats! You have successfully resurrected the legend Meiolania. It will join you in your adventure.";
-                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth / 4, facilityFont2);
-                turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2;
-                spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), 1, SpriteEffects.None, 0);
+                turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth / 4, facilityFont2, textScaleFactor);
+                turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (HydroBot.hasTurtle)
             {
@@ -545,16 +554,16 @@ namespace Poseidon
                     playTurtleJigsaw = true;
                     string turtleJigsawButtonText = "Research Meiolania";//"RESURRECT MEIOLANIA\nTURTLE";
                     playTurtleJigsawRect.X = (int)(turtleTextPos.X - playTurtleJigsawRect.Width / 2);
-                    playTurtleJigsawRect.Y = (int)(turtleTextPos.Y + 10);
+                    playTurtleJigsawRect.Y = (int)(turtleTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playTurtleJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else
                 {
                     string turtleText = "You need " + (GameConstants.boneCountForTurtleJigsaw - HydroBot.numTurtlePieces).ToString() + " more fossils to research more on Meiolania";
-                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth / 4, facilityFont2);
-                    turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), 1, SpriteEffects.None, 0);
+                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth / 4, facilityFont2, textScaleFactor);
+                    turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
             }
             else
@@ -568,39 +577,39 @@ namespace Poseidon
                     playTurtleJigsaw = true;
                     string turtleJigsawButtonText = "Resurrect Meiolania";//"RESURRECT MEIOLANIA\nTURTLE";
                     playTurtleJigsawRect.X = (int)(turtleTextPos.X - playTurtleJigsawRect.Width / 2);
-                    playTurtleJigsawRect.Y = (int)(turtleTextPos.Y + 10);
+                    playTurtleJigsawRect.Y = (int)(turtleTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playTurtleJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numTurtlePieces > 0)
                 {
                     string turtleText = "You need " + (GameConstants.boneCountForTurtleJigsaw - HydroBot.numTurtlePieces).ToString() + " more fossils to resurrect Meiolania";
-                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth/4, facilityFont2);
-                    turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), 1, SpriteEffects.None, 0);
+                    turtleText = Poseidon.Core.IngamePresentation.wrapLine(turtleText, screenWidth/4, facilityFont2, textScaleFactor);
+                    turtleTextPos.Y += facilityFont.MeasureString(turtleText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, turtleText, turtleTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(turtleText).X / 2, facilityFont.MeasureString(turtleText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
             }
 
             if (dolphinLost)
             {
                 string lost_Str = "Sorry, resurrection unsuccessful, the collected fragments can not be reused.";//"SORRY, RESURRECTION TIMED OUT. THE BONES CANNOT BE REUSED.";
-                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, screenWidth / 4, facilityFont);
-                dolphinTextPos.Y += facilityFont.MeasureString(lost_Str).Y / 2;
-                spriteBatch.DrawString(facilityFont, lost_Str, dolphinTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(lost_Str).X / 2, facilityFont.MeasureString(lost_Str).Y / 2), 1, SpriteEffects.None, 0);
+                lost_Str = Poseidon.Core.IngamePresentation.wrapLine(lost_Str, screenWidth / 4, facilityFont, textScaleFactor);
+                dolphinTextPos.Y += facilityFont.MeasureString(lost_Str).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, lost_Str, dolphinTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(lost_Str).X / 2, facilityFont.MeasureString(lost_Str).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (dolphinWon && HydroBot.dolphinPower>1f)
             {
                 string dolphinText = "With more understanding, you have become better friends!";
-                dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2);
-                dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2;
-                spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), 1, SpriteEffects.None, 0);
+                dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2, textScaleFactor);
+                dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (dolphinWon)
             {
                 string dolphinText = "Congrats! You have successfully resurrected the Maui's dolphin. It will join you in your adventure.";
-                dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2);
-                dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2;
-                spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), 1, SpriteEffects.None, 0);
+                dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2, textScaleFactor);
+                dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2 * textScaleFactor;
+                spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Gold * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else if (HydroBot.hasDolphin)
             {
@@ -613,16 +622,16 @@ namespace Poseidon
                     playDolphinJigsaw = true;
                     string dolphinJigsawButtonText = "Research Maui's dolphin";//"RESURRECT MAUI'S\nDOLPHIN";
                     playDolphinJigsawRect.X = (int)(dolphinTextPos.X - playDolphinJigsawRect.Width / 2);
-                    playDolphinJigsawRect.Y = (int)(dolphinTextPos.Y + 10);
+                    playDolphinJigsawRect.Y = (int)(dolphinTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else
                 {
                     string dolphinText = "You need " + (GameConstants.boneCountForDolphinJigsaw - HydroBot.numDolphinPieces).ToString() + " more bones to research more on Maui's Dolphin";
-                    dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2);
-                    dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), 1, SpriteEffects.None, 0);
+                    dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2, textScaleFactor);
+                    dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
             }
             else
@@ -636,28 +645,28 @@ namespace Poseidon
                     playDolphinJigsaw = true;
                     string dolphinJigsawButtonText = "Resurrect Maui's dolphin";//"RESURRECT MAUI'S\nDOLPHIN";
                     playDolphinJigsawRect.X = (int)(dolphinTextPos.X - playDolphinJigsawRect.Width / 2);
-                    playDolphinJigsawRect.Y = (int)(dolphinTextPos.Y + 10);
+                    playDolphinJigsawRect.Y = (int)(dolphinTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numDolphinPieces > 0)
                 {
                     string dolphinText = "You need " + (GameConstants.boneCountForDolphinJigsaw - HydroBot.numDolphinPieces).ToString() + " more bones to resurrect Maui's Dolphin";
-                    dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2);
-                    dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2;
-                    spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), 1, SpriteEffects.None, 0);
+                    dolphinText = Poseidon.Core.IngamePresentation.wrapLine(dolphinText, screenWidth / 4, facilityFont2, textScaleFactor);
+                    dolphinTextPos.Y += facilityFont.MeasureString(dolphinText).Y / 2 * textScaleFactor;
+                    spriteBatch.DrawString(facilityFont, dolphinText, dolphinTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(dolphinText).X / 2, facilityFont.MeasureString(dolphinText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
             }
             if (!HydroBot.hasSeaCow && !HydroBot.hasTurtle && !HydroBot.hasDolphin && HydroBot.numSeaCowPieces == 0 && HydroBot.numDolphinPieces == 0 && HydroBot.numTurtlePieces == 0)
             {
                 string txt = "Collect bones/fossils to resurrect extinct sea creatures. Bones and fossils are found while processing trash in the factories. They are also found in treasure chests inside shipwrecks.";
-                txt = Poseidon.Core.IngamePresentation.wrapLine(txt, backgroundRect.Width - 100, facilityFont2);
-                spriteBatch.DrawString(facilityFont2, txt, new Vector2(backgroundRect.Left + 50, resurTitlePos.Y + 10 + facilityFont.MeasureString(resurrectTitle).Y / 2 + facilityFont.MeasureString(txt).Y / 2), Color.Violet);
+                txt = Poseidon.Core.IngamePresentation.wrapLine(txt, backgroundRect.Width - 130, facilityFont2, textScaleFactor);
+                spriteBatch.DrawString(facilityFont2, txt, new Vector2(screenWidth/2, resurTitlePos.Y + lineSpacing + facilityFont.MeasureString(resurrectTitle).Y / 2 + facilityFont.MeasureString(txt).Y / 2), Color.Violet, 0, new Vector2(facilityFont.MeasureString(txt).X/2, facilityFont.MeasureString(txt).Y/2), textScaleFactor, SpriteEffects.None, 0);
             }
 
             string nextText = "Press Enter to continue";
-            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X - 70, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y - 50);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor);
+            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X/2 - 50, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y/2 - 30);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor, 0, new Vector2(menuSmall.MeasureString(nextText).X / 2, menuSmall.MeasureString(nextText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
         }
 
         public void UpgradeBioFactory(List<Factory> factories)

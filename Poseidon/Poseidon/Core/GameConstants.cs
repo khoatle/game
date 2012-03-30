@@ -61,7 +61,7 @@ namespace Poseidon {
 
         //Trash
         public const int numTrashForUpgrade = 25;
-        public const int numDaysForUpgrade = 15;
+        public const int numDaysForUpgrade = 1;//15;
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
         public const int maxTrashCarryingCapacity = 15;
@@ -116,7 +116,7 @@ namespace Poseidon {
         public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
-        public static int[] NumberShipWreck = { 5, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
+        public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
@@ -296,5 +296,10 @@ namespace Poseidon {
         public const float TurtleStartingHealth = 2000;
 
         public const int MaxNumTries = 200;
+
+        //config for drawing texts in the game
+        public static float textScaleFactor = 0;
+        public static int lineSpacing = 10;
+        
     }
 }

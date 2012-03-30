@@ -284,6 +284,7 @@ namespace Poseidon
             if (GameConstants.textScaleFactor == 0)
             {
                 GameConstants.textScaleFactor = (float)game.Window.ClientBounds.Width / 1280 * (float)game.Window.ClientBounds.Height / 800;
+                GameConstants.textScaleFactor = (float)Math.Sqrt(GameConstants.textScaleFactor);
                 //GameConstants.lineSpacing = (int)(GameConstants.lineSpacing * GameConstants.textScaleFactor);
             }
 

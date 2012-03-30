@@ -489,7 +489,7 @@ namespace Poseidon
                     playSeaCowJigsawRect.X = (int)(seacowTextPos.X - playSeaCowJigsawRect.Width / 2);
                     playSeaCowJigsawRect.Y = (int)(seacowTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playSeaCowJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
                 }
                 else
                 {
@@ -512,7 +512,7 @@ namespace Poseidon
                     playSeaCowJigsawRect.X = (int)(seacowTextPos.X - playSeaCowJigsawRect.Width / 2);
                     playSeaCowJigsawRect.Y = (int)(seacowTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playSeaCowJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, seacowJigsawButtonText, new Vector2(playSeaCowJigsawRect.Center.X - facilityFont.MeasureString(seacowJigsawButtonText).X / 2, playSeaCowJigsawRect.Center.Y - facilityFont.MeasureString(seacowJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numSeaCowPieces > 0)
                 {
@@ -557,7 +557,7 @@ namespace Poseidon
                     playTurtleJigsawRect.X = (int)(turtleTextPos.X - playTurtleJigsawRect.Width / 2);
                     playTurtleJigsawRect.Y = (int)(turtleTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playTurtleJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
                 }
                 else
                 {
@@ -580,7 +580,7 @@ namespace Poseidon
                     playTurtleJigsawRect.X = (int)(turtleTextPos.X - playTurtleJigsawRect.Width / 2);
                     playTurtleJigsawRect.Y = (int)(turtleTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playTurtleJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, turtleJigsawButtonText, new Vector2(playTurtleJigsawRect.Center.X - facilityFont.MeasureString(turtleJigsawButtonText).X / 2, playTurtleJigsawRect.Center.Y - facilityFont.MeasureString(turtleJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numTurtlePieces > 0)
                 {
@@ -625,7 +625,7 @@ namespace Poseidon
                     playDolphinJigsawRect.X = (int)(dolphinTextPos.X - playDolphinJigsawRect.Width / 2);
                     playDolphinJigsawRect.Y = (int)(dolphinTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
                 }
                 else
                 {
@@ -648,7 +648,7 @@ namespace Poseidon
                     playDolphinJigsawRect.X = (int)(dolphinTextPos.X - playDolphinJigsawRect.Width / 2);
                     playDolphinJigsawRect.Y = (int)(dolphinTextPos.Y + lineSpacing * textScaleFactor);
                     spriteBatch.Draw(playJigsawButton, playDolphinJigsawRect, Color.White * fadeFactor);
-                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(facilityFont, dolphinJigsawButtonText, new Vector2(playDolphinJigsawRect.Center.X - facilityFont.MeasureString(dolphinJigsawButtonText).X / 2, playDolphinJigsawRect.Center.Y - facilityFont.MeasureString(dolphinJigsawButtonText).Y / 2), Color.Gold * fadeFactor, 0, new Vector2(0, 0), 1.0f, SpriteEffects.None, 0);
                 }
                 else if (HydroBot.numDolphinPieces > 0)
                 {

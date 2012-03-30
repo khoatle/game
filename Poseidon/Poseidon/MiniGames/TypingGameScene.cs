@@ -216,7 +216,8 @@ namespace Poseidon.MiniGames
             {
                 spriteBatch.Begin();
                 base.Draw(gameTime);
-                spriteBatch.DrawString(font, "You gain " + expAwarded + " experience from the written test!", new Vector2(trafficLightRed.Width + 10, 10), Color.Red);
+                string strResult = "You gain " + expAwarded + " experience from the written test!";
+                spriteBatch.DrawString(font, strResult, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Width/2, 50), Color.Red, 0, new Vector2(font.MeasureString(strResult).X/2, font.MeasureString(strResult).Y/2), 1.5f, SpriteEffects.None, 0);
 
                 string nextText = "Press ENTER to continue";
                 Vector2 nextTextPosition = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - font.MeasureString(nextText).X, game.GraphicsDevice.Viewport.TitleSafeArea.Bottom - font.MeasureString(nextText).Y);
@@ -258,6 +259,10 @@ namespace Poseidon.MiniGames
                 spriteBatch.Draw(trafficLightGreen, new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X+50, 10), Color.White);
                 spriteBatch.DrawString(font, str + (int)(maxTime - elapsedSeconds.TotalSeconds), new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - font.MeasureString(str).X, 10), Color.Red);
             }
+
+            string skipText = "Press Esc to skip minigame.";
+            Vector2 skipTextPosition = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - IngamePresentation.menuSmall.MeasureString(skipText).X, game.GraphicsDevice.Viewport.TitleSafeArea.Bottom - IngamePresentation.menuSmall.MeasureString(skipText).Y);
+            spriteBatch.DrawString(IngamePresentation.menuSmall, skipText, skipTextPosition, Color.Red);
 
             if (isOver) {
                 spriteBatch.End();

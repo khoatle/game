@@ -42,7 +42,7 @@ namespace Poseidon
             
         }
 
-        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, Cursor cursor)
+        public static void deleteSmallerThanZero(SwimmingObject[] objs, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, Cursor cursor, ParticleSystem explosionParticles)
         {
             for (int i = 0; i < size; i++) {
                 if (objs[i].health <= 0 && objs[i].gaveExp == false) {
@@ -104,7 +104,11 @@ namespace Poseidon
                         if (!objs[i].isBigBoss)
                         {
                             if (objs[i].BoundingSphere.Intersects(cameraFrustum))
-                                PoseidonGame.audio.hunterYell.Play();
+                            {
+                                if (objs[i] is GhostPirate)
+                                    PoseidonGame.audio.skeletonDie.Play();
+                                else PoseidonGame.audio.hunterYell.Play();
+                            }
                         }
                         else
                         {
@@ -112,6 +116,15 @@ namespace Poseidon
                                 PoseidonGame.audio.mutantSharkYell.Play();
                             else if (objs[i] is Terminator)
                                 PoseidonGame.audio.terminatorYell.Play();
+                            else if (objs[i] is Submarine)
+                            {
+                                PoseidonGame.audio.Explosion.Play();
+                                if (explosionParticles != null)
+                                {
+                                    for (int k = 0; k < GameConstants.numExplosionParticles; k++)
+                                        explosionParticles.AddParticle(objs[i].Position, Vector3.Zero);
+                                }
+                            }
                         }
                     }
 
@@ -202,7 +215,8 @@ namespace Poseidon
             futureBoundingSphere.Center.X = futurePosition.X;
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
-            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, futureBoundingSphere))
+            //don't let the living object to swim completely out of the screen reach
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX - 30, hydroBot.MaxRangeZ - 30, futureBoundingSphere))
             {
                 return false;
             }
@@ -300,7 +314,7 @@ namespace Poseidon
         /// </summary>
         /* scene --> 1-playgamescene, 2-shipwreckscene */
         /* switch to use GameMode instead, look at the beginning of PoseidonGame for more details */
-        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, GameTime gameTime, HydroBot hydroBot, BaseEnemy[] enemies, int enemiesAmount, Fish[] fishes, int fishAmount, Camera gameCamera) {
+        public static void updateDamageBulletVsBarriersCollision(List<DamageBullet> bullets, SwimmingObject[] barriers, ref int size, BoundingFrustum cameraFrustum, GameMode gameMode, GameTime gameTime, HydroBot hydroBot, BaseEnemy[] enemies, int enemiesAmount, Fish[] fishes, int fishAmount, Camera gameCamera, ParticleSystem explosionParticles) {
             BoundingSphere sphere;
             for (int i = 0; i < bullets.Count; i++) {
                 //special handling for the skill combo FlyingHammer
@@ -331,7 +345,9 @@ namespace Poseidon
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
                         if (barriers[j] is Fish && barriers[j].BoundingSphere.Intersects(cameraFrustum))
+                        {
                             PoseidonGame.audio.animalYell.Play();
+                        }
                         if (barriers[j] is BaseEnemy)
                         {
                             //if (((BaseEnemy)barriers[j]).isHypnotise)
@@ -365,15 +381,17 @@ namespace Poseidon
                                     barriers[j].Position = oldPosition;
                                     barriers[j].BoundingSphere.Center = oldPosition;
                                 }
-                                if (PoseidonGame.playTime.TotalSeconds - ((FlyingHammer)bullets[i]).timeShot > 0.75)
-                                {
-                                    ((FlyingHammer)bullets[i]).explodeNow = true;
-                                    PoseidonGame.audio.Explo1.Play();
-                                    gameCamera.Shake(25f, .4f);
-                                    CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
-                                }
                             }
-
+                        }
+                        // add particle effect when certain kind of bullet hits
+                        if (bullets[i] is Torpedo || bullets[i] is ChasingBullet)
+                        {
+                            if (explosionParticles != null)
+                            {
+                                for (int k = 0; k < GameConstants.numExplosionParticles; k++)
+                                    explosionParticles.AddParticle(bullets[i].Position, Vector3.Zero);
+                            }
+                            PoseidonGame.audio.explosionSmall.Play();
                         }
 
                         //whether or not to reduce health of the hit object
@@ -453,17 +471,18 @@ namespace Poseidon
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
 
                             int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * barriers[j].basicExperienceReward);
-                            int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
+                            //int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
                             int goodWillReward = (int)(((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.GoodWillPointGainForHealing);
 
                             HydroBot.currentExperiencePts += expReward;
-                            HydroBot.currentEnvPoint += envReward;
+                            //HydroBot.currentEnvPoint += envReward;
 
                             //update good will point
                             HydroBot.IncreaseGoodWillPoint(goodWillReward);
 
                             Point point = new Point();
-                            String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
+                            //String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";
+                            String point_string = "+" + expReward.ToString() + "EXP";
                             point.LoadContent(PoseidonGame.contentManager, point_string, barriers[j].Position, Color.LawnGreen);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
@@ -517,13 +536,14 @@ namespace Poseidon
                     }
 
                     // add particle effect when certain kind of bullet hits
-                    if (enemyBullets[i] is Torpedo)
+                    if (enemyBullets[i] is Torpedo || enemyBullets[i] is ChasingBullet)
                     {
                         if (explosionParticles != null)
                         {
                             for (int k = 0; k < GameConstants.numExplosionParticles; k++)
                                 explosionParticles.AddParticle(enemyBullets[i].Position, Vector3.Zero);
                         }
+                        PoseidonGame.audio.explosionSmall.Play();
                     }
 
                     enemyBullets.RemoveAt(i);

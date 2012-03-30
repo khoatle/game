@@ -45,6 +45,8 @@ namespace Poseidon
 
         }
 
+
+
         public override void update(GameTime gameTime)
         {
             
@@ -57,7 +59,8 @@ namespace Poseidon
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
         }
 
-        public override void draw(Matrix view, Matrix projection)
+
+        public override void draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
@@ -69,6 +72,7 @@ namespace Poseidon
             foreach (ModelMesh mesh in Model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
+                //foreach (Effect effect in mesh.Effects)
                 {
                     effect.World = worldMatrix * transforms[mesh.ParentBone.Index];
                     effect.DiffuseColor = Color.Gold.ToVector3();
@@ -87,6 +91,23 @@ namespace Poseidon
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
                     effect.FogColor = fogColor.ToVector3();
+
+                    //for our custom BasicEffect
+                    //effect.CurrentTechnique = effect.Techniques[techniqueName];
+                    //Matrix readlWorldMatrix = worldMatrix * transforms[mesh.ParentBone.Index];
+                    ////effect.CurrentTechnique = effect.Techniques[techniqueName];
+                    //effect.Parameters["World"].SetValue(readlWorldMatrix);
+                    //effect.Parameters["WorldInverseTranspose"].SetValue(Matrix.Invert(readlWorldMatrix));
+                    //effect.Parameters["View"].SetValue(view);
+                    //effect.Parameters["Projection"].SetValue(projection);
+                    //effect.Parameters["EyePosition"].SetValue(new Vector4(gameCamera.AvatarHeadOffset, 0));
+                    //Matrix WorldView = readlWorldMatrix * view;
+                    //EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
+                    //effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
+
+                    //effect.Parameters["AmbientColor"].SetValue(ambientColor.ToVector4());
+                    //effect.Parameters["DiffuseColor"].SetValue(diffuseColor.ToVector4());
+                    //effect.Parameters["SpecularColor"].SetValue(specularColor.ToVector4());
                 }
                 mesh.Draw();
             }

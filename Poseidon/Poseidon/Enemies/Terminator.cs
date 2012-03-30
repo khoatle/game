@@ -40,7 +40,8 @@ namespace Poseidon
             //Terminator is undefeatable before the last level
             if (PlayGameScene.currentLevel == 11 || gameMode == GameMode.SurvivalMode)
             {
-                health = 10000 * (HydroBot.gamePlusLevel + 1);
+                health = 10000 + (HydroBot.gamePlusLevel * 5000);// *(HydroBot.gamePlusLevel + 1);
+
                 maxHealth = health;
             }
             else
@@ -257,7 +258,8 @@ namespace Poseidon
                     if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeChasingBulletLast)
                         chasingBulletMode = false;
                 }
-                else if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 10)
+                //only cast special skill when hunting hydrobot
+                else if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 10 && currentHuntingTarget is HydroBot)
                 {
                     powerupsType = random.Next(3);
                     if (powerupsType == 0)

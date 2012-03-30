@@ -66,7 +66,7 @@ namespace Poseidon
             // Set up the parameters
             //currently only applies for herculesBullet
             //and the mjolnir
-            if (this is HerculesBullet) //|| modelName.Contains("mjolnir"))
+            if (this is HerculesBullet)// || this is Torpedo)
                 SetupShaderParameters(PoseidonGame.contentManager, Model);     
         }
 
@@ -81,6 +81,9 @@ namespace Poseidon
 
         public bool getStatus() { return isActive; }
 
+        public virtual void draw(Matrix view, Matrix projection, Camera gameCamera, string techiniqueName)
+        {
+        }
         public virtual void draw(Matrix view, Matrix projection)
         {
             Matrix[] transforms = new Matrix[Model.Bones.Count];

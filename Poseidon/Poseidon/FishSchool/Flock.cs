@@ -14,6 +14,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 #endregion
 
 namespace Poseidon.FishSchool
@@ -26,7 +27,7 @@ namespace Poseidon.FishSchool
     {
         #region Constants
         //Number of FLock members
-        int flockSize = GameConstants.FishInSchool[PlayGameScene.currentLevel];
+        int flockSize = (int)(GameConstants.FishInSchool[PlayGameScene.currentLevel] * GameSettings.SchoolOfFishDetail);
         #endregion
 
         #region Fields
@@ -97,31 +98,41 @@ namespace Poseidon.FishSchool
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         /// <param name="cat"></param>
-        public void Update(GameTime gameTime, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
+        public void Update(GameTime gameTime, HydroBot tank, BoundingFrustum frustum, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)//, Cat cat)
         {
+            BoundingSphere boundingSphere;
             foreach (Fish thisFish in flock)
             {
                 thisFish.ResetThink();
-
-                foreach (Fish otherFish in flock)
+                
+                //can't reduce the workload here cuz of unreal fish formation (they don't regroup if out of screen)
+                //if (frustum.Intersects(boundingSphere))
                 {
-                    //this check is so we don't try to fly to ourself!
-                    if (thisFish != otherFish)
+                    foreach (Fish otherFish in flock)
                     {
-                        thisFish.ReactTo(otherFish, ref flockParams);
+                        //this check is so we don't try to fly to ourself!
+                        if (thisFish != otherFish)
+                        {
+                            thisFish.ReactTo(otherFish, ref flockParams);
+                        }
                     }
                 }
-
+                boundingSphere = new BoundingSphere(thisFish.Location, 1.0f);
                 //Look for the main character
                 thisFish.ReactToMainCharacter(tank, ref flockParams);
-                //React to enemies and other big fishes
-                for (int i = 0; i < enemyAmount; i++)
+
+                //reduce workload of update
+                if (frustum.Intersects(boundingSphere)) 
                 {
-                    thisFish.ReactToSwimmingObject(enemies[i], ref flockParams);
-                }
-                for (int i = 0; i < fishAmount; i++)
-                {
-                    thisFish.ReactToSwimmingObject(fishes[i], ref flockParams);
+                    //React to enemies and other big fishes
+                    for (int i = 0; i < enemyAmount; i++)
+                    {
+                        thisFish.ReactToSwimmingObject(enemies[i], ref flockParams);
+                    }
+                    for (int i = 0; i < fishAmount; i++)
+                    {
+                        thisFish.ReactToSwimmingObject(fishes[i], ref flockParams);
+                    }
                 }
                 thisFish.Update(gameTime, ref flockParams);
             }
@@ -132,13 +143,13 @@ namespace Poseidon.FishSchool
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="gameTime"></param>
-        public void Draw(SpriteBatch spriteBatch, GameTime gameTime)
+        public void Draw(SpriteBatch spriteBatch, GameTime gameTime, BoundingFrustum frustum)
         {
-            //BoundingSphere boundingSphere;
+            BoundingSphere boundingSphere;
             foreach (Fish theFish in flock)
             {
-                //boundingSphere = new BoundingSphere(theBird.Location, 1.0f);
-                //if (PlayGameScene.frustum.Intersects(boundingSphere))
+                boundingSphere = new BoundingSphere(theFish.Location, 1.0f);
+                if (frustum.Intersects(boundingSphere))
                     theFish.Draw(spriteBatch, gameTime);
             }
         }

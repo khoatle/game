@@ -326,7 +326,7 @@ namespace Poseidon
             {
                 //in survival mode, try to place the ancient fish near you
                 if (gameMode == GameMode.SurvivalMode)
-                    fish[i].Position = GenerateSurfaceRandomPosition(0, minX, 0, minZ, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                    fish[i].Position = GenerateSurfaceRandomPosition(minX, minX + 100, minZ, minZ + 100, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 else fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = floatHeight;
                 //tempCenter = fish[i].BoundingSphere.Center;
@@ -436,12 +436,12 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             Torpedo newBullet = new Torpedo();
-            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
             Torpedo newBullet1 = new Torpedo();
-            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 10 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
             newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet1);
             if (shooter.BoundingSphere.Intersects(cameraFrustum))
@@ -509,18 +509,19 @@ namespace Poseidon
         {
             Vector3 tempCenter;
             int xVal, zVal, heightValue; //positionSign
+            int numTries = 0;
             foreach (Trash trash in trashes)
             {
                 //trash.Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, random, enemiesAmount, fishAmount, enemies,
                 //    fish, shipWrecks);
                 do
                 {
-                    xVal = random.Next(minX, maxX);
-                    zVal = random.Next(minZ, maxZ);
-                    if (random.Next(100) % 2 == 0)
-                        xVal *= -1;
-                    if (random.Next(100) % 2 == 0)
-                        zVal *= -1;
+                    xVal = random.Next(0, 2 * maxX) - maxX;
+                    zVal = random.Next(0, 2 * maxZ) - maxZ;
+                    //if (random.Next(100) % 2 == 0)
+                    //    xVal *= -1;
+                    //if (random.Next(100) % 2 == 0)
+                    //    zVal *= -1;
                     heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
                     //positionSign = random.Next(4);
                     
@@ -537,7 +538,8 @@ namespace Poseidon
                     //        zVal *= -1;
                     //        break;
                     //}
-                } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, null, null) ); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
+                    numTries++;
+                } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, null, null) && numTries < GameConstants.MaxNumTries); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
@@ -560,7 +562,7 @@ namespace Poseidon
             else lastTrashDrop = PoseidonGame.playTime.TotalSeconds;
 
             Vector3 tempCenter;
-            int positionSign, xVal, zVal, heightValue;
+            int numTries = 0, xVal, zVal, heightValue;
             float orientation = random.Next(100);
             int trash_type = random.Next(100);
             Trash sinkingTrash;
@@ -589,24 +591,25 @@ namespace Poseidon
             sinkingTrash.sinkableTrash = true;
             do
             {
-                positionSign = random.Next(4);
-                xVal = random.Next(minX, maxX);
-                zVal = random.Next(minZ, maxZ);
-                switch (positionSign)
-                {
-                    case 0:
-                        xVal *= -1;
-                        break;
-                    case 1:
-                        zVal *= -1;
-                        break;
-                    case 2:
-                        xVal *= -1;
-                        zVal *= -1;
-                        break;
-                }
+                //positionSign = random.Next(4);
+                xVal = random.Next(0, 2 * maxX) - maxX;
+                zVal = random.Next(0, 2 * maxZ) - maxZ;
+                //switch (positionSign)
+                //{
+                //    case 0:
+                //        xVal *= -1;
+                //        break;
+                //    case 1:
+                //        zVal *= -1;
+                //        break;
+                //    case 2:
+                //        xVal *= -1;
+                //        zVal *= -1;
+                //        break;
+                //}
                 heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
-            } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, factories, researchFacility));
+                numTries++;
+            } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, factories, researchFacility) && numTries < GameConstants.MaxNumTries);
 
             sinkingTrash.Position.X = xVal;
             sinkingTrash.Position.Z = zVal;
@@ -629,6 +632,7 @@ namespace Poseidon
         public static Vector3 GenerateSurfaceRandomPosition(int minX, int maxX, int minZ, int maxZ, float floatHeight, float boundingSphereRadius, Random random, int enemiesAmount, int fishAmount, BaseEnemy[] enemies, Fish[] fish, List<ShipWreck> shipWrecks)
         {
             int xValue, zValue;
+            int numTries = 0;
             do
             {
                 xValue = random.Next(minX, maxX);
@@ -637,8 +641,8 @@ namespace Poseidon
                     xValue *= -1;
                 if (random.Next(100) % 2 == 0)
                     zValue *= -1;
-
-            } while (IsSurfaceOccupied(new BoundingSphere(new Vector3(xValue, floatHeight, zValue), boundingSphereRadius), enemiesAmount, fishAmount, enemies, fish));
+                numTries++;
+            } while (IsSurfaceOccupied(new BoundingSphere(new Vector3(xValue, floatHeight, zValue), boundingSphereRadius + 10), enemiesAmount, fishAmount, enemies, fish) && numTries < GameConstants.MaxNumTries);
 
             return new Vector3(xValue, 0, zValue);
         }
@@ -647,19 +651,21 @@ namespace Poseidon
         {
             int xValue, zValue;
             BoundingSphere prospectiveBoundingSphere = objBoundingSphere;
+            prospectiveBoundingSphere.Radius += 10;
+            int numTries = 0;
             do
             {
-                xValue = random.Next(minX, maxX);
-                zValue = random.Next(minZ, maxZ);
-                if (random.Next(100) % 2 == 0)
-                    xValue *= -1;
-                if (random.Next(100) % 2 == 0)
-                    zValue *= -1;
+                xValue = random.Next(0, 2 * maxX) - maxX;
+                zValue = random.Next(0, 2 * maxZ) - maxZ;
+                //if (random.Next(100) % 2 == 0)
+                //    xValue *= -1;
+                //if (random.Next(100) % 2 == 0)
+                //    zValue *= -1;
                 prospectiveBoundingSphere.Center.X = xValue;
                 prospectiveBoundingSphere.Center.Y = 0 + prospectiveBoundingSphere.Radius;
                 prospectiveBoundingSphere.Center.Z = zValue;
-
-            } while (IsShipFloorPlaceInvalid(xValue, zValue, treasureChests, staticObjects, prospectiveBoundingSphere));
+                numTries++;
+            } while (IsShipFloorPlaceInvalid(xValue, zValue, treasureChests, staticObjects, prospectiveBoundingSphere) && numTries < GameConstants.MaxNumTries);
             //if (xValue > 0) xValue = maxX - 8;
             //else xValue = -maxX + 8;
             return new Vector3(xValue, 0, zValue);
@@ -668,17 +674,19 @@ namespace Poseidon
         public static Vector3 GenerateSeaBedRandomPosition(int minX, int maxX, int minZ, int maxZ, Random random, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects)
         {
             int xValue, zValue;
+            int numTries = 0;
+
             do
             {
-                xValue = random.Next(minX, maxX);
-                zValue = random.Next(minZ, maxZ);
-                if (random.Next(100) % 2 == 0)
-                    xValue *= -1;
-                if (random.Next(100) % 2 == 0)
-                    zValue *= -1;
-                
-                
-            } while (IsSeaBedPlaceOccupied(xValue,0, zValue, 30, shipWrecks, staticObjects, null, null, null));
+                xValue = random.Next(0, 2 * maxX) - maxX;
+                zValue = random.Next(0, 2 * maxZ) - maxX;
+                //if (random.Next(100) % 2 == 0)
+                //    xValue *= -1;
+                //if (random.Next(100) % 2 == 0)
+                //    zValue *= -1;
+                numTries++;
+
+            } while (IsSeaBedPlaceOccupied(xValue, 0, zValue, 30, shipWrecks, staticObjects, null, null, null) && numTries < GameConstants.MaxNumTries);
             
             return new Vector3(xValue, 0, zValue);
         }
@@ -715,6 +723,7 @@ namespace Poseidon
             if (HydroBot.gameMode == GameMode.ShipWreck)
             {
                 bool objInsideShip = false;
+                
                 foreach (BoundingBox bbox in ShipWreckScene.levelContainBoxes[ShipWreckScene.shipSceneType[PoseidonGame.currentShipWreckID]])
                 {
                     if (bbox.Contains(prospectiveBoundingSphere) == ContainmentType.Contains)
@@ -732,22 +741,14 @@ namespace Poseidon
             {
                 foreach (GameObject currentObj in treasureChests)
                 {
-                    if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 50) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 50))
-                        return true;
+                    if (prospectiveBoundingSphere.Intersects(currentObj.BoundingSphere)) return true;
                 }
             }
             if (staticObjects != null)
             {
                 foreach (GameObject currentObj in staticObjects)
                 {
-                    if (((int)(MathHelper.Distance(
-                        xValue, currentObj.Position.X)) < 50) &&
-                        ((int)(MathHelper.Distance(
-                        zValue, currentObj.Position.Z)) < 50))
-                        return true;
+                    if (prospectiveBoundingSphere.Intersects(currentObj.BoundingSphere)) return true;
                 }
             }
             bool objInsideShip = false;
@@ -946,7 +947,7 @@ namespace Poseidon
                     //} while (numTries < 20 && (IsSurfaceOccupied(xValue, zValue, enemyAmount, fishAmount, enemies, fishes) ||
                     //     (((int)(MathHelper.Distance(xValue, hydroBot.Position.X)) < 200) &&
                     //     ((int)(MathHelper.Distance(zValue, hydroBot.Position.Z)) < 200))));
-                    for (numTries = 0; numTries < 20; numTries++)
+                    for (numTries = 0; numTries < GameConstants.MaxNumTries; numTries++)
                     {
                         xValue = random.Next(0, hydroBot.MaxRangeX);
                         zValue = random.Next(0, hydroBot.MaxRangeZ);

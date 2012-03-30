@@ -26,18 +26,22 @@ namespace Poseidon
         {
             speed = (float)(GameConstants.EnemySpeed * 1.2);
             damage = GameConstants.TerminatorShootingDamage;
-            timeBetweenFire = 1.0f;
+            timeBetweenFire = 2.0f;
             isBigBoss = true;
             random = new Random();
-            health = 10000 * (HydroBot.gamePlusLevel + 1);
+            health = 6000;
+            health += (HydroBot.gamePlusLevel * 3000);
             maxHealth = health;
+
+            //health = 1;
     
             if (PlayGameScene.currentLevel > 10)
                 perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
             else
                 perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 3000 * (HydroBot.gamePlusLevel + 1);
+            basicExperienceReward = 2000 * (HydroBot.gamePlusLevel + 1);
 
+            //basicExperienceReward = 1;
             this.gameMode = gameMode;
         }
 
@@ -47,11 +51,11 @@ namespace Poseidon
             clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, false);
-            enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(0.4f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.08f;
+            scaledSphere.Radius *= 0.16f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             // Set up the parameters
@@ -71,7 +75,7 @@ namespace Poseidon
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                enemyMatrix = Matrix.CreateScale(0.4f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
@@ -228,7 +232,7 @@ namespace Poseidon
                 }
 
 
-                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 10)
+                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 15)
                 {
                     bool powerUsed = false;
                     powerupsType = random.Next(2);

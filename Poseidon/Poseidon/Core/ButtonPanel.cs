@@ -135,12 +135,13 @@ namespace Poseidon.Core
             anchoredIndex = -1;
             for (int i = 0; i < buttons.Count; i++)
             {
-                buttons[i].Update(gameTime, mouseState, panelRectangle.Contains(mouseState.X, mouseState.Y));
-                cursorInGameArena &= (buttons[i].state == Button.InteractionState.OUT); // this variable will remain true if cursor is outside all of the buttons
                 if (buttons[i].Anchored)
                 {
                     anchoredIndex = i;
                 }
+                buttons[i].Update(gameTime, mouseState, panelRectangle.Contains(mouseState.X, mouseState.Y));
+                cursorInGameArena &= (buttons[i].state == Button.InteractionState.OUT); // this variable will remain true if cursor is outside all of the buttons
+
                 if (buttons[i].state != Button.InteractionState.OUT)
                 {
                     // This condition will satisfy for at most one button
@@ -167,11 +168,13 @@ namespace Poseidon.Core
                 clickToBuildDetected = false;
             }
 
-            if (cursorInGameArena && previousRButtonState == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released && anchoredIndex >= 0)
+            if (previousRButtonState == ButtonState.Pressed && mouseState.RightButton == ButtonState.Released && cursorInGameArena && anchoredIndex >= 0)
             {
+
                 rightClickToRemoveAnchor = true;
                 removeAnchorDetectedTime = gameTime.TotalGameTime;
                 clickToRemoveAnchorActive = true;
+
             }
             else
             {

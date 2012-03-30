@@ -17,9 +17,9 @@
     <MaxColor>FFA9A9A9</MaxColor>
     <MinRotateSpeed>-2</MinRotateSpeed>
     <MaxRotateSpeed>2</MaxRotateSpeed>
-    <MinStartSize>10</MinStartSize>
-    <MaxStartSize>20</MaxStartSize>
-    <MinEndSize>50</MinEndSize>
-    <MaxEndSize>70</MaxEndSize>
+    <MinStartSize>15</MinStartSize>
+    <MaxStartSize>30</MaxStartSize>
+    <MinEndSize>75</MinEndSize>
+    <MaxEndSize>105</MaxEndSize>
   </Asset>
 </XnaContent>

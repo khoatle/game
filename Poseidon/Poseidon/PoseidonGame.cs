@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };
@@ -132,7 +132,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
             MediaPlayer.Volume = 0.5f;
@@ -204,7 +204,7 @@ namespace Poseidon
             helpForegroundTexture4 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_skills_4");
             helpForegroundTexture5 = Content.Load<Texture2D>("Image/SceneTextures/helpforeground_otherKeys_5");
             nextHelpButton = Content.Load<Texture2D>("Image/ButtonTextures/nextHelpButton");
-            SpriteFont menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            SpriteFont menuSmall = IngamePresentation.menuSmall;
             helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice, menuSmall);
             Components.Add(helpScene);
 
@@ -220,7 +220,7 @@ namespace Poseidon
             // Create the Start Scene
             startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
-            smallFont = Content.Load<SpriteFont>("Fonts/menuSmall");
+            smallFont = IngamePresentation.menuSmall;
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
             startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
@@ -418,6 +418,7 @@ namespace Poseidon
                             lvl = level;
                         }
                         PlayGameScene.currentLevel = lvl;
+                        MediaPlayer.Stop();
                         ShowScene(loadingScene);
                     }
                     i++;
@@ -433,7 +434,7 @@ namespace Poseidon
 
         public void HandleQuizzGameInput()
         {
-            if (quizzGameScene.questionAnswered >= 4)// || enterPressed)
+            if (quizzGameScene.questionAnswered >= 4 || EscPressed)// || enterPressed)
             {
                 //each right answer give 5% environment boost
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
@@ -445,7 +446,7 @@ namespace Poseidon
         }
         public void HandleTypeGameInput()
         {
-            if (typeGameScene.isOver && enterPressed)
+            if (typeGameScene.isOver && enterPressed || EscPressed)
             {
                 PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -648,14 +649,10 @@ namespace Poseidon
 
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
-                if (!playGameScene.shipWrecks[curWreck].accessed
-                    && CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
+                if (CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
-                    // no re-explore a ship wreck
-                    // no, let the user re-explore now because he would miss a relic -> lose
-                    //playGameScene.shipWrecks[curWreck].accessed = true;
                     // put the skill into one of the chest if skillID != 0
                     shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
@@ -727,7 +724,7 @@ namespace Poseidon
                             ShowScene(playGameScene);
                             break;
                         case "Load Saved Level":
-                            MediaPlayer.Stop();
+                            //MediaPlayer.Stop();
                             ShowScene(selectLoadingLevelScene);
                             break;
                         case "Survival Mode":
@@ -913,7 +910,7 @@ namespace Poseidon
             PerformanceHelper.StartFrame();
             using (new TimeRulerHelper("Update", Color.Yellow))
             {
-                System.Threading.Thread.Sleep(5);
+                // System.Threading.Thread.Sleep(5);
 
                 // Get the Keyboard and GamePad state
                 CheckKeyEntered();

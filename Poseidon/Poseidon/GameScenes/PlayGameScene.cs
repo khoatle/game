@@ -94,6 +94,10 @@ namespace Poseidon
         protected bool tipHover = false;
         Rectangle tipIconRectangle;
 
+        protected Texture2D toNextLevelTexture;
+        protected bool toNextLevelHover = false;
+        Rectangle toNextLevelIconRectangle;
+
         // Current game level
         public static int currentLevel;
 
@@ -263,39 +267,39 @@ namespace Poseidon
             //stop spinning the bar
             IngamePresentation.StopSpinning();
 
-            if (PoseidonGame.gamePlus)
-            {
-                int[] numShootingEnemies = { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+            //if (PoseidonGame.gamePlus)
+            //{
+            //    int[] numShootingEnemies = { 0, 5, 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+            //    GameConstants.NumberShootingEnemies = numShootingEnemies;
+            //    int[] numCombatEnemies =   { 0, 5, 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
+            //    GameConstants.NumberCombatEnemies = numCombatEnemies;
+            //    int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //    GameConstants.NumberGhostPirate = numGhostPirates;
+            //    int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
+            //    GameConstants.NumberFish = numFish;
+            //    int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
+            //    GameConstants.NumberMutantShark = numMutantShark;
+            //    int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
+            //    GameConstants.NumberTerminator = numTerminator;
+            //    int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            //    GameConstants.NumberSubmarine = numSubmarine;
+            //} 
+            //else {
+                int[] numShootingEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies =   { HydroBot.gamePlusLevel * 5, 5 + (HydroBot.gamePlusLevel * 5), 10 + (HydroBot.gamePlusLevel * 5), 15, 15, 30, 30, 30, 30, 75, 15, 15 };
-                GameConstants.NumberCombatEnemies = numCombatEnemies;
-                int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                GameConstants.NumberGhostPirate = numGhostPirates;
-                int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
-                GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 1, 2 + HydroBot.gamePlusLevel, 3 + HydroBot.gamePlusLevel, 4 + HydroBot.gamePlusLevel, 5 + HydroBot.gamePlusLevel, 10 + HydroBot.gamePlusLevel, 0, HydroBot.gamePlusLevel };
-                GameConstants.NumberMutantShark = numMutantShark;
-                int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1 };
-                GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-                GameConstants.NumberSubmarine = numSubmarine;
-            } 
-            else {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
-                GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 15, 20, 20, 20, 20, 35, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 35, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 2, 3, 3, 10, 0, 0 };
+                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 1, 2, 2, 10, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
-                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 2, 0, 0 };
+                int[] numSubmarine = { 0, 0, 0, 0, 0, 0, 1, 1, 2, 3, 0, 0 };
                 GameConstants.NumberSubmarine = numSubmarine;
-            }
+            //}
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -530,6 +534,8 @@ namespace Poseidon
             }
             else // Level won
             {
+
+
                 ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
                 objectsToSerialize.hydrobot = hydroBot;
 
@@ -644,7 +650,7 @@ namespace Poseidon
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, currentLevel, GameMode.MainGame, GameConstants.MainGameFloatHeight);
             //placeFuelCells();
             AddingObjects.placeShipWreck(shipWrecks, staticObjects, random, terrain.heightMapInfo,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
+                0, GameConstants.MainGameMaxRangeX, 0, GameConstants.MainGameMaxRangeZ);
             
             //Initialize trash
             //int random_model;
@@ -820,9 +826,9 @@ namespace Poseidon
                 {
                     ResetGame(gameTime, aspectRatio);
                 }
-                if ((currentGameState == GameState.Running))
+                if (currentGameState == GameState.Running || currentGameState == GameState.WonButStaying)
                 {
-                    MouseState currentMouseState;
+                    MouseState currentMouseState = new MouseState();
                     currentMouseState = Mouse.GetState();
                     // Update Factory Button Panel
                     factoryButtonPanel.Update(gameTime, currentMouseState);
@@ -912,7 +918,8 @@ namespace Poseidon
 
                     tipHover = mouseOnTipIcon(currentMouseState);
                     levelObjHover =  mouseOnLevelObjectiveIcon(currentMouseState);
-                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() || factoryButtonPanel.clickToBuildDetected;
+                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || toNextLevelHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor() 
+                        || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, shipWrecks, staticObjects, mouseOnInteractiveIcons);
@@ -1084,16 +1091,16 @@ namespace Poseidon
                     }
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateHealingBulletVsBarrierCollision(healthBullet, fish, fishAmount, frustum, GameMode.MainGame);
                     Collision.updateDamageBulletVsBarriersCollision(enemyBullet, fish, ref fishAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
                     Collision.updateProjectileHitBot(hydroBot, enemyBullet, GameMode.MainGame, enemies, enemiesAmount, particleManager.explosionParticles, gameCamera, fish, fishAmount);
                     Collision.updateDamageBulletVsBarriersCollision(alliesBullets, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
-                        enemies, enemiesAmount, fish, fishAmount, gameCamera);
+                        enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
 
-                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor);
-                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor);
+                    Collision.deleteSmallerThanZero(enemies, ref enemiesAmount, frustum, GameMode.MainGame, cursor, particleManager.explosionLargeParticles);
+                    Collision.deleteSmallerThanZero(fish, ref fishAmount, frustum, GameMode.MainGame, cursor, particleManager.explosionLargeParticles);
 
                     for (int i = 0; i < enemiesAmount; i++)
                     {
@@ -1121,24 +1128,39 @@ namespace Poseidon
                     roundTimer -= gameTime.ElapsedGameTime;
                     PoseidonGame.playTime += gameTime.ElapsedGameTime;
 
-                    if (CheckWinCondition())
+                    if (!(currentGameState == GameState.WonButStaying))
                     {
-                        currentGameState = GameState.Won;
-                        audio.gameWon.Play();
+                        if (CheckWinCondition())
+                        {
+                            if (!GameConstants.haveToStayTillEnd[currentLevel])
+                                currentGameState = GameState.WonButStaying;
+                            else currentGameState = GameState.Won;
+                            audio.gameWon.Play();
+                        }
+                        if (CheckLoseCondition())
+                        {
+                            currentGameState = GameState.Lost;
+                            audio.gameOver.Play();
+                        }
                     }
-                    if (CheckLoseCondition())
+                    else
                     {
-                        currentGameState = GameState.Lost;
-                        audio.gameOver.Play();
+                        //time = 0, move to next level now
+                        if (HydroBot.currentHitPoint <= 0) currentGameState = GameState.Lost;
+                        if (roundTimer <= TimeSpan.Zero) currentGameState = GameState.Won;
+                        toNextLevelHover = mouseOnNextLevelIcon(lastMouseState);
+                        if (toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
+                            currentGameState = GameState.Won;
                     }
+                    
                    
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 
                     //update the school of fish
-                    schoolOfFish1.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
-                    schoolOfFish2.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
-                    schoolOfFish3.Update(gameTime, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish1.Update(gameTime, frustum, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish2.Update(gameTime, frustum, hydroBot, enemies, enemiesAmount, fish, fishAmount);
+                    schoolOfFish3.Update(gameTime, frustum, hydroBot, enemies, enemiesAmount, fish, fishAmount);
 
                     //update graphic effects
                     graphicEffect.UpdateInput(gameTime);
@@ -1147,6 +1169,7 @@ namespace Poseidon
                 }
 
                 prevGameState = currentGameState;
+
                 if (currentGameState == GameState.Lost)
                 {
                     // Reset the world for a new game
@@ -1162,6 +1185,7 @@ namespace Poseidon
                         ResetGame(gameTime, aspectRatio);
                     }
                 }
+
                 if (currentGameState == GameState.Won)
                 {
                     if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
@@ -1170,6 +1194,9 @@ namespace Poseidon
                         if (!displayStatisticsNow) displayStatisticsNow = true;
                         else
                         {
+                            //return all strange rocks that are not yet processed to bot
+                            if (researchFacility != null)
+                                HydroBot.numStrangeObjCollected += researchFacility.listTimeRockProcessing.Count;
                             currentLevel++;
                             if (currentLevel < 11)
                                 currentGameState = GameState.ToMiniGame;
@@ -1388,6 +1415,10 @@ namespace Poseidon
                     DrawCutScene();
                     break;
                 case GameState.Running:
+                    RestoreGraphicConfig();
+                    DrawGameplayScreen(gameTime);
+                    break;
+                case GameState.WonButStaying:
                     RestoreGraphicConfig();
                     DrawGameplayScreen(gameTime);
                     break;
@@ -1623,9 +1654,9 @@ namespace Poseidon
 
             //draw schools of fish
             spriteBatch.Begin();
-            schoolOfFish1.Draw(gameTime, spriteBatch);
-            schoolOfFish2.Draw(gameTime, spriteBatch);
-            schoolOfFish3.Draw(gameTime, spriteBatch);
+            schoolOfFish1.Draw(gameTime, spriteBatch, frustum);
+            schoolOfFish2.Draw(gameTime, spriteBatch, frustum);
+            schoolOfFish3.Draw(gameTime, spriteBatch, frustum);
             spriteBatch.End();
 
             //draw particle effects
@@ -1677,6 +1708,7 @@ namespace Poseidon
 
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             DrawLevelObjectiveIcon();
+            if (currentGameState == GameState.WonButStaying) DrawToNextLevelButton();
             if (PoseidonGame.gamePlus)
                 DrawGamePlusLevel();
             else
@@ -1794,7 +1826,7 @@ namespace Poseidon
             IngamePresentation.DrawEnvironmentBar(game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, statsFont, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
@@ -1891,7 +1923,7 @@ namespace Poseidon
 
         public bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
         {
-            if(levelObjectiveIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+            if (levelObjectiveIconRectangle.Contains(lmouseState.X, lmouseState.Y))
                 return true;
             else
                 return false;
@@ -1899,7 +1931,15 @@ namespace Poseidon
 
         public bool mouseOnTipIcon(MouseState lmouseState)
         {
-            if ( tipIconRectangle.Intersects(new Rectangle(lmouseState.X, lmouseState.Y, 10, 10)))
+            if (tipIconRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
+        }
+
+        public bool mouseOnNextLevelIcon(MouseState lmouseState)
+        {
+            if (toNextLevelIconRectangle.Contains(lmouseState.X, lmouseState.Y))
                 return true;
             else
                 return false;
@@ -2004,6 +2044,10 @@ namespace Poseidon
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black);
             }
+            string nextText = "Enter to continue.Esc to skip.";
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.DarkViolet);
+
             spriteBatch.End();
             if (screenTransitNow)
             {
@@ -2270,7 +2314,9 @@ namespace Poseidon
             {
                 if (enemyBullet[i].BoundingSphere.Intersects(frustum))
                 {
-                    enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    if (enemyBullet[i] is Torpedo)
+                        enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    else enemyBullet[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
 
@@ -2281,6 +2327,19 @@ namespace Poseidon
                     alliesBullets[i].draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
                 }
             }
+        }
+        public void DrawToNextLevelButton()
+        {
+            if (toNextLevelHover) toNextLevelTexture = IngamePresentation.toNextLevelHoverTexture;
+            else toNextLevelTexture = IngamePresentation.toNextLevelNormalTexture;
+            int xOffsetText, yOffsetText;
+
+            xOffsetText = levelObjectiveIconRectangle.X - toNextLevelTexture.Width - 20;
+            yOffsetText = levelObjectiveIconRectangle.Center.Y - toNextLevelTexture.Height/2;
+
+            toNextLevelIconRectangle = new Rectangle(xOffsetText, yOffsetText, toNextLevelTexture.Width, toNextLevelTexture.Height);
+
+            spriteBatch.Draw(toNextLevelTexture, toNextLevelIconRectangle, Color.White);
         }
     }
 }

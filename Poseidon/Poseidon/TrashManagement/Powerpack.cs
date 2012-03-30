@@ -74,7 +74,7 @@ namespace Poseidon
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            Matrix rotationYMatrix = Matrix.CreateRotationZ(MathHelper.Pi/4) * Matrix.CreateRotationY(orientation);
             Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)

@@ -64,7 +64,7 @@ namespace Poseidon.Core
             levelTips.Add(tipItem);
             tipItem = new TipItem("There are 3 shipwrecks. A shipwreck will appear on the radar once it is spotted.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("Double click on a ship wreck to get into it. Press 'esc' to get out.");
+            tipItem = new TipItem("Double click on a ship wreck to get into it. Press 'Esc' to get out.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("Cleaning the environment and healing make the fish happy, they will help you in return.");
             levelTips.Add(tipItem);

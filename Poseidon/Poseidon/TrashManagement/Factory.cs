@@ -232,7 +232,7 @@ namespace Poseidon
                     }
 
                     //Produce strange rock
-                    if (random.Next(100) < 10) //10% probability
+                    if (random.Next(100) < 15) //15% probability
                     {
                         ProduceStrangeRock(ref powerpacks, resources, ref strangeRockModels);
                     }
@@ -548,17 +548,17 @@ namespace Poseidon
                     if (HydroBot.plasticPlantLevel == 1)
                     {
                         trashBlockSize = 5;
-                        processingTime = 4;
+                        processingTime = 8;
                     }
                     else if (HydroBot.plasticPlantLevel == 2)
                     {
                         trashBlockSize = 3;
-                        processingTime = 4;
+                        processingTime = 8;
                     }
                     else
                     {
                         trashBlockSize = 1;
-                        processingTime = 4;
+                        processingTime = 8;
                     }
                     break;
                 case FactoryType.radioactive:
@@ -606,7 +606,7 @@ namespace Poseidon
             float radius = 5f;
             //cuz this only appears in main game or survival mode
             floatPosition.Y = GameConstants.MainGameFloatHeight;
-            for(int i=0; i<20; i++) // try 20 times
+            for(int i = 0; i < GameConstants.MaxNumTries; i++) // try 20 times
             {
                 if (Collision.isFloatPositionValid(floatPosition, radius, powerpacks, resources))
                 {

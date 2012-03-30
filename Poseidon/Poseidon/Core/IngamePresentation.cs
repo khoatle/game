@@ -51,6 +51,7 @@ namespace Poseidon.Core
         public static Texture2D facilityUpgradeButton;
         public static Texture2D playJigsawButton;
         public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
+        public static SpriteFont menuSmall;
 
         //level winning/losing screen
         public static Texture2D winningTexture, losingTexture;
@@ -62,6 +63,9 @@ namespace Poseidon.Core
         public static float fadeFactorBeginValue = 4.0f;
         public static float fadeFactorReduceStep = 0.01f;
         public static float fadeFactor = fadeFactorBeginValue;
+
+        //to next level button
+        public static Texture2D toNextLevelNormalTexture, toNextLevelHoverTexture;
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
@@ -117,6 +121,7 @@ namespace Poseidon.Core
             increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
             increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
 
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWinNew");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOverNew");
@@ -132,6 +137,9 @@ namespace Poseidon.Core
             bubbles = new List<Bubble>();
 
             statisticFont = Content.Load<SpriteFont>("Fonts/statisticsfont");
+
+            toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
+            toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");
         }
         
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
@@ -507,7 +515,7 @@ namespace Poseidon.Core
             }
         }
 
-        public static void DrawLevelBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
+        public static void DrawLevelBar(Game game, SpriteBatch spriteBatch, int currentExperience, int nextLevelExp, int level, int heightFromTop, string type, Color typeColor)
         {
             int barX = game.Window.ClientBounds.Width / 2 - HealthBar.Width / 2;
             int barY = heightFromTop;
@@ -529,7 +537,7 @@ namespace Poseidon.Core
                 new Rectangle(barX, barY, HealthBar.Width, barHeight),
                 new Rectangle(0, 0, HealthBar.Width, barHeight),
                 Color.White);
-            type = type.ToUpper();
+            //type = type.ToUpper();
             spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X/2, heightFromTop - 1), Color.Gold);
         }
 
@@ -598,6 +606,11 @@ namespace Poseidon.Core
                         {
                             line += "STRANGE ROCK";
                             comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.";
+                        }
+                        else if (powerPackPointedAt.powerType == PowerPackType.GoldenKey)
+                        {
+                            line += "GOLDEN KEY";
+                            comment = "Can open any treasure chest.";
                         }
                         spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(line).X / 2, 4), Color.Yellow);
                         comment = wrapLine(comment, commentMaxLength, statsFont);

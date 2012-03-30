@@ -61,7 +61,7 @@ namespace Poseidon
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
             // if clip player has been initialized, update it
-            if (clipPlayer != null && BoundingSphere.Intersects(cameraFrustum))
+            if (BoundingSphere.Intersects(cameraFrustum))
             {
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
@@ -192,6 +192,7 @@ namespace Poseidon
                                 SurvivalGameScene.points.Add(point);
 
                             PoseidonGame.audio.botYell.Play();
+                            PlayGameScene.healthLost += damage;
                         }
                         if (HydroBot.autoHipnotizeMode)
                         {

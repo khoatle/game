@@ -177,7 +177,7 @@ namespace Poseidon
                 return;
             }
 
-            double processingTime = 8; //2 days
+            double processingTime = 12; //3 days
             int fossilType = random.Next(100);
             string point_string = "";
             bool boneFound = false;
@@ -188,20 +188,20 @@ namespace Poseidon
                 if (PoseidonGame.playTime.TotalSeconds - listTimeRockProcessing[i] >= processingTime)
                 {
                     listTimeRockProcessing.RemoveAt(i);
-                    //produce fossil/bone 60% of the times.
-                    if (fossilType >= 80)
+                    //produce fossil/bone 75% of the times.
+                    if (fossilType >= 74)
                     {
                         HydroBot.numTurtlePieces++;
                         point_string = "Research Centre found\na Meiolania Turtle fossil\nfrom the strange rock";
                         boneFound = true;
                     }
-                    else if (fossilType >= 60)
+                    else if (fossilType >= 49)
                     {
                         HydroBot.numDolphinPieces++;
                         point_string = "Research Centre found\na Maui's Dolphin bone\nfrom the strange rock";
                         boneFound = true;
                     }
-                    else if (fossilType >= 40)
+                    else if (fossilType >= 24)
                     {
                         HydroBot.numSeaCowPieces++;
                         boneFound = true;
@@ -350,7 +350,7 @@ namespace Poseidon
                     bioUpgrade = true;
                     bioButtonText = "Upgrade to level 2";
                 }
-                else if (HydroBot.bioPlantLevel == 2 && HydroBot.totalBioTrashProcessed >= GameConstants.numTrashForUpgrade)
+                else if (HydroBot.bioPlantLevel == 2 && HydroBot.totalBioTrashProcessed >= 2 * GameConstants.numTrashForUpgrade)
                 {
                     bioUpgrade = true;
                     bioButtonText = "Upgrade to level 3";
@@ -366,7 +366,7 @@ namespace Poseidon
                     plasticUpgrade = true;
                     plasticButtonText = "Upgrade to level 2";
                 }
-                else if (HydroBot.plasticPlantLevel == 2 && HydroBot.totalPlasticTrashProcessed >= GameConstants.numTrashForUpgrade)
+                else if (HydroBot.plasticPlantLevel == 2 && HydroBot.totalPlasticTrashProcessed >= 2 * GameConstants.numTrashForUpgrade)
                 {
                     plasticUpgrade = true;
                     plasticButtonText = "Upgrade to level 3";
@@ -401,7 +401,7 @@ namespace Poseidon
                 }
                 else
                 {
-                    bioButtonText = "You need to process "+(GameConstants.numTrashForUpgrade-HydroBot.totalBioTrashProcessed).ToString()+" more trash for upgrade to level "+ (HydroBot.bioPlantLevel+1).ToString();
+                    bioButtonText = "You need to process " + (HydroBot.bioPlantLevel * GameConstants.numTrashForUpgrade - HydroBot.totalBioTrashProcessed).ToString() + " more trash for upgrade to level " + (HydroBot.bioPlantLevel + 1).ToString();
                     bioButtonText = Poseidon.Core.IngamePresentation.wrapLine(bioButtonText, backgroundRect.Width/3, facilityFont2);
                     bioTextPos.Y += facilityFont.MeasureString(bioButtonText).Y / 2;
                     spriteBatch.DrawString(facilityFont, bioButtonText, bioTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(bioButtonText).X / 2, facilityFont.MeasureString(bioButtonText).Y / 2), 1, SpriteEffects.None, 0);
@@ -427,7 +427,7 @@ namespace Poseidon
                 }
                 else
                 {
-                    plasticButtonText = "You need to process " + (GameConstants.numTrashForUpgrade - HydroBot.totalPlasticTrashProcessed).ToString() + " more trash for upgrade to level "+ (HydroBot.plasticPlantLevel+1).ToString();
+                    plasticButtonText = "You need to process " + (HydroBot.bioPlantLevel * GameConstants.numTrashForUpgrade - HydroBot.totalPlasticTrashProcessed).ToString() + " more trash for upgrade to level " + (HydroBot.plasticPlantLevel + 1).ToString();
                     plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, backgroundRect.Width / 3, facilityFont2);
                     plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2;
                     spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), 1, SpriteEffects.None, 0);
@@ -437,7 +437,7 @@ namespace Poseidon
 
             //Draw resurrection title:
             string resurrectTitle = "EXTINCT ANIMAL RESURRECTION";
-            Vector2 resurTitlePos = new Vector2(screenWidth/2, bioUpgradeRect.Bottom + 10 + facilityFont.MeasureString(resurrectTitle).Y/2);
+            Vector2 resurTitlePos = new Vector2(screenWidth / 2, upgradeFacTitlePos.Y + 200 + facilityFont.MeasureString(resurrectTitle).Y / 2);
             spriteBatch.DrawString(facilityFont, resurrectTitle, resurTitlePos, Color.LawnGreen * fadeFactor, 0, new Vector2(facilityFont.MeasureString(resurrectTitle).X / 2, facilityFont.MeasureString(resurrectTitle).Y / 2), 1, SpriteEffects.None, 0);
 
             Vector2 dolphinTextPos = new Vector2(2 * screenWidth/4, resurTitlePos.Y + 10);
@@ -652,7 +652,7 @@ namespace Poseidon
             {
                 string txt = "Collect bones/fossils to resurrect extinct sea creatures. Bones and fossils are found while processing trash in the factories. They are also found in treasure chests inside shipwrecks.";
                 txt = Poseidon.Core.IngamePresentation.wrapLine(txt, backgroundRect.Width - 100, facilityFont2);
-                spriteBatch.DrawString(facilityFont2, txt, new Vector2(backgroundRect.Left + 50, playSeaCowJigsawRect.Top), Color.White);
+                spriteBatch.DrawString(facilityFont2, txt, new Vector2(backgroundRect.Left + 50, resurTitlePos.Y + 10 + facilityFont.MeasureString(resurrectTitle).Y / 2 + facilityFont.MeasureString(txt).Y / 2), Color.Violet);
             }
 
             string nextText = "Press Enter to continue";

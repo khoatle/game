@@ -50,6 +50,9 @@ namespace Poseidon {
             this.shooter = shooter;
         }
 
+        public override void draw(Matrix view, Matrix projection, Camera gameCamera, string techiniqueName)
+        {
+        }
         public override void draw(Matrix view, Matrix projection)
         {
             if (shooter == null)

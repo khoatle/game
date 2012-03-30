@@ -389,6 +389,15 @@ namespace Poseidon
 
         public void DrawFactoryConfigurationScene(SpriteBatch spriteBatch, SpriteFont menuSmall)
         {
+            if (GameConstants.textScaleFactor == 0)
+            {
+                GameConstants.textScaleFactor = (float)game.Window.ClientBounds.Width / 1280 * (float)game.Window.ClientBounds.Height / 800;
+                //GameConstants.lineSpacing = (int)(GameConstants.lineSpacing * GameConstants.textScaleFactor);
+            }
+
+            float textScaleFactor = GameConstants.textScaleFactor;
+            float lineSpacing = GameConstants.lineSpacing;
+
             float fadeFactor = 0.65f;
             string title = "";
             string production_str = "PRODUCT: "+produce.ToString().ToUpper();
@@ -425,7 +434,7 @@ namespace Poseidon
                     break;
                 case FactoryType.plastic:
                     title = "Plastic Recycling Plant";
-                    plant_basic_description = "Basic steps for plastic recycling:\n1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n3) Washing: Contaminants are removed.\n4) Pelleting: The plastic is mented down and made into small pellets.\n\nTypes of plastic (with code and examples):\n1: PET - bottles\n2: HDPE - milk bottles, bags\n3: PVC - pipes, detergent bottles, raincoats\n4: LDPE - bread bags\n5: PP - straws, screw-on lids\n6: PS - foam, yogurt containers\n7: Others - ketchup bottles\nThe code numbers are printed within a recycle sign on most plastic containers.";
+                    plant_basic_description = "Basic steps for plastic recycling:\n1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n3) Washing: Contaminants are removed.\n4) Pelleting: The plastic is mented down and made into small pellets.\n\nTypes of plastic (with code and some examples): PET - bottles, HDPE - milk bottles, bags, PVC - pipes, detergent bottles, raincoats, LDPE - bread bags, PP - straws, screw-on lids, PS - foam, yogurt containers, Others - ketchup bottles.\n\nThe code numbers are printed within a recycle sign on most plastic containers.";
                     numDays = (float)processingTime / GameConstants.DaysPerSecond;
                     production_str += " for " + trashBlockSize + " trash in "+ numDays.ToString() +" day";
                     if (HydroBot.plasticPlantLevel == 1)
@@ -435,7 +444,7 @@ namespace Poseidon
                     }
                     else if (HydroBot.plasticPlantLevel == 2)
                     {
-                        technologyLevel += "Advanced technology";
+                        technologyLevel = "Advanced technology";
                         plant_upgradeLevel_description = "Monomer Recycling: The polymers undergoes inverse of the polymerization reaction which is used during manufacturing. This creates same mix of chemicals that formed the original polymer, which can be purified and used to synthesize new polymer chains of the same type.";
                     }
                     else
@@ -456,17 +465,17 @@ namespace Poseidon
             //draw background
             spriteBatch.Draw(background, backgroundRect, Color.White);
 
-            Vector2 titlePos = new Vector2(backgroundRect.Center.X, backgroundRect.Top + 120);
+            Vector2 titlePos = new Vector2(backgroundRect.Center.X, backgroundRect.Top + 70 * textScaleFactor);
             //draw title string
-            spriteBatch.DrawString(factoryFont, title, titlePos, Color.Yellow * fadeFactor, 0, new Vector2(factoryFont.MeasureString(title).X/2, factoryFont.MeasureString(title).Y/2), 1.5f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(factoryFont, title, titlePos, Color.Yellow * fadeFactor, 0, new Vector2(factoryFont.MeasureString(title).X/2, factoryFont.MeasureString(title).Y/2), 1.5f * textScaleFactor, SpriteEffects.None, 0);
 
-            Vector2 technologyPos = titlePos + new Vector2(0, factoryFont.MeasureString(title).Y / 2 * 1.5f + 10 + factoryFont.MeasureString(technologyLevel).Y/2);
+            Vector2 technologyPos = titlePos + new Vector2(0, factoryFont.MeasureString(title).Y / 2 * 1.5f + lineSpacing + factoryFont.MeasureString(technologyLevel).Y/2) * textScaleFactor;
             //draw current technology string
-            spriteBatch.DrawString(factoryFont, technologyLevel, technologyPos, Color.Red * fadeFactor, 0, new Vector2(factoryFont.MeasureString(technologyLevel).X / 2, factoryFont.MeasureString(technologyLevel).Y / 2), 1.0f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(factoryFont, technologyLevel, technologyPos, Color.Red * fadeFactor, 0, new Vector2(factoryFont.MeasureString(technologyLevel).X / 2, factoryFont.MeasureString(technologyLevel).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
-            Vector2 productionPos = technologyPos + new Vector2(0, factoryFont.MeasureString(technologyLevel).Y / 2 + 10 + factoryFont.MeasureString(production_str).Y / 2);
+            Vector2 productionPos = technologyPos + new Vector2(0, factoryFont.MeasureString(technologyLevel).Y / 2 + lineSpacing + factoryFont.MeasureString(production_str).Y / 2) * textScaleFactor;
             //draw production string
-            spriteBatch.DrawString(factoryFont, production_str, productionPos, Color.LawnGreen * fadeFactor, 0, new Vector2(factoryFont.MeasureString(production_str).X / 2, factoryFont.MeasureString(production_str).Y / 2), 1.0f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(factoryFont, production_str, productionPos, Color.LawnGreen * fadeFactor, 0, new Vector2(factoryFont.MeasureString(production_str).X / 2, factoryFont.MeasureString(production_str).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
             if (produceButtonHover) produceButton = IngamePresentation.factoryProduceButtonHoverTexture;
             if (produceButtonPress) produceButton = IngamePresentation.factoryProduceButtonPressedTexture;
@@ -474,7 +483,7 @@ namespace Poseidon
             //draw change_produce button
             spriteBatch.Draw(produceButton, produceRect, Color.White * fadeFactor);
 
-            produceRect.Y = (int)(productionPos.Y + 10 + factoryFont.MeasureString(production_str).Y / 2);
+            produceRect.Y = (int)(productionPos.Y + (lineSpacing + factoryFont.MeasureString(production_str).Y / 2) * textScaleFactor);
             //draw change_produce text
             string changeProduceButtonText;
             if (produce == Produce.resource)
@@ -493,28 +502,28 @@ namespace Poseidon
                 beingProcessedStr = "CURRENT STATUS: " + numBeingProcessed.ToString() + " " + produce.ToString().ToUpper() + "S ARE BEING GENERATED.";
             else
                 beingProcessedStr = "CURRENT STATUS: " + numTrashWaiting.ToString() + " TRASH WAITING TO BE PROCESSED.";
-            beingProcessedStr = Poseidon.Core.IngamePresentation.wrapLine(beingProcessedStr, backgroundRect.Width - 100, factoryFont);
-            spriteBatch.DrawString(factoryFont, beingProcessedStr, new Vector2(backgroundRect.Center.X - factoryFont.MeasureString(beingProcessedStr).X / 2, produceRect.Bottom + 5), Color.Black * fadeFactor);
+            beingProcessedStr = Poseidon.Core.IngamePresentation.wrapLine(beingProcessedStr, backgroundRect.Width - 100, factoryFont, textScaleFactor);
+            spriteBatch.DrawString(factoryFont, beingProcessedStr, new Vector2(backgroundRect.Center.X, produceRect.Bottom + (lineSpacing / 2 + factoryFont.MeasureString(beingProcessedStr).Y/2) * textScaleFactor), Color.Black * fadeFactor, 0, new Vector2(factoryFont.MeasureString(beingProcessedStr).X / 2, factoryFont.MeasureString(beingProcessedStr).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
             //draw description
-            plant_basic_description = Poseidon.Core.IngamePresentation.wrapLine(plant_basic_description, backgroundRect.Width - 130, factoryFont);
-            Vector2 basicDescPos = new Vector2(backgroundRect.Left + 65, produceRect.Bottom + 45);
-            spriteBatch.DrawString(factoryFont, plant_basic_description, basicDescPos, Color.Purple * fadeFactor);
+            plant_basic_description = Poseidon.Core.IngamePresentation.wrapLine(plant_basic_description, backgroundRect.Width - 130, factoryFont, textScaleFactor);
+            Vector2 basicDescPos = new Vector2(backgroundRect.Center.X, produceRect.Bottom + (45 + factoryFont.MeasureString(plant_basic_description).Y/2) * textScaleFactor);
+            spriteBatch.DrawString(factoryFont, plant_basic_description, basicDescPos, Color.Purple * fadeFactor, 0, new Vector2(factoryFont.MeasureString(plant_basic_description).X/2, factoryFont.MeasureString(plant_basic_description).Y/2), textScaleFactor, SpriteEffects.None, 0);
 
             if (factoryType != FactoryType.radioactive)
             {
                 string text = "Current technology:";
-                Vector2 textPos = basicDescPos + new Vector2(0, factoryFont.MeasureString(plant_basic_description).Y + 10);
-                spriteBatch.DrawString(factoryFont, text, textPos, Color.Red * fadeFactor);
+                Vector2 textPos = basicDescPos + new Vector2(0, factoryFont.MeasureString(plant_basic_description).Y / 2 + lineSpacing + factoryFont.MeasureString(text).Y/2) * textScaleFactor;
+                spriteBatch.DrawString(factoryFont, text, textPos, Color.Red * fadeFactor, 0, new Vector2(factoryFont.MeasureString(text).X / 2, factoryFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
-                Vector2 upgradePos = textPos + new Vector2(0, factoryFont.MeasureString(text).Y + 10);
-                plant_upgradeLevel_description = IngamePresentation.wrapLine(plant_upgradeLevel_description, backgroundRect.Width - 130, factoryFont);
-                spriteBatch.DrawString(factoryFont, plant_upgradeLevel_description, upgradePos, Color.LawnGreen * fadeFactor);
+                plant_upgradeLevel_description = IngamePresentation.wrapLine(plant_upgradeLevel_description, backgroundRect.Width - 130, factoryFont, textScaleFactor);
+                Vector2 upgradePos = textPos + new Vector2(0, factoryFont.MeasureString(text).Y / 2 + lineSpacing + factoryFont.MeasureString(plant_upgradeLevel_description).Y / 2) * textScaleFactor;
+                spriteBatch.DrawString(factoryFont, plant_upgradeLevel_description, upgradePos, Color.LawnGreen * fadeFactor, 0, new Vector2(factoryFont.MeasureString(plant_upgradeLevel_description).X / 2, factoryFont.MeasureString(plant_upgradeLevel_description).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
 
             string nextText = "Press Enter to continue";
-            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X - 70, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y - 50);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Orange * fadeFactor);
+            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X / 2 - 50, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y / 2 - 30);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor, 0, new Vector2(menuSmall.MeasureString(nextText).X / 2, menuSmall.MeasureString(nextText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
         }
 

@@ -473,14 +473,18 @@ namespace Poseidon
         {
             if (jigsawGameScene.inOrder)
             {
-                AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                
                 MediaPlayer.Stop();
                 jigsawGameScene.StopVideoPlayers();
                 ShowScene(playGameScene);
                 switch (jigsawType)
                 {
                     case 0:
-                        HydroBot.hasSeaCow = true;
+                        if (!HydroBot.hasSeaCow)
+                        {
+                            HydroBot.hasSeaCow = true;
+                            AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                        }
                         HydroBot.iconActivated[IngamePresentation.seaCowIcon] = true;
                         HydroBot.seaCowPower += 1.0f;
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForSeaCowJigsaw;
@@ -488,7 +492,11 @@ namespace Poseidon
                         ResearchFacility.seaCowWon = true;
                         break;
                     case 1:
-                        HydroBot.hasTurtle = true;
+                        if (!HydroBot.hasTurtle)
+                        {
+                            HydroBot.hasTurtle = true;
+                            AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                        }
                         HydroBot.iconActivated[IngamePresentation.turtleIcon] = true;
                         HydroBot.turtlePower += 1.0f;
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForTurtleJigsaw;
@@ -496,7 +504,11 @@ namespace Poseidon
                         ResearchFacility.turtleWon = true;
                         break;
                     case 2:
-                        HydroBot.hasDolphin = true;
+                        if (!HydroBot.hasDolphin)
+                        {
+                            HydroBot.hasDolphin = true;
+                            AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                        }
                         HydroBot.iconActivated[IngamePresentation.dolphinIcon] = true;
                         HydroBot.dolphinPower += 1.0f;
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForDolphinJigsaw;

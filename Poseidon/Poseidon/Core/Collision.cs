@@ -216,7 +216,7 @@ namespace Poseidon
             futureBoundingSphere.Center.Z = futurePosition.Z;
 
             //don't let the living object to swim completely out of the screen reach
-            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX - 30, hydroBot.MaxRangeZ - 30, futureBoundingSphere))
+            if (isOutOfMap(futurePosition, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, futureBoundingSphere))
             {
                 return false;
             }

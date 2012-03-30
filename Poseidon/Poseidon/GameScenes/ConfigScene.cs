@@ -20,10 +20,7 @@ namespace Poseidon
     public class ConfigScene : GameScene
     {
         // Textures and their rectangles
-        protected readonly Texture2D configTitle;
-        protected readonly Texture2D slideBar;
-        protected readonly Texture2D uncheckedBox;
-        protected readonly Texture2D checkedBox;
+        protected readonly Texture2D configTitle, slideBar, uncheckedBox, checkedBox, okButton;
 
         protected Rectangle titleRect;
         protected List<Rectangle> itemRectList;
@@ -43,10 +40,13 @@ namespace Poseidon
 
         //Check mouse position and click
         int selectedIndex = -1;
+        bool mouseOnOK = false;
 
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
-        public static bool clicked = false;
+        private bool clicked = false;
+        public static bool okClicked = false;
+
 
         //Color
         protected Color regularColor = Color.Khaki, selectedColor = Color.FloralWhite;
@@ -67,7 +67,7 @@ namespace Poseidon
 
 
         public ConfigScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                            Texture2D background, Texture2D configTitle, Texture2D unselectedCheckbox, Texture2D selectedCheckBox,  GraphicsDevice graphicDevice)
+                            Texture2D background, Texture2D configTitle, Texture2D unselectedCheckbox, Texture2D selectedCheckBox, Texture2D okButton,  GraphicsDevice graphicDevice)
             : base(game)
         {
             this.game = game;
@@ -76,6 +76,7 @@ namespace Poseidon
             selectedFont = largeFont;
             uncheckedBox = unselectedCheckbox;
             checkedBox = selectedCheckBox;
+            this.okButton = okButton;
 
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
@@ -109,6 +110,10 @@ namespace Poseidon
             iconRectList.Add(showLiveTipRect);
             specialEffectRect = new Rectangle(game.Window.ClientBounds.Center.X + titleWidth / 2, itemRectList[3].Top, height, height);
             iconRectList.Add(specialEffectRect);
+
+            width = titleWidth/2;
+            height = (int)(titleHeight*0.75);
+            okBox = new Rectangle(game.Window.ClientBounds.Center.X - width / 2, game.Window.ClientBounds.Bottom - (int)(height * 1.5), width, height);
 
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)Game.Services.GetService(
@@ -187,12 +192,18 @@ namespace Poseidon
                 selectedIndex = -1;
             }
 
-            if (selectedIndex >= 0)
+            if (okBox.Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)))
             {
-                if (prevselectedIndex != selectedIndex)
-                {
-                    audio.MenuScroll.Play();
-                }
+                selectedIndex = -2; 
+            }
+
+            if (prevselectedIndex != selectedIndex && selectedIndex!= -1)
+            {
+                audio.MenuScroll.Play();
+            }
+
+            if (selectedIndex >= 0)
+            {   
                 if (iconRectList[selectedIndex].Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
                 {
                     clicked = true;
@@ -229,6 +240,11 @@ namespace Poseidon
                 clicked = false;
             }
 
+            if (okBox.Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
+            {
+                okClicked = true;
+            }
+
             if (MediaPlayer.State.Equals(MediaState.Stopped))
             {
 
@@ -247,7 +263,11 @@ namespace Poseidon
         {
             spriteBatch.Begin();
             base.Draw(gameTime);
+            
+            //Draw Title
             spriteBatch.Draw(configTitle, titleRect, Color.White);
+            
+            //Draw the item text
             for(int i=0; i<menuItems.Length; i++ )
             {
                 if (i == selectedIndex)
@@ -261,6 +281,8 @@ namespace Poseidon
                     spriteBatch.DrawString(regularFont, menuItems[i], new Vector2(itemRectList[i].Left, itemRectList[i].Top), regularColor);
                 }
             }
+            
+            //Draw the checkbox and bars
             if(GameSettings.ShowLiveTip)
                 spriteBatch.Draw(checkedBox, showLiveTipRect, Color.White);
             else
@@ -269,6 +291,13 @@ namespace Poseidon
                 spriteBatch.Draw(checkedBox, specialEffectRect, Color.White);
             else
                 spriteBatch.Draw(uncheckedBox, specialEffectRect, Color.White);
+ 
+            //draw OK button
+            if(selectedIndex==-2) //mouse on Ok
+                spriteBatch.Draw(okButton, okBox, Color.Orange);
+            else
+                spriteBatch.Draw(okButton, okBox, Color.White);
+
             cursor.Draw(gameTime);
             spriteBatch.End();
         }

@@ -68,17 +68,17 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         public override void Draw(GameTime gameTime)
         {
-            Rectangle logoRect = new Rectangle(Game.Window.ClientBounds.Center.X - teamLogo.Width/2, Game.Window.ClientBounds.Center.Y - teamLogo.Height, teamLogo.Width, teamLogo.Height);
             string text;
             if (PoseidonGame.gamePlus)
                 text = "LOADING GAME+";
             else
                 text = "LOADING";
-            Vector2 textPositon = new Vector2(logoRect.Center.X - (font.MeasureString(text).X/2), logoRect.Bottom+100);
+            Vector2 textPositon = new Vector2(Game.Window.ClientBounds.Center.X - (font.MeasureString(text).X / 2), Game.Window.ClientBounds.Center.Y + 200);
 
             spriteBatch.Begin();
             base.Draw(gameTime);
 
+            Rectangle logoRect = new Rectangle(Game.Window.ClientBounds.Right - teamLogo.Width, Game.Window.ClientBounds.Bottom - teamLogo.Height, teamLogo.Width, teamLogo.Height);
             spriteBatch.Draw(teamLogo, logoRect , Color.White);
             spriteBatch.DrawString(font, text, textPositon, Color.Black);
             spriteBatch.End();

@@ -55,6 +55,7 @@ namespace Poseidon
         private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge, typeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture, teamLogo;
         StartScene startScene;
+        ConfigScene configScene;
         LoadingScene loadingScene;
         SelectLoadingLevelScene selectLoadingLevelScene;
         // For the Attribute board
@@ -231,6 +232,13 @@ namespace Poseidon
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
+            //Create the config screen
+            Texture2D configTitle = Content.Load<Texture2D>("Image/SceneTextures/configTitle");
+            Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configUnselectedCheckBox");
+            Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configSelectedCheckBox");
+            configScene = new ConfigScene(this, startSceneSmall, startSceneLarge, startBackgroundTexture, configTitle, unselectedCheckBox, selectedCheckBox, GraphicsDevice);
+            Components.Add(configScene);
+
             AttributeBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/AttributeBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
             tipBackgroundTexture = LevelObjectiveBackgroundTexture;
@@ -320,6 +328,13 @@ namespace Poseidon
             if (activeScene == startScene)
             {
                 HandleStartSceneInput();
+            }
+            else if (activeScene == configScene)
+            {
+                if (enterPressed || EscPressed)
+                {
+                    ShowScene(startScene);
+                }
             }
             else if (activeScene == selectLoadingLevelScene)
             {
@@ -735,6 +750,7 @@ namespace Poseidon
                             ShowScene(survivalGameScene);
                             break;
                         case "Config":
+                            ShowScene(configScene);
                             break;
                         case "Help":
                             ShowScene(helpScene);

@@ -234,9 +234,13 @@ namespace Poseidon
 
             //Create the config screen
             Texture2D configTitle = Content.Load<Texture2D>("Image/SceneTextures/configTitle");
-            Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configUnselectedCheckBox");
-            Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configSelectedCheckBox");
-            configScene = new ConfigScene(this, startSceneSmall, startSceneLarge, startBackgroundTexture, configTitle, unselectedCheckBox, selectedCheckBox, GraphicsDevice);
+            Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configUnselectedCheckBox");
+            Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configSelectedCheckBox");
+            Texture2D configslideBar = Content.Load<Texture2D>("Image/ButtonTextures/configBar");
+            Texture2D configslideButton = Content.Load<Texture2D>("Image/ButtonTextures/configDragButton");
+            Texture2D configOkButton = Content.Load<Texture2D>("Image/ButtonTextures/configOkButton");
+            SpriteFont normalFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            configScene = new ConfigScene(this, startSceneSmall, startSceneLarge, normalFont, startBackgroundTexture, configTitle, unselectedCheckBox, selectedCheckBox, configslideBar, configslideButton, configOkButton, GraphicsDevice);
             Components.Add(configScene);
 
             AttributeBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/AttributeBackground");
@@ -331,8 +335,9 @@ namespace Poseidon
             }
             else if (activeScene == configScene)
             {
-                if (enterPressed || EscPressed)
+                if (enterPressed || EscPressed || ConfigScene.okClicked)
                 {
+                    ConfigScene.okClicked = false;
                     ShowScene(startScene);
                 }
             }

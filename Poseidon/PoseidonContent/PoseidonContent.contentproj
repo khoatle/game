@@ -2584,20 +2584,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\configSelectedCheckBox.png">
-      <Name>configSelectedCheckBox</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\SceneTextures\configUnselectedCheckBox.png">
-      <Name>configUnselectedCheckBox</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\SceneTextures\helpforeground_move_1.png">
       <Name>helpforeground_move_1</Name>
       <Importer>TextureImporter</Importer>
@@ -2614,6 +2600,32 @@
   <ItemGroup>
     <Compile Include="Image\ButtonTextures\configOkButton.png">
       <Name>configOkButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configBar.png">
+      <Name>configBar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configDragButton.png">
+      <Name>configDragButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configSelectedCheckBox.png">
+      <Name>configSelectedCheckBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\ButtonTextures\configUnselectedCheckBox.png">
+      <Name>configUnselectedCheckBox</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

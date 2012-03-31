@@ -76,8 +76,7 @@ namespace Poseidon.MiniGames
             spriteBatch = (SpriteBatch)Game.Services.GetService(
                                             typeof(SpriteBatch));
             // Get the audio library
-            audio = (AudioLibrary)
-                Game.Services.GetService(typeof(AudioLibrary));
+            audio = PoseidonGame.audio;
             Load();
         }
 
@@ -166,6 +165,7 @@ namespace Poseidon.MiniGames
                     expAwarded += 300;
                 }
                 HydroBot.currentExperiencePts += expAwarded;
+                HydroBot.IncreaseGoodWillPoint(expAwarded);
                 return;
             }
 

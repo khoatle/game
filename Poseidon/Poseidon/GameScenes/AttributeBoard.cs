@@ -71,8 +71,8 @@ namespace Poseidon
             //Components.Add(cursor);
 
             UnassignedPtsBar = Content.Load<Texture2D>("Image/AttributeBoardTextures/UnassignedPtsBarNew");
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            menuLarge = Content.Load<SpriteFont>("Fonts/menuLarge");
+            statsFont = IngamePresentation.statsFont;
+            menuLarge = IngamePresentation.largeFont;
             speedTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/speed");
             hitpointTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/hit_point");
             shootrateTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/shooting_rate");

@@ -45,7 +45,7 @@ namespace Poseidon
                 this.spriteBatch = PoseidonGame.spriteBatch;
             }
 
-            laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/greenBall");
+            laserBeamTexture = IngamePresentation.healLaserBeamTexture;
         }
 
         public override void draw(Matrix view, Matrix projection)

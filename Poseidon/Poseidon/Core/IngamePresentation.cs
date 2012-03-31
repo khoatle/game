@@ -26,7 +26,7 @@ namespace Poseidon.Core
         static Random random = new Random();
         //textures for good will bar
         static Texture2D[] iconTextures, resultTextures;
-        static Texture2D GoodWillBar, EnvironmentBar, lobsterTexture, crabTexture, iconFrame;
+        static Texture2D GoodWillBar, EnvironmentBar, iconFrame;
         public static Texture2D buttonNormalTexture, buttonHoverTexture, buttonPressedTexture;
         static Texture2D HealthBar;
 
@@ -39,7 +39,8 @@ namespace Poseidon.Core
             armorIcon = 7, sandalIcon = 8, beltIcon = 9, dolphinIcon = 10, seaCowIcon = 11, turtleIcon = 12;
 
         // Texture and font for property window of a factory
-        public static SpriteFont factoryFont;
+        public static Texture2D factoryPanelTexture;
+        public static SpriteFont factoryFont, factoryPanelFont;
         public static Texture2D factoryBackground;
         public static Texture2D factoryProduceButtonNormalTexture, factoryProduceButtonHoverTexture, factoryProduceButtonPressedTexture;
         public static Texture2D dummyTexture;
@@ -51,10 +52,10 @@ namespace Poseidon.Core
         public static Texture2D facilityUpgradeButton;
         public static Texture2D playJigsawButton;
         public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
-        public static SpriteFont menuSmall;
+        public static SpriteFont menuSmall, largeFont, typeFont;
 
         //level winning/losing screen
-        public static Texture2D winningTexture, losingTexture;
+        public static Texture2D winningTexture, losingTexture, actionTexture, stunnedTexture, scaredIconTexture, goldenKeyTexture;
 
         //for displaying tip on screen
         public static int currentTipID = 0;
@@ -66,6 +67,31 @@ namespace Poseidon.Core
 
         //to next level button
         public static Texture2D toNextLevelNormalTexture, toNextLevelHoverTexture;
+
+        // For drawing the currently selected skill
+        public static Texture2D[] skillTextures;
+        // For drawing the currently selected bullet type
+        public static Texture2D[] bulletTypeTextures;
+
+        //school of fish textures
+        public static Texture2D fishTexture1, fishTexture2, fishTexture3;
+
+        public static Texture2D levelObjectiveNormalIconTexture, levelObjectiveHoverIconTexture, tipNormalIconTexture, tipHoverIconTexture;
+
+        // Textures for animating the processing state of factories.
+        // Plastic factory will use nuclear factory textures
+        public static List<Texture2D> biofactoryAnimationTextures;
+        public static List<Texture2D> nuclearFactoryAnimationTextures;
+        public static List<Texture2D> plasticFactoryLevelTextures;
+        public static List<Texture2D> biodegradableFactoryLevelTextures;
+
+        public static Texture2D laserBeamTexture, healLaserBeamTexture, submarineLaserBeamTexture;
+
+        public static Texture2D normalCursorTexture;
+        public static Texture2D shootingCursorTexture;
+        public static Texture2D onFishCursorTexture;
+        public static Texture2D onAttributeCursorTexture;
+        public static Texture2D menuCursorTexture;
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
@@ -103,7 +129,6 @@ namespace Poseidon.Core
             buttonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
 
             // Load Textures and fonts for factory control panel
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
             factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel");
             factoryProduceButtonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonLargeFrame"); //("Image/TrashManagement/ChangeFactoryProduceBox");
             factoryProduceButtonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
@@ -112,34 +137,105 @@ namespace Poseidon.Core
             dummyTexture.SetData(new int[4]);
 
 
-            // Load Textures and fonts for research facility property dialog
-            facilityFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            facilityFont2 = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            // Load Textures for research facility property dialog
             facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");
             facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
             increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
-            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            
 
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWinNew");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOverNew");
+            actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
+            stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
+            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBarNew");
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBarNew");
-            lobsterTexture = Content.Load<Texture2D>("Image/Miscellaneous/lobster");
-            crabTexture = Content.Load<Texture2D>("Image/Miscellaneous/crab");
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             bubbles = new List<Bubble>();
 
+            //load all fonts
+            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             statisticFont = Content.Load<SpriteFont>("Fonts/statisticsfont");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            facilityFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
+            typeFont = Content.Load<SpriteFont>("Fonts/font");
+            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
 
             toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
             toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");
+
+            skillTextures = new Texture2D[GameConstants.numberOfSkills];
+            bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
+            // Loading main character skill icon textures
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                skillTextures[index] = Content.Load<Texture2D>(GameConstants.iconNames[index]);
+            }
+            // Loading main character bullet icon textures
+            for (int index = 0; index < GameConstants.numBulletTypes; index++)
+            {
+                bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
+            }
+
+            goldenKeyTexture = Content.Load<Texture2D>("Image/SceneTextures/goldkey");
+
+            fishTexture1 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish1");
+            fishTexture2 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish2-1");
+            fishTexture3 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish3");
+
+            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
+            tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
+            tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
+
+            // Load lower left pannel button
+            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+
+            // Load textures for partid animation for factories
+            biofactoryAnimationTextures = new List<Texture2D>();
+            nuclearFactoryAnimationTextures = new List<Texture2D>();
+            for (int i = 0; i < 6; i++)
+            {
+                biofactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/conveyor_bench" + i));
+            }
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/orange"));
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
+
+            // Factory level textures
+            plasticFactoryLevelTextures = new List<Texture2D>();
+            biodegradableFactoryLevelTextures = new List<Texture2D>();
+            for (int i = 0; i < 3; i++)
+            {
+                // using same level textures for both factories
+                Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
+                plasticFactoryLevelTextures.Add(loadedTexture);
+                biodegradableFactoryLevelTextures.Add(loadedTexture);
+            }
+
+            laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBall");
+            healLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/greenBall");
+            submarineLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/laserBeam");
+
+            normalCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
+            shootingCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
+            onFishCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/fishcursorNew1");
+            onAttributeCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/hammerAndWrench");
+            menuCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/menuCursor");
+
+        }
+
+        public static void Initiate3DGraphics(ContentManager Content)
+        {
+
         }
         
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)

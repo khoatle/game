@@ -268,6 +268,7 @@ namespace Poseidon {
         public const int GoodWillPointGainForPlanting = 25;
         public const int GoodWillPointGainForCleaning = 50;
         public const int GoodWillPointGainForHealing = 25;
+        public const int BasicGoodWillGainForPlayingMiniGame = 50;
 
         //const for particle systems
         public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;

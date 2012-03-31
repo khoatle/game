@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Poseidon.Core;
 
 namespace Poseidon {
     public class DamageBullet : Projectiles {
@@ -41,7 +42,7 @@ namespace Poseidon {
                 this.spriteBatch = PoseidonGame.spriteBatch;
             }
 
-            laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBall");
+            laserBeamTexture = IngamePresentation.laserBeamTexture;
         }
 
         public void initialize(Vector3 position, Vector3 headingDirection, float speed, int damage, BaseEnemy shooter) {

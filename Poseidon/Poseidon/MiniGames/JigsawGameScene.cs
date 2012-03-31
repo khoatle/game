@@ -160,7 +160,7 @@ namespace Poseidon.MiniGames
         protected override void LoadContent()
         {
             font = content.Load<SpriteFont>("Fonts/JigsawFont");
-            timerFont = content.Load<SpriteFont>("Fonts/menuSmall");
+            timerFont = IngamePresentation.menuSmall;
 
             seacowImage = new Texture2D[2];
             turtleImage = new Texture2D[2];

@@ -80,6 +80,67 @@ namespace Poseidon.GraphicEffects
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
+            if (currentKeyboardState.IsKeyDown(Keys.Q) &&
+                 lastKeyboardState.IsKeyUp(Keys.Q))
+            {
+                bloom.Settings.BaseIntensity += 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.W) &&
+                 lastKeyboardState.IsKeyUp(Keys.W))
+            {
+                bloom.Settings.BaseSaturation += 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.E) &&
+                 lastKeyboardState.IsKeyUp(Keys.E))
+            {
+                bloom.Settings.BloomIntensity += 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.R) &&
+                 lastKeyboardState.IsKeyUp(Keys.R))
+            {
+                bloom.Settings.BloomSaturation += 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.T) &&
+                 lastKeyboardState.IsKeyUp(Keys.T))
+            {
+                bloom.Settings.BloomThreshold += 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.Y) &&
+                 lastKeyboardState.IsKeyUp(Keys.Y))
+            {
+                bloom.Settings.BlurAmount += 0.1f;
+            }
+
+            if (currentKeyboardState.IsKeyDown(Keys.D1) &&
+                 lastKeyboardState.IsKeyUp(Keys.D1))
+            {
+                bloom.Settings.BaseIntensity -= 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D2) &&
+                 lastKeyboardState.IsKeyUp(Keys.D2))
+            {
+                bloom.Settings.BaseSaturation -= 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D3) &&
+                 lastKeyboardState.IsKeyUp(Keys.D3))
+            {
+                bloom.Settings.BloomIntensity -= 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D4) &&
+                 lastKeyboardState.IsKeyUp(Keys.D4))
+            {
+                bloom.Settings.BloomSaturation -= 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D5) &&
+                 lastKeyboardState.IsKeyUp(Keys.D5))
+            {
+                bloom.Settings.BloomThreshold -= 0.1f;
+            }
+            if (currentKeyboardState.IsKeyDown(Keys.D6) &&
+                 lastKeyboardState.IsKeyUp(Keys.D6))
+            {
+                bloom.Settings.BlurAmount -= 0.1f;
+            }
             // Switch underwater effect on/off
             if (currentKeyboardState.IsKeyDown(Keys.U) &&
                  lastKeyboardState.IsKeyUp(Keys.U))
@@ -87,11 +148,12 @@ namespace Poseidon.GraphicEffects
                 underWaterEffectEnabled = !underWaterEffectEnabled;
             }
 
-            if (currentKeyboardState.IsKeyDown(Keys.R) &&
-                lastKeyboardState.IsKeyUp(Keys.R))
-            {
-                divisor = 0.1f;
-            }
+
+            //if (currentKeyboardState.IsKeyDown(Keys.R) &&
+            //    lastKeyboardState.IsKeyUp(Keys.R))
+            //{
+            //    divisor = 0.1f;
+            //}
 
             // Switch to the next bloom settings preset?
             if (currentKeyboardState.IsKeyDown(Keys.A) &&
@@ -244,17 +306,22 @@ namespace Poseidon.GraphicEffects
             spriteBatch.End();
             //graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
             //graphics.GraphicsDevice.Textures[1] = afterBloomTexture;          
-            //DrawOverlayText();
+            DrawOverlayText();
             return afterEffectsRenderTarget;
         }
 
         void DrawOverlayText()
         {
-            string text = "A = settings (" + bloom.Settings.Name + ")\n" +
-                          "B = toggle bloom (" + (bloomEffectEnabled ? "on" : "off") + ")\n" +
-                          "D = show buffer (" + bloom.ShowBuffer.ToString() + ")\n" +
-                          "U = toggle underwater (" + (underWaterEffectEnabled ? "on" : "off") + ")";
-
+            //string text = "A = settings (" + bloom.Settings.Name + ")\n" +
+            //              "B = toggle bloom (" + (bloomEffectEnabled ? "on" : "off") + ")\n" +
+            //              "D = show buffer (" + bloom.ShowBuffer.ToString() + ")\n" +
+            //              "U = toggle underwater (" + (underWaterEffectEnabled ? "on" : "off") + ")";
+            string text = "BaseIntensity: " + bloom.Settings.BaseIntensity + "\n" +
+                          "BaseSaturation: " + bloom.Settings.BaseSaturation + "\n" +
+                          "BloomIntensity: " + bloom.Settings.BloomIntensity + "\n" +
+                          "BloomSaturation: " + bloom.Settings.BloomSaturation + "\n" +
+                          "BloomThreshold: " + bloom.Settings.BloomThreshold + "\n" +
+                          "BlurAmount: " + bloom.Settings.BlurAmount + "\n";
             //spriteBatch.Begin(0, BlendState.Opaque, null, null, null, null);
             spriteBatch.Begin();
             // Draw the string twice to create a drop shadow, first colored black

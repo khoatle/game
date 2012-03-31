@@ -172,7 +172,7 @@ namespace Poseidon
             //initiate all 2D graphics and fonts for the game
             IngamePresentation.Initiate2DGraphics(Content);
 
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            statsFont = IngamePresentation.statsFont;
 
             //For pausing the game
             paused = false;
@@ -187,8 +187,8 @@ namespace Poseidon
             Services.AddService(typeof(AudioLibrary), audio);
 
             //For general game control
-            actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
-            stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
+            actionTexture = IngamePresentation.actionTexture;
+            stunnedTexture = IngamePresentation.stunnedTexture;
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
@@ -222,8 +222,8 @@ namespace Poseidon
             startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             smallFont = IngamePresentation.menuSmall;
-            largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
-            typeFont = Content.Load<SpriteFont>("Fonts/font");
+            largeFont = IngamePresentation.largeFont;
+            typeFont = IngamePresentation.typeFont;
             startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             teamLogo = Content.Load<Texture2D>("Image/Miscellaneous/TeamLogo");
@@ -255,7 +255,7 @@ namespace Poseidon
             Components.Add(selectLoadingLevelScene);
 
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
-            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
+            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
             Components.Add(shipWreckScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
@@ -455,6 +455,7 @@ namespace Poseidon
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
                 if (HydroBot.currentEnvPoint >= HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
                 HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 50;
+                HydroBot.IncreaseGoodWillPoint(GameConstants.BasicGoodWillGainForPlayingMiniGame * quizzGameScene.numRightAnswer);
                 PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
             }
@@ -799,7 +800,7 @@ namespace Poseidon
             cutSceneDialog = new CutSceneDialog();
 
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
                       
             // Create the Attribute board

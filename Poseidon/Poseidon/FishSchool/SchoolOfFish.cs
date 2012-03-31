@@ -67,7 +67,7 @@ namespace Poseidon.FishSchool
 
         ContentManager content;
         int minValueX, minValueZ, maxValueX, maxValueZ, gameMaxX, gameMaxZ;
-        public SchoolOfFish(ContentManager Content, string fishTextureName, int minX, int maxX, int minZ, int maxZ)
+        public SchoolOfFish(ContentManager Content, Texture2D fishTexture, int minX, int maxX, int minZ, int maxZ)
         {
             flock = null;
             //cat = null;
@@ -75,7 +75,7 @@ namespace Poseidon.FishSchool
             flockParams = new AIParameters();
             ResetAIParams();
             this.content = Content;
-            fishTexture = Content.Load<Texture2D>(fishTextureName);
+            this.fishTexture = fishTexture;
             this.gameMaxX = GameConstants.MainGameMaxRangeX;
             this.gameMaxZ = GameConstants.MainGameMaxRangeZ;
             minValueX = minX;

@@ -662,7 +662,7 @@ namespace Poseidon
             {
                 string txt = "Collect bones/fossils to resurrect extinct sea creatures. Bones and fossils are found while processing trash in the factories. They are also found in treasure chests inside shipwrecks.";
                 txt = Poseidon.Core.IngamePresentation.wrapLine(txt, backgroundRect.Width - 130, facilityFont2, textScaleFactor);
-                spriteBatch.DrawString(facilityFont2, txt, new Vector2(screenWidth/2, resurTitlePos.Y + lineSpacing + facilityFont.MeasureString(resurrectTitle).Y / 2 + facilityFont.MeasureString(txt).Y / 2), Color.Violet, 0, new Vector2(facilityFont.MeasureString(txt).X/2, facilityFont.MeasureString(txt).Y/2), textScaleFactor, SpriteEffects.None, 0);
+                spriteBatch.DrawString(facilityFont2, txt, new Vector2(screenWidth / 2, resurTitlePos.Y + lineSpacing + facilityFont.MeasureString(resurrectTitle).Y / 2 + facilityFont.MeasureString(txt).Y / 2), Color.Purple, 0, new Vector2(facilityFont.MeasureString(txt).X / 2, facilityFont.MeasureString(txt).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
 
             string nextText = "Press Enter to continue";

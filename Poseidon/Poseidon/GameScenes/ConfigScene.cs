@@ -256,11 +256,13 @@ namespace Poseidon
                         GameSettings.MusicVolume = (float)(clickedPositionX - musicVolumeRect.Left) / (float)musicVolumeRect.Width;
                         if (GameSettings.MusicVolume < 0f) GameSettings.MusicVolume = 0f;
                         if (GameSettings.MusicVolume > 1f) GameSettings.MusicVolume = 1f;
+                        MediaPlayer.Volume = GameSettings.MusicVolume;
                         break;
                     case 1:
                         GameSettings.SoundVolume = (float)(clickedPositionX - soundVolumeRect.Left) / (float)soundVolumeRect.Width;
                         if (GameSettings.SoundVolume < 0f) GameSettings.SoundVolume = 0f;
                         if (GameSettings.SoundVolume > 1f) GameSettings.SoundVolume = 1f;
+                        SoundEffect.MasterVolume = GameSettings.SoundVolume;
                         break;
                     case 2:
                         if (GameSettings.ShowLiveTip)

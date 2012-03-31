@@ -126,6 +126,8 @@ namespace Poseidon
 
         public static bool justCloseControlPanel = false;
 
+        public bool threeDgraphicInitiated = false;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -136,8 +138,7 @@ namespace Poseidon
             graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
-            MediaPlayer.Volume = 0.5f;
-            SoundEffect.MasterVolume = 0.5f;
+
         }
 
         /// <summary>
@@ -787,6 +788,7 @@ namespace Poseidon
         }
         private void CreateLevelDependentScenes()
         {
+
             //Set Level Objective. To make it scale with GamePlusLevel, we must put it in playgamescene after the hydrobot is loaded,
             //However, The cutscene uses the levelobjective values, and the cut scene must be created before playgamescene as it is 
             //used in playgamescene. Hence levelObj is initialized here , & can not use the gameplusLevel.

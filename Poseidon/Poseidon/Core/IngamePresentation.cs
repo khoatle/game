@@ -233,13 +233,104 @@ namespace Poseidon.Core
 
         }
 
+        public static Model bossBullet, chasingBullet, damageBullet, healBullet, herculesArrow, mjolnir, normalbullet, piercingArrow, torpedo,
+            diverGun, diverKnife, mutantShark, ghostPirate, submarine, terminator, bioFactory, bioFactoryStage0, bioFactoryStage1, bioFactoryState2, bioFactoryStage3,
+            nuclearFactory, nuclearFactoryStage0, nuclearFactoryStage1, nuclearFactoryStage2, nuclearFactoryStage3, plasticFactory, plasticFactoryStage0, plasticFactoryStage1, plasticFactoryStage2, plasticFactoryStage3,
+            researchFacility, researchFacilityStage0, researchFacilityStage1, researchFacilityStage2, researchFacilityStage3, hydrobot, goldenKey, boundingSphere, strangeRock1, strangeRock2,
+            healthPowPack, resource, shootratePowPack, speedPowPack, strengthPowPack,
+            dolphin, hammershark, leopardshark, manetee, mauiDolphin, meiolania, normalshark, orca, penguin, seal, stellarSeaCow, stingray, turtle,
+            barrel, barrelstack, boxstack, chestClosed, chest, shipwreck2, shipwreck3, shipwreck4, shipwreckscene1, shipwreckscene2, shipwreckscene3, shipwreckscene4, shipwreckscene5, shipwreckscene6,
+            bioTrash, plasticTrash, radioTrash; 
         public static void Initiate3DGraphics(ContentManager Content)
         {
+            bossBullet = Content.Load<Model>("Models/BulletModels/bossBullet");
+            chasingBullet = Content.Load<Model>("Models/BulletModels/chasingBullet");
+            damageBullet = Content.Load<Model>("Models/BulletModels/damageBullet");
+            healBullet = Content.Load<Model>("Models/BulletModels/healBullet");
+            herculesArrow = Content.Load<Model>("Models/BulletModels/herculesArrow");
+            mjolnir = Content.Load<Model>("Models/BulletModels/mjolnir");
+            normalbullet = Content.Load<Model>("Models/BulletModels/normalbullet");
+            piercingArrow = Content.Load<Model>("Models/BulletModels/piercingArrow");
+            torpedo = Content.Load<Model>("Models/BulletModels/torpedo");
 
+            diverGun = Content.Load<Model>("Models/EnemyModels/diver_green_ly");
+            diverKnife = Content.Load<Model>("Models/EnemyModels/diver_knife_orange_yellow");
+            mutantShark = Content.Load<Model>("Models/EnemyModels/mutantSharkVer2");
+            ghostPirate = Content.Load<Model>("Models/EnemyModels/skeletonrigged");
+            submarine = Content.Load<Model>("Models/EnemyModels/submarine");
+            terminator = Content.Load<Model>("Models/EnemyModels/terminator");
+            
+            bioFactory = Content.Load<Model>("Models/FactoryModels/biodegradablefactory");
+            bioFactoryStage0 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage0");
+            bioFactoryStage1 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage1");
+            bioFactoryState2 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage2");
+            bioFactoryStage3 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage3");
+            nuclearFactory = Content.Load<Model>("Models/FactoryModels/nuclearfactory");
+            nuclearFactoryStage0 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage0");
+            nuclearFactoryStage1 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage1");
+            nuclearFactoryStage2 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage2");
+            nuclearFactoryStage3 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage3");
+            plasticFactory = Content.Load<Model>("Models/FactoryModels/plasticfactory");
+            plasticFactoryStage0 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage0");
+            plasticFactoryStage1 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage1");
+            plasticFactoryStage2 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage2");
+            plasticFactoryStage3 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage3");
+            researchFacility = Content.Load<Model>("Models/FactoryModels/researchfacility");
+            researchFacilityStage0 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage0");
+            researchFacilityStage1 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage1");
+            researchFacilityStage2 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage2");
+            researchFacilityStage3 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage3");
+            
+            hydrobot = Content.Load<Model>("Models/MainCharacter/bot");
+            
+            goldenKey = Content.Load<Model>("Models/Miscellaneous/goldenkey");
+            boundingSphere = Content.Load<Model>("Models/Miscellaneous/sphere1ur");
+            strangeRock1 = Content.Load<Model>("Models/Miscellaneous/strangerock1ver2");
+            strangeRock2 = Content.Load<Model>("Models/Miscellaneous/strangerock2ver2");
+
+            healthPowPack = Content.Load<Model>("Models/PowerpackResource/healthpowerpack");
+            resource = Content.Load<Model>("Models/PowerpackResource/resource");
+            shootratePowPack = Content.Load<Model>("Models/PowerpackResource/shootratepowerpack");
+            speedPowPack = Content.Load<Model>("Models/PowerpackResource/speedpowerpack");
+            strengthPowPack = Content.Load<Model>("Models/PowerpackResource/strengthpowerpack");
+
+            dolphin = Content.Load<Model>("Models/SeaAnimalModels/dolphinVer3");
+            hammershark = Content.Load<Model>("Models/SeaAnimalModels/hammersharkver2");
+            leopardshark = Content.Load<Model>("Models/SeaAnimalModels/leopardsharkver3");
+            manetee = Content.Load<Model>("Models/SeaAnimalModels/maneteever2");
+            mauiDolphin = Content.Load<Model>("Models/SeaAnimalModels/mauidolphin");
+            meiolania = Content.Load<Model>("Models/SeaAnimalModels/meiolaniawithanim");
+            normalshark = Content.Load<Model>("Models/SeaAnimalModels/normalsharkver3");
+            orca = Content.Load<Model>("Models/SeaAnimalModels/orcaver2");
+            penguin = Content.Load<Model>("Models/SeaAnimalModels/penguin");
+            seal = Content.Load<Model>("Models/SeaAnimalModels/sealver2");
+            stellarSeaCow = Content.Load<Model>("Models/SeaAnimalModels/stellarseacow");
+            stingray = Content.Load<Model>("Models/SeaAnimalModels/stingray");
+            turtle = Content.Load<Model>("Models/SeaAnimalModels/turtle");
+
+            barrel = Content.Load<Model>("Models/ShipWreckModels/barrel");
+            barrelstack = Content.Load<Model>("Models/ShipWreckModels/barrelstack");
+            boxstack = Content.Load<Model>("Models/ShipWreckModels/boxstack");
+            chestClosed = Content.Load<Model>("Models/ShipWreckModels/chest-closed");
+            chest = Content.Load<Model>("Models/ShipWreckModels/chest");
+            shipwreck2 = Content.Load<Model>("Models/ShipWreckModels/shipwreck2");
+            shipwreck3 = Content.Load<Model>("Models/ShipWreckModels/shipwreck3");
+            shipwreck4 = Content.Load<Model>("Models/ShipWreckModels/shipwreck4");
+            shipwreckscene1 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene1");
+            shipwreckscene2 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene2");
+            shipwreckscene3 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene3");
+            shipwreckscene4 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene4");
+            shipwreckscene5 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene5");
+            shipwreckscene6 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene6");
+
+            bioTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer4");
+            plasticTrash = Content.Load<Model>("Models/TrashModels/plastictrashver3");
+            radioTrash = Content.Load<Model>("Models/TrashModels/radioactivetrash"); ;
         }
         
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
         {
+            if (!GameSettings.ShowLiveTip) return;
             Rectangle rectSafeArea;
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
             float xOffsetText, yOffsetText;

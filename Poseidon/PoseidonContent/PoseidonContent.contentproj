@@ -356,13 +356,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PowerpackResource\plant1.fbx">
-      <Name>plant1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBar.png">
       <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
@@ -508,13 +501,6 @@
       <Name>Starfish-cursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\BulletModels\herculesBullet.fbx">
-      <Name>herculesBullet</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -802,22 +788,6 @@
       <Name>normalBackground3</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel5.fbx">
-      <Name>trashModel5</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel4.fbx">
-      <Name>trashModel4</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>

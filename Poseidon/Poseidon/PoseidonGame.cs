@@ -233,6 +233,7 @@ namespace Poseidon
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
             //Create the config screen
+            loadConfigSettings();
             Texture2D configTitle = Content.Load<Texture2D>("Image/SceneTextures/configTitle");
             Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configUnselectedCheckBox");
             Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configSelectedCheckBox");
@@ -777,6 +778,7 @@ namespace Poseidon
                             break;
                         case "Quit":
                             MediaPlayer.Stop();
+                            saveConfigSettings();
                             Exit();
                             break;
 
@@ -784,8 +786,58 @@ namespace Poseidon
                 }
             }
         }
+
+        private void saveConfigSettings()
+        {
+            BinaryWriter bw = new BinaryWriter(File.Open("configSettings", FileMode.Create));
+            bw.Write((double)GameSettings.MusicVolume);
+            bw.Write((double)GameSettings.SoundVolume);
+            bw.Write(GameSettings.ShowLiveTip);
+            bw.Write(GameSettings.SpecialEffectsEnabled);
+            bw.Write((double)GameSettings.NumParticleLevel);
+            bw.Write((double)GameSettings.SchoolOfFishDetail);
+            bw.Close();
+        }
+
+        private void loadConfigSettings()
+        {
+            if (File.Exists("configSettings"))
+            {
+                try
+                {
+                    BinaryReader br = new BinaryReader(File.Open("configSettings", FileMode.Open));
+                    GameSettings.MusicVolume = (float)br.ReadDouble();
+                    GameSettings.SoundVolume = (float)br.ReadDouble();
+                    GameSettings.ShowLiveTip = br.ReadBoolean();
+                    GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
+                    GameSettings.NumParticleLevel = (float)br.ReadDouble();
+                    GameSettings.SchoolOfFishDetail = (float)br.ReadDouble();
+                    br.Close();
+                }
+                catch
+                {
+                    setDefaultConfigSettings();
+                }
+            }
+            else
+            {
+                setDefaultConfigSettings();
+            }
+        }
+
+        private void setDefaultConfigSettings()
+        {
+            GameSettings.MusicVolume = 1f;
+            GameSettings.SoundVolume = 1f;
+            GameSettings.ShowLiveTip = true;
+            GameSettings.SpecialEffectsEnabled = true;
+            GameSettings.NumParticleLevel = 1f;
+            GameSettings.SchoolOfFishDetail = 1f;
+        }
+
         private void CreateLevelDependentScenes()
         {
+
             //Set Level Objective. To make it scale with GamePlusLevel, we must put it in playgamescene after the hydrobot is loaded,
             //However, The cutscene uses the levelobjective values, and the cut scene must be created before playgamescene as it is 
             //used in playgamescene. Hence levelObj is initialized here , & can not use the gameplusLevel.

@@ -29,10 +29,12 @@ namespace Poseidon
 
         Game game;
 
-        protected Rectangle titleLine1Rect;
-        protected Vector2 titleLine1Position;
-        protected Rectangle titleLine2Rect;
-        protected Vector2 titleLine2Position;
+        protected Rectangle titleLine1SrcRect;
+        protected Rectangle titleLine1DestRect;
+        protected Rectangle titleLine2SrcRect;
+        protected Rectangle titleLine2DestRect;
+
+        protected float widthScale, heightScale;
 
         GraphicsDevice graphicsDevice;
 
@@ -51,8 +53,12 @@ namespace Poseidon
             this.game = game;
             this.graphicsDevice = graphicDevice;
 
-            titleLine1Rect = new Rectangle(0, 0, 588, 126);//Hydrobot (0,0, 588, 126)
-            titleLine2Rect = new Rectangle(90, 169, 620, 126); //Adventure (90, 169, 620, 126)
+            widthScale = (float)game.Window.ClientBounds.Width / 1280;
+            heightScale = (float)game.Window.ClientBounds.Height / 800;
+            GameConstants.textScaleFactor = (float)Math.Sqrt((double)widthScale * (double)heightScale);
+
+            titleLine1SrcRect = new Rectangle(0, 0, 588, 126);//Hydrobot (0,0, 588, 126)
+            titleLine2SrcRect = new Rectangle(90, 169, 620, 126); //Adventure (90, 169, 620, 126)
             
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
@@ -73,12 +79,9 @@ namespace Poseidon
             menu = new TextMenuComponent(game, smallFont, largeFont);
 
             //starting values
-            titleLine1Position.X = -1 * titleLine1Rect.Width;
-            titleLine1Position.Y = titleLine1Rect.Height / 3;
-            titleLine2Position.X = game.Window.ClientBounds.Width;
-            titleLine2Position.Y = (int)(titleLine1Rect.Height * 1.5);
+            resetMenuStartPosition();
 
-            menu.Position = new Vector2((game.Window.ClientBounds.Width / 2) , (titleLine2Position.Y + titleLine2Rect.Height));
+            menu.Position = new Vector2((game.Window.ClientBounds.Width / 2) , titleLine2DestRect.Bottom);
 
             menu.SetMenuItems(menuItems);
             Components.Add(menu);
@@ -94,13 +97,28 @@ namespace Poseidon
             cursor = new Cursor(game, spriteBatch);
         }
 
+        private void resetMenuStartPosition()
+        {
+            int width1 = (int)(titleLine1SrcRect.Width * widthScale);
+            int height1 = (int)(titleLine1SrcRect.Height * heightScale);
+            int width2 = (int)(titleLine2SrcRect.Width * widthScale);
+            int height2 = (int)(titleLine2SrcRect.Height * heightScale);
+            int line1posX = (-1 * width1);
+            int line2posX = game.Window.ClientBounds.Width;
+            int line1posY = height1 / 3;
+            int line2posY = (int)(height1 * 1.5);
+            titleLine1DestRect = new Rectangle(line1posX, line1posY, width1, height1);
+            titleLine2DestRect = new Rectangle(line2posX, line2posY, width2, height2);
+        }
+
         /// <summary>
         /// Show the start scene
         /// </summary>
         public override void Show()
         {
-            titleLine1Position.X = -1 * titleLine1Rect.Width;
-            titleLine2Position.X = game.Window.ClientBounds.Width;
+            
+            titleLine1DestRect.X = (-1 * titleLine1DestRect.Width);
+            titleLine2DestRect.X = game.Window.ClientBounds.Width;
 
             audio.NewMeteor.Play();
 
@@ -135,7 +153,7 @@ namespace Poseidon
                         menuItems = items;
                     }
                 }
-                menu.Position = new Vector2((game.Window.ClientBounds.Width / 2), (titleLine2Position.Y + titleLine2Rect.Height));
+                menu.Position = new Vector2((game.Window.ClientBounds.Width / 2), titleLine2DestRect.Bottom);
                 menu.SetMenuItems(menuItems);
             }
             
@@ -179,42 +197,21 @@ namespace Poseidon
             }
             if (!menu.Visible)
             {
-                if (titleLine2Position.X >= (game.Window.ClientBounds.Center.X - titleLine2Rect.Width/2))
+                if (titleLine2DestRect.X >= (game.Window.ClientBounds.Center.X - titleLine2DestRect.Width / 2))
                 {
-                    titleLine2Position.X -= (game.Window.ClientBounds.Width*0.0117f);
+                    titleLine2DestRect.X -= (int)(15*widthScale);
                 }
 
-                if (titleLine1Position.X <= (game.Window.ClientBounds.Center.X - titleLine1Rect.Width/2))
+                if (titleLine1DestRect.X <= (game.Window.ClientBounds.Center.X - titleLine1DestRect.Width / 2))
                 {
-                    titleLine1Position.X += (game.Window.ClientBounds.Width * 0.0117f);
+                    titleLine1DestRect.X += (int)(15*widthScale);
                 }
                 else
                 {
                     menu.Visible = true;
                     menu.Enabled = true;
-                    //Random rand = new Random();
-                    //MediaPlayer.Play(audio.backgroundMusics[rand.Next(GameConstants.NumNormalBackgroundMusics)]);
-//#if XBOX360
-//                    enhancedPosition = new Vector2((rainPosition.X + 
-//                    rainRect.Width - enhancedRect.Width / 2), rainPosition.Y);
-//#else
-//                    enhancedPosition =
-//                        new Vector2((rainPosition.X + rainRect.Width -
-//                        enhancedRect.Width / 2) - 80, rainPosition.Y);
-//#endif
-//                    showEnhanced = true;
                 }
             }
-            //else
-            //{
-            //    elapsedTime += gameTime.ElapsedGameTime;
-
-            //    if (elapsedTime > TimeSpan.FromSeconds(1))
-            //    {
-            //        elapsedTime -= TimeSpan.FromSeconds(1);
-            //        showEnhanced = !showEnhanced;
-            //    }
-            //}
             cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
             base.Update(gameTime);
         }
@@ -228,13 +225,13 @@ namespace Poseidon
             spriteBatch.Begin();
             base.Draw(gameTime);
 
-            int logoWidth = (int)(game.Window.ClientBounds.Width * 0.234); //300
-            int logoHeight = (int)(game.Window.ClientBounds.Height * 0.375); //300
+            int logoWidth = (int)(300 * widthScale); //300
+            int logoHeight = (int)(300 * heightScale); //300
             Rectangle teamLogoRectangle = new Rectangle(game.Window.ClientBounds.Right - (logoWidth-(logoWidth/10)), game.Window.ClientBounds.Bottom - (logoHeight-(logoHeight/10)), logoWidth, logoHeight);
             spriteBatch.Draw(teamLogo, teamLogoRectangle, Color.White);
             //System.Diagnostics.Debug.WriteLine(titleLine1Position + "Rect" + titleLine1Rect);
-            spriteBatch.Draw(elements, titleLine1Position, titleLine1Rect, Color.White);
-            spriteBatch.Draw(elements, titleLine2Position, titleLine2Rect, Color.White);
+            spriteBatch.Draw(elements, titleLine1DestRect, titleLine1SrcRect, Color.White);
+            spriteBatch.Draw(elements, titleLine2DestRect, titleLine2SrcRect, Color.White);
             
             //if (showEnhanced)
             //{

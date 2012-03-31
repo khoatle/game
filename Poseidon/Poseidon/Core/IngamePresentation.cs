@@ -26,7 +26,7 @@ namespace Poseidon.Core
         static Random random = new Random();
         //textures for good will bar
         static Texture2D[] iconTextures, resultTextures;
-        static Texture2D GoodWillBar, EnvironmentBar, lobsterTexture, crabTexture, iconFrame;
+        static Texture2D GoodWillBar, EnvironmentBar, iconFrame;
         public static Texture2D buttonNormalTexture, buttonHoverTexture, buttonPressedTexture;
         static Texture2D HealthBar;
 
@@ -39,7 +39,8 @@ namespace Poseidon.Core
             armorIcon = 7, sandalIcon = 8, beltIcon = 9, dolphinIcon = 10, seaCowIcon = 11, turtleIcon = 12;
 
         // Texture and font for property window of a factory
-        public static SpriteFont factoryFont;
+        public static Texture2D factoryPanelTexture;
+        public static SpriteFont factoryFont, factoryPanelFont;
         public static Texture2D factoryBackground;
         public static Texture2D factoryProduceButtonNormalTexture, factoryProduceButtonHoverTexture, factoryProduceButtonPressedTexture;
         public static Texture2D dummyTexture;
@@ -51,10 +52,10 @@ namespace Poseidon.Core
         public static Texture2D facilityUpgradeButton;
         public static Texture2D playJigsawButton;
         public static Texture2D increaseAttributeButtonNormalTexture, increaseAttributeButtonHoverTexture, increaseAttributeButtonPressedTexture;
-        public static SpriteFont menuSmall;
+        public static SpriteFont menuSmall, largeFont, typeFont;
 
         //level winning/losing screen
-        public static Texture2D winningTexture, losingTexture;
+        public static Texture2D winningTexture, losingTexture, actionTexture, stunnedTexture, scaredIconTexture, goldenKeyTexture;
 
         //for displaying tip on screen
         public static int currentTipID = 0;
@@ -66,6 +67,31 @@ namespace Poseidon.Core
 
         //to next level button
         public static Texture2D toNextLevelNormalTexture, toNextLevelHoverTexture;
+
+        // For drawing the currently selected skill
+        public static Texture2D[] skillTextures;
+        // For drawing the currently selected bullet type
+        public static Texture2D[] bulletTypeTextures;
+
+        //school of fish textures
+        public static Texture2D fishTexture1, fishTexture2, fishTexture3;
+
+        public static Texture2D levelObjectiveNormalIconTexture, levelObjectiveHoverIconTexture, tipNormalIconTexture, tipHoverIconTexture;
+
+        // Textures for animating the processing state of factories.
+        // Plastic factory will use nuclear factory textures
+        public static List<Texture2D> biofactoryAnimationTextures;
+        public static List<Texture2D> nuclearFactoryAnimationTextures;
+        public static List<Texture2D> plasticFactoryLevelTextures;
+        public static List<Texture2D> biodegradableFactoryLevelTextures;
+
+        public static Texture2D laserBeamTexture, healLaserBeamTexture, submarineLaserBeamTexture;
+
+        public static Texture2D normalCursorTexture;
+        public static Texture2D shootingCursorTexture;
+        public static Texture2D onFishCursorTexture;
+        public static Texture2D onAttributeCursorTexture;
+        public static Texture2D menuCursorTexture;
 
         public static void Initiate2DGraphics(ContentManager Content)
         {
@@ -103,7 +129,6 @@ namespace Poseidon.Core
             buttonPressedTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFramePressed");
 
             // Load Textures and fonts for factory control panel
-            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
             factoryBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel");
             factoryProduceButtonNormalTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonLargeFrame"); //("Image/TrashManagement/ChangeFactoryProduceBox");
             factoryProduceButtonHoverTexture = Content.Load<Texture2D>("Image/ButtonTextures/buttonFrameHover");
@@ -112,38 +137,200 @@ namespace Poseidon.Core
             dummyTexture.SetData(new int[4]);
 
 
-            // Load Textures and fonts for research facility property dialog
-            facilityFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
-            facilityFont2 = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            // Load Textures for research facility property dialog
             facilityBackground = Content.Load<Texture2D>("Image/TrashManagement/futuristicControlPanel2");
             facilityUpgradeButton = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             playJigsawButton = Content.Load<Texture2D>("Image/TrashManagement/upgradeButton");
             increaseAttributeButtonNormalTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButton");
             increaseAttributeButtonHoverTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonHover");
             increaseAttributeButtonPressedTexture = Content.Load<Texture2D>("Image/TrashManagement/increaseAttributeButtonPressed");
-            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            
 
             winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWinNew");
             losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOverNew");
+            actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
+            stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
+            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
             EnvironmentBar = Content.Load<Texture2D>("Image/Miscellaneous/EnvironmentBarNew");
             HealthBar = Content.Load<Texture2D>("Image/Miscellaneous/HealthBarNew");
-            lobsterTexture = Content.Load<Texture2D>("Image/Miscellaneous/lobster");
-            crabTexture = Content.Load<Texture2D>("Image/Miscellaneous/crab");
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
             bubbles = new List<Bubble>();
 
+            //load all fonts
+            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
             statisticFont = Content.Load<SpriteFont>("Fonts/statisticsfont");
+            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            facilityFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            facilityFont2 = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            factoryFont = Content.Load<SpriteFont>("Fonts/factoryConfig");
+            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
+            typeFont = Content.Load<SpriteFont>("Fonts/font");
+            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
 
             toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
             toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");
+
+            skillTextures = new Texture2D[GameConstants.numberOfSkills];
+            bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
+            // Loading main character skill icon textures
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                skillTextures[index] = Content.Load<Texture2D>(GameConstants.iconNames[index]);
+            }
+            // Loading main character bullet icon textures
+            for (int index = 0; index < GameConstants.numBulletTypes; index++)
+            {
+                bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
+            }
+
+            goldenKeyTexture = Content.Load<Texture2D>("Image/SceneTextures/goldkey");
+
+            fishTexture1 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish1");
+            fishTexture2 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish2-1");
+            fishTexture3 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish3");
+
+            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
+            tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
+            tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
+
+            // Load lower left pannel button
+            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+
+            // Load textures for partid animation for factories
+            biofactoryAnimationTextures = new List<Texture2D>();
+            nuclearFactoryAnimationTextures = new List<Texture2D>();
+            for (int i = 0; i < 6; i++)
+            {
+                biofactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/conveyor_bench" + i));
+            }
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/orange"));
+            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
+
+            // Factory level textures
+            plasticFactoryLevelTextures = new List<Texture2D>();
+            biodegradableFactoryLevelTextures = new List<Texture2D>();
+            for (int i = 0; i < 3; i++)
+            {
+                // using same level textures for both factories
+                Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
+                plasticFactoryLevelTextures.Add(loadedTexture);
+                biodegradableFactoryLevelTextures.Add(loadedTexture);
+            }
+
+            laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBall");
+            healLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/greenBall");
+            submarineLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/laserBeam");
+
+            normalCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
+            shootingCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
+            onFishCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/fishcursorNew1");
+            onAttributeCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/hammerAndWrench");
+            menuCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/menuCursor");
+
+        }
+
+        public static Model bossBullet, chasingBullet, damageBullet, healBullet, herculesArrow, mjolnir, normalbullet, piercingArrow, torpedo,
+            diverGun, diverKnife, mutantShark, ghostPirate, submarine, terminator, bioFactory, bioFactoryStage0, bioFactoryStage1, bioFactoryState2, bioFactoryStage3,
+            nuclearFactory, nuclearFactoryStage0, nuclearFactoryStage1, nuclearFactoryStage2, nuclearFactoryStage3, plasticFactory, plasticFactoryStage0, plasticFactoryStage1, plasticFactoryStage2, plasticFactoryStage3,
+            researchFacility, researchFacilityStage0, researchFacilityStage1, researchFacilityStage2, researchFacilityStage3, hydrobot, goldenKey, boundingSphere, strangeRock1, strangeRock2,
+            healthPowPack, resource, shootratePowPack, speedPowPack, strengthPowPack,
+            dolphin, hammershark, leopardshark, manetee, mauiDolphin, meiolania, normalshark, orca, penguin, seal, stellarSeaCow, stingray, turtle,
+            barrel, barrelstack, boxstack, chestClosed, chest, shipwreck2, shipwreck3, shipwreck4, shipwreckscene1, shipwreckscene2, shipwreckscene3, shipwreckscene4, shipwreckscene5, shipwreckscene6,
+            bioTrash, plasticTrash, radioTrash; 
+        public static void Initiate3DGraphics(ContentManager Content)
+        {
+            bossBullet = Content.Load<Model>("Models/BulletModels/bossBullet");
+            chasingBullet = Content.Load<Model>("Models/BulletModels/chasingBullet");
+            damageBullet = Content.Load<Model>("Models/BulletModels/damageBullet");
+            healBullet = Content.Load<Model>("Models/BulletModels/healBullet");
+            herculesArrow = Content.Load<Model>("Models/BulletModels/herculesArrow");
+            mjolnir = Content.Load<Model>("Models/BulletModels/mjolnir");
+            normalbullet = Content.Load<Model>("Models/BulletModels/normalbullet");
+            piercingArrow = Content.Load<Model>("Models/BulletModels/piercingArrow");
+            torpedo = Content.Load<Model>("Models/BulletModels/torpedo");
+
+            diverGun = Content.Load<Model>("Models/EnemyModels/diver_green_ly");
+            diverKnife = Content.Load<Model>("Models/EnemyModels/diver_knife_orange_yellow");
+            mutantShark = Content.Load<Model>("Models/EnemyModels/mutantSharkVer2");
+            ghostPirate = Content.Load<Model>("Models/EnemyModels/skeletonrigged");
+            submarine = Content.Load<Model>("Models/EnemyModels/submarine");
+            terminator = Content.Load<Model>("Models/EnemyModels/terminator");
+            
+            bioFactory = Content.Load<Model>("Models/FactoryModels/biodegradablefactory");
+            bioFactoryStage0 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage0");
+            bioFactoryStage1 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage1");
+            bioFactoryState2 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage2");
+            bioFactoryStage3 = Content.Load<Model>("Models/FactoryModels/biodegradablefactory_stage3");
+            nuclearFactory = Content.Load<Model>("Models/FactoryModels/nuclearfactory");
+            nuclearFactoryStage0 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage0");
+            nuclearFactoryStage1 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage1");
+            nuclearFactoryStage2 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage2");
+            nuclearFactoryStage3 = Content.Load<Model>("Models/FactoryModels/nuclearfactory_stage3");
+            plasticFactory = Content.Load<Model>("Models/FactoryModels/plasticfactory");
+            plasticFactoryStage0 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage0");
+            plasticFactoryStage1 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage1");
+            plasticFactoryStage2 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage2");
+            plasticFactoryStage3 = Content.Load<Model>("Models/FactoryModels/plasticfactory_stage3");
+            researchFacility = Content.Load<Model>("Models/FactoryModels/researchfacility");
+            researchFacilityStage0 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage0");
+            researchFacilityStage1 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage1");
+            researchFacilityStage2 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage2");
+            researchFacilityStage3 = Content.Load<Model>("Models/FactoryModels/researchfacility_stage3");
+            
+            hydrobot = Content.Load<Model>("Models/MainCharacter/bot");
+            
+            goldenKey = Content.Load<Model>("Models/Miscellaneous/goldenkey");
+            boundingSphere = Content.Load<Model>("Models/Miscellaneous/sphere1ur");
+            strangeRock1 = Content.Load<Model>("Models/Miscellaneous/strangerock1ver2");
+            strangeRock2 = Content.Load<Model>("Models/Miscellaneous/strangerock2ver2");
+
+            healthPowPack = Content.Load<Model>("Models/PowerpackResource/healthpowerpack");
+            resource = Content.Load<Model>("Models/PowerpackResource/resource");
+            shootratePowPack = Content.Load<Model>("Models/PowerpackResource/shootratepowerpack");
+            speedPowPack = Content.Load<Model>("Models/PowerpackResource/speedpowerpack");
+            strengthPowPack = Content.Load<Model>("Models/PowerpackResource/strengthpowerpack");
+
+            dolphin = Content.Load<Model>("Models/SeaAnimalModels/dolphinVer3");
+            hammershark = Content.Load<Model>("Models/SeaAnimalModels/hammersharkver2");
+            leopardshark = Content.Load<Model>("Models/SeaAnimalModels/leopardsharkver3");
+            manetee = Content.Load<Model>("Models/SeaAnimalModels/maneteever2");
+            mauiDolphin = Content.Load<Model>("Models/SeaAnimalModels/mauidolphin");
+            meiolania = Content.Load<Model>("Models/SeaAnimalModels/meiolaniawithanim");
+            normalshark = Content.Load<Model>("Models/SeaAnimalModels/normalsharkver3");
+            orca = Content.Load<Model>("Models/SeaAnimalModels/orcaver2");
+            penguin = Content.Load<Model>("Models/SeaAnimalModels/penguin");
+            seal = Content.Load<Model>("Models/SeaAnimalModels/sealver2");
+            stellarSeaCow = Content.Load<Model>("Models/SeaAnimalModels/stellarseacow");
+            stingray = Content.Load<Model>("Models/SeaAnimalModels/stingray");
+            turtle = Content.Load<Model>("Models/SeaAnimalModels/turtle");
+
+            barrel = Content.Load<Model>("Models/ShipWreckModels/barrel");
+            barrelstack = Content.Load<Model>("Models/ShipWreckModels/barrelstack");
+            boxstack = Content.Load<Model>("Models/ShipWreckModels/boxstack");
+            chestClosed = Content.Load<Model>("Models/ShipWreckModels/chest-closed");
+            chest = Content.Load<Model>("Models/ShipWreckModels/chest");
+            shipwreck2 = Content.Load<Model>("Models/ShipWreckModels/shipwreck2");
+            shipwreck3 = Content.Load<Model>("Models/ShipWreckModels/shipwreck3");
+            shipwreck4 = Content.Load<Model>("Models/ShipWreckModels/shipwreck4");
+            shipwreckscene1 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene1");
+            shipwreckscene2 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene2");
+            shipwreckscene3 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene3");
+            shipwreckscene4 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene4");
+            shipwreckscene5 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene5");
+            shipwreckscene6 = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene6");
+
+            bioTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer4");
+            plasticTrash = Content.Load<Model>("Models/TrashModels/plastictrashver3");
+            radioTrash = Content.Load<Model>("Models/TrashModels/radioactivetrash"); ;
         }
         
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
         {
+            if (!GameSettings.ShowLiveTip) return;
             Rectangle rectSafeArea;
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
             float xOffsetText, yOffsetText;

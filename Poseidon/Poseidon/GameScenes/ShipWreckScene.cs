@@ -109,10 +109,6 @@ namespace Poseidon
         bool showPainting = false;
         int paintingToShow = 0;
         bool showNoKey = false;
-        // showing strange objects found scene
-        bool showStrangeObjectFound = false;
-        Texture2D[] fossilTextures;
-        int fossilToDraw;
 
         // Bubbles over characters
         List<Bubble> bubbles;
@@ -137,7 +133,7 @@ namespace Poseidon
         public static BoundingBox[][] levelContainBoxes;
         public static int[] shipSceneType;
 
-        public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Texture2D stunnedTexture)
+        public ShipWreckScene(Game game, GraphicsDeviceManager graphics, ContentManager Content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog)
             : base(game)
         {
             this.graphics = graphics;
@@ -148,7 +144,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
-            this.stunnedIconTexture = stunnedTexture;
+            this.stunnedIconTexture = IngamePresentation.stunnedTexture;
             random = new Random();
             ground = new GameObject();
             gameCamera = new Camera(GameMode.ShipWreck);
@@ -181,11 +177,11 @@ namespace Poseidon
             bubbles = new List<Bubble>();
             points = new List<Point>();
 
-            fossilTextures = new Texture2D[4];
-            fossilTextures[0] = Content.Load<Texture2D>("Image/Fossils/fossil1");
-            fossilTextures[1] = Content.Load<Texture2D>("Image/Fossils/fossil2");
-            fossilTextures[2] = Content.Load<Texture2D>("Image/Fossils/fossil3");
-            fossilTextures[3] = Content.Load<Texture2D>("Image/Fossils/fossil4");
+            //fossilTextures = new Texture2D[4];
+            //fossilTextures[0] = Content.Load<Texture2D>("Image/Fossils/fossil1");
+            //fossilTextures[1] = Content.Load<Texture2D>("Image/Fossils/fossil2");
+            //fossilTextures[2] = Content.Load<Texture2D>("Image/Fossils/fossil3");
+            //fossilTextures[3] = Content.Load<Texture2D>("Image/Fossils/fossil4");
 
             //Load Strange Rock
             strangeRockModels = new Model[2];
@@ -204,8 +200,7 @@ namespace Poseidon
             menuSmall = IngamePresentation.menuSmall;
             paintingFont = statisticFont;// Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
-            audio = (AudioLibrary)
-                Game.Services.GetService(typeof(AudioLibrary));
+            audio = PoseidonGame.audio;
 
             //Random random = new Random();
             //int random_terrain = random.Next(5);
@@ -222,16 +217,8 @@ namespace Poseidon
             //        "TerrainProcessor?";
             //    throw new InvalidOperationException(message);
             //}
-            // Loading main character skill icon textures
-            for (int index = 0; index < GameConstants.numberOfSkills; index++)
-            {
-                skillTextures[index] = Content.Load<Texture2D>(GameConstants.iconNames[index]);
-            }
-            // Loading main character bullet icon textures
-            for (int index = 0; index < GameConstants.numBulletTypes; index++)
-            {
-                bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
-            }
+            skillTextures = IngamePresentation.skillTextures;
+            bulletTypeTextures = IngamePresentation.bulletTypeTextures;
 
             //Initialize fuel cells
             //fuelCells = new List<FuelCell>(GameConstants.NumFuelCells);
@@ -248,10 +235,10 @@ namespace Poseidon
 
             hydroBot.Load(Content);
 
-            noKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/goldkey");//no_key");
+            noKeyScreen = IngamePresentation.goldenKeyTexture;
 
             skillFoundScreen = Content.Load<Texture2D>("Image/SceneTextures/skillFoundBackground");
-            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
+            scaredIconTexture = IngamePresentation.scaredIconTexture;
 
             PresentationParameters pp = graphics.GraphicsDevice.PresentationParameters;
             renderTarget = new RenderTarget2D(graphics.GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight,
@@ -651,15 +638,7 @@ namespace Poseidon
                 }
                 return;
             }
-            if (showStrangeObjectFound)
-            {
-                // return to game if enter pressed
-                if (chestExitPressed)
-                {
-                    showStrangeObjectFound = false;
-                }
-                return;
-            }
+
             if (showNoKey)
             {
                 //cursor.Update(gameTime);
@@ -1078,14 +1057,7 @@ namespace Poseidon
                 RestoreGraphicConfig();
                 //return;
             }
-            if (showStrangeObjectFound)
-            {
-                spriteBatch.Begin();
-                DrawFoundStrangeObjScene();
-                spriteBatch.End();
-                RestoreGraphicConfig();
-                //return;
-            }
+
             if (showNoKey)
             {
                 spriteBatch.Begin();
@@ -1112,37 +1084,37 @@ namespace Poseidon
             spriteBatch.End();
             
         }
-        private void DrawFoundStrangeObjScene()
-        {
-            float xOffsetText, yOffsetText;
-            string str1 = "You have found a strange ... \"rock\"";
+        //private void DrawFoundStrangeObjScene()
+        //{
+        //    float xOffsetText, yOffsetText;
+        //    string str1 = "You have found a strange ... \"rock\"";
 
-            Rectangle rectSafeArea;
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-            str1 = IngamePresentation.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
+        //    Rectangle rectSafeArea;
+        //    rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+        //    str1 = IngamePresentation.wrapLine(str1, rectSafeArea.Width - 20, paintingFont);
 
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
+        //    xOffsetText = rectSafeArea.X;
+        //    yOffsetText = rectSafeArea.Y;
 
-            //Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText + 20);
+        //    //Vector2 strSize = statsFont.MeasureString(str1);
+        //    Vector2 strPosition =
+        //        new Vector2((int)xOffsetText + 10, (int)yOffsetText + 20);
 
-            //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
+        //    //spriteBatch.Draw(skillFoundScreen, new Rectangle(rectSafeArea.Center.X - skillFoundScreen.Width / 2, rectSafeArea.Center.Y - skillFoundScreen.Height / 2, skillFoundScreen.Width, skillFoundScreen.Height), Color.White);
 
-            spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Silver);
-            xOffsetText = rectSafeArea.Center.X - (fossilTextures[fossilToDraw].Width / 2);
-            yOffsetText = rectSafeArea.Center.Y - (fossilTextures[fossilToDraw].Height / 2);
+        //    spriteBatch.DrawString(paintingFont, str1, strPosition, Color.Silver);
+        //    xOffsetText = rectSafeArea.Center.X - (fossilTextures[fossilToDraw].Width / 2);
+        //    yOffsetText = rectSafeArea.Center.Y - (fossilTextures[fossilToDraw].Height / 2);
 
-            Vector2 skillIconPosition =
-                new Vector2((int)xOffsetText, (int)yOffsetText);
+        //    Vector2 skillIconPosition =
+        //        new Vector2((int)xOffsetText, (int)yOffsetText);
 
-            spriteBatch.Draw(fossilTextures[fossilToDraw], skillIconPosition, Color.White);
+        //    spriteBatch.Draw(fossilTextures[fossilToDraw], skillIconPosition, Color.White);
 
-            string nextText = "Press Alt/Enter to continue";
-            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
-        }
+        //    string nextText = "Press Alt/Enter to continue";
+        //    Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
+        //    spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
+        //}
         private void DrawNoKey()
         {
             string message = "You have not had the key to treasure chests yet, try to help the fish first so that they will help you find the key in return";

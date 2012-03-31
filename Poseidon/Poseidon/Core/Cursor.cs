@@ -13,6 +13,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
+using Poseidon.Core;
 #endregion
 
 namespace Poseidon
@@ -70,11 +71,11 @@ namespace Poseidon
         // also, we need to create a SpriteBatch.
         protected void Load()
         {
-            normalCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
-            shootingCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
-            onFishCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/fishcursorNew1");
-            onAttributeCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/hammerAndWrench");
-            menuCursorTexture = Game.Content.Load<Texture2D>("Image/CursorTextures/menuCursor");
+            normalCursorTexture = IngamePresentation.normalCursorTexture;
+            shootingCursorTexture = IngamePresentation.shootingCursorTexture;
+            onFishCursorTexture = IngamePresentation.onFishCursorTexture;
+            onAttributeCursorTexture = IngamePresentation.onAttributeCursorTexture;
+            menuCursorTexture = IngamePresentation.menuCursorTexture;
 
             cursorTexture = normalCursorTexture;
             textureCenter = new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2);

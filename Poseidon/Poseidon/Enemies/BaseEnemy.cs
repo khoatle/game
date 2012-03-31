@@ -65,10 +65,13 @@ namespace Poseidon
         //is this enemy released from the submarine?
         public bool releasedFromSubmarine = false;
 
+        public float lastForwardDirection = 0;
+
         float turnAmount = 0;
 
         public virtual void Load(int clipStart, int clipEnd, int fps)
         {
+            
             skd = Model.Tag as SkinningData;
             clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
@@ -181,8 +184,10 @@ namespace Poseidon
             //    BoundingSphere.Center.X += speed * headingDirection.X;
             //    BoundingSphere.Center.Z += speed * headingDirection.Z;
             //}
+            bool isCombatEnemy = (currentHuntingTarget.GetType().Name.Equals("CombatEnemy"))? true : false;
+
             float pullDistance = Vector3.Distance(currentHuntingTarget.Position, Position);
-            float timeFactor = (currentHuntingTarget.GetType().Name.Equals("CombatEnemy"))? 1.25f:1f;
+            float timeFactor = (isCombatEnemy)? 1.25f:1f;
             Vector3 futurePosition;
 
             if (pullDistance > (BoundingSphere.Radius + currentHuntingTarget.BoundingSphere.Radius) * timeFactor)
@@ -198,18 +203,22 @@ namespace Poseidon
                         Vector3 push = Position - enemies[i].Position;
 
                         float distance = (Vector3.Distance(Position, enemies[i].Position)) - enemies[i].BoundingSphere.Radius;
-                        if (distance < BoundingSphere.Radius * 4)
+                        if (distance < BoundingSphere.Radius * 5)
                         {
                             contenders++;
                             if (distance < 0.0001f) // prevent divide by 0 
                             {
                                 distance = 0.0001f;
                             }
-                            float weight = 1 / distance;
+                            float weight = 1.1f / distance;
                             // push away from big boss 
                             //if (enemies[i].isBigBoss) {
                             //    weight *= 1.5f;
                             //}
+                            // If we stuck last time and this enemy is close by, get away from it
+                            if (((BaseEnemy)enemies[i]).currentHuntingTarget == currentHuntingTarget && distance < BoundingSphere.Radius * 3) {
+                                push *= 2;
+                            }
                             totalPush += push * weight;
                         }
                     }
@@ -235,7 +244,7 @@ namespace Poseidon
                     }
                 }
 
-                pull *= Math.Max(1, 6 * contenders);
+                pull *= Math.Max(1, 4 * contenders);
                 pull += totalPush;
                 pull.Normalize();
 
@@ -247,7 +256,12 @@ namespace Poseidon
                     Position = futurePosition;
                     BoundingSphere.Center.X += (pull * speed * speedFactor).X;
                     BoundingSphere.Center.Z += (pull * speed * speedFactor).Z;
+                    lastForwardDirection = ForwardDirection;
                     ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
+
+                    if (Math.Abs(lastForwardDirection - ForwardDirection) > 45f) {
+                        ForwardDirection = (lastForwardDirection + ForwardDirection) / 2 ;
+                    }
                 }
             }
         }
@@ -379,7 +393,7 @@ namespace Poseidon
         // Go randomly is default move
         protected void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot, float speedFactor)
         {
-            float lastForwardDir = ForwardDirection;
+            float lastForwardDir = lastForwardDirection = ForwardDirection;
             float lastTurnAmount = turnAmount;
 
             Vector3 futurePosition = Position;

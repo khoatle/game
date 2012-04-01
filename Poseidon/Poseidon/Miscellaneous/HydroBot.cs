@@ -908,222 +908,221 @@ namespace Poseidon
                 //Collect powerpacks and resources
                 Collect_Powerpacks_and_Resources(powerpacks, resources, gameTime);
 
-                if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
+                //if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
+                if (trashes != null)
+
                 {
-                    Point point = new Point();
-                    point.LoadContent(PoseidonGame.contentManager, "Organic trash\ncontainer nis full", Position, Color.LawnGreen);
-                    if (gameMode == GameMode.ShipWreck)
-                        ShipWreckScene.points.Add(point);
-                    else if (gameMode == GameMode.MainGame)
-                        PlayGameScene.points.Add(point);
-                    else if (gameMode == GameMode.SurvivalMode)
-                        SurvivalGameScene.points.Add(point);
-                }
-                else
-                {
-                    Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
-                    if (trashes != null)
+                    //foreach (Trash trash in trashes)
+                    for(int i=0; i<trashes.Count; i++)
                     {
-                        //foreach (Trash trash in trashes)
-                        for(int i=0; i<trashes.Count; i++)
+                        Trash trash = trashes[i];
+                        if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
-                            Trash trash = trashes[i];
-                            if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                            string display_str;
+                            if (trash.trashType == TrashType.biodegradable)
                             {
-                                string display_str;
-                                if (trash.trashType == TrashType.biodegradable)
+                                if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
                                 {
-                                    bioTrash++;
-                                    display_str = "Organic trash\ncollected " + bioTrash;
-
-                                    if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
-
-                                    IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
-
-                                    //Increase Environment and experience points
-                                    int envPoints = GameConstants.envGainForBioTrashClean;
-                                    int expPoints;
-                                    if (PoseidonGame.gamePlus)
-                                    {
-                                        if (PlayGameScene.currentLevel > 0)
-                                            envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
-                                        else
-                                            envPoints = envPoints - 5;
-                                    }
-                                    expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
-                                    HydroBot.currentExperiencePts += expPoints;
-                                    HydroBot.currentEnvPoint += envPoints;
-                                    display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
+                                    Point point1 = new Point();
+                                    point1.LoadContent(PoseidonGame.contentManager, "Organic trash\ncontainer nis full", Position, Color.LawnGreen);
+                                    if (gameMode == GameMode.ShipWreck)
+                                        ShipWreckScene.points.Add(point1);
+                                    else if (gameMode == GameMode.MainGame)
+                                        PlayGameScene.points.Add(point1);
+                                    else if (gameMode == GameMode.SurvivalMode)
+                                        SurvivalGameScene.points.Add(point1);
                                 }
-                                else if (trash.trashType == TrashType.plastic)
+                                bioTrash++;
+                                display_str = "Organic trash\ncollected " + bioTrash;
+
+                                if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
+
+                                IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
+                                //Increase Environment and experience points
+                                int envPoints = GameConstants.envGainForBioTrashClean;
+                                int expPoints;
+                                if (PoseidonGame.gamePlus)
                                 {
-                                    display_str = "Wrong type:\nPlastic";
+                                    if (PlayGameScene.currentLevel > 0)
+                                        envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
+                                    else
+                                        envPoints = envPoints - 5;
                                 }
-                                else //radioactive
-                                {
-                                    display_str = "Wrong type:\nRadioactive";
-                                }
-                                PoseidonGame.audio.retrieveSound.Play();
-
-                                Point point = new Point();
-                                point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
-                                if (gameMode == GameMode.ShipWreck)
-                                    ShipWreckScene.points.Add(point);
-                                else if (gameMode == GameMode.MainGame)
-                                    PlayGameScene.points.Add(point);
-                                else if (gameMode == GameMode.SurvivalMode)
-                                    SurvivalGameScene.points.Add(point);
-                                trashes.Remove(trash);
-                                i -= 1;
+                                expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
+                                HydroBot.currentExperiencePts += expPoints;
+                                HydroBot.currentEnvPoint += envPoints;
+                                display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
                             }
+                            else if (trash.trashType == TrashType.plastic)
+                            {
+                                display_str = "Wrong type:\nPlastic";
+                            }
+                            else //radioactive
+                            {
+                                display_str = "Wrong type:\nRadioactive";
+                            }
+                            PoseidonGame.audio.retrieveSound.Play();
+
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                            trashes.Remove(trash);
+                            i -= 1;
                         }
                     }
                 }
             }
             if (lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X)) // Collect Plastic Trash
             {
-                if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
+                //if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
+                if (trashes != null)
                 {
-                    Point point = new Point();
-                    point.LoadContent(PoseidonGame.contentManager, "Plastic trash\ncontainer is full", Position, Color.LawnGreen);
-                    if (gameMode == GameMode.ShipWreck)
-                        ShipWreckScene.points.Add(point);
-                    else if (gameMode == GameMode.MainGame)
-                        PlayGameScene.points.Add(point);
-                    else if (gameMode == GameMode.SurvivalMode)
-                        SurvivalGameScene.points.Add(point);
-                }
-                else
-                {
-                    Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
-                    if (trashes != null)
+                    //foreach (Trash trash in trashes)
+                    for(int i=0; i<trashes.Count; i++)
                     {
-                        //foreach (Trash trash in trashes)
-                        for(int i=0; i<trashes.Count; i++)
+                        Trash trash = trashes[i];
+                        if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
-                            Trash trash = trashes[i];
-                            if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                            string display_str;
+                            if (trash.trashType == TrashType.biodegradable)
                             {
-                                string display_str;
-                                if (trash.trashType == TrashType.biodegradable)
-                                {
-                                    display_str = "Wrong type:\nOrganic";
-                                }
-                                else if (trash.trashType == TrashType.plastic)
-                                {
-                                    plasticTrash++;
-                                    display_str = "Plastic trash\ncollected " + plasticTrash;
-
-                                    if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
-
-                                    //update good will point
-                                    IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
-
-                                    //Increase Environment and experience points
-                                    int envPoints = GameConstants.envGainForPlasticTrashClean;
-                                    int expPoints;
-                                    if (PoseidonGame.gamePlus)
-                                    {
-                                        if (PlayGameScene.currentLevel > 0)
-                                            envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
-                                        else
-                                            envPoints = envPoints - 5;
-                                    }
-                                    expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
-                                    HydroBot.currentExperiencePts += expPoints;
-                                    HydroBot.currentEnvPoint += envPoints;
-                                    display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
-                                }
-                                else //radioactive
-                                {
-                                    display_str = "Wrong type:\nRadioactive";
-                                }
-                                PoseidonGame.audio.retrieveSound.Play();
-                                Point point = new Point();
-                                point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
-                                if (gameMode == GameMode.ShipWreck)
-                                    ShipWreckScene.points.Add(point);
-                                else if (gameMode == GameMode.MainGame)
-                                    PlayGameScene.points.Add(point);
-                                else if (gameMode == GameMode.SurvivalMode)
-                                    SurvivalGameScene.points.Add(point);
-                                trashes.Remove(trash);
-                                i -= 1;
+                                display_str = "Wrong type:\nOrganic";
                             }
+                            else if (trash.trashType == TrashType.plastic)
+                            {
+                                if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
+                                {
+                                    Point point1 = new Point();
+                                    point1.LoadContent(PoseidonGame.contentManager, "Plastic trash\ncontainer is full", Position, Color.LawnGreen);
+                                    if (gameMode == GameMode.ShipWreck)
+                                        ShipWreckScene.points.Add(point1);
+                                    else if (gameMode == GameMode.MainGame)
+                                        PlayGameScene.points.Add(point1);
+                                    else if (gameMode == GameMode.SurvivalMode)
+                                        SurvivalGameScene.points.Add(point1);
+                                    break;
+                                }
+
+                                plasticTrash++;
+                                display_str = "Plastic trash\ncollected " + plasticTrash;
+
+                                if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
+
+                                //update good will point
+                                IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
+                                //Increase Environment and experience points
+                                int envPoints = GameConstants.envGainForPlasticTrashClean;
+                                int expPoints;
+                                if (PoseidonGame.gamePlus)
+                                {
+                                    if (PlayGameScene.currentLevel > 0)
+                                        envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
+                                    else
+                                        envPoints = envPoints - 5;
+                                }
+                                expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
+                                HydroBot.currentExperiencePts += expPoints;
+                                HydroBot.currentEnvPoint += envPoints;
+                                display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
+                            }
+                            else //radioactive
+                            {
+                                display_str = "Wrong type:\nRadioactive";
+                            }
+                            PoseidonGame.audio.retrieveSound.Play();
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                            trashes.Remove(trash);
+                            i -= 1;
                         }
                     }
                 }
+                
             }
             if (lastKeyboardState.IsKeyDown(Keys.C) && currentKeyboardState.IsKeyUp(Keys.C)) // Collect Nuclear Trash
             {
-                if (nuclearTrash >= GameConstants.maxRadioTrashCarryingCapacity)
+                //if (nuclearTrash >= GameConstants.maxRadioTrashCarryingCapacity)
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
+                if (trashes != null)
                 {
-                    Point point = new Point();
-                    point.LoadContent(PoseidonGame.contentManager, "Nuclear trash\ncontainer is full", Position, Color.LawnGreen);
-                    if (gameMode == GameMode.ShipWreck)
-                        ShipWreckScene.points.Add(point);
-                    else if (gameMode == GameMode.MainGame)
-                        PlayGameScene.points.Add(point);
-                    else if (gameMode == GameMode.SurvivalMode)
-                        SurvivalGameScene.points.Add(point);
-                }
-                else
-                {
-                    Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
-                    if (trashes != null)
+                    //foreach (Trash trash in trashes)
+                    for (int i = 0; i < trashes.Count; i++)
                     {
-                        //foreach (Trash trash in trashes)
-                        for (int i = 0; i < trashes.Count; i++)
+                        Trash trash = trashes[i];
+                        if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
-                            Trash trash = trashes[i];
-                            if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
+                            string display_str;
+                            if (trash.trashType == TrashType.biodegradable)
                             {
-                                string display_str;
-                                if (trash.trashType == TrashType.biodegradable)
-                                {
-                                    display_str = "Wrong type:\nOrganic";
-                                }
-                                else if (trash.trashType == TrashType.plastic)
-                                {
-                                    display_str = "Wrong type:\nPlastic";
-                                }
-                                else //radioactive
-                                {
-                                    nuclearTrash++;
-                                    display_str = "Radioactive trash\ncollected " + nuclearTrash;
-
-                                    if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
-
-                                    //update good will point
-                                    IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
-
-                                    //Increase Environment and experience points
-                                    int envPoints = GameConstants.envGainForNuclearTrashClean;
-                                    int expPoints;
-                                    if (PoseidonGame.gamePlus)
-                                    {
-                                        if (PlayGameScene.currentLevel > 0)
-                                            envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
-                                        else
-                                            envPoints = envPoints - 5;
-                                    }
-                                    expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
-                                    HydroBot.currentExperiencePts += expPoints;
-                                    HydroBot.currentEnvPoint += envPoints;
-                                    display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
-                                }
-                                PoseidonGame.audio.retrieveSound.Play();
-                                Point point = new Point();
-                                point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
-                                if (gameMode == GameMode.ShipWreck)
-                                    ShipWreckScene.points.Add(point);
-                                else if (gameMode == GameMode.MainGame)
-                                    PlayGameScene.points.Add(point);
-                                else if (gameMode == GameMode.SurvivalMode)
-                                    SurvivalGameScene.points.Add(point);
-                                trashes.Remove(trash);
-                                i -= 1;
+                                display_str = "Wrong type:\nOrganic";
                             }
+                            else if (trash.trashType == TrashType.plastic)
+                            {
+                                display_str = "Wrong type:\nPlastic";
+                            }
+                            else //radioactive
+                            {
+                                if (nuclearTrash >= GameConstants.maxNukeTrashCarryingCapacity)
+                                {
+                                    Point point1 = new Point();
+                                    point1.LoadContent(PoseidonGame.contentManager, "Nuclear trash\ncontainer is full", Position, Color.LawnGreen);
+                                    if (gameMode == GameMode.ShipWreck)
+                                        ShipWreckScene.points.Add(point1);
+                                    else if (gameMode == GameMode.MainGame)
+                                        PlayGameScene.points.Add(point1);
+                                    else if (gameMode == GameMode.SurvivalMode)
+                                        SurvivalGameScene.points.Add(point1);
+                                    break;
+                                }
+                                nuclearTrash++;
+                                display_str = "Radioactive trash\ncollected " + nuclearTrash;
+
+                                if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
+
+                                //update good will point
+                                IncreaseGoodWillPoint(GameConstants.GoodWillPointGainForCleaning);
+
+                                //Increase Environment and experience points
+                                int envPoints = GameConstants.envGainForNuclearTrashClean;
+                                int expPoints;
+                                if (PoseidonGame.gamePlus)
+                                {
+                                    if (PlayGameScene.currentLevel > 0)
+                                        envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
+                                    else
+                                        envPoints = envPoints - 5;
+                                }
+                                expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
+                                HydroBot.currentExperiencePts += expPoints;
+                                HydroBot.currentEnvPoint += envPoints;
+                                display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
+                            }
+                            PoseidonGame.audio.retrieveSound.Play();
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                            trashes.Remove(trash);
+                            i -= 1;
                         }
                     }
                 }

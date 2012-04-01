@@ -30,7 +30,7 @@ namespace Poseidon.Core
         public static Texture2D buttonNormalTexture, buttonHoverTexture, buttonPressedTexture;
         static Texture2D HealthBar;
 
-        public static SpriteFont statsFont, statisticFont, fishTalkFont;
+        public static SpriteFont statsFont, statisticFont, fishTalkFont, tipFont;
 
         public static List<Bubble> bubbles;
         public static double lastBubbleCreated = 0;
@@ -169,6 +169,7 @@ namespace Poseidon.Core
             largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
             typeFont = Content.Load<SpriteFont>("Fonts/font");
             factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
+            tipFont = Content.Load<SpriteFont>("Fonts/tip");
 
             toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
             toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");

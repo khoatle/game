@@ -45,7 +45,7 @@ namespace Poseidon {
         public const int ShipWreckMaxRangeZ = 600;
         // 5 seconds for power-ups' effects
         public const int EffectExpired = 10;
-        public const int jigsawGameMaxTime = 180; //sec
+        public const int jigsawGameMaxTime = 240; //sec
         public const int boneCountForDolphinJigsaw = 8;
         public const int boneCountForSeaCowJigsaw = 16;
         public const int boneCountForTurtleJigsaw = 24;
@@ -64,7 +64,9 @@ namespace Poseidon {
         public const int numDaysForUpgrade = 15;
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
-        public const int maxTrashCarryingCapacity = 15;
+        public const int maxBioTrashCarryingCapacity = 30;
+        public const int maxPlasticTrashCarryingCapacity = 15;
+        public const int maxRadioTrashCarryingCapacity = 5;
         public const float powerpackResourceRotationSpeed = 0.08f;
 
         //Environment Const
@@ -113,8 +115,8 @@ namespace Poseidon {
         //number of trash, enemy and fish per level for main game
         public static int maxShipPerLevel = 3;
         public static int[] NumberTrash =           {  50,  50,  50,   50,  50,  50,  50,  50,  50,   50,   50,   50  };
-        public static int[] NumberBioTrash =        {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
-        public static int[] NumberPlasticTrash =    {  24,  24,  24,   24,  24,  24,  24,  24,  24,   24,   24,   24  };
+        public static int[] NumberBioTrash =        { 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30, 30 };
+        public static int[] NumberPlasticTrash =    { 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18 };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
         public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
         public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };

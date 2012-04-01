@@ -564,16 +564,16 @@ namespace Poseidon
             Vector3 tempCenter;
             int numTries = 0, xVal, zVal, heightValue;
             float orientation = random.Next(100);
-            int trash_type = random.Next(100);
+            int trash_type = random.Next(50);
             Trash sinkingTrash;
-            if (trash_type < 48)
+            if (trash_type < 30)
             {
                 sinkingTrash = new Trash(TrashType.biodegradable, particleManager);
                 sinkingTrash.Load(Content,ref bioTrash, orientation);
                 sinkingTrash.sinkingRate = 0.25f;
                 sinkingTrash.sinkingRotationRate = 0.015f;
             }
-            else if (trash_type < 96)
+            else if (trash_type < 48)
             {
                 sinkingTrash = new Trash(TrashType.plastic, particleManager);
                 sinkingTrash.Load(Content,ref plasticTrash, orientation); //nuclear model

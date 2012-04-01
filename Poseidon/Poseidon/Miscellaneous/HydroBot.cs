@@ -908,7 +908,7 @@ namespace Poseidon
                 //Collect powerpacks and resources
                 Collect_Powerpacks_and_Resources(powerpacks, resources, gameTime);
 
-                if (bioTrash >= GameConstants.maxTrashCarryingCapacity)
+                if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
                 {
                     Point point = new Point();
                     point.LoadContent(PoseidonGame.contentManager, "Organic trash\ncontainer nis full", Position, Color.LawnGreen);
@@ -982,7 +982,7 @@ namespace Poseidon
             }
             if (lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X)) // Collect Plastic Trash
             {
-                if (plasticTrash >= GameConstants.maxTrashCarryingCapacity)
+                if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
                 {
                     Point point = new Point();
                     point.LoadContent(PoseidonGame.contentManager, "Plastic trash\ncontainer is full", Position, Color.LawnGreen);
@@ -1056,7 +1056,7 @@ namespace Poseidon
             }
             if (lastKeyboardState.IsKeyDown(Keys.C) && currentKeyboardState.IsKeyUp(Keys.C)) // Collect Nuclear Trash
             {
-                if (nuclearTrash >= GameConstants.maxTrashCarryingCapacity)
+                if (nuclearTrash >= GameConstants.maxRadioTrashCarryingCapacity)
                 {
                     Point point = new Point();
                     point.LoadContent(PoseidonGame.contentManager, "Nuclear trash\ncontainer is full", Position, Color.LawnGreen);

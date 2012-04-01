@@ -351,12 +351,21 @@ namespace Poseidon
             {
                 if (loadingScene.loadingSceneStarted)
                 {
-                    //CreateLevelDependentScenes(loadingScene.loadingLevel);
-                    CreateLevelDependentScenes();
-                    startScene.gameStarted = true;
-                    startScene.Hide();
                     loadingScene.loadingSceneStarted = false;
-                    ShowScene(playGameScene);
+                    if (loadingScene.loadingSurvivalScene)
+                    {
+                        loadingScene.loadingSurvivalScene = false;
+                        CreateSurvivalDependentScenes();
+                        SurvivalGameScene.score = 0;
+                        ShowScene(survivalGameScene);
+                    }
+                    else
+                    {
+                        CreateLevelDependentScenes();
+                        startScene.gameStarted = true;
+                        startScene.Hide();
+                        ShowScene(playGameScene);
+                    }
                 }
             }
             // Handle Help Scene input
@@ -765,9 +774,8 @@ namespace Poseidon
                         case "Survival Mode":
                             MediaPlayer.Stop();
                             gamePlus = false;
-                            CreateSurvivalDependentScenes();
-                            SurvivalGameScene.score = 0;
-                            ShowScene(survivalGameScene);
+                            loadingScene.loadingSurvivalScene = true;
+                            ShowScene(loadingScene);
                             break;
                         case "Config":
                             ShowScene(configScene);

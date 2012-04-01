@@ -5,6 +5,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
+
 #endregion
 
 namespace Poseidon.Core
@@ -26,8 +27,11 @@ namespace Poseidon.Core
         protected int selectedIndex = -1;
         private readonly List<string> menuItems;
         private List<Rectangle> rectMenuItems;
+        
         // Size of menu in pixels
         protected int width, height;
+        protected float textScale;
+
         // For audio effects
         protected AudioLibrary audio;
         
@@ -58,6 +62,9 @@ namespace Poseidon.Core
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
+            float widthScale = (float)game.Window.ClientBounds.Width / 1280;
+            float heightScale = (float)game.Window.ClientBounds.Height / 800;
+            textScale = (float)System.Math.Sqrt((double)(widthScale * heightScale));
         }
 
         /// <summary>
@@ -69,33 +76,31 @@ namespace Poseidon.Core
             menuItems.Clear();
             menuItems.AddRange(items);
 
-            CalculateBounds();
-
             rectMenuItems.Clear();
 
             int x,y, width, height;
             y = (int)position.Y;
-            if (((menuItems.Count * regularFont.LineSpacing) + position.Y) < Game.Window.ClientBounds.Height) // 1 column
+            if (((menuItems.Count * regularFont.LineSpacing * textScale) + position.Y) < Game.Window.ClientBounds.Height) // 1 column
             {
 
                 for (int i = 0; i < menuItems.Count; i++)
                 {
-                    width = (int)(regularFont.MeasureString(menuItems[i]).X);
-                    height = (int)(regularFont.MeasureString(menuItems[i]).Y);
+                    width = (int)(regularFont.MeasureString(menuItems[i]).X*textScale);
+                    height = (int)(regularFont.MeasureString(menuItems[i]).Y*textScale);
                     x = (int)(position.X - (width / 2));
                     
                     Rectangle itemRectangle = new Rectangle(x,y, width, height);
                     rectMenuItems.Add(itemRectangle);
                     
-                    y += regularFont.LineSpacing;
+                    y += (int)(regularFont.LineSpacing*textScale);
                 }
             }
-            else if (((menuItems.Count * regularFont.LineSpacing) + position.Y) < Game.Window.ClientBounds.Height * 2)  // Need to draw 2 columns
+            else if (((menuItems.Count * regularFont.LineSpacing * textScale) + position.Y) < Game.Window.ClientBounds.Height * 2)  // Need to draw 2 columns
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
-                    width = (int)(regularFont.MeasureString(menuItems[i]).X);
-                    height = (int)(regularFont.MeasureString(menuItems[i]).Y);
+                    width = (int)(regularFont.MeasureString(menuItems[i]).X * textScale);
+                    height = (int)(regularFont.MeasureString(menuItems[i]).Y * textScale);
                     if (i <= menuItems.Count / 2)
                         x = (int)(position.X - (position.X / 2) - (width / 2));
                     else
@@ -107,15 +112,15 @@ namespace Poseidon.Core
                     if (i == (int)menuItems.Count / 2)
                         y = (int)position.Y;
                     else
-                        y += regularFont.LineSpacing;
+                        y += (int)(regularFont.LineSpacing*textScale);
                 }
             }
             else // Need to draw 3 columns
             {
                 for (int i = 0; i < menuItems.Count; i++)
                 {
-                    width = (int)(regularFont.MeasureString(menuItems[i]).X);
-                    height = (int)(regularFont.MeasureString(menuItems[i]).Y);
+                    width = (int)(regularFont.MeasureString(menuItems[i]).X*textScale);
+                    height = (int)(regularFont.MeasureString(menuItems[i]).Y*textScale);
                     if (i <= menuItems.Count / 3)
                         x = (int)(position.X - (Game.Window.ClientBounds.Width / 3) - (width / 2));
                     else if (i <= menuItems.Count * 2 / 3)
@@ -129,28 +134,13 @@ namespace Poseidon.Core
                     if ((i == (int)menuItems.Count / 3) || (i == (int)menuItems.Count * 2 / 3))
                         y = (int)position.Y;
                     else
-                        y += regularFont.LineSpacing;
+                        y += (int)(regularFont.LineSpacing*textScale);
                 }
             }
 
         }
 
-        /// <summary>
-        /// Width of menu in pixels
-        /// </summary>
-        public int Width
-        {
-            get { return width; }
-        }
-
-        /// <summary>
-        /// Height of menu in pixels
-        /// </summary>
-        public int Height
-        {
-            get { return height; }
-        }
-
+        
         /// <summary>
         /// Selected menu item index
         /// </summary>
@@ -187,24 +177,7 @@ namespace Poseidon.Core
             set { position = value; }
         }
 
-        /// <summary>
-        /// Get the menu bounds
-        /// </summary>
-        protected void CalculateBounds()
-        {
-            width = 0;
-            height = 0;
-            foreach (string item in menuItems)
-            {
-                Vector2 size = selectedFont.MeasureString(item);
-                if (size.X > width)
-                {
-                    width = (int)size.X;
-                }
-                height += selectedFont.LineSpacing;
-            }
-        }
-
+        
         /// <summary>
         /// Allows the game component to update itself.
         /// </summary>
@@ -257,8 +230,8 @@ namespace Poseidon.Core
                     font = regularFont;
                     theColor = regularColor;
                 }
-                spriteBatch.DrawString(font, menuItems[i], new Vector2(rectMenuItems[i].Left+1, rectMenuItems[i].Top+1), theColor); //shadow
-                spriteBatch.DrawString(font, menuItems[i], new Vector2(rectMenuItems[i].Left, rectMenuItems[i].Top), theColor);
+                spriteBatch.DrawString(font, menuItems[i], new Vector2(rectMenuItems[i].Left + 1, rectMenuItems[i].Top + 1), theColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f); //shadow
+                spriteBatch.DrawString(font, menuItems[i], new Vector2(rectMenuItems[i].Left, rectMenuItems[i].Top), theColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
             }
 
             base.Draw(gameTime);

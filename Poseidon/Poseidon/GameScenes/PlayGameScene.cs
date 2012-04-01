@@ -214,7 +214,7 @@ namespace Poseidon
 
         
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar, Texture2D stunnedTexture)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
             graphics = graphic;
@@ -227,7 +227,7 @@ namespace Poseidon
             this.game = game;
             this.cutSceneDialog = cutSceneDialog;
             this.radar = radar;
-            this.stunnedIconTexture = stunnedTexture;
+            this.stunnedIconTexture = IngamePresentation.stunnedTexture;
             roundTime = GameConstants.RoundTime[currentLevel];
             random = new Random();
 
@@ -311,14 +311,14 @@ namespace Poseidon
             bubbles = new List<Bubble>();
             points = new List<Point>();
 
-            schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+            schoolOfFish1 = new SchoolOfFish(Content,IngamePresentation.fishTexture1, 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
-            schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish2 = new SchoolOfFish(Content, IngamePresentation.fishTexture2, -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
-            schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish3 = new SchoolOfFish(Content, IngamePresentation.fishTexture3, -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
 
-            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
+            scaredIconTexture = IngamePresentation.scaredIconTexture;
 
             winningTexture = IngamePresentation.winningTexture;
             losingTexture = IngamePresentation.losingTexture;
@@ -349,36 +349,26 @@ namespace Poseidon
         {
             statsFont = IngamePresentation.statsFont;
             statisticFont = IngamePresentation.statisticFont;
-            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
+            menuSmall = IngamePresentation.menuSmall;
             fishTalkFont = IngamePresentation.fishTalkFont;
             keyFoundFont = statisticFont;// Content.Load<SpriteFont>("Fonts/painting");
             // Get the audio library
-            audio = (AudioLibrary)
-                Game.Services.GetService(typeof(AudioLibrary));
+            audio = PoseidonGame.audio;
 
             //Uncomment below line to use LEVELS
             //string terrain_name = "Image/terrain" + currentLevel;
 
             terrain = new Terrain(Content);
 
-            // Loading main character skill icon textures
-            for (int index = 0; index < GameConstants.numberOfSkills; index++)
-            {
-                skillTextures[index] = Content.Load<Texture2D>(GameConstants.iconNames[index]);
-            }
+            skillTextures = IngamePresentation.skillTextures;
+            bulletTypeTextures = IngamePresentation.bulletTypeTextures;
 
-            // Loading main character bullet icon textures
-            for (int index = 0; index < GameConstants.numBulletTypes; index++)
-            {
-                bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
-            }
+            levelObjectiveNormalIconTexture = IngamePresentation.levelObjectiveNormalIconTexture;
+            levelObjectiveHoverIconTexture = IngamePresentation.toNextLevelHoverTexture;
+            tipNormalIconTexture = IngamePresentation.tipNormalIconTexture;
+            tipHoverIconTexture = IngamePresentation.tipHoverIconTexture;
 
-            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
-            levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
-            tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
-            tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
-
-            foundKeyScreen = Content.Load<Texture2D>("Image/SceneTextures/goldkey");
+            foundKeyScreen = IngamePresentation.goldenKeyTexture;
 
             powerpacks = new List<Powerpack>();
             resources = new List<Resource>();
@@ -419,18 +409,13 @@ namespace Poseidon
             particleManager = new ParticleManagement(this.game, GraphicDevice);
 
             // Load lower left pannel button
-            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+            factoryPanelTexture = IngamePresentation.factoryPanelTexture;
             // Load Font for displaying extra information on factory panel
-            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
+            factoryPanelFont = IngamePresentation.factoryPanelFont;
         
             // Load textures for partid animation for factories
-            biofactoryAnimationTextures = new List<Texture2D>();
-            nuclearFactoryAnimationTextures = new List<Texture2D>();
-            for (int i=0; i<6; i++) {
-                biofactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/conveyor_bench" + i));
-            }
-            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/orange"));
-            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
+            biofactoryAnimationTextures = IngamePresentation.biofactoryAnimationTextures;
+            nuclearFactoryAnimationTextures = IngamePresentation.nuclearFactoryAnimationTextures;
 
             // Load factory and research lab models
             plasticFactoryModelStates = new List<Model>();
@@ -452,15 +437,8 @@ namespace Poseidon
 
 
             // Factory level textures
-            plasticFactoryLevelTextures = new List<Texture2D>();
-            biodegradableFactoryLevelTextures = new List<Texture2D>();
-            for (int i = 0; i < 3; i++)
-            {
-                // using same level textures for both factories
-                Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
-                plasticFactoryLevelTextures.Add(loadedTexture);
-                biodegradableFactoryLevelTextures.Add(loadedTexture);
-            }
+            plasticFactoryLevelTextures = IngamePresentation.plasticFactoryLevelTextures;
+            biodegradableFactoryLevelTextures = IngamePresentation.biodegradableFactoryLevelTextures;
 
             // Load Trash
             biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer4");
@@ -578,11 +556,11 @@ namespace Poseidon
 
             startTime = gameTime.TotalGameTime;
             
-            schoolOfFish1 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish1", 100, GameConstants.MainGameMaxRangeX - 250,
+            schoolOfFish1 = new SchoolOfFish(Content, IngamePresentation.fishTexture1, 100, GameConstants.MainGameMaxRangeX - 250,
                 100, GameConstants.MainGameMaxRangeZ - 250);
-            schoolOfFish2 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish2-1", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish2 = new SchoolOfFish(Content, IngamePresentation.fishTexture2, -GameConstants.MainGameMaxRangeX + 250, -100,
                 -GameConstants.MainGameMaxRangeZ + 250, -100);
-            schoolOfFish3 = new SchoolOfFish(Content, "Image/FishSchoolTextures/smallfish3", -GameConstants.MainGameMaxRangeX + 250, -100,
+            schoolOfFish3 = new SchoolOfFish(Content, IngamePresentation.fishTexture3, -GameConstants.MainGameMaxRangeX + 250, -100,
                 100, GameConstants.MainGameMaxRangeZ - 250);
 
             //reset the shipwreck content too

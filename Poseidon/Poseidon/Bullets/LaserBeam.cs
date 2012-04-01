@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 
 namespace Poseidon
 {
@@ -49,7 +50,7 @@ namespace Poseidon
                 - graphicDevice.Viewport.Project(shooter.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
             direction2D.Normalize();
             this.forwardDir = (float)Math.Atan2(direction2D.X, direction2D.Y);
-            laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/laserBeam");
+            laserBeamTexture = IngamePresentation.submarineLaserBeamTexture;
         }
 
         public override void update(GameTime gameTime)

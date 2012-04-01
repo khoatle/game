@@ -20,10 +20,7 @@ namespace Poseidon
     public class ConfigScene : GameScene
     {
         // Textures and their rectangles
-        protected readonly Texture2D configTitle;
-        protected readonly Texture2D slideBar;
-        protected readonly Texture2D uncheckedBox;
-        protected readonly Texture2D checkedBox;
+        protected readonly Texture2D configTitle, slideBar, dragButton, uncheckedBox, checkedBox, okButton;
 
         protected Rectangle titleRect;
         protected List<Rectangle> itemRectList;
@@ -37,16 +34,25 @@ namespace Poseidon
         protected Rectangle okBox;
         private string[] menuItems;
 
+        //Scale Factors
+        float widthScale = 1f;
+        float heightScale = 1f;
+        float textScale = 1f;
+
         //Fonts
         SpriteFont regularFont;
         SpriteFont selectedFont;
-
+        SpriteFont numberFont;
+        
         //Check mouse position and click
         int selectedIndex = -1;
 
         MouseState currentMouseState = new MouseState();
         MouseState lastMouseState = new MouseState();
-        public static bool clicked = false;
+        private bool clicked = false;
+        private int clickedPositionX;
+        public static bool okClicked = false;
+
 
         //Color
         protected Color regularColor = Color.Khaki, selectedColor = Color.FloralWhite;
@@ -66,23 +72,32 @@ namespace Poseidon
         Random rand = new Random();
 
 
-        public ConfigScene(Game game, SpriteFont smallFont, SpriteFont largeFont,
-                            Texture2D background, Texture2D configTitle, Texture2D unselectedCheckbox, Texture2D selectedCheckBox,  GraphicsDevice graphicDevice)
+        public ConfigScene(Game game, SpriteFont smallFont, SpriteFont largeFont, SpriteFont numberFont,
+                            Texture2D background, Texture2D configTitle, Texture2D unselectedCheckbox, Texture2D selectedCheckBox, Texture2D slidebar, Texture2D dragbutton, Texture2D okButton,  GraphicsDevice graphicDevice)
             : base(game)
         {
             this.game = game;
             this.graphicsDevice = graphicDevice;
             regularFont = smallFont;
             selectedFont = largeFont;
+            widthScale = (float)game.Window.ClientBounds.Width / 1280;
+            heightScale = (float)game.Window.ClientBounds.Height / 800;
+            textScale = (float)Math.Sqrt((double)(widthScale * heightScale));
+            
             uncheckedBox = unselectedCheckbox;
             checkedBox = selectedCheckBox;
+            this.okButton = okButton;
+            this.slideBar = slidebar;
+            this.dragButton = dragbutton;
+            this.numberFont = numberFont;
+
 
             Components.Add(new ImageComponent(game, background,
                                             ImageComponent.DrawMode.Stretch));
 
             this.configTitle = configTitle;
-            int titleWidth = (int)(game.Window.ClientBounds.Width * 0.32); //409 if width=1280
-            int titleHeight = (int)(game.Window.ClientBounds.Height * 0.125); //100 if height=800
+            int titleWidth = (int)(410 * widthScale);
+            int titleHeight = (int)(100 * heightScale);
             titleRect = new Rectangle(game.Window.ClientBounds.Center.X - titleWidth / 2, game.Window.ClientBounds.Top + titleHeight/3, titleWidth, titleHeight);
 
             string[] items = { "Music Volume", "Sound Volume", "Show Live Tips", "Special Effect", "Particle Level", "Fish School Size" };
@@ -90,25 +105,40 @@ namespace Poseidon
             itemRectList = new List<Rectangle>(menuItems.Length);
             iconRectList = new List<Rectangle>(menuItems.Length);
 
-            int x, y, width, height;
-            x = game.Window.ClientBounds.Center.X - (int)( findMaxWidth() * 0.6);
+            int x, y, width, height, maxItemWidth;
+            maxItemWidth = findMaxWidth();
+            x = game.Window.ClientBounds.Center.X - (int)( maxItemWidth* 0.7);
             y = titleRect.Bottom+titleHeight/4;
-            height = (int)(regularFont.MeasureString(menuItems[0]).Y);
+            height = (int)((regularFont.MeasureString(menuItems[0]).Y) * textScale);
             foreach (string menu in menuItems)
             {
-                width = (int)(regularFont.MeasureString(menu).X);
+                width = (int)(regularFont.MeasureString(menu).X * textScale);
                 Rectangle itemRectangle = new Rectangle(x, y, width, height);
                 itemRectList.Add(itemRectangle);
 
-                y += (int)(regularFont.LineSpacing*1.2);
+                y += (int)(regularFont.LineSpacing*1.2*textScale);
             }
 
-            iconRectList.Add(new Rectangle());
-            iconRectList.Add(new Rectangle());
-            showLiveTipRect = new Rectangle(game.Window.ClientBounds.Center.X+titleWidth/2, itemRectList[2].Top, height, height);
+            int iconPositionX = x + maxItemWidth + (int)(10 * widthScale);
+            int barheight = (int)(20*heightScale), barwidth = (int)(200*widthScale);
+            int checkBoxheight = (int)(30*heightScale) , checkboxWidth = (int)(30*widthScale);
+
+            musicVolumeRect = new Rectangle(iconPositionX, itemRectList[0].Center.Y - barheight / 2, barwidth, barheight);
+            iconRectList.Add(musicVolumeRect);
+            soundVolumeRect = new Rectangle(iconPositionX, itemRectList[1].Center.Y - barheight / 2, barwidth, barheight);
+            iconRectList.Add(soundVolumeRect);
+            showLiveTipRect = new Rectangle(iconPositionX+ barwidth/2, itemRectList[2].Center.Y - checkBoxheight/2, checkboxWidth, checkBoxheight);
             iconRectList.Add(showLiveTipRect);
-            specialEffectRect = new Rectangle(game.Window.ClientBounds.Center.X + titleWidth / 2, itemRectList[3].Top, height, height);
+            specialEffectRect = new Rectangle(iconPositionX + barwidth/2, itemRectList[3].Center.Y - checkBoxheight / 2, checkboxWidth, checkBoxheight);
             iconRectList.Add(specialEffectRect);
+            numParticleRect = new Rectangle(iconPositionX, itemRectList[4].Center.Y - barheight / 2, barwidth, barheight);
+            iconRectList.Add(numParticleRect);
+            schoolFishRect = new Rectangle(iconPositionX, itemRectList[5].Center.Y - barheight / 2, barwidth, barheight);
+            iconRectList.Add(schoolFishRect);
+
+            width = titleWidth/2;
+            height = (int)(titleHeight*0.75);
+            okBox = new Rectangle(game.Window.ClientBounds.Center.X - width / 2, game.Window.ClientBounds.Bottom - (int)(height * 1.5), width, height);
 
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)Game.Services.GetService(
@@ -129,7 +159,7 @@ namespace Poseidon
             int width;
             foreach (string menu in menuItems)
             {
-                width = (int)(regularFont.MeasureString(menu).X);
+                width = (int)(regularFont.MeasureString(menu).X * textScale);
                 if (width > maxWidth)
                 {
                     maxWidth = width;
@@ -177,9 +207,13 @@ namespace Poseidon
             lastMouseState = currentMouseState;
             currentMouseState = Mouse.GetState();
 
+            int cursorWidthSensivity = (int)(32*widthScale), cursorHeightSensitivity = (int)(32*heightScale);
+            int mouseX = currentMouseState.X - (cursorWidthSensivity / 2);
+            int mouseY = currentMouseState.Y - (cursorHeightSensitivity / 2);
+
             for (int i = 0; i < iconRectList.Count; i++)
             {
-                if (iconRectList[i].Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)))
+                if (iconRectList[i].Intersects(new Rectangle(mouseX, mouseY, cursorWidthSensivity, cursorHeightSensitivity)))
                 {
                     selectedIndex = i;
                     break;
@@ -187,14 +221,29 @@ namespace Poseidon
                 selectedIndex = -1;
             }
 
-            if (selectedIndex >= 0)
+            if (okBox.Intersects(new Rectangle(mouseX, mouseY, cursorWidthSensivity, cursorHeightSensitivity)))
             {
-                if (prevselectedIndex != selectedIndex)
+                selectedIndex = -2; 
+            }
+
+            if (prevselectedIndex != selectedIndex && selectedIndex!= -1)
+            {
+                audio.MenuScroll.Play();
+            }
+
+            if (selectedIndex == 2 || selectedIndex == 3) //checkbox
+            {
+                if (iconRectList[selectedIndex].Intersects(new Rectangle(mouseX, mouseY, cursorWidthSensivity, cursorHeightSensitivity)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
                 {
-                    audio.MenuScroll.Play();
+                    clickedPositionX = currentMouseState.X;
+                    clicked = true;
                 }
-                if (iconRectList[selectedIndex].Intersects(new Rectangle(currentMouseState.X, currentMouseState.Y, 10, 10)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
+            }
+            else if (selectedIndex >= 0) //Bars -- just drag
+            {
+                if (iconRectList[selectedIndex].Intersects(new Rectangle(mouseX, mouseY, cursorWidthSensivity, cursorHeightSensitivity)) && currentMouseState.LeftButton.Equals(ButtonState.Pressed))
                 {
+                    clickedPositionX = currentMouseState.X;
                     clicked = true;
                 }
             }
@@ -204,8 +253,16 @@ namespace Poseidon
                 switch (selectedIndex)
                 {
                     case 0:
+                        GameSettings.MusicVolume = (float)(clickedPositionX - musicVolumeRect.Left) / (float)musicVolumeRect.Width;
+                        if (GameSettings.MusicVolume < 0f) GameSettings.MusicVolume = 0f;
+                        if (GameSettings.MusicVolume > 1f) GameSettings.MusicVolume = 1f;
+                        MediaPlayer.Volume = GameSettings.MusicVolume;
                         break;
                     case 1:
+                        GameSettings.SoundVolume = (float)(clickedPositionX - soundVolumeRect.Left) / (float)soundVolumeRect.Width;
+                        if (GameSettings.SoundVolume < 0f) GameSettings.SoundVolume = 0f;
+                        if (GameSettings.SoundVolume > 1f) GameSettings.SoundVolume = 1f;
+                        SoundEffect.MasterVolume = GameSettings.SoundVolume;
                         break;
                     case 2:
                         if (GameSettings.ShowLiveTip)
@@ -220,13 +277,24 @@ namespace Poseidon
                             GameSettings.SpecialEffectsEnabled = true;
                         break;
                     case 4:
+                        GameSettings.NumParticleLevel = (float)(clickedPositionX - numParticleRect.Left) / (float)numParticleRect.Width;
+                        if (GameSettings.NumParticleLevel < 0f) GameSettings.NumParticleLevel = 0f;
+                        if (GameSettings.NumParticleLevel > 1f) GameSettings.NumParticleLevel = 1f;
                         break;
                     case 5:
+                        GameSettings.SchoolOfFishDetail = (float)(clickedPositionX - schoolFishRect.Left) / (float)schoolFishRect.Width;
+                        if (GameSettings.SchoolOfFishDetail < 0f) GameSettings.SchoolOfFishDetail = 0f;
+                        if (GameSettings.SchoolOfFishDetail > 1f) GameSettings.SchoolOfFishDetail = 1f;
                         break;
                     default:
                         break;
                 }
                 clicked = false;
+            }
+
+            if (okBox.Intersects(new Rectangle(mouseX, mouseY, cursorWidthSensivity, cursorHeightSensitivity)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
+            {
+                okClicked = true;
             }
 
             if (MediaPlayer.State.Equals(MediaState.Stopped))
@@ -247,28 +315,74 @@ namespace Poseidon
         {
             spriteBatch.Begin();
             base.Draw(gameTime);
+            
+            //Draw Title
             spriteBatch.Draw(configTitle, titleRect, Color.White);
+            
+            //Draw the item text
             for(int i=0; i<menuItems.Length; i++ )
             {
                 if (i == selectedIndex)
                 {
-                    spriteBatch.DrawString(selectedFont, menuItems[i], new Vector2(itemRectList[i].Left + 1, itemRectList[i].Top + 1), selectedColor); //shadow
-                    spriteBatch.DrawString(selectedFont, menuItems[i], new Vector2(itemRectList[i].Left, itemRectList[i].Top), selectedColor);
+                    spriteBatch.DrawString(selectedFont, menuItems[i], new Vector2(itemRectList[i].Left + 1, itemRectList[i].Top + 1), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f); //shadow
+                    spriteBatch.DrawString(selectedFont, menuItems[i], new Vector2(itemRectList[i].Left, itemRectList[i].Top), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
                 }
                 else
                 {
-                    spriteBatch.DrawString(regularFont, menuItems[i], new Vector2(itemRectList[i].Left + 1, itemRectList[i].Top + 1), regularColor); //shadow
-                    spriteBatch.DrawString(regularFont, menuItems[i], new Vector2(itemRectList[i].Left, itemRectList[i].Top), regularColor);
+                    spriteBatch.DrawString(regularFont, menuItems[i], new Vector2(itemRectList[i].Left + 1, itemRectList[i].Top + 1), regularColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f); //shadow
+                    spriteBatch.DrawString(regularFont, menuItems[i], new Vector2(itemRectList[i].Left, itemRectList[i].Top), regularColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
                 }
             }
+            
+
+            //Draw the checkbox and bars
+            //Music Volume
+            spriteBatch.Draw(slideBar, musicVolumeRect, Color.White);
+            int buttonDiameter = musicVolumeRect.Height;
+            float numberScale = 0.8f * textScale;
+            int buttonPositionX = musicVolumeRect.Left + (int)(GameSettings.MusicVolume*musicVolumeRect.Width) - (buttonDiameter/2);
+            spriteBatch.Draw(dragButton, new Rectangle(buttonPositionX, musicVolumeRect.Top, buttonDiameter, buttonDiameter), Color.White) ;
+            spriteBatch.DrawString(numberFont, GameSettings.MusicVolume.ToString("P0"), new Vector2(buttonPositionX, musicVolumeRect.Top-(numberFont.MeasureString("1").Y * numberScale)), selectedColor, 0f, new Vector2(0, 0), numberScale, SpriteEffects.None, 0f);
+
+            //Sound
+            spriteBatch.Draw(slideBar, soundVolumeRect, Color.White);
+            buttonDiameter = soundVolumeRect.Height;
+            buttonPositionX = soundVolumeRect.Left + (int)(GameSettings.SoundVolume * soundVolumeRect.Width) - (buttonDiameter / 2);
+            spriteBatch.Draw(dragButton, new Rectangle(buttonPositionX, soundVolumeRect.Top, buttonDiameter, buttonDiameter), Color.White);
+            spriteBatch.DrawString(numberFont, GameSettings.SoundVolume.ToString("P0"), new Vector2(buttonPositionX, soundVolumeRect.Top - (numberFont.MeasureString("1").Y * numberScale)), selectedColor, 0f, new Vector2(0, 0), numberScale, SpriteEffects.None, 0f);
+
+            //Show Tip CheckBox
             if(GameSettings.ShowLiveTip)
                 spriteBatch.Draw(checkedBox, showLiveTipRect, Color.White);
             else
                 spriteBatch.Draw(uncheckedBox, showLiveTipRect, Color.White);
+
+            //Special Effect CheckBox
             if (GameSettings.SpecialEffectsEnabled)
                 spriteBatch.Draw(checkedBox, specialEffectRect, Color.White);
             else
                 spriteBatch.Draw(uncheckedBox, specialEffectRect, Color.White);
+ 
+            //Num Particle Bar
+            spriteBatch.Draw(slideBar, numParticleRect , Color.White);
+            buttonDiameter = numParticleRect.Height;
+            buttonPositionX = numParticleRect.Left + (int)(GameSettings.NumParticleLevel * numParticleRect.Width) - (buttonDiameter / 2);
+            spriteBatch.Draw(dragButton, new Rectangle(buttonPositionX, numParticleRect.Top, buttonDiameter, buttonDiameter), Color.White);
+            spriteBatch.DrawString(numberFont, GameSettings.NumParticleLevel.ToString("P0"), new Vector2(buttonPositionX, numParticleRect.Top - (numberFont.MeasureString("1").Y*numberScale)), selectedColor, 0f, new Vector2(0, 0), numberScale, SpriteEffects.None, 0f);
+
+            //School Size
+            spriteBatch.Draw(slideBar, schoolFishRect, Color.White);
+            buttonDiameter = schoolFishRect.Height;
+            buttonPositionX = schoolFishRect.Left + (int)(GameSettings.SchoolOfFishDetail * schoolFishRect.Width) - (buttonDiameter / 2);
+            spriteBatch.Draw(dragButton, new Rectangle(buttonPositionX, schoolFishRect.Top, buttonDiameter, buttonDiameter), Color.White);
+            spriteBatch.DrawString(numberFont, GameSettings.SchoolOfFishDetail.ToString("P0"), new Vector2(buttonPositionX, schoolFishRect.Top - (numberFont.MeasureString("1").Y*numberScale)), selectedColor, 0f, new Vector2(0, 0), numberScale, SpriteEffects.None, 0f);
+
+            //draw OK button
+            if(selectedIndex==-2) //mouse on Ok
+                spriteBatch.Draw(okButton, okBox, Color.DarkRed);
+            else
+                spriteBatch.Draw(okButton, okBox, Color.Khaki);
+
             cursor.Draw(gameTime);
             spriteBatch.End();
         }

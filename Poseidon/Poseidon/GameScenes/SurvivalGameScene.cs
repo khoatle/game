@@ -228,9 +228,9 @@ namespace Poseidon
 
 
             //loading winning, losing textures
-            winningTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelWin");
-            losingTexture = Content.Load<Texture2D>("Image/SceneTextures/GameOver");
-            scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
+            winningTexture = IngamePresentation.winningTexture;
+            losingTexture = IngamePresentation.losingTexture;
+            scaredIconTexture = IngamePresentation.scaredIconTexture;
 
             isAncientKilled = false;
 
@@ -251,9 +251,9 @@ namespace Poseidon
 
         public void Load()
         {
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
-            menuSmall = Content.Load<SpriteFont>("Fonts/menuSmall");
-            fishTalkFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            statsFont = IngamePresentation.statsFont;
+            menuSmall = IngamePresentation.menuSmall;
+            fishTalkFont = IngamePresentation.fishTalkFont;
 
             // Get the audio library
             audio = (AudioLibrary)
@@ -261,17 +261,8 @@ namespace Poseidon
 
             terrain = new Terrain(Content);
 
-            // Loading main character skill icon textures
-            for (int index = 0; index < GameConstants.numberOfSkills; index++)
-            {
-                skillTextures[index] = Content.Load<Texture2D>(GameConstants.iconNames[index]);
-            }
-
-            // Loading main character bullet icon textures
-            for (int index = 0; index < GameConstants.numBulletTypes; index++)
-            {
-                bulletTypeTextures[index] = Content.Load<Texture2D>(GameConstants.bulletNames[index]);
-            }
+            skillTextures = IngamePresentation.skillTextures;
+            bulletTypeTextures = IngamePresentation.bulletTypeTextures;
 
             powerpacks = new List<Powerpack>();
             resources = new List<Resource>();
@@ -306,19 +297,13 @@ namespace Poseidon
             particleManager = new ParticleManagement(this.game, GraphicDevice);
 
             // Load lower left pannel button
-            factoryPanelTexture = Content.Load<Texture2D>("Image/ButtonTextures/factory_button");
+            factoryPanelTexture = IngamePresentation.factoryPanelTexture;
             // Load Font for displaying extra information on factory panel
-            factoryPanelFont = Content.Load<SpriteFont>("Fonts/panelInfoText");
+            factoryPanelFont = IngamePresentation.factoryPanelFont;
 
             // Load textures for partid animation for factories
-            biofactoryAnimationTextures = new List<Texture2D>();
-            nuclearFactoryAnimationTextures = new List<Texture2D>();
-            for (int i = 0; i < 6; i++)
-            {
-                biofactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/conveyor_bench" + i));
-            }
-            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/orange"));
-            nuclearFactoryAnimationTextures.Add(Content.Load<Texture2D>("Image/TrashManagement/yellow"));
+            biofactoryAnimationTextures = IngamePresentation.biofactoryAnimationTextures;
+            nuclearFactoryAnimationTextures = IngamePresentation.nuclearFactoryAnimationTextures;
 
             // Load factory and research lab models
             plasticFactoryModelStates = new List<Model>();
@@ -340,15 +325,8 @@ namespace Poseidon
 
 
             // Factory level textures
-            plasticFactoryLevelTextures = new List<Texture2D>();
-            biodegradableFactoryLevelTextures = new List<Texture2D>();
-            for (int i = 0; i < 3; i++)
-            {
-                // using same level textures for both factories
-                Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
-                plasticFactoryLevelTextures.Add(loadedTexture);
-                biodegradableFactoryLevelTextures.Add(loadedTexture);
-            }
+            plasticFactoryLevelTextures = IngamePresentation.plasticFactoryLevelTextures;
+            biodegradableFactoryLevelTextures = IngamePresentation.biodegradableFactoryLevelTextures;
 
             // Load Trash
             biodegradableTrash = Content.Load<Model>("Models/TrashModels/biodegradableTrashVer4");
@@ -450,13 +428,13 @@ namespace Poseidon
             //int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
             trashes = new List<Trash>(numTrash);
             int bioIndex, plasticIndex, nuclearIndex;
-            for (bioIndex = 0; bioIndex < 45; bioIndex++)
+            for (bioIndex = 0; bioIndex < 50; bioIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.biodegradable, particleManager));
                 trashes[bioIndex].Load(Content,ref biodegradableTrash, orientation); //bio model
             }
-            for (plasticIndex = bioIndex; plasticIndex < bioIndex + 45; plasticIndex++)
+            for (plasticIndex = bioIndex; plasticIndex < bioIndex + 25; plasticIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.plastic, particleManager));

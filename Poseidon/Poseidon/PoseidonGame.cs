@@ -126,6 +126,8 @@ namespace Poseidon
 
         public static bool justCloseControlPanel = false;
 
+        public bool threeDgraphicInitiated = false;
+
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -136,8 +138,7 @@ namespace Poseidon
             graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
-            MediaPlayer.Volume = 0.5f;
-            SoundEffect.MasterVolume = 0.5f;
+
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace Poseidon
             //initiate all 2D graphics and fonts for the game
             IngamePresentation.Initiate2DGraphics(Content);
 
-            statsFont = Content.Load<SpriteFont>("Fonts/StatsFont");
+            statsFont = IngamePresentation.statsFont;
 
             //For pausing the game
             paused = false;
@@ -187,8 +188,8 @@ namespace Poseidon
             Services.AddService(typeof(AudioLibrary), audio);
 
             //For general game control
-            actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
-            stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
+            actionTexture = IngamePresentation.actionTexture;
+            stunnedTexture = IngamePresentation.stunnedTexture;
 
             // Loading the radar
             Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
@@ -222,8 +223,8 @@ namespace Poseidon
             startSceneSmall = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             startSceneLarge = Content.Load<SpriteFont>("Fonts/startScreenLarge");
             smallFont = IngamePresentation.menuSmall;
-            largeFont = Content.Load<SpriteFont>("Fonts/menuLarge");
-            typeFont = Content.Load<SpriteFont>("Fonts/font");
+            largeFont = IngamePresentation.largeFont;
+            typeFont = IngamePresentation.typeFont;
             startBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             startElementsTexture = Content.Load<Texture2D>("Image/SceneTextures/startSceneElements");
             teamLogo = Content.Load<Texture2D>("Image/Miscellaneous/TeamLogo");
@@ -233,10 +234,15 @@ namespace Poseidon
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
             //Create the config screen
+            loadConfigSettings();
             Texture2D configTitle = Content.Load<Texture2D>("Image/SceneTextures/configTitle");
-            Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configUnselectedCheckBox");
-            Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configSelectedCheckBox");
-            configScene = new ConfigScene(this, startSceneSmall, startSceneLarge, startBackgroundTexture, configTitle, unselectedCheckBox, selectedCheckBox, GraphicsDevice);
+            Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configUnselectedCheckBox");
+            Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configSelectedCheckBox");
+            Texture2D configslideBar = Content.Load<Texture2D>("Image/ButtonTextures/configBar");
+            Texture2D configslideButton = Content.Load<Texture2D>("Image/ButtonTextures/configDragButton");
+            Texture2D configOkButton = Content.Load<Texture2D>("Image/ButtonTextures/configOkButton");
+            SpriteFont normalFont = Content.Load<SpriteFont>("Fonts/fishTalk");
+            configScene = new ConfigScene(this, startSceneSmall, startSceneLarge, normalFont, startBackgroundTexture, configTitle, unselectedCheckBox, selectedCheckBox, configslideBar, configslideButton, configOkButton, GraphicsDevice);
             Components.Add(configScene);
 
             AttributeBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/AttributeBackground");
@@ -255,7 +261,7 @@ namespace Poseidon
             Components.Add(selectLoadingLevelScene);
 
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
-            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, stunnedTexture);
+            shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
             Components.Add(shipWreckScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
@@ -331,8 +337,9 @@ namespace Poseidon
             }
             else if (activeScene == configScene)
             {
-                if (enterPressed || EscPressed)
+                if (enterPressed || EscPressed || ConfigScene.okClicked)
                 {
+                    ConfigScene.okClicked = false;
                     ShowScene(startScene);
                 }
             }
@@ -455,6 +462,7 @@ namespace Poseidon
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
                 if (HydroBot.currentEnvPoint >= HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
                 HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 50;
+                HydroBot.IncreaseGoodWillPoint(GameConstants.BasicGoodWillGainForPlayingMiniGame * quizzGameScene.numRightAnswer);
                 PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
             }
@@ -772,6 +780,7 @@ namespace Poseidon
                             break;
                         case "Quit":
                             MediaPlayer.Stop();
+                            saveConfigSettings();
                             Exit();
                             break;
 
@@ -779,8 +788,60 @@ namespace Poseidon
                 }
             }
         }
+
+        private void saveConfigSettings()
+        {
+            BinaryWriter bw = new BinaryWriter(File.Open("configSettings", FileMode.Create));
+            bw.Write((double)GameSettings.MusicVolume);
+            bw.Write((double)GameSettings.SoundVolume);
+            bw.Write(GameSettings.ShowLiveTip);
+            bw.Write(GameSettings.SpecialEffectsEnabled);
+            bw.Write((double)GameSettings.NumParticleLevel);
+            bw.Write((double)GameSettings.SchoolOfFishDetail);
+            bw.Close();
+        }
+
+        private void loadConfigSettings()
+        {
+            if (File.Exists("configSettings"))
+            {
+                try
+                {
+                    BinaryReader br = new BinaryReader(File.Open("configSettings", FileMode.Open));
+                    GameSettings.MusicVolume = (float)br.ReadDouble();
+                    MediaPlayer.Volume = GameSettings.MusicVolume;
+                    GameSettings.SoundVolume = (float)br.ReadDouble();
+                    SoundEffect.MasterVolume = GameSettings.SoundVolume;
+                    GameSettings.ShowLiveTip = br.ReadBoolean();
+                    GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
+                    GameSettings.NumParticleLevel = (float)br.ReadDouble();
+                    GameSettings.SchoolOfFishDetail = (float)br.ReadDouble();
+                    br.Close();
+                }
+                catch
+                {
+                    setDefaultConfigSettings();
+                }
+            }
+            else
+            {
+                setDefaultConfigSettings();
+            }
+        }
+
+        private void setDefaultConfigSettings()
+        {
+            GameSettings.MusicVolume = 1f;
+            GameSettings.SoundVolume = 1f;
+            GameSettings.ShowLiveTip = true;
+            GameSettings.SpecialEffectsEnabled = true;
+            GameSettings.NumParticleLevel = 1f;
+            GameSettings.SchoolOfFishDetail = 1f;
+        }
+
         private void CreateLevelDependentScenes()
         {
+
             //Set Level Objective. To make it scale with GamePlusLevel, we must put it in playgamescene after the hydrobot is loaded,
             //However, The cutscene uses the levelobjective values, and the cut scene must be created before playgamescene as it is 
             //used in playgamescene. Hence levelObj is initialized here , & can not use the gameplusLevel.
@@ -799,7 +860,7 @@ namespace Poseidon
             cutSceneDialog = new CutSceneDialog();
 
             // Create the main game play scene
-            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
+            playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
                       
             // Create the Attribute board

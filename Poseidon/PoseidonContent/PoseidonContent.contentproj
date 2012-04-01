@@ -356,13 +356,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\PowerpackResource\plant1.fbx">
-      <Name>plant1</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\AttributeBoardTextures\UnassignedPtsBar.png">
       <Name>UnassignedPtsBar</Name>
       <Importer>TextureImporter</Importer>
@@ -508,13 +501,6 @@
       <Name>Starfish-cursor</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\BulletModels\herculesBullet.fbx">
-      <Name>herculesBullet</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -802,22 +788,6 @@
       <Name>normalBackground3</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel5.fbx">
-      <Name>trashModel5</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2</ProcessorParameters_Scale>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Models\TrashModels\trashModel4.fbx">
-      <Name>trashModel4</Name>
-      <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>2.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -2584,20 +2554,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\configSelectedCheckBox.png">
-      <Name>configSelectedCheckBox</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\SceneTextures\configUnselectedCheckBox.png">
-      <Name>configUnselectedCheckBox</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\SceneTextures\helpforeground_move_1.png">
       <Name>helpforeground_move_1</Name>
       <Importer>TextureImporter</Importer>
@@ -2607,6 +2563,39 @@
   <ItemGroup>
     <Compile Include="Image\SceneTextures\helpforeground_shoot_2.png">
       <Name>helpforeground_shoot_2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configOkButton.png">
+      <Name>configOkButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configBar.png">
+      <Name>configBar</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configDragButton.png">
+      <Name>configDragButton</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\ButtonTextures\configSelectedCheckBox.png">
+      <Name>configSelectedCheckBox</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\ButtonTextures\configUnselectedCheckBox.png">
+      <Name>configUnselectedCheckBox</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

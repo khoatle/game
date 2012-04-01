@@ -1690,6 +1690,35 @@
       <Processor>ModelProcessor</Processor>
       <ProcessorParameters_Scale>0.4</ProcessorParameters_Scale>
     </Compile>
+    <Compile Include="Models\DecorationObjects\kelpPlant.fbx">
+      <Name>kelpPlant</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
+    <Compile Include="Models\DecorationObjects\animalBone1.fbx">
+      <Name>animalBone1</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\DecorationObjects\animalBone2.fbx">
+      <Name>animalBone2</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\DecorationObjects\animalBone3.fbx">
+      <Name>animalBone3</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>5</ProcessorParameters_Scale>
+    </Compile>
+    <Compile Include="Models\DecorationObjects\animalBone4.fbx">
+      <Name>animalBone4</Name>
+      <Importer>FbxImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>5</ProcessorParameters_Scale>
+    </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>
     </None>

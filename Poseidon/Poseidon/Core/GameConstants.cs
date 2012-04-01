@@ -119,7 +119,7 @@ namespace Poseidon {
         public static int[] NumberPlasticTrash =    { 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18 };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
         public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
-        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  50,  50,  50,   0,   0,   0  };
+        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  20,  50,  0,   0,   0,   0  };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
         public static int[] NumberGhostPirate = new int[maxLevel];
@@ -136,7 +136,7 @@ namespace Poseidon {
         public static int[] ShipNumberGhostPirate = { 0, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
         public const int ShipNumberFish = 0;
         public const int NumberChests = 10;
-        public const int NumStaticObjectsMain = 0;
+        public static int[] NumStaticObjectsMain = { 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0 , 0};
         public const int NumStaticObjectsShip = 10;
         public const int NumTypeShipScence = 6;
 
@@ -226,15 +226,15 @@ namespace Poseidon {
         //seagrass meadow: all gray
         public static Color[] FogColor = {  Color.Blue, Color.Gray, Color.Blue, Color.Blue,
                                             Color.Blue, Color.DodgerBlue, Color.Black, Color.Blue,
-                                            Color.Red, Color.Blue, Color.Blue, Color.Blue };
+                                            Color.DarkRed, Color.Blue, Color.Blue, Color.Blue };
         public static Color[] AmbientColor = {  Color.DeepSkyBlue, Color.Gray, Color.DeepSkyBlue, Color.DeepSkyBlue,
                                                 Color.DeepSkyBlue, Color.DodgerBlue, Color.Black, Color.DeepSkyBlue,
-                                                Color.Red, Color.DeepSkyBlue, Color.DeepSkyBlue, Color.DeepSkyBlue };
+                                                Color.DarkRed, Color.DeepSkyBlue, Color.DeepSkyBlue, Color.DeepSkyBlue };
         public static Color[] DiffuseColor = {  Color.Cyan, Color.Gray, Color.Cyan, Color.Cyan,
-                                                Color.Cyan, Color.Cyan, Color.Black, Color.Cyan,
+                                                Color.Cyan, Color.Cyan, Color.Gray, Color.Cyan,
                                                 Color.IndianRed, Color.Cyan, Color.Cyan, Color.Cyan };
         public static Color[] SpecularColor = {   Color.LightSkyBlue, Color.Gray, Color.LightSkyBlue, Color.LightSkyBlue,
-                                                  Color.LightSkyBlue, Color.Cyan, Color.Black, Color.LightSkyBlue, 
+                                                  Color.LightSkyBlue, Color.Cyan, Color.Gray, Color.LightSkyBlue, 
                                                   Color.IndianRed, Color.LightSkyBlue, Color.LightSkyBlue, Color.LightSkyBlue };
 
         public static bool[] PreferBlueColor = { false, false, false, false,

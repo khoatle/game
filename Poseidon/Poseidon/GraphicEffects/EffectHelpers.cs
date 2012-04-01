@@ -331,10 +331,10 @@ namespace Poseidon
             {
                 if (GameConstants.PreferBlueColor[PlayGameScene.currentLevel])
                 {
-                    fogColor = LerpColor(GameConstants.FogColor[PlayGameScene.currentLevel], Color.Blue, envFactor) * envFactor;
-                    ambientColor = LerpColor(GameConstants.AmbientColor[PlayGameScene.currentLevel], new Color(0, 191.0f / 255.0f, 1), envFactor) * envFactor;
-                    diffuseColor = LerpColor(GameConstants.DiffuseColor[PlayGameScene.currentLevel], new Color(0, 255, 255), envFactor) * envFactor;
-                    specularColor = LerpColor(GameConstants.SpecularColor[PlayGameScene.currentLevel], new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), envFactor) * envFactor;
+                    fogColor = LerpColor(GameConstants.FogColor[PlayGameScene.currentLevel], Color.Blue, envFactor - 0.2f) * envFactor;
+                    ambientColor = LerpColor(GameConstants.AmbientColor[PlayGameScene.currentLevel], new Color(0, 191.0f / 255.0f, 1), envFactor - 0.2f) * envFactor;
+                    diffuseColor = LerpColor(GameConstants.DiffuseColor[PlayGameScene.currentLevel], new Color(0, 255, 255), envFactor - 0.2f) * envFactor;
+                    specularColor = LerpColor(GameConstants.SpecularColor[PlayGameScene.currentLevel], new Color(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f), envFactor - 0.2f) * envFactor;
                 }
                 else
                 {

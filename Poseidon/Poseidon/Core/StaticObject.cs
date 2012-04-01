@@ -10,9 +10,18 @@ namespace Poseidon
 {
     public class StaticObject : GameObject
     {
+        float orientation = 0;
+        public static Random random = new Random();
+        float scale;
+
         public void LoadContent(ContentManager content, string modelname)
         {
-
+            if (HydroBot.gameMode == GameMode.MainGame)
+            {
+                orientation = (float)random.Next(0, 629) / 100;
+                scale = (float)random.Next(5, 11)/ 10;
+            }
+            
             //Model = content.Load<Model>("Models/shark2");
             Model = content.Load<Model>(modelname);
             Position = Vector3.Down;
@@ -20,13 +29,17 @@ namespace Poseidon
 
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= GameConstants.ShipWreckBoundingSphereFactor;
+            if (HydroBot.gameMode == GameMode.ShipWreck)
+                scaledSphere.Radius *= GameConstants.ShipWreckBoundingSphereFactor;
+            else scaledSphere.Radius *= scale;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
+
+
             // Set up the parameters
             //SetupShaderParameters(content, Model);
-               
+             
         }
 
         public void Update()
@@ -40,8 +53,10 @@ namespace Poseidon
 
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
-            Matrix translateMatrix = Matrix.CreateTranslation(Position);
-            Matrix worldMatrix = translateMatrix;
+            Matrix translateMatrix = Matrix.CreateScale(scale) * Matrix.CreateTranslation(Position);
+            Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
+            //Matrix scaleMatrix = Matrix.CreateScale(scale);
+            Matrix worldMatrix = rotationYMatrix * translateMatrix;
 
             foreach (ModelMesh mesh in Model.Meshes)
             {

@@ -64,7 +64,9 @@ namespace Poseidon {
         public const int numDaysForUpgrade = 15;
         public const int numResourcesAtStart = 20;
         public const int numResourcesForEachFactory = 5;
-        public const int maxTrashCarryingCapacity = 15;
+        public const int maxBioTrashCarryingCapacity = 30;
+        public const int maxPlasticTrashCarryingCapacity = 15;
+        public const int maxNukeTrashCarryingCapacity = 5;
         public const float powerpackResourceRotationSpeed = 0.08f;
 
         //Environment Const

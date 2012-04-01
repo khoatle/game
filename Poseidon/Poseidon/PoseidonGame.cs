@@ -55,6 +55,7 @@ namespace Poseidon
         private SpriteFont smallFont, largeFont, startSceneSmall, startSceneLarge, typeFont;
         protected Texture2D startBackgroundTexture, startElementsTexture, teamLogo;
         StartScene startScene;
+        ConfigScene configScene;
         LoadingScene loadingScene;
         SelectLoadingLevelScene selectLoadingLevelScene;
         // For the Attribute board
@@ -130,7 +131,7 @@ namespace Poseidon
             graphics = new GraphicsDeviceManager(this);
 
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
+            graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
             graphics.IsFullScreen = true;
 
@@ -231,6 +232,13 @@ namespace Poseidon
             Components.Add(startScene);
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
+            //Create the config screen
+            Texture2D configTitle = Content.Load<Texture2D>("Image/SceneTextures/configTitle");
+            Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configUnselectedCheckBox");
+            Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/SceneTextures/configSelectedCheckBox");
+            configScene = new ConfigScene(this, startSceneSmall, startSceneLarge, startBackgroundTexture, configTitle, unselectedCheckBox, selectedCheckBox, GraphicsDevice);
+            Components.Add(configScene);
+
             AttributeBackgroundTexture = Content.Load<Texture2D>("Image/AttributeBoardTextures/AttributeBackground");
             LevelObjectiveBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/LevelObjectiveBackground");
             tipBackgroundTexture = LevelObjectiveBackgroundTexture;
@@ -320,6 +328,13 @@ namespace Poseidon
             if (activeScene == startScene)
             {
                 HandleStartSceneInput();
+            }
+            else if (activeScene == configScene)
+            {
+                if (enterPressed || EscPressed)
+                {
+                    ShowScene(startScene);
+                }
             }
             else if (activeScene == selectLoadingLevelScene)
             {
@@ -456,14 +471,18 @@ namespace Poseidon
         {
             if (jigsawGameScene.inOrder)
             {
-                AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                
                 MediaPlayer.Stop();
                 jigsawGameScene.StopVideoPlayers();
                 ShowScene(playGameScene);
                 switch (jigsawType)
                 {
                     case 0:
-                        HydroBot.hasSeaCow = true;
+                        if (!HydroBot.hasSeaCow)
+                        {
+                            HydroBot.hasSeaCow = true;
+                            AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                        }
                         HydroBot.iconActivated[IngamePresentation.seaCowIcon] = true;
                         HydroBot.seaCowPower += 1.0f;
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForSeaCowJigsaw;
@@ -471,7 +490,11 @@ namespace Poseidon
                         ResearchFacility.seaCowWon = true;
                         break;
                     case 1:
-                        HydroBot.hasTurtle = true;
+                        if (!HydroBot.hasTurtle)
+                        {
+                            HydroBot.hasTurtle = true;
+                            AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                        }
                         HydroBot.iconActivated[IngamePresentation.turtleIcon] = true;
                         HydroBot.turtlePower += 1.0f;
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForTurtleJigsaw;
@@ -479,7 +502,11 @@ namespace Poseidon
                         ResearchFacility.turtleWon = true;
                         break;
                     case 2:
-                        HydroBot.hasDolphin = true;
+                        if (!HydroBot.hasDolphin)
+                        {
+                            HydroBot.hasDolphin = true;
+                            AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
+                        }
                         HydroBot.iconActivated[IngamePresentation.dolphinIcon] = true;
                         HydroBot.dolphinPower += 1.0f;
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForDolphinJigsaw;
@@ -735,6 +762,7 @@ namespace Poseidon
                             ShowScene(survivalGameScene);
                             break;
                         case "Config":
+                            ShowScene(configScene);
                             break;
                         case "Help":
                             ShowScene(helpScene);

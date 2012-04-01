@@ -501,7 +501,7 @@ namespace Poseidon
             //skills[3] = true;
             //skills[4] = true;
 
-            unassignedPts = 5;
+            //unassignedPts = 5;
 
             //for testing survival mode
             //currentHitPoint = maxHitPoint = 300;
@@ -514,10 +514,10 @@ namespace Poseidon
             //    iconActivated[index] = true;
             //}
 
-            numSeaCowPieces = numTurtlePieces = 30;
-            numDolphinPieces = 3;
-            bioPlantLevel = plasticPlantLevel = 1;
-            totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
+            //numSeaCowPieces = numTurtlePieces = 30;
+            //numDolphinPieces = 3;
+            //bioPlantLevel = plasticPlantLevel = 1;
+            //totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
 
             //hasTurtle = true;
             //turtlePower = 2.0f;

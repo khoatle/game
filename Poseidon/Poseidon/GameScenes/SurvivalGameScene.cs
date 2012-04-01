@@ -428,13 +428,13 @@ namespace Poseidon
             //int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
             trashes = new List<Trash>(numTrash);
             int bioIndex, plasticIndex, nuclearIndex;
-            for (bioIndex = 0; bioIndex < 45; bioIndex++)
+            for (bioIndex = 0; bioIndex < 50; bioIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.biodegradable, particleManager));
                 trashes[bioIndex].Load(Content,ref biodegradableTrash, orientation); //bio model
             }
-            for (plasticIndex = bioIndex; plasticIndex < bioIndex + 45; plasticIndex++)
+            for (plasticIndex = bioIndex; plasticIndex < bioIndex + 25; plasticIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.plastic, particleManager));

@@ -908,8 +908,10 @@ namespace Poseidon
                 //Collect powerpacks and resources
                 Collect_Powerpacks_and_Resources(powerpacks, resources, gameTime);
 
+                //if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                 if (trashes != null)
+
                 {
                     //foreach (Trash trash in trashes)
                     for(int i=0; i<trashes.Count; i++)
@@ -980,6 +982,7 @@ namespace Poseidon
             }
             if (lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X)) // Collect Plastic Trash
             {
+                //if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                 if (trashes != null)
                 {
@@ -1054,6 +1057,7 @@ namespace Poseidon
             }
             if (lastKeyboardState.IsKeyDown(Keys.C) && currentKeyboardState.IsKeyUp(Keys.C)) // Collect Nuclear Trash
             {
+                //if (nuclearTrash >= GameConstants.maxRadioTrashCarryingCapacity)
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                 if (trashes != null)
                 {

@@ -817,7 +817,9 @@ namespace Poseidon
                 {
                     BinaryReader br = new BinaryReader(File.Open("configSettings", FileMode.Open));
                     GameSettings.MusicVolume = (float)br.ReadDouble();
+                    MediaPlayer.Volume = GameSettings.MusicVolume;
                     GameSettings.SoundVolume = (float)br.ReadDouble();
+                    SoundEffect.MasterVolume = GameSettings.SoundVolume;
                     GameSettings.ShowLiveTip = br.ReadBoolean();
                     GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
                     GameSettings.NumParticleLevel = (float)br.ReadDouble();

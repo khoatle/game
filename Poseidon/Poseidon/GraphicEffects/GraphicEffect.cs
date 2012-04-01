@@ -75,71 +75,81 @@ namespace Poseidon.GraphicEffects
             this.spriteFont = spriteFont;
         }
 
+        public bool enableConfig = false;
         public void UpdateInput(GameTime gameTime)
         {
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
 
-            if (currentKeyboardState.IsKeyDown(Keys.Q) &&
-                 lastKeyboardState.IsKeyUp(Keys.Q))
+            
+            if (currentKeyboardState.IsKeyDown(Keys.OemTilde) &&
+                 lastKeyboardState.IsKeyUp(Keys.OemTilde))
             {
-                bloom.Settings.BaseIntensity += 0.1f;
+                enableConfig = !enableConfig;
             }
-            if (currentKeyboardState.IsKeyDown(Keys.W) &&
-                 lastKeyboardState.IsKeyUp(Keys.W))
+            if (enableConfig)
             {
-                bloom.Settings.BaseSaturation += 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.E) &&
-                 lastKeyboardState.IsKeyUp(Keys.E))
-            {
-                bloom.Settings.BloomIntensity += 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.R) &&
-                 lastKeyboardState.IsKeyUp(Keys.R))
-            {
-                bloom.Settings.BloomSaturation += 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.T) &&
-                 lastKeyboardState.IsKeyUp(Keys.T))
-            {
-                bloom.Settings.BloomThreshold += 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.Y) &&
-                 lastKeyboardState.IsKeyUp(Keys.Y))
-            {
-                bloom.Settings.BlurAmount += 0.1f;
-            }
+                if (currentKeyboardState.IsKeyDown(Keys.Q) &&
+                     lastKeyboardState.IsKeyUp(Keys.Q))
+                {
+                    bloom.Settings.BaseIntensity += 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.W) &&
+                     lastKeyboardState.IsKeyUp(Keys.W))
+                {
+                    bloom.Settings.BaseSaturation += 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.E) &&
+                     lastKeyboardState.IsKeyUp(Keys.E))
+                {
+                    bloom.Settings.BloomIntensity += 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.R) &&
+                     lastKeyboardState.IsKeyUp(Keys.R))
+                {
+                    bloom.Settings.BloomSaturation += 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.T) &&
+                     lastKeyboardState.IsKeyUp(Keys.T))
+                {
+                    bloom.Settings.BloomThreshold += 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.Y) &&
+                     lastKeyboardState.IsKeyUp(Keys.Y))
+                {
+                    bloom.Settings.BlurAmount += 0.1f;
+                }
 
-            if (currentKeyboardState.IsKeyDown(Keys.D1) &&
-                 lastKeyboardState.IsKeyUp(Keys.D1))
-            {
-                bloom.Settings.BaseIntensity -= 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.D2) &&
-                 lastKeyboardState.IsKeyUp(Keys.D2))
-            {
-                bloom.Settings.BaseSaturation -= 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.D3) &&
-                 lastKeyboardState.IsKeyUp(Keys.D3))
-            {
-                bloom.Settings.BloomIntensity -= 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.D4) &&
-                 lastKeyboardState.IsKeyUp(Keys.D4))
-            {
-                bloom.Settings.BloomSaturation -= 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.D5) &&
-                 lastKeyboardState.IsKeyUp(Keys.D5))
-            {
-                bloom.Settings.BloomThreshold -= 0.1f;
-            }
-            if (currentKeyboardState.IsKeyDown(Keys.D6) &&
-                 lastKeyboardState.IsKeyUp(Keys.D6))
-            {
-                bloom.Settings.BlurAmount -= 0.1f;
+                if (currentKeyboardState.IsKeyDown(Keys.D1) &&
+                     lastKeyboardState.IsKeyUp(Keys.D1))
+                {
+                    bloom.Settings.BaseIntensity -= 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.D2) &&
+                     lastKeyboardState.IsKeyUp(Keys.D2))
+                {
+                    bloom.Settings.BaseSaturation -= 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.D3) &&
+                     lastKeyboardState.IsKeyUp(Keys.D3))
+                {
+                    bloom.Settings.BloomIntensity -= 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.D4) &&
+                     lastKeyboardState.IsKeyUp(Keys.D4))
+                {
+                    bloom.Settings.BloomSaturation -= 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.D5) &&
+                     lastKeyboardState.IsKeyUp(Keys.D5))
+                {
+                    bloom.Settings.BloomThreshold -= 0.1f;
+                }
+                if (currentKeyboardState.IsKeyDown(Keys.D6) &&
+                     lastKeyboardState.IsKeyUp(Keys.D6))
+                {
+                    bloom.Settings.BlurAmount -= 0.1f;
+                }
             }
             // Switch underwater effect on/off
             if (currentKeyboardState.IsKeyDown(Keys.U) &&
@@ -316,7 +326,8 @@ namespace Poseidon.GraphicEffects
             //              "B = toggle bloom (" + (bloomEffectEnabled ? "on" : "off") + ")\n" +
             //              "D = show buffer (" + bloom.ShowBuffer.ToString() + ")\n" +
             //              "U = toggle underwater (" + (underWaterEffectEnabled ? "on" : "off") + ")";
-            string text = "BaseIntensity: " + bloom.Settings.BaseIntensity + "\n" +
+            string text = "Enable config (press `): " + enableConfig.ToString() + "\n" +
+                          "BaseIntensity: " + bloom.Settings.BaseIntensity + "\n" +
                           "BaseSaturation: " + bloom.Settings.BaseSaturation + "\n" +
                           "BloomIntensity: " + bloom.Settings.BloomIntensity + "\n" +
                           "BloomSaturation: " + bloom.Settings.BloomSaturation + "\n" +

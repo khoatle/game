@@ -930,6 +930,7 @@ namespace Poseidon
                                         PlayGameScene.points.Add(point1);
                                     else if (gameMode == GameMode.SurvivalMode)
                                         SurvivalGameScene.points.Add(point1);
+                                    break;
                                 }
                                 bioTrash++;
                                 display_str = "Organic trash\ncollected " + bioTrash;

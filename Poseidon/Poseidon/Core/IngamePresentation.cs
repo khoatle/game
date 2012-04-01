@@ -839,7 +839,7 @@ namespace Poseidon.Core
                                 if (trashPointedAt.trashType == TrashType.biodegradable)
                                 {
                                     line += "BIODEGRADABLE TRASH";
-                                    comment = "Organic, will emit greenhouse gases unless processed in a processing plant.";
+                                    comment = "Great source of renewable energy.";
                                 }
                                 else if (trashPointedAt.trashType == TrashType.plastic)
                                 {

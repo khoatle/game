@@ -55,7 +55,7 @@ namespace Poseidon
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.16f;
+            scaledSphere.Radius *= 0.20f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             // Set up the parameters
@@ -221,7 +221,7 @@ namespace Poseidon
                     }
                 }
 
-                if (currentHuntingTarget.GetType().Name.Equals("Fish"))
+                if (currentHuntingTarget is Fish)
                 {
                     Fish tmp = (Fish)currentHuntingTarget;
                     if (tmp.health <= 0)

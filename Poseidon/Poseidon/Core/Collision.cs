@@ -154,7 +154,7 @@ namespace Poseidon
 
                     //if we are playing the survival mode
                     //revive the dead enemy instead
-                    if (gameMode != GameMode.SurvivalMode)
+                    if (gameMode != GameMode.SurvivalMode || objs[i] is Fish)
                     {
                         objs[i] = null;
                         for (int k = i; k < size - 1; k++)

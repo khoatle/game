@@ -298,7 +298,7 @@ namespace Poseidon
             firstUse = new bool[GameConstants.numberOfSkills];
             for (int i = 0; i < GameConstants.numberOfSkills; i++)
             {
-                if (PlayGameScene.currentLevel == 0) // No skill in level 0 (gamePLus)
+                if (PlayGameScene.currentLevel == 0 && gameMode != GameMode.SurvivalMode) // No skill in level 0 (gamePLus)
                 {
                     lsSkills[i] = skills[i] = false;
                 }
@@ -308,7 +308,7 @@ namespace Poseidon
                     lsSkills[i] = skills[i] = (bool)info.GetValue(Skillname, typeof(bool));
                 }
             }
-            if (PlayGameScene.currentLevel == 0) // No skill in level 0 (gamePLus)
+            if (PlayGameScene.currentLevel == 0 && gameMode != GameMode.SurvivalMode) // No skill in level 0 (gamePLus)
             {
                 activeSkillID = lsActiveSkillID = -1;
                 secondSkillID = lsSecondSkillID = -1;

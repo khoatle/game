@@ -355,6 +355,7 @@ namespace Poseidon
                     if (loadingScene.loadingSurvivalScene)
                     {
                         loadingScene.loadingSurvivalScene = false;
+                        startScene.gameStarted = true;
                         CreateSurvivalDependentScenes();
                         SurvivalGameScene.score = 0;
                         ShowScene(survivalGameScene);
@@ -765,7 +766,10 @@ namespace Poseidon
                             break;
                         case "Resume Game":
                             MediaPlayer.Stop();
-                            ShowScene(playGameScene);
+                            if (HydroBot.gameMode == GameMode.MainGame)
+                                ShowScene(playGameScene);
+                            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                ShowScene(survivalGameScene);
                             break;
                         case "Load Saved Level":
                             //MediaPlayer.Stop();

@@ -1002,7 +1002,13 @@ namespace Poseidon
             spriteBatch.Begin();
             if (currentGameState == GameState.Won)
                 spriteBatch.Draw(winningTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
-            else spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+            else
+            {
+                spriteBatch.Draw(losingTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
+                string losingText = "Sorry everyone, I could not do it...";
+                Vector2 losingTextPos = new Vector2(game.Window.ClientBounds.Width / 2, 10 + IngamePresentation.statisticFont.MeasureString(losingText).Y / 2);
+                spriteBatch.DrawString(IngamePresentation.statisticFont, losingText, losingTextPos, Color.Red, 0, new Vector2(IngamePresentation.statisticFont.MeasureString(losingText).X / 2, IngamePresentation.statisticFont.MeasureString(losingText).Y / 2), 1.5f, SpriteEffects.None, 0);      
+            }
             spriteBatch.End();
         }
 

@@ -151,7 +151,7 @@ namespace Poseidon
             {
                 startChasingTime = PoseidonGame.playTime;
 
-                if (currentHuntingTarget.GetType().Name.Equals("Fish"))
+                if (currentHuntingTarget is Fish)
                 {
                     Fish tmp = (Fish)currentHuntingTarget;
                     if (tmp.health <= 0)

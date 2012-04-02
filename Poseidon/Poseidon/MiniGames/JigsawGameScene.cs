@@ -227,36 +227,36 @@ namespace Poseidon.MiniGames
                     image = seacowImage[random.Next(2)];
                     animalName = "STELLAR'S SEA COW";
                     generalInfoText = "";
-                    generalInfoText += animalName+":\n";
-                    generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n";
-                    generalInfoText += "Extinct Since: ~1750.\n";
+                    generalInfoText += animalName+":\n ";
+                    generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n ";
+                    generalInfoText += "Extinct Since: ~1750.\n ";
                     generalInfoText += "Reason: Hunting for food and skin.";
                     break;
                 case 1:
                     image = turtleImage[random.Next(2)];
                     animalName = "MEIOLANIA";
                     generalInfoText = "";
-                    generalInfoText += animalName + ":\n";
-                    generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n";
-                    generalInfoText += "Extinct: >2,000yrs.\n";
+                    generalInfoText += animalName + ":\n ";
+                    generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n ";
+                    generalInfoText += "Extinct: >2,000yrs.\n ";
                     generalInfoText += "Reason: Excessive hunting.";
                     break;
                 case 2:
                     image = dolphinImage[random.Next(2)];
                     animalName = "MAUI'S DOLPHIN";
                     generalInfoText = "";
-                    generalInfoText += animalName + ":\n";
-                    generalInfoText += "Description: Smallest known species of dolphin. Lived near coasts.\n";
-                    generalInfoText += "Extinct Since: ~2050.\n";
+                    generalInfoText += animalName + ":\n ";
+                    generalInfoText += "Description: Smallest known species of dolphin. Lived near coasts.\n ";
+                    generalInfoText += "Extinct Since: ~2050.\n ";
                     generalInfoText += "Reason of Extinction: Pollution, injury from nets, boats.";
                     break;
                 default:
                     image = seacowImage[random.Next(2)];
                     generalInfoText = "";
                     animalName = "Steller's Sea Cow";
-                    generalInfoText += animalName + "\n";
-                    generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n";
-                    generalInfoText += "EXTINCT SINCE: 1700 something\n";
+                    generalInfoText += animalName + "\n ";
+                    generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n ";
+                    generalInfoText += "EXTINCT SINCE: 1700 something\n ";
                     generalInfoText += "REASON: Ate too much!";
                     break;
             }
@@ -292,25 +292,25 @@ namespace Poseidon.MiniGames
             {
                 videoPlayBackState = VideoPlayBackState.ExtractingDNA;
                 videoPlayer.Play(extractDNAVid);
-                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED\nFRAGMENTS";
+                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
             {
                 videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
                 videoPlayer.Play(reconstructDNAVid);
-                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT\nDNA SEQUENCE";
+                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
             {
                 videoPlayBackState = VideoPlayBackState.FillingGaps;
                 videoPlayer.Play(fillGapsVid);
-                stepText = "STEP 3: FILLING GAPS IN DNA WITH\nPREDICTON TECHNIQUES";
+                stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
             }
             else
             {
                 videoPlayBackState = VideoPlayBackState.InjectAndGrow;
                 videoPlayer.Play(injectAndGrowVid);
-                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW\nCELL";
+                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
             }
             stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, videoRectangle.Width - (tabSpace*2) , font);
             if (timeNow <= 0)

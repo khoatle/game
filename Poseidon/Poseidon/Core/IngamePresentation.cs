@@ -954,21 +954,18 @@ namespace Poseidon.Core
 
             foreach (String word in wordArray)
             {
-                if (font.MeasureString(line + word).Length()*scale > width)
+                if (font.MeasureString(line + word).Length() * scale > width)
                 {
-                    if (word.Contains("\n"))
-                    {
-                        returnString = returnString + line;
-                    }
-                    else returnString = returnString + line + '\n';
+                    returnString = returnString + line + '\n';
                     line = String.Empty;
+                    line = line + word + ' ';
                 }
                 else if (word.Contains("\n"))
                 {
-                    returnString = returnString + line;
+                    returnString = returnString + line + word;
                     line = string.Empty;
                 }
-                line = line + word + ' ';
+                else line = line + word + ' ';
             }
             return returnString + line;
         }

@@ -96,6 +96,12 @@ namespace Poseidon.MiniGames
         int startWidth, tabSpace;
 
         Rectangle letAIHandleButtonRectangle;
+        Texture2D letAIHandleButtonTexture;
+        bool letAIHandleButtonHover = false;
+        public bool letAIHandle = false;
+
+        public MouseState lastMouseState, currentMouseState;
+        public bool clicked = false;
 
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
@@ -206,6 +212,7 @@ namespace Poseidon.MiniGames
             timeUp = false;
             timeNow = (double)GameConstants.jigsawGameMaxTime;
             inOrder = false;
+            letAIHandle = false;
             shufflePieces();
             videoPlayBackState = VideoPlayBackState.ExtractingDNA;
             vidIndex = 0;  
@@ -317,6 +324,17 @@ namespace Poseidon.MiniGames
             putInfoInDebuggingString();
 
             MouseState mouseState = Mouse.GetState();
+            letAIHandleButtonHover = mouseOnLetAIHandle(mouseState);
+            bool dumbValue = false;
+            double dumbDoubleValue = 0;
+            clicked = false;
+            CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref dumbDoubleValue, ref clicked, ref dumbValue, ref dumbValue);
+            if (letAIHandleButtonHover && clicked)
+            {
+                letAIHandle = true;
+                clicked = false;
+                return;
+            }
 
             // If not sliding, then the player can control, otherwise he has to wait until the sliding finishes
             if (isSliding == false)
@@ -378,7 +396,9 @@ namespace Poseidon.MiniGames
             spriteBatch.Begin();
             spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White);
             letAIHandleButtonRectangle.Y = (int)(5 + timerFont.MeasureString(timerString).Y + 10);
-            spriteBatch.Draw(IngamePresentation.letAIHandleNormalTexture, letAIHandleButtonRectangle, Color.White);
+            if (letAIHandleButtonHover) letAIHandleButtonTexture = IngamePresentation.letAIHandleHoverTexture;
+            else letAIHandleButtonTexture = IngamePresentation.letAIHandleNormalTexture;
+            spriteBatch.Draw(letAIHandleButtonTexture, letAIHandleButtonRectangle, Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
 
@@ -735,7 +755,8 @@ namespace Poseidon.MiniGames
         // Slidable if rowFrom = emptyRow xor colFrom == emptyCol
         private bool isSlidable(int pieceRow, int pieceCol)
         {
-            return pieceRow == emptyCellRow ^ pieceCol == emptyCellCol;
+            if (pieceRow < 0 || pieceCol < 0) return false;
+            else return pieceRow == emptyCellRow ^ pieceCol == emptyCellCol;
         }
 
         // Get top left X, Y position of piece
@@ -749,6 +770,14 @@ namespace Poseidon.MiniGames
         {
             desiredWidthPerPiece = desiredWidthOfImage / numberOfCol;
             desiredHeightPerPiece = desiredHeightOfImage / numberOfRow;
+        }
+
+        public bool mouseOnLetAIHandle(MouseState lmouseState)
+        {
+            if (letAIHandleButtonRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
         }
     }
 }

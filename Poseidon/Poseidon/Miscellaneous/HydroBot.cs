@@ -515,7 +515,7 @@ namespace Poseidon
             //}
 
             //numSeaCowPieces = numTurtlePieces = 30;
-            //numDolphinPieces = 3;
+            //numDolphinPieces = 30;
             //bioPlantLevel = plasticPlantLevel = 1;
             //totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
 

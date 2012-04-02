@@ -737,7 +737,7 @@ namespace Poseidon.Core
         {
             int commentMaxLength = game.Window.ClientBounds.Width / 4;
 
-            float textScaleFactor = (float)game.Window.ClientBounds.Width / 1600 * (float)game.Window.ClientBounds.Height / 940;
+            float textScaleFactor = (float)game.Window.ClientBounds.Width / 1440 * (float)game.Window.ClientBounds.Height / 900;
             textScaleFactor = (float)Math.Sqrt(textScaleFactor);
             float lineSpacing = GameConstants.lineSpacing;
 
@@ -809,9 +809,9 @@ namespace Poseidon.Core
                             comment = "Can open any treasure chest.";
                         }
                         tip = "Press Z to collect";
-                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                         comment = wrapLine(comment, commentMaxLength, statsFont);
-                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     }
                     else
                     {
@@ -823,9 +823,9 @@ namespace Poseidon.Core
                             line = "RECYCLED RESOURCE BOX";
                             comment = "A box contains recycled resource produced by the processing plant. Recycled resources can be used to construct new facilities.";
                             tip = "Press Z to collect";
-                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                             comment = wrapLine(comment, commentMaxLength, statsFont);
-                            spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                         }
                         else
                         {
@@ -836,9 +836,9 @@ namespace Poseidon.Core
                                 line = "TREASURE CHEST";
                                 comment = "Contains valuables sunk with the ship hundreds years ago.";
                                 tip = "Double click to open";
-                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                                 comment = wrapLine(comment, commentMaxLength, statsFont);
-                                spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                             }
                             Trash trashPointedAt = null, botOnTrash = null;
                             CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes, ref trashPointedAt, ref botOnTrash, null);
@@ -866,9 +866,9 @@ namespace Poseidon.Core
                                     tip = "Press C to collect";
                                 }
 
-                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                                 comment = wrapLine(comment, commentMaxLength, statsFont);
-                                spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                             }
                             else
                             {
@@ -881,9 +881,9 @@ namespace Poseidon.Core
                                     line = "OLD SHIPWRECK";
                                     comment = "Sunk hundreds years ago.";
                                     tip =  "Double click to enter";
-                                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                                     comment = wrapLine(comment, commentMaxLength, statsFont);
-                                    spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                    spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                                 }
                                 else
                                 {
@@ -909,9 +909,9 @@ namespace Poseidon.Core
                                             comment = "Radioactive wastes can be dropped here for processing.";
                                         }
                                         tip = "Double click to drop collected wastes";
-                                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                                         comment = wrapLine(comment, commentMaxLength, statsFont);
-                                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                        spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                                     }
                                     else
                                     {
@@ -921,9 +921,9 @@ namespace Poseidon.Core
                                             line = "RESEARCH FACILITY";
                                             comment = "Researches on upgrading factories and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
                                             tip = "Double click to drop collected wastes";
-                                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                            spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
                                             comment = wrapLine(comment, commentMaxLength, statsFont);
-                                            spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y / 2 + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                                            spriteBatch.DrawString(statsFont, comment, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor), Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
                                         }
                                     }

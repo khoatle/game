@@ -226,7 +226,7 @@ namespace Poseidon
                     fish[i].sad_talk = "Why humans can not be as friendly as us?";
                 }
 
-                fish[i].ForwardDirection = random.Next(0, 314) / 100;
+                fish[i].ForwardDirection = (float)random.Next(0, 629) / 100;
 
                 //level 1: seagrass meadow is turtle and manetee only
                 if (currentLevel == 1)

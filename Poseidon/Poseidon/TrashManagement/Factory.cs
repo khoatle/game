@@ -54,6 +54,7 @@ namespace Poseidon
         public bool produceButtonHover = false, produceButtonPress = false;
         enum Produce { resource, powerpack };
         Produce produce;
+        static Produce defaultChoice = Produce.resource;
         List<Model> modelStates; // 4 stages of model, the last one is fully constructed one
         public List<Model> ModelStates 
         {
@@ -143,7 +144,7 @@ namespace Poseidon
                 currentPartTexture = animationTextures[0];
             }
 
-            produce = Produce.resource;
+            produce = defaultChoice;
             factoryFont = font;
             background = backgroundTexture;
 
@@ -530,7 +531,8 @@ namespace Poseidon
 
         public void SwitchProductionItem()
         {
-             produce = ((produce==Produce.powerpack)? produce = Produce.resource : produce = Produce.powerpack);
+            produce = ((produce==Produce.powerpack)? produce = Produce.resource : produce = Produce.powerpack);
+            defaultChoice = produce;
         }
 
         public void SetUpgradeLevelDependentVariables()

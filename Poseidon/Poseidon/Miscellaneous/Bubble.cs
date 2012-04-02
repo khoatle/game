@@ -26,6 +26,7 @@ namespace Poseidon
         public Color specularColor;
 
         int minX, maxX;
+        double lastUpdate = 0;
 
         public void LoadContent(ContentManager Content, Vector3 position, bool fromSeaBed, float startingScale)
         {
@@ -43,7 +44,7 @@ namespace Poseidon
         {
             random = new Random();
             startingScale = (float)random.Next(5, 10) / 10.0f;
-            floatingSpeed = random.NextDouble() + 0.5;
+            floatingSpeed = random.Next(20, 40);
             bubbleTexture = Content.Load<Texture2D>("Image/Miscellaneous/bubble-small2");
             bubble2DPos = position;
             int randomFactor = random.Next(3);
@@ -51,7 +52,7 @@ namespace Poseidon
             else if (randomFactor == 1) bubble2DPos.X -= 2;
             this.minX = minX;
             this.maxX = maxX;
-
+            lastUpdate = PoseidonGame.playTime.TotalMilliseconds;
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
@@ -74,7 +75,8 @@ namespace Poseidon
             }
             else if (randomFactor == 1 && bubble2DPos.X - bubbleTexture.Width / 2 * startingScale - 1 >= minX)
                 bubble2DPos.X -= 1;
-            bubble2DPos.Y -= (float)floatingSpeed;
+            bubble2DPos.Y -= (float)floatingSpeed * (float)(PoseidonGame.playTime.TotalMilliseconds - lastUpdate) / 1000;
+            lastUpdate = PoseidonGame.playTime.TotalMilliseconds;
         }
         public void Draw(SpriteBatch spriteBatch, float scaleUp)
         {

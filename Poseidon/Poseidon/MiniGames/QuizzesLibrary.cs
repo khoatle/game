@@ -425,7 +425,7 @@ namespace Poseidon.MiniGames
             quizz.question = "All plastic with a recycle sign is recycled, irrespective of its number.";
             quizz.options[0] = "True.";
             quizz.options[1] = "False, most recycling centers only recycle type 1 & 2.";
-            quizz.options[2] = "Types doesn't matter. All kind of plastic can be melted together.";
+            quizz.options[2] = "Number doesn't matter.";
             quizz.options[3] = "False, most of it is dumped.";
             quizz.answerID = 1;
             quizzesList.Add(quizz);

@@ -364,7 +364,7 @@ namespace Poseidon
             bulletTypeTextures = IngamePresentation.bulletTypeTextures;
 
             levelObjectiveNormalIconTexture = IngamePresentation.levelObjectiveNormalIconTexture;
-            levelObjectiveHoverIconTexture = IngamePresentation.toNextLevelHoverTexture;
+            levelObjectiveHoverIconTexture = IngamePresentation.levelObjectiveHoverIconTexture;
             tipNormalIconTexture = IngamePresentation.tipNormalIconTexture;
             tipHoverIconTexture = IngamePresentation.tipHoverIconTexture;
 
@@ -665,24 +665,30 @@ namespace Poseidon
             researchFacility = null;
 
             //Initialize the static objects.
-            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain);
-            for (int index = 0; index < GameConstants.NumStaticObjectsMain; index++)
+            staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain[currentLevel]);
+            for (int index = 0; index < GameConstants.NumStaticObjectsMain[currentLevel]; index++)
             {
                 staticObjects.Add(new StaticObject());
-                int randomObject = random.Next(3);
-                switch (randomObject)
+                if (currentLevel == 6)
                 {
-                    case 0:
-                        staticObjects[index].LoadContent(Content, "Models/chest");
-                        break;
-                    case 1:
-                        staticObjects[index].LoadContent(Content, "Models/plant");
-                        break;
-                    case 2:
-                        staticObjects[index].LoadContent(Content, "Models/plant2");
-                        break;
+                    int randomObject = random.Next(4);
+                    switch (randomObject)
+                    {
+                        case 0:
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1");
+                            break;
+                        case 1:
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2");
+                            break;
+                        case 2:
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3");
+                            break;
+                        case 3:
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4");
+                            break;
+                    }
                 }
-                staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                //staticObjects[index].LoadContent(Content, "Models/barrelstack");
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, terrain.heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
@@ -1096,13 +1102,6 @@ namespace Poseidon
                         fish[i].Update(gameTime, frustum, enemies, enemiesAmount, fish, fishAmount, random.Next(100), hydroBot, enemyBullet);
                     }
 
-                    //Checking win/lost condition for this level
-                    if (HydroBot.currentHitPoint <= 0) 
-                    { 
-                        currentGameState = GameState.Lost;
-                        audio.gameOver.Play();
-                    }
-
                     roundTimer -= gameTime.ElapsedGameTime;
                     PoseidonGame.playTime += gameTime.ElapsedGameTime;
 
@@ -1130,8 +1129,14 @@ namespace Poseidon
                         if (toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
                             currentGameState = GameState.Won;
                     }
-                    
-                   
+
+
+                    //Checking win/lost condition for this level
+                    if (HydroBot.currentHitPoint <= 0)
+                    {
+                        currentGameState = GameState.Lost;
+                        audio.gameOver.Play();
+                    }
                     //cursor update
                     cursor.Update(GraphicDevice, gameCamera, gameTime, frustum);
 

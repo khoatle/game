@@ -135,7 +135,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -351,12 +351,22 @@ namespace Poseidon
             {
                 if (loadingScene.loadingSceneStarted)
                 {
-                    //CreateLevelDependentScenes(loadingScene.loadingLevel);
-                    CreateLevelDependentScenes();
-                    startScene.gameStarted = true;
-                    startScene.Hide();
                     loadingScene.loadingSceneStarted = false;
-                    ShowScene(playGameScene);
+                    if (loadingScene.loadingSurvivalScene)
+                    {
+                        loadingScene.loadingSurvivalScene = false;
+                        startScene.gameStarted = true;
+                        CreateSurvivalDependentScenes();
+                        SurvivalGameScene.score = 0;
+                        ShowScene(survivalGameScene);
+                    }
+                    else
+                    {
+                        CreateLevelDependentScenes();
+                        startScene.gameStarted = true;
+                        startScene.Hide();
+                        ShowScene(playGameScene);
+                    }
                 }
             }
             // Handle Help Scene input
@@ -756,7 +766,10 @@ namespace Poseidon
                             break;
                         case "Resume Game":
                             MediaPlayer.Stop();
-                            ShowScene(playGameScene);
+                            if (HydroBot.gameMode == GameMode.MainGame)
+                                ShowScene(playGameScene);
+                            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                ShowScene(survivalGameScene);
                             break;
                         case "Load Saved Level":
                             //MediaPlayer.Stop();
@@ -765,9 +778,8 @@ namespace Poseidon
                         case "Survival Mode":
                             MediaPlayer.Stop();
                             gamePlus = false;
-                            CreateSurvivalDependentScenes();
-                            SurvivalGameScene.score = 0;
-                            ShowScene(survivalGameScene);
+                            loadingScene.loadingSurvivalScene = true;
+                            ShowScene(loadingScene);
                             break;
                         case "Config":
                             ShowScene(configScene);

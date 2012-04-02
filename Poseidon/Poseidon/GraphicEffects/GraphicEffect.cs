@@ -35,7 +35,7 @@ namespace Poseidon.GraphicEffects
         float m_Timer = 0;
         Random random;
         float fadeBetweenScenes = 1.0f;
-        public float fadeTransitAmount = 0.01f;
+        public float fadeTransitAmount = 0.025f;
 
         public GraphicEffect(GameScene gameScene, SpriteBatch spriteBatch, SpriteFont spriteFont)
         {
@@ -201,7 +201,7 @@ namespace Poseidon.GraphicEffects
 
         public RenderTarget2D DrawWithEffects(GameTime gameTime, RenderTarget2D originalScene, GraphicsDeviceManager graphics)
         {
-            if (!GameSettings.SpecialEffectsEnabled) return originalScene;
+            if (!GameSettings. SpecialEffectsEnabled) return originalScene;
             //applying blurring effect
             SetBlurEffectParameters(1.0f / (float)blurRenderTarget1.Width, 0);
 

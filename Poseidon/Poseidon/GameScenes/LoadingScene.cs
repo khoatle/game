@@ -20,6 +20,7 @@ namespace Poseidon
         protected SpriteBatch spriteBatch = null;
         private SpriteFont font;
         public bool loadingSceneStarted = false;
+        public bool loadingSurvivalScene = false;
         //public int loadingLevel;
 
         public LoadingScene(Game game, SpriteFont font,

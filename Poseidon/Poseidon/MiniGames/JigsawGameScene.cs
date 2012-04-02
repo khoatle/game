@@ -95,6 +95,8 @@ namespace Poseidon.MiniGames
         Rectangle videoRectangle, descriptionRectangle;
         int startWidth, tabSpace;
 
+        Rectangle letAIHandleButtonRectangle;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -118,6 +120,8 @@ namespace Poseidon.MiniGames
             int descRectWidth = videoRectWidth;
             int descRectHeight = game.Window.ClientBounds.Height - videoRectHeight - topTextHeight;
             descriptionRectangle = new Rectangle(startWidth, videoRectangle.Bottom+10, descRectWidth, descRectHeight);
+
+            letAIHandleButtonRectangle = new Rectangle(50, 0, IngamePresentation.letAIHandleNormalTexture.Width, IngamePresentation.letAIHandleNormalTexture.Height); 
         }
 
         /// <summary>
@@ -373,6 +377,8 @@ namespace Poseidon.MiniGames
 
             spriteBatch.Begin();
             spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White);
+            letAIHandleButtonRectangle.Y = (int)(5 + timerFont.MeasureString(timerString).Y + 10);
+            spriteBatch.Draw(IngamePresentation.letAIHandleNormalTexture, letAIHandleButtonRectangle, Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
 

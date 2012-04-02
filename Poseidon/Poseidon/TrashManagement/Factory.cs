@@ -74,7 +74,7 @@ namespace Poseidon
 
         public bool sandDirturbedAnimationPlayed;
         ParticleManagement particleManager;
-        SoundEffectInstance buildingSoundInstance;
+        public static SoundEffectInstance buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
 
 
         public Factory(FactoryType factorytype, ParticleManagement particleManager, GraphicsDevice graphicsDevice)
@@ -97,7 +97,7 @@ namespace Poseidon
             lastConstructionSwitchTime = TimeSpan.Zero;
             constructionSwitchSpan = TimeSpan.FromSeconds(3);
             this.particleManager = particleManager;
-            buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
+            //buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
 
             //for animating trash processing
             switch (factoryType)
@@ -187,8 +187,9 @@ namespace Poseidon
 
             if (underConstruction)
             {
-
-                if (buildingSoundInstance.State != SoundState.Playing)
+                if (buildingSoundInstance.State == SoundState.Paused)
+                    buildingSoundInstance.Resume();
+                else if (buildingSoundInstance.State != SoundState.Playing)
                 {
                     buildingSoundInstance.Play();
                 }
@@ -523,9 +524,9 @@ namespace Poseidon
                 spriteBatch.DrawString(factoryFont, plant_upgradeLevel_description, upgradePos, Color.LawnGreen * fadeFactor, 0, new Vector2(factoryFont.MeasureString(plant_upgradeLevel_description).X / 2, factoryFont.MeasureString(plant_upgradeLevel_description).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
 
-            string nextText = "Press Enter to continue";
-            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X / 2 - 50, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y / 2 - 30);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor, 0, new Vector2(menuSmall.MeasureString(nextText).X / 2, menuSmall.MeasureString(nextText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+            //string nextText = "Press Enter to continue";
+            //Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X / 2 - 50, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y / 2 - 30);
+            //spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor, 0, new Vector2(menuSmall.MeasureString(nextText).X / 2, menuSmall.MeasureString(nextText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
         }
 

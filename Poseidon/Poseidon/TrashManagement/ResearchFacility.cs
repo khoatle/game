@@ -53,7 +53,7 @@ namespace Poseidon
 
         public bool sandDirturbedAnimationPlayed;
         ParticleManagement particleManager;
-        SoundEffectInstance buildingSoundInstance;
+        public static SoundEffectInstance buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
 
         int screenWidth, screenHeight;
 
@@ -77,7 +77,7 @@ namespace Poseidon
             lastConstructionSwitchTime = TimeSpan.Zero;
             constructionSwitchSpan = TimeSpan.FromSeconds(3);
             this.particleManager = particleManager;
-            buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
+            //buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
         }
 
         public void LoadContent(Game game, Vector3 position, float orientation)
@@ -150,7 +150,9 @@ namespace Poseidon
             if (underConstruction)
             {
 
-                if (buildingSoundInstance.State != SoundState.Playing)
+                if (buildingSoundInstance.State == SoundState.Paused)
+                    buildingSoundInstance.Resume();
+                else if (buildingSoundInstance.State != SoundState.Playing)
                 {
                     buildingSoundInstance.Play();
                 }
@@ -665,9 +667,9 @@ namespace Poseidon
                 spriteBatch.DrawString(facilityFont2, txt, new Vector2(screenWidth / 2, resurTitlePos.Y + lineSpacing + facilityFont.MeasureString(resurrectTitle).Y / 2 + facilityFont.MeasureString(txt).Y / 2), Color.Purple, 0, new Vector2(facilityFont.MeasureString(txt).X / 2, facilityFont.MeasureString(txt).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
 
-            string nextText = "Press Enter to continue";
-            Vector2 nextTextPosition = new Vector2(backgroundRect.Right - menuSmall.MeasureString(nextText).X/2 - 50, backgroundRect.Bottom - menuSmall.MeasureString(nextText).Y/2 - 30);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor, 0, new Vector2(menuSmall.MeasureString(nextText).X / 2, menuSmall.MeasureString(nextText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+            //string nextText = "Press Enter to continue";
+            //Vector2 nextTextPosition = new Vector2(backgroundRect.Right - (menuSmall.MeasureString(nextText).X/2 - 50) * textScaleFactor, backgroundRect.Bottom - (menuSmall.MeasureString(nextText).Y/2 - 30)*textScaleFactor);
+            //spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White * fadeFactor, 0, new Vector2(menuSmall.MeasureString(nextText).X / 2, menuSmall.MeasureString(nextText).Y / 2), textScaleFactor, SpriteEffects.None, 0);
         }
 
         public void UpgradeBioFactory(List<Factory> factories)

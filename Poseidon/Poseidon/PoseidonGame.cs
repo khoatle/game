@@ -999,6 +999,8 @@ namespace Poseidon
         {
             activeScene.Hide();
             activeScene = scene;
+            Factory.buildingSoundInstance.Pause();
+            ResearchFacility.buildingSoundInstance.Pause();
             scene.Show();
         }
         /// <summary>

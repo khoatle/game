@@ -361,6 +361,8 @@ namespace Poseidon
         public override void Show()
         {
             paused = false;
+            //Factory.buildingSoundInstance.Resume();
+            //ResearchFacility.buildingSoundInstance.Resume();
             base.Show();
         }
 

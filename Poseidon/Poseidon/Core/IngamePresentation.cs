@@ -93,6 +93,8 @@ namespace Poseidon.Core
         public static Texture2D onAttributeCursorTexture;
         public static Texture2D menuCursorTexture;
 
+        public static Texture2D letAIHandleNormalTexture, letAIHandleHoverTexture;
+
         public static void Initiate2DGraphics(ContentManager Content)
         {
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
@@ -232,6 +234,8 @@ namespace Poseidon.Core
             onAttributeCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/hammerAndWrench");
             menuCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/menuCursor");
 
+            letAIHandleNormalTexture = Content.Load<Texture2D>("Image/MinigameTextures/letAIHandle");
+            letAIHandleHoverTexture = Content.Load<Texture2D>("Image/MinigameTextures/letAIHandleHover");
         }
 
         public static Model bossBullet, chasingBullet, damageBullet, healBullet, herculesArrow, mjolnir, normalbullet, piercingArrow, torpedo,
@@ -463,7 +467,7 @@ namespace Poseidon.Core
             if (PoseidonGame.playTime.TotalMilliseconds - lastBubbleCreated >= 250)
             {
                 Bubble bubble = new Bubble();
-                bubble.LoadContentBubbleSmall(PoseidonGame.contentManager, new Vector2(barX + barWidth / 2, barY + EnvironmentBar.Height - 7), barX, barX + barWidth - 3);
+                bubble.LoadContentBubbleSmall(PoseidonGame.contentManager, new Vector2(barX + barWidth / 2, barY + EnvironmentBar.Height - 8), barX, barX + barWidth - 3);
                 bubbles.Add(bubble);
                 lastBubbleCreated = PoseidonGame.playTime.TotalMilliseconds;
             }

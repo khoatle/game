@@ -95,6 +95,8 @@ namespace Poseidon.Core
 
         public static Texture2D letAIHandleNormalTexture, letAIHandleHoverTexture;
 
+        public static Texture2D exitShipWreckTexture;
+
         public static void Initiate2DGraphics(ContentManager Content)
         {
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
@@ -175,6 +177,8 @@ namespace Poseidon.Core
 
             toNextLevelHoverTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevelhover");
             toNextLevelNormalTexture = Content.Load<Texture2D>("Image/Miscellaneous/tonextlevel");
+
+            exitShipWreckTexture = Content.Load<Texture2D>("Image/Miscellaneous/exitShipWreckTip");
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];

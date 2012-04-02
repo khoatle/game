@@ -1048,6 +1048,8 @@ namespace Poseidon
             DrawBulletType();
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
             cursor.Draw(gameTime);
+            Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, 0);
+            spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
             spriteBatch.End();
             if (foundRelic[currentShipWreckID])
             {

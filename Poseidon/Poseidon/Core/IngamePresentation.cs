@@ -934,8 +934,14 @@ namespace Poseidon.Core
                 {
                     returnString = returnString + line + '\n';
                     line = String.Empty;
+                    line = line + word + ' ';
                 }
-                line = line + word + ' ';
+                else if (word.Contains("\n"))
+                {
+                    returnString = returnString + line + word;
+                    line = string.Empty;
+                }
+                else line = line + word + ' ';
             }
             return returnString + line;
         }
@@ -950,8 +956,17 @@ namespace Poseidon.Core
             {
                 if (font.MeasureString(line + word).Length()*scale > width)
                 {
-                    returnString = returnString + line + '\n';
+                    if (word.Contains("\n"))
+                    {
+                        returnString = returnString + line;
+                    }
+                    else returnString = returnString + line + '\n';
                     line = String.Empty;
+                }
+                else if (word.Contains("\n"))
+                {
+                    returnString = returnString + line;
+                    line = string.Empty;
                 }
                 line = line + word + ' ';
             }

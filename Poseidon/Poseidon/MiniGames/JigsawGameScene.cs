@@ -333,6 +333,7 @@ namespace Poseidon.MiniGames
             {
                 letAIHandle = true;
                 clicked = false;
+                PoseidonGame.audio.MenuScroll.Play();
                 return;
             }
 

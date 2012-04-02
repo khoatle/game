@@ -152,7 +152,7 @@ namespace Poseidon
 
                 if (buildingSoundInstance.State == SoundState.Paused)
                     buildingSoundInstance.Resume();
-                else if (buildingSoundInstance.State != SoundState.Playing)
+                if (buildingSoundInstance.State != SoundState.Playing)
                 {
                     buildingSoundInstance.Play();
                 }

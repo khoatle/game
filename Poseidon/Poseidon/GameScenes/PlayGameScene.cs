@@ -863,8 +863,7 @@ namespace Poseidon
                             openFactoryConfigurationScene = false;
                             openResearchFacilityConfigScene = false;
                             PoseidonGame.justCloseControlPanel = true;
-                            Factory.buildingSoundInstance.Resume();
-                            ResearchFacility.buildingSoundInstance.Resume();
+                       
                         }
                         else
                         {

@@ -482,6 +482,8 @@ namespace Poseidon
         {
             paused = false;
             HydroBot.gameMode = GameMode.MainGame;
+            //Factory.buildingSoundInstance.Resume();
+            //ResearchFacility.buildingSoundInstance.Resume();
             base.Show();
         }
 
@@ -852,6 +854,8 @@ namespace Poseidon
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
                     {
+                        Factory.buildingSoundInstance.Pause();
+                        ResearchFacility.buildingSoundInstance.Pause();
                         bool exitFactConfPressed;
                         exitFactConfPressed = (lastKeyboardState.IsKeyDown(Keys.Enter) && (currentKeyboardState.IsKeyUp(Keys.Enter)));
                         if (exitFactConfPressed)
@@ -859,6 +863,7 @@ namespace Poseidon
                             openFactoryConfigurationScene = false;
                             openResearchFacilityConfigScene = false;
                             PoseidonGame.justCloseControlPanel = true;
+                       
                         }
                         else
                         {
@@ -2027,7 +2032,7 @@ namespace Poseidon
                 string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
                 spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black);
             }
-            string nextText = "Enter to continue.Esc to skip.";
+            string nextText = "Enter to continue. Esc to skip.";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
             spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.DarkViolet);
 

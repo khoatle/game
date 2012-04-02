@@ -95,6 +95,14 @@ namespace Poseidon.MiniGames
         Rectangle videoRectangle, descriptionRectangle;
         int startWidth, tabSpace;
 
+        Rectangle letAIHandleButtonRectangle;
+        Texture2D letAIHandleButtonTexture;
+        bool letAIHandleButtonHover = false;
+        public bool letAIHandle = false;
+
+        public MouseState lastMouseState, currentMouseState;
+        public bool clicked = false;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -118,6 +126,8 @@ namespace Poseidon.MiniGames
             int descRectWidth = videoRectWidth;
             int descRectHeight = game.Window.ClientBounds.Height - videoRectHeight - topTextHeight;
             descriptionRectangle = new Rectangle(startWidth, videoRectangle.Bottom+10, descRectWidth, descRectHeight);
+
+            letAIHandleButtonRectangle = new Rectangle(50, 0, IngamePresentation.letAIHandleNormalTexture.Width, IngamePresentation.letAIHandleNormalTexture.Height); 
         }
 
         /// <summary>
@@ -202,6 +212,7 @@ namespace Poseidon.MiniGames
             timeUp = false;
             timeNow = (double)GameConstants.jigsawGameMaxTime;
             inOrder = false;
+            letAIHandle = false;
             shufflePieces();
             videoPlayBackState = VideoPlayBackState.ExtractingDNA;
             vidIndex = 0;  
@@ -216,36 +227,36 @@ namespace Poseidon.MiniGames
                     image = seacowImage[random.Next(2)];
                     animalName = "STELLAR'S SEA COW";
                     generalInfoText = "";
-                    generalInfoText += animalName+":\n";
-                    generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n";
-                    generalInfoText += "Extinct Since: ~1750.\n";
+                    generalInfoText += animalName+":\n ";
+                    generalInfoText += "Description: Large herbivorous mammal with black thick skin,small head no teeth.\n ";
+                    generalInfoText += "Extinct Since: ~1750.\n ";
                     generalInfoText += "Reason: Hunting for food and skin.";
                     break;
                 case 1:
                     image = turtleImage[random.Next(2)];
                     animalName = "MEIOLANIA";
                     generalInfoText = "";
-                    generalInfoText += animalName + ":\n";
-                    generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n";
-                    generalInfoText += "Extinct: >2,000yrs.\n";
+                    generalInfoText += animalName + ":\n ";
+                    generalInfoText += "Description: Large turle with 2ft wide head and 2 long horns.\n ";
+                    generalInfoText += "Extinct: >2,000yrs.\n ";
                     generalInfoText += "Reason: Excessive hunting.";
                     break;
                 case 2:
                     image = dolphinImage[random.Next(2)];
                     animalName = "MAUI'S DOLPHIN";
                     generalInfoText = "";
-                    generalInfoText += animalName + ":\n";
-                    generalInfoText += "Description: Smallest known species of dolphin. Lived near coasts.\n";
-                    generalInfoText += "Extinct Since: ~2050.\n";
+                    generalInfoText += animalName + ":\n ";
+                    generalInfoText += "Description: Smallest known species of dolphin. Lived near coasts.\n ";
+                    generalInfoText += "Extinct Since: ~2050.\n ";
                     generalInfoText += "Reason of Extinction: Pollution, injury from nets, boats.";
                     break;
                 default:
                     image = seacowImage[random.Next(2)];
                     generalInfoText = "";
                     animalName = "Steller's Sea Cow";
-                    generalInfoText += animalName + "\n";
-                    generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n";
-                    generalInfoText += "EXTINCT SINCE: 1700 something\n";
+                    generalInfoText += animalName + "\n ";
+                    generalInfoText += "DESCRIPTION: fat, heavy, and possibly ugly\n ";
+                    generalInfoText += "EXTINCT SINCE: 1700 something\n ";
                     generalInfoText += "REASON: Ate too much!";
                     break;
             }
@@ -281,25 +292,25 @@ namespace Poseidon.MiniGames
             {
                 videoPlayBackState = VideoPlayBackState.ExtractingDNA;
                 videoPlayer.Play(extractDNAVid);
-                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED\nFRAGMENTS";
+                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
             {
                 videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
                 videoPlayer.Play(reconstructDNAVid);
-                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT\nDNA SEQUENCE";
+                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
             }
             else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
             {
                 videoPlayBackState = VideoPlayBackState.FillingGaps;
                 videoPlayer.Play(fillGapsVid);
-                stepText = "STEP 3: FILLING GAPS IN DNA WITH\nPREDICTON TECHNIQUES";
+                stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
             }
             else
             {
                 videoPlayBackState = VideoPlayBackState.InjectAndGrow;
                 videoPlayer.Play(injectAndGrowVid);
-                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW\nCELL";
+                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
             }
             stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, videoRectangle.Width - (tabSpace*2) , font);
             if (timeNow <= 0)
@@ -313,6 +324,18 @@ namespace Poseidon.MiniGames
             putInfoInDebuggingString();
 
             MouseState mouseState = Mouse.GetState();
+            letAIHandleButtonHover = mouseOnLetAIHandle(mouseState);
+            bool dumbValue = false;
+            double dumbDoubleValue = 0;
+            clicked = false;
+            CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref dumbDoubleValue, ref clicked, ref dumbValue, ref dumbValue);
+            if (letAIHandleButtonHover && clicked)
+            {
+                letAIHandle = true;
+                clicked = false;
+                PoseidonGame.audio.MenuScroll.Play();
+                return;
+            }
 
             // If not sliding, then the player can control, otherwise he has to wait until the sliding finishes
             if (isSliding == false)
@@ -373,6 +396,10 @@ namespace Poseidon.MiniGames
 
             spriteBatch.Begin();
             spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White);
+            letAIHandleButtonRectangle.Y = (int)(5 + timerFont.MeasureString(timerString).Y + 10);
+            if (letAIHandleButtonHover) letAIHandleButtonTexture = IngamePresentation.letAIHandleHoverTexture;
+            else letAIHandleButtonTexture = IngamePresentation.letAIHandleNormalTexture;
+            spriteBatch.Draw(letAIHandleButtonTexture, letAIHandleButtonRectangle, Color.White);
             cursor.Draw(gameTime);
             spriteBatch.End();
 
@@ -729,7 +756,8 @@ namespace Poseidon.MiniGames
         // Slidable if rowFrom = emptyRow xor colFrom == emptyCol
         private bool isSlidable(int pieceRow, int pieceCol)
         {
-            return pieceRow == emptyCellRow ^ pieceCol == emptyCellCol;
+            if (pieceRow < 0 || pieceCol < 0) return false;
+            else return pieceRow == emptyCellRow ^ pieceCol == emptyCellCol;
         }
 
         // Get top left X, Y position of piece
@@ -743,6 +771,14 @@ namespace Poseidon.MiniGames
         {
             desiredWidthPerPiece = desiredWidthOfImage / numberOfCol;
             desiredHeightPerPiece = desiredHeightOfImage / numberOfRow;
+        }
+
+        public bool mouseOnLetAIHandle(MouseState lmouseState)
+        {
+            if (letAIHandleButtonRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
         }
     }
 }

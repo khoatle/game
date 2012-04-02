@@ -361,6 +361,8 @@ namespace Poseidon
         public override void Show()
         {
             paused = false;
+            //Factory.buildingSoundInstance.Resume();
+            //ResearchFacility.buildingSoundInstance.Resume();
             base.Show();
         }
 
@@ -573,6 +575,8 @@ namespace Poseidon
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
                     {
+                        Factory.buildingSoundInstance.Pause();
+                        ResearchFacility.buildingSoundInstance.Pause();
                         bool exitFactConfPressed;
                         exitFactConfPressed = (lastKeyboardState.IsKeyDown(Keys.Enter) && (currentKeyboardState.IsKeyUp(Keys.Enter)));
                         if (exitFactConfPressed)
@@ -850,7 +854,7 @@ namespace Poseidon
                 Point point = new Point();
                 String point_string = "Not enough\nresources";
                 point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
-                PlayGameScene.points.Add(point);
+                points.Add(point);
                 return false;
             }
 
@@ -877,7 +881,7 @@ namespace Poseidon
                 Point point = new Point();
                 String point_string = "Can not\nbuild here";
                 point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
-                PlayGameScene.points.Add(point);
+                points.Add(point);
                 return false;
             }
 
@@ -891,7 +895,7 @@ namespace Poseidon
                 Point point = new Point();
                 String point_string = "Can not\nbuild here";
                 point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
-                PlayGameScene.points.Add(point);
+                points.Add(point);
                 return false;
             }
 
@@ -904,7 +908,7 @@ namespace Poseidon
                         Point point = new Point();
                         String point_string = "Can only build\n1 research center";
                         point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
-                        PlayGameScene.points.Add(point);
+                        points.Add(point);
                         audio.MenuScroll.Play();
                         status = false;
                     }

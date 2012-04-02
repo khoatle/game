@@ -120,6 +120,8 @@ namespace Poseidon.Core
             levelTips.Add(tipItem);
             tipItem = new TipItem("The resurrected animals will join you in the battle with their unique abilities.");
             levelTips.Add(tipItem);
+            tipItem = new TipItem("Resurrection can be done by AI but the resurrected animal will lose 40% power.");
+            levelTips.Add(tipItem);
             allTips.Add(levelTips);
 
             //tip for level 7
@@ -177,6 +179,8 @@ namespace Poseidon.Core
             tipItem = new TipItem("'Base of powerpacks' can make your battle much easier.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("The resurrected animals' power can be increased with further study in the Research center.");
+            levelTips.Add(tipItem);
+            tipItem = new TipItem("Resurrection can be done by AI but the resurrected animal will lose 40% power.");
             levelTips.Add(tipItem);
             allTips.Add(levelTips);
 

@@ -487,9 +487,10 @@ namespace Poseidon
         }
         public void HandleJigsawInput()
         {
-            if (jigsawGameScene.inOrder)
+            if (jigsawGameScene.inOrder || jigsawGameScene.letAIHandle)
             {
-                
+                float efficiency = 1.0f;
+                if (jigsawGameScene.letAIHandle) efficiency = 0.6f;
                 MediaPlayer.Stop();
                 jigsawGameScene.StopVideoPlayers();
                 ShowScene(playGameScene);
@@ -502,7 +503,7 @@ namespace Poseidon
                             AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
                         }
                         HydroBot.iconActivated[IngamePresentation.seaCowIcon] = true;
-                        HydroBot.seaCowPower += 1.0f;
+                        HydroBot.seaCowPower += efficiency;
                         HydroBot.numSeaCowPieces -= GameConstants.boneCountForSeaCowJigsaw;
                         ResearchFacility.playSeaCowJigsaw = false;
                         ResearchFacility.seaCowWon = true;
@@ -514,7 +515,7 @@ namespace Poseidon
                             AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
                         }
                         HydroBot.iconActivated[IngamePresentation.turtleIcon] = true;
-                        HydroBot.turtlePower += 1.0f;
+                        HydroBot.turtlePower += efficiency;
                         HydroBot.numTurtlePieces -= GameConstants.boneCountForTurtleJigsaw;
                         ResearchFacility.playTurtleJigsaw = false;
                         ResearchFacility.turtleWon = true;
@@ -526,7 +527,7 @@ namespace Poseidon
                             AddingObjects.placeMinion(Content, jigsawType, playGameScene.enemies, playGameScene.enemiesAmount, playGameScene.fish, ref playGameScene.fishAmount, playGameScene.hydroBot);
                         }
                         HydroBot.iconActivated[IngamePresentation.dolphinIcon] = true;
-                        HydroBot.dolphinPower += 1.0f;
+                        HydroBot.dolphinPower += efficiency;
                         HydroBot.numDolphinPieces -= GameConstants.boneCountForDolphinJigsaw;
                         ResearchFacility.playDolphinJigsaw = false;
                         ResearchFacility.dolphinWon = true;
@@ -999,6 +1000,8 @@ namespace Poseidon
         {
             activeScene.Hide();
             activeScene = scene;
+            Factory.buildingSoundInstance.Pause();
+            ResearchFacility.buildingSoundInstance.Pause();
             scene.Show();
         }
         /// <summary>

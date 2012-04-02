@@ -16,7 +16,8 @@ namespace Poseidon
         public float scale = 0.025f;
         public float timeLast = 2000.0f;
         public float startingScale;
-        public double floatingSpeed;
+        public float floatingSpeed;
+        public float fluctutatingSpeed;
         public bool fromSeaBed;
         Random random;
 
@@ -45,6 +46,7 @@ namespace Poseidon
             random = new Random();
             startingScale = (float)random.Next(5, 10) / 10.0f;
             floatingSpeed = random.Next(20, 40);
+            fluctutatingSpeed = 40;// random.Next(40, 60);
             bubbleTexture = Content.Load<Texture2D>("Image/Miscellaneous/bubble-small2");
             bubble2DPos = position;
             int randomFactor = random.Next(3);
@@ -69,13 +71,14 @@ namespace Poseidon
         public void UpdateBubbleSmall()
         {
             int randomFactor = random.Next(3);
-            if (randomFactor == 2 && bubble2DPos.X + bubbleTexture.Width / 2 * startingScale + 1 <= maxX)
+            float fluctuateDistance = fluctutatingSpeed * (float)(PoseidonGame.playTime.TotalMilliseconds - lastUpdate) / 1000;
+            if (randomFactor == 2 && bubble2DPos.X + bubbleTexture.Width / 2 * startingScale + fluctuateDistance <= maxX)
             {
-                bubble2DPos.X += 1;
+                bubble2DPos.X += fluctuateDistance;
             }
-            else if (randomFactor == 1 && bubble2DPos.X - bubbleTexture.Width / 2 * startingScale - 1 >= minX)
-                bubble2DPos.X -= 1;
-            bubble2DPos.Y -= (float)floatingSpeed * (float)(PoseidonGame.playTime.TotalMilliseconds - lastUpdate) / 1000;
+            else if (randomFactor == 1 && bubble2DPos.X - bubbleTexture.Width / 2 * startingScale - fluctuateDistance >= minX)
+                bubble2DPos.X -= fluctuateDistance;
+            bubble2DPos.Y -= floatingSpeed * (float)(PoseidonGame.playTime.TotalMilliseconds - lastUpdate) / 1000;
             lastUpdate = PoseidonGame.playTime.TotalMilliseconds;
         }
         public void Draw(SpriteBatch spriteBatch, float scaleUp)

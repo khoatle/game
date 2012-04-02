@@ -1426,7 +1426,7 @@ namespace Poseidon
 
             if (powerpacks != null)
             {
-                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 5);
+                Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 10);
                 for (int curCell = 0; curCell < powerpacks.Count; curCell++)
                 {
                     powerpacks[curCell].BoundingSphere.Center.Y = Position.Y;

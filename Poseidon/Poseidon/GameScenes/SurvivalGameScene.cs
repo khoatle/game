@@ -363,6 +363,7 @@ namespace Poseidon
             paused = false;
             //Factory.buildingSoundInstance.Resume();
             //ResearchFacility.buildingSoundInstance.Resume();
+            HydroBot.gameMode = GameMode.SurvivalMode;
             base.Show();
         }
 
@@ -595,10 +596,9 @@ namespace Poseidon
                         }
                     }
 
-                    //tipHover = mouseOnTipIcon(currentMouseState);
-                    //levelObjHover = mouseOnLevelObjectiveIcon(currentMouseState);
-                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor()
-                        || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
+                    IngamePresentation.levelObjHover = IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState);
+                    bool mouseOnInteractiveIcons = IngamePresentation.levelObjHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor()
+                         || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, null,null, mouseOnInteractiveIcons);
@@ -1104,6 +1104,7 @@ namespace Poseidon
             //factoryButtonPanel.DrawAnchor(spriteBatch);
 
             if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+            IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
 
             if (openFactoryConfigurationScene)
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);

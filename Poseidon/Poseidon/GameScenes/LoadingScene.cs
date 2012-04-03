@@ -71,7 +71,7 @@ namespace Poseidon
         {
             string text;
             if (PoseidonGame.gamePlus)
-                text = "LOADING GAME+";
+                text = "LOADING GAME +";
             else
                 text = "LOADING";
             Vector2 textPositon = new Vector2(Game.Window.ClientBounds.Center.X - (font.MeasureString(text).X / 2), Game.Window.ClientBounds.Center.Y + 200);

@@ -264,6 +264,14 @@ namespace Poseidon
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
             Components.Add(shipWreckScene);
 
+            // Create the Attribute board
+            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
+            Components.Add(AttributeScene);
+
+            // Create level objective scene
+            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
+            Components.Add(levelObjectiveScene);
+
             presentScene = Content.Load<Video>("Videos/presentScene");
         }
 
@@ -749,6 +757,17 @@ namespace Poseidon
                 ShowScene(AttributeScene);
                 AttributeButtonPressed = false;
             }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
+            {
+                prevScene = survivalGameScene;
+                ShowScene(levelObjectiveScene);
+            }
+            else
+            {
+                doubleClicked = false;
+            }
             if (survivalGameScene.currentGameState == GameState.ToMainMenu)
                 ShowScene(startScene);
         }
@@ -894,13 +913,6 @@ namespace Poseidon
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
                       
-            // Create the Attribute board
-            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
-            Components.Add(AttributeScene);
-
-            // Create level objective scene
-            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
-            Components.Add(levelObjectiveScene);
 
             // Create tip scene
             tipScene = new TipScene(this, tipBackgroundTexture, Content);
@@ -920,10 +932,6 @@ namespace Poseidon
             // Create the survival game play scene
             survivalGameScene = new SurvivalGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(survivalGameScene);
-
-            // Create the Attribute board
-            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
-            Components.Add(AttributeScene);
 
         }
         /// <summary>

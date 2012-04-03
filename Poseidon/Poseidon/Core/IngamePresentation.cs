@@ -737,7 +737,7 @@ namespace Poseidon.Core
         {
             int commentMaxLength = game.Window.ClientBounds.Width / 4;
 
-            float textScaleFactor = (float)game.Window.ClientBounds.Width / 1600 * (float)game.Window.ClientBounds.Height / 940;
+            float textScaleFactor = (float)game.Window.ClientBounds.Width / 1440 * (float)game.Window.ClientBounds.Height / 900;
             textScaleFactor = (float)Math.Sqrt(textScaleFactor);
             float lineSpacing = GameConstants.lineSpacing;
 

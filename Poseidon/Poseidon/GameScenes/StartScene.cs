@@ -53,7 +53,7 @@ namespace Poseidon
             this.game = game;
             this.graphicsDevice = graphicDevice;
 
-            widthScale = (float)game.Window.ClientBounds.Width / 1600;
+            widthScale = (float)game.Window.ClientBounds.Width / 1504;
             heightScale = (float)game.Window.ClientBounds.Height / 940;
             GameConstants.textScaleFactor = (float)Math.Sqrt((double)widthScale * (double)heightScale);
 

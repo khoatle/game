@@ -1664,7 +1664,7 @@ namespace Poseidon
                         spriteBatch.Begin();
                         spriteBatch.Draw(stunnedIconTexture, drawPos, Color.White);
                         spriteBatch.End();
-                        RestoreGraphicConfig();
+                        //RestoreGraphicConfig();
                     }
                     if (enemies[i].isFleeing == true)
                     {
@@ -1673,10 +1673,11 @@ namespace Poseidon
                         spriteBatch.Begin();
                         spriteBatch.Draw(scaredIconTexture, drawPos, Color.White);
                         spriteBatch.End();
-                        RestoreGraphicConfig();
+                        
                     }
                 }
             }
+            //RestoreGraphicConfig();
             //draw boundary of the game scene
             //gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //Draw points gained / lost

@@ -62,8 +62,9 @@ namespace Poseidon.Core
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
 
-            float widthScale = (float)game.Window.ClientBounds.Width / 1504;
-            float heightScale = (float)game.Window.ClientBounds.Height / 940;
+            float widthScale = (float)game.Window.ClientBounds.Width / 1440;
+            float heightScale = (float)game.Window.ClientBounds.Height / 900;
+
             textScale = (float)System.Math.Sqrt((double)(widthScale * heightScale));
         }
 

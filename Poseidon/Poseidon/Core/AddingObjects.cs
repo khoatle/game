@@ -126,7 +126,7 @@ namespace Poseidon
             if (currentLevel == 1)
                 type = random.Next(2);
             //Level 4 is shark only
-            if (currentLevel == 4)
+            else if (currentLevel == 4)
                 type = random.Next(6, 9);
             //level 5: polar sea, we have penguin
             else if (currentLevel == 5)
@@ -232,7 +232,7 @@ namespace Poseidon
                 if (currentLevel == 1)
                     type = random.Next(2);
                 //Level 4 is shark only
-                if (currentLevel == 4)
+                else if (currentLevel == 4)
                     type = random.Next(6, 9);
                 //level 5: polar sea, we have penguin
                 else if (currentLevel == 5)

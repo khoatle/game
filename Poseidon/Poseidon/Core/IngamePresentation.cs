@@ -359,16 +359,37 @@ namespace Poseidon.Core
             plasticTrash = Content.Load<Model>("Models/TrashModels/plastictrashver3");
             radioTrash = Content.Load<Model>("Models/TrashModels/radioactivetrash"); ;
         }
-        
+
+        private static Vector2 timerPos = Vector2.Zero;
+        public static void DrawTimeRemaining(TimeSpan roundTimer, GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
+        {
+            float xOffsetText, yOffsetText;
+            int days;
+            string str1 = GameConstants.StrTimeRemaining;
+            Rectangle rectSafeArea;
+            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
+            str1 += days.ToString();
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.X;
+            yOffsetText = rectSafeArea.Y;
+
+            timerPos = new Vector2((int)xOffsetText + 10, (int)yOffsetText + 10);
+
+            spriteBatch.DrawString(menuSmall, str1, timerPos, Color.DarkRed, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+        }
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
         {
             if (!GameSettings.ShowLiveTip) return;
 
             Rectangle rectSafeArea;
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
             float xOffsetText, yOffsetText;
-            xOffsetText = rectSafeArea.X + 10;
-            yOffsetText = rectSafeArea.Y + 50;
+            xOffsetText = timerPos.X;
+            yOffsetText = timerPos.Y + menuSmall.MeasureString(GameConstants.StrTimeRemaining).Y * textScaleFactor + 10 ;
 
             if (lastCurrentLevel != PlayGameScene.currentLevel)
             {

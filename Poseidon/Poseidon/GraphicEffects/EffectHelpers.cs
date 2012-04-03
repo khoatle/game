@@ -323,9 +323,11 @@ namespace Poseidon
             float envFactor = (lastEnv / (float)HydroBot.maxEnvPoint);
 
             //we don't want the screen to be too dark
-            if (envFactor < 0.35f) envFactor = 0.35f;
             //or too bright
-            if (envFactor > 0.90f) envFactor = 0.90f;
+            //level 5 seems to be too bright
+            if (PlayGameScene.currentLevel == 5 && HydroBot.gameMode == GameMode.MainGame)
+                envFactor = MathHelper.Clamp(envFactor, 0.35f, 0.80f);
+            else envFactor = MathHelper.Clamp(envFactor, 0.35f, 0.90f);
             //envFactor = 1.0f;
             if (HydroBot.gameMode == GameMode.MainGame)
             {

@@ -169,8 +169,10 @@ namespace Poseidon
             }
             else if (currentLevel == 3)
             {
-                level_objective = "Destroy the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "Mutant shark is still lurking around.";
+                level_objective = "Defeat the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (PlayGameScene.isBossKilled)
+                    achieved_status = "Mutant shark has been defeated.";
+                else achieved_status = "Mutant shark is still lurking around.";
             }
             else if (currentLevel == 4)
             {
@@ -240,7 +242,9 @@ namespace Poseidon
             else if (currentLevel == 11)
             {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "Terminator is still alive.";
+                if (PlayGameScene.isBossKilled)
+                    achieved_status = "Terminator has been defeated.";
+                else achieved_status = "Terminator is still alive.";
             }
 
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);

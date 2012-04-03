@@ -1061,6 +1061,7 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
+            IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
             DrawStats();
             IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
             DrawBulletType();
@@ -1249,13 +1250,6 @@ namespace Poseidon
 
         private void DrawStats()
         {
-            float xOffsetText, yOffsetText;
-            int days;
-            string str1 = GameConstants.StrTimeRemaining;
-            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
-            str1 += days.ToString();
-            //str1 += "\n" + HydroBot.gameMode.ToString();
-            Rectangle rectSafeArea;
 
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null);
 
@@ -1267,20 +1261,6 @@ namespace Poseidon
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
-
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
-
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-
-            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
-            //strPosition.Y += strSize.Y;
-            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 
         }
         public bool CharacterNearChest(BoundingSphere chestSphere)

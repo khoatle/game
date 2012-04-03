@@ -316,7 +316,7 @@ namespace Poseidon.GraphicEffects
             spriteBatch.End();
             //graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
             //graphics.GraphicsDevice.Textures[1] = afterBloomTexture;          
-            DrawOverlayText();
+            //DrawOverlayText();
             return afterEffectsRenderTarget;
         }
 

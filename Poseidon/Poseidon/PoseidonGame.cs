@@ -128,6 +128,7 @@ namespace Poseidon
 
         public bool threeDgraphicInitiated = false;
 
+        public static bool DrawBoundingSphere = false;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -643,6 +644,8 @@ namespace Poseidon
             {
                 audio.MenuBack.Play();
                 playGameScene.Paused = !playGameScene.Paused;
+                ResearchFacility.buildingSoundInstance.Pause();
+                Factory.buildingSoundInstance.Pause();
             }
             if (backPressed)
             {
@@ -745,6 +748,8 @@ namespace Poseidon
             {
                 audio.MenuBack.Play();
                 survivalGameScene.Paused = !survivalGameScene.Paused;
+                ResearchFacility.buildingSoundInstance.Pause();
+                Factory.buildingSoundInstance.Pause();
             }
             if (backPressed)
             {

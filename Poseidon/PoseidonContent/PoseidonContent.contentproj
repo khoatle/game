@@ -56,11 +56,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
     </Compile>
-    <Compile Include="Models\Miscellaneous\sphere1uR.x">
-      <Name>sphere1uR</Name>
-      <Importer>XImporter</Importer>
-      <Processor>ModelProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Fonts\StatsFont.spritefont">
@@ -70,6 +65,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\Miscellaneous\sphere1uR.x">
+      <Name>sphere1uR</Name>
+      <Importer>XImporter</Importer>
+      <Processor>ModelProcessor</Processor>
+    </Compile>
     <Compile Include="Sounds\SoundEffects\laserFire.wav">
       <Name>laserFire</Name>
       <Importer>WavImporter</Importer>

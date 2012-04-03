@@ -446,6 +446,8 @@ namespace Poseidon
             //golden key
             goldenKey = Content.Load<Model>("Models/Miscellaneous/Goldenkey");
 
+            boundingSphere.Model = Content.Load<Model>("Models/Miscellaneous/sphere1uR");
+
             //Initialize the game field
             InitializeGameField(Content);
 
@@ -1668,6 +1670,7 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
+            IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
             DrawStats();
             IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
             DrawBulletType();
@@ -1731,12 +1734,35 @@ namespace Poseidon
                 {
                     // Static object gameCamera inside PlayGameScene object
                     //researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                    if (PoseidonGame.DrawBoundingSphere){
+                        researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                        RasterizerState rs = new RasterizerState();
+                        rs.FillMode = FillMode.WireFrame;
+                        GraphicDevice.RasterizerState = rs;
+                        researchAnchor.DrawBoundingSphere(gameCamera.ViewMatrix,
+                            gameCamera.ProjectionMatrix, boundingSphere);
+
+                        rs = new RasterizerState();
+                        rs.FillMode = FillMode.Solid;
+                        GraphicDevice.RasterizerState = rs;
+                    }
                 }
                 else if (factoryAnchor != null)
                 {
                     //factoryAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
                     factoryAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                    if (PoseidonGame.DrawBoundingSphere)
+                    {
+                        RasterizerState rs = new RasterizerState();
+                        rs.FillMode = FillMode.WireFrame;
+                        GraphicDevice.RasterizerState = rs;
+                        factoryAnchor.DrawBoundingSphere(gameCamera.ViewMatrix,
+                            gameCamera.ProjectionMatrix, boundingSphere);
+
+                        rs = new RasterizerState();
+                        rs.FillMode = FillMode.Solid;
+                        GraphicDevice.RasterizerState = rs;
+                    }
                 }
             }
         }
@@ -1776,14 +1802,6 @@ namespace Poseidon
 
         private void DrawStats()
         {
-            float xOffsetText, yOffsetText;
-            int days;
-            string str1 = GameConstants.StrTimeRemaining;
-            string str2 = "";
-            //str2 += hydroBot.Position;
-            Rectangle rectSafeArea;
-            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds)/GameConstants.DaysPerSecond;
-            str1 += days.ToString();
 
             //too much texts on screen 
             if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
@@ -1802,17 +1820,6 @@ namespace Poseidon
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
 
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
-
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-
-            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
             //strPosition.Y += strSize.Y;
             //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
         }
@@ -2067,6 +2074,18 @@ namespace Poseidon
                 if (factoryRealSphere.Intersects(frustum))
                 {
                     factory.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
+                    if (PoseidonGame.DrawBoundingSphere)
+                    {
+                        RasterizerState rs = new RasterizerState();
+                        rs.FillMode = FillMode.WireFrame;
+                        GraphicDevice.RasterizerState = rs;
+                        factory.DrawBoundingSphere(gameCamera.ViewMatrix,
+                            gameCamera.ProjectionMatrix, boundingSphere);
+
+                        rs = new RasterizerState();
+                        rs.FillMode = FillMode.Solid;
+                        GraphicDevice.RasterizerState = rs;
+                    }
                 }
             }
             if (researchFacility != null)
@@ -2076,7 +2095,18 @@ namespace Poseidon
                 if (factoryRealSphere.Intersects(frustum))
                 {
                     researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    //researchFacility.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "BalloonShading");
+                    if (PoseidonGame.DrawBoundingSphere)
+                    {
+                        RasterizerState rs = new RasterizerState();
+                        rs.FillMode = FillMode.WireFrame;
+                        GraphicDevice.RasterizerState = rs;
+                        researchFacility.DrawBoundingSphere(gameCamera.ViewMatrix,
+                            gameCamera.ProjectionMatrix, boundingSphere);
+
+                        rs = new RasterizerState();
+                        rs.FillMode = FillMode.Solid;
+                        GraphicDevice.RasterizerState = rs;
+                    }
                 }
             }
             //Draw each static object

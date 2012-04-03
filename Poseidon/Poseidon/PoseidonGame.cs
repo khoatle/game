@@ -171,7 +171,7 @@ namespace Poseidon
             Services.AddService(typeof(SpriteBatch), spriteBatch);
 
             //initiate all 2D graphics and fonts for the game
-            IngamePresentation.Initiate2DGraphics(Content);
+            IngamePresentation.Initiate2DGraphics(Content, this);
 
             statsFont = IngamePresentation.statsFont;
 
@@ -598,6 +598,24 @@ namespace Poseidon
                 ShowScene(playGameScene);
                 doubleClicked = false;
             }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
+            {
+                prevScene = shipWreckScene;
+                ShowScene(levelObjectiveScene);
+            }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && IngamePresentation.mouseOnTipIcon(currentMouseState))
+            {
+                prevScene = shipWreckScene;
+                ShowScene(tipScene);
+            }
+            else
+            {
+                doubleClicked = false;
+            }
  
             //if (AttributeButtonPressed)// || AttributePressed)
             //{
@@ -654,14 +672,14 @@ namespace Poseidon
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released
-                && playGameScene.mouseOnLevelObjectiveIcon(currentMouseState))
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
             {
                 prevScene = playGameScene;
                 ShowScene(levelObjectiveScene);
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released
-                && playGameScene.mouseOnTipIcon(currentMouseState))
+                && IngamePresentation.mouseOnTipIcon(currentMouseState))
             {
                 prevScene = playGameScene;
                 ShowScene(tipScene);
@@ -987,13 +1005,19 @@ namespace Poseidon
         private void HandleLevelObjectiveInput()
         {
             if (EscPressed || enterPressed)
+            {
+                if (prevScene is ShipWreckScene) shipWreckScene.backFromTipOrLevelObjective = true;
                 ShowScene(prevScene);
+            }
         }
 
         private void HandleTipInput()
         {
             if (EscPressed || enterPressed)
+            {
+                if (prevScene is ShipWreckScene) shipWreckScene.backFromTipOrLevelObjective = true;
                 ShowScene(prevScene);
+            }
         }
 
         protected void ShowScene(GameScene scene)

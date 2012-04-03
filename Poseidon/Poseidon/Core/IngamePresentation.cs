@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon.Core
 {
@@ -97,8 +98,26 @@ namespace Poseidon.Core
 
         public static Texture2D exitShipWreckTexture;
 
-        public static void Initiate2DGraphics(ContentManager Content)
+        public static Texture2D levelObjectiveIconTexture;
+        public static Rectangle levelObjectiveIconRectangle;
+
+        public static bool levelObjHover = false;
+        public static bool tipHover = false;
+        public static Texture2D tipIconTexture;
+        public static Rectangle tipIconRectangle;
+
+        //for text scaling
+        private static int commentMaxLength;
+        private static float textScaleFactor;
+        private static float lineSpacing;
+
+        public static void Initiate2DGraphics(ContentManager Content, Game game)
         {
+            commentMaxLength = game.Window.ClientBounds.Width / 4;
+            textScaleFactor = (float)game.Window.ClientBounds.Width / 1440 * (float)game.Window.ClientBounds.Height / 900;
+            textScaleFactor = (float)Math.Sqrt(textScaleFactor);
+            lineSpacing = GameConstants.lineSpacing / 2;
+
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];
             iconTextures[poseidonFace] = Content.Load<Texture2D>("Image/SpinningReel/poseidonFace");
             iconTextures[strengthIcon] = Content.Load<Texture2D>("Image/SpinningReel/strengthIcon");
@@ -249,7 +268,11 @@ namespace Poseidon.Core
             healthPowPack, resource, shootratePowPack, speedPowPack, strengthPowPack,
             dolphin, hammershark, leopardshark, manetee, mauiDolphin, meiolania, normalshark, orca, penguin, seal, stellarSeaCow, stingray, turtle,
             barrel, barrelstack, boxstack, chestClosed, chest, shipwreck2, shipwreck3, shipwreck4, shipwreckscene1, shipwreckscene2, shipwreckscene3, shipwreckscene4, shipwreckscene5, shipwreckscene6,
-            bioTrash, plasticTrash, radioTrash; 
+            bioTrash, plasticTrash, radioTrash;
+        public static bool toNextLevelHover;
+        public static Texture2D toNextLevelTexture;
+        public static Rectangle toNextLevelIconRectangle;
+
         public static void Initiate3DGraphics(ContentManager Content)
         {
             bossBullet = Content.Load<Model>("Models/BulletModels/bossBullet");
@@ -340,6 +363,7 @@ namespace Poseidon.Core
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
         {
             if (!GameSettings.ShowLiveTip) return;
+
             Rectangle rectSafeArea;
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
             float xOffsetText, yOffsetText;
@@ -354,8 +378,8 @@ namespace Poseidon.Core
                 fadeFactor = fadeFactorBeginValue;
             }
             string tipStr = "Tip: " + PoseidonGame.liveTipManager.allTips[PlayGameScene.currentLevel][currentTipID].tipItemStr;
-            tipStr = wrapLine(tipStr, rectSafeArea.Width / 4, statsFont);
-            spriteBatch.DrawString(statsFont, tipStr, new Vector2(xOffsetText, yOffsetText), Color.White * fadeFactor);
+            tipStr = wrapLine(tipStr, rectSafeArea.Width / 4, statsFont, textScaleFactor);
+            spriteBatch.DrawString(statsFont, tipStr, new Vector2(xOffsetText, yOffsetText), Color.White * fadeFactor, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
             fadeFactor -= fadeFactorReduceStep;
 
             if (PoseidonGame.playTime.TotalSeconds - lastTipChange >= 15)
@@ -739,13 +763,6 @@ namespace Poseidon.Core
 
         public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources)
         {
-            int commentMaxLength = game.Window.ClientBounds.Width / 4;
-
-            float textScaleFactor = (float)game.Window.ClientBounds.Width / 1440 * (float)game.Window.ClientBounds.Height / 900;
-            textScaleFactor = (float)Math.Sqrt(textScaleFactor);
-            float lineSpacing = GameConstants.lineSpacing / 2;
-
-
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
@@ -917,6 +934,91 @@ namespace Poseidon.Core
                 }
             }
             
+        }
+
+        //Draw level objective icon
+        public static void DrawLevelObjectiveIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
+        {
+            if (levelObjHover) levelObjectiveIconTexture = levelObjectiveHoverIconTexture;
+            else levelObjectiveIconTexture = levelObjectiveNormalIconTexture;
+
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            xOffsetText = rectSafeArea.Right;
+            yOffsetText = rectSafeArea.Top;
+            int width = (int)(96 * textScaleFactor);
+            int height = (int)(96 * textScaleFactor);
+
+            levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
+
+            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, Color.White);
+
+        }
+
+        //Draw level tip icon
+        public static void DrawTipIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
+        {
+            if (tipHover) tipIconTexture = tipHoverIconTexture;
+            else tipIconTexture = tipNormalIconTexture;
+            int xOffsetText, yOffsetText;
+
+            xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
+            yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
+
+            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
+
+            spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
+
+        }
+        //Draw GamePlus level
+        public static void DrawGamePlusLevel(SpriteBatch spriteBatch)
+        {
+            int xOffsetText, yOffsetText;
+            string text = "Game + " + HydroBot.gamePlusLevel;
+
+            xOffsetText = levelObjectiveIconRectangle.Right - (int)facilityFont.MeasureString(text).X - 20;
+            yOffsetText = levelObjectiveIconRectangle.Bottom + 5;
+
+            spriteBatch.DrawString(facilityFont, text, new Vector2(xOffsetText, yOffsetText), Color.Gold);
+        }
+        public static void DrawToNextLevelButton(SpriteBatch spriteBatch)
+        {
+            if (toNextLevelHover) toNextLevelTexture = IngamePresentation.toNextLevelHoverTexture;
+            else toNextLevelTexture = IngamePresentation.toNextLevelNormalTexture;
+            int xOffsetText, yOffsetText;
+
+            xOffsetText = levelObjectiveIconRectangle.X - toNextLevelTexture.Width - 20;
+            yOffsetText = levelObjectiveIconRectangle.Center.Y - toNextLevelTexture.Height / 2;
+
+            toNextLevelIconRectangle = new Rectangle(xOffsetText, yOffsetText, toNextLevelTexture.Width, toNextLevelTexture.Height);
+
+            spriteBatch.Draw(toNextLevelTexture, toNextLevelIconRectangle, Color.White);
+        }
+        public static bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
+        {
+            if (levelObjectiveIconRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
+        }
+
+        public static bool mouseOnTipIcon(MouseState lmouseState)
+        {
+            if (tipIconRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
+        }
+        public static bool mouseOnNextLevelIcon(MouseState lmouseState)
+        {
+            if (toNextLevelIconRectangle.Contains(lmouseState.X, lmouseState.Y))
+                return true;
+            else
+                return false;
         }
 
         public static string wrapLine(string input_line, int width, SpriteFont font)

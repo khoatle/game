@@ -57,7 +57,7 @@ namespace Poseidon.Core
         public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<Powerpack> powerPacks)
         {
             // The last parameter of the color determines how transparent the radar circle will be
-            spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / ((RadarImage.Height) * 0.5f), SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / ((RadarImage.Height) * 0.5f) * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
             //new Color(100, 100, 100, 150)
             // display shipwreck on the map
             if (shipWrecks != null)
@@ -89,7 +89,7 @@ namespace Poseidon.Core
                         float scaleHeight = 1.0f + ((shipWreck.Position.Y - playerPos.Y) / 200.0f);
 
                         // Draw enemy dot on radar
-                        spriteBatch.Draw(ShipwreckDotImage, diffVect, null, Color.White, 0.0f, new Vector2(ShipwreckDotImage.Width / 2, ShipwreckDotImage.Height / 2), scaleHeight * 0.8f, SpriteEffects.None, 0.0f);
+                        spriteBatch.Draw(ShipwreckDotImage, diffVect, null, Color.White, 0.0f, new Vector2(ShipwreckDotImage.Width / 2, ShipwreckDotImage.Height / 2), scaleHeight * 0.8f * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
                         //}
                     }
                 }
@@ -139,7 +139,7 @@ namespace Poseidon.Core
                                 thisImage = OrganicFactoryDotImage;
                                 break;
                         }
-                        spriteBatch.Draw(thisImage, diffVect, null, Color.White, 0.0f, new Vector2(thisImage.Width / 2, thisImage.Height / 2), scaleHeight * 0.8f, SpriteEffects.None, 0.0f);
+                        spriteBatch.Draw(thisImage, diffVect, null, Color.White, 0.0f, new Vector2(thisImage.Width / 2, thisImage.Height / 2), scaleHeight * 0.8f * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
                     //}
                 }
             }
@@ -168,7 +168,7 @@ namespace Poseidon.Core
                     float scaleHeight = 1.0f + ((researchFacility.Position.Y - playerPos.Y) / 200.0f);
 
                     // Draw enemy dot on radar
-                    spriteBatch.Draw(ResearchFacilityDotImage, diffVect, null, Color.White, 0.0f, new Vector2(ResearchFacilityDotImage.Width / 2, ResearchFacilityDotImage.Height / 2), scaleHeight * 0.8f, SpriteEffects.None, 0.0f);
+                    spriteBatch.Draw(ResearchFacilityDotImage, diffVect, null, Color.White, 0.0f, new Vector2(ResearchFacilityDotImage.Width / 2, ResearchFacilityDotImage.Height / 2), scaleHeight * 0.8f * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
                 //}
             }
 
@@ -197,8 +197,8 @@ namespace Poseidon.Core
 
                     // Draw enemy dot on radar
                     if (enemies[i].isBigBoss)
-                        spriteBatch.Draw(BigBossDotImage, diffVect, null, Color.White, 0.0f, new Vector2(BigBossDotImage.Width / 2, BigBossDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
-                    else spriteBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(EnemyDotImage.Width / 2, EnemyDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
+                        spriteBatch.Draw(BigBossDotImage, diffVect, null, Color.White, 0.0f, new Vector2(BigBossDotImage.Width / 2, BigBossDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+                    else spriteBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(EnemyDotImage.Width / 2, EnemyDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
                 }
             }
             // If fish is in range
@@ -227,8 +227,8 @@ namespace Poseidon.Core
                     if (fishes[i].isBigBoss) scaleHeight *= 1.5f;
                     // Draw fish dot on radar
                     if (fishes[i] is SeaCow || fishes[i] is SeaDolphin || fishes[i] is SeaTurtle)
-                        spriteBatch.Draw(SideKickDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
-                    else spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight, SpriteEffects.None, 0.0f);
+                        spriteBatch.Draw(SideKickDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+                    else spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
                 }
             }
 
@@ -261,14 +261,14 @@ namespace Poseidon.Core
                         // at lower elevations have smaller dots.
                         float scaleHeight = 1.0f;
 
-                        spriteBatch.Draw(GoldenKeyDot, diffVect, null, Color.White, 0.0f, new Vector2(GoldenKeyDot.Width / 2, GoldenKeyDot.Height / 2), scaleHeight * 0.4f, SpriteEffects.None, 0.0f);
+                        spriteBatch.Draw(GoldenKeyDot, diffVect, null, Color.White, 0.0f, new Vector2(GoldenKeyDot.Width / 2, GoldenKeyDot.Height / 2), scaleHeight * 0.4f * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
                         //}
                     }
                 }
             }
             // Draw player's dot last
             //spriteBatch.Draw(PlayerDotImage, RadarCenterPos, Color.White);
-            spriteBatch.Draw(PlayerDotImage, RadarCenterPos, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width / 2, PlayerDotImage.Height / 2), 1.0f, SpriteEffects.None, 0.0f); 
+            spriteBatch.Draw(PlayerDotImage, RadarCenterPos, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width / 2, PlayerDotImage.Height / 2), 1.0f * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f); 
         }
     }
 }

@@ -1828,21 +1828,8 @@ namespace Poseidon
         // Draw the currently selected bullet type
         private void DrawBulletType()
         {
-            int xOffsetText, yOffsetText;
-            Rectangle rectSafeArea;
 
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-
-            //xOffsetText = rectSafeArea.Left + 325;
-            xOffsetText = rectSafeArea.Center.X - 150 -64;
-            yOffsetText = rectSafeArea.Bottom - 80;
-
-            //Vector2 bulletIconPosition =
-            //    new Vector2((int)xOffsetText, (int)yOffsetText);
-            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
-            //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
-            spriteBatch.Draw(bulletTypeTextures[HydroBot.bulletType], destRectangle, Color.White);
+            IngamePresentation.DrawBulletType(GraphicDevice, spriteBatch);
         }
 
         // Draw the currently selected skill/spell

@@ -232,7 +232,9 @@ namespace Poseidon
             //spriteBatch.Draw(cursorTexture, 
             //    new Vector2( position.X - cursorTexture.Width / 2.0f, position.Y - cursorTexture.Height / 2.0f ),
             //    null, Color.White, 0.0f, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
-            spriteBatch.Draw(cursorTexture, position, null, Color.White, 0, new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2), 1, SpriteEffects.None, 0);
+            if (cursorTexture == menuCursorTexture)
+                spriteBatch.Draw(cursorTexture, position, null, Color.White, 0, Vector2.Zero, 1 * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+            else spriteBatch.Draw(cursorTexture, position, null, Color.White, 0, new Vector2(cursorTexture.Width / 2, cursorTexture.Height / 2), 1 * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
 
             //spriteBatch.End();
         }

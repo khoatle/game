@@ -423,12 +423,12 @@ namespace Poseidon.Core
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
             //xOffsetText = rectSafeArea.Right - 400;
-            xOffsetText = rectSafeArea.Center.X + 150;
-            yOffsetText = rectSafeArea.Bottom - 100;
+            xOffsetText = rectSafeArea.Center.X + HealthBar.Width/2;
+            yOffsetText = rectSafeArea.Height - (int)(96 * GameConstants.generalTextScaleFactor);
 
             //Vector2 skillIconPosition =
             //    new Vector2((int)xOffsetText, (int)yOffsetText);
-            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
+            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(96 * GameConstants.generalTextScaleFactor), (int)(96 * GameConstants.generalTextScaleFactor));
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
             spriteBatch.Draw(skillTextures[HydroBot.activeSkillID], destRectangle, Color.White);
@@ -436,9 +436,29 @@ namespace Poseidon.Core
             //draw the 2nd skill icon if skill combo activated
             if (HydroBot.skillComboActivated && HydroBot.secondSkillID != -1)
             {
-                destRectangle = new Rectangle(xOffsetText + 100, yOffsetText, 96, 96);
+                destRectangle = new Rectangle(xOffsetText + (int)(96 * GameConstants.generalTextScaleFactor), yOffsetText, (int)(96 * GameConstants.generalTextScaleFactor), (int)(96 * GameConstants.generalTextScaleFactor));
                 spriteBatch.Draw(skillTextures[HydroBot.secondSkillID], destRectangle, Color.White);
             }
+        }
+        // Draw the currently selected bullet type
+        public static void DrawBulletType(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
+        {
+
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
+
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            //xOffsetText = rectSafeArea.Left + 325;
+            xOffsetText = rectSafeArea.Center.X - HealthBar.Width/2 - (int)(64 * GameConstants.generalTextScaleFactor);
+            yOffsetText = rectSafeArea.Height - (int)(64 * GameConstants.generalTextScaleFactor) - 5;
+
+            //Vector2 bulletIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
+            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(64 * GameConstants.generalTextScaleFactor), (int)(64 * GameConstants.generalTextScaleFactor));
+            //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
+            spriteBatch.Draw(bulletTypeTextures[HydroBot.bulletType], destRectangle, Color.White);
         }
         public static void DrawHealthBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
         {

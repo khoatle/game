@@ -1110,10 +1110,10 @@ namespace Poseidon
                if (PlayGameScene.currentGameState == GameState.ToNextLevel) loadingScene.Draw(gameTime);
                base.Draw(gameTime);
             }
-            //spriteBatch.Begin();
-            //spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
-            //    + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
-            //spriteBatch.End();
+            spriteBatch.Begin();
+            spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
+                + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);
+            spriteBatch.End();
         }
 
     }

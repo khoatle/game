@@ -22,8 +22,9 @@ namespace Poseidon
 
         Texture2D bubbleTexture;
         int currentFrame = 0;
-        double timeLastFrame;
+        double lastScaleChange;
         float scale = 1.0f;
+        
         bool increase = true;
 
         public void LoadContent(ContentManager Content, String text, Vector3 position, Color color)
@@ -34,7 +35,7 @@ namespace Poseidon
             random = new Random();
             point3DPos = position;
             this.color = color;
-            timeLastFrame = PoseidonGame.playTime.TotalMilliseconds;
+            lastScaleChange = PoseidonGame.playTime.TotalMilliseconds;
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
@@ -59,14 +60,15 @@ namespace Poseidon
             //    timeLastFrame = PoseidonGame.playTime.TotalMilliseconds;
             //    if (currentFrame == 8) currentFrame = 0;
             //}
+            float elapsedTime = (float)((PoseidonGame.playTime.TotalMilliseconds - lastScaleChange) / 1000);
             if (increase)
-                scale += 0.01f;
-            else scale -= 0.01f;
+                scale += 0.5f * elapsedTime;
+            else scale -= 0.5f * elapsedTime;
             if (scale >= 1.3f)
                 increase = false;
             else if (scale <= 1.0f) increase = true;
             scale = MathHelper.Clamp(scale, 1.0f, 1.3f);
-
+            lastScaleChange = PoseidonGame.playTime.TotalMilliseconds;
 
             spriteBatch.Begin();
             spriteBatch.Draw(bubbleTexture, point2DPos, null, Color.White * fadeFactor * (1 - pointsFont.MeasureString(this.text).X / bubbleTexture.Width) * 0.8f, 0, new Vector2(bubbleTexture.Width / 2, bubbleTexture.Height / 2), pointsFont.MeasureString(this.text).X / bubbleTexture.Width * scale, SpriteEffects.None, 0);

@@ -55,6 +55,7 @@ namespace Poseidon
 
             widthScale = (float)game.Window.ClientBounds.Width / 1440;
             heightScale = (float)game.Window.ClientBounds.Height / 900;
+
             GameConstants.textScaleFactor = (float)Math.Sqrt((double)widthScale * (double)heightScale);
 
             titleLine1SrcRect = new Rectangle(0, 0, 588, 126);//Hydrobot (0,0, 588, 126)

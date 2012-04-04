@@ -463,12 +463,12 @@ namespace Poseidon.Core
                 healthColor = Color.Orange;
             spriteBatch.Draw(HealthBar,
                 new Rectangle(barX, barY, (int)(barLength * healthiness), barHeight),
-                new Rectangle(0, barHeight + 1, (int)(HealthBar.Width * healthiness), barHeight),
+                new Rectangle(0, 22, (int)(HealthBar.Width * healthiness), 22),
                 healthColor);
             //Draw the box around the health bar
             spriteBatch.Draw(HealthBar,
                 new Rectangle(barX, barY, barLength, barHeight),
-                new Rectangle(0, 0, HealthBar.Width, barHeight),
+                new Rectangle(0, 0, HealthBar.Width, 22),
                 Color.White);
             spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2, heightFromTop - 1), Color.MediumVioletRed);
         }

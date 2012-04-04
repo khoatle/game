@@ -34,7 +34,7 @@ namespace Poseidon {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
             lastHealthUpdateTime = 0;
             healthChangeInterval = GameConstants.maxHealthChangeInterval;
-            health = GameConstants.DefaultFishHP;
+            health = maxHealth = GameConstants.DefaultFishHP;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -205,7 +205,10 @@ namespace Poseidon {
                 }
                 else if (env_health < 0.5)
                 {
-                    this.health -= GameConstants.healthChangeValue;
+                    //in dead sea, animal loses health twice faster
+                    if (PlayGameScene.currentLevel == 6 && HydroBot.gameMode == GameMode.MainGame)
+                        this.health -= 2 * GameConstants.healthChangeValue;
+                    else this.health -= GameConstants.healthChangeValue;
                     env_deviation = 0.5 - env_health;
                 }
                 lastHealthUpdateTime = PoseidonGame.playTime.TotalSeconds;

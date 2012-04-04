@@ -227,6 +227,7 @@ namespace Poseidon
                 }
 
                 fish[i].ForwardDirection = (float)random.Next(0, 629) / 100;
+                //fish[i].Name += "AAAAAAAAAAAAAAAAAAAAAAAAAA";
 
                 //level 1: seagrass meadow is turtle and manetee only
                 if (currentLevel == 1)

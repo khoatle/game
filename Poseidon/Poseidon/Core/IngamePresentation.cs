@@ -427,7 +427,7 @@ namespace Poseidon.Core
 
             //Vector2 skillIconPosition =
             //    new Vector2((int)xOffsetText, (int)yOffsetText);
-            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 96, 96);
+            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(96 * textScaleFactor), (int)(96 * textScaleFactor));
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
             spriteBatch.Draw(skillTextures[HydroBot.activeSkillID], destRectangle, Color.White);

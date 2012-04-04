@@ -114,8 +114,8 @@ namespace Poseidon
             spriteBatch.Draw(textureNextButton, nextRectangle, Color.White);
 
             string nextText = "Press Enter/Esc to return";
-            Vector2 nextTextPosition = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X*GameConstants.textScaleFactor, graphicsDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y*GameConstants.textScaleFactor);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White, 0f, new Vector2(0,0), GameConstants.textScaleFactor, SpriteEffects.None, 0f);
+            Vector2 nextTextPosition = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X*GameConstants.generalTextScaleFactor, graphicsDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y*GameConstants.generalTextScaleFactor);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White, 0f, new Vector2(0,0), GameConstants.generalTextScaleFactor, SpriteEffects.None, 0f);
 
             cursor.Draw(gameTime);
             spriteBatch.End();

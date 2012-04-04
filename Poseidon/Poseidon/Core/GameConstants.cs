@@ -301,7 +301,8 @@ namespace Poseidon {
         public const int MaxNumTries = 200;
 
         //config for drawing texts in the game
-        public static float textScaleFactor = 0;
+        public static float generalTextScaleFactor = 0;
+        public static float factoryTextScaleFactor = 0;
         public static int lineSpacing = 10;
         
     }

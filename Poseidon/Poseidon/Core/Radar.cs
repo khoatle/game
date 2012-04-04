@@ -30,12 +30,12 @@ namespace Poseidon.Core
         private const float RadarRangeSquared = RadarRange * RadarRange;
 
         // Radius of radar circle on the screen
-        public static float RadarScreenRadius = GameConstants.RadarScreenRadius;
+        public static float RadarScreenRadius = GameConstants.RadarScreenRadius * GameConstants.generalTextScaleFactor;
 
         // This is the center position of the radar hud on the screen. 
         private Vector2 RadarCenterPos;// = new Vector2(500, 175);
 
-        public Radar(ContentManager Content, string playerDotPath, string enemyDotPath, string fishDotPath, string radarImagePath, string bigBossDotPath, Vector2 radarCenter)
+        public Radar(ContentManager Content, string playerDotPath, string enemyDotPath, string fishDotPath, string radarImagePath, string bigBossDotPath, Game game)
         {
             PlayerDotImage = Content.Load<Texture2D>(playerDotPath);
             EnemyDotImage = Content.Load<Texture2D>(enemyDotPath);
@@ -50,14 +50,14 @@ namespace Poseidon.Core
             SideKickDotImage = Content.Load<Texture2D>("Image/RadarTextures/sidekickDot");
             GoldenKeyDot = Content.Load<Texture2D>("Image/RadarTextures/keydot");
 
-            this.RadarCenterPos = radarCenter;
+            this.RadarCenterPos = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - RadarScreenRadius, game.GraphicsDevice.Viewport.TitleSafeArea.Bottom - RadarScreenRadius);
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
         public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<Powerpack> powerPacks)
         {
             // The last parameter of the color determines how transparent the radar circle will be
-            spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / ((RadarImage.Height) * 0.5f) * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / (RadarImage.Height * 0.5f), SpriteEffects.None, 0.0f);
             //new Color(100, 100, 100, 150)
             // display shipwreck on the map
             if (shipWrecks != null)

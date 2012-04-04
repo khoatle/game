@@ -193,8 +193,8 @@ namespace Poseidon
             stunnedTexture = IngamePresentation.stunnedTexture;
 
             // Loading the radar
-            Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
-            radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
+            //Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius * GameConstants.generalTextScaleFactor, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius * GameConstants.generalTextScaleFactor);
+            radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", this);
 
             //load the tips
             liveTipManager = new LiveTipManager();

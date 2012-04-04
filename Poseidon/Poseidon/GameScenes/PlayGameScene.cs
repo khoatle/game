@@ -321,10 +321,10 @@ namespace Poseidon
             rankTextures[4] = Content.Load<Texture2D>("Image/LevelStatistics/exceptionalRank");
 
             // Instantiate the factory Button
-            float buttonScale = 1.0f;
-            if (game.Window.ClientBounds.Width <= 900) {
-                buttonScale = 0.8f; // scale the factory panel icons a bit smaller in small window mode
-            }
+            float buttonScale = 1.0f * IngamePresentation.textScaleFactor;
+            //if (game.Window.ClientBounds.Width <= 900) {
+            //    buttonScale = 0.8f; // scale the factory panel icons a bit smaller in small window mode
+            //}
             factoryButtonPanel = new ButtonPanel(4, buttonScale);
 
             this.Load();
@@ -1735,8 +1735,8 @@ namespace Poseidon
                 {
                     // Static object gameCamera inside PlayGameScene object
                     //researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-                    if (PoseidonGame.DrawBoundingSphere){
-                        researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                    researchAnchor.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "CustomAlphaShading");
+                    if (PoseidonGame.DrawBoundingSphere){                 
                         RasterizerState rs = new RasterizerState();
                         rs.FillMode = FillMode.WireFrame;
                         GraphicDevice.RasterizerState = rs;

@@ -108,8 +108,8 @@ namespace Poseidon.Core
 
         //for text scaling
         private static int commentMaxLength;
-        private static float textScaleFactor;
-        private static float lineSpacing;
+        public static float textScaleFactor;
+        public static float lineSpacing;
 
         public static void Initiate2DGraphics(ContentManager Content, Game game)
         {

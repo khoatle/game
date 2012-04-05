@@ -29,6 +29,7 @@ namespace Poseidon
 
         int minX, maxX;
         double lastUpdate = 0;
+        float camHeightScale;
 
         public void LoadContent(ContentManager Content, Vector3 position, bool fromSeaBed, float startingScale)
         {
@@ -68,6 +69,7 @@ namespace Poseidon
             if (timeLast >= 0)
                 scale = startingScale * (2000.0f / timeLast);
             scale = MathHelper.Clamp(scale, startingScale, startingScale * 5);
+            camHeightScale = (float)GameConstants.StandardCamHeight / (float)gameCamera.camHeight;
         }
         public void UpdateBubbleSmall()
         {
@@ -85,7 +87,7 @@ namespace Poseidon
         public void Draw(SpriteBatch spriteBatch, float scaleUp)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, specularColor, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * scaleUp * IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, specularColor * camHeightScale, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * IngamePresentation.textScaleFactor * camHeightScale, SpriteEffects.None, 0);
             spriteBatch.End();
         }
         public void DrawBubbleSmall(SpriteBatch spriteBatch)

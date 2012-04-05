@@ -33,7 +33,7 @@ namespace Poseidon
         private static readonly Random random = new Random();
 
         private GameMode gameMode;
-        private float camHeight = 0;
+        public float camHeight = 0;
         private float gameFloatHeight = 0;
         private int MaxRangeX = 0;
         private int MaxRangeZ = 0;

@@ -167,6 +167,7 @@ namespace Poseidon {
         public const int TrashFloatHeight = 30;
         // camera height for main game
         public const float MainCamHeight = 200;
+        public const float StandardCamHeight = 200;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 20;
         public const float ShipCamHeight = 150;

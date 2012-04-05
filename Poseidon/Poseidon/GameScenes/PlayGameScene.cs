@@ -300,11 +300,11 @@ namespace Poseidon
             points = new List<Point>();
 
             schoolOfFish1 = new SchoolOfFish(Content,IngamePresentation.fishTexture1, 100, GameConstants.MainGameMaxRangeX - 250,
-                100, GameConstants.MainGameMaxRangeZ - 250);
+                100, GameConstants.MainGameMaxRangeZ - 250, GameConstants.MainCamHeight);
             schoolOfFish2 = new SchoolOfFish(Content, IngamePresentation.fishTexture2, -GameConstants.MainGameMaxRangeX + 250, -100,
-                -GameConstants.MainGameMaxRangeZ + 250, -100);
+                -GameConstants.MainGameMaxRangeZ + 250, -100, GameConstants.MainCamHeight);
             schoolOfFish3 = new SchoolOfFish(Content, IngamePresentation.fishTexture3, -GameConstants.MainGameMaxRangeX + 250, -100,
-                100, GameConstants.MainGameMaxRangeZ - 250);
+                100, GameConstants.MainGameMaxRangeZ - 250, GameConstants.MainCamHeight);
 
             scaredIconTexture = IngamePresentation.scaredIconTexture;
 
@@ -544,11 +544,11 @@ namespace Poseidon
             startTime = gameTime.TotalGameTime;
             
             schoolOfFish1 = new SchoolOfFish(Content, IngamePresentation.fishTexture1, 100, GameConstants.MainGameMaxRangeX - 250,
-                100, GameConstants.MainGameMaxRangeZ - 250);
+                100, GameConstants.MainGameMaxRangeZ - 250, GameConstants.MainCamHeight);
             schoolOfFish2 = new SchoolOfFish(Content, IngamePresentation.fishTexture2, -GameConstants.MainGameMaxRangeX + 250, -100,
-                -GameConstants.MainGameMaxRangeZ + 250, -100);
+                -GameConstants.MainGameMaxRangeZ + 250, -100, GameConstants.MainCamHeight);
             schoolOfFish3 = new SchoolOfFish(Content, IngamePresentation.fishTexture3, -GameConstants.MainGameMaxRangeX + 250, -100,
-                100, GameConstants.MainGameMaxRangeZ - 250);
+                100, GameConstants.MainGameMaxRangeZ - 250, GameConstants.MainCamHeight);
 
             //reset the shipwreck content too
             ShipWreckScene.resetShipWreckNow = true;

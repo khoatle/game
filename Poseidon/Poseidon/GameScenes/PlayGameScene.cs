@@ -519,10 +519,6 @@ namespace Poseidon
             roundTimer = roundTime;
             isBossKilled = false;
             
-            //User must find the key at every level
-            firstShow = true;
-            showFoundKey = false;
-            hadkey = false;
 
             screenTransitNow = false;
             graphicEffect.resetTransitTimer();
@@ -564,6 +560,11 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
+            //User must find the key at every level
+            firstShow = true;
+            showFoundKey = false;
+            hadkey = false;
+
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             myBullet = new List<DamageBullet>();
@@ -819,7 +820,8 @@ namespace Poseidon
                             factoryButtonPanel.removeAnchor();
                         }
                     }
-                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                        && !openResearchFacilityConfigScene && !openResearchFacilityConfigScene)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -1671,24 +1673,26 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
-            DrawStats();
-            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
-            DrawBulletType();
-            DrawHeight();
-            DrawRadar();
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene && !(showFoundKey && firstShow))
+            {
+                IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
+                DrawStats();
+                IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
+                DrawBulletType();
+                DrawHeight();
+                DrawRadar();
 
-            // Draw the factory panel
-            factoryButtonPanel.Draw(spriteBatch);
+                // Draw the factory panel
+                factoryButtonPanel.Draw(spriteBatch);
 
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
-            IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
-            if (currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
-            if (PoseidonGame.gamePlus)
-                IngamePresentation.DrawGamePlusLevel(spriteBatch);
-            else
-                IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);
-
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+                if (currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
+                if (PoseidonGame.gamePlus)
+                    IngamePresentation.DrawGamePlusLevel(spriteBatch);
+                else
+                    IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);
+            }
             if (openFactoryConfigurationScene)
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
             if (openResearchFacilityConfigScene)
@@ -1805,8 +1809,8 @@ namespace Poseidon
         {
 
             //too much texts on screen 
-            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
-                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
+
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);

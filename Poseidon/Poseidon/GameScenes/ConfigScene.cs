@@ -80,9 +80,9 @@ namespace Poseidon
             this.graphicsDevice = graphicDevice;
             regularFont = smallFont;
             selectedFont = largeFont;
-            widthScale = (float)game.Window.ClientBounds.Width / 1280;
-            heightScale = (float)game.Window.ClientBounds.Height / 800;
-            textScale = (float)Math.Sqrt((double)(widthScale * heightScale));
+            //widthScale = (float)game.Window.ClientBounds.Width / 1280;
+            //heightScale = (float)game.Window.ClientBounds.Height / 800;
+            textScale = GameConstants.generalTextScaleFactor;//(float)Math.Sqrt((double)(widthScale * heightScale));
             
             uncheckedBox = unselectedCheckbox;
             checkedBox = selectedCheckBox;
@@ -280,6 +280,11 @@ namespace Poseidon
                         GameSettings.NumParticleLevel = (float)(clickedPositionX - numParticleRect.Left) / (float)numParticleRect.Width;
                         if (GameSettings.NumParticleLevel < 0f) GameSettings.NumParticleLevel = 0f;
                         if (GameSettings.NumParticleLevel > 1f) GameSettings.NumParticleLevel = 1f;
+                        GameConstants.numExplosionParticles = (int) (GameConstants.DefaultNumExplosionParticles * GameSettings.NumParticleLevel) ;
+                        GameConstants.numSandParticles = (int)(GameConstants.DefaultNumSandParticles * GameSettings.NumParticleLevel);
+                        GameConstants.numSandParticlesForFactory = (int)(GameConstants.DefaultNumSandParticlesForFactory * GameSettings.NumParticleLevel);
+                        GameConstants.trailParticlesPerSecond = (int)(GameConstants.DefaultTrailParticlesPerSecond * GameSettings.NumParticleLevel);
+                        GameConstants.numFrozenBreathParticlesPerUpdate = (int)(GameConstants.DefaultNumFrozenBreathParticlesPerUpdate * GameSettings.NumParticleLevel);
                         break;
                     case 5:
                         GameSettings.SchoolOfFishDetail = (float)(clickedPositionX - schoolFishRect.Left) / (float)schoolFishRect.Width;

@@ -556,7 +556,8 @@ namespace Poseidon
                             factoryButtonPanel.removeAnchor();
                         }
                     }
-                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                        && !openResearchFacilityConfigScene && !openResearchFacilityConfigScene)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -1095,17 +1096,19 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            DrawStats();
-            DrawBulletType();
-            //DrawHeight();
-            DrawRadar();
-            // Draw the factory panel
-            factoryButtonPanel.Draw(spriteBatch);
-            //factoryButtonPanel.DrawAnchor(spriteBatch);
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
+            {
+                DrawStats();
+                DrawBulletType();
+                //DrawHeight();
+                DrawRadar();
+                // Draw the factory panel
+                factoryButtonPanel.Draw(spriteBatch);
+                //factoryButtonPanel.DrawAnchor(spriteBatch);
 
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
-            IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
-
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+            }
             if (openFactoryConfigurationScene)
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
             if (openResearchFacilityConfigScene)
@@ -1136,8 +1139,7 @@ namespace Poseidon
             str1 += ((int)score).ToString();
 
             //too much texts on screen 
-            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
-                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);

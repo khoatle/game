@@ -274,11 +274,17 @@ namespace Poseidon {
         public const int BasicGoodWillGainForPlayingMiniGame = 50;
 
         //const for particle systems
-        public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;
-        public static int numSandParticles = (int)(30 * GameSettings.NumParticleLevel);
-        public static int numSandParticlesForFactory = (int)(80 * GameSettings.NumParticleLevel);
-        public static float trailParticlesPerSecond = (int)(100 * GameSettings.NumParticleLevel);
-        public static int numFrozenBreathParticlesPerUpdate = (int)(3 * GameSettings.NumParticleLevel);
+        public static int DefaultNumExplosionParticles = 20;
+        public static int DefaultNumSandParticles = 30;
+        public static int DefaultNumSandParticlesForFactory = 80;
+        public static float DefaultTrailParticlesPerSecond = 100;
+        public static int DefaultNumFrozenBreathParticlesPerUpdate = 3;
+
+        public static int numExplosionParticles = DefaultNumExplosionParticles;
+        public static int numSandParticles = DefaultNumSandParticles;
+        public static int numSandParticlesForFactory = DefaultNumSandParticlesForFactory;
+        public static float trailParticlesPerSecond = DefaultTrailParticlesPerSecond;
+        public static int numFrozenBreathParticlesPerUpdate = DefaultNumFrozenBreathParticlesPerUpdate;
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;

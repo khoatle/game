@@ -57,7 +57,7 @@ namespace Poseidon
         List<StaticObject>[] staticObjects;
         List<Powerpack>[] powerpacks;
         // draw a cutscene when finding a god's relic
-        bool[] foundRelic;// = false;
+        public bool[] foundRelic;// = false;
         // has artifact?
         public int skillID;
 
@@ -788,8 +788,8 @@ namespace Poseidon
                             chest.SetupShaderParameters(PoseidonGame.contentManager, chest.Model);
                             //this is just for testing
                             //should be removed
-                            //skillID = 4;
-                            //chest.skillID = 4;
+                            skillID = 4;
+                            chest.skillID = 4;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -1061,20 +1061,23 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
-            DrawStats();
-            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
-            DrawBulletType();
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
-            IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
-            if (PlayGameScene.currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
-            if (PoseidonGame.gamePlus)
-                IngamePresentation.DrawGamePlusLevel(spriteBatch);
-            else
-                IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);
+            if (!foundRelic[currentShipWreckID] && !showNoKey)
+            {
+                IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
+                DrawStats();
+                IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
+                DrawBulletType();
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+                if (PlayGameScene.currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
+                if (PoseidonGame.gamePlus)
+                    IngamePresentation.DrawGamePlusLevel(spriteBatch);
+                else
+                    IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);          
+                Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, GraphicDevice.Viewport.TitleSafeArea.Height - IngamePresentation.exitShipWreckTexture.Height);
+                spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
+            }
             cursor.Draw(gameTime);
-            Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, GraphicDevice.Viewport.TitleSafeArea.Height - IngamePresentation.exitShipWreckTexture.Height);
-            spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
             spriteBatch.End();
             if (foundRelic[currentShipWreckID])
             {

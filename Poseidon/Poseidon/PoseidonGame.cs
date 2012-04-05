@@ -133,10 +133,10 @@ namespace Poseidon
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = 800;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
-            graphics.PreferredBackBufferHeight = 600;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
+            graphics.PreferredBackBufferWidth = 1024;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
+            graphics.PreferredBackBufferHeight = 768;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -596,7 +596,7 @@ namespace Poseidon
                 audio.MenuBack.Play();
                 shipWreckScene.Paused = !shipWreckScene.Paused;
             }
-            if (backPressed)
+            if (backPressed && !shipWreckScene.foundRelic[currentShipWreckID])
             {
                 //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
@@ -870,6 +870,11 @@ namespace Poseidon
                     GameSettings.ShowLiveTip = br.ReadBoolean();
                     GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
                     GameSettings.NumParticleLevel = (float)br.ReadDouble();
+                    GameConstants.numExplosionParticles = (int) (GameConstants.DefaultNumExplosionParticles * GameSettings.NumParticleLevel) ;
+                    GameConstants.numSandParticles = (int)(GameConstants.DefaultNumSandParticles * GameSettings.NumParticleLevel);
+                    GameConstants.numSandParticlesForFactory = (int)(GameConstants.DefaultNumSandParticlesForFactory * GameSettings.NumParticleLevel);
+                    GameConstants.trailParticlesPerSecond = (int)(GameConstants.DefaultTrailParticlesPerSecond * GameSettings.NumParticleLevel);
+                    GameConstants.numFrozenBreathParticlesPerUpdate = (int)(GameConstants.DefaultNumFrozenBreathParticlesPerUpdate * GameSettings.NumParticleLevel);
                     GameSettings.SchoolOfFishDetail = (float)br.ReadDouble();
                     br.Close();
                 }

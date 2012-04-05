@@ -492,16 +492,7 @@ namespace Poseidon
 
             //just for testing
             //should be removed
-<<<<<<< HEAD
-            skillComboActivated = true;
-            activeSkillID = 4;
-            secondSkillID = 2;
-            skills[0] = true;
-            skills[1] = true;
-            skills[2] = true;
-            skills[3] = true;
-            skills[4] = true;
-=======
+
             //skillComboActivated = true;
             //activeSkillID = 4;
             //secondSkillID = -1;
@@ -510,7 +501,6 @@ namespace Poseidon
             //skills[2] = true;
             //skills[3] = true;
             //skills[4] = true;
->>>>>>> 46d12b0c9e9a0581651ba32da42e7e1aa435e7bc
 
             //unassignedPts = 5;
 
@@ -519,11 +509,11 @@ namespace Poseidon
             //strength = 2;
             //speed = 1;
 
-            goodWillBarActivated = true;
-            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            {
-                iconActivated[index] = true;
-            }
+            //goodWillBarActivated = true;
+            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            //{
+            //    iconActivated[index] = true;
+            //}
 
             //numSeaCowPieces = numTurtlePieces = 30;
             //numDolphinPieces = 30;

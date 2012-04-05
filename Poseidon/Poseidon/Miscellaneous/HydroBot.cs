@@ -494,7 +494,7 @@ namespace Poseidon
             //should be removed
             skillComboActivated = true;
             activeSkillID = 4;
-            secondSkillID = -1;
+            secondSkillID = 2;
             skills[0] = true;
             skills[1] = true;
             skills[2] = true;
@@ -508,11 +508,11 @@ namespace Poseidon
             //strength = 2;
             //speed = 1;
 
-            //goodWillBarActivated = true;
-            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            //{
-            //    iconActivated[index] = true;
-            //}
+            goodWillBarActivated = true;
+            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            {
+                iconActivated[index] = true;
+            }
 
             //numSeaCowPieces = numTurtlePieces = 30;
             //numDolphinPieces = 30;
@@ -1163,11 +1163,11 @@ namespace Poseidon
                     }
                 }
                 //disable goodwill bar in level 1
-                if (PlayGameScene.currentLevel == 0)
-                {
-                    goodWillBarActivated = false;
-                }
-                else goodWillBarActivated = true;
+                //if (PlayGameScene.currentLevel == 0)
+                //{
+                //    goodWillBarActivated = false;
+                //}
+                //else goodWillBarActivated = true;
             }
 
             if (isPoissoned == true) {

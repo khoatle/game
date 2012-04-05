@@ -528,11 +528,11 @@ namespace Poseidon.Core
 
         public static void DrawEnvironmentBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentEnvironment, int maxEnvironemnt)
         {
-            int barX = game.Window.ClientBounds.Width - 50;
-            int barY = game.Window.ClientBounds.Height / 2 - EnvironmentBar.Height / 2;
+            int barX = game.Window.ClientBounds.Width - 10 - (int)(41 * textScaleFactor);
+            int barY = game.Window.ClientBounds.Height / 2 - (int)(EnvironmentBar.Height / 2 * textScaleFactor);
             string type = "ENVIRONMENT";
             Color typeColor = Color.IndianRed;
-            int barWidth = 41;// EnvironmentBar.Width / 2;
+            int barWidth = (int)(41 * textScaleFactor);// EnvironmentBar.Width / 2;
             double healthiness = (double)currentEnvironment / maxEnvironemnt;
             //Draw the negative space for the health bar
             //spriteBatch.Draw(EnvironmentBar,
@@ -548,19 +548,17 @@ namespace Poseidon.Core
             else if (healthiness < 0.8)
                 healthColor = Color.LawnGreen;
             spriteBatch.Draw(EnvironmentBar,
-                new Rectangle(barX, barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)), barWidth, (int)(EnvironmentBar.Height * healthiness)),
+                new Vector2(barX, barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)) * textScaleFactor),
                 new Rectangle(45, EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness), 43, (int)(EnvironmentBar.Height * healthiness)),
-                healthColor);
+                healthColor, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
             //Draw the box around the health bar
-            spriteBatch.Draw(EnvironmentBar,
-                new Rectangle(barX, barY, barWidth, EnvironmentBar.Height),
-                new Rectangle(0, 0, barWidth, EnvironmentBar.Height),
-                Color.White);
+            spriteBatch.Draw(EnvironmentBar, new Vector2(barX, barY), new Rectangle(0, 0, 41, EnvironmentBar.Height), Color.White,
+                0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 20), typeColor, 90.0f, new Vector2(barX + 10, barY + 20), 1, SpriteEffects.FlipVertically, 0);
             type = type.ToUpper();
             //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 35, barY + 70), typeColor, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-            spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2 + statsFont.MeasureString(type).Y / 2, game.Window.ClientBounds.Height / 2 - statsFont.MeasureString(type).X / 2), Color.Gold, 3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+            spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2), Color.Gold, 3.14f / 2, new Vector2(statsFont.MeasureString(type).X / 2, statsFont.MeasureString(type).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
             //draw the lobster on bottom
             //spriteBatch.Draw(lobsterTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + EnvironmentBar.Height / 2 - 30), null, Color.White, 0, new Vector2(lobsterTexture.Width / 2, lobsterTexture.Height / 2), 1, SpriteEffects.None, 0);
@@ -569,13 +567,13 @@ namespace Poseidon.Core
             if (PoseidonGame.playTime.TotalMilliseconds - lastBubbleCreated >= 250)
             {
                 Bubble bubble = new Bubble();
-                bubble.LoadContentBubbleSmall(PoseidonGame.contentManager, new Vector2(barX + barWidth / 2, barY + EnvironmentBar.Height - 8), barX, barX + barWidth - 3);
+                bubble.LoadContentBubbleSmall(PoseidonGame.contentManager, new Vector2(barX + barWidth / 2, barY + (EnvironmentBar.Height) * textScaleFactor - 8), barX, barX + barWidth - 3);
                 bubbles.Add(bubble);
                 lastBubbleCreated = PoseidonGame.playTime.TotalMilliseconds;
             }
             for (int i = 0; i < bubbles.Count; i++)
             {
-                if (bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)) ||
+                if (bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + (EnvironmentBar.Height - (int)(EnvironmentBar.Height * healthiness)) * textScaleFactor ||
                     bubbles[i].bubble2DPos.Y - bubbles[i].bubbleTexture.Height/2 * bubbles[i].startingScale <= barY + 4)
                     bubbles.RemoveAt(i--);
 
@@ -586,7 +584,65 @@ namespace Poseidon.Core
                 aBubble.DrawBubbleSmall(spriteBatch);
             }
         }
+        public static void DrawGoodWillBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont)
+        {
+            if (!HydroBot.goodWillBarActivated) return;
 
+            int barX = (int)((iconFrame.Width / 2 - 21) * textScaleFactor);
+            int barY = game.Window.ClientBounds.Height / 2 - (int)(GoodWillBar.Height / 2 * textScaleFactor);
+            string type = "GOOD WILL";
+            Color typeColor = Color.Gold;
+            int barWidth = (int)(42 * textScaleFactor);// EnvironmentBar.Width / 2;
+            double healthiness = (double)HydroBot.goodWillPoint / HydroBot.maxGoodWillPoint;
+
+            //Draw the current health level based on the current Health
+            Color healthColor = Color.Gold;
+            if (healthiness < 0.2)
+                healthColor = Color.DarkRed;
+            else if (healthiness < 0.5)
+                healthColor = Color.Red;
+            else if (healthiness < 0.8)
+                healthColor = Color.LawnGreen;
+            spriteBatch.Draw(GoodWillBar,
+                new Vector2(barX, barY + (GoodWillBar.Height - (int)(GoodWillBar.Height * healthiness)) * textScaleFactor),
+                new Rectangle(45, GoodWillBar.Height - (int)(GoodWillBar.Height * healthiness), 43, (int)(GoodWillBar.Height * healthiness)),
+                healthColor, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+            //Draw the box around the health bar
+            spriteBatch.Draw(GoodWillBar, new Vector2(barX, barY), new Rectangle(0, 0, 42, GoodWillBar.Height), Color.White,
+                0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
+            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 20), typeColor, 90.0f, new Vector2(barX + 10, barY + 20), 1, SpriteEffects.FlipVertically, 0);
+            type = type.ToUpper();
+            //spriteBatch.DrawString(statsFont, type, new Vector2(barX + 10, barY + 200), typeColor, -3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
+            spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2), Color.Gold, -3.14f / 2, new Vector2(statsFont.MeasureString(type).X / 2, statsFont.MeasureString(type).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+            //draw the spinning reel on top of the bar
+            Color colorToDraw;
+            int faceDrawNext = HydroBot.faceToDraw + 1;
+            if (faceDrawNext == iconTextures.Length) faceDrawNext = 0;
+            if (HydroBot.iconActivated[faceDrawNext]) colorToDraw = Color.White;
+            else colorToDraw = Color.Black;
+            spriteBatch.Draw(iconTextures[faceDrawNext], new Vector2(0, barY - iconTextures[faceDrawNext].Height * textScaleFactor - 15), new Rectangle(0, (int)(iconTextures[faceDrawNext].Height * (1.0f - partialDraw)), iconTextures[faceDrawNext].Width, (int)(iconTextures[faceDrawNext].Height * partialDraw)), colorToDraw, 
+                0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+            if (HydroBot.iconActivated[HydroBot.faceToDraw]) colorToDraw = Color.White;
+            else colorToDraw = Color.Black;
+            spriteBatch.Draw(iconTextures[HydroBot.faceToDraw], new Vector2(0, barY - iconTextures[faceDrawNext].Height * textScaleFactor - 15 + iconTextures[HydroBot.faceToDraw].Height * textScaleFactor * partialDraw), new Rectangle(0, 0, iconTextures[HydroBot.faceToDraw].Width, (int)(iconTextures[HydroBot.faceToDraw].Height * (1.0f - partialDraw))), colorToDraw,
+                0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+
+            //draw the frame
+            spriteBatch.Draw(iconFrame, new Vector2(0, barY - iconFrame.Height * textScaleFactor - 15), null, Color.White, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+
+            //draw the crab on bottom
+            //spriteBatch.Draw(crabTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + GoodWillBar.Height / 2 - 30), null, Color.White, 0, new Vector2(crabTexture.Width / 2, crabTexture.Height / 2), 1, SpriteEffects.None, 0);
+
+            //display the result of the spin
+            if (displayResult)
+            {
+                Vector2 posToDraw = new Vector2(iconFrame.Width / 2 * textScaleFactor, barY - (iconFrame.Height - 20) * textScaleFactor);
+                if (buzzNow) posToDraw += new Vector2(random.Next(-5, 5), random.Next(-5, 5)) * textScaleFactor;
+                spriteBatch.Draw(resultTextures[faceDrawNext], posToDraw, null, Color.White, 0,
+                    new Vector2(resultTextures[faceDrawNext].Width / 2, resultTextures[faceDrawNext].Height / 2), resultDisplayScale * textScaleFactor, SpriteEffects.None, 0);
+            }
+        }
         public static void UpdateGoodWillBar()
         {
             int faceBeingShown;
@@ -744,68 +800,6 @@ namespace Poseidon.Core
                 spinningSpeed = 0.1f;
                 goingToStopSpinning = stoppedSpinning = false;
                 accelerationTime = TimeSpan.FromSeconds(random.Next(3) + 1);
-            }
-        }
-        public static void DrawGoodWillBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont)
-        {
-            if (!HydroBot.goodWillBarActivated) return;
-
-            int barX = iconFrame.Width/2 - GoodWillBar.Width/4;
-            int barY = game.Window.ClientBounds.Height / 2 - GoodWillBar.Height / 2;
-            string type = "GOOD WILL";
-            Color typeColor = Color.Gold;
-            int barWidth = 42;// EnvironmentBar.Width / 2;
-            double healthiness = (double)HydroBot.goodWillPoint / HydroBot.maxGoodWillPoint;
-
-            //Draw the current health level based on the current Health
-            Color healthColor = Color.Gold;
-            if (healthiness < 0.2)
-                healthColor = Color.DarkRed;
-            else if (healthiness < 0.5)
-                healthColor = Color.Red;
-            else if (healthiness < 0.8)
-                healthColor = Color.LawnGreen;
-            spriteBatch.Draw(GoodWillBar,
-                new Rectangle(barX, barY + (GoodWillBar.Height - (int)(GoodWillBar.Height * healthiness)), barWidth, (int)(GoodWillBar.Height * healthiness)),
-                new Rectangle(45, GoodWillBar.Height - (int)(GoodWillBar.Height * healthiness), 43, (int)(GoodWillBar.Height * healthiness)),
-                healthColor);
-
-            //Draw the box around the health bar
-            spriteBatch.Draw(GoodWillBar,
-                new Rectangle(barX, barY, barWidth, EnvironmentBar.Height),
-                new Rectangle(0, 0, barWidth, EnvironmentBar.Height),
-                Color.White);
-
-            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(game.Window.ClientBounds.Width / 2 - ((type.Length / 2) * 14), heightFromTop - 1), typeColor);
-            //spriteBatch.DrawString(statsFont, type.ToUpper(), new Vector2(barX + 10, barY + 20), typeColor, 90.0f, new Vector2(barX + 10, barY + 20), 1, SpriteEffects.FlipVertically, 0);
-            type = type.ToUpper();
-            //spriteBatch.DrawString(statsFont, type, new Vector2(barX + 10, barY + 200), typeColor, -3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-            spriteBatch.DrawString(statsFont, type, new Vector2(barX + barWidth / 2 - statsFont.MeasureString(type).Y / 2, game.Window.ClientBounds.Height / 2 + statsFont.MeasureString(type).X / 2), Color.Gold, -3.14f / 2, new Vector2(0, 0), 1, SpriteEffects.None, 0);
-
-            //draw the spinning reel on top of the bar
-            Color colorToDraw;
-            int faceDrawNext = HydroBot.faceToDraw + 1;
-            if (faceDrawNext == iconTextures.Length) faceDrawNext = 0;
-            if (HydroBot.iconActivated[faceDrawNext]) colorToDraw = Color.White;
-            else colorToDraw = Color.Black;
-            spriteBatch.Draw(iconTextures[faceDrawNext], new Vector2(0, barY - iconTextures[faceDrawNext].Height - 20), new Rectangle(0, (int)(iconTextures[faceDrawNext].Height * (1.0f - partialDraw)), iconTextures[faceDrawNext].Width, (int)(iconTextures[faceDrawNext].Height * partialDraw)), colorToDraw);
-            if (HydroBot.iconActivated[HydroBot.faceToDraw]) colorToDraw = Color.White;
-            else colorToDraw = Color.Black;
-            spriteBatch.Draw(iconTextures[HydroBot.faceToDraw], new Vector2(0, barY - iconTextures[faceDrawNext].Height - 20 + iconTextures[HydroBot.faceToDraw].Height * partialDraw), new Rectangle(0, 0, iconTextures[HydroBot.faceToDraw].Width, (int)(iconTextures[HydroBot.faceToDraw].Height * (1.0f - partialDraw))), colorToDraw);
-
-            //draw the frame
-            spriteBatch.Draw(iconFrame, new Vector2(0, barY - iconFrame.Height - 20), null, Color.White);
-
-            //draw the crab on bottom
-            //spriteBatch.Draw(crabTexture, new Vector2(barX + barWidth / 2, game.Window.ClientBounds.Height / 2 + GoodWillBar.Height / 2 - 30), null, Color.White, 0, new Vector2(crabTexture.Width / 2, crabTexture.Height / 2), 1, SpriteEffects.None, 0);
-
-            //display the result of the spin
-            if (displayResult)
-            {
-                Vector2 posToDraw = new Vector2(iconFrame.Width / 2, barY - iconFrame.Height - 20);
-                if (buzzNow) posToDraw += new Vector2(random.Next(-5, 5), random.Next(-5, 5));
-                spriteBatch.Draw(resultTextures[faceDrawNext], posToDraw, null, Color.White, 0,
-                    new Vector2(resultTextures[faceDrawNext].Width / 2, resultTextures[faceDrawNext].Height / 2), resultDisplayScale, SpriteEffects.None, 0);
             }
         }
 

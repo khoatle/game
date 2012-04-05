@@ -788,8 +788,8 @@ namespace Poseidon
                             chest.SetupShaderParameters(PoseidonGame.contentManager, chest.Model);
                             //this is just for testing
                             //should be removed
-                            skillID = 4;
-                            chest.skillID = 4;
+                            //skillID = 4;
+                            //chest.skillID = 4;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -1161,11 +1161,12 @@ namespace Poseidon
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(10, 0), oceanPaintings.paintings[paintingToShow].color);
-            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
-                oceanPaintings.paintings[paintingToShow].color);
+            
 
             String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);
             spriteBatch.Draw(oceanPaintings.backgroundBox, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y - 10, GraphicDevice.Viewport.TitleSafeArea.Width, (int)paintingFont.MeasureString(line).Y * 2), Color.White);
+            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
+                oceanPaintings.paintings[paintingToShow].color);
             spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 

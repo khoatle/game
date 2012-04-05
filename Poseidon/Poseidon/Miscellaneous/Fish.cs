@@ -341,9 +341,13 @@ namespace Poseidon {
             //for (int i = 0; i < 4; i++)
             //{
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
-                orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
-                Vector3 headingDirection = Vector3.Transform(movement, orientationMatrix);
-                headingDirection *= GameConstants.FishSpeed;
+
+                Vector3 headingDirection = Vector3.Zero;
+                headingDirection.X = (float)Math.Sin(ForwardDirection);
+                headingDirection.Z = (float)Math.Cos(ForwardDirection);
+                headingDirection.Normalize();
+
+                headingDirection *= GameConstants.FishSpeed * speedFactor;
                 futurePosition = Position + headingDirection;
 
                 if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot) &&

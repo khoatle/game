@@ -148,7 +148,7 @@ namespace Poseidon {
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
-                                                       TimeSpan.FromSeconds(450), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
@@ -202,7 +202,7 @@ namespace Poseidon {
         public const float coolDownForArchillesArmor = 10;
         public const float coolDownForThorHammer = 10;
         public const float coolDownForHermesSandal = 10;
-        public const float coolDownForHypnotise = 1;//10;
+        public const float coolDownForHypnotise = 10;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
         public const float timeHypnotiseLast = 10;
@@ -301,8 +301,8 @@ namespace Poseidon {
         public const int plasticfactoryLevelPartId = 5;
 
         //constants for animal health
-        public const float DolphinStartingHealth = 500;
-        public const float SeaCowStartingHealth = 1000;
+        public const float DolphinStartingHealth = 1000;
+        public const float SeaCowStartingHealth = 1500;
         public const float TurtleStartingHealth = 2000;
 
         public const int MaxNumTries = 200;

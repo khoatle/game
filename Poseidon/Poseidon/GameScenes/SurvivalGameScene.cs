@@ -406,7 +406,8 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
-            
+            HydroBot.numResources += GameConstants.numResourcesAtStart;
+
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             myBullet = new List<DamageBullet>();
@@ -557,7 +558,7 @@ namespace Poseidon
                         }
                     }
                     if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
-                        && !openResearchFacilityConfigScene && !openResearchFacilityConfigScene)
+                        && !openResearchFacilityConfigScene && !openFactoryConfigurationScene)
                     {
                         foreach (Factory factory in factories)
                         {

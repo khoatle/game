@@ -54,6 +54,8 @@ namespace Poseidon
                 particleManager = PlayGameScene.particleManager;
             else if (HydroBot.gameMode == GameMode.SurvivalMode)
                 particleManager = SurvivalGameScene.particleManager;
+
+            speedFactor = 1.5f;
         }
 
         public override void attack()

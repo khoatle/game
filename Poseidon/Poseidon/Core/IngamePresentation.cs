@@ -428,6 +428,7 @@ namespace Poseidon.Core
 
             //Vector2 skillIconPosition =
             //    new Vector2((int)xOffsetText, (int)yOffsetText);
+
             Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(96 * GameConstants.generalTextScaleFactor), (int)(96 * GameConstants.generalTextScaleFactor));
 
             //spriteBatch.Draw(skillTextures[tank.activeSkillID], skillIconPosition, Color.White);
@@ -825,7 +826,7 @@ namespace Poseidon.Core
                     line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, commentMaxLength, fishTalkFont, textScaleFactor);
                 }
                 line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + HealthBar.Height/2 + (fishTalkFont.MeasureString(line).Y / 2 + lineSpacing) * textScaleFactor), Color.Yellow, 0, new Vector2(fishTalkFont.MeasureString(line).X / 2, fishTalkFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (fishTalkFont.MeasureString(fishPointedAt.Name).Y + fishTalkFont.MeasureString(line).Y / 2 + lineSpacing) * textScaleFactor), Color.Yellow, 0, new Vector2(fishTalkFont.MeasureString(line).X / 2, fishTalkFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
             }
             else
             {
@@ -966,10 +967,10 @@ namespace Poseidon.Core
                             }
                         }
                     }
-                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), 1, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     comment = wrapLine(comment, commentMaxLength, statsFont, textScaleFactor);
                     tip = wrapLine(tip, commentMaxLength, statsFont, textScaleFactor);
-                    Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y + (lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor);
+                    Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor);
                     spriteBatch.DrawString(statsFont, comment, commentPos, Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(comment).Y / 2 + lineSpacing + statsFont.MeasureString(tip).Y / 2) * textScaleFactor;
                     spriteBatch.DrawString(statsFont, tip, tipPos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip).X / 2, statsFont.MeasureString(tip).Y / 2), textScaleFactor, SpriteEffects.None, 0);

@@ -1105,6 +1105,7 @@ namespace Poseidon
                    {
                        playingTexture = videoPlayer.GetTexture();
                        spriteBatch.Begin();
+                       //spriteBatch.Draw(playingTexture, new Rectangle((int)(graphics.PreferredBackBufferWidth / 4), (int)(graphics.PreferredBackBufferHeight/4), (int)(graphics.PreferredBackBufferWidth/2), (int)(graphics.PreferredBackBufferHeight/2)), Color.White);
                        spriteBatch.Draw(playingTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
                        spriteBatch.End();
                    }

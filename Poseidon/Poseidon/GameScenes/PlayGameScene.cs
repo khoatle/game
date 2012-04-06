@@ -507,6 +507,8 @@ namespace Poseidon
 
                 Serializer serializer = new Serializer();
                 serializer.SerializeObjects(filenamePrefix + currentLevel.ToString(), objectsToSerialize);
+                if (PoseidonGame.gamePlus)
+                    serializer.SerializeObjects("SurvivalMode", objectsToSerialize);
 
                 hydroBot.SetLevelStartValues();
             }
@@ -987,6 +989,11 @@ namespace Poseidon
                     {
                         trash.Update(gameTime);
                     }
+
+                    foreach (Powerpack powPack in powerpacks)
+                        powPack.Update();
+                    foreach (Resource res in resources)
+                        res.Update();
                    
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
                     foreach (Factory factory in factories)
@@ -1202,9 +1209,28 @@ namespace Poseidon
             bool status = false;
             float orientation; // 0, PI/2, PI, 3*PI/2
             Factory oneFactory;
-
+            bool notEnoughResource = false;
+            switch (buildingType)
+            {
+                case BuildingType.researchlab:
+                    if (HydroBot.numResources < GameConstants.numResourcesForResearchCenter)
+                        notEnoughResource = true;
+                    break;
+                case BuildingType.biodegradable:
+                    if (HydroBot.numResources < GameConstants.numResourcesForBioFactory)
+                        notEnoughResource = true;
+                    break;
+                case BuildingType.plastic:
+                    if (HydroBot.numResources < GameConstants.numResourcesForPlasticFactory)
+                        notEnoughResource = true;
+                    break;
+                case BuildingType.radioactive:
+                    if (HydroBot.numResources < GameConstants.numResourcesForRadioFactory)
+                        notEnoughResource = true;
+                    break;
+            }
             // Check if hydrobot has sufficient resources for building a factory
-            if (HydroBot.numResources < GameConstants.numResourcesForEachFactory)
+            if (notEnoughResource)
             {
                 // Play some sound hinting no sufficient resource
                 audio.MenuScroll.Play();
@@ -1279,8 +1305,16 @@ namespace Poseidon
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation);
-                        HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                        HydroBot.numResources -= GameConstants.numResourcesForResearchCenter;
                         status = true;
+                        //env loss for building factory
+                        if (GameConstants.envLossPerFactoryBuilt > 0)
+                        {
+                            HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                            Point lossPoint = new Point();
+                            lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                            points.Add(lossPoint);
+                        }
                     }
                     break;
 
@@ -1292,9 +1326,18 @@ namespace Poseidon
                     oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, biofactoryAnimationTextures);
-                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    HydroBot.numResources -= GameConstants.numResourcesForBioFactory;
                     factories.Add(oneFactory);
                     status = true;
+
+                    //env loss for building factory
+                    if (GameConstants.envLossPerFactoryBuilt > 0)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                        Point lossPoint = new Point();
+                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                        points.Add(lossPoint);
+                    }
                     break;
 
                 case BuildingType.plastic:
@@ -1305,9 +1348,17 @@ namespace Poseidon
                     oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
                     oneFactory.LevelTextures = plasticFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
-                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    HydroBot.numResources -= GameConstants.numResourcesForPlasticFactory;
                     factories.Add(oneFactory);
                     status = true;
+                    //env loss for building factory
+                    if (GameConstants.envLossPerFactoryBuilt > 0)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                        Point lossPoint = new Point();
+                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                        points.Add(lossPoint);
+                    }
                     break;
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive, particleManager, GraphicDevice);
@@ -1316,9 +1367,17 @@ namespace Poseidon
                     oneFactory.Model = radioactiveFactoryModel;
                     oneFactory.ModelStates = radioactiveFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures);
-                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    HydroBot.numResources -= GameConstants.numResourcesForRadioFactory;
                     factories.Add(oneFactory);
                     status = true;
+                    //env loss for building factory
+                    if (GameConstants.envLossPerFactoryBuilt > 0)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                        Point lossPoint = new Point();
+                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                        points.Add(lossPoint);
+                    }
                     break;
             }
             if (status)

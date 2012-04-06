@@ -198,7 +198,12 @@ namespace Poseidon.Core
                 if (buttons[i].state != Button.InteractionState.OUT)
                 {
                     // display info text
-                    String displayText = buttons[i].Name + "\nRequired  : " + GameConstants.numResourcesForEachFactory + " resources\nAvailable : " + HydroBot.numResources + " resources";
+                    int resourceRequired = 0;
+                    if (i == 0) resourceRequired = GameConstants.numResourcesForResearchCenter;
+                    else if (i == 1) resourceRequired = GameConstants.numResourcesForRadioFactory;
+                    else if (i == 2) resourceRequired = GameConstants.numResourcesForBioFactory;
+                    else if (i == 3) resourceRequired = GameConstants.numResourcesForPlasticFactory;
+                    String displayText = buttons[i].Name + "\nRequired  : " + resourceRequired + " resources\nAvailable : " + HydroBot.numResources + " resources";
                     infoTextPosition.Y -= (int)infoTextFont.MeasureString(displayText).Y * IngamePresentation.textScaleFactor;
                     spriteBatch.DrawString(infoTextFont, displayText, infoTextPosition, Color.Red, 0, Vector2.Zero, IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
                 }

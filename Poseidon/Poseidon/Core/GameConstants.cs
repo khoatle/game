@@ -62,8 +62,11 @@ namespace Poseidon {
         //Trash
         public const int numTrashForUpgrade = 25;
         public const int numDaysForUpgrade = 15;
-        public const int numResourcesAtStart = 20;
-        public const int numResourcesForEachFactory = 5;
+        public const int numResourcesForBioFactory = 5;
+        public const int numResourcesForPlasticFactory = 7;
+        public const int numResourcesForRadioFactory = 10;
+        public const int numResourcesForResearchCenter = 10;
+        public const int numResourcesAtStart = numResourcesForBioFactory + numResourcesForPlasticFactory + numResourcesForRadioFactory + numResourcesForResearchCenter;
         public const int maxBioTrashCarryingCapacity = 30;
         public const int maxPlasticTrashCarryingCapacity = 15;
         public const int maxNukeTrashCarryingCapacity = 5;
@@ -75,10 +78,13 @@ namespace Poseidon {
         public const int EachLevelMinEnv = 200;
         public const int envLossForFishDeath = 15;
         public const int envLossPerTrashAdd = 10;
+        public const int envLossPerFactoryBuilt = 15;
         public const int envGainForBioTrashClean = 10;
         public const int envGainForPlasticTrashClean = 30;
         public const int envGainForNuclearTrashClean = 100;
-        public const int expGainForTrash = 10;
+        public const int expGainForBioTrash = 7;
+        public const int expGainForPlasTrash = 12;
+        public const int expGainForRadioTrash = 30;
         public const int BasicEnvGainForHealingFish = 5;
         public const int envGainForCorrectQuizAnswer = 50;
         //Health update of fish based on environment
@@ -194,7 +200,7 @@ namespace Poseidon {
         public const float RadarRange = 300.0f;
 
         //milisecond delay for double click
-        public const double clickTimerDelay = 250;
+        public const double clickTimerDelay = 300;
 
 
         //skills specifications

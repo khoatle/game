@@ -655,8 +655,8 @@ namespace Poseidon
                 return;
             }
             if (!paused && !returnToMain)
-            {   
-             
+            {
+                doubleClicked = false;
                 CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
 
                 IngamePresentation.tipHover = IngamePresentation.mouseOnTipIcon(currentMouseState);
@@ -826,7 +826,7 @@ namespace Poseidon
                                 else
                                 {
                                     // give the player some experience as reward
-                                    HydroBot.currentExperiencePts += GameConstants.ExpPainting;
+                                    HydroBot.currentExperiencePts += GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5);
 
                                     Point point = new Point();
                                     String point_string = "+" + GameConstants.ExpPainting + " EXP";
@@ -866,6 +866,10 @@ namespace Poseidon
                 {
                     fishes[currentShipWreckID][i].Update(gameTime, frustum, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID], random.Next(100), hydroBot, enemyBullet);
                 }
+
+
+                foreach (Powerpack powPack in powerpacks[currentShipWreckID])
+                    powPack.Update();
 
                 //for the shader
                 m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;

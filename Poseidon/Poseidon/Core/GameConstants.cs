@@ -148,7 +148,7 @@ namespace Poseidon {
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
-                                                       TimeSpan.FromSeconds(450), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
@@ -202,7 +202,7 @@ namespace Poseidon {
         public const float coolDownForArchillesArmor = 10;
         public const float coolDownForThorHammer = 10;
         public const float coolDownForHermesSandal = 10;
-        public const float coolDownForHypnotise = 1;//10;
+        public const float coolDownForHypnotise = 10;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
         public const float timeHypnotiseLast = 10;
@@ -259,12 +259,12 @@ namespace Poseidon {
         public static int gainHitPoint = 20;
 
         //consts for the survival mode
-        public const int SurvivalModeMaxShootingEnemy = 35;
-        public const int SurvivalModeMaxCombatEnemy = 35;
-        public const int SurvivalModeMaxGhostPirate = 30;
-        public const int SurvivalModeMaxMutantShark = 15;
-        public const int SurvivalModeMaxTerminator = 2;
-        public const int SurvivalModeMaxSubmarine = 2;
+        public const int SurvivalModeMaxShootingEnemy = 30;
+        public const int SurvivalModeMaxCombatEnemy = 30;
+        public const int SurvivalModeMaxGhostPirate = 20;
+        public const int SurvivalModeMaxMutantShark = 6;
+        public const int SurvivalModeMaxTerminator = 3;
+        public const int SurvivalModeMaxSubmarine = 1;
 
         public const int NumGoodWillBarIcons = 13;
         public const int MaxGoodWillPoint = 1000;
@@ -274,11 +274,17 @@ namespace Poseidon {
         public const int BasicGoodWillGainForPlayingMiniGame = 50;
 
         //const for particle systems
-        public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;
-        public static int numSandParticles = (int)(30 * GameSettings.NumParticleLevel);
-        public static int numSandParticlesForFactory = (int)(80 * GameSettings.NumParticleLevel);
-        public static float trailParticlesPerSecond = (int)(100 * GameSettings.NumParticleLevel);
-        public static int numFrozenBreathParticlesPerUpdate = (int)(3 * GameSettings.NumParticleLevel);
+        public static int DefaultNumExplosionParticles = 20;
+        public static int DefaultNumSandParticles = 30;
+        public static int DefaultNumSandParticlesForFactory = 80;
+        public static float DefaultTrailParticlesPerSecond = 100;
+        public static int DefaultNumFrozenBreathParticlesPerUpdate = 3;
+
+        public static int numExplosionParticles = DefaultNumExplosionParticles;
+        public static int numSandParticles = DefaultNumSandParticles;
+        public static int numSandParticlesForFactory = DefaultNumSandParticlesForFactory;
+        public static float trailParticlesPerSecond = DefaultTrailParticlesPerSecond;
+        public static int numFrozenBreathParticlesPerUpdate = DefaultNumFrozenBreathParticlesPerUpdate;
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;
@@ -295,8 +301,8 @@ namespace Poseidon {
         public const int plasticfactoryLevelPartId = 5;
 
         //constants for animal health
-        public const float DolphinStartingHealth = 500;
-        public const float SeaCowStartingHealth = 1000;
+        public const float DolphinStartingHealth = 1000;
+        public const float SeaCowStartingHealth = 1500;
         public const float TurtleStartingHealth = 2000;
 
         public const int MaxNumTries = 200;

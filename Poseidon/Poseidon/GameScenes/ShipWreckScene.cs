@@ -57,7 +57,7 @@ namespace Poseidon
         List<StaticObject>[] staticObjects;
         List<Powerpack>[] powerpacks;
         // draw a cutscene when finding a god's relic
-        bool[] foundRelic;// = false;
+        public bool[] foundRelic;// = false;
         // has artifact?
         public int skillID;
 
@@ -1061,20 +1061,23 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
-            DrawStats();
-            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
-            DrawBulletType();
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
-            IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
-            if (PlayGameScene.currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
-            if (PoseidonGame.gamePlus)
-                IngamePresentation.DrawGamePlusLevel(spriteBatch);
-            else
-                IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);
+            if (!foundRelic[currentShipWreckID] && !showNoKey)
+            {
+                IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
+                DrawStats();
+                IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
+                DrawBulletType();
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+                if (PlayGameScene.currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
+                if (PoseidonGame.gamePlus)
+                    IngamePresentation.DrawGamePlusLevel(spriteBatch);
+                else
+                    IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);          
+                Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, GraphicDevice.Viewport.TitleSafeArea.Height - IngamePresentation.exitShipWreckTexture.Height);
+                spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
+            }
             cursor.Draw(gameTime);
-            Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, GraphicDevice.Viewport.TitleSafeArea.Height - IngamePresentation.exitShipWreckTexture.Height);
-            spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
             spriteBatch.End();
             if (foundRelic[currentShipWreckID])
             {
@@ -1158,11 +1161,12 @@ namespace Poseidon
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(10, 0), oceanPaintings.paintings[paintingToShow].color);
-            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
-                oceanPaintings.paintings[paintingToShow].color);
+            
 
             String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);
             spriteBatch.Draw(oceanPaintings.backgroundBox, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y - 10, GraphicDevice.Viewport.TitleSafeArea.Width, (int)paintingFont.MeasureString(line).Y * 2), Color.White);
+            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
+                oceanPaintings.paintings[paintingToShow].color);
             spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 

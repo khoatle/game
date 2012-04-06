@@ -395,8 +395,8 @@ namespace Poseidon.MiniGames
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White);
-            letAIHandleButtonRectangle.Y = (int)(5 + timerFont.MeasureString(timerString).Y + 10);
+            spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+            letAIHandleButtonRectangle.Y = (int)(5 + timerFont.MeasureString(timerString).Y * GameConstants.generalTextScaleFactor );
             if (letAIHandleButtonHover) letAIHandleButtonTexture = IngamePresentation.letAIHandleHoverTexture;
             else letAIHandleButtonTexture = IngamePresentation.letAIHandleNormalTexture;
             spriteBatch.Draw(letAIHandleButtonTexture, letAIHandleButtonRectangle, Color.White);

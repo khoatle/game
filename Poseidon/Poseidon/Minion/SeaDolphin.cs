@@ -39,6 +39,7 @@ namespace Poseidon
 
             maxHealth = GameConstants.DolphinStartingHealth;
             health = maxHealth;
+            speedFactor = 2.0f;
         }
 
         public bool isTargeting() {

@@ -240,13 +240,17 @@ namespace Poseidon.Core
             // Factory level textures
             plasticFactoryLevelTextures = new List<Texture2D>();
             biodegradableFactoryLevelTextures = new List<Texture2D>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 // using same level textures for both factories
                 Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
                 plasticFactoryLevelTextures.Add(loadedTexture);
                 biodegradableFactoryLevelTextures.Add(loadedTexture);
             }
+            Texture2D lastLevelTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level2");
+            biodegradableFactoryLevelTextures.Add(lastLevelTexture);
+            lastLevelTexture = Content.Load<Texture2D>("Image/TrashManagement/PlasticFactory_level2");
+            plasticFactoryLevelTextures.Add(lastLevelTexture);
 
             laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBall");
             healLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/greenBall");

@@ -369,7 +369,7 @@ namespace Poseidon
             bioPlantLevel = lsBioPlantLevel = (int)info.GetValue("bioPlantLevel", typeof(int));
             plasticPlantLevel = lsPlasticPlantLevel = (int)info.GetValue("plasticPlantLevel", typeof(int));
             numResources = lsNumResources = (int)info.GetValue("numResources", typeof(int));
-            numResources += GameConstants.numResourcesAtStart;
+            //numResources += GameConstants.numResourcesAtStart;
 
             //resurrected sidekicks stuff
             numStrangeObjCollected = lsNumStrangeObjCollected = (int)info.GetValue("numStrangeObjCollected", typeof(int));
@@ -509,11 +509,11 @@ namespace Poseidon
             //strength = 2;
             //speed = 1;
 
-            goodWillBarActivated = true;
-            for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
-            {
-                iconActivated[index] = true;
-            }
+            //goodWillBarActivated = true;
+            //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
+            //{
+            //    iconActivated[index] = true;
+            //}
 
             //numSeaCowPieces = numTurtlePieces = 30;
             //numDolphinPieces = 30;
@@ -658,7 +658,6 @@ namespace Poseidon
             lsBioPlantLevel = bioPlantLevel;
             lsPlasticPlantLevel = plasticPlantLevel;
 
-            numResources += GameConstants.numResourcesAtStart;
             lsNumResources = numResources;
 
             lsTotalBioTrashProcessed = totalBioTrashProcessed;
@@ -1474,6 +1473,14 @@ namespace Poseidon
                         else if (powerpacks[curCell].powerType == PowerPackType.GoldenKey)
                         {
                             PlayGameScene.hadkey = true;
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, "Golden key\nobtained!", Position, Color.LawnGreen);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
                         }
                         //RetrievedSound.Play();
                         PoseidonGame.audio.retrieveSound.Play();

@@ -232,8 +232,8 @@ namespace Poseidon
             spriteBatch.Begin();
             base.Draw(gameTime);
 
-            int logoWidth = (int)(300 * widthScale); //300
-            int logoHeight = (int)(300 * heightScale); //300
+            int logoWidth = (int)(256 * GameConstants.generalTextScaleFactor); //300
+            int logoHeight = (int)(256 * GameConstants.generalTextScaleFactor); //300
             Rectangle teamLogoRectangle = new Rectangle(game.Window.ClientBounds.Right - (logoWidth-(logoWidth/10)), game.Window.ClientBounds.Bottom - (logoHeight-(logoHeight/10)), logoWidth, logoHeight);
             spriteBatch.Draw(teamLogo, teamLogoRectangle, Color.White);
             //System.Diagnostics.Debug.WriteLine(titleLine1Position + "Rect" + titleLine1Rect);

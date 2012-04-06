@@ -273,15 +273,15 @@ namespace Poseidon
             //    GameConstants.NumberSubmarine = numSubmarine;
             //} 
             //else {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 35, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 35, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
                 int[] numFish = { 50, 50, 50, 0, 50, 50, 25, 50, 0, 0, 0, 0 };
                 GameConstants.NumberFish = numFish;
-                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 1, 2, 2, 10, 0, 0 };
+                int[] numMutantShark = { 0, 0, 0, 1, 1, 2, 1, 2, 2, 6, 0, 0 };
                 GameConstants.NumberMutantShark = numMutantShark;
                 int[] numTerminator = { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1 };
                 GameConstants.NumberTerminator = numTerminator;
@@ -476,6 +476,7 @@ namespace Poseidon
         {
             currentSentence = 0;
             currentGameState = GameState.PlayingCutScene;
+            gameCamera.shaking = false;
 
             string filenamePrefix;
             if (PoseidonGame.gamePlus)
@@ -519,10 +520,6 @@ namespace Poseidon
             roundTimer = roundTime;
             isBossKilled = false;
             
-            //User must find the key at every level
-            firstShow = true;
-            showFoundKey = false;
-            hadkey = false;
 
             screenTransitNow = false;
             graphicEffect.resetTransitTimer();
@@ -564,6 +561,12 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
+            HydroBot.numResources += GameConstants.numResourcesAtStart;
+            //User must find the key at every level
+            firstShow = true;
+            showFoundKey = false;
+            hadkey = false;
+
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             myBullet = new List<DamageBullet>();
@@ -819,7 +822,8 @@ namespace Poseidon
                             factoryButtonPanel.removeAnchor();
                         }
                     }
-                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                        && !openResearchFacilityConfigScene && !openFactoryConfigurationScene)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -1671,24 +1675,26 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
-            DrawStats();
-            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
-            DrawBulletType();
-            DrawHeight();
-            DrawRadar();
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene && !(showFoundKey && firstShow))
+            {
+                IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
+                DrawStats();
+                IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
+                DrawBulletType();
+                DrawHeight();
+                DrawRadar();
 
-            // Draw the factory panel
-            factoryButtonPanel.Draw(spriteBatch);
+                // Draw the factory panel
+                factoryButtonPanel.Draw(spriteBatch);
 
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
-            IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
-            if (currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
-            if (PoseidonGame.gamePlus)
-                IngamePresentation.DrawGamePlusLevel(spriteBatch);
-            else
-                IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);
-
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+                if (currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
+                if (PoseidonGame.gamePlus)
+                    IngamePresentation.DrawGamePlusLevel(spriteBatch);
+                else
+                    IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);
+            }
             if (openFactoryConfigurationScene)
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
             if (openResearchFacilityConfigScene)
@@ -1805,8 +1811,8 @@ namespace Poseidon
         {
 
             //too much texts on screen 
-            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
-                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
+
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);
@@ -1886,8 +1892,8 @@ namespace Poseidon
                 Rectangle botRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, botRectangle, Color.White);
                 //draw what is said
-                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(botRectangle.Left + 50, botRectangle.Top + 60), Color.Blue);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall, GameConstants.generalTextScaleFactor);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(botRectangle.Left + 50, botRectangle.Top + 60), Color.Blue, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
             }
             //Poseidon speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 1)
@@ -1907,8 +1913,8 @@ namespace Poseidon
                 Rectangle PoseidonRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, PoseidonRectangle, Color.White);
                 //draw what is said
-                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(PoseidonRectangle.Left + 50, PoseidonRectangle.Top + 65), Color.Blue);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall, GameConstants.generalTextScaleFactor);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(PoseidonRectangle.Left + 50, PoseidonRectangle.Top + 65), Color.Blue, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
             }
             //Terminator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 2)
@@ -1928,8 +1934,8 @@ namespace Poseidon
                 Rectangle terminatorRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, terminatorRectangle, Color.White);
                 //draw what is said
-                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(terminatorRectangle.Left + 50, terminatorRectangle.Top + 60), Color.Blue);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall, GameConstants.generalTextScaleFactor);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(terminatorRectangle.Left + 50, terminatorRectangle.Top + 60), Color.Blue, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
             }
             //Narrator speaking
             if (cutSceneDialog.cutScenes[currentLevel][currentSentence].speakerID == 3)
@@ -1938,12 +1944,12 @@ namespace Poseidon
                 Rectangle narratorRectangle = new Rectangle(0, GraphicDevice.Viewport.TitleSafeArea.Height - talkingBox.Height, GraphicDevice.Viewport.TitleSafeArea.Width, talkingBox.Height);
                 spriteBatch.Draw(talkingBox, narratorRectangle, Color.White);
                 //draw what is said
-                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall);
-                spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black);
+                string text = IngamePresentation.wrapLine(cutSceneDialog.cutScenes[currentLevel][currentSentence].sentence, GraphicDevice.Viewport.TitleSafeArea.Width - 100, menuSmall, GameConstants.generalTextScaleFactor);
+                spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
             }
             string nextText = "Enter to continue. Esc to skip.";
-            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.DarkViolet);
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X * GameConstants.generalTextScaleFactor, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y * GameConstants.generalTextScaleFactor);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.DarkViolet, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
 
             spriteBatch.End();
             if (screenTransitNow)

@@ -17,6 +17,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 #endregion
 
 namespace Poseidon.FishSchool
@@ -58,7 +59,7 @@ namespace Poseidon.FishSchool
             location = loc;
             //loc3D = new Vector3(loc.X, 0, loc.Y);
 
-            moveSpeed = 30.0f;// 125.0f;
+            moveSpeed = 30.0f;// *IngamePresentation.textScaleFactor * SchoolOfFish.camHeightScale;// 125.0f;
             fleeing = false;
             random = new Random((int)loc.X + (int)loc.Z);
             animaltype = AnimalType.Fish;
@@ -144,8 +145,8 @@ namespace Poseidon.FishSchool
             //orientation and tint color
             //spriteBatch.Draw(texture, location, null, tintColor,
             //    rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
-            spriteBatch.Draw(texture, loc2D, null, specularColor,
-                rotation, textureCenter, 1.0f, SpriteEffects.None, 0.0f);
+            spriteBatch.Draw(texture, loc2D, null, specularColor * SchoolOfFish.camHeightScale,
+                rotation, textureCenter, IngamePresentation.textScaleFactor * SchoolOfFish.camHeightScale, SpriteEffects.None, 0.0f);
         }
         #endregion
 

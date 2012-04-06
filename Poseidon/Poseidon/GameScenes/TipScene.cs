@@ -118,17 +118,17 @@ namespace Poseidon
                 text += tipItem.tipItemStr + "\n";
             }
 
-            spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X -( tipFont.MeasureString(title).X*GameConstants.textScaleFactor), 2), Color.Red, 0, new Vector2(0, 0), 2*GameConstants.textScaleFactor, SpriteEffects.None, 0);
+            spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X -( tipFont.MeasureString(title).X*GameConstants.generalTextScaleFactor), 2), Color.Red, 0, new Vector2(0, 0), 2*GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
 
-            text = IngamePresentation.wrapLine(text, tipBoxRect.Width - 100, tipFont, GameConstants.textScaleFactor);
+            text = IngamePresentation.wrapLine(text, tipBoxRect.Width - 100, tipFont, GameConstants.generalTextScaleFactor);
 
-            tipStringPosition = new Vector2(tipBoxRect.Center.X - (tipFont.MeasureString(text).X*GameConstants.textScaleFactor / 2), tipBoxRect.Center.Y - (tipFont.MeasureString(text).Y*GameConstants.textScaleFactor/2));
+            tipStringPosition = new Vector2(tipBoxRect.Center.X - (tipFont.MeasureString(text).X*GameConstants.generalTextScaleFactor / 2), tipBoxRect.Center.Y - (tipFont.MeasureString(text).Y*GameConstants.generalTextScaleFactor/2));
 
-            spriteBatch.DrawString(tipFont, text, tipStringPosition, Color.Black, 0, new Vector2(0, 0), GameConstants.textScaleFactor, SpriteEffects.None, 0);
+            spriteBatch.DrawString(tipFont, text, tipStringPosition, Color.Black, 0, new Vector2(0, 0), GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
 
             string nextText = "Press Enter/Esc to continue";
             Vector2 nextTextPosition = new Vector2(game.Window.ClientBounds.Right - tipFont.MeasureString(nextText).X, game.Window.ClientBounds.Bottom - tipFont.MeasureString(nextText).Y);
-            spriteBatch.DrawString(tipFont, nextText, nextTextPosition, Color.Black, 0, new Vector2(0, 0), GameConstants.textScaleFactor, SpriteEffects.None, 0);
+            spriteBatch.DrawString(tipFont, nextText, nextTextPosition, Color.Black, 0, new Vector2(0, 0), GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
 
             spriteBatch.End();
         }

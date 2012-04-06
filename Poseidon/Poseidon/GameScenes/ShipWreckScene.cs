@@ -57,7 +57,7 @@ namespace Poseidon
         List<StaticObject>[] staticObjects;
         List<Powerpack>[] powerpacks;
         // draw a cutscene when finding a god's relic
-        bool[] foundRelic;// = false;
+        public bool[] foundRelic;// = false;
         // has artifact?
         public int skillID;
 
@@ -417,6 +417,7 @@ namespace Poseidon
         /// Show the action scene
         /// </summary>
 
+        public bool backFromTipOrLevelObjective = false;
         public override void Show()
         {
             paused = false;
@@ -438,7 +439,7 @@ namespace Poseidon
                 CreateNewShipWreckVariables();
                 resetShipWreckNow = false;
             }
-            if (!backFromAttributeBoard)
+            if (!backFromAttributeBoard && !backFromTipOrLevelObjective)
             {
                 ResetShipWreckGeneralVariables();
             }
@@ -450,8 +451,12 @@ namespace Poseidon
                 shipAccessed[currentShipWreckID] = true;
             }
 
-            graphicEffect.resetTransitTimer();
-            screenTransitNow = true;
+            if (!backFromTipOrLevelObjective)
+            {
+                graphicEffect.resetTransitTimer();
+                screenTransitNow = true;
+            }
+            else backFromTipOrLevelObjective = false;   
             if (backFromAttributeBoard == true) backFromAttributeBoard = false;
             base.Show();
         }
@@ -654,7 +659,9 @@ namespace Poseidon
              
                 CursorManager.CheckClick(ref lastMouseState,ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
 
-                bool mouseOnInteractiveIcons = false;
+                IngamePresentation.tipHover = IngamePresentation.mouseOnTipIcon(currentMouseState);
+                IngamePresentation.levelObjHover = IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState);
+                bool mouseOnInteractiveIcons = IngamePresentation.levelObjHover || IngamePresentation.tipHover || IngamePresentation.toNextLevelHover;
                 //hydrobot update
                 hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], fishes[currentShipWreckID], fishAmount[currentShipWreckID],
                     Content, spriteBatch, myBullet, this, null, healthBullet, powerpacks[currentShipWreckID], null, null, null, null, mouseOnInteractiveIcons);
@@ -706,6 +713,7 @@ namespace Poseidon
                 {
                     point.Update(GraphicDevice, gameCamera, gameTime);
                 }
+
 
                 gameCamera.Update(hydroBot.ForwardDirection,
                     hydroBot.Position, aspectRatio, gameTime, cursor);
@@ -872,6 +880,16 @@ namespace Poseidon
 
                 roundTimer -= gameTime.ElapsedGameTime;
                 PoseidonGame.playTime += gameTime.ElapsedGameTime;
+
+                if (PlayGameScene.currentGameState == GameState.WonButStaying)
+                {
+                    IngamePresentation.toNextLevelHover = IngamePresentation.mouseOnNextLevelIcon(lastMouseState);
+                    if (IngamePresentation.toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
+                    {
+                        PlayGameScene.currentGameState = GameState.Won;
+                        returnToMain = true;
+                    }
+                }
                 if (roundTimer < TimeSpan.Zero)
                 {
                     returnToMain = true;
@@ -1043,13 +1061,23 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            DrawStats();
-            IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
-            DrawBulletType();
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+            if (!foundRelic[currentShipWreckID] && !showNoKey)
+            {
+                IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
+                DrawStats();
+                IngamePresentation.DrawLiveTip(GraphicDevice, spriteBatch);
+                DrawBulletType();
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+                if (PlayGameScene.currentGameState == GameState.WonButStaying) IngamePresentation.DrawToNextLevelButton(spriteBatch);
+                if (PoseidonGame.gamePlus)
+                    IngamePresentation.DrawGamePlusLevel(spriteBatch);
+                else
+                    IngamePresentation.DrawTipIcon(GraphicDevice, spriteBatch);          
+                Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, GraphicDevice.Viewport.TitleSafeArea.Height - IngamePresentation.exitShipWreckTexture.Height);
+                spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
+            }
             cursor.Draw(gameTime);
-            Vector2 exitSignPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Width - IngamePresentation.exitShipWreckTexture.Width, 0);
-            spriteBatch.Draw(IngamePresentation.exitShipWreckTexture, exitSignPosition, Color.White);
             spriteBatch.End();
             if (foundRelic[currentShipWreckID])
             {
@@ -1122,7 +1150,7 @@ namespace Poseidon
             string message = "You have not had the key to treasure chests yet, try to help the fish first so that they will help you find the key in return";
             message = IngamePresentation.wrapLine(message, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);
             spriteBatch.Draw(noKeyScreen, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Center.X - noKeyScreen.Width / 2, GraphicDevice.Viewport.TitleSafeArea.Center.Y - noKeyScreen.Height / 2, noKeyScreen.Width, noKeyScreen.Height), Color.White);
-            spriteBatch.DrawString(paintingFont, message, new Vector2(10, 100), Color.Red);
+            spriteBatch.DrawString(paintingFont, message, new Vector2(10, 130), Color.Red);
             
             string nextText = "Press Alt/Enter to continue";
             Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y);
@@ -1133,11 +1161,12 @@ namespace Poseidon
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
             spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(10, 0), oceanPaintings.paintings[paintingToShow].color);
-            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
-                oceanPaintings.paintings[paintingToShow].color);
+            
 
             String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);
             spriteBatch.Draw(oceanPaintings.backgroundBox, new Rectangle(GraphicDevice.Viewport.TitleSafeArea.Left, GraphicDevice.Viewport.TitleSafeArea.Center.Y - 10, GraphicDevice.Viewport.TitleSafeArea.Width, (int)paintingFont.MeasureString(line).Y * 2), Color.White);
+            spriteBatch.DrawString(paintingFont, "Do you know:", new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y),
+                oceanPaintings.paintings[paintingToShow].color);
             spriteBatch.DrawString(paintingFont, line,
                 new Vector2(GraphicDevice.Viewport.TitleSafeArea.Left + 10, GraphicDevice.Viewport.TitleSafeArea.Center.Y + 100), oceanPaintings.paintings[paintingToShow].color);
 
@@ -1225,38 +1254,17 @@ namespace Poseidon
 
         private void DrawStats()
         {
-            float xOffsetText, yOffsetText;
-            int days;
-            string str1 = GameConstants.StrTimeRemaining;
-            days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
-            str1 += days.ToString();
-            //str1 += "\n" + HydroBot.gameMode.ToString();
-            Rectangle rectSafeArea;
 
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null);
 
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(game, spriteBatch, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);
-
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
-
-            xOffsetText = rectSafeArea.X;
-            yOffsetText = rectSafeArea.Y;
-
-            Vector2 strSize = statsFont.MeasureString(str1);
-            Vector2 strPosition =
-                new Vector2((int)xOffsetText + 10, (int)yOffsetText);
-
-            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
-            //strPosition.Y += strSize.Y;
-            //spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
 
         }
         public bool CharacterNearChest(BoundingSphere chestSphere)

@@ -363,6 +363,7 @@ namespace Poseidon
             paused = false;
             //Factory.buildingSoundInstance.Resume();
             //ResearchFacility.buildingSoundInstance.Resume();
+            HydroBot.gameMode = GameMode.SurvivalMode;
             base.Show();
         }
 
@@ -405,7 +406,8 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
-            
+            HydroBot.numResources += GameConstants.numResourcesAtStart;
+
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
             myBullet = new List<DamageBullet>();
@@ -555,7 +557,8 @@ namespace Poseidon
                             factoryButtonPanel.removeAnchor();
                         }
                     }
-                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released))
+                    if ((lastKeyboardState.IsKeyDown(Keys.LeftShift) || lastKeyboardState.IsKeyDown(Keys.RightShift)) && (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released)
+                        && !openResearchFacilityConfigScene && !openFactoryConfigurationScene)
                     {
                         foreach (Factory factory in factories)
                         {
@@ -595,10 +598,9 @@ namespace Poseidon
                         }
                     }
 
-                    //tipHover = mouseOnTipIcon(currentMouseState);
-                    //levelObjHover = mouseOnLevelObjectiveIcon(currentMouseState);
-                    bool mouseOnInteractiveIcons = levelObjHover || tipHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor()
-                        || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
+                    IngamePresentation.levelObjHover = IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState);
+                    bool mouseOnInteractiveIcons = IngamePresentation.levelObjHover || (!factoryButtonPanel.cursorOutsidePanelArea) || factoryButtonPanel.hasAnyAnchor()
+                         || factoryButtonPanel.clickToBuildDetected || factoryButtonPanel.clickToRemoveAnchorActive || factoryButtonPanel.rightClickToRemoveAnchor;
                     //hydrobot update
                     hydroBot.UpdateAction(gameTime, cursor, gameCamera, enemies, enemiesAmount, fish, fishAmount, Content, spriteBatch, myBullet,
                         this, terrain.heightMapInfo, healthBullet, powerpacks, resources, trashes, null,null, mouseOnInteractiveIcons);
@@ -1095,16 +1097,19 @@ namespace Poseidon
                 point.Draw(spriteBatch);
             }
             spriteBatch.Begin();
-            DrawStats();
-            DrawBulletType();
-            //DrawHeight();
-            DrawRadar();
-            // Draw the factory panel
-            factoryButtonPanel.Draw(spriteBatch);
-            //factoryButtonPanel.DrawAnchor(spriteBatch);
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
+            {
+                DrawStats();
+                DrawBulletType();
+                //DrawHeight();
+                DrawRadar();
+                // Draw the factory panel
+                factoryButtonPanel.Draw(spriteBatch);
+                //factoryButtonPanel.DrawAnchor(spriteBatch);
 
-            if (HydroBot.activeSkillID != -1) DrawActiveSkill();
-
+                if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
+            }
             if (openFactoryConfigurationScene)
                 factoryToConfigure.DrawFactoryConfigurationScene(spriteBatch, menuSmall);
             if (openResearchFacilityConfigScene)
@@ -1135,18 +1140,17 @@ namespace Poseidon
             str1 += ((int)score).ToString();
 
             //too much texts on screen 
-            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
-                IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
+            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 60, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
             IngamePresentation.DrawEnvironmentBar(game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 30, "EXPERIENCE LEVEL", Color.Brown);
+            IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);

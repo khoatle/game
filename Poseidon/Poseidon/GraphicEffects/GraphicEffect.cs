@@ -292,7 +292,20 @@ namespace Poseidon.GraphicEffects
             else
             {
                 spriteBatch.Begin();
-                spriteBatch.Draw(originalScene, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                if (!HydroBot.distortingScreen && !HydroBot.ripplingScreen)
+                {
+                    spriteBatch.Draw(blurRenderTarget2, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                        //fix the problem of ugly areas at the edges of the screen
+                         new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
+                }
+                else if (HydroBot.distortingScreen && !HydroBot.ripplingScreen)
+                    spriteBatch.Draw(distortionRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                        //fix the problem of ugly areas at the edges of the screen
+                         new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
+                else if (HydroBot.ripplingScreen)
+                    spriteBatch.Draw(rippleRenderTarget, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight),
+                        //fix the problem of ugly areas at the edges of the screen
+                         new Rectangle(32, 32, originalScene.Width - 64, originalScene.Height - 64), Color.White);
                 spriteBatch.End();
             }
 
@@ -309,15 +322,16 @@ namespace Poseidon.GraphicEffects
                 spriteBatch.Draw(afterUnderWaterTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
                 spriteBatch.End();
             }
-            graphics.GraphicsDevice.SetRenderTarget(afterEffectsRenderTarget);
-            graphics.GraphicsDevice.Clear(Color.Black);
-            spriteBatch.Begin();
-            spriteBatch.Draw(afterBloomTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);// * ((float)HydroBot.currentEnvPoint / (float)HydroBot.maxEnvPoint));
-            spriteBatch.End();
+            //graphics.GraphicsDevice.SetRenderTarget(afterEffectsRenderTarget);
+            //graphics.GraphicsDevice.Clear(Color.Black);
+            //spriteBatch.Begin();
+            //spriteBatch.Draw(afterBloomTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);// * ((float)HydroBot.currentEnvPoint / (float)HydroBot.maxEnvPoint));
+            //spriteBatch.End();
             //graphics.GraphicsDevice.SamplerStates[1] = SamplerState.AnisotropicClamp;
             //graphics.GraphicsDevice.Textures[1] = afterBloomTexture;          
-            DrawOverlayText();
-            return afterEffectsRenderTarget;
+            //DrawOverlayText();
+            return afterBloomTexture;// afterEffectsRenderTarget;
+
         }
 
         void DrawOverlayText()
@@ -500,7 +514,8 @@ namespace Poseidon.GraphicEffects
         public void ApplyEdgeDetection(RenderTarget2D wholeScene, RenderTarget2D normalDepthRenderTarget, GraphicsDevice graphicsDevice, RenderTarget2D edgeDetectionRenderTarget)
         {
             Effect effectToUse = null;
-            if (GameSettings.SpecialEffectsEnabled) effectToUse = edgeDetectionEffect;
+            if (GameSettings.SpecialEffectsEnabled) 
+                effectToUse = edgeDetectionEffect;
             Vector2 resolution = new Vector2(wholeScene.Width, wholeScene.Height);
             Texture2D normalDepthTexture = normalDepthRenderTarget;
             edgeDetectionParameters["ScreenResolution"].SetValue(resolution);

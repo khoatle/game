@@ -148,7 +148,7 @@ namespace Poseidon {
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
-                                                       TimeSpan.FromSeconds(450), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days
@@ -167,6 +167,7 @@ namespace Poseidon {
         public const int TrashFloatHeight = 30;
         // camera height for main game
         public const float MainCamHeight = 200;
+        public const float StandardCamHeight = 200;
         // float height for shipwreck
         public const int ShipWreckFloatHeight = 20;
         public const float ShipCamHeight = 150;
@@ -181,7 +182,7 @@ namespace Poseidon {
         public const float FruitBoundingSphereFactor = 0.9f;
         public const float TreasureChestSphereFactor = 1.0f;
         public const float TrashBoundingSphereFactor = 0.2f; //0.9f
-        public const float FactoryBoundingSphereFactor = 0.9f;
+        public const float FactoryBoundingSphereFactor = 0.8f;
         public const float FruitGrowth = 3.5f;
 
         //skills
@@ -201,7 +202,7 @@ namespace Poseidon {
         public const float coolDownForArchillesArmor = 10;
         public const float coolDownForThorHammer = 10;
         public const float coolDownForHermesSandal = 10;
-        public const float coolDownForHypnotise = 1;//10;
+        public const float coolDownForHypnotise = 10;
         public const float timeArmorLast = 5;
         public const float timeStunLast = 5;
         public const float timeHypnotiseLast = 10;
@@ -273,11 +274,17 @@ namespace Poseidon {
         public const int BasicGoodWillGainForPlayingMiniGame = 50;
 
         //const for particle systems
-        public static int numExplosionParticles = (int) (20 * GameSettings.NumParticleLevel) ;
-        public static int numSandParticles = (int)(30 * GameSettings.NumParticleLevel);
-        public static int numSandParticlesForFactory = (int)(80 * GameSettings.NumParticleLevel);
-        public static float trailParticlesPerSecond = (int)(100 * GameSettings.NumParticleLevel);
-        public static int numFrozenBreathParticlesPerUpdate = (int)(3 * GameSettings.NumParticleLevel);
+        public static int DefaultNumExplosionParticles = 20;
+        public static int DefaultNumSandParticles = 30;
+        public static int DefaultNumSandParticlesForFactory = 80;
+        public static float DefaultTrailParticlesPerSecond = 100;
+        public static int DefaultNumFrozenBreathParticlesPerUpdate = 3;
+
+        public static int numExplosionParticles = DefaultNumExplosionParticles;
+        public static int numSandParticles = DefaultNumSandParticles;
+        public static int numSandParticlesForFactory = DefaultNumSandParticlesForFactory;
+        public static float trailParticlesPerSecond = DefaultTrailParticlesPerSecond;
+        public static int numFrozenBreathParticlesPerUpdate = DefaultNumFrozenBreathParticlesPerUpdate;
 
         // constants for Factory Buildings
         public const int FactoryPanelMaxButtons = 4;
@@ -294,14 +301,15 @@ namespace Poseidon {
         public const int plasticfactoryLevelPartId = 5;
 
         //constants for animal health
-        public const float DolphinStartingHealth = 500;
-        public const float SeaCowStartingHealth = 1000;
+        public const float DolphinStartingHealth = 1000;
+        public const float SeaCowStartingHealth = 1500;
         public const float TurtleStartingHealth = 2000;
 
         public const int MaxNumTries = 200;
 
         //config for drawing texts in the game
-        public static float textScaleFactor = 0;
+        public static float generalTextScaleFactor = 0;
+        public static float factoryTextScaleFactor = 0;
         public static int lineSpacing = 10;
         
     }

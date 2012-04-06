@@ -271,55 +271,58 @@ namespace Poseidon.MiniGames
             // Draw question and choices
             spriteBatch.Begin();
             base.Draw(gameTime);
-            // draw the question
-            Color color = Color.Lime;
-            string question = IngamePresentation.wrapLine(quizzesLibrary.quizzesList[questionID].question, 850, quizFont);
-            spriteBatch.DrawString(quizFont, question, positionQs, Color.Red);
-            //draw 4 buttons
-            spriteBatch.Draw(buttonTexture, rectA, Color.White);
-            spriteBatch.Draw(buttonTexture, rectB, Color.White);
-            spriteBatch.Draw(buttonTexture, rectC, Color.White);
-            spriteBatch.Draw(buttonTexture, rectD, Color.White);
-            // draw 4 answers
-            spriteBatch.DrawString(quizFont, " A  " + quizzesLibrary.quizzesList[questionID].options[0], positionA, color);
-            spriteBatch.DrawString(quizFont, " B  " + quizzesLibrary.quizzesList[questionID].options[1], positionB , color);
-            spriteBatch.DrawString(quizFont, " C  " + quizzesLibrary.quizzesList[questionID].options[2], positionC , color);
-            spriteBatch.DrawString(quizFont, " D  " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color);
-            if (displayRightWrongAnswer)
+            if (questionAnswered < 4)
             {
-                Color ansButtonColor;
-                if (rightAnswer)
+                // draw the question
+                Color color = Color.Lime;
+                string question = IngamePresentation.wrapLine(quizzesLibrary.quizzesList[questionID].question, (int)(0.75f * game.Window.ClientBounds.Width), quizFont, GameConstants.generalTextScaleFactor);
+                spriteBatch.DrawString(quizFont, question, new Vector2(game.Window.ClientBounds.Width/2, 200 * GameConstants.generalTextScaleFactor), Color.Red, 0, new Vector2(quizFont.MeasureString(question).X/2, quizFont.MeasureString(question).Y/2), GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                //draw 4 buttons
+                spriteBatch.Draw(buttonTexture, rectA, Color.White);
+                spriteBatch.Draw(buttonTexture, rectB, Color.White);
+                spriteBatch.Draw(buttonTexture, rectC, Color.White);
+                spriteBatch.Draw(buttonTexture, rectD, Color.White);
+                // draw 4 answers
+                spriteBatch.DrawString(quizFont, " A  " + quizzesLibrary.quizzesList[questionID].options[0], positionA, color, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                spriteBatch.DrawString(quizFont, " B  " + quizzesLibrary.quizzesList[questionID].options[1], positionB, color, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                spriteBatch.DrawString(quizFont, " C  " + quizzesLibrary.quizzesList[questionID].options[2], positionC, color, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                spriteBatch.DrawString(quizFont, " D  " + quizzesLibrary.quizzesList[questionID].options[3], positionD, color, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                if (displayRightWrongAnswer)
                 {
-                    spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
-                    ansButtonColor = Color.Yellow;
+                    Color ansButtonColor;
+                    if (rightAnswer)
+                    {
+                        spriteBatch.DrawString(quizFont, "CORRECT", positionAns, color);
+                        ansButtonColor = Color.Yellow;
+                    }
+                    else
+                    {
+                        spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
+                        ansButtonColor = Color.Red;
+                    }
+                    switch (selectedChoice)
+                    {
+                        case 0:
+                            spriteBatch.Draw(selectedButtonTexture, rectA, ansButtonColor);
+                            break;
+                        case 1:
+                            spriteBatch.Draw(selectedButtonTexture, rectB, ansButtonColor);
+                            break;
+                        case 2:
+                            spriteBatch.Draw(selectedButtonTexture, rectC, ansButtonColor);
+                            break;
+                        case 3:
+                            spriteBatch.Draw(selectedButtonTexture, rectD, ansButtonColor);
+                            break;
+                    }
+                    spriteBatch.Draw(nextButtonTexture, nextButtonRect, Color.White);
                 }
-                else
-                {
-                    spriteBatch.DrawString(quizFont, "WRONG", positionAns, color);
-                    ansButtonColor = Color.Red;
-                }
-                switch (selectedChoice)
-                {
-                    case 0:
-                        spriteBatch.Draw(selectedButtonTexture, rectA, ansButtonColor);
-                        break;
-                    case 1:
-                        spriteBatch.Draw(selectedButtonTexture, rectB, ansButtonColor);
-                        break;
-                    case 2:
-                        spriteBatch.Draw(selectedButtonTexture, rectC, ansButtonColor);
-                        break;
-                    case 3:
-                        spriteBatch.Draw(selectedButtonTexture, rectD, ansButtonColor);
-                        break;
-                }
-                spriteBatch.Draw(nextButtonTexture, nextButtonRect, Color.White);
+                cursor.Draw(gameTime);
+                string skipText = "Press Esc to skip minigame.";
+                Vector2 skipTextPosition = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - IngamePresentation.menuSmall.MeasureString(skipText).X * GameConstants.generalTextScaleFactor, 0);
+                spriteBatch.DrawString(IngamePresentation.menuSmall, skipText, skipTextPosition, Color.Red, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                
             }
-            cursor.Draw(gameTime);
-            string skipText = "Press Esc to skip minigame.";
-            Vector2 skipTextPosition = new Vector2(game.GraphicsDevice.Viewport.TitleSafeArea.Right - IngamePresentation.menuSmall.MeasureString(skipText).X, game.GraphicsDevice.Viewport.TitleSafeArea.Bottom - IngamePresentation.menuSmall.MeasureString(skipText).Y);
-            spriteBatch.DrawString(IngamePresentation.menuSmall, skipText, skipTextPosition, Color.Red);
-
             spriteBatch.End();
         }
     }

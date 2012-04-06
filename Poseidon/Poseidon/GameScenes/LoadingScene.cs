@@ -21,6 +21,7 @@ namespace Poseidon
         private SpriteFont font;
         public bool loadingSceneStarted = false;
         public bool loadingSurvivalScene = false;
+        Game game;
         //public int loadingLevel;
 
         public LoadingScene(Game game, SpriteFont font,
@@ -35,6 +36,7 @@ namespace Poseidon
             // Get the current spritebatch
             spriteBatch = (SpriteBatch)Game.Services.GetService(
                                             typeof(SpriteBatch));
+            this.game = game;
 
         }
 
@@ -71,17 +73,19 @@ namespace Poseidon
         {
             string text;
             if (PoseidonGame.gamePlus)
-                text = "LOADING GAME+";
+                text = "LOADING GAME +";
             else
                 text = "LOADING";
-            Vector2 textPositon = new Vector2(Game.Window.ClientBounds.Center.X - (font.MeasureString(text).X / 2), Game.Window.ClientBounds.Center.Y + 200);
+            Vector2 textPositon = new Vector2(Game.Window.ClientBounds.Center.X - (font.MeasureString(text).X / 2) * GameConstants.generalTextScaleFactor, Game.Window.ClientBounds.Center.Y + 200 * GameConstants.generalTextScaleFactor);
 
             spriteBatch.Begin();
             base.Draw(gameTime);
 
-            Rectangle logoRect = new Rectangle(Game.Window.ClientBounds.Right - teamLogo.Width, Game.Window.ClientBounds.Bottom - teamLogo.Height, teamLogo.Width, teamLogo.Height);
-            spriteBatch.Draw(teamLogo, logoRect , Color.White);
-            spriteBatch.DrawString(font, text, textPositon, Color.Black);
+            int logoWidth = (int)(256 * GameConstants.generalTextScaleFactor); //300
+            int logoHeight = (int)(256 * GameConstants.generalTextScaleFactor); //300
+            Rectangle teamLogoRectangle = new Rectangle(this.game.Window.ClientBounds.Right - (logoWidth - (logoWidth / 10)), this.game.Window.ClientBounds.Bottom - (logoHeight - (logoHeight / 10)), logoWidth, logoHeight);
+            spriteBatch.Draw(teamLogo, teamLogoRectangle, Color.White);
+            spriteBatch.DrawString(font, text, textPositon, Color.Black, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
             spriteBatch.End();
             //this.loadingLevel = PlayGameScene.currentLevel;
             loadingSceneStarted = true;

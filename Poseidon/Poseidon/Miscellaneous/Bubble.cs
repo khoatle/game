@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Poseidon.Core;
 namespace Poseidon
 {
     public class Bubble
@@ -28,6 +29,7 @@ namespace Poseidon
 
         int minX, maxX;
         double lastUpdate = 0;
+        float camHeightScale;
 
         public void LoadContent(ContentManager Content, Vector3 position, bool fromSeaBed, float startingScale)
         {
@@ -44,7 +46,7 @@ namespace Poseidon
         public void LoadContentBubbleSmall(ContentManager Content, Vector2 position, int minX, int maxX)
         {
             random = new Random();
-            startingScale = (float)random.Next(5, 10) / 10.0f;
+            startingScale = (float)random.Next(5, 10) / 10.0f * IngamePresentation.textScaleFactor;
             floatingSpeed = random.Next(20, 40);
             fluctutatingSpeed = 40;// random.Next(40, 60);
             bubbleTexture = Content.Load<Texture2D>("Image/Miscellaneous/bubble-small2");
@@ -67,6 +69,7 @@ namespace Poseidon
             if (timeLast >= 0)
                 scale = startingScale * (2000.0f / timeLast);
             scale = MathHelper.Clamp(scale, startingScale, startingScale * 5);
+            camHeightScale = (float)GameConstants.StandardCamHeight / (float)gameCamera.camHeight;
         }
         public void UpdateBubbleSmall()
         {
@@ -84,7 +87,7 @@ namespace Poseidon
         public void Draw(SpriteBatch spriteBatch, float scaleUp)
         {
             spriteBatch.Begin();
-            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, specularColor, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * scaleUp, SpriteEffects.None, 0);
+            spriteBatch.Draw(bubbleTexture, bubble2DPos, null, specularColor * camHeightScale, 0, new Vector2(bubbleTexture.Height / 2, bubbleTexture.Width / 2), scale * IngamePresentation.textScaleFactor * camHeightScale, SpriteEffects.None, 0);
             spriteBatch.End();
         }
         public void DrawBubbleSmall(SpriteBatch spriteBatch)

@@ -55,7 +55,14 @@ namespace Poseidon
 
             widthScale = (float)game.Window.ClientBounds.Width / 1440;
             heightScale = (float)game.Window.ClientBounds.Height / 900;
-            GameConstants.textScaleFactor = (float)Math.Sqrt((double)widthScale * (double)heightScale);
+
+            //textScale = widthScale * heightScale;
+            //if (textScale > 1) textScale = 1;
+
+            GameConstants.generalTextScaleFactor = (float)Math.Sqrt((double)widthScale * (double)heightScale);
+
+            if (GameConstants.generalTextScaleFactor > 1)
+                GameConstants.generalTextScaleFactor = 1;
 
             titleLine1SrcRect = new Rectangle(0, 0, 588, 126);//Hydrobot (0,0, 588, 126)
             titleLine2SrcRect = new Rectangle(90, 169, 620, 126); //Adventure (90, 169, 620, 126)
@@ -225,8 +232,8 @@ namespace Poseidon
             spriteBatch.Begin();
             base.Draw(gameTime);
 
-            int logoWidth = (int)(300 * widthScale); //300
-            int logoHeight = (int)(300 * heightScale); //300
+            int logoWidth = (int)(256 * GameConstants.generalTextScaleFactor); //300
+            int logoHeight = (int)(256 * GameConstants.generalTextScaleFactor); //300
             Rectangle teamLogoRectangle = new Rectangle(game.Window.ClientBounds.Right - (logoWidth-(logoWidth/10)), game.Window.ClientBounds.Bottom - (logoHeight-(logoHeight/10)), logoWidth, logoHeight);
             spriteBatch.Draw(teamLogo, teamLogoRectangle, Color.White);
             //System.Diagnostics.Debug.WriteLine(titleLine1Position + "Rect" + titleLine1Rect);

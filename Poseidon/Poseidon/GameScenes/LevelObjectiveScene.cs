@@ -64,12 +64,12 @@ namespace Poseidon
         public override void Show()
         {
 
-            int objectiveBoxWidth = (int)(GraphicsDevice.Viewport.TitleSafeArea.Width * 0.55);
-            int objectiveBoxHeight = (int)(GraphicsDevice.Viewport.TitleSafeArea.Height * 0.3);
-            objectiveBoxRect = new Rectangle(GraphicsDevice.Viewport.TitleSafeArea.Center.X - objectiveBoxWidth / 2, GraphicsDevice.Viewport.TitleSafeArea.Center.Y - (int)(objectiveBoxHeight * 1.2), objectiveBoxWidth, objectiveBoxHeight);
-            int achievedBoxWidth = (int)(GraphicsDevice.Viewport.TitleSafeArea.Width * 0.55);
-            int achievedBoxHeight = (int)(GraphicsDevice.Viewport.TitleSafeArea.Height * 0.3);
-            achievedBoxRect = new Rectangle(GraphicsDevice.Viewport.TitleSafeArea.Center.X - achievedBoxWidth / 2, GraphicsDevice.Viewport.TitleSafeArea.Center.Y + (int)(achievedBoxHeight * 0.2), achievedBoxWidth, achievedBoxHeight);
+            int objectiveBoxWidth = (int)(game.GraphicsDevice.Viewport.TitleSafeArea.Width * 0.55);
+            int objectiveBoxHeight = (int)(game.GraphicsDevice.Viewport.TitleSafeArea.Height * 0.3);
+            objectiveBoxRect = new Rectangle(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - objectiveBoxWidth / 2, game.GraphicsDevice.Viewport.TitleSafeArea.Center.Y - (int)(objectiveBoxHeight * 1.2), objectiveBoxWidth, objectiveBoxHeight);
+            int achievedBoxWidth = (int)(game.GraphicsDevice.Viewport.TitleSafeArea.Width * 0.55);
+            int achievedBoxHeight = (int)(game.GraphicsDevice.Viewport.TitleSafeArea.Height * 0.3);
+            achievedBoxRect = new Rectangle(game.GraphicsDevice.Viewport.TitleSafeArea.Center.X - achievedBoxWidth / 2, game.GraphicsDevice.Viewport.TitleSafeArea.Center.Y + (int)(achievedBoxHeight * 0.2), achievedBoxWidth, achievedBoxHeight);
             
 
             audio.NewMeteor.Play();
@@ -117,9 +117,11 @@ namespace Poseidon
             string level_objective="";
             string achieved_status="";
 
+            if (HydroBot.gameMode == GameMode.SurvivalMode)
+                level_description = "SURVIVAL MODE";
             if (PoseidonGame.gamePlus)
             {
-                level_description = "GAMEPLUS"+ "("+HydroBot.gamePlusLevel+")"+" LEVEL " + (currentLevel + 1).ToString();
+                level_description = "GAME + " + HydroBot.gamePlusLevel + "\n" + " LEVEL " + (currentLevel + 1).ToString();
             }
             else
             {
@@ -132,7 +134,11 @@ namespace Poseidon
             spriteBatch.Draw(objectiveBox, objectiveBoxRect, Color.White);
             spriteBatch.Draw(achievedBox, achievedBoxRect, Color.White);
 
-            if (currentLevel == 0)
+            if (HydroBot.gameMode == GameMode.SurvivalMode)
+            {
+                level_objective = "Protect the ancient sea animal against hunters";
+            }
+            else if (currentLevel == 0)
             {
                 double env_percent = (double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100;
                 double target_percent = GameConstants.LevelObjective[currentLevel]*100;
@@ -163,8 +169,10 @@ namespace Poseidon
             }
             else if (currentLevel == 3)
             {
-                level_objective = "Destroy the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "Mutant shark is still lurking around.";
+                level_objective = "Defeat the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                if (PlayGameScene.isBossKilled)
+                    achieved_status = "Mutant shark has been defeated.";
+                else achieved_status = "Mutant shark is still lurking around.";
             }
             else if (currentLevel == 4)
             {
@@ -234,7 +242,9 @@ namespace Poseidon
             else if (currentLevel == 11)
             {
                 level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "Terminator is still alive.";
+                if (PlayGameScene.isBossKilled)
+                    achieved_status = "Terminator has been defeated.";
+                else achieved_status = "Terminator is still alive.";
             }
 
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);

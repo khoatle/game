@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework;
+using Poseidon.Core;
 
 namespace Poseidon.FishSchool
 {
@@ -67,13 +68,14 @@ namespace Poseidon.FishSchool
 
         ContentManager content;
         int minValueX, minValueZ, maxValueX, maxValueZ, gameMaxX, gameMaxZ;
-        public SchoolOfFish(ContentManager Content, Texture2D fishTexture, int minX, int maxX, int minZ, int maxZ)
+        public static float camHeightScale;
+        public SchoolOfFish(ContentManager Content, Texture2D fishTexture, int minX, int maxX, int minZ, int maxZ, float camHeight)
         {
             flock = null;
             //cat = null;
 
             flockParams = new AIParameters();
-            ResetAIParams();
+            
             this.content = Content;
             this.fishTexture = fishTexture;
             this.gameMaxX = GameConstants.MainGameMaxRangeX;
@@ -82,6 +84,8 @@ namespace Poseidon.FishSchool
             minValueZ = minZ;
             maxValueX = maxX;
             maxValueZ = maxZ;
+            camHeightScale = (float)GameConstants.StandardCamHeight / (float)camHeight;
+            ResetAIParams();
         }
 
         public void Update(GameTime gameTime, BoundingFrustum frustum, HydroBot tank, SwimmingObject[] enemies, int enemyAmount, SwimmingObject[] fishes, int fishAmount)
@@ -118,8 +122,8 @@ namespace Poseidon.FishSchool
         /// </summary>
         private void ResetAIParams()
         {
-            flockParams.DetectionDistance = detectionDefault;
-            flockParams.SeparationDistance = separationDefault;
+            flockParams.DetectionDistance = detectionDefault;// *IngamePresentation.textScaleFactor * camHeightScale;
+            flockParams.SeparationDistance = separationDefault;// *IngamePresentation.textScaleFactor * camHeightScale;
             flockParams.MoveInOldDirectionInfluence = moveInOldDirInfluenceDefault;
             flockParams.MoveInFlockDirectionInfluence = moveInFlockDirInfluenceDefault;
             flockParams.MoveInRandomDirectionInfluence = moveInRandomDirInfluenceDefault;

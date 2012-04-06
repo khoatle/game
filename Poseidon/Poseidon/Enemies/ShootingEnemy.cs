@@ -181,7 +181,19 @@ namespace Poseidon
                 else
                     isFleeing = false;
             }
-
+            if (isPoissoned == true)
+            {
+                if (accumulatedHealthLossFromPoison < maxHPLossFromPoisson)
+                {
+                    health -= 0.1f;
+                    accumulatedHealthLossFromPoison += 0.1f;
+                }
+                else
+                {
+                    isPoissoned = false;
+                    accumulatedHealthLossFromPoison = 0;
+                }
+            }
             // Wear out slow
             if (speedFactor != 1)
                 if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds * HydroBot.turtlePower)

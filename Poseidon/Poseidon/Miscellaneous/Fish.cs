@@ -34,7 +34,7 @@ namespace Poseidon {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
             lastHealthUpdateTime = 0;
             healthChangeInterval = GameConstants.maxHealthChangeInterval;
-            health = GameConstants.DefaultFishHP;
+            health = maxHealth = GameConstants.DefaultFishHP;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -205,7 +205,10 @@ namespace Poseidon {
                 }
                 else if (env_health < 0.5)
                 {
-                    this.health -= GameConstants.healthChangeValue;
+                    //in dead sea, animal loses health twice faster
+                    if (PlayGameScene.currentLevel == 6 && HydroBot.gameMode == GameMode.MainGame)
+                        this.health -= 2 * GameConstants.healthChangeValue;
+                    else this.health -= GameConstants.healthChangeValue;
                     env_deviation = 0.5 - env_health;
                 }
                 lastHealthUpdateTime = PoseidonGame.playTime.TotalSeconds;
@@ -338,9 +341,13 @@ namespace Poseidon {
             //for (int i = 0; i < 4; i++)
             //{
                 ForwardDirection += turnAmount * GameConstants.TurnSpeed;
-                orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
-                Vector3 headingDirection = Vector3.Transform(movement, orientationMatrix);
-                headingDirection *= GameConstants.FishSpeed;
+
+                Vector3 headingDirection = Vector3.Zero;
+                headingDirection.X = (float)Math.Sin(ForwardDirection);
+                headingDirection.Z = (float)Math.Cos(ForwardDirection);
+                headingDirection.Normalize();
+
+                headingDirection *= GameConstants.FishSpeed * speedFactor;
                 futurePosition = Position + headingDirection;
 
                 if (Collision.isBarriersValidMove(this, futurePosition, enemies, enemiesAmount, hydroBot) &&

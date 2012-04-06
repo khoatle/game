@@ -199,8 +199,8 @@ namespace Poseidon.Core
                 {
                     // display info text
                     String displayText = buttons[i].Name + "\nRequired  : " + GameConstants.numResourcesForEachFactory + " resources\nAvailable : " + HydroBot.numResources + " resources";
-                    infoTextPosition.Y -= (int)infoTextFont.MeasureString(displayText).Y;
-                    spriteBatch.DrawString(infoTextFont, displayText, infoTextPosition, Color.Red);
+                    infoTextPosition.Y -= (int)infoTextFont.MeasureString(displayText).Y * IngamePresentation.textScaleFactor;
+                    spriteBatch.DrawString(infoTextFont, displayText, infoTextPosition, Color.Red, 0, Vector2.Zero, IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
                 }
             }
         }

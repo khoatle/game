@@ -128,14 +128,15 @@ namespace Poseidon
 
         public bool threeDgraphicInitiated = false;
 
+        public static bool DrawBoundingSphere = false;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
+            graphics.PreferredBackBufferWidth =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -171,7 +172,7 @@ namespace Poseidon
             Services.AddService(typeof(SpriteBatch), spriteBatch);
 
             //initiate all 2D graphics and fonts for the game
-            IngamePresentation.Initiate2DGraphics(Content);
+            IngamePresentation.Initiate2DGraphics(Content, this);
 
             statsFont = IngamePresentation.statsFont;
 
@@ -192,8 +193,8 @@ namespace Poseidon
             stunnedTexture = IngamePresentation.stunnedTexture;
 
             // Loading the radar
-            Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius);
-            radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", radarCenter);
+            //Vector2 radarCenter = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.Right - GameConstants.RadarScreenRadius * GameConstants.generalTextScaleFactor, GraphicsDevice.Viewport.TitleSafeArea.Bottom - GameConstants.RadarScreenRadius * GameConstants.generalTextScaleFactor);
+            radar = new Radar(Content, "Image/RadarTextures/playerDot", "Image/RadarTextures/enemyDot", "Image/RadarTextures/fishDot", "Image/RadarTextures/compass", "Image/RadarTextures/bossDot", this);
 
             //load the tips
             liveTipManager = new LiveTipManager();
@@ -263,6 +264,14 @@ namespace Poseidon
             // Create the shipwreck game play scene -- MUST be created before play game scene, as it overwrites the static attibutes of hydrobot
             shipWreckScene = new ShipWreckScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog);
             Components.Add(shipWreckScene);
+
+            // Create the Attribute board
+            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
+            Components.Add(AttributeScene);
+
+            // Create level objective scene
+            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
+            Components.Add(levelObjectiveScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
         }
@@ -587,7 +596,7 @@ namespace Poseidon
                 audio.MenuBack.Play();
                 shipWreckScene.Paused = !shipWreckScene.Paused;
             }
-            if (backPressed)
+            if (backPressed && !shipWreckScene.foundRelic[currentShipWreckID])
             {
                 //playGameScene.tank.CopyAttribute(shipWreckScene.tank);
                 playGameScene.roundTimer = shipWreckScene.roundTimer;
@@ -596,6 +605,24 @@ namespace Poseidon
                 playGameScene.graphicEffect.resetTransitTimer();
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
+                doubleClicked = false;
+            }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
+            {
+                prevScene = shipWreckScene;
+                ShowScene(levelObjectiveScene);
+            }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && IngamePresentation.mouseOnTipIcon(currentMouseState))
+            {
+                prevScene = shipWreckScene;
+                ShowScene(tipScene);
+            }
+            else
+            {
                 doubleClicked = false;
             }
  
@@ -617,6 +644,8 @@ namespace Poseidon
             {
                 audio.MenuBack.Play();
                 playGameScene.Paused = !playGameScene.Paused;
+                ResearchFacility.buildingSoundInstance.Pause();
+                Factory.buildingSoundInstance.Pause();
             }
             if (backPressed)
             {
@@ -654,14 +683,14 @@ namespace Poseidon
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released
-                && playGameScene.mouseOnLevelObjectiveIcon(currentMouseState))
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
             {
                 prevScene = playGameScene;
                 ShowScene(levelObjectiveScene);
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released
-                && playGameScene.mouseOnTipIcon(currentMouseState))
+                && IngamePresentation.mouseOnTipIcon(currentMouseState))
             {
                 prevScene = playGameScene;
                 ShowScene(tipScene);
@@ -719,6 +748,8 @@ namespace Poseidon
             {
                 audio.MenuBack.Play();
                 survivalGameScene.Paused = !survivalGameScene.Paused;
+                ResearchFacility.buildingSoundInstance.Pause();
+                Factory.buildingSoundInstance.Pause();
             }
             if (backPressed)
             {
@@ -730,6 +761,17 @@ namespace Poseidon
                 prevScene = survivalGameScene;
                 ShowScene(AttributeScene);
                 AttributeButtonPressed = false;
+            }
+            if (lastMouseState.LeftButton == ButtonState.Pressed
+                && currentMouseState.LeftButton == ButtonState.Released
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
+            {
+                prevScene = survivalGameScene;
+                ShowScene(levelObjectiveScene);
+            }
+            else
+            {
+                doubleClicked = false;
             }
             if (survivalGameScene.currentGameState == GameState.ToMainMenu)
                 ShowScene(startScene);
@@ -828,6 +870,11 @@ namespace Poseidon
                     GameSettings.ShowLiveTip = br.ReadBoolean();
                     GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
                     GameSettings.NumParticleLevel = (float)br.ReadDouble();
+                    GameConstants.numExplosionParticles = (int) (GameConstants.DefaultNumExplosionParticles * GameSettings.NumParticleLevel) ;
+                    GameConstants.numSandParticles = (int)(GameConstants.DefaultNumSandParticles * GameSettings.NumParticleLevel);
+                    GameConstants.numSandParticlesForFactory = (int)(GameConstants.DefaultNumSandParticlesForFactory * GameSettings.NumParticleLevel);
+                    GameConstants.trailParticlesPerSecond = (int)(GameConstants.DefaultTrailParticlesPerSecond * GameSettings.NumParticleLevel);
+                    GameConstants.numFrozenBreathParticlesPerUpdate = (int)(GameConstants.DefaultNumFrozenBreathParticlesPerUpdate * GameSettings.NumParticleLevel);
                     GameSettings.SchoolOfFishDetail = (float)br.ReadDouble();
                     br.Close();
                 }
@@ -876,13 +923,6 @@ namespace Poseidon
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
                       
-            // Create the Attribute board
-            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
-            Components.Add(AttributeScene);
-
-            // Create level objective scene
-            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
-            Components.Add(levelObjectiveScene);
 
             // Create tip scene
             tipScene = new TipScene(this, tipBackgroundTexture, Content);
@@ -902,10 +942,6 @@ namespace Poseidon
             // Create the survival game play scene
             survivalGameScene = new SurvivalGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(survivalGameScene);
-
-            // Create the Attribute board
-            AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
-            Components.Add(AttributeScene);
 
         }
         /// <summary>
@@ -987,13 +1023,19 @@ namespace Poseidon
         private void HandleLevelObjectiveInput()
         {
             if (EscPressed || enterPressed)
+            {
+                if (prevScene is ShipWreckScene) shipWreckScene.backFromTipOrLevelObjective = true;
                 ShowScene(prevScene);
+            }
         }
 
         private void HandleTipInput()
         {
             if (EscPressed || enterPressed)
+            {
+                if (prevScene is ShipWreckScene) shipWreckScene.backFromTipOrLevelObjective = true;
                 ShowScene(prevScene);
+            }
         }
 
         protected void ShowScene(GameScene scene)

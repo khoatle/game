@@ -64,7 +64,11 @@ namespace Poseidon.Core
 
             float widthScale = (float)game.Window.ClientBounds.Width / 1440;
             float heightScale = (float)game.Window.ClientBounds.Height / 900;
-            textScale = (float)System.Math.Sqrt((double)(widthScale * heightScale));
+
+            textScale = widthScale * heightScale;
+            if (textScale > 1) textScale = 1;
+
+            textScale = (float)System.Math.Sqrt((double)(textScale));
         }
 
         /// <summary>

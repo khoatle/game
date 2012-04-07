@@ -96,8 +96,8 @@ namespace Poseidon
                                             ImageComponent.DrawMode.Stretch));
 
             this.configTitle = configTitle;
-            int titleWidth = (int)(410 * widthScale);
-            int titleHeight = (int)(100 * heightScale);
+            int titleWidth = (int)(330 * widthScale);
+            int titleHeight = (int)(80 * heightScale);
             titleRect = new Rectangle(game.Window.ClientBounds.Center.X - titleWidth / 2, game.Window.ClientBounds.Top + titleHeight/3, titleWidth, titleHeight);
 
             string[] items = { "Music Volume", "Sound Volume", "Show Live Tips", "Special Effect", "Particle Level", "Fish School Size" };

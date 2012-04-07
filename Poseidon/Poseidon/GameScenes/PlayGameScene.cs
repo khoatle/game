@@ -36,7 +36,7 @@ namespace Poseidon
         SpriteFont statsFont, statisticFont;
         SpriteFont fishTalkFont;
         SpriteFont keyFoundFont;
-        SpriteFont menuSmall;
+        static SpriteFont menuSmall;
 
         public static Camera gameCamera;
         public static GameState currentGameState = GameState.PlayingCutScene;
@@ -200,15 +200,13 @@ namespace Poseidon
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
 
-        
-
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
             graphics = graphic;
             Content = content;
             GraphicDevice = GraphicsDevice;
-            this.spriteBatch = spriteBatch;
+            spriteBatch = sBatch;
             this.pausePosition = pausePosition;
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
@@ -273,9 +271,9 @@ namespace Poseidon
             //    GameConstants.NumberSubmarine = numSubmarine;
             //} 
             //else {
-                int[] numShootingEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
+                int[] numShootingEnemies = { 40, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
+                int[] numCombatEnemies = { 40, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
@@ -387,7 +385,7 @@ namespace Poseidon
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
 
-            graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
+            graphicEffect = new GraphicEffect(this, spriteBatch, fishTalkFont);
             // Construct our particle system components.
             particleManager = new ParticleManagement(this.game, GraphicDevice);
 
@@ -733,9 +731,10 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
+            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3)
+            //{
             //    HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
-            //    AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            //    AddingObjects.placeMinion(Content, 2-type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
             //    type++;
             //}
 
@@ -1868,6 +1867,7 @@ namespace Poseidon
 
         private void DrawStats()
         {
+            //IngamePresentation.DrawDebug("isWandering " + fish[fishAmount - 1].isWandering + "\nisReturnBot " + fish[fishAmount - 1].isReturnBot + "\nisChasing " + fish[fishAmount - 1].isChasing + "\nisFighting " + fish[fishAmount - 1].isFighting + "\nisCasting " + fish[fishAmount - 1].isCasting + "\n", new Vector2(100, 100), spriteBatch);
 
             //too much texts on screen 
 

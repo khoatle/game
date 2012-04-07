@@ -142,7 +142,7 @@ namespace Poseidon {
         public static int[] ShipNumberGhostPirate = { 0, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
         public const int ShipNumberFish = 0;
         public const int NumberChests = 10;
-        public static int[] NumStaticObjectsMain = { 0, 0, 0, 0, 0, 0, 20, 100, 0, 0, 0 , 0};
+        public static int[] NumStaticObjectsMain = { 0, 0, 0, 0, 0, 0, 20, 200, 0, 0, 0 , 0};
         public const int NumStaticObjectsShip = 10;
         public const int NumTypeShipScence = 6;
 

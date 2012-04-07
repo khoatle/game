@@ -358,6 +358,8 @@ namespace Poseidon
                 tempCenter.Z = shipWreck.Position.Z;
                 shipWreck.BoundingSphere = new BoundingSphere(tempCenter,
                     shipWreck.BoundingSphere.Radius);
+                //shipWreck.CalculateBoundingBox(1.0f, shipWreck.orientation);
+                //ModifyBoundingBox(ref shipWreck.boundingBox, GameConstants.MainGameFloatHeight);
             }
         }
 
@@ -849,12 +851,17 @@ namespace Poseidon
             if (staticObjects != null)
             {
                 BoundingSphere sphereForTesting;
-                foreach (GameObject currentObj in staticObjects)
+                foreach (StaticObject currentObj in staticObjects)
                 {
                     sphereForTesting = currentObj.BoundingSphere;
-                    //special handling for kelp plant
-                    if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 7)
-                        sphereForTesting.Radius = 3;
+                    //special handling for kelp plant and animal bones
+                    if (HydroBot.gameMode == GameMode.MainGame)
+                    {
+                        if (PlayGameScene.currentLevel == 7)
+                            sphereForTesting.Radius = 3;
+                        else if (PlayGameScene.currentLevel == 6)
+                            sphereForTesting.Radius *= 0.5f;
+                    }
                     if (objectBoundingSphere.Intersects(sphereForTesting))
                     {
                         return true;
@@ -891,6 +898,66 @@ namespace Poseidon
             return false;
         }
 
+        //bounding box version
+        public static bool IsSeaBedPlaceOccupied(BoundingBox objBoundingBox, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, List<Trash> trashes, List<Factory> factories, ResearchFacility researchFacility)
+        {
+            if (shipWrecks != null)
+            {
+                //not so close to the ship wreck
+                foreach (GameObject currentObj in shipWrecks)
+                {
+                    if (objBoundingBox.Intersects(currentObj.boundingBox))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (staticObjects != null)
+            {
+                //BoundingSphere sphereForTesting;
+                foreach (StaticObject currentObj in staticObjects)
+                {
+                    //sphereForTesting = currentObj.BoundingSphere;
+                    //special handling for kelp plant
+                    //if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 7)
+                    //    sphereForTesting.Radius = 3;
+                    if (objBoundingBox.Intersects(currentObj.boundingBox))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (trashes != null)
+            {
+                foreach (Trash trash in trashes)
+                {
+                    if (objBoundingBox.Intersects(trash.BoundingSphere))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (factories != null)
+            {
+                foreach (Factory factory in factories)
+                {
+                    if (objBoundingBox.Intersects(factory.boundingBox))
+                    {
+                        return true;
+                    }
+                }
+            }
+            if (researchFacility != null)
+            {
+                if (objBoundingBox.Intersects(researchFacility.boundingBox))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+
         public static void PlaceStaticObjects(List<StaticObject> staticObjects, List<ShipWreck> shipWrecks, Random random, HeightMapInfo heightMapInfo, int minX, int maxX, int minZ, int maxZ)
         {
             Vector3 tempCenter;
@@ -909,6 +976,8 @@ namespace Poseidon
                 tempCenter.Z = staticObject.Position.Z;
                 staticObject.BoundingSphere = new BoundingSphere(tempCenter,
                     staticObject.BoundingSphere.Radius);
+                //staticObject.CalculateBoundingBox(staticObject.scale, staticObject.orientation);
+                //ModifyBoundingBox(ref staticObject.boundingBox, GameConstants.MainGameFloatHeight);
             }
         }
 
@@ -989,6 +1058,12 @@ namespace Poseidon
                     }             
                 }
             }
+        }
+        public static void ModifyBoundingBox(ref BoundingBox boundingBox, int newMinHeight)
+        {
+                //float difference = boundingBox.Max.Y - boundingBox.Min.Y;
+                //boundingBox.Min.Y = newMinHeight;
+                //boundingBox.Max.Y = newMinHeight + difference;
         }
     }
 }

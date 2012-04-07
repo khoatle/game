@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using SkinnedModel;
+using Poseidon.Core;
 
 namespace Poseidon
 {
@@ -193,7 +194,7 @@ namespace Poseidon
             if (isWandering == true)
             {
                 // If the fish is far from the point after the bot's back or is the bot moving
-                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius || tank.isMoving())
+                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius || (tank.isMoving() && Vector3.Distance(tank.Position, Position) > 30f))
                 {
                     isWandering = false;
                     isReturnBot = true;

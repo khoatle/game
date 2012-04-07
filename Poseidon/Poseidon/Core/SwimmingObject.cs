@@ -118,6 +118,17 @@ namespace Poseidon
                         }
                     }
                 }
+                Vector3 hydrobotPush = Position - hydroBot.Position;
+                float hydroDistance = (Vector3.Distance(Position, hydroBot.Position)) - hydroBot.BoundingSphere.Radius;
+                if (hydroDistance < BoundingSphere.Radius * 5) {
+                    contenders++;
+                    if (hydroDistance < 0.0001f) // prevent divide by 0 
+                    {
+                        hydroDistance = 0.0001f;
+                    }
+                    float weight = 1 / hydroDistance;
+                    totalPush += hydrobotPush * weight;
+                }
 
                 for (int i = 0; i < fishAmount; i++)
                 {

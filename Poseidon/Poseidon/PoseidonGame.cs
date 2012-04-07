@@ -133,10 +133,10 @@ namespace Poseidon
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
-            graphics.PreferredBackBufferHeight =  GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -701,7 +701,7 @@ namespace Poseidon
             }
             if (PlayGameScene.currentGameState == GameState.ToMiniGame)
             {
-                Random rand = new Random();
+                //Random rand = new Random();
                 if (rand.Next(2) == 0)
                     ShowScene(quizzGameScene);
                 else
@@ -821,6 +821,7 @@ namespace Poseidon
                         case "Survival Mode":
                             MediaPlayer.Stop();
                             gamePlus = false;
+                            HydroBot.gamePlusLevel = 0;
                             loadingScene.loadingSurvivalScene = true;
                             ShowScene(loadingScene);
                             break;

@@ -946,12 +946,10 @@ namespace Poseidon
                                 int expPoints;
                                 if (PoseidonGame.gamePlus)
                                 {
-                                    if (PlayGameScene.currentLevel > 0)
-                                        envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
-                                    else
+                                    if (PlayGameScene.currentLevel == 0)
                                         envPoints = envPoints - 5;
                                 }
-                                expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
+                                expPoints = GameConstants.expGainForBioTrash + (HydroBot.gamePlusLevel * 5);
                                 HydroBot.currentExperiencePts += expPoints;
                                 HydroBot.currentEnvPoint += envPoints;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
@@ -1025,12 +1023,10 @@ namespace Poseidon
                                 int expPoints;
                                 if (PoseidonGame.gamePlus)
                                 {
-                                    if (PlayGameScene.currentLevel > 0)
-                                        envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
-                                    else
+                                    if (PlayGameScene.currentLevel == 0)
                                         envPoints = envPoints - 5;
                                 }
-                                expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
+                                expPoints = GameConstants.expGainForPlasTrash + (HydroBot.gamePlusLevel * 5);
                                 HydroBot.currentExperiencePts += expPoints;
                                 HydroBot.currentEnvPoint += envPoints;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
@@ -1103,12 +1099,10 @@ namespace Poseidon
                                 int expPoints;
                                 if (PoseidonGame.gamePlus)
                                 {
-                                    if (PlayGameScene.currentLevel > 0)
-                                        envPoints = (envPoints + HydroBot.gamePlusLevel * 5);
-                                    else
+                                    if (PlayGameScene.currentLevel == 0)
                                         envPoints = envPoints - 5;
                                 }
-                                expPoints = GameConstants.expGainForTrash + (HydroBot.gamePlusLevel * 5);
+                                expPoints = GameConstants.expGainForRadioTrash + (HydroBot.gamePlusLevel * 5);
                                 HydroBot.currentExperiencePts += expPoints;
                                 HydroBot.currentEnvPoint += envPoints;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";

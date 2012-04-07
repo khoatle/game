@@ -365,6 +365,10 @@ namespace Poseidon.Core
             radioTrash = Content.Load<Model>("Models/TrashModels/radioactivetrash"); ;
         }
 
+        //public static void DrawDebug(string str, Vector2 position, SpriteBatch spriteBatch) {
+        //    spriteBatch.DrawString(menuSmall, str, position, Color.White);
+        //}
+
         private static Vector2 timerPos = Vector2.Zero;
         public static void DrawTimeRemaining(TimeSpan roundTimer, GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
@@ -963,7 +967,7 @@ namespace Poseidon.Core
                                         if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
                                         {
                                             line = "RESEARCH FACILITY";
-                                            comment = "Researches on upgrading factories and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
+                                            comment = "Researches on upgrading plants and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
                                             tip = "Double click to drop collected objects";          
                                         }
                                     }

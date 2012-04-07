@@ -42,7 +42,7 @@ namespace Poseidon
                 maxHealth = health;
             }
             perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 750 + (HydroBot.gamePlusLevel*100);
+            basicExperienceReward = 750 * (HydroBot.gamePlusLevel + 1);
         }
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)

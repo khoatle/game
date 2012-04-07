@@ -1698,7 +1698,7 @@
     <Compile Include="Models\DecorationObjects\kelpPlant.fbx">
       <Name>kelpPlant</Name>
       <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
     <Compile Include="Models\DecorationObjects\animalBone1.fbx">
       <Name>animalBone1</Name>

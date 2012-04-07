@@ -540,7 +540,7 @@ namespace Poseidon
                     //        break;
                     //}
                     numTries++;
-                } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, null, null) && numTries < GameConstants.MaxNumTries); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
+                } while (IsSeaBedPlaceOccupied(xVal, GameConstants.MainGameFloatHeight, zVal, 30, shipWrecks, staticObjects, trashes, null, null) && numTries < GameConstants.MaxNumTries); //no need to check with factories as this funciton is called only at the start of the game when factories are not present.
 
                 trash.Position.X = xVal;
                 trash.Position.Z = zVal;
@@ -610,7 +610,7 @@ namespace Poseidon
                 //}
                 heightValue = (int)heightMapInfo.GetHeight(new Vector3(xVal, 0, zVal));
                 numTries++;
-            } while (IsSeaBedPlaceOccupied(xVal, 0, zVal, 30, shipWrecks, staticObjects, trashes, factories, researchFacility) && numTries < GameConstants.MaxNumTries);
+            } while (IsSeaBedPlaceOccupied(xVal, GameConstants.MainGameFloatHeight, zVal, 30, shipWrecks, staticObjects, trashes, factories, researchFacility) && numTries < GameConstants.MaxNumTries);
 
             sinkingTrash.Position.X = xVal;
             sinkingTrash.Position.Z = zVal;
@@ -687,7 +687,7 @@ namespace Poseidon
                 //    zValue *= -1;
                 numTries++;
 
-            } while (IsSeaBedPlaceOccupied(xValue, 0, zValue, 30, shipWrecks, staticObjects, null, null, null) && numTries < GameConstants.MaxNumTries);
+            } while (IsSeaBedPlaceOccupied(xValue, GameConstants.MainGameFloatHeight, zValue, 30, shipWrecks, staticObjects, null, null, null) && numTries < GameConstants.MaxNumTries);
             
             return new Vector3(xValue, 0, zValue);
         }
@@ -848,9 +848,14 @@ namespace Poseidon
             }
             if (staticObjects != null)
             {
+                BoundingSphere sphereForTesting;
                 foreach (GameObject currentObj in staticObjects)
                 {
-                    if (objectBoundingSphere.Intersects(currentObj.BoundingSphere))
+                    sphereForTesting = currentObj.BoundingSphere;
+                    //special handling for kelp plant
+                    if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 7)
+                        sphereForTesting.Radius = 3;
+                    if (objectBoundingSphere.Intersects(sphereForTesting))
                     {
                         return true;
                     }
@@ -898,7 +903,9 @@ namespace Poseidon
                 staticObject.Position.Y = heightMapInfo.GetHeight(staticObject.Position);
                 tempCenter = staticObject.BoundingSphere.Center;
                 tempCenter.X = staticObject.Position.X;
-                tempCenter.Y = staticObject.Position.Y;
+                if (HydroBot.gameMode == GameMode.MainGame || HydroBot.gameMode == GameMode.SurvivalMode)
+                    tempCenter.Y = GameConstants.MainGameFloatHeight;
+                else tempCenter.Y = staticObject.Position.Y;
                 tempCenter.Z = staticObject.Position.Z;
                 staticObject.BoundingSphere = new BoundingSphere(tempCenter,
                     staticObject.BoundingSphere.Radius);

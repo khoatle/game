@@ -228,7 +228,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "So what will be the next relic to find?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "The next relic is the most powerful of all. It is somewhere in the Dead sea, where the water is so salty that very few animals survive. Find the Thor's hammer in " + ((GameConstants.RoundTime[6].Minutes * 60) + GameConstants.RoundTime[6].Seconds) / GameConstants.DaysPerSecond + " days. Take care.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "The next relic is the most powerful of all. It is somewhere in the Dead sea, where the water is so salty that very few fishes survive. Find the Thor's hammer in " + ((GameConstants.RoundTime[6].Minutes * 60) + GameConstants.RoundTime[6].Seconds) / GameConstants.DaysPerSecond + " days. Beware, you might face enemy submaries. They are loaded with torpedoes and packed with divers. Take care.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -236,7 +236,7 @@ namespace Poseidon
             cutScene = new List<Sentence>();
             sentence = new Sentence(0, "I found the Thor's hammer. It's power is truly unmatchable!", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Yes, it is. But to defeat the Terminator, you still need more power. Explore the beautiful Kelp forest near Equador and find Achilles' armor in " + ((GameConstants.RoundTime[7].Minutes * 60) + GameConstants.RoundTime[7].Seconds) / GameConstants.DaysPerSecond + " days. Beware, you might face enemy submaries. They are loaded with torpedoes and packed with divers.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Yes, it is. But to defeat the Terminator, you still need more power. Explore the beautiful Kelp forest near Equador and find Achilles' armor in " + ((GameConstants.RoundTime[7].Minutes * 60) + GameConstants.RoundTime[7].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 

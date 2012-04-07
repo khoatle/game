@@ -40,6 +40,7 @@ namespace Poseidon.MiniGames
         public float timeBetweenUpdates;
         KeyboardState lastKeyboardState = new KeyboardState();
         KeyboardState currentKeyboardState = new KeyboardState();
+        public int whichParagraph;
         //introducing game rule and stuff
         bool introducing = false;
         Texture2D introductionTexture;
@@ -62,9 +63,9 @@ namespace Poseidon.MiniGames
             //timeBetweenUpdates = (float)game.TargetElapsedTime.TotalSeconds;
             timeInterval = 6f;
             elapsedSeconds = TimeSpan.FromSeconds(0);
+            whichParagraph = random.Next(paragraphLib.paragraphLib.Count);
             
-            
-            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[whichParagraph].content);
             typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
 
             isMatching = true;
@@ -100,7 +101,10 @@ namespace Poseidon.MiniGames
         public override void Hide()
         {
             MediaPlayer.Stop();
-            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[random.Next(paragraphLib.paragraphLib.Count)].content);
+            if (paragraphLib.paragraphLib.Count > 5) // so that same para is not repeated.
+                paragraphLib.paragraphLib.RemoveAt(whichParagraph);
+            whichParagraph = random.Next(paragraphLib.paragraphLib.Count);
+            displayBox = new Textbox(topLeftX + 10, height - 300, width - 20, 260, paragraphLib.paragraphLib[whichParagraph].content);
             typingBox = new WritingBox(topLeftX + 10, height - 80, width - 20, 20);
             ((WritingBox)typingBox).loadContent(boxBackground, font);
             ((Textbox)displayBox).loadContent(boxBackground, font);

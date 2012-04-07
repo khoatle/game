@@ -54,7 +54,7 @@ namespace Poseidon.Core
             RadarImageCenter = new Vector2(RadarImage.Width * 0.5f, RadarImage.Height * 0.5f);
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<Powerpack> powerPacks)
+        public void Draw(SpriteBatch spriteBatch, Vector3 playerPos, BaseEnemy[] enemies, int enemyAmount, Fish[] fishes, int fishAmount, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<Powerpack> powerPacks, List<StaticObject> staticObjs)
         {
             // The last parameter of the color determines how transparent the radar circle will be
             spriteBatch.Draw(RadarImage, RadarCenterPos, null, Color.White, 0.0f, RadarImageCenter, RadarScreenRadius / (RadarImage.Height * 0.5f), SpriteEffects.None, 0.0f);
@@ -266,6 +266,37 @@ namespace Poseidon.Core
                     }
                 }
             }
+            //if (staticObjs != null)
+            //{
+            //    foreach (StaticObject staticObj in staticObjs)
+            //    {
+
+            //        Vector2 diffVect = new Vector2(staticObj.Position.X - playerPos.X, staticObj.Position.Z - playerPos.Z);
+            //        float distance = diffVect.LengthSquared();
+
+            //        // Check if enemy is within RadarRange
+            //        //if (distance < RadarRangeSquared)
+            //        //{
+            //        if (distance > RadarRangeSquared)
+            //            diffVect *= RadarRange / diffVect.Length();
+            //        // Scale the distance from world coords to radar coords
+            //        diffVect *= RadarScreenRadius / RadarRange;
+
+            //        // We rotate each point on the radar so that the player is always facing UP on the radar
+            //        //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+            //        // Offset coords from radar's center
+            //        diffVect = -diffVect;
+            //        diffVect += RadarCenterPos;
+
+            //        // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+            //        // at lower elevations have smaller dots.
+            //        float scaleHeight = 1.0f;
+
+            //        spriteBatch.Draw(PlayerDotImage, diffVect, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width / 2, PlayerDotImage.Height / 2), 1.0f, SpriteEffects.None, 0.0f);
+
+            //    }
+            //}
             // Draw player's dot last
             //spriteBatch.Draw(PlayerDotImage, RadarCenterPos, Color.White);
             spriteBatch.Draw(PlayerDotImage, RadarCenterPos, null, Color.White, 0.0f, new Vector2(PlayerDotImage.Width / 2, PlayerDotImage.Height / 2), 1.0f * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f); 

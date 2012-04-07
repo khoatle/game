@@ -65,6 +65,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Image\TrashManagement\BiodegradableFactory_level2.png">
+      <Name>BiodegradableFactory_level2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Compile Include="Models\Miscellaneous\sphere1uR.x">
       <Name>sphere1uR</Name>
       <Importer>XImporter</Importer>
@@ -1693,7 +1698,7 @@
     <Compile Include="Models\DecorationObjects\kelpPlant.fbx">
       <Name>kelpPlant</Name>
       <Importer>FbxImporter</Importer>
-      <Processor>ModelProcessor</Processor>
+      <Processor>SkinnedModelProcessor</Processor>
     </Compile>
     <Compile Include="Models\DecorationObjects\animalBone1.fbx">
       <Name>animalBone1</Name>
@@ -2216,11 +2221,6 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\TrashManagement\BiodegradableFactory_level2.png">
-      <Name>BiodegradableFactory_level2</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Image\SceneTextures\Credits.png">
@@ -2644,6 +2644,13 @@
   <ItemGroup>
     <Compile Include="Image\Miscellaneous\exitShipWreckTip.png">
       <Name>exitShipWreckTip</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\TrashManagement\PlasticFactory_level2.png">
+      <Name>PlasticFactory_level2</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

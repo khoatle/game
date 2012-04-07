@@ -34,14 +34,14 @@ namespace Poseidon.MiniGames
             for (int i = 0; i < words.Count; i++) {
                 if (words[i].Equals("\n")) {
                     nextDrawPosition.X = posX;
-                    nextDrawPosition.Y += font.LineSpacing;
+                    nextDrawPosition.Y += font.LineSpacing * GameConstants.generalTextScaleFactor;
                 }
                 else if (i == markupIndex) {
-                    spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Crimson);
-                    nextDrawPosition.X += font.MeasureString(words[markupIndex] + " ").X;
+                    spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Crimson, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                    nextDrawPosition.X += font.MeasureString(words[markupIndex] + " ").X * GameConstants.generalTextScaleFactor;
                 } else {
-                    spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Black);
-                    nextDrawPosition.X += font.MeasureString(words[i] + " ").X;
+                    spriteBatch.DrawString(font, words[i] + " ", nextDrawPosition, Color.Black, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+                    nextDrawPosition.X += font.MeasureString(words[i] + " ").X * GameConstants.generalTextScaleFactor;
                 }
             }
             spriteBatch.End();
@@ -59,7 +59,7 @@ namespace Poseidon.MiniGames
         {
             string line = "";
             for (int i = 0; i < words.Count; i++) {
-                if (font.MeasureString(line + words[i]).X > width) {
+                if (font.MeasureString(line + words[i]).X * GameConstants.generalTextScaleFactor > width) {
                     if (markupIndex == i) {
                         markupIndex++;
                     }

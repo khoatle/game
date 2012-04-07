@@ -240,13 +240,17 @@ namespace Poseidon.Core
             // Factory level textures
             plasticFactoryLevelTextures = new List<Texture2D>();
             biodegradableFactoryLevelTextures = new List<Texture2D>();
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 2; i++)
             {
                 // using same level textures for both factories
                 Texture2D loadedTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level" + i);
                 plasticFactoryLevelTextures.Add(loadedTexture);
                 biodegradableFactoryLevelTextures.Add(loadedTexture);
             }
+            Texture2D lastLevelTexture = Content.Load<Texture2D>("Image/TrashManagement/BiodegradableFactory_level2");
+            biodegradableFactoryLevelTextures.Add(lastLevelTexture);
+            lastLevelTexture = Content.Load<Texture2D>("Image/TrashManagement/PlasticFactory_level2");
+            plasticFactoryLevelTextures.Add(lastLevelTexture);
 
             laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBall");
             healLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/greenBall");
@@ -360,6 +364,10 @@ namespace Poseidon.Core
             plasticTrash = Content.Load<Model>("Models/TrashModels/plastictrashver3");
             radioTrash = Content.Load<Model>("Models/TrashModels/radioactivetrash"); ;
         }
+
+        //public static void DrawDebug(string str, Vector2 position, SpriteBatch spriteBatch) {
+        //    spriteBatch.DrawString(menuSmall, str, position, Color.White);
+        //}
 
         private static Vector2 timerPos = Vector2.Zero;
         public static void DrawTimeRemaining(TimeSpan roundTimer, GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
@@ -959,7 +967,7 @@ namespace Poseidon.Core
                                         if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
                                         {
                                             line = "RESEARCH FACILITY";
-                                            comment = "Researches on upgrading factories and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
+                                            comment = "Researches on upgrading plants and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
                                             tip = "Double click to drop collected objects";          
                                         }
                                     }

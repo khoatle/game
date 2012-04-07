@@ -36,7 +36,7 @@ namespace Poseidon
         SpriteFont statsFont, statisticFont;
         SpriteFont fishTalkFont;
         SpriteFont keyFoundFont;
-        SpriteFont menuSmall;
+        static SpriteFont menuSmall;
 
         public static Camera gameCamera;
         public static GameState currentGameState = GameState.PlayingCutScene;
@@ -200,15 +200,13 @@ namespace Poseidon
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
 
-        
-
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch spriteBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
             : base(game)
         {
             graphics = graphic;
             Content = content;
             GraphicDevice = GraphicsDevice;
-            this.spriteBatch = spriteBatch;
+            spriteBatch = sBatch;
             this.pausePosition = pausePosition;
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
@@ -387,7 +385,7 @@ namespace Poseidon
                                                          pp.BackBufferWidth, pp.BackBufferHeight, false,
                                                          pp.BackBufferFormat, pp.DepthStencilFormat);
 
-            graphicEffect = new GraphicEffect(this, this.spriteBatch, fishTalkFont);
+            graphicEffect = new GraphicEffect(this, spriteBatch, fishTalkFont);
             // Construct our particle system components.
             particleManager = new ParticleManagement(this.game, GraphicDevice);
 
@@ -507,6 +505,8 @@ namespace Poseidon
 
                 Serializer serializer = new Serializer();
                 serializer.SerializeObjects(filenamePrefix + currentLevel.ToString(), objectsToSerialize);
+                if (PoseidonGame.gamePlus)
+                    serializer.SerializeObjects("SurvivalMode", objectsToSerialize);
 
                 hydroBot.SetLevelStartValues();
             }
@@ -662,23 +662,27 @@ namespace Poseidon
                 if (currentLevel == 6)
                 {
                     int randomObject = random.Next(4);
+                    randomObject = 0;
                     switch (randomObject)
                     {
                         case 0:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1", false, 1, 24, 24);
                             break;
                         case 1:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2", false, 0, 0, 0);
                             break;
                         case 2:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3", false, 0, 0, 0);
                             break;
                         case 3:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4", false, 0, 0, 0);
                             break;
                     }
                 }
-                //staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                if (currentLevel == 7)
+                {
+                    staticObjects[index].LoadContent(Content, "Models/DecorationObjects/kelpPlant", true, 1, 48, 24);
+                }
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, terrain.heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
@@ -731,9 +735,10 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3) {
+            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3)
+            //{
             //    HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
-            //    AddingObjects.placeMinion(Content, type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            //    AddingObjects.placeMinion(Content, 2-type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
             //    type++;
             //}
 
@@ -987,6 +992,11 @@ namespace Poseidon
                     {
                         trash.Update(gameTime);
                     }
+
+                    foreach (Powerpack powPack in powerpacks)
+                        powPack.Update();
+                    foreach (Resource res in resources)
+                        res.Update();
                    
                     CursorManager.CheckClick(ref this.lastMouseState, ref this.currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
                     foreach (Factory factory in factories)
@@ -1048,6 +1058,10 @@ namespace Poseidon
                         if (shipWreck.BoundingSphere.Intersects(frustum) && shipWreck.seen == false)
                             shipWreck.seen = true;
                     }
+                    foreach (StaticObject staticObj in staticObjects)
+                    {
+                        staticObj.Update(frustum, gameTime);
+                    }
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
@@ -1067,6 +1081,7 @@ namespace Poseidon
                     {
                         alliesBullets[i].update(gameTime);
                     }
+
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
@@ -1202,9 +1217,28 @@ namespace Poseidon
             bool status = false;
             float orientation; // 0, PI/2, PI, 3*PI/2
             Factory oneFactory;
-
+            bool notEnoughResource = false;
+            switch (buildingType)
+            {
+                case BuildingType.researchlab:
+                    if (HydroBot.numResources < GameConstants.numResourcesForResearchCenter)
+                        notEnoughResource = true;
+                    break;
+                case BuildingType.biodegradable:
+                    if (HydroBot.numResources < GameConstants.numResourcesForBioFactory)
+                        notEnoughResource = true;
+                    break;
+                case BuildingType.plastic:
+                    if (HydroBot.numResources < GameConstants.numResourcesForPlasticFactory)
+                        notEnoughResource = true;
+                    break;
+                case BuildingType.radioactive:
+                    if (HydroBot.numResources < GameConstants.numResourcesForRadioFactory)
+                        notEnoughResource = true;
+                    break;
+            }
             // Check if hydrobot has sufficient resources for building a factory
-            if (HydroBot.numResources < GameConstants.numResourcesForEachFactory)
+            if (notEnoughResource)
             {
                 // Play some sound hinting no sufficient resource
                 audio.MenuScroll.Play();
@@ -1279,8 +1313,16 @@ namespace Poseidon
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation);
-                        HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                        HydroBot.numResources -= GameConstants.numResourcesForResearchCenter;
                         status = true;
+                        //env loss for building factory
+                        if (GameConstants.envLossPerFactoryBuilt > 0)
+                        {
+                            HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                            Point lossPoint = new Point();
+                            lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                            points.Add(lossPoint);
+                        }
                     }
                     break;
 
@@ -1292,9 +1334,18 @@ namespace Poseidon
                     oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, biofactoryAnimationTextures);
-                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    HydroBot.numResources -= GameConstants.numResourcesForBioFactory;
                     factories.Add(oneFactory);
                     status = true;
+
+                    //env loss for building factory
+                    if (GameConstants.envLossPerFactoryBuilt > 0)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                        Point lossPoint = new Point();
+                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                        points.Add(lossPoint);
+                    }
                     break;
 
                 case BuildingType.plastic:
@@ -1305,9 +1356,17 @@ namespace Poseidon
                     oneFactory.ModelStates = plasticFactoryModelStates;     // set different model states so that under construction states are handled
                     oneFactory.LevelTextures = plasticFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
-                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    HydroBot.numResources -= GameConstants.numResourcesForPlasticFactory;
                     factories.Add(oneFactory);
                     status = true;
+                    //env loss for building factory
+                    if (GameConstants.envLossPerFactoryBuilt > 0)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                        Point lossPoint = new Point();
+                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                        points.Add(lossPoint);
+                    }
                     break;
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive, particleManager, GraphicDevice);
@@ -1316,9 +1375,17 @@ namespace Poseidon
                     oneFactory.Model = radioactiveFactoryModel;
                     oneFactory.ModelStates = radioactiveFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures);
-                    HydroBot.numResources -= GameConstants.numResourcesForEachFactory;
+                    HydroBot.numResources -= GameConstants.numResourcesForRadioFactory;
                     factories.Add(oneFactory);
                     status = true;
+                    //env loss for building factory
+                    if (GameConstants.envLossPerFactoryBuilt > 0)
+                    {
+                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
+                        Point lossPoint = new Point();
+                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
+                        points.Add(lossPoint);
+                    }
                     break;
             }
             if (status)
@@ -1776,7 +1843,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks, staticObjects);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)
@@ -1809,6 +1876,7 @@ namespace Poseidon
 
         private void DrawStats()
         {
+            //IngamePresentation.DrawDebug("isWandering " + fish[fishAmount - 1].isWandering + "\nisReturnBot " + fish[fishAmount - 1].isReturnBot + "\nisChasing " + fish[fishAmount - 1].isChasing + "\nisFighting " + fish[fishAmount - 1].isFighting + "\nisCasting " + fish[fishAmount - 1].isCasting + "\n", new Vector2(100, 100), spriteBatch);
 
             //too much texts on screen 
 

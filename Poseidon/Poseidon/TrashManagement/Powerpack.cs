@@ -70,7 +70,7 @@ namespace Poseidon
 
         public void Draw(Matrix view, Matrix projection, Camera gameCamera, string techniqueName)
         {
-            Update(); //since update is only changing orientation, it is better to put here than in playgamescene & survival scene
+            //Update(); //since update is only changing orientation, it is better to put here than in playgamescene & survival scene
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
             Matrix translateMatrix = Matrix.CreateTranslation(Position);

@@ -131,7 +131,7 @@ namespace Poseidon
                     if (objs[i] is Fish)
                     {
                         int envLoss;
-                        envLoss = GameConstants.envLossForFishDeath + 5*HydroBot.gamePlusLevel;
+                        envLoss = GameConstants.envLossForFishDeath + 5 * HydroBot.gamePlusLevel;
                         HydroBot.currentEnvPoint -= envLoss;
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))
                         {
@@ -470,7 +470,7 @@ namespace Poseidon
                             barriers[j].health += bullets[i].healthAmount;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
 
-                            int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * barriers[j].basicExperienceReward);
+                            int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * (barriers[j].basicExperienceReward + HydroBot.gamePlusLevel * 5));
                             //int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
                             int goodWillReward = (int)(((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.GoodWillPointGainForHealing);
 

@@ -963,7 +963,7 @@ namespace Poseidon.Core
                                         if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
                                         {
                                             line = "RESEARCH FACILITY";
-                                            comment = "Researches on upgrading factories and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
+                                            comment = "Researches on upgrading plants and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
                                             tip = "Double click to drop collected objects";          
                                         }
                                     }

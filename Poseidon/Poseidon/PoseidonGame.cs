@@ -133,8 +133,8 @@ namespace Poseidon
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = 1024;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
-            graphics.PreferredBackBufferHeight = 768;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
             graphics.IsFullScreen = true;
 
@@ -702,9 +702,9 @@ namespace Poseidon
             if (PlayGameScene.currentGameState == GameState.ToMiniGame)
             {
                 //Random rand = new Random();
-                //if (rand.Next(2) == 0)
-                //    ShowScene(quizzGameScene);
-                //else
+                if (rand.Next(2) == 0)
+                    ShowScene(quizzGameScene);
+                else
                     ShowScene(typeGameScene);
             }
             if (PlayGameScene.currentGameState == GameState.GameComplete)

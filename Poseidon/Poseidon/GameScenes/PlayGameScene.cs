@@ -664,23 +664,27 @@ namespace Poseidon
                 if (currentLevel == 6)
                 {
                     int randomObject = random.Next(4);
+                    randomObject = 0;
                     switch (randomObject)
                     {
                         case 0:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1", false, 1, 24, 24);
                             break;
                         case 1:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2", false, 0, 0, 0);
                             break;
                         case 2:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3", false, 0, 0, 0);
                             break;
                         case 3:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4", false, 0, 0, 0);
                             break;
                     }
                 }
-                //staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                if (currentLevel == 7)
+                {
+                    staticObjects[index].LoadContent(Content, "Models/DecorationObjects/kelpPlant", true, 1, 48, 24);
+                }
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, terrain.heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
@@ -1055,6 +1059,10 @@ namespace Poseidon
                         if (shipWreck.BoundingSphere.Intersects(frustum) && shipWreck.seen == false)
                             shipWreck.seen = true;
                     }
+                    foreach (StaticObject staticObj in staticObjects)
+                    {
+                        staticObj.Update(frustum, gameTime);
+                    }
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
@@ -1074,6 +1082,7 @@ namespace Poseidon
                     {
                         alliesBullets[i].update(gameTime);
                     }
+
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
@@ -1835,7 +1844,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks, staticObjects);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)

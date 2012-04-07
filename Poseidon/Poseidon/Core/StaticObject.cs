@@ -12,15 +12,16 @@ namespace Poseidon
 {
     public class StaticObject : GameObject
     {
-        float orientation = 0;
+        public float orientation = 0;
         public static Random random = new Random();
-        float scale;
+        public float scale;
         bool isAnimated = false;
         Matrix[] bones;
         SkinningData skd;
         protected ClipPlayer clipPlayer;
         protected Matrix fishMatrix;
         protected Quaternion qRotation = Quaternion.Identity;
+        public BoundingBox boundingBox;
 
         public void LoadContent(ContentManager content, string modelname, bool isAnimated, int clipStart, int clipEnd, int fpsRate)
         {
@@ -55,10 +56,13 @@ namespace Poseidon
                 fishMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                    Matrix.CreateTranslation(Position);
             }
+
             // Set up the parameters
             //SetupShaderParameters(content, Model);
              
         }
+
+
 
         public void Update(BoundingFrustum cameraFrustum, GameTime gameTime)
         {
@@ -156,5 +160,9 @@ namespace Poseidon
                 mesh.Draw();
             }
         }
+
+
+
+
     }
 }

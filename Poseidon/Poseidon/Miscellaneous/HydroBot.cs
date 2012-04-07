@@ -1163,11 +1163,11 @@ namespace Poseidon
                     }
                 }
                 //disable goodwill bar in level 1
-                //if (PlayGameScene.currentLevel == 0)
-                //{
-                //    goodWillBarActivated = false;
-                //}
-                //else goodWillBarActivated = true;
+                if (PlayGameScene.currentLevel == 0)
+                {
+                    goodWillBarActivated = false;
+                }
+                else goodWillBarActivated = true;
             }
 
             if (isPoissoned == true) {

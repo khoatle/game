@@ -144,8 +144,8 @@ namespace Poseidon
         bool notYetReleased = false;
         double clickTimer = 0;
 
-        private bool openFactoryConfigurationScene = false;
-        private bool openResearchFacilityConfigScene = false;
+        public bool openFactoryConfigurationScene = false;
+        public bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
 
 
@@ -158,7 +158,7 @@ namespace Poseidon
         // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
         SpriteFont factoryPanelFont;
-        ButtonPanel factoryButtonPanel;
+        public ButtonPanel factoryButtonPanel;
 
         // Models and textures for Factories and buildings
         private Model researchBuildingModel;

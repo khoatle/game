@@ -163,9 +163,15 @@ namespace Poseidon
                     Position = futurePosition;
                     BoundingSphere.Center.X += (pull * GameConstants.FishSpeed * speedFactor).X;
                     BoundingSphere.Center.Z += (pull * GameConstants.FishSpeed * speedFactor).Z;
+                    float lastForwardDir = ForwardDirection;
                     ForwardDirection = (float)Math.Atan2(pull.X, pull.Z);
+                    PlaySteeringAnimation(lastForwardDir, ForwardDirection);
                 }
             }
+        }
+
+        public virtual void PlaySteeringAnimation(float lastForwardDir, float curForwardDir)
+        {
         }
 
         public virtual void Draw(Matrix view, Matrix projection) {

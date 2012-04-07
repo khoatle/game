@@ -59,7 +59,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "-" + damage.ToString() + "HP";
+                String point_string = "-" + (int)damage + "HP";
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -71,6 +71,7 @@ namespace Poseidon
                 //if (this.BoundingSphere.Intersects(cameraFrustum))
                 PoseidonGame.audio.slashSound.Play();
             }
+            base.attack();
         }
 
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
@@ -105,7 +106,7 @@ namespace Poseidon
                     PoseidonGame.audio.healingSound.Play();
 
                     Point point = new Point();
-                    String point_string = "Health + " + healAmount;
+                    String point_string = "Health + " + (int)healAmount;
                     point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
                     if (HydroBot.gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);
@@ -114,6 +115,7 @@ namespace Poseidon
                     else if (HydroBot.gameMode == GameMode.SurvivalMode)
                         SurvivalGameScene.points.Add(point);
                 }
+
             }
 
             // OK, I'm casting it
@@ -134,6 +136,7 @@ namespace Poseidon
                     Vector3 facingDirection = hydroBot.Position - Position;
                     ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
                 }
+                RestoreNormalAnimation();
             }
 
             Vector3 destination = hydroBot.Position + new Vector3(AfterX, 0, AfterZ);

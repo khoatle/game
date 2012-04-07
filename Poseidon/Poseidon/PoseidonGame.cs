@@ -668,7 +668,7 @@ namespace Poseidon
             if (doubleClicked 
                 && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
                 && !CursorManager.MouseOnFish(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
-                && GetInShipWreck())
+                && GetInShipWreck() && !playGameScene.factoryButtonPanel.hasAnyAnchor() && !playGameScene.openFactoryConfigurationScene && !playGameScene.openResearchFacilityConfigScene)
             {
                 //disable camera shaking or else we will get a shake 
                 //right after getting out of a shipwreck

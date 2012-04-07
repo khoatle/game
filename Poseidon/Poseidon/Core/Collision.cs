@@ -467,12 +467,14 @@ namespace Poseidon
                             PoseidonGame.audio.animalHappy.Play();
 
                         if (barriers[j].health < barriers[j].maxHealth ) {
-                            barriers[j].health += bullets[i].healthAmount;
+                            float amountHealed = Math.Min(bullets[i].healthAmount, barriers[j].maxHealth - barriers[j].health);
+
+                            barriers[j].health += amountHealed;
                             if (barriers[j].health > barriers[j].maxHealth) barriers[j].health = barriers[j].maxHealth;
 
-                            int expReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * (barriers[j].basicExperienceReward + HydroBot.gamePlusLevel * 5));
+                            int expReward = (int)(((double)amountHealed / (double)GameConstants.HealingAmount) * (barriers[j].basicExperienceReward + HydroBot.gamePlusLevel * 5));
                             //int envReward = (int) (((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.BasicEnvGainForHealingFish);
-                            int goodWillReward = (int)(((double)bullets[i].healthAmount / (double)GameConstants.HealingAmount) * GameConstants.GoodWillPointGainForHealing);
+                            int goodWillReward = (int)(((double)amountHealed / (double)GameConstants.HealingAmount) * GameConstants.GoodWillPointGainForHealing);
 
                             HydroBot.currentExperiencePts += expReward;
                             //HydroBot.currentEnvPoint += envReward;

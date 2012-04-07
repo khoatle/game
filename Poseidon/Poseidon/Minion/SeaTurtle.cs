@@ -71,7 +71,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "-" + damage.ToString() + "HP";
+                String point_string = "-" + (int)damage + "HP";
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -82,6 +82,7 @@ namespace Poseidon
                 //if (this.BoundingSphere.Intersects(cameraFrustum))
                 PoseidonGame.audio.slashSound.Play();
             }
+            base.attack();
         }
 
         public void FrozenBreathe(SwimmingObject[] enemies, int enemiesSize, bool firstCast) {
@@ -158,6 +159,7 @@ namespace Poseidon
                     FrozenBreathe(enemies, enemiesSize, firstCast);
                     firstCast = false;   
                 }
+                RestoreNormalAnimation();
             }
 
             Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);

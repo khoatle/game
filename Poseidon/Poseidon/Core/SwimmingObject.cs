@@ -119,7 +119,7 @@ namespace Poseidon
                     }
                 }
                 Vector3 hydrobotPush = Position - hydroBot.Position;
-                float hydroDistance = (Vector3.Distance(Position, hydroBot.Position)) - hydroBot.BoundingSphere.Radius;
+                float hydroDistance = (Vector3.Distance(Position, hydroBot.Position)) - hydroBot.BoundingSphere.Radius - BoundingSphere.Radius;
                 if (hydroDistance < BoundingSphere.Radius * 5) {
                     contenders++;
                     if (hydroDistance < 0.0001f) // prevent divide by 0 

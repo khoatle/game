@@ -705,6 +705,7 @@ namespace Poseidon
             }
             if (PlayGameScene.currentGameState == GameState.GameComplete)
             {
+                MediaPlayer.Stop();
                 ShowScene(startScene);
             }
             if (playJigsaw)

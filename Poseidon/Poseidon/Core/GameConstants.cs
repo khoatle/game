@@ -152,7 +152,7 @@ namespace Poseidon {
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
-                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
+                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
         //public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(490), 

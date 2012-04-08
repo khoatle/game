@@ -56,7 +56,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "-" + damage.ToString() + "HP";
+                String point_string = "-" + (int)damage + "HP";
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -69,6 +69,7 @@ namespace Poseidon
                 //if (this.BoundingSphere.Intersects(cameraFrustum))
                     PoseidonGame.audio.slashSound.Play();
             }
+            base.attack();
         }
 
         public void giveBuff() {
@@ -186,7 +187,7 @@ namespace Poseidon
                         }
                     } // END for()
                 } // End if (PoseidonGame.playTime.TotalSeconds... (timeout), more effect will be added by including an "else"
-                
+                RestoreNormalAnimation();
             } // End if (isCasting == true)
 
             // Moving, and changing state Logic

@@ -13,7 +13,7 @@ namespace Poseidon
         // different types of ship wreck
         // or maybe just its orientation
         int type;
-        float orientation;
+        public float orientation;
         // no re-access
         public bool accessed;
         // special skill's ID that this ship wreck will have in one of its chests

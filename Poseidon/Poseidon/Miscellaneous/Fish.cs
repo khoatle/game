@@ -298,7 +298,10 @@ namespace Poseidon {
             return null;
         }
 
-        public virtual void attack() {}
+        public virtual void attack()
+        {
+            RestoreNormalAnimation();
+        }
 
         public void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {
@@ -393,6 +396,32 @@ namespace Poseidon {
             //}
         }
 
-        
+        public override void PlaySteeringAnimation(float lastForwardDir, float curForwardDir)
+        {
+            if (!(Name == "shark") && !(Name == "Meiolania") && !(Name == "penguin"))
+            {
+                if (curForwardDir - lastForwardDir > 0)
+                {
+                    if (!clipPlayer.inRange(29, 31))
+                        clipPlayer.switchRange(29, 31);
+                }
+                else if (ForwardDirection - lastForwardDir < 0)
+                {
+                    if (!clipPlayer.inRange(40, 42))
+                        clipPlayer.switchRange(40, 42);
+                }
+                else
+                {
+                    if (!clipPlayer.inRange(1, 24))
+                        clipPlayer.switchRange(1, 24);
+                }
+            }
+        }
+
+        public void RestoreNormalAnimation()
+        {
+            if (!clipPlayer.inRange(1, 24))
+                clipPlayer.switchRange(1, 24);
+        }
     }
 }

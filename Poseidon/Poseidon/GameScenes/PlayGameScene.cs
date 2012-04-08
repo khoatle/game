@@ -144,8 +144,8 @@ namespace Poseidon
         bool notYetReleased = false;
         double clickTimer = 0;
 
-        private bool openFactoryConfigurationScene = false;
-        private bool openResearchFacilityConfigScene = false;
+        public bool openFactoryConfigurationScene = false;
+        public bool openResearchFacilityConfigScene = false;
         private Factory factoryToConfigure;
 
 
@@ -158,7 +158,7 @@ namespace Poseidon
         // Texture/Font for Mouse Interaction panel for factories
         Texture2D factoryPanelTexture;
         SpriteFont factoryPanelFont;
-        ButtonPanel factoryButtonPanel;
+        public ButtonPanel factoryButtonPanel;
 
         // Models and textures for Factories and buildings
         private Model researchBuildingModel;
@@ -1251,16 +1251,23 @@ namespace Poseidon
 
             int radius = 60; // need to revise this based on the model for each building
             BoundingSphere buildingBoundingSphere;
+            //BoundingBox buildingBoundingBox = new BoundingBox();
             if (factoryAnchor != null)
             {
                 buildingBoundingSphere = factoryAnchor.BoundingSphere;
                 radius = (int)buildingBoundingSphere.Radius;
+                //factoryAnchor.CalculateBoundingBox(1.0f, factoryAnchor.orientation);
+                //buildingBoundingBox = factoryAnchor.boundingBox;
             }
             else if (researchAnchor != null)
             {
                 buildingBoundingSphere = researchAnchor.BoundingSphere;
                 radius = (int)buildingBoundingSphere.Radius;
+                //researchAnchor.CalculateBoundingBox(1.0f, researchAnchor.orientation);
+                //buildingBoundingBox = researchAnchor.boundingBox;
             }
+
+            //AddingObjects.ModifyBoundingBox(ref buildingBoundingBox, GameConstants.MainGameFloatHeight);
 
             // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
             // Give a lax of 40 units so that if a click happened at the edge of the arena, building is not allowed. This is to prevent the case
@@ -1280,6 +1287,7 @@ namespace Poseidon
 
             int heightValue = GameConstants.MainGameFloatHeight;//(int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
+            //if (AddingObjects.IsSeaBedPlaceOccupied(buildingBoundingBox, shipWrecks, staticObjects, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();
@@ -1313,6 +1321,8 @@ namespace Poseidon
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation);
+                        //researchFacility.CalculateBoundingBox(1.0f, orientation);
+                        //AddingObjects.ModifyBoundingBox(ref researchFacility.boundingBox, GameConstants.MainGameFloatHeight);
                         HydroBot.numResources -= GameConstants.numResourcesForResearchCenter;
                         status = true;
                         //env loss for building factory
@@ -1334,6 +1344,8 @@ namespace Poseidon
                     oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, biofactoryAnimationTextures);
+                    //oneFactory.CalculateBoundingBox(1.0f, orientation);
+                    //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     HydroBot.numResources -= GameConstants.numResourcesForBioFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1357,6 +1369,8 @@ namespace Poseidon
                     oneFactory.LevelTextures = plasticFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForPlasticFactory;
+                    //oneFactory.CalculateBoundingBox(1.0f, orientation);
+                    //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     factories.Add(oneFactory);
                     status = true;
                     //env loss for building factory
@@ -1376,6 +1390,8 @@ namespace Poseidon
                     oneFactory.ModelStates = radioactiveFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForRadioFactory;
+                    //oneFactory.CalculateBoundingBox(1.0f, orientation);
+                    //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     factories.Add(oneFactory);
                     status = true;
                     //env loss for building factory

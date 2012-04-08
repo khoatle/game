@@ -59,7 +59,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Garbage dumping of harmful materials has taken its toll on the oceans", "Image/Cutscenes/Beach", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Effectively, all ocean life is facing mass extinction. The black market is in high demand for marine animals",
+            sentence = new Sentence(3, "All ocean life is facing mass extinction. The black market is in high demand for marine animals",
                 "Image/Cutscenes/tire trash", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Consequently, poachers take to the oceans to hunt the remaining few ...", "Image/Cutscenes/poachers", 0);
@@ -98,23 +98,19 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Not yet, the world still needs you, bot.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Wow! An old man? In the middle of the sea? Who might you be?", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "An old man? In the middle of the sea? Who might you be?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "People call me Poseidon, I am the ruler of the sea.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "I am known as Poseidon, the ruler of the sea.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Wow, Poseidon ... I thought you only exists in the myth. Thank you for saving my life.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "Poseidon ... I thought you only exists in the myth. Thank you for saving my life.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "It was my pleasure, and besides, as I said ealier, we need you to help us, bot.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "I do not understand, how can a hydrobot like me help you with anything?", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "I do not understand, how can a hydrobot like me help you with anything? I could not even protect myself from that poacher.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "As you may have already seen, the ocean life is in grave danger. The sea environment is completely polluted because of trash. Sea animals are being hunted by these illegal organization.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "As you may have already seen, the ocean life is in grave danger. The sea environment is completely polluted because of waste. Sea animals are being hunted by these illegal organization.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "And it was them who tried to exterminate me ...", "Image/Cutscenes/Robot Poseidon", 0);
-            cutScene.Add(sentence);
-            sentence = new Sentence(1, "Yes, correct. The sea environment is destroyed and my power is weakened ...", "Image/Cutscenes/Robot Poseidon", 0);
-            cutScene.Add(sentence);
-            sentence = new Sentence(0, "Then why don't you stop them?", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "Then why don't you stop them? You are very powerful, right?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "I can not interfere with human, that has been the rule for centuries and can not be violated ... but you can, and that's why we need your help.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
@@ -122,56 +118,96 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(1, "I observed you tried to save the fishes, you have a kind heart and that's why I chose you.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Alright, I got it, so how do we start? I have the power to clean the ocean and heal the sea animals!", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "Alright, I got it, so how do we start? I have the ability to clean the ocean and heal the sea animals!", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Impressive, but these power will not be enough for you to win this battle. I will give you the power to shoot a special bullet, after the hunters are defeated, they will be teleported to me and we will try to educate them.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Impressive, but these power will not be enough for you to win this battle. I will give you the power to shoot a special type of bullet, after the hunters are defeated, they will be teleported to me and we will try to educate them.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Teleportation! Wow, that's exciting. Thank you so much. I will not disappoint you.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "That's absolutely fantastic. I will not let you down.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "And from now on, for all the good deeds that you do for the ocean, I will repay you handsomely, pay attention to the good will indicator.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days to accomplish this mission.", "Image/Cutscenes/Robot Poseidon", 0);
+            //sentence = new Sentence(1, "I will now send you to near the coast of COSTA RICA. There are many divers hunting the sea creatures. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days to accomplish this mission.", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            sentence = new Sentence(1, "Now, on your way to Florida's seagrass meadow to stop the poachers there. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
+
+            //sentence = new Sentence(0, "Who are you?", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(1, "I am Poseidon, the ruler of the sea.", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(0, "Why did you save my life?", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(1, "You are a bot, you don't have a life. Besides, I want you to protect the ocean life.", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(0, "Huh! I can't even protect myself. The poachers are after me.", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(1, "I got some teleportation bullets from a UH scientist back in 2080. You can teleport the poachers to my prison. Do you think you can handle that?", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(0, "Absolutely, that's fantastic. I will not let you down.", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+            //sentence = new Sentence(1, "Go near the coast of Florida where there are lots of seagrasses. You will find many poachers. You need to save at least " + (GameConstants.LevelObjective[1] * 100).ToString() + "% of the sea creatures at the end of " + ((GameConstants.RoundTime[1].Minutes * 60) + GameConstants.RoundTime[1].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
+            //cutScene.Add(sentence);
+
             cutScenes.Add(cutScene);
  
 
             //For scene 2
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "Are you sure the humans are safe? I don't want to hurt them!", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "I am back from the Florida coast. How are the captured poachers doing? ", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Don't worry about them. They will be released when they learn their lesson. But there is something else to worry about. They took away a leopard shark and modified it's genes. It is a fierce creature now capable of poisonous bites.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Don't worry about them. They will be released once they learn their lesson.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Oh, no! How can I defeat such a ferocious creature?", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "Cool! If they can be turned from bad to good, it will benefit the ocean life alot. ", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "There are ancient relics left forgotten inside the shipwrecks hundreds or thousands years ago. Their powers are incredible. Perhaps, obtaining them will give us some hope", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Yes, but there is a more urgent matter at the moment. The hunter organization took away a leopard shark and modified it's genes. It is now a fierce creature with corrosive bites. Seems that organization is taking a step to stop you.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Ancient Relics??", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "A mutant shark ...? Does not sound like something I can defeat ...", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, " Just find the relic in " + ((GameConstants.RoundTime[2].Minutes * 60) + GameConstants.RoundTime[2].Seconds) / GameConstants.DaysPerSecond + " days in one of the shipwrecks and I will explain it further.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Yes, not at the moment. But there is still hope.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Hope?", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Among the pirate ships that sunk in the ocean thousands years ago, there are ones with ancient relics left forgotten inside. The incredible power of these relics may help us.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Ancient relics???", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Just obtain the relic from one of the shipwrecks and I will explain further. You have to return before " + ((GameConstants.RoundTime[2].Minutes * 60) + GameConstants.RoundTime[2].Seconds) / GameConstants.DaysPerSecond + " days have passed or else it will be too late.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
 
             //For scene 3
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "I found an old pair of sandals ... but they do not seem to fit, how am I supposed to wear this?", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "I am back. You did not tell me that there are ghost pirates inside these shipwrecks...", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Well, I did not want to scare you. I hope they did not cause much problem for you?", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "I am not a kid anymore, ghost can not scare me, you know.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Oh ... uhm ... I see ... (Does he mean that he was once a kid Hydrobot???)", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "Anyway, I found an old pair of sandals ... but they do not seem to fit, how am I supposed to wear this?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Settle down bot, these sandals are not for wearing. They are the legendary winged sandals of Hermes which enabled him to move at super sonic speeed.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Awesome, can I use that power too?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Unfortunately, an ancient relic's power can not be used by either a human or a bot. But I can help you to extract the power of this relic and use it periodically. However, everything has its price, using the relic will also hurt you a little bit.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Unfortunately, an ancient relic's power can be used by neither a human nor a bot. But I can help you to extract the power of this relic and use it periodically.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(0, "Sounds interesting, I am fully prepared!", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "Sounds interesting, I am eager to try it out!", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "The winged sandal is very powerful if used at the correct moment. Your goal is to find and defeat the mutant shark in " + ((GameConstants.RoundTime[3].Minutes * 60) + GameConstants.RoundTime[3].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "However, everything has its price, using the relic will also hurt you a little bit. So use the power efficiently.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "I will keep that in mind.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Now go find and defeat the mutant shark. Finish the mission in " + ((GameConstants.RoundTime[3].Minutes * 60) + GameConstants.RoundTime[3].Seconds) / GameConstants.DaysPerSecond + " days before the enemies realize your appearance.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
 
             //For scene 4
             cutScene = new List<Sentence>();
-            sentence = new Sentence(0, "I did it. The mutant shark was very tough to defeat.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(0, "I did it! The mutant shark was very tough to defeat.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(1, "Congratulations, but it is not over yet. The enemies plan to capture our sharks and create more mutant sharks.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
@@ -198,7 +234,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Then what can I do to defeat him.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "There are more ancient relics lying around. Obtain them and you will have more special powers. Your mission is to explore the shipwrecks and find the Hercules's Bow in " + ((GameConstants.RoundTime[5].Minutes * 60) + GameConstants.RoundTime[5].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "There are more ancient relics hidden in treasure chests. Obtain it and you will have more special powers. But you must travel far and wide to find these. The Hercules' bow is somewhere in the Artic sea. Your mission is to explore the shipwrecks in the icy waters and find the Hercules's Bow in " + ((GameConstants.RoundTime[5].Minutes * 60) + GameConstants.RoundTime[5].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -210,7 +246,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "So what will be the next relic to find?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "This time, find the Thor's hammer in " + ((GameConstants.RoundTime[6].Minutes * 60) + GameConstants.RoundTime[6].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "The next relic is the most powerful of all. It is somewhere in the Dead sea, where the water is so salty that very few fishes survive. Find the Thor's hammer in " + ((GameConstants.RoundTime[6].Minutes * 60) + GameConstants.RoundTime[6].Seconds) / GameConstants.DaysPerSecond + " days. Beware, you might face enemy submaries. They are loaded with torpedoes and packed with divers. Take care.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -218,7 +254,7 @@ namespace Poseidon
             cutScene = new List<Sentence>();
             sentence = new Sentence(0, "I found the Thor's hammer. It's power is truly unmatchable!", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "Yes, it is. But to defeat the Terminator, you still need more power. This mission, find Achilles' armor in " + ((GameConstants.RoundTime[7].Minutes * 60) + GameConstants.RoundTime[7].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "Yes, it is. But to defeat the Terminator, you still need more power. Explore the beautiful Kelp forest near Equador and find Achilles' armor in " + ((GameConstants.RoundTime[7].Minutes * 60) + GameConstants.RoundTime[7].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 
@@ -230,7 +266,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "So have we found all the relics?", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "There is yet one relic left to find. It is the The Aphrodite's belt. Go and find it in " + ((GameConstants.RoundTime[8].Minutes * 60) + GameConstants.RoundTime[8].Seconds) / GameConstants.DaysPerSecond + " days.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "There is yet one relic left to find. It is the The Aphrodite's belt. Go and find it in the Red sea within " + ((GameConstants.RoundTime[8].Minutes * 60) + GameConstants.RoundTime[8].Seconds) / GameConstants.DaysPerSecond + " days. The polluted water has harmful chemicals which may corrode your metals. Take care.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 

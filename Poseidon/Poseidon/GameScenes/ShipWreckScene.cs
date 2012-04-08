@@ -561,13 +561,13 @@ namespace Poseidon
                 switch (randomObject)
                 {
                     case 0:
-                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/barrel");
+                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/barrel", false, 0, 0, 0);
                         break;
                     case 1:
-                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/barrelstack");
+                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/barrelstack", false, 0, 0, 0);
                         break;
                     case 2:
-                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/boxstack");
+                        staticObjects[currentShipWreckID][index].LoadContent(Content, "Models/ShipWreckModels/boxstack", false, 0, 0, 0);
                         break;
                 }
                 //staticObjects[index].LoadContent(Content, "Models/boxstack");

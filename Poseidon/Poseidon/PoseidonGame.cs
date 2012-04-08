@@ -133,8 +133,8 @@ namespace Poseidon
         {
             graphics = new GraphicsDeviceManager(this);
 
-            graphics.PreferredBackBufferWidth = 1024;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
-            graphics.PreferredBackBufferHeight = 768;// GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
+            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
+            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
             graphics.IsFullScreen = false;
 
@@ -268,10 +268,6 @@ namespace Poseidon
             // Create the Attribute board
             AttributeScene = new AttributeBoard(this, AttributeBackgroundTexture, Content);
             Components.Add(AttributeScene);
-
-            // Create level objective scene
-            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
-            Components.Add(levelObjectiveScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
         }
@@ -702,9 +698,9 @@ namespace Poseidon
             if (PlayGameScene.currentGameState == GameState.ToMiniGame)
             {
                 //Random rand = new Random();
-                //if (rand.Next(2) == 0)
-                //    ShowScene(quizzGameScene);
-                //else
+                if (rand.Next(2) == 0)
+                    ShowScene(quizzGameScene);
+                else
                     ShowScene(typeGameScene);
             }
             if (PlayGameScene.currentGameState == GameState.GameComplete)
@@ -923,7 +919,10 @@ namespace Poseidon
             // Create the main game play scene
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
-                      
+
+            // Create level objective scene
+            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
+            Components.Add(levelObjectiveScene);
 
             // Create tip scene
             tipScene = new TipScene(this, tipBackgroundTexture, Content);

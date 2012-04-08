@@ -142,7 +142,7 @@ namespace Poseidon {
         public static int[] ShipNumberGhostPirate = { 0, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };
         public const int ShipNumberFish = 0;
         public const int NumberChests = 10;
-        public static int[] NumStaticObjectsMain = { 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0 , 0};
+        public static int[] NumStaticObjectsMain = { 0, 0, 0, 0, 0, 0, 20, 200, 0, 0, 0 , 0};
         public const int NumStaticObjectsShip = 10;
         public const int NumTypeShipScence = 6;
 
@@ -154,7 +154,11 @@ namespace Poseidon {
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
-                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)}; 
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
+        //public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(490), 
+        //                                               TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(160), TimeSpan.FromSeconds(600),
+        //                                               TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570),
+        //                                               TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220)}; 
         public const string StrTimeRemaining = "Days Remaining: ";
         public const string ScoreAchieved = "Score: ";
         public const int DaysPerSecond = 4; // 120 = 30 days

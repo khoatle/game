@@ -1182,7 +1182,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, null, factories, researchFacility, powerpacks);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, null, factories, researchFacility, powerpacks, null);
         }
 
 

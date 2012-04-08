@@ -12,7 +12,7 @@ namespace Poseidon
     {
         public bool CheckWinCondition()
         {
-            if (enemiesAmount <= 10000) return true;
+            //if (enemiesAmount <= 10000) return true;
             if (currentLevel == 0)
             {
                 // this is just for instantly testing minigames

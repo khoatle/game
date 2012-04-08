@@ -271,9 +271,9 @@ namespace Poseidon
             //    GameConstants.NumberSubmarine = numSubmarine;
             //} 
             //else {
-                int[] numShootingEnemies = { 40, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
+                int[] numShootingEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
                 GameConstants.NumberShootingEnemies = numShootingEnemies;
-                int[] numCombatEnemies = { 40, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
+                int[] numCombatEnemies = { 0, 5, 10, 0, 10, 15, 20, 20, 20, 30, 10, 10 };
                 GameConstants.NumberCombatEnemies = numCombatEnemies;
                 int[] numGhostPirates = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0 };
                 GameConstants.NumberGhostPirate = numGhostPirates;
@@ -662,23 +662,27 @@ namespace Poseidon
                 if (currentLevel == 6)
                 {
                     int randomObject = random.Next(4);
+                    randomObject = 0;
                     switch (randomObject)
                     {
                         case 0:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone1", false, 1, 24, 24);
                             break;
                         case 1:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone2", false, 0, 0, 0);
                             break;
                         case 2:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone3", false, 0, 0, 0);
                             break;
                         case 3:
-                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4");
+                            staticObjects[index].LoadContent(Content, "Models/DecorationObjects/animalBone4", false, 0, 0, 0);
                             break;
                     }
                 }
-                //staticObjects[index].LoadContent(Content, "Models/barrelstack");
+                if (currentLevel == 7)
+                {
+                    staticObjects[index].LoadContent(Content, "Models/DecorationObjects/kelpPlant", true, 1, 48, 24);
+                }
             }
             AddingObjects.PlaceStaticObjects(staticObjects, shipWrecks, random, terrain.heightMapInfo, GameConstants.MainGameMinRangeX,
                 GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ);
@@ -1054,6 +1058,10 @@ namespace Poseidon
                         if (shipWreck.BoundingSphere.Intersects(frustum) && shipWreck.seen == false)
                             shipWreck.seen = true;
                     }
+                    foreach (StaticObject staticObj in staticObjects)
+                    {
+                        staticObj.Update(frustum, gameTime);
+                    }
 
                     for (int i = 0; i < myBullet.Count; i++)
                     {
@@ -1073,6 +1081,7 @@ namespace Poseidon
                     {
                         alliesBullets[i].update(gameTime);
                     }
+
                     Collision.updateBulletOutOfBound(hydroBot.MaxRangeX, hydroBot.MaxRangeZ, healthBullet, myBullet, enemyBullet, alliesBullets, frustum);
                     Collision.updateDamageBulletVsBarriersCollision(myBullet, enemies, ref enemiesAmount, frustum, GameMode.MainGame, gameTime, hydroBot,
                         enemies, enemiesAmount, fish, fishAmount, gameCamera, particleManager.explosionParticles);
@@ -1242,16 +1251,23 @@ namespace Poseidon
 
             int radius = 60; // need to revise this based on the model for each building
             BoundingSphere buildingBoundingSphere;
+            //BoundingBox buildingBoundingBox = new BoundingBox();
             if (factoryAnchor != null)
             {
                 buildingBoundingSphere = factoryAnchor.BoundingSphere;
                 radius = (int)buildingBoundingSphere.Radius;
+                //factoryAnchor.CalculateBoundingBox(1.0f, factoryAnchor.orientation);
+                //buildingBoundingBox = factoryAnchor.boundingBox;
             }
             else if (researchAnchor != null)
             {
                 buildingBoundingSphere = researchAnchor.BoundingSphere;
                 radius = (int)buildingBoundingSphere.Radius;
+                //researchAnchor.CalculateBoundingBox(1.0f, researchAnchor.orientation);
+                //buildingBoundingBox = researchAnchor.boundingBox;
             }
+
+            //AddingObjects.ModifyBoundingBox(ref buildingBoundingBox, GameConstants.MainGameFloatHeight);
 
             // Check if position selected for building is within game arena.. The game area is within -MaxRange to +MaxRange for both X and Z axis
             // Give a lax of 40 units so that if a click happened at the edge of the arena, building is not allowed. This is to prevent the case
@@ -1271,6 +1287,7 @@ namespace Poseidon
 
             int heightValue = GameConstants.MainGameFloatHeight;//(int)terrain.heightMapInfo.GetHeight(new Vector3(position.X, 0, position.Z));
             if (AddingObjects.IsSeaBedPlaceOccupied((int)position.X, heightValue, (int)position.Z, radius, shipWrecks, staticObjects, trashes, factories, researchFacility))
+            //if (AddingObjects.IsSeaBedPlaceOccupied(buildingBoundingBox, shipWrecks, staticObjects, trashes, factories, researchFacility))
             {
                 // Play some sound hinting seabed place is occupied
                 audio.MenuScroll.Play();
@@ -1304,6 +1321,8 @@ namespace Poseidon
                         researchFacility.Model = researchBuildingModel;
                         researchFacility.ModelStates = researchBuildingModelStates;
                         researchFacility.LoadContent(game, position, orientation);
+                        //researchFacility.CalculateBoundingBox(1.0f, orientation);
+                        //AddingObjects.ModifyBoundingBox(ref researchFacility.boundingBox, GameConstants.MainGameFloatHeight);
                         HydroBot.numResources -= GameConstants.numResourcesForResearchCenter;
                         status = true;
                         //env loss for building factory
@@ -1325,6 +1344,8 @@ namespace Poseidon
                     oneFactory.ModelStates = biodegradableFactoryModelStates;
                     oneFactory.LevelTextures = biodegradableFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, biofactoryAnimationTextures);
+                    //oneFactory.CalculateBoundingBox(1.0f, orientation);
+                    //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     HydroBot.numResources -= GameConstants.numResourcesForBioFactory;
                     factories.Add(oneFactory);
                     status = true;
@@ -1348,6 +1369,8 @@ namespace Poseidon
                     oneFactory.LevelTextures = plasticFactoryLevelTextures;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures); // for time being reuse nuclear factory animation texture
                     HydroBot.numResources -= GameConstants.numResourcesForPlasticFactory;
+                    //oneFactory.CalculateBoundingBox(1.0f, orientation);
+                    //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     factories.Add(oneFactory);
                     status = true;
                     //env loss for building factory
@@ -1367,6 +1390,8 @@ namespace Poseidon
                     oneFactory.ModelStates = radioactiveFactoryModelStates;
                     oneFactory.LoadContent(game, position, orientation, ref IngamePresentation.factoryFont, ref IngamePresentation.factoryBackground, nuclearFactoryAnimationTextures);
                     HydroBot.numResources -= GameConstants.numResourcesForRadioFactory;
+                    //oneFactory.CalculateBoundingBox(1.0f, orientation);
+                    //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     factories.Add(oneFactory);
                     status = true;
                     //env loss for building factory
@@ -1834,7 +1859,7 @@ namespace Poseidon
 
         private void DrawRadar()
         {
-            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks);
+            radar.Draw(spriteBatch, hydroBot.Position, enemies, enemiesAmount, fish, fishAmount, shipWrecks, factories, researchFacility, powerpacks, staticObjects);
         }
 
         public bool CharacterNearShipWreck(BoundingSphere shipSphere)

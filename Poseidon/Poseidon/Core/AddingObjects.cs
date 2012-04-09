@@ -379,8 +379,9 @@ namespace Poseidon
                 tempCenter.Z = chest.Position.Z;
                 chest.BoundingSphere = new BoundingSphere(tempCenter,
                     chest.BoundingSphere.Radius);
-                if (chest.Position.X > 0) chest.orientation = -MathHelper.PiOver2;
-                else chest.orientation = MathHelper.PiOver2;
+                chest.orientation = random.Next(0, 4) * MathHelper.PiOver2;
+                //if (chest.Position.X > 0) chest.orientation = -MathHelper.PiOver2;
+                //else chest.orientation = MathHelper.PiOver2;
             }
         }
         public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet, GameMode gameMode) {
@@ -997,6 +998,7 @@ namespace Poseidon
                 tempCenter.Z = staticObject.Position.Z;
                 staticObject.BoundingSphere = new BoundingSphere(tempCenter,
                     staticObject.BoundingSphere.Radius);
+                staticObject.orientation = random.Next(0, 4) * MathHelper.PiOver2;
             }
         }
 

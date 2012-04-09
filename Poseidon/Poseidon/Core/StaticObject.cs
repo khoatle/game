@@ -32,6 +32,10 @@ namespace Poseidon
                     scale = (float)random.Next(5, 11) / 10;
                 else scale = random.Next(4, 7);
             }
+            else if (HydroBot.gameMode == GameMode.ShipWreck)
+            {
+                scale = 1.0f;
+            }
         
             Model = content.Load<Model>(modelname);
             Position = Vector3.Down;

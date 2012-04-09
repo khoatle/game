@@ -1000,25 +1000,6 @@ namespace Poseidon
             RestoreGraphicConfig();
             DrawObjectsOnHighLayer();
 
-
-            //Draw each static object
-            foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
-            {
-                if (staticObject.BoundingSphere.Intersects(frustum))
-                {
-                    staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
-
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
-            }
-
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
             DrawProjectTiles();
@@ -1301,6 +1282,23 @@ namespace Poseidon
                     //rs.FillMode = FillMode.WireFrame;
                     //GraphicDevice.RasterizerState = rs;
                     //treasureChest.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+            //Draw each static object
+            foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
+            {
+                if (staticObject.BoundingSphere.Intersects(frustum))
+                {
+                    staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
                     //    gameCamera.ProjectionMatrix, boundingSphere);
 
                     //rs = new RasterizerState();

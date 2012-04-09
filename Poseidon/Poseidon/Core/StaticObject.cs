@@ -21,7 +21,7 @@ namespace Poseidon
         protected ClipPlayer clipPlayer;
         protected Matrix fishMatrix;
         protected Quaternion qRotation = Quaternion.Identity;
-        public BoundingBox boundingBox;
+        //public BoundingBox boundingBox;
 
         public void LoadContent(ContentManager content, string modelname, bool isAnimated, int clipStart, int clipEnd, int fpsRate)
         {

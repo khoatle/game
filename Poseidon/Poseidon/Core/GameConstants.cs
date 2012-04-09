@@ -60,7 +60,7 @@ namespace Poseidon {
         //public const int FishHP = 50;
 
         //Trash
-        public const int numTrashForUpgrade = 25;
+        public const int numTrashForUpgrade = 50;
         public const int numDaysForUpgrade = 15;
         public const int numResourcesForBioFactory = 5;
         public const int numResourcesForPlasticFactory = 7;

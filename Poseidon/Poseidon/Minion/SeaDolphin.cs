@@ -98,15 +98,17 @@ namespace Poseidon
                     // Start casting
                     startCasting = PoseidonGame.playTime;
 
-                    healAmount *= HydroBot.dolphinPower;
+                    float healedAmount = healAmount * HydroBot.dolphinPower;
 
-                    HydroBot.currentHitPoint += healAmount;
+                    healedAmount = Math.Min(healedAmount, HydroBot.maxHitPoint - HydroBot.currentHitPoint);
+
+                    HydroBot.currentHitPoint += healedAmount;
                     HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
 
                     PoseidonGame.audio.healingSound.Play();
 
                     Point point = new Point();
-                    String point_string = "Health + " + (int)healAmount;
+                    String point_string = "Health + " + (int)healedAmount;
                     point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
                     if (HydroBot.gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);

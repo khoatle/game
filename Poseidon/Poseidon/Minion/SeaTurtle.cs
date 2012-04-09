@@ -104,7 +104,7 @@ namespace Poseidon
                 }
             }
 
-            if (PlayGameScene.particleManager.frozenBreathParticles != null)
+            if (particleManager.frozenBreathParticles != null)
             {
                 for (int k = 0; k < GameConstants.numFrozenBreathParticlesPerUpdate; k++)
                     particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0, 0, 1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);

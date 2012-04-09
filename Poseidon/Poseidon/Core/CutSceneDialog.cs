@@ -51,7 +51,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "... Sorry everyone, I could not do it ...", "Image/Cutscenes/terminatorKillBot", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "The story begins around 2 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
+            sentence = new Sentence(3, "The story begins around 3 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Year 2100 ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
@@ -89,9 +89,9 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Hope and death seemed all but certain.", "Image/Cutscenes/Robot Shot", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Luckily he is not alone ... a whirlpool suddenly appears and takes him away", "Image/Cutscenes/Robot Whirlpool", 0);
+            sentence = new Sentence(3, "However, a whirlpool suddenly appears and takes him away", "Image/Cutscenes/Robot Whirlpool", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Luckily he is not alone ... a whirlpool suddenly appears and takes him away", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(3, "Luckily he is not alone ... ", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             //more work needed on this part
             sentence = new Sentence(0, "Wow ... what have just happened? I thought I was going to die there ...", "Image/Cutscenes/Robot Poseidon", 0);

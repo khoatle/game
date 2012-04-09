@@ -29,6 +29,8 @@ namespace Poseidon
 
         public static float seaCowDamage = 10f;
 
+        Camera gameCamera;
+
         public SeaCow() : base() {
             lastAttack = PoseidonGame.playTime;
             lastCast = PoseidonGame.playTime;
@@ -41,6 +43,13 @@ namespace Poseidon
 
             maxHealth = GameConstants.SeaCowStartingHealth;
             health = maxHealth;
+
+            if (HydroBot.gameMode == GameMode.ShipWreck)
+                gameCamera = ShipWreckScene.gameCamera;
+            else if (HydroBot.gameMode == GameMode.MainGame)
+                gameCamera = PlayGameScene.gameCamera;
+            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                gameCamera = SurvivalGameScene.gameCamera;
         }
 
         public override void attack()
@@ -155,8 +164,8 @@ namespace Poseidon
                         viewPort = PlayGameScene.GraphicDevice.Viewport;
                     else if (HydroBot.gameMode == GameMode.SurvivalMode)
                         viewPort = SurvivalGameScene.GraphicDevice.Viewport;
-                    Vector3 screenPos = viewPort.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
-                    HydroBot.rippleCenter = new Vector2(screenPos.X / PlayGameScene.GraphicDevice.Viewport.Width, screenPos.Y / PlayGameScene.GraphicDevice.Viewport.Height);
+                    Vector3 screenPos = viewPort.Project(Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                    HydroBot.rippleCenter = new Vector2(screenPos.X / viewPort.Width, screenPos.Y / viewPort.Height);
                     PoseidonGame.audio.maneteeRoar.Play();
                 }
             }

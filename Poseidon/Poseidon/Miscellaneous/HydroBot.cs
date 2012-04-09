@@ -1165,7 +1165,8 @@ namespace Poseidon
             }
 
             if (isPoissoned == true) {
-                if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
+                if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson * ((float)HydroBot.gamePlusLevel / 2 + 1))
+                {
                     if (!invincibleMode) {
                         currentHitPoint -= 0.1f;
                     }

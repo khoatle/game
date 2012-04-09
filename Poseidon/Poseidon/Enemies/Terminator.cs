@@ -28,6 +28,7 @@ namespace Poseidon
         protected double timeLastLaugh = 0;
         Random random;
         int powerupsType;
+        double timeBetweenPowerUse = 10;
 
         public Terminator(GameMode gameMode)
             : base()
@@ -54,11 +55,12 @@ namespace Poseidon
 
             if (PoseidonGame.gamePlus)
             {
-                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 2);
                 damage *= (HydroBot.gamePlusLevel + 1);
-                timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
+                timeBetweenFire /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
                 basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
                 health += (HydroBot.gamePlusLevel * 5000);
+                timeBetweenPowerUse /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
             }
             maxHealth = health;
         }
@@ -278,7 +280,7 @@ namespace Poseidon
                         chasingBulletMode = false;
                 }
                 //only cast special skill when hunting hydrobot
-                else if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 10 && currentHuntingTarget is HydroBot)
+                else if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeBetweenPowerUse && currentHuntingTarget is HydroBot)
                 {
                     powerupsType = random.Next(3);
                     if (powerupsType == 0)

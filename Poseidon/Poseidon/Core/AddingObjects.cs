@@ -422,7 +422,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             ChasingBullet newBullet = new ChasingBullet();
-            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target, (Terminator)shooter);
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.ChasingBulletDamage * ((float)HydroBot.gamePlusLevel/2 + 1)), target, (Terminator)shooter);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
             if (shooter.BoundingSphere.Intersects(cameraFrustum)) {
@@ -440,12 +440,12 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             Torpedo newBullet = new Torpedo();
-            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.TorpedoDamage * ((float)HydroBot.gamePlusLevel / 2 + 1)), target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
             Torpedo newBullet1 = new Torpedo();
-            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.TorpedoDamage * ((float)HydroBot.gamePlusLevel / 2 + 1)), target, (Submarine)shooter, gameMode);
             newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet1);
             if (shooter.BoundingSphere.Intersects(cameraFrustum))
@@ -464,7 +464,7 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             LaserBeam newBullet = new LaserBeam();
-            newBullet.initialize(shooter.Position + shootingDirection * 5, shootingDirection, GameConstants.BulletSpeed, GameConstants.LaserBeamDamage, target, (Submarine)shooter, gameMode);
+            newBullet.initialize(shooter.Position + shootingDirection * 5, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.LaserBeamDamage * ((float)HydroBot.gamePlusLevel / 2 + 1)), target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 

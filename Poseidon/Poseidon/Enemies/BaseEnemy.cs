@@ -115,7 +115,7 @@ namespace Poseidon
             basicExperienceReward = 60;
             if (PoseidonGame.gamePlus)
             {
-                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 2);
                 health *= (HydroBot.gamePlusLevel + 1); //+1 as it starts from 0
                 basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
             }

@@ -390,12 +390,12 @@ namespace Poseidon.GraphicEffects
 
         public void PrepareEdgeDetect(HydroBot hydroBot, Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTargetLow, RenderTarget2D normalDepthRenderTargetHigh)
         {
-            if (!GameSettings.SpecialEffectsEnabled) return;
-
             graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
             graphicsDevice.Clear(Color.Black);
             graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
             graphicsDevice.Clear(Color.Black);
+            if (!GameSettings.SpecialEffectsEnabled) return;
+
             graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
 
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);

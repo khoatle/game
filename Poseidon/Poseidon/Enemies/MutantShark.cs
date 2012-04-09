@@ -39,7 +39,7 @@ namespace Poseidon
             {
                 health += (HydroBot.gamePlusLevel * 2000);
                 maxHealth = health;
-                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 2);
                 damage *= (HydroBot.gamePlusLevel + 1);
                 basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
             }

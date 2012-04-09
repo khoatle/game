@@ -20,6 +20,7 @@ namespace Poseidon
         int numHunterGeneratedAtOnce = 2;
         GameMode gameMode;
         bool releasingHunter = false;
+        double timeBetweenPowerUse = 15;
 
         public Submarine(GameMode gameMode)
             : base()
@@ -40,11 +41,12 @@ namespace Poseidon
 
             if (PoseidonGame.gamePlus)
             {
-                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 2);
                 damage *= (HydroBot.gamePlusLevel + 1);
                 timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
                 health += (HydroBot.gamePlusLevel * 3000);
                 basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
+                timeBetweenPowerUse /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
             }
             maxHealth = health;
             //basicExperienceReward = 1;
@@ -238,7 +240,7 @@ namespace Poseidon
                 }
 
 
-                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 15)
+                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeBetweenPowerUse)
                 {
                     bool powerUsed = false;
                     powerupsType = random.Next(2);

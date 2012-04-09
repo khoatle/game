@@ -985,7 +985,27 @@ namespace Poseidon
 
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
-            
+
+            DrawTerrain(ground.Model);
+
+            //Draw each static object
+            foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
+            {
+                if (staticObject.BoundingSphere.Intersects(frustum))
+                {
+                    staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
+                    //RasterizerState rs = new RasterizerState();
+                    //rs.FillMode = FillMode.WireFrame;
+                    //GraphicDevice.RasterizerState = rs;
+                    //staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
+                    //    gameCamera.ProjectionMatrix, boundingSphere);
+
+                    //rs = new RasterizerState();
+                    //rs.FillMode = FillMode.Solid;
+                    //GraphicDevice.RasterizerState = rs;
+                }
+            }
+
             //applying edge detection for objects on low layer of the game
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTargetLow, graphics.GraphicsDevice, edgeDetectionRenderTarget);
             RestoreGraphicConfig();
@@ -1287,24 +1307,7 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
-            //Draw each static object
-            foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
-            {
-                if (staticObject.BoundingSphere.Intersects(frustum))
-                {
-                    staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
-                    //RasterizerState rs = new RasterizerState();
-                    //rs.FillMode = FillMode.WireFrame;
-                    //GraphicDevice.RasterizerState = rs;
-                    //staticObject.DrawBoundingSphere(gameCamera.ViewMatrix,
-                    //    gameCamera.ProjectionMatrix, boundingSphere);
 
-                    //rs = new RasterizerState();
-                    //rs.FillMode = FillMode.Solid;
-                    //GraphicDevice.RasterizerState = rs;
-                }
-            }
-            DrawTerrain(ground.Model);
         }
 
         public void DrawObjectsOnHighLayer()

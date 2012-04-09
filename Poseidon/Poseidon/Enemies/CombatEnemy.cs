@@ -33,7 +33,7 @@ namespace Poseidon
             damage = GameConstants.CombatEnemyDamage;
             if (PoseidonGame.gamePlus)
             {
-                timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
+                timeBetweenFire /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
                 damage *= (HydroBot.gamePlusLevel + 1);
             }
 

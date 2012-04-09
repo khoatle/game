@@ -662,7 +662,7 @@ namespace Poseidon
                 if (currentLevel == 6)
                 {
                     int randomObject = random.Next(4);
-                    randomObject = 0;
+                    //randomObject = 0;
                     switch (randomObject)
                     {
                         case 0:

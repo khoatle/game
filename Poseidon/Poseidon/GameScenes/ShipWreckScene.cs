@@ -986,8 +986,6 @@ namespace Poseidon
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
             
-            DrawTerrain(ground.Model);
-
             //applying edge detection for objects on low layer of the game
             graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTargetLow, graphics.GraphicsDevice, edgeDetectionRenderTarget);
             RestoreGraphicConfig();
@@ -1306,6 +1304,7 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
+            DrawTerrain(ground.Model);
         }
 
         public void DrawObjectsOnHighLayer()

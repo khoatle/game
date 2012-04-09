@@ -24,23 +24,29 @@ namespace Poseidon
         public Submarine(GameMode gameMode)
             : base()
         {
-            speed = (float)(GameConstants.EnemySpeed * 1.2);
+            speed = (float)(GameConstants.EnemySpeed * 1.5);
             damage = GameConstants.TerminatorShootingDamage;
             timeBetweenFire = 2.0f;
             isBigBoss = true;
             random = new Random();
             health = 6000;
-            health += (HydroBot.gamePlusLevel * 3000);
-            maxHealth = health;
-
             //health = 1;
     
-            if (PlayGameScene.currentLevel > 10)
-                perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
-            else
-                perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 2000 * (HydroBot.gamePlusLevel + 1);
+            //if (PlayGameScene.currentLevel > 10)
+            //    perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
+            //else
+            perceptionRadius = GameConstants.BossPerceptionRadius;
+            basicExperienceReward = 2000;
 
+            if (PoseidonGame.gamePlus)
+            {
+                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+                damage *= (HydroBot.gamePlusLevel + 1);
+                timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
+                health += (HydroBot.gamePlusLevel * 3000);
+                basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
+            }
+            maxHealth = health;
             //basicExperienceReward = 1;
             this.gameMode = gameMode;
         }

@@ -1153,7 +1153,7 @@ namespace Poseidon
                 {
                     if (!invincibleMode)
                     {
-                        currentHitPoint -= 0.01f;
+                        currentHitPoint -= 0.01f * (HydroBot.gamePlusLevel + 1);
                     }
                 }
                 //disable goodwill bar in level 1

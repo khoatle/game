@@ -32,28 +32,35 @@ namespace Poseidon
         public Terminator(GameMode gameMode)
             : base()
         {
-            speed = (float)(GameConstants.EnemySpeed * 1.2);
+            speed = (float)(GameConstants.EnemySpeed * 1.5);
             damage = GameConstants.TerminatorShootingDamage;
-            timeBetweenFire = 0.3f;
+            timeBetweenFire = 0.3f; 
             isBigBoss = true;
             random = new Random();
             //Terminator is undefeatable before the last level
             if (PlayGameScene.currentLevel == 11 || gameMode == GameMode.SurvivalMode)
             {
-                health = 10000 + (HydroBot.gamePlusLevel * 5000);// *(HydroBot.gamePlusLevel + 1);
-
-                maxHealth = health;
+                health = 10000;
             }
             else
             {
                 health = 1000000;
-                maxHealth = health;
             }
-            if (PlayGameScene.currentLevel > 10)
-                perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
-            else
-                perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 3000 * (HydroBot.gamePlusLevel + 1);
+            //if (PlayGameScene.currentLevel > 10)
+            //    perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
+            //else
+            perceptionRadius = GameConstants.BossPerceptionRadius;
+            basicExperienceReward = 3000;
+
+            if (PoseidonGame.gamePlus)
+            {
+                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
+                damage *= (HydroBot.gamePlusLevel + 1);
+                timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
+                basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
+                health += (HydroBot.gamePlusLevel * 5000);
+            }
+            maxHealth = health;
         }
 
         public override void Load(int clipStart, int clipEnd, int fps)

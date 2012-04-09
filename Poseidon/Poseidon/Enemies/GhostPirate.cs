@@ -15,11 +15,15 @@ namespace Poseidon
         public GhostPirate()
             : base()
         {
-            speed = (float)(GameConstants.EnemySpeed * 1.5);
-            if (PoseidonGame.gamePlus)
-                speed *= (1.0f + HydroBot.gamePlusLevel / 2);
-            damage = (int)(GameConstants.CombatEnemyDamage * 1.5 * (HydroBot.gamePlusLevel + 1));
+            speed *= 1.5f;
+            damage = (int)(GameConstants.CombatEnemyDamage * 1.5);
             health = maxHealth = GameConstants.DefaultEnemyHP * 2 * (HydroBot.gamePlusLevel + 1);
+            if (PoseidonGame.gamePlus)
+            {
+                health *= (HydroBot.gamePlusLevel + 1);
+                damage *= (HydroBot.gamePlusLevel + 1);
+            }
+            maxHealth = health;
             basicExperienceReward = 120 * (HydroBot.gamePlusLevel + 1);
         }
 

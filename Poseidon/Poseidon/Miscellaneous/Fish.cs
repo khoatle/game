@@ -34,7 +34,7 @@ namespace Poseidon {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
             lastHealthUpdateTime = 0;
             healthChangeInterval = GameConstants.maxHealthChangeInterval;
-            health = maxHealth = GameConstants.DefaultFishHP;
+            health = maxHealth = GameConstants.DefaultFishHP + HydroBot.gamePlusLevel * 100;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)

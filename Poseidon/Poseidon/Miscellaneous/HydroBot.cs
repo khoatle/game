@@ -365,8 +365,6 @@ namespace Poseidon
                 iconActivated[j] = lsIconActivated[j] = (bool)info.GetValue(iconName, typeof(bool));
             }
             
-            skillComboActivated = lsSkillComboActivated = (bool)info.GetValue("skillComboActivated", typeof(bool));
-
             bioTrash = plasticTrash = nuclearTrash = 0;
             totalBioTrashProcessed = lsTotalBioTrashProcessed = (int)info.GetValue("totalBioTrashProcessed", typeof(int));
             totalPlasticTrashProcessed = lsTotalPlasticTrashProcessed = (int)info.GetValue("totalPlasticTrashProcessed", typeof(int));
@@ -433,7 +431,6 @@ namespace Poseidon
                 string iconName = "iconActivated"+ j.ToString();
                 info.AddValue(iconName, iconActivated[j]);
             }
-            info.AddValue("skillComboActivated", skillComboActivated);
             info.AddValue("bioPlantLevel", bioPlantLevel);
             info.AddValue("plasticPlantLevel", plasticPlantLevel);
             info.AddValue("numResources", numResources);

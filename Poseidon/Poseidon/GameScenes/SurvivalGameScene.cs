@@ -106,7 +106,7 @@ namespace Poseidon
         Texture2D winningTexture, losingTexture;
 
         //score: using hydrobot gained exp as score
-        public static float score = 0;
+        public static float score = 0, highestScore;
 
         //is ancient fish killed
         public static bool isAncientKilled;

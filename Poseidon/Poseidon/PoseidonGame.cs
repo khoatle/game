@@ -172,6 +172,8 @@ namespace Poseidon
             spriteBatch = new SpriteBatch(GraphicsDevice);
             Services.AddService(typeof(SpriteBatch), spriteBatch);
 
+            loadGlobalData();
+            
             //initiate all 2D graphics and fonts for the game
             IngamePresentation.Initiate2DGraphics(Content, this);
 
@@ -238,7 +240,6 @@ namespace Poseidon
             //SkillBackgroundTexture = Content.Load<Texture2D>("Image/skill_background");
 
             //Create the config screen
-            loadConfigSettings();
             Texture2D configTitle = Content.Load<Texture2D>("Image/SceneTextures/configTitle");
             Texture2D unselectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configUnselectedCheckBox");
             Texture2D selectedCheckBox = Content.Load<Texture2D>("Image/ButtonTextures/configSelectedCheckBox");
@@ -846,7 +847,7 @@ namespace Poseidon
                             break;
                         case "Quit":
                             MediaPlayer.Stop();
-                            saveConfigSettings();
+                            saveGlobalData();
                             Exit();
                             break;
 
@@ -855,25 +856,29 @@ namespace Poseidon
             }
         }
 
-        private void saveConfigSettings()
+        private void saveGlobalData()
         {
-            BinaryWriter bw = new BinaryWriter(File.Open("configSettings", FileMode.Create));
+            BinaryWriter bw = new BinaryWriter(File.Open("globalData", FileMode.Create));
             bw.Write((double)GameSettings.MusicVolume);
             bw.Write((double)GameSettings.SoundVolume);
             bw.Write(GameSettings.ShowLiveTip);
             bw.Write(GameSettings.SpecialEffectsEnabled);
             bw.Write((double)GameSettings.NumParticleLevel);
             bw.Write((double)GameSettings.SchoolOfFishDetail);
+            bw.Write(HydroBot.skillComboActivated);
+            if (SurvivalGameScene.score > SurvivalGameScene.highestScore)
+                SurvivalGameScene.highestScore = SurvivalGameScene.score;
+            bw.Write((double)SurvivalGameScene.highestScore);
             bw.Close();
         }
 
-        private void loadConfigSettings()
+        private void loadGlobalData()
         {
-            if (File.Exists("configSettings"))
+            if (File.Exists("globalData"))
             {
                 try
                 {
-                    BinaryReader br = new BinaryReader(File.Open("configSettings", FileMode.Open));
+                    BinaryReader br = new BinaryReader(File.Open("globalData", FileMode.Open));
                     GameSettings.MusicVolume = (float)br.ReadDouble();
                     MediaPlayer.Volume = GameSettings.MusicVolume;
                     GameSettings.SoundVolume = (float)br.ReadDouble();
@@ -887,20 +892,22 @@ namespace Poseidon
                     GameConstants.trailParticlesPerSecond = (int)(GameConstants.DefaultTrailParticlesPerSecond * GameSettings.NumParticleLevel);
                     GameConstants.numFrozenBreathParticlesPerUpdate = (int)(GameConstants.DefaultNumFrozenBreathParticlesPerUpdate * GameSettings.NumParticleLevel);
                     GameSettings.SchoolOfFishDetail = (float)br.ReadDouble();
+                    HydroBot.skillComboActivated = HydroBot.lsSkillComboActivated = br.ReadBoolean();
+                    SurvivalGameScene.highestScore = (float)br.ReadDouble();
                     br.Close();
                 }
                 catch
                 {
-                    setDefaultConfigSettings();
+                    setDefaultGlobalData();
                 }
             }
             else
             {
-                setDefaultConfigSettings();
+                setDefaultGlobalData();
             }
         }
 
-        private void setDefaultConfigSettings()
+        private void setDefaultGlobalData()
         {
             GameSettings.MusicVolume = 1f;
             GameSettings.SoundVolume = 1f;
@@ -908,6 +915,8 @@ namespace Poseidon
             GameSettings.SpecialEffectsEnabled = true;
             GameSettings.NumParticleLevel = 1f;
             GameSettings.SchoolOfFishDetail = 1f;
+            HydroBot.skillComboActivated = HydroBot.lsSkillComboActivated = false;
+            SurvivalGameScene.highestScore = 0f;
         }
 
         private void CreateLevelDependentScenes()

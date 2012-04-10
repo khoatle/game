@@ -61,7 +61,7 @@ namespace Poseidon {
             if (Name.Contains("penguin")) scale = 2.0f;
             if (isBigBoss)
             {
-                scale *= 2.0f;
+                //scale *= 2.0f;
                 maxHealth = 5000;
                 health = 5000;
             }
@@ -185,7 +185,7 @@ namespace Poseidon {
                 if (Name.Contains("manetee")) scale = 0.6f;
                 if (Name.Contains("seal")) scale = 1.1f;
                 if (Name.Contains("penguin")) scale = 2.0f;
-                if (isBigBoss) scale *= 2.0f;
+                //if (isBigBoss) scale *= 2.0f;
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
@@ -284,6 +284,22 @@ namespace Poseidon {
                     EffectHelpers.SetFogVector(ref WorldView, GameConstants.FogStart, GameConstants.FogEnd, effect.Parameters["FogVector"]);
                     effect.Parameters["FogColor"].SetValue(fogColor.ToVector3());
                     effect.Parameters["DiffuseIntensity"].SetValue(0.5f);
+                }
+                mesh.Draw();
+                if (isBigBoss == true)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                        effect.Parameters["gInflate"].SetValue(0.065f);
+                        effect.Parameters["gGlowColor"].SetValue(new Vector3(0, 255, 0));
+                        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                    }
                 }
                 mesh.Draw();
             }

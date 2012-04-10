@@ -135,7 +135,7 @@ namespace Poseidon
             if (gameStarted)
             {
                 // Create the Menu
-                if (PlayGameScene.currentGameState != GameState.GameComplete)
+                if ((HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentGameState != GameState.GameComplete) || (HydroBot.gameMode == GameMode.SurvivalMode && SurvivalGameScene.currentGameState != GameState.ToMainMenu))
                 {
                     if (File.Exists("SurvivalMode"))
                     {

@@ -131,7 +131,7 @@ namespace Poseidon
                     if (objs[i] is Fish)
                     {
                         int envLoss;
-                        envLoss = GameConstants.envLossForFishDeath + 5 * HydroBot.gamePlusLevel;
+                        envLoss = GameConstants.envLossForFishDeath;
                         HydroBot.currentEnvPoint -= envLoss;
                         if (objs[i].BoundingSphere.Intersects(cameraFrustum))
                         {
@@ -154,7 +154,7 @@ namespace Poseidon
 
                     //if we are playing the survival mode
                     //revive the dead enemy instead
-                    if (gameMode != GameMode.SurvivalMode || objs[i] is Fish)
+                    if (gameMode != GameMode.SurvivalMode || objs[i] is Fish || (objs[i].releasedFromSubmarine))
                     {
                         objs[i] = null;
                         for (int k = i; k < size - 1; k++)
@@ -485,6 +485,9 @@ namespace Poseidon
 
                             //update good will point
                             HydroBot.IncreaseGoodWillPoint(goodWillReward);
+
+                            if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.score += expReward / 2;
 
                             Point point = new Point();
                             //String point_string = "+" + envReward.ToString() + "ENV\n+"+expReward.ToString()+"EXP";

@@ -300,7 +300,11 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "Once and for all!", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(1, "In order to reach the Terminator, you will first have to break through the enemy defense. Be careful, there will be a lot of enemies.", "Image/Cutscenes/Robot Poseidon", 0);
+            sentence = new Sentence(1, "In order to reach the Terminator, you will first have to break through the enemy defense.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(0, "With all the powerful relics in our hand, I guess that will not be a big problem.", "Image/Cutscenes/Robot Poseidon", 0);
+            cutScene.Add(sentence);
+            sentence = new Sentence(1, "Be careful, as far as I know, the enemies somehow got their hands on the Dead Pirate King Crown. An evil artefact that gives them control over the ghost pirates. You will probably have to face the pirates out of their ships this time.", "Image/Cutscenes/Robot Poseidon", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 

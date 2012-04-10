@@ -829,7 +829,7 @@ namespace Poseidon
                                     HydroBot.currentExperiencePts += GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5);
 
                                     Point point = new Point();
-                                    String point_string = "+" + GameConstants.ExpPainting + " EXP";
+                                    String point_string = "+" + (GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5)) + " EXP";
                                     point.LoadContent(Content, point_string, chest.Position, Color.LawnGreen);
                                     points.Add(point);
 

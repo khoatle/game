@@ -50,6 +50,7 @@ namespace Poseidon
                 gameCamera = PlayGameScene.gameCamera;
             else if (HydroBot.gameMode == GameMode.SurvivalMode)
                 gameCamera = SurvivalGameScene.gameCamera;
+            speedFactor = 1 + (HydroBot.seaCowPower - 1) / 4;
         }
 
         public override void attack()
@@ -133,13 +134,19 @@ namespace Poseidon
             }
         }
 
+        float lastPower = 1;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
-            float lastMaxHealth = maxHealth;
-            maxHealth = GameConstants.SeaCowStartingHealth * HydroBot.seaCowPower;
-            health += (maxHealth - lastMaxHealth);
+            if (lastPower != HydroBot.seaCowPower)
+            {
+                float lastMaxHealth = maxHealth;
+                maxHealth = GameConstants.SeaCowStartingHealth * HydroBot.seaCowPower;
+                health += (maxHealth - lastMaxHealth);
+                speedFactor = 1 + (HydroBot.seaCowPower - 1) / 4;
+                lastPower = HydroBot.seaCowPower;
+            }
 
             BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
 

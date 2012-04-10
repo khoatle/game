@@ -327,7 +327,7 @@ namespace Poseidon
             {
                 //in survival mode, try to place the ancient fish near you
                 if (gameMode == GameMode.SurvivalMode)
-                    fish[i].Position = GenerateSurfaceRandomPosition(minX, minX + 100, minZ, minZ + 100, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                    fish[i].Position = GenerateSurfaceRandomPosition(50, 80, 50, 80, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 else fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = floatHeight;
                 //tempCenter = fish[i].BoundingSphere.Center;
@@ -627,7 +627,7 @@ namespace Poseidon
             trashes.Add(sinkingTrash);
 
             //degrade environment
-            HydroBot.currentEnvPoint -= GameConstants.envLossPerTrashAdd;
+            HydroBot.currentEnvPoint -= (int)((float)GameConstants.envLossPerTrashAdd / 2);
 
             return sinkingTrash.Position;
         }

@@ -47,7 +47,8 @@ namespace Poseidon
         protected Texture2D helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton;
         HelpScene helpScene;
         //Textures for the credit scene
-        protected Texture2D creditBackgroundTexture, creditForegroundTexture1, creditForegroundTexture2, nextCreditButton;
+        protected Texture2D creditBackgroundTexture, nextCreditButton;
+        protected Texture2D[] creditForgroundTextures;
         CreditScene creditScene;
         protected GameScene activeScene;
         protected GameScene prevScene;
@@ -136,7 +137,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -214,10 +215,12 @@ namespace Poseidon
 
             //For Credit scene
             creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
-            creditForegroundTexture1 = Content.Load<Texture2D>("Image/SceneTextures/Credits");
-            creditForegroundTexture2 = Content.Load<Texture2D>("Image/SceneTextures/Credits_Soundtracks");
+            creditForgroundTextures = new Texture2D[3];
+            creditForgroundTextures[0] = Content.Load<Texture2D>("Image/SceneTextures/Credits1");
+            creditForgroundTextures[1] = Content.Load<Texture2D>("Image/SceneTextures/Credits2");
+            creditForgroundTextures[2] = Content.Load<Texture2D>("Image/SceneTextures/Credits3");
             nextCreditButton = Content.Load<Texture2D>("Image/ButtonTextures/nextCreditButton");
-            creditScene = new CreditScene(this, creditBackgroundTexture, creditForegroundTexture1, creditForegroundTexture2, nextCreditButton, spriteBatch, GraphicsDevice);
+            creditScene = new CreditScene(this, creditBackgroundTexture, creditForgroundTextures, nextCreditButton, spriteBatch, GraphicsDevice);
             Components.Add(creditScene);
 
             // Create the Start Scene
@@ -476,7 +479,7 @@ namespace Poseidon
                 //each right answer give 5% environment boost
                 HydroBot.currentEnvPoint += quizzGameScene.numRightAnswer * GameConstants.envGainForCorrectQuizAnswer;
                 if (HydroBot.currentEnvPoint >= HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
-                HydroBot.currentExperiencePts += quizzGameScene.numRightAnswer * 50;
+                HydroBot.currentExperiencePts += (quizzGameScene.numRightAnswer + HydroBot.gamePlusLevel) * 50 ;
                 HydroBot.IncreaseGoodWillPoint(GameConstants.BasicGoodWillGainForPlayingMiniGame * quizzGameScene.numRightAnswer);
                 PlayGameScene.currentGameState = GameState.ToNextLevel;
                 ShowScene(playGameScene);
@@ -498,7 +501,7 @@ namespace Poseidon
                 if (jigsawGameScene.letAIHandle) efficiency = 0.6f;
                 MediaPlayer.Stop();
                 jigsawGameScene.StopVideoPlayers();
-                ShowScene(playGameScene);
+                ShowScene(prevScene);
                 switch (jigsawType)
                 {
                     case 0:
@@ -543,7 +546,7 @@ namespace Poseidon
             {
                 MediaPlayer.Stop();
                 jigsawGameScene.StopVideoPlayers();
-                ShowScene(playGameScene);
+                ShowScene(prevScene);
                 switch (jigsawType)
                 {
                     case 0:
@@ -567,7 +570,7 @@ namespace Poseidon
             {
                 MediaPlayer.Stop();
                 jigsawGameScene.StopVideoPlayers();
-                ShowScene(playGameScene);
+                ShowScene(prevScene);
                 EscPressed = false;
             }
         }
@@ -770,8 +773,18 @@ namespace Poseidon
             {
                 doubleClicked = false;
             }
-            if (survivalGameScene.currentGameState == GameState.ToMainMenu)
+            if (SurvivalGameScene.currentGameState == GameState.ToMainMenu)
+            {
+                MediaPlayer.Stop();
                 ShowScene(startScene);
+            }
+            if (playJigsaw)
+            {
+                prevScene = survivalGameScene;
+                playJigsaw = false;
+                jigsawGameScene.setImageType(jigsawType);
+                ShowScene(jigsawGameScene);
+            }
         }
         /// <summary>
         /// Handle buttons and keyboard in StartScene
@@ -915,31 +928,60 @@ namespace Poseidon
             }
 
             // Loading the cutscenes
-            cutSceneDialog = new CutSceneDialog();
+            if (cutSceneDialog == null)
+                cutSceneDialog = new CutSceneDialog();
 
             // Create the main game play scene
             playGameScene = new PlayGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar);
             Components.Add(playGameScene);
 
             // Create level objective scene
-            levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
-            Components.Add(levelObjectiveScene);
+            if (levelObjectiveScene == null)
+            {
+                levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
+                Components.Add(levelObjectiveScene);
+            }
 
             // Create tip scene
-            tipScene = new TipScene(this, tipBackgroundTexture, Content);
-            Components.Add(tipScene);
+            if (tipScene == null)
+            {
+                tipScene = new TipScene(this, tipBackgroundTexture, Content);
+                Components.Add(tipScene);
+            }
 
             // Create minigame scenes
-            quizzGameScene = new QuizzGameScene(this, quizzGameBackgroundTexture, Content, GraphicsDevice);
-            Components.Add(quizzGameScene);
-            typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
-            Components.Add(typeGameScene);
-            jigsawGameScene = new JigsawGameScene(this, Content, graphics, GraphicsDevice);
-            Components.Add(jigsawGameScene);
+            if (quizzGameScene == null)
+            {
+                quizzGameScene = new QuizzGameScene(this, quizzGameBackgroundTexture, Content, GraphicsDevice);
+                Components.Add(quizzGameScene);
+            }
+            if (typeGameScene == null)
+            {
+                typeGameScene = new TypingGameScene(this, typeFont, boxBackground, typeGameBackgroundTexture, Content);
+                Components.Add(typeGameScene);
+            }
+            if (jigsawGameScene == null)
+            {
+                jigsawGameScene = new JigsawGameScene(this, Content, graphics, GraphicsDevice);
+                Components.Add(jigsawGameScene);
+            }
 
         }
         private void CreateSurvivalDependentScenes()
         {
+            // Create level objective scene
+            if (levelObjectiveScene == null)
+            {
+                levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
+                Components.Add(levelObjectiveScene);
+            }
+
+            if (jigsawGameScene == null)
+            {
+                jigsawGameScene = new JigsawGameScene(this, Content, graphics, GraphicsDevice);
+                Components.Add(jigsawGameScene);
+            }
+
             // Create the survival game play scene
             survivalGameScene = new SurvivalGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);
             Components.Add(survivalGameScene);
@@ -1054,9 +1096,9 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            PerformanceHelper.StartFrame();
-            using (new TimeRulerHelper("Update", Color.Yellow))
-            {
+            //PerformanceHelper.StartFrame();
+            //using (new TimeRulerHelper("Update", Color.Yellow))
+            //{
                 // System.Threading.Thread.Sleep(5);
 
                 // Get the Keyboard and GamePad state
@@ -1084,8 +1126,8 @@ namespace Poseidon
                 CheckClick(gameTime);
                 HandleScenesInput(gameTime);
                 base.Update(gameTime);
-            }
-            perfString = "FPS: " + PerformanceHelper.FpsCounter.Fps;
+            //}
+            //perfString = "FPS: " + PerformanceHelper.FpsCounter.Fps;
         }
 
         /// <summary>
@@ -1094,8 +1136,8 @@ namespace Poseidon
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            using (new TimeRulerHelper("Draw", Color.Blue))
-            {
+            //using (new TimeRulerHelper("Draw", Color.Blue))
+            //{
 
                GraphicsDevice.DepthStencilState = DepthStencilState.Default;
                if (gameState == GameState.PlayingPresentScene)
@@ -1116,7 +1158,7 @@ namespace Poseidon
                //Draw loading scene to mask long loading time
                if (PlayGameScene.currentGameState == GameState.ToNextLevel) loadingScene.Draw(gameTime);
                base.Draw(gameTime);
-            }
+            //}
             //spriteBatch.Begin();
             //spriteBatch.DrawString(smallFont, perfString + "\n" + "Avg draw: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Draw")
             //    + "\nAvg Update: " + PerformanceHelper.TimeRuler.GetAverageTime(0, "Update"), new Vector2(500, 500), Color.White);

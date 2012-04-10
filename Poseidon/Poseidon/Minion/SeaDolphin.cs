@@ -39,7 +39,7 @@ namespace Poseidon
 
             maxHealth = GameConstants.DolphinStartingHealth;
             health = maxHealth;
-            speedFactor = 2.0f;
+            speedFactor = 2.0f + (HydroBot.seaCowPower - 1) / 4;
         }
 
         public bool isTargeting() {
@@ -74,13 +74,19 @@ namespace Poseidon
             base.attack();
         }
 
+        float lastPower = 1.0f;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
-            float lastMaxHealth = maxHealth;
-            maxHealth = GameConstants.DolphinStartingHealth * HydroBot.dolphinPower;
-            health += (maxHealth - lastMaxHealth);
+            if (lastPower != HydroBot.dolphinPower)
+            {
+                float lastMaxHealth = maxHealth;
+                maxHealth = GameConstants.DolphinStartingHealth * HydroBot.dolphinPower;
+                health += (maxHealth - lastMaxHealth);
+                speedFactor = 2.0f + (HydroBot.dolphinPower - 1) / 4;
+                lastPower = HydroBot.dolphinPower;
+            }
 
             // Only cast skill when there is an enemy near by
             if (!isReturnBot && !isCasting)

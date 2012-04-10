@@ -41,7 +41,7 @@ namespace Poseidon
 
             if (PoseidonGame.gamePlus)
             {
-                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 4);
                 damage *= (HydroBot.gamePlusLevel + 1);
                 timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
                 health += (HydroBot.gamePlusLevel * 3000);
@@ -63,7 +63,7 @@ namespace Poseidon
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.20f;
+            scaledSphere.Radius *= 0.25f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             // Set up the parameters
@@ -130,7 +130,7 @@ namespace Poseidon
                     enemies[enemyAmount] = new ShootingEnemy();
                     enemies[enemyAmount].Name = "Shooting Enemy";
                     enemies[enemyAmount].LoadContent(PoseidonGame.contentManager, "Models/EnemyModels/diver_green_ly");
-                    ((BaseEnemy)enemies[enemyAmount]).releasedFromSubmarine = true;
+                    enemies[enemyAmount].releasedFromSubmarine = true;
                     ((BaseEnemy)enemies[enemyAmount]).Load(1, 25, 24);
                     if (i % 2 == 0) releaseOnRightSide = true;
                     else releaseOnRightSide = false;

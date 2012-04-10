@@ -55,7 +55,7 @@ namespace Poseidon
 
             if (PoseidonGame.gamePlus)
             {
-                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 4);
                 damage *= (HydroBot.gamePlusLevel + 1);
                 timeBetweenFire /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
                 basicExperienceReward *= (HydroBot.gamePlusLevel + 1);

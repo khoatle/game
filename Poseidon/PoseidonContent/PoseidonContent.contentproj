@@ -2222,13 +2222,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Image\SceneTextures\Credits.png">
-      <Name>Credits</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\SceneTextures\helpforeground_otherKeys_5.png">
       <Name>helpforeground_otherKeys_5</Name>
       <Importer>TextureImporter</Importer>
@@ -2257,13 +2250,6 @@
       <Name>bossBackground2</Name>
       <Importer>Mp3Importer</Importer>
       <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Image\SceneTextures\Credits_Soundtracks.png">
-      <Name>Credits_Soundtracks</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -2650,6 +2636,23 @@
   <ItemGroup>
     <Compile Include="Image\TrashManagement\PlasticFactory_level2.png">
       <Name>PlasticFactory_level2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\SceneTextures\Credits1.png">
+      <Name>Credits1</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SceneTextures\Credits2.png">
+      <Name>Credits2</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\SceneTextures\Credits3.png">
+      <Name>Credits3</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

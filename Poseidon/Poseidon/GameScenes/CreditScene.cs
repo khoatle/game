@@ -17,7 +17,8 @@ namespace Poseidon
     public class CreditScene : GameScene
     {
         Random random = new Random();
-        Texture2D backgroundTexture, foregroundTexture1, foregroundTexture2, textureNextButton;
+        Texture2D backgroundTexture, textureNextButton;
+        Texture2D[] creditForgroundTextures;
         Rectangle textureFrontRectangle, nextRectangle;
         SpriteBatch spriteBatch;
         GraphicsDevice graphicsDevice;
@@ -26,19 +27,19 @@ namespace Poseidon
         MouseState lastMouseState = new MouseState();
         // Audio
         protected AudioLibrary audio;
-        public CreditScene(Game game, Texture2D textureBack, Texture2D textureFront1, Texture2D textureFront2, Texture2D textureNextButton, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
+        int textureIndex = 0;
+        public CreditScene(Game game, Texture2D textureBack, Texture2D[] creditForgroundTextures, Texture2D textureNextButton, SpriteBatch spriteBatch, GraphicsDevice graphicsDevice)
             : base(game)
         {
             this.spriteBatch = spriteBatch;
             backgroundTexture = textureBack;
-            foregroundTexture1 = textureFront1;
-            foregroundTexture2 = textureFront2;
             this.textureNextButton = textureNextButton;
             this.graphicsDevice = graphicsDevice;
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
             cursor = new Cursor(game, spriteBatch);
+            this.creditForgroundTextures = creditForgroundTextures;
 
             int creditSceneWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.65);
             int creditSceneHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.75);
@@ -71,6 +72,12 @@ namespace Poseidon
                 if (nextRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 5, 5)))
                     nextPressed = true;
             }
+            if (nextPressed)
+            {
+                textureIndex += 1;
+                if (textureIndex == creditForgroundTextures.Length) textureIndex = 0;
+                nextPressed = false;
+            }
             base.Update(gameTime);
         }
         public override void Draw(GameTime gameTime)
@@ -78,15 +85,20 @@ namespace Poseidon
             spriteBatch.Begin();
             base.Draw(gameTime);
             spriteBatch.Draw(backgroundTexture, new Rectangle(graphicsDevice.Viewport.TitleSafeArea.Top, graphicsDevice.Viewport.TitleSafeArea.Left, graphicsDevice.Viewport.TitleSafeArea.Width, graphicsDevice.Viewport.TitleSafeArea.Height), Color.White);
-            if (nextPressed)
-                spriteBatch.Draw(foregroundTexture2, textureFrontRectangle, Color.White);
-            else
-            {
-                spriteBatch.Draw(foregroundTexture1, textureFrontRectangle, Color.White);
-                spriteBatch.Draw(textureNextButton, nextRectangle, Color.White);
-            }
+
+            spriteBatch.Draw(creditForgroundTextures[textureIndex], textureFrontRectangle, Color.White);
+            spriteBatch.Draw(textureNextButton, nextRectangle, Color.White);
+            //else
+            //{
+            //    spriteBatch.Draw(foregroundTexture1, textureFrontRectangle, Color.White);
+            //    spriteBatch.Draw(textureNextButton, nextRectangle, Color.White);
+            //}
             cursor.Draw(gameTime);
+            string nextText = "Press Enter/Esc to return";
+            Vector2 nextTextPosition = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Right - IngamePresentation.menuSmall.MeasureString(nextText).X * GameConstants.generalTextScaleFactor, graphicsDevice.Viewport.TitleSafeArea.Bottom - IngamePresentation.menuSmall.MeasureString(nextText).Y * GameConstants.generalTextScaleFactor);
+            spriteBatch.DrawString(IngamePresentation.menuSmall, nextText, nextTextPosition, Color.White, 0f, new Vector2(0, 0), GameConstants.generalTextScaleFactor, SpriteEffects.None, 0f);
             spriteBatch.End();
+
         }
     }
 }

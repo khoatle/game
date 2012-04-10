@@ -55,7 +55,7 @@ namespace Poseidon
             else if (HydroBot.gameMode == GameMode.SurvivalMode)
                 particleManager = SurvivalGameScene.particleManager;
 
-            speedFactor = 1.5f;
+            speedFactor = 1.5f + (HydroBot.seaCowPower - 1) / 4;
         }
 
         public override void attack()
@@ -112,14 +112,20 @@ namespace Poseidon
             //numTimeReleaseFrozenBreath += 1;
         }
 
+        float lastPower = 1.0f;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, 
             SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
-            float lastMaxHealth = maxHealth;
-            maxHealth = GameConstants.TurtleStartingHealth * HydroBot.turtlePower;
-            health += (maxHealth - lastMaxHealth);
+            if (lastPower != HydroBot.turtlePower)
+            {
+                float lastMaxHealth = maxHealth;
+                maxHealth = GameConstants.TurtleStartingHealth * HydroBot.turtlePower;
+                health += (maxHealth - lastMaxHealth);
+                speedFactor = 1.5f + (HydroBot.turtlePower - 1) / 4;
+                lastPower = HydroBot.turtlePower;
+            }
 
             BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
             if (!isReturnBot && !isCasting && potentialEnemy != null)

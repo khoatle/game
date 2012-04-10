@@ -42,6 +42,9 @@ namespace Poseidon
         //has this enemy given us exp points already?
         public bool gaveExp;
 
+        //is this enemy released from the submarine?
+        public bool releasedFromSubmarine = false;
+
         public SwimmingObject()
             : base()
         {

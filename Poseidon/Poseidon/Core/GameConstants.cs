@@ -60,7 +60,7 @@ namespace Poseidon {
         //public const int FishHP = 50;
 
         //Trash
-        public const int numTrashForUpgrade = 25;
+        public const int numTrashForUpgrade = 50;
         public const int numDaysForUpgrade = 15;
         public const int numResourcesForBioFactory = 5;
         public const int numResourcesForPlasticFactory = 7;
@@ -152,7 +152,7 @@ namespace Poseidon {
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
         public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
-                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(450),
+                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
         //public static readonly TimeSpan[] RoundTime = {TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(490), 
@@ -273,8 +273,11 @@ namespace Poseidon {
         public const int SurvivalModeMaxCombatEnemy = 30;
         public const int SurvivalModeMaxGhostPirate = 20;
         public const int SurvivalModeMaxMutantShark = 6;
-        public const int SurvivalModeMaxTerminator = 3;
-        public const int SurvivalModeMaxSubmarine = 1;
+        public const int SurvivalModeMaxTerminator = 1;
+        public const int SurvivalModeMaxSubmarine = 2;
+        public const int SurvivalModeNumBioTrash = 50;
+        public const int SurvivalModeNumPlasTrash = 30;
+        public const int SurvivalModeNumRadioTrash = 4;
 
         public const int NumGoodWillBarIcons = 13;
         public const int MaxGoodWillPoint = 1000;
@@ -312,7 +315,7 @@ namespace Poseidon {
 
         //constants for animal health
         public const float DolphinStartingHealth = 1000;
-        public const float SeaCowStartingHealth = 1500;
+        public const float SeaCowStartingHealth = 3000;
         public const float TurtleStartingHealth = 2000;
 
         public const int MaxNumTries = 200;

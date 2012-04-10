@@ -29,6 +29,8 @@ namespace Poseidon
 
         public static float seaCowDamage = 10f;
 
+        Camera gameCamera;
+
         public SeaCow() : base() {
             lastAttack = PoseidonGame.playTime;
             lastCast = PoseidonGame.playTime;
@@ -41,6 +43,14 @@ namespace Poseidon
 
             maxHealth = GameConstants.SeaCowStartingHealth;
             health = maxHealth;
+
+            if (HydroBot.gameMode == GameMode.ShipWreck)
+                gameCamera = ShipWreckScene.gameCamera;
+            else if (HydroBot.gameMode == GameMode.MainGame)
+                gameCamera = PlayGameScene.gameCamera;
+            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+                gameCamera = SurvivalGameScene.gameCamera;
+            speedFactor = 1 + (HydroBot.seaCowPower - 1) / 4;
         }
 
         public override void attack()
@@ -124,13 +134,19 @@ namespace Poseidon
             }
         }
 
+        float lastPower = 1;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
-            float lastMaxHealth = maxHealth;
-            maxHealth = GameConstants.SeaCowStartingHealth * HydroBot.seaCowPower;
-            health += (maxHealth - lastMaxHealth);
+            if (lastPower != HydroBot.seaCowPower)
+            {
+                float lastMaxHealth = maxHealth;
+                maxHealth = GameConstants.SeaCowStartingHealth * HydroBot.seaCowPower;
+                health += (maxHealth - lastMaxHealth);
+                speedFactor = 1 + (HydroBot.seaCowPower - 1) / 4;
+                lastPower = HydroBot.seaCowPower;
+            }
 
             BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
 
@@ -155,8 +171,8 @@ namespace Poseidon
                         viewPort = PlayGameScene.GraphicDevice.Viewport;
                     else if (HydroBot.gameMode == GameMode.SurvivalMode)
                         viewPort = SurvivalGameScene.GraphicDevice.Viewport;
-                    Vector3 screenPos = viewPort.Project(Position, PlayGameScene.gameCamera.ProjectionMatrix, PlayGameScene.gameCamera.ViewMatrix, Matrix.Identity);
-                    HydroBot.rippleCenter = new Vector2(screenPos.X / PlayGameScene.GraphicDevice.Viewport.Width, screenPos.Y / PlayGameScene.GraphicDevice.Viewport.Height);
+                    Vector3 screenPos = viewPort.Project(Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                    HydroBot.rippleCenter = new Vector2(screenPos.X / viewPort.Width, screenPos.Y / viewPort.Height);
                     PoseidonGame.audio.maneteeRoar.Play();
                 }
             }

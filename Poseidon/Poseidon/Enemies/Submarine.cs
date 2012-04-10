@@ -20,27 +20,35 @@ namespace Poseidon
         int numHunterGeneratedAtOnce = 2;
         GameMode gameMode;
         bool releasingHunter = false;
+        double timeBetweenPowerUse = 15;
 
         public Submarine(GameMode gameMode)
             : base()
         {
-            speed = (float)(GameConstants.EnemySpeed * 1.2);
+            speed = (float)(GameConstants.EnemySpeed * 1.5);
             damage = GameConstants.TerminatorShootingDamage;
             timeBetweenFire = 2.0f;
             isBigBoss = true;
             random = new Random();
             health = 6000;
-            health += (HydroBot.gamePlusLevel * 3000);
-            maxHealth = health;
-
             //health = 1;
     
-            if (PlayGameScene.currentLevel > 10)
-                perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
-            else
-                perceptionRadius = GameConstants.BossPerceptionRadius;
-            basicExperienceReward = 2000 * (HydroBot.gamePlusLevel + 1);
+            //if (PlayGameScene.currentLevel > 10)
+            //    perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
+            //else
+            perceptionRadius = GameConstants.BossPerceptionRadius;
+            basicExperienceReward = 2000;
 
+            if (PoseidonGame.gamePlus)
+            {
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 4);
+                damage *= (HydroBot.gamePlusLevel + 1);
+                timeBetweenFire /= (1 + HydroBot.gamePlusLevel * 0.25f);
+                health += (HydroBot.gamePlusLevel * 3000);
+                basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
+                timeBetweenPowerUse /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
+            }
+            maxHealth = health;
             //basicExperienceReward = 1;
             this.gameMode = gameMode;
         }
@@ -55,7 +63,7 @@ namespace Poseidon
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.20f;
+            scaledSphere.Radius *= 0.25f;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
             // Set up the parameters
@@ -122,7 +130,7 @@ namespace Poseidon
                     enemies[enemyAmount] = new ShootingEnemy();
                     enemies[enemyAmount].Name = "Shooting Enemy";
                     enemies[enemyAmount].LoadContent(PoseidonGame.contentManager, "Models/EnemyModels/diver_green_ly");
-                    ((BaseEnemy)enemies[enemyAmount]).releasedFromSubmarine = true;
+                    enemies[enemyAmount].releasedFromSubmarine = true;
                     ((BaseEnemy)enemies[enemyAmount]).Load(1, 25, 24);
                     if (i % 2 == 0) releaseOnRightSide = true;
                     else releaseOnRightSide = false;
@@ -232,7 +240,7 @@ namespace Poseidon
                 }
 
 
-                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > 15)
+                if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeBetweenPowerUse)
                 {
                     bool powerUsed = false;
                     powerupsType = random.Next(2);

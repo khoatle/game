@@ -21,7 +21,7 @@ namespace Poseidon
         protected ClipPlayer clipPlayer;
         protected Matrix fishMatrix;
         protected Quaternion qRotation = Quaternion.Identity;
-        public BoundingBox boundingBox;
+        //public BoundingBox boundingBox;
 
         public void LoadContent(ContentManager content, string modelname, bool isAnimated, int clipStart, int clipEnd, int fpsRate)
         {
@@ -31,6 +31,10 @@ namespace Poseidon
                 if (!isAnimated)
                     scale = (float)random.Next(5, 11) / 10;
                 else scale = random.Next(4, 7);
+            }
+            else if (HydroBot.gameMode == GameMode.ShipWreck)
+            {
+                scale = 1.0f;
             }
         
             Model = content.Load<Model>(modelname);

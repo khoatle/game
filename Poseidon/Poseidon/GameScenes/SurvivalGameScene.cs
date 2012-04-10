@@ -42,7 +42,7 @@ namespace Poseidon
         SpriteFont menuSmall;
         
         public static Camera gameCamera;
-        public GameState currentGameState = GameState.Running;
+        public static GameState currentGameState = GameState.Running;
         // In order to know we are resetting the level winning or losing
         // winning: keep the current bot
         // losing: reset our bot to the bot at the beginning of the level
@@ -215,6 +215,10 @@ namespace Poseidon
 
             HydroBot.gamePlusLevel = 0;
             HydroBot.gameMode = GameMode.SurvivalMode;
+            for (int index = 0; index < GameConstants.numberOfSkills; index++)
+            {
+                HydroBot.skills[index] = true;
+            }
 
             skillTextures = new Texture2D[GameConstants.numberOfSkills];
             bulletTypeTextures = new Texture2D[GameConstants.numBulletTypes];
@@ -406,6 +410,7 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
+            currentGameState = GameState.Running;
             HydroBot.numResources += GameConstants.numResourcesAtStart;
 
             enemyBullet = new List<DamageBullet>();
@@ -421,30 +426,32 @@ namespace Poseidon
                 + GameConstants.SurvivalModeMaxMutantShark + GameConstants.SurvivalModeMaxTerminator + GameConstants.SurvivalModeMaxSubmarine * (1 + GameConstants.NumEnemiesInSubmarine)];
             fish = new Fish[4];
 
+            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
+                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, -1, GameMode.SurvivalMode, GameConstants.MainGameFloatHeight);
+
             AddingObjects.placeEnemies(ref enemiesAmount, enemies, Content, random, fishAmount, fish, null,
                 GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, -1, GameMode.SurvivalMode, GameConstants.MainGameFloatHeight);
 
-            AddingObjects.placeFish(ref fishAmount, fish, Content, random, enemiesAmount, enemies, null,
-                GameConstants.MainGameMinRangeX, GameConstants.MainGameMaxRangeX, GameConstants.MainGameMinRangeZ, GameConstants.MainGameMaxRangeZ, -1, GameMode.SurvivalMode, GameConstants.MainGameFloatHeight);
+
 
             //Initialize trash
             //int random_model;
             //int numberTrash = GameConstants.NumberBioTrash[currentLevel] + GameConstants.NumberNuclearTrash[currentLevel] + GameConstants.NumberPlasticTrash[currentLevel];
-            trashes = new List<Trash>(numTrash);
+            trashes = new List<Trash>(GameConstants.SurvivalModeNumBioTrash + GameConstants.SurvivalModeNumPlasTrash + GameConstants.SurvivalModeNumRadioTrash);
             int bioIndex, plasticIndex, nuclearIndex;
-            for (bioIndex = 0; bioIndex < 50; bioIndex++)
+            for (bioIndex = 0; bioIndex < GameConstants.SurvivalModeNumBioTrash; bioIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.biodegradable, particleManager));
                 trashes[bioIndex].Load(Content,ref biodegradableTrash, orientation); //bio model
             }
-            for (plasticIndex = bioIndex; plasticIndex < bioIndex + 25; plasticIndex++)
+            for (plasticIndex = bioIndex; plasticIndex < bioIndex + GameConstants.SurvivalModeNumPlasTrash; plasticIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.plastic, particleManager));
                 trashes[plasticIndex].Load(Content,ref plasticTrash, orientation); //plastic model
             }
-            for (nuclearIndex = plasticIndex; nuclearIndex < plasticIndex + 10; nuclearIndex++)
+            for (nuclearIndex = plasticIndex; nuclearIndex < plasticIndex + GameConstants.SurvivalModeNumRadioTrash; nuclearIndex++)
             {
                 orientation = random.Next(100);
                 trashes.Add(new Trash(TrashType.radioactive, particleManager));
@@ -514,7 +521,7 @@ namespace Poseidon
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
             }
             //skill combo unlock
-            if (score >= 50000 && !HydroBot.skillComboActivated)
+            if (score >= 20000 && !HydroBot.skillComboActivated)
             {
                 HydroBot.skillComboActivated = true;
                 Point point = new Point();

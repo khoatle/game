@@ -62,9 +62,6 @@ namespace Poseidon
         protected TimeSpan startHypnotiseTime;
         public bool justBeingShot = false;
 
-        //is this enemy released from the submarine?
-        public bool releasedFromSubmarine = false;
-
         public float lastForwardDirection = 0;
 
         float turnAmount = 0;
@@ -110,17 +107,17 @@ namespace Poseidon
             timeBetweenFire = 1.0f;
             stunned = false;
             prevFire = new TimeSpan();
-            health = GameConstants.DefaultEnemyHP * (HydroBot.gamePlusLevel + 1); //+1 as it starts from 0
-            maxHealth = health;
-            basicExperienceReward = 60 * (HydroBot.gamePlusLevel + 1);
+            speed = GameConstants.EnemySpeed;
+            health = GameConstants.DefaultEnemyHP;
+            basicExperienceReward = 60;
             if (PoseidonGame.gamePlus)
             {
-                speed = GameConstants.EnemySpeed * (1.0f + HydroBot.gamePlusLevel / 2);
+                speed *= (1.0f + (float)HydroBot.gamePlusLevel / 4);
+                health *= (HydroBot.gamePlusLevel + 1); //+1 as it starts from 0
+                basicExperienceReward *= (HydroBot.gamePlusLevel + 1);
             }
-            else
-            {
-                speed = GameConstants.EnemySpeed;
-            }
+
+            maxHealth = health;
             damage = GameConstants.DefaultEnemyDamage; //overwritten later
         }
 

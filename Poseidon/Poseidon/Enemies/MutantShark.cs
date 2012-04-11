@@ -119,6 +119,8 @@ namespace Poseidon
                 {
                     isFleeing = false;
                 }
+                if (!clipPlayer.inRange(1, 24))
+                    clipPlayer.switchRange(1, 24);
             }
             if (isPoissoned == true)
             {
@@ -138,9 +140,9 @@ namespace Poseidon
                 if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds * HydroBot.turtlePower)
                     speedFactor = 1;
 
-            float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
-            buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
-            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor * HydroBot.beltPower)
+            float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f * HydroBot.beltPower;
+            buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
             {
                 wearOutHypnotise();
             }
@@ -260,7 +262,7 @@ namespace Poseidon
                             else if (gameMode == GameMode.SurvivalMode)
                                 SurvivalGameScene.gameCamera.Shake(25f, .4f);
 
-                            CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
+                            CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode, true);
                         }
                     }
                     //if (currentHuntingTarget.GetType().Name.Equals("Fish"))

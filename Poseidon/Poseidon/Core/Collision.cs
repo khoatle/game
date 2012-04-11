@@ -325,7 +325,7 @@ namespace Poseidon
                         ((FlyingHammer)bullets[i]).explodeNow = true;
                         PoseidonGame.audio.Explo1.Play();
                         gameCamera.Shake(25f, .4f);
-                        CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
+                        CastSkill.UseThorHammer(bullets[i].Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode, false);
                     }
                 }
                 if (bullets[i] is FlyingHammer)
@@ -540,8 +540,8 @@ namespace Poseidon
                     if (HydroBot.autoExplodeMode)
                     {
                         PoseidonGame.audio.Explo1.Play();
-                        gameCamera.Shake(25f, .4f);
-                        CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
+                        gameCamera.Shake(12.5f, .2f);
+                        CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode, true);
                     }
 
                     // add particle effect when certain kind of bullet hits

@@ -77,7 +77,7 @@ namespace Poseidon
                     HydroBot.skillPrevUsed[1] = PoseidonGame.playTime.TotalSeconds;
                     PoseidonGame.audio.Explo1.Play();
                     gameCamera.Shake(25f, .4f);
-                    CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, HydroBot.gameMode);
+                    CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, enemies, ref enemiesAmount, fish, fishAmount, HydroBot.gameMode, false);
                     skillUsed = true;
                 }
             }
@@ -214,7 +214,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(hydroBot.Position + shootingDirection * 10, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 20 * healthiness * HydroBot.bowPower * HydroBot.sandalPower, HydroBot.strengthUp, gameMode);
+            d.initialize(hydroBot.Position + shootingDirection * 10, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength * 10 * healthiness * HydroBot.bowPower * HydroBot.sandalPower, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/piercingArrow");
             d.BoundingSphere.Radius *= 0.7f;
             //d.loadContent(Content, "Models/BulletModels/mjolnir");
@@ -240,7 +240,7 @@ namespace Poseidon
             PoseidonGame.audio.herculesShot.Play();
             myBullets.Add(d);
         }
-        public static void UseThorHammer(Vector3 Position, int MaxRangeX, int MaxRangeZ, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, GameMode gameMode)
+        public static void UseThorHammer(Vector3 Position, int MaxRangeX, int MaxRangeZ, BaseEnemy[] enemies, ref int enemiesAmount, SwimmingObject[] fishes, int fishAmount, GameMode gameMode, bool halfStrength)
         {
             HydroBot.distortingScreen = true;
             HydroBot.distortionStart = PoseidonGame.playTime.TotalSeconds;
@@ -255,7 +255,8 @@ namespace Poseidon
                         enemies[i].stunned = true;
                         enemies[i].stunnedStartTime = PoseidonGame.playTime.TotalSeconds;
                     }
-                    int healthloss = (int) (GameConstants.ThorDamage * healthiness * HydroBot.strength * HydroBot.strengthUp * HydroBot.hammerPower);
+                    float healthloss = (GameConstants.ThorDamage * healthiness * HydroBot.strength * HydroBot.strengthUp * HydroBot.hammerPower);
+                    if (halfStrength) healthloss /= 2;
                     enemies[i].health -= healthloss;
                     PushEnemy(Position, MaxRangeX, MaxRangeZ, enemies[i], enemies, enemiesAmount, fishes, fishAmount);
                     //if (enemies[i].health <= 0)
@@ -269,7 +270,7 @@ namespace Poseidon
                     //}
 
                     Point point = new Point();
-                    String point_string = "-" + healthloss.ToString() + "HP";
+                    String point_string = "-" + ((int)healthloss).ToString() + "HP";
                     point.LoadContent(PoseidonGame.contentManager, point_string, enemies[i].Position, Color.DarkRed);
                     if (gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);

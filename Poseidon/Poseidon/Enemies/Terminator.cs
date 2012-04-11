@@ -103,7 +103,12 @@ namespace Poseidon
                 clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
             }
             // do not delete this
-            if (stunned) return;
+            if (stunned)
+            {
+                if (!clipPlayer.inRange(31, 60))
+                    clipPlayer.switchRange(31, 60);
+                return;
+            }
 
             // Fleeing stuff
             if (isFleeing == true)
@@ -136,9 +141,9 @@ namespace Poseidon
                 if (PoseidonGame.playTime.TotalSeconds - slowStart.TotalSeconds > slowDuration.TotalSeconds * HydroBot.turtlePower)
                     speedFactor = 1;
 
-            float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
-            buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
-            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor * HydroBot.beltPower)
+            float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f * HydroBot.beltPower;
+            buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
             {
                 wearOutHypnotise();
             }

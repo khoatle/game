@@ -137,7 +137,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -856,6 +856,7 @@ namespace Poseidon
             }
         }
 
+
         private void saveGlobalData()
         {
             BinaryWriter bw = new BinaryWriter(File.Open("globalData", FileMode.Create));
@@ -866,11 +867,10 @@ namespace Poseidon
             bw.Write((double)GameSettings.NumParticleLevel);
             bw.Write((double)GameSettings.SchoolOfFishDetail);
             bw.Write(HydroBot.skillComboActivated);
-            if (SurvivalGameScene.score > SurvivalGameScene.highestScore)
-                SurvivalGameScene.highestScore = SurvivalGameScene.score;
             bw.Write((double)SurvivalGameScene.highestScore);
             bw.Close();
         }
+
 
         private void loadGlobalData()
         {

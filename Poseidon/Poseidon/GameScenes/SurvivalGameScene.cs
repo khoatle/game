@@ -106,7 +106,8 @@ namespace Poseidon
         Texture2D winningTexture, losingTexture;
 
         //score: using hydrobot gained exp as score
-        public static float score = 0, highestScore;
+        public static float score = 0;
+        public static float highestScore;
 
         //is ancient fish killed
         public static bool isAncientKilled;
@@ -525,10 +526,11 @@ namespace Poseidon
             {
                 HydroBot.skillComboActivated = true;
                 Point point = new Point();
-                point.LoadContent(PoseidonGame.contentManager, "CONGRATULATIONS\nSKILL COMBO UNLOCKED", hydroBot.Position, Color.LawnGreen);
+                point.LoadContent(PoseidonGame.contentManager, "CONGRATULATIONS\nSKILL COMBO UNLOCKED", hydroBot.Position, Color.Gold);
                 points.Add(point);
                 PoseidonGame.audio.levelUpSound.Play();
             }
+            if (score > highestScore) highestScore = score;
             if (!paused)
             {
                 //timming = gameTime;
@@ -1201,7 +1203,7 @@ namespace Poseidon
             string str2 = "";// = GameConstants.StrCellsFound + retrievedFruits.ToString() +
             //" of " + fruits.Count;
             Rectangle rectSafeArea;
-            str1 += ((int)score).ToString();
+            str1 += ((int)score).ToString() + " High Score: " + ((int)highestScore).ToString();
 
             //too much texts on screen 
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);

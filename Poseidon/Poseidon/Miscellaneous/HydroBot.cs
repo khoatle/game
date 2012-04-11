@@ -220,7 +220,7 @@ namespace Poseidon
                     iconActivated[index] = true;
                 else iconActivated[index] = false;
             }
-            skillComboActivated = false;
+            //skillComboActivated = false;
             goodWillBarActivated = false;
             maxGoodWillPoint = GameConstants.MaxGoodWillPoint;
             goodWillPoint = lsGoodWillPoint = 0;

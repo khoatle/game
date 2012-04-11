@@ -222,7 +222,7 @@ namespace Poseidon.MiniGames
             startText = IngamePresentation.wrapLine(startText, desiredWidthOfImage-5, font, textScale);
             startTextPosition = new Vector2(topLeftPosition.X+5, topLeftPosition.Y+desiredHeightOfImage/2);
             startButton = skipButton = IngamePresentation.buttonNormalTexture;
-            startButtonRect = new Rectangle( (int)(startTextPosition.X + desiredWidthOfImage / 4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
+            startButtonRect = new Rectangle((int)(startTextPosition.X + desiredWidthOfImage / 4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
             skipButtonRect = new Rectangle((int)(startTextPosition.X + desiredWidthOfImage*3/4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
             previewTime = 0;
         }
@@ -479,9 +479,9 @@ namespace Poseidon.MiniGames
                 spriteBatch.Begin();
                 spriteBatch.DrawString(font, startText, startTextPosition, textColor, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f);
                 spriteBatch.Draw(startButton, startButtonRect, Color.White);
-                spriteBatch.DrawString(timerFont, "PLAY", new Vector2(startButtonRect.Center.X - timerFont.MeasureString("PLAY").X / 2, startButtonRect.Center.Y - timerFont.MeasureString("PLAY").Y / 2), Color.Yellow, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
+                spriteBatch.DrawString(timerFont, "PLAY", new Vector2(startButtonRect.Center.X, startButtonRect.Center.Y), Color.Yellow, 0f, new Vector2(timerFont.MeasureString("PLAY").X / 2, timerFont.MeasureString("PLAY").Y / 2), textScale, SpriteEffects.None, 0f);
                 spriteBatch.Draw(skipButton, skipButtonRect, Color.White);
-                spriteBatch.DrawString(timerFont, "SKIP", new Vector2(skipButtonRect.Center.X - timerFont.MeasureString("SKIP").X / 2, skipButtonRect.Center.Y - timerFont.MeasureString("SKIP").Y / 2), Color.Yellow, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f );
+                spriteBatch.DrawString(timerFont, "SKIP", new Vector2(skipButtonRect.Center.X, skipButtonRect.Center.Y), Color.Yellow, 0f, new Vector2(timerFont.MeasureString("SKIP").X / 2,timerFont.MeasureString("SKIP").Y / 2), textScale, SpriteEffects.None, 0f );
                 spriteBatch.End();
             }
 

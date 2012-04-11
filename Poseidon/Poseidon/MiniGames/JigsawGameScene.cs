@@ -73,8 +73,9 @@ namespace Poseidon.MiniGames
 
         public bool inOrder = false;
         public bool gamePlayed = false;
+        bool gameStarted = false;
 
-        private double timeNow;
+        private double timeNow, previewTime;
         public bool timeUp;
 
         Random random;
@@ -103,6 +104,14 @@ namespace Poseidon.MiniGames
         public MouseState lastMouseState, currentMouseState;
         public bool clicked = false;
 
+        Texture2D startButton, skipButton;
+        Rectangle startButtonRect, skipButtonRect;
+        string startText;
+        float textScale;
+        Vector2 startTextPosition;
+        
+        float widthScale, heightScale;
+
         public JigsawGameScene(Game game, ContentManager Content, GraphicsDeviceManager graphic, GraphicsDevice graphicsDevice)
             : base(game)
         {
@@ -115,19 +124,26 @@ namespace Poseidon.MiniGames
             //Content.RootDirectory = "Content";
             random = new Random();
 
-            startWidth = (int)(game.Window.ClientBounds.Width*0.02); //25
-            tabSpace = (int)(game.Window.ClientBounds.Width * 0.04); //50
+            widthScale = (float)game.Window.ClientBounds.Width / 1280;
+            heightScale = (float)game.Window.ClientBounds.Height / 800;
 
-            int videoRectWidth = (int)(game.Window.ClientBounds.Width * 0.46); //600
-            int videoRectHeight = (int)(game.Window.ClientBounds.Height * 0.6); //480
-            int topTextHeight = (int)(game.Window.ClientBounds.Height * 0.125); //100
-            videoRectangle = new Rectangle(startWidth, topTextHeight , videoRectWidth, videoRectHeight);//(20,100,600,480)
+            if (widthScale > 1.5) widthScale = 1.5f;
+            if (heightScale > 1.5) heightScale = 1.5f;
+
+            startWidth = (int)(25 * widthScale);
+            tabSpace = (int)(50 * widthScale);
+
+            int videoRectWidth = (int)(600*widthScale); 
+            int videoRectHeight = (int)(480 * heightScale);
+            int topTextHeight = (int)(100 * heightScale);
+            videoRectangle = new Rectangle(startWidth, topTextHeight , videoRectWidth, videoRectHeight);
 
             int descRectWidth = videoRectWidth;
             int descRectHeight = game.Window.ClientBounds.Height - videoRectHeight - topTextHeight;
             descriptionRectangle = new Rectangle(startWidth, videoRectangle.Bottom+10, descRectWidth, descRectHeight);
 
-            letAIHandleButtonRectangle = new Rectangle(50, 0, IngamePresentation.letAIHandleNormalTexture.Width, IngamePresentation.letAIHandleNormalTexture.Height); 
+            letAIHandleButtonRectangle = new Rectangle(50, 0, IngamePresentation.letAIHandleNormalTexture.Width, IngamePresentation.letAIHandleNormalTexture.Height);
+
         }
 
         /// <summary>
@@ -148,12 +164,12 @@ namespace Poseidon.MiniGames
             initializeEmptyCell(0, 0);
 
             // Tweak this
-            topLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2 + 50, 100);
-            frameTopLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 20);
+            topLeftPosition = new Vector2((game.Window.ClientBounds.Width / 2) + (30*widthScale), 75*(heightScale));
+            frameTopLeftPosition = new Vector2(game.Window.ClientBounds.Width / 2, 20*heightScale);
 
             // Tweak this
-            desiredWidthOfImage = game.Window.ClientBounds.Width / 2 - 115;
-            desiredHeightOfImage = game.Window.ClientBounds.Height - 210;
+            desiredWidthOfImage = game.Window.ClientBounds.Width / 2 - (int)(78 * widthScale);
+            desiredHeightOfImage = game.Window.ClientBounds.Height - (int)(160 * heightScale);
 
             isSliding = false;
             distanceTraveled = 0;
@@ -189,16 +205,27 @@ namespace Poseidon.MiniGames
             // Load/Initialize pieces here
             loadPieces();
 
-            // Shuffle pieces
-            shufflePieces();
-
             dnaAnimation = content.Load<Video>("Videos/dnaAnimation");
             extractDNAVid = content.Load<Video>("Videos/extractDNA");
             reconstructDNAVid = content.Load<Video>("Videos/reconstructDNA");
             fillGapsVid = content.Load<Video>("Videos/fillGaps");
             injectAndGrowVid = content.Load<Video>("Videos/injectAndGrow");
+
+            initializeStartScene();
+
         }
 
+        private void initializeStartScene()
+        {
+            textScale = (float)Math.Sqrt((double)(widthScale*heightScale));// GameConstants.generalTextScaleFactor;
+            startText = "WHILE THE EXTINCT ANIMAL IS BEING RESURRECTED IN THE LAB, PLAY THE JIGSAW GAME TO RECREATE THIS IMAGE. YOU CAN ALSO CHOOSE TO SKIP IT. THE AI WILL DO IT FOR YOU, BUT THE ANIMAL WILL HAVE 60% EFFICIENCY";
+            startText = IngamePresentation.wrapLine(startText, desiredWidthOfImage-5, font, textScale);
+            startTextPosition = new Vector2(topLeftPosition.X+5, topLeftPosition.Y+desiredHeightOfImage/2);
+            startButton = skipButton = IngamePresentation.buttonNormalTexture;
+            startButtonRect = new Rectangle( (int)(startTextPosition.X + desiredWidthOfImage / 4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
+            skipButtonRect = new Rectangle((int)(startTextPosition.X + desiredWidthOfImage*3/4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
+            previewTime = 0;
+        }
 
         public void StopVideoPlayers()
         {
@@ -209,13 +236,16 @@ namespace Poseidon.MiniGames
         public override void Show()
         {
             MediaPlayer.Stop();
+            cursor.SetMenuCursorImage();
             timeUp = false;
             timeNow = (double)GameConstants.jigsawGameMaxTime;
+            previewTime = 0;
             inOrder = false;
             letAIHandle = false;
-            shufflePieces();
             videoPlayBackState = VideoPlayBackState.ExtractingDNA;
-            vidIndex = 0;  
+            vidIndex = 0;
+            gameStarted = gamePlayed = false;
+            unShufflePieces();
             base.Show();
         }
 
@@ -283,45 +313,11 @@ namespace Poseidon.MiniGames
             {
                 MediaPlayer.Play(PoseidonGame.audio.jigsawMusics[random.Next(GameConstants.NumJigsawBackgroundMusics)]);
             }
-            timeNow -= gameTime.ElapsedGameTime.TotalSeconds;
 
             if (dnaAnimationVideoPlayer.State == MediaState.Stopped)
                 dnaAnimationVideoPlayer.Play(dnaAnimation);
 
-            if (GameConstants.jigsawGameMaxTime - timeNow <= 20)
-            {
-                videoPlayBackState = VideoPlayBackState.ExtractingDNA;
-                videoPlayer.Play(extractDNAVid);
-                stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
-            }
-            else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
-            {
-                videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
-                videoPlayer.Play(reconstructDNAVid);
-                stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
-            }
-            else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
-            {
-                videoPlayBackState = VideoPlayBackState.FillingGaps;
-                videoPlayer.Play(fillGapsVid);
-                stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
-            }
-            else
-            {
-                videoPlayBackState = VideoPlayBackState.InjectAndGrow;
-                videoPlayer.Play(injectAndGrowVid);
-                stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
-            }
-            stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, videoRectangle.Width - (tabSpace*2) , font);
-            if (timeNow <= 0)
-            {
-                timeUp = true;
-            }
-            timerString = "RESURRECTING "+animalName+"\nTIME REMAINING: "+ ((int)timeNow).ToString() + " Seconds";
-            
-            cursor.Update(graphicsDevice, PlayGameScene.gameCamera , gameTime, null);
-   
-            putInfoInDebuggingString();
+            cursor.Update(graphicsDevice, PlayGameScene.gameCamera, gameTime, null);
 
             MouseState mouseState = Mouse.GetState();
             letAIHandleButtonHover = mouseOnLetAIHandle(mouseState);
@@ -329,35 +325,114 @@ namespace Poseidon.MiniGames
             double dumbDoubleValue = 0;
             clicked = false;
             CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref dumbDoubleValue, ref clicked, ref dumbValue, ref dumbValue);
-            if (letAIHandleButtonHover && clicked)
+
+            if (!gameStarted)
             {
-                letAIHandle = true;
-                clicked = false;
-                PoseidonGame.audio.MenuScroll.Play();
-                return;
-            }
-
-            // If not sliding, then the player can control, otherwise he has to wait until the sliding finishes
-            if (isSliding == false)
-            {
-                float desiredWidthPerPiece;
-                float desiredHeightPerPiece;
-                getDesiredWidthAndHeightPerPiece(out desiredWidthPerPiece, out desiredHeightPerPiece);
-
-                // Get the cell the mouse is targeting
-                getRowColOfPiece(mouseState, desiredWidthPerPiece, desiredHeightPerPiece, out mouseRow, out mouseCol);
-
-                // If slidable
-                if (mouseState.LeftButton == ButtonState.Pressed && isSlidable(mouseRow, mouseCol))
+                if (clicked && startButtonRect.Intersects(new Rectangle(mouseState.X, mouseState.Y, 10, 10)))
                 {
-                    isSliding = true;
-                    
-                    moveBlocks(mouseRow, mouseCol);
-                    if (!gamePlayed) gamePlayed = true;
+                    gameStarted = true;
+                    shufflePieces();
+                    clicked = false;
                 }
-            } // Slide otherwise 
-            else moveBlocks(mouseRow, mouseCol);
+                else if (clicked && skipButtonRect.Intersects(new Rectangle(mouseState.X, mouseState.Y, 10, 10)))
+                {
+                    letAIHandle = true;
+                    clicked = false;
+                    return;
+                }
+                previewTime += gameTime.ElapsedGameTime.TotalSeconds;
+                if (previewTime < 10)
+                {
+                    videoPlayBackState = VideoPlayBackState.ExtractingDNA;
+                    videoPlayer.Play(extractDNAVid);
+                    stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
+                }
+                else if (previewTime < 20)
+                {
+                    videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
+                    videoPlayer.Play(reconstructDNAVid);
+                    stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
+                }
+                else if (previewTime < 30)
+                {
+                    videoPlayBackState = VideoPlayBackState.FillingGaps;
+                    videoPlayer.Play(fillGapsVid);
+                    stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
+                }
+                else
+                {
+                    videoPlayBackState = VideoPlayBackState.InjectAndGrow;
+                    videoPlayer.Play(injectAndGrowVid);
+                    stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
+                }
+                stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, videoRectangle.Width - (tabSpace * 2), font);
+                timerString = "RESURRECTING " + animalName;
+            }
+            else
+            {
+                timeNow -= gameTime.ElapsedGameTime.TotalSeconds;
+                checkInOrder();
+                if (GameConstants.jigsawGameMaxTime - timeNow <= 20)
+                {
+                    videoPlayBackState = VideoPlayBackState.ExtractingDNA;
+                    videoPlayer.Play(extractDNAVid);
+                    stepText = "STEP 1: EXTRACT DNA FROM COLLECTED FRAGMENTS";
+                }
+                else if (GameConstants.jigsawGameMaxTime - timeNow <= 40)
+                {
+                    videoPlayBackState = VideoPlayBackState.ReconstructingDNA;
+                    videoPlayer.Play(reconstructDNAVid);
+                    stepText = "STEP 2: ATTEMPTING TO RECONSTRUCT DNA SEQUENCE";
+                }
+                else if (GameConstants.jigsawGameMaxTime - timeNow <= 60)
+                {
+                    videoPlayBackState = VideoPlayBackState.FillingGaps;
+                    videoPlayer.Play(fillGapsVid);
+                    stepText = "STEP 3: FILLING GAPS IN DNA WITH PREDICTON TECHNIQUES";
+                }
+                else
+                {
+                    videoPlayBackState = VideoPlayBackState.InjectAndGrow;
+                    videoPlayer.Play(injectAndGrowVid);
+                    stepText = "STEP 4: INJECT DNA INTO CELL AND GROW CELL";
+                }
+                stepText = Poseidon.Core.IngamePresentation.wrapLine(stepText, videoRectangle.Width - (tabSpace * 2), font);
+                if (timeNow <= 0)
+                {
+                    timeUp = true;
+                }
+                timerString = "RESURRECTING " + animalName + "\nTIME REMAINING: " + ((int)timeNow).ToString() + " Seconds";
 
+
+                if (letAIHandleButtonHover && clicked)
+                {
+                    letAIHandle = true;
+                    clicked = false;
+                    PoseidonGame.audio.MenuScroll.Play();
+                    return;
+                }
+
+                // If not sliding, then the player can control, otherwise he has to wait until the sliding finishes
+                if (isSliding == false)
+                {
+                    float desiredWidthPerPiece;
+                    float desiredHeightPerPiece;
+                    getDesiredWidthAndHeightPerPiece(out desiredWidthPerPiece, out desiredHeightPerPiece);
+
+                    // Get the cell the mouse is targeting
+                    getRowColOfPiece(mouseState, desiredWidthPerPiece, desiredHeightPerPiece, out mouseRow, out mouseCol);
+
+                    // If slidable
+                    if (mouseState.LeftButton == ButtonState.Pressed && isSlidable(mouseRow, mouseCol))
+                    {
+                        isSliding = true;
+
+                        moveBlocks(mouseRow, mouseCol);
+                        if (!gamePlayed) gamePlayed = true;
+                    }
+                } // Slide otherwise 
+                else moveBlocks(mouseRow, mouseCol);
+            }
             base.Update(gameTime);
         }
 
@@ -393,6 +468,22 @@ namespace Poseidon.MiniGames
                 game.Window.ClientBounds.Width / 2 - 20, game.Window.ClientBounds.Height - 2 * (int)frameTopLeftPosition.Y), Color.White);
             spriteBatch.End();
             drawAllPieces(new Vector2(), texelSize.X, texelSize.Y);
+
+            if (!gameStarted)
+            {
+                Color textColor;
+                if (image == turtleImage[0])
+                    textColor = Color.Yellow;
+                else
+                    textColor = Color.Black;
+                spriteBatch.Begin();
+                spriteBatch.DrawString(font, startText, startTextPosition, textColor, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(startButton, startButtonRect, Color.White);
+                spriteBatch.DrawString(timerFont, "PLAY", new Vector2(startButtonRect.Center.X - timerFont.MeasureString("PLAY").X / 2, startButtonRect.Center.Y - timerFont.MeasureString("PLAY").Y / 2), Color.Yellow, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
+                spriteBatch.Draw(skipButton, skipButtonRect, Color.White);
+                spriteBatch.DrawString(timerFont, "SKIP", new Vector2(skipButtonRect.Center.X - timerFont.MeasureString("SKIP").X / 2, skipButtonRect.Center.Y - timerFont.MeasureString("SKIP").Y / 2), Color.Yellow, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f );
+                spriteBatch.End();
+            }
 
             spriteBatch.Begin();
             spriteBatch.DrawString(timerFont, timerString, new Vector2(50,5), Color.White, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
@@ -582,7 +673,7 @@ namespace Poseidon.MiniGames
         }
 
         // Get information
-        private void putInfoInDebuggingString()
+        private void checkInOrder()
         {
             int row, col;
             MouseState mouseState = Mouse.GetState();
@@ -590,10 +681,10 @@ namespace Poseidon.MiniGames
             Vector2 desiredSizeOfPiece = new Vector2(desiredWidthOfImage / numberOfCol, desiredHeightOfImage / numberOfRow);
             getRowColOfPiece(mouseState, desiredSizeOfPiece.X, desiredSizeOfPiece.Y, out row, out col);
 
-            debugString = "Coordinate of the piece is (rowFrom, colFrom): (" + row + ", " + col + ")\n";
-            debugString += "Corrdinate of empty piece is (rowFrom, colFrom): (" + emptyCellRow + ", " + emptyCellCol + ")\n";
-            debugString += Mouse.GetState().ToString();
-            debugString += "\nSlidability: " + isSlidable(row, col);
+            //debugString = "Coordinate of the piece is (rowFrom, colFrom): (" + row + ", " + col + ")\n";
+            //debugString += "Corrdinate of empty piece is (rowFrom, colFrom): (" + emptyCellRow + ", " + emptyCellCol + ")\n";
+            //debugString += Mouse.GetState().ToString();
+            //debugString += "\nSlidability: " + isSlidable(row, col);
 
             inOrder = true;
             for (int i = 0; i < numberOfRow; i++)
@@ -606,8 +697,8 @@ namespace Poseidon.MiniGames
                     }
                 }
             }
-            if (inOrder) debugString += "\nWinner\n";
-            else debugString += "\nLoser\n";
+            //if (inOrder) debugString += "\nWinner\n";
+            //else debugString += "\nLoser\n";
 
         }
 
@@ -722,6 +813,28 @@ namespace Poseidon.MiniGames
                     Math.Abs(dirCol) == Math.Abs(dirRow));
 
                 swapCell(emptyCellRow, emptyCellCol, emptyCellRow + dirRow, emptyCellCol + dirCol);
+            }
+        }
+
+        //Unshuffle Pieces
+        public void unShufflePieces()
+        {
+            int truerow, truecol;
+            for (int i = 0; i < numberOfRow; i++)
+            {
+                for (int j = 0; j < numberOfCol; j++)
+                {
+                    if(isEmptyCell(i,j))
+                        continue;
+                    truerow = jigsawPieces[i][j].trueRow;
+                    truecol = jigsawPieces[i][j].trueCol;
+                    while ( (!isEmptyCell(i, j)) && (i != truerow || j != truecol) )
+                    {
+                        truerow = jigsawPieces[i][j].trueRow;
+                        truecol = jigsawPieces[i][j].trueCol;
+                        swapCell(i, j, truerow, truecol);
+                    }
+                }
             }
         }
 

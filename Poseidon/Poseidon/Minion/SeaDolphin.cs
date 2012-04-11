@@ -39,7 +39,7 @@ namespace Poseidon
 
             maxHealth = GameConstants.DolphinStartingHealth;
             health = maxHealth;
-            speedFactor = 2.0f;
+            speedFactor = 2.0f + (HydroBot.seaCowPower - 1) / 4;
         }
 
         public bool isTargeting() {
@@ -59,7 +59,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "-" + damage.ToString() + "HP";
+                String point_string = "-" + (int)damage + "HP";
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -71,15 +71,22 @@ namespace Poseidon
                 //if (this.BoundingSphere.Intersects(cameraFrustum))
                 PoseidonGame.audio.slashSound.Play();
             }
+            base.attack();
         }
 
+        float lastPower = 1.0f;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot hydroBot, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
-            float lastMaxHealth = maxHealth;
-            maxHealth = GameConstants.DolphinStartingHealth * HydroBot.dolphinPower;
-            health += (maxHealth - lastMaxHealth);
+            if (lastPower != HydroBot.dolphinPower)
+            {
+                float lastMaxHealth = maxHealth;
+                maxHealth = GameConstants.DolphinStartingHealth * HydroBot.dolphinPower;
+                health += (maxHealth - lastMaxHealth);
+                speedFactor = 2.0f + (HydroBot.dolphinPower - 1) / 4;
+                lastPower = HydroBot.dolphinPower;
+            }
 
             // Only cast skill when there is an enemy near by
             if (!isReturnBot && !isCasting)
@@ -97,15 +104,17 @@ namespace Poseidon
                     // Start casting
                     startCasting = PoseidonGame.playTime;
 
-                    healAmount *= HydroBot.dolphinPower;
+                    float healedAmount = healAmount * HydroBot.dolphinPower;
 
-                    HydroBot.currentHitPoint += healAmount;
+                    healedAmount = Math.Min(healedAmount, HydroBot.maxHitPoint - HydroBot.currentHitPoint);
+
+                    HydroBot.currentHitPoint += healedAmount;
                     HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
 
                     PoseidonGame.audio.healingSound.Play();
 
                     Point point = new Point();
-                    String point_string = "Health + " + healAmount;
+                    String point_string = "Health + " + (int)healedAmount;
                     point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
                     if (HydroBot.gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);
@@ -114,6 +123,7 @@ namespace Poseidon
                     else if (HydroBot.gameMode == GameMode.SurvivalMode)
                         SurvivalGameScene.points.Add(point);
                 }
+
             }
 
             // OK, I'm casting it
@@ -134,6 +144,7 @@ namespace Poseidon
                     Vector3 facingDirection = hydroBot.Position - Position;
                     ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
                 }
+                RestoreNormalAnimation();
             }
 
             Vector3 destination = hydroBot.Position + new Vector3(AfterX, 0, AfterZ);

@@ -55,7 +55,7 @@ namespace Poseidon
             else if (HydroBot.gameMode == GameMode.SurvivalMode)
                 particleManager = SurvivalGameScene.particleManager;
 
-            speedFactor = 1.5f;
+            speedFactor = 1.5f + (HydroBot.seaCowPower - 1) / 4;
         }
 
         public override void attack()
@@ -71,7 +71,7 @@ namespace Poseidon
                 ForwardDirection = (float)Math.Atan2(facingDirection.X, facingDirection.Z);
 
                 Point point = new Point();
-                String point_string = "-" + damage.ToString() + "HP";
+                String point_string = "-" + (int)damage + "HP";
                 point.LoadContent(PoseidonGame.contentManager, point_string, currentTarget.Position, Color.Red);
                 if (HydroBot.gameMode == GameMode.ShipWreck)
                     ShipWreckScene.points.Add(point);
@@ -82,6 +82,7 @@ namespace Poseidon
                 //if (this.BoundingSphere.Intersects(cameraFrustum))
                 PoseidonGame.audio.slashSound.Play();
             }
+            base.attack();
         }
 
         public void FrozenBreathe(SwimmingObject[] enemies, int enemiesSize, bool firstCast) {
@@ -103,7 +104,7 @@ namespace Poseidon
                 }
             }
 
-            if (PlayGameScene.particleManager.frozenBreathParticles != null)
+            if (particleManager.frozenBreathParticles != null)
             {
                 for (int k = 0; k < GameConstants.numFrozenBreathParticlesPerUpdate; k++)
                     particleManager.frozenBreathParticles.AddParticle(Position + Vector3.Transform(new Vector3(0, 0, 1), orientationMatrix) * 10, Vector3.Zero, ForwardDirection, MathHelper.PiOver4);
@@ -111,14 +112,20 @@ namespace Poseidon
             //numTimeReleaseFrozenBreath += 1;
         }
 
+        float lastPower = 1.0f;
         public override void Update(Microsoft.Xna.Framework.GameTime gameTime, BoundingFrustum cameraFrustum, SwimmingObject[] enemies, int enemiesSize, 
             SwimmingObject[] fish, int fishSize, int changeDirection, HydroBot tank, List<DamageBullet> enemyBullet)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
 
-            float lastMaxHealth = maxHealth;
-            maxHealth = GameConstants.TurtleStartingHealth * HydroBot.turtlePower;
-            health += (maxHealth - lastMaxHealth);
+            if (lastPower != HydroBot.turtlePower)
+            {
+                float lastMaxHealth = maxHealth;
+                maxHealth = GameConstants.TurtleStartingHealth * HydroBot.turtlePower;
+                health += (maxHealth - lastMaxHealth);
+                speedFactor = 1.5f + (HydroBot.turtlePower - 1) / 4;
+                lastPower = HydroBot.turtlePower;
+            }
 
             BaseEnemy potentialEnemy = lookForEnemy(enemies, enemiesSize);
             if (!isReturnBot && !isCasting && potentialEnemy != null)
@@ -158,6 +165,7 @@ namespace Poseidon
                     FrozenBreathe(enemies, enemiesSize, firstCast);
                     firstCast = false;   
                 }
+                RestoreNormalAnimation();
             }
 
             Vector3 destination = tank.Position + new Vector3(AfterX, 0, AfterZ);

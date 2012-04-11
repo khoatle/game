@@ -829,7 +829,7 @@ namespace Poseidon
                                     HydroBot.currentExperiencePts += GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5);
 
                                     Point point = new Point();
-                                    String point_string = "+" + GameConstants.ExpPainting + " EXP";
+                                    String point_string = "+" + (GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5)) + " EXP";
                                     point.LoadContent(Content, point_string, chest.Position, Color.LawnGreen);
                                     points.Add(point);
 
@@ -985,21 +985,8 @@ namespace Poseidon
 
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
-            
+
             DrawTerrain(ground.Model);
-
-            //applying edge detection for objects on low layer of the game
-            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTargetLow, graphics.GraphicsDevice, edgeDetectionRenderTarget);
-            RestoreGraphicConfig();
-            DrawObjectsOnLowLayer();
-
-            DrawLowPriorityObjectsOnHighLayer();
-
-            //applying edge detection for objects on high layer of the game
-            graphicEffect.ApplyEdgeDetection(edgeDetectionRenderTarget, normalDepthRenderTargetHigh, graphics.GraphicsDevice, renderTarget);
-            RestoreGraphicConfig();
-            DrawObjectsOnHighLayer();
-
 
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects[currentShipWreckID])
@@ -1018,6 +1005,18 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
+
+            //applying edge detection for objects on low layer of the game
+            graphicEffect.ApplyEdgeDetection(renderTarget, normalDepthRenderTargetLow, graphics.GraphicsDevice, edgeDetectionRenderTarget);
+            RestoreGraphicConfig();
+            DrawObjectsOnLowLayer();
+
+            DrawLowPriorityObjectsOnHighLayer();
+
+            //applying edge detection for objects on high layer of the game
+            graphicEffect.ApplyEdgeDetection(edgeDetectionRenderTarget, normalDepthRenderTargetHigh, graphics.GraphicsDevice, renderTarget);
+            RestoreGraphicConfig();
+            DrawObjectsOnHighLayer();
 
             hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
@@ -1308,6 +1307,7 @@ namespace Poseidon
                     //GraphicDevice.RasterizerState = rs;
                 }
             }
+
         }
 
         public void DrawObjectsOnHighLayer()

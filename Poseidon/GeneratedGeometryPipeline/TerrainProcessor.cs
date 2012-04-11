@@ -97,9 +97,9 @@ namespace GeneratedGeometryPipeline
             else if (terrainName == "terrain8.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/redsea.jpg";//red sea
             else if (terrainName == "terrain9.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
-            else if (terrainName == "terrain10.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain5.jpg";
+            else if (terrainName == "terrain10.bmp")
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
             else if (terrainName == "terrain11.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";
             else terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";   

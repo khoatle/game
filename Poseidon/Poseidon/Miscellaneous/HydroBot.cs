@@ -291,6 +291,11 @@ namespace Poseidon
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
                 if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
             }
+            else
+            {
+                currentEnvPoint -= ((GameConstants.SurvivalModeNumBioTrash + GameConstants.SurvivalModeNumPlasTrash + GameConstants.SurvivalModeNumRadioTrash) * GameConstants.envLossPerTrashAdd);
+                if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
+            }
 
             skills = new bool[GameConstants.numberOfSkills];
             lsSkills = new bool[GameConstants.numberOfSkills];
@@ -360,8 +365,6 @@ namespace Poseidon
                 iconActivated[j] = lsIconActivated[j] = (bool)info.GetValue(iconName, typeof(bool));
             }
             
-            skillComboActivated = lsSkillComboActivated = (bool)info.GetValue("skillComboActivated", typeof(bool));
-
             bioTrash = plasticTrash = nuclearTrash = 0;
             totalBioTrashProcessed = lsTotalBioTrashProcessed = (int)info.GetValue("totalBioTrashProcessed", typeof(int));
             totalPlasticTrashProcessed = lsTotalPlasticTrashProcessed = (int)info.GetValue("totalPlasticTrashProcessed", typeof(int));
@@ -428,7 +431,6 @@ namespace Poseidon
                 string iconName = "iconActivated"+ j.ToString();
                 info.AddValue(iconName, iconActivated[j]);
             }
-            info.AddValue("skillComboActivated", skillComboActivated);
             info.AddValue("bioPlantLevel", bioPlantLevel);
             info.AddValue("plasticPlantLevel", plasticPlantLevel);
             info.AddValue("numResources", numResources);
@@ -952,6 +954,8 @@ namespace Poseidon
                                 expPoints = GameConstants.expGainForBioTrash + (HydroBot.gamePlusLevel * 5);
                                 HydroBot.currentExperiencePts += expPoints;
                                 HydroBot.currentEnvPoint += envPoints;
+                                if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                    SurvivalGameScene.score += expPoints / 2;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
                             }
                             else if (trash.trashType == TrashType.plastic)
@@ -1029,6 +1033,8 @@ namespace Poseidon
                                 expPoints = GameConstants.expGainForPlasTrash + (HydroBot.gamePlusLevel * 5);
                                 HydroBot.currentExperiencePts += expPoints;
                                 HydroBot.currentEnvPoint += envPoints;
+                                if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                    SurvivalGameScene.score += expPoints / 2;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
                             }
                             else //radioactive
@@ -1105,6 +1111,8 @@ namespace Poseidon
                                 expPoints = GameConstants.expGainForRadioTrash + (HydroBot.gamePlusLevel * 5);
                                 HydroBot.currentExperiencePts += expPoints;
                                 HydroBot.currentEnvPoint += envPoints;
+                                if (HydroBot.gameMode == GameMode.SurvivalMode)
+                                    SurvivalGameScene.score += expPoints / 2;
                                 display_str += "\n+" + envPoints.ToString() + "ENV\n+" + expPoints.ToString() + "EXP";
                             }
                             PoseidonGame.audio.retrieveSound.Play();
@@ -1153,7 +1161,7 @@ namespace Poseidon
                 {
                     if (!invincibleMode)
                     {
-                        currentHitPoint -= 0.01f;
+                        currentHitPoint -= 0.01f * (HydroBot.gamePlusLevel + 1);
                     }
                 }
                 //disable goodwill bar in level 1
@@ -1165,7 +1173,8 @@ namespace Poseidon
             }
 
             if (isPoissoned == true) {
-                if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson) {
+                if (accumulatedHealthLossFromPoisson < maxHPLossFromPoisson * ((float)HydroBot.gamePlusLevel / 2 + 1))
+                {
                     if (!invincibleMode) {
                         currentHitPoint -= 0.1f;
                     }

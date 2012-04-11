@@ -168,8 +168,10 @@ namespace Poseidon.MiniGames
                 else {
                     expAwarded += 300;
                 }
-                HydroBot.currentExperiencePts += expAwarded;
                 HydroBot.IncreaseGoodWillPoint(expAwarded);
+                expAwarded *= (HydroBot.gamePlusLevel + 1);
+                HydroBot.currentExperiencePts += expAwarded;
+                
                 return;
             }
 

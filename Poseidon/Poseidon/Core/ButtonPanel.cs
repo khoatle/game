@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Poseidon.Core
 {
-    class ButtonPanel
+    public class ButtonPanel
     {
         private Vector2 topLeft;
         private Vector2 infoTextPosition;

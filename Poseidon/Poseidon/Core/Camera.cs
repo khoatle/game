@@ -48,15 +48,15 @@ namespace Poseidon
             {
                 camHeight = GameConstants.MainCamHeight;
                 gameFloatHeight = GameConstants.MainGameFloatHeight;
-                MaxRangeX = GameConstants.MainGameMaxRangeX + 8;
-                MaxRangeZ = GameConstants.MainGameMaxRangeZ + 5;
+                MaxRangeX = GameConstants.MainGameMaxRangeX + 15;
+                MaxRangeZ = GameConstants.MainGameMaxRangeZ + 12;
             }
             else if (gameMode == GameMode.ShipWreck)
             {
                 camHeight = GameConstants.ShipCamHeight;
                 gameFloatHeight = GameConstants.ShipWreckFloatHeight;
-                MaxRangeX = GameConstants.ShipWreckMaxRangeX + 8;
-                MaxRangeZ = GameConstants.ShipWreckMaxRangeZ + 5;
+                MaxRangeX = GameConstants.ShipWreckMaxRangeX + 15;
+                MaxRangeZ = GameConstants.ShipWreckMaxRangeZ + 12;
             }
             this.gameMode = gameMode;
 

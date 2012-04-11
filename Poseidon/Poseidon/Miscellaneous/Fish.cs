@@ -34,7 +34,7 @@ namespace Poseidon {
             basicExperienceReward = GameConstants.BasicExpHealingFish;
             lastHealthUpdateTime = 0;
             healthChangeInterval = GameConstants.maxHealthChangeInterval;
-            health = maxHealth = GameConstants.DefaultFishHP;
+            health = maxHealth = GameConstants.DefaultFishHP + HydroBot.gamePlusLevel * 100;
         }
 
         public void Load(int clipStart, int clipEnd, int fpsRate)
@@ -61,7 +61,7 @@ namespace Poseidon {
             if (Name.Contains("penguin")) scale = 2.0f;
             if (isBigBoss)
             {
-                scale *= 2.0f;
+                //scale *= 2.0f;
                 maxHealth = 5000;
                 health = 5000;
             }
@@ -185,7 +185,7 @@ namespace Poseidon {
                 if (Name.Contains("manetee")) scale = 0.6f;
                 if (Name.Contains("seal")) scale = 1.1f;
                 if (Name.Contains("penguin")) scale = 2.0f;
-                if (isBigBoss) scale *= 2.0f;
+                //if (isBigBoss) scale *= 2.0f;
                 fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
@@ -286,6 +286,22 @@ namespace Poseidon {
                     effect.Parameters["DiffuseIntensity"].SetValue(0.5f);
                 }
                 mesh.Draw();
+                if (isBigBoss == true)
+                {
+                    foreach (Effect effect in mesh.Effects)
+                    {
+                        effect.CurrentTechnique = effect.Techniques["BalloonShading"];
+                        effect.Parameters["gWorldXf"].SetValue(Matrix.Identity);
+                        effect.Parameters["gWorldITXf"].SetValue(Matrix.Invert(Matrix.Identity));
+                        effect.Parameters["Bones"].SetValue(bones);
+                        effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
+                        effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
+                        effect.Parameters["gInflate"].SetValue(0.065f);
+                        effect.Parameters["gGlowColor"].SetValue(new Vector3(0, 255, 0));
+                        //effect.Parameters["gGlowExpon"].SetValue(1.5f);
+                    }
+                }
+                mesh.Draw();
             }
         }
 
@@ -298,7 +314,10 @@ namespace Poseidon {
             return null;
         }
 
-        public virtual void attack() {}
+        public virtual void attack()
+        {
+            RestoreNormalAnimation();
+        }
 
         public void randomWalk(int changeDirection, SwimmingObject[] enemies, int enemiesAmount, SwimmingObject[] fishes, int fishAmount, HydroBot hydroBot)
         {
@@ -393,6 +412,32 @@ namespace Poseidon {
             //}
         }
 
-        
+        public override void PlaySteeringAnimation(float lastForwardDir, float curForwardDir)
+        {
+            if (!(Name == "shark") && !(Name == "Meiolania") && !(Name == "penguin"))
+            {
+                if (curForwardDir - lastForwardDir > 0)
+                {
+                    if (!clipPlayer.inRange(29, 31))
+                        clipPlayer.switchRange(29, 31);
+                }
+                else if (ForwardDirection - lastForwardDir < 0)
+                {
+                    if (!clipPlayer.inRange(40, 42))
+                        clipPlayer.switchRange(40, 42);
+                }
+                else
+                {
+                    if (!clipPlayer.inRange(1, 24))
+                        clipPlayer.switchRange(1, 24);
+                }
+            }
+        }
+
+        public void RestoreNormalAnimation()
+        {
+            if (!clipPlayer.inRange(1, 24))
+                clipPlayer.switchRange(1, 24);
+        }
     }
 }

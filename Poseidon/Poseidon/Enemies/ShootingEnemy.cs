@@ -22,11 +22,14 @@ namespace Poseidon
             configBits = new bool[] { false, false, false, false };
             shortDistance = GameConstants.EnemyShootingDistance;// *(HydroBot.gamePlusLevel + 1);
             isHypnotise = false;
+            timeBetweenFire = GameConstants.EnemyShootingRate;
+            damage = GameConstants.EnemyShootingDamage;
             if (PoseidonGame.gamePlus)
-                timeBetweenFire = GameConstants.EnemyShootingRate / (1 + HydroBot.gamePlusLevel * 0.25f);
-            else
-                timeBetweenFire = GameConstants.EnemyShootingRate;
-            damage = GameConstants.EnemyShootingDamage * (HydroBot.gamePlusLevel+1);
+            {
+                timeBetweenFire /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
+                damage *= (HydroBot.gamePlusLevel + 1);
+            }
+
         }
 
         // Return the perceptID correspondingly

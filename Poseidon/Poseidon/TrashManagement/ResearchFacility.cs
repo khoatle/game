@@ -293,7 +293,7 @@ namespace Poseidon
             float textScaleFactor = GameConstants.factoryTextScaleFactor;
             float lineSpacing = GameConstants.lineSpacing;
                 
-            //HydroBot.numTurtlePieces = 30; //REMOVE - JUST fOR TESTING
+            //HydroBot.numSeaCowPieces= 20; //REMOVE - JUST fOR TESTING
             float fadeFactor = 0.65f;
             string title = "RESEARCH FACILITY";
             string description = "Welcome to the Research Facility. Processing techniques are analyzed by AI here for processing plant upgradation. State of the art genetic engineering will help you resurrect extinct animals. You can also use experience points to upgrade your own parts here.";

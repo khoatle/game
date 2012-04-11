@@ -82,81 +82,81 @@ namespace Poseidon.GraphicEffects
             currentKeyboardState = Keyboard.GetState();
 
             
-            if (currentKeyboardState.IsKeyDown(Keys.OemTilde) &&
-                 lastKeyboardState.IsKeyUp(Keys.OemTilde))
-            {
-                enableConfig = !enableConfig;
-            }
-            if (enableConfig)
-            {
-                if (currentKeyboardState.IsKeyDown(Keys.Q) &&
-                     lastKeyboardState.IsKeyUp(Keys.Q))
-                {
-                    bloom.Settings.BaseIntensity += 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.W) &&
-                     lastKeyboardState.IsKeyUp(Keys.W))
-                {
-                    bloom.Settings.BaseSaturation += 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.E) &&
-                     lastKeyboardState.IsKeyUp(Keys.E))
-                {
-                    bloom.Settings.BloomIntensity += 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.R) &&
-                     lastKeyboardState.IsKeyUp(Keys.R))
-                {
-                    bloom.Settings.BloomSaturation += 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.T) &&
-                     lastKeyboardState.IsKeyUp(Keys.T))
-                {
-                    bloom.Settings.BloomThreshold += 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.Y) &&
-                     lastKeyboardState.IsKeyUp(Keys.Y))
-                {
-                    bloom.Settings.BlurAmount += 0.1f;
-                }
+            //if (currentKeyboardState.IsKeyDown(Keys.OemTilde) &&
+            //     lastKeyboardState.IsKeyUp(Keys.OemTilde))
+            //{
+            //    enableConfig = !enableConfig;
+            //}
+            //if (enableConfig)
+            //{
+            //    if (currentKeyboardState.IsKeyDown(Keys.Q) &&
+            //         lastKeyboardState.IsKeyUp(Keys.Q))
+            //    {
+            //        bloom.Settings.BaseIntensity += 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.W) &&
+            //         lastKeyboardState.IsKeyUp(Keys.W))
+            //    {
+            //        bloom.Settings.BaseSaturation += 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.E) &&
+            //         lastKeyboardState.IsKeyUp(Keys.E))
+            //    {
+            //        bloom.Settings.BloomIntensity += 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.R) &&
+            //         lastKeyboardState.IsKeyUp(Keys.R))
+            //    {
+            //        bloom.Settings.BloomSaturation += 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.T) &&
+            //         lastKeyboardState.IsKeyUp(Keys.T))
+            //    {
+            //        bloom.Settings.BloomThreshold += 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.Y) &&
+            //         lastKeyboardState.IsKeyUp(Keys.Y))
+            //    {
+            //        bloom.Settings.BlurAmount += 0.1f;
+            //    }
 
-                if (currentKeyboardState.IsKeyDown(Keys.D1) &&
-                     lastKeyboardState.IsKeyUp(Keys.D1))
-                {
-                    bloom.Settings.BaseIntensity -= 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.D2) &&
-                     lastKeyboardState.IsKeyUp(Keys.D2))
-                {
-                    bloom.Settings.BaseSaturation -= 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.D3) &&
-                     lastKeyboardState.IsKeyUp(Keys.D3))
-                {
-                    bloom.Settings.BloomIntensity -= 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.D4) &&
-                     lastKeyboardState.IsKeyUp(Keys.D4))
-                {
-                    bloom.Settings.BloomSaturation -= 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.D5) &&
-                     lastKeyboardState.IsKeyUp(Keys.D5))
-                {
-                    bloom.Settings.BloomThreshold -= 0.1f;
-                }
-                if (currentKeyboardState.IsKeyDown(Keys.D6) &&
-                     lastKeyboardState.IsKeyUp(Keys.D6))
-                {
-                    bloom.Settings.BlurAmount -= 0.1f;
-                }
-            }
-            // Switch underwater effect on/off
-            if (currentKeyboardState.IsKeyDown(Keys.U) &&
-                 lastKeyboardState.IsKeyUp(Keys.U))
-            {
-                underWaterEffectEnabled = !underWaterEffectEnabled;
-            }
+            //    if (currentKeyboardState.IsKeyDown(Keys.D1) &&
+            //         lastKeyboardState.IsKeyUp(Keys.D1))
+            //    {
+            //        bloom.Settings.BaseIntensity -= 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.D2) &&
+            //         lastKeyboardState.IsKeyUp(Keys.D2))
+            //    {
+            //        bloom.Settings.BaseSaturation -= 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.D3) &&
+            //         lastKeyboardState.IsKeyUp(Keys.D3))
+            //    {
+            //        bloom.Settings.BloomIntensity -= 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.D4) &&
+            //         lastKeyboardState.IsKeyUp(Keys.D4))
+            //    {
+            //        bloom.Settings.BloomSaturation -= 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.D5) &&
+            //         lastKeyboardState.IsKeyUp(Keys.D5))
+            //    {
+            //        bloom.Settings.BloomThreshold -= 0.1f;
+            //    }
+            //    if (currentKeyboardState.IsKeyDown(Keys.D6) &&
+            //         lastKeyboardState.IsKeyUp(Keys.D6))
+            //    {
+            //        bloom.Settings.BlurAmount -= 0.1f;
+            //    }
+            //}
+            //// Switch underwater effect on/off
+            //if (currentKeyboardState.IsKeyDown(Keys.U) &&
+            //     lastKeyboardState.IsKeyUp(Keys.U))
+            //{
+            //    underWaterEffectEnabled = !underWaterEffectEnabled;
+            //}
 
 
             //if (currentKeyboardState.IsKeyDown(Keys.R) &&
@@ -166,33 +166,33 @@ namespace Poseidon.GraphicEffects
             //}
 
             // Switch to the next bloom settings preset?
-            if (currentKeyboardState.IsKeyDown(Keys.A) &&
-                 lastKeyboardState.IsKeyUp(Keys.A))
-            {
-                bloomSettingsIndex = (bloomSettingsIndex + 1) %
-                                     BloomSettings.PresetSettings.Length;
+            //if (currentKeyboardState.IsKeyDown(Keys.A) &&
+            //     lastKeyboardState.IsKeyUp(Keys.A))
+            //{
+            //    bloomSettingsIndex = (bloomSettingsIndex + 1) %
+            //                         BloomSettings.PresetSettings.Length;
 
-                bloom.Settings = BloomSettings.PresetSettings[bloomSettingsIndex];
-                bloomEffectEnabled = true;
-            }
+            //    bloom.Settings = BloomSettings.PresetSettings[bloomSettingsIndex];
+            //    bloomEffectEnabled = true;
+            //}
 
-            // Toggle bloom on or off?
-            if (currentKeyboardState.IsKeyDown(Keys.B) &&
-                 lastKeyboardState.IsKeyUp(Keys.B))
-            {
-                bloomEffectEnabled = !bloomEffectEnabled;
-            }
+            //// Toggle bloom on or off?
+            //if (currentKeyboardState.IsKeyDown(Keys.B) &&
+            //     lastKeyboardState.IsKeyUp(Keys.B))
+            //{
+            //    bloomEffectEnabled = !bloomEffectEnabled;
+            //}
 
-            // Cycle through the intermediate buffer debug display modes?
-            if (currentKeyboardState.IsKeyDown(Keys.D) &&
-                 lastKeyboardState.IsKeyUp(Keys.D))
-            {
-                bloomEffectEnabled = true;
-                bloom.ShowBuffer++;
+            //// Cycle through the intermediate buffer debug display modes?
+            //if (currentKeyboardState.IsKeyDown(Keys.D) &&
+            //     lastKeyboardState.IsKeyUp(Keys.D))
+            //{
+            //    bloomEffectEnabled = true;
+            //    bloom.ShowBuffer++;
 
-                if (bloom.ShowBuffer > BloomComponent.IntermediateBuffer.FinalResult)
-                    bloom.ShowBuffer = 0;
-            }
+            //    if (bloom.ShowBuffer > BloomComponent.IntermediateBuffer.FinalResult)
+            //        bloom.ShowBuffer = 0;
+            //}
 
             //timer for certain the shaders
             m_Timer += (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
@@ -390,12 +390,12 @@ namespace Poseidon.GraphicEffects
 
         public void PrepareEdgeDetect(HydroBot hydroBot, Cursor cursor, Camera gameCamera, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources, GraphicsDevice graphicsDevice, RenderTarget2D normalDepthRenderTargetLow, RenderTarget2D normalDepthRenderTargetHigh)
         {
-            if (!GameSettings.SpecialEffectsEnabled) return;
-
             graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
             graphicsDevice.Clear(Color.Black);
             graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
             graphicsDevice.Clear(Color.Black);
+            if (!GameSettings.SpecialEffectsEnabled) return;
+
             graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
 
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);

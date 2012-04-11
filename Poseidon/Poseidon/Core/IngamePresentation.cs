@@ -115,8 +115,9 @@ namespace Poseidon.Core
         {
             commentMaxLength = game.Window.ClientBounds.Width / 4;
             textScaleFactor = (float)game.Window.ClientBounds.Width / 1440 * (float)game.Window.ClientBounds.Height / 900;
+            textScaleFactor = (float)Math.Sqrt(textScaleFactor);
             if (textScaleFactor > 1) textScaleFactor = 1;
-            GameConstants.generalTextScaleFactor = textScaleFactor = (float)Math.Sqrt(textScaleFactor);
+            GameConstants.generalTextScaleFactor = textScaleFactor;
             lineSpacing = GameConstants.lineSpacing / 2;
 
             iconTextures = new Texture2D[GameConstants.NumGoodWillBarIcons];

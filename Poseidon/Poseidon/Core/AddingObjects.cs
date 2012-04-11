@@ -327,7 +327,7 @@ namespace Poseidon
             {
                 //in survival mode, try to place the ancient fish near you
                 if (gameMode == GameMode.SurvivalMode)
-                    fish[i].Position = GenerateSurfaceRandomPosition(minX, minX + 100, minZ, minZ + 100, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
+                    fish[i].Position = GenerateSurfaceRandomPosition(50, 80, 50, 80, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 else fish[i].Position = GenerateSurfaceRandomPosition(minX, maxX, minZ, maxZ, floatHeight, fish[i].BoundingSphere.Radius, random, enemiesAmount, fishAmount, enemies, fish, shipWrecks);
                 fish[i].Position.Y = floatHeight;
                 //tempCenter = fish[i].BoundingSphere.Center;
@@ -379,8 +379,9 @@ namespace Poseidon
                 tempCenter.Z = chest.Position.Z;
                 chest.BoundingSphere = new BoundingSphere(tempCenter,
                     chest.BoundingSphere.Radius);
-                if (chest.Position.X > 0) chest.orientation = -MathHelper.PiOver2;
-                else chest.orientation = MathHelper.PiOver2;
+                chest.orientation = random.Next(0, 4) * MathHelper.PiOver2;
+                //if (chest.Position.X > 0) chest.orientation = -MathHelper.PiOver2;
+                //else chest.orientation = MathHelper.PiOver2;
             }
         }
         public static void placeHealingBullet(HydroBot hydroBot, ContentManager Content, List<HealthBullet> healthBullet, GameMode gameMode) {
@@ -421,7 +422,7 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             
             ChasingBullet newBullet = new ChasingBullet();
-            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, GameConstants.ChasingBulletDamage, target, (Terminator)shooter);
+            newBullet.initialize(shooter.Position, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.ChasingBulletDamage * ((float)HydroBot.gamePlusLevel/2 + 1)), target, (Terminator)shooter);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/chasingBullet");
             bullets.Add(newBullet);
             if (shooter.BoundingSphere.Intersects(cameraFrustum)) {
@@ -439,12 +440,12 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             Torpedo newBullet = new Torpedo();
-            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
+            newBullet.initialize(shooter.Position - PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.TorpedoDamage * ((float)HydroBot.gamePlusLevel / 2 + 1)), target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
             Torpedo newBullet1 = new Torpedo();
-            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, GameConstants.TorpedoDamage, target, (Submarine)shooter, gameMode);
+            newBullet1.initialize(shooter.Position + PerpendicularVector(shootingDirection) * 20 + shootingDirection * 0, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.TorpedoDamage * ((float)HydroBot.gamePlusLevel / 2 + 1)), target, (Submarine)shooter, gameMode);
             newBullet1.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet1);
             if (shooter.BoundingSphere.Intersects(cameraFrustum))
@@ -463,7 +464,7 @@ namespace Poseidon
 
             //one topedo on the left and one on the right
             LaserBeam newBullet = new LaserBeam();
-            newBullet.initialize(shooter.Position + shootingDirection * 5, shootingDirection, GameConstants.BulletSpeed, GameConstants.LaserBeamDamage, target, (Submarine)shooter, gameMode);
+            newBullet.initialize(shooter.Position + shootingDirection * 5, shootingDirection, GameConstants.BulletSpeed, (int)(GameConstants.LaserBeamDamage * ((float)HydroBot.gamePlusLevel / 2 + 1)), target, (Submarine)shooter, gameMode);
             newBullet.loadContent(PoseidonGame.contentManager, "Models/BulletModels/torpedo");
             bullets.Add(newBullet);
 
@@ -626,7 +627,7 @@ namespace Poseidon
             trashes.Add(sinkingTrash);
 
             //degrade environment
-            HydroBot.currentEnvPoint -= GameConstants.envLossPerTrashAdd;
+            HydroBot.currentEnvPoint -= (int)((float)GameConstants.envLossPerTrashAdd / 2);
 
             return sinkingTrash.Position;
         }
@@ -997,6 +998,7 @@ namespace Poseidon
                 tempCenter.Z = staticObject.Position.Z;
                 staticObject.BoundingSphere = new BoundingSphere(tempCenter,
                     staticObject.BoundingSphere.Radius);
+                staticObject.orientation = random.Next(0, 4) * MathHelper.PiOver2;
             }
         }
 

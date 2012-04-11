@@ -103,12 +103,13 @@ namespace Poseidon.MiniGames
 
         public MouseState lastMouseState, currentMouseState;
         public bool clicked = false;
+        bool mouseOnPlayButton = false;
 
-        Texture2D startButton, skipButton;
-        Rectangle startButtonRect, skipButtonRect;
-        string startText;
+        Texture2D startButton, selectedStartButton;//, skipButton;
+        Rectangle startButtonRect;//, skipButtonRect;
+        //string startText;
         float textScale;
-        Vector2 startTextPosition;
+        //Vector2 startTextPosition;
         
         float widthScale, heightScale;
 
@@ -173,6 +174,7 @@ namespace Poseidon.MiniGames
 
             isSliding = false;
             distanceTraveled = 0;
+            mouseOnPlayButton = false;
             videoPlayer = new VideoPlayer();
             dnaAnimationVideoPlayer = new VideoPlayer();
 
@@ -218,12 +220,13 @@ namespace Poseidon.MiniGames
         private void initializeStartScene()
         {
             textScale = (float)Math.Sqrt((double)(widthScale*heightScale));// GameConstants.generalTextScaleFactor;
-            startText = "WHILE THE EXTINCT ANIMAL IS BEING RESURRECTED IN THE LAB, PLAY THE JIGSAW GAME TO RECREATE THIS IMAGE. YOU CAN ALSO CHOOSE TO SKIP IT. THE AI WILL DO IT FOR YOU, BUT THE ANIMAL WILL HAVE 60% EFFICIENCY";
-            startText = IngamePresentation.wrapLine(startText, desiredWidthOfImage-5, font, textScale);
-            startTextPosition = new Vector2(topLeftPosition.X+5, topLeftPosition.Y+desiredHeightOfImage/2);
-            startButton = skipButton = IngamePresentation.buttonNormalTexture;
-            startButtonRect = new Rectangle((int)(startTextPosition.X + desiredWidthOfImage / 4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
-            skipButtonRect = new Rectangle((int)(startTextPosition.X + desiredWidthOfImage*3/4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
+            //startText = "WHILE THE EXTINCT ANIMAL IS BEING RESURRECTED IN THE LAB, PLAY THE JIGSAW GAME TO RECREATE THIS IMAGE. YOU CAN ALSO CHOOSE TO SKIP IT. THE AI WILL DO IT FOR YOU, BUT THE ANIMAL WILL HAVE 60% EFFICIENCY";
+            //startText = IngamePresentation.wrapLine(startText, desiredWidthOfImage-5, font, textScale);
+            //startTextPosition = new Vector2(topLeftPosition.X+5, topLeftPosition.Y+desiredHeightOfImage/2);
+            startButton = IngamePresentation.buttonNormalTexture;
+            selectedStartButton = IngamePresentation.buttonHoverTexture;
+            startButtonRect = new Rectangle( (int)(topLeftPosition.X + desiredWidthOfImage / 2 - startButton.Width / 2), (int)(topLeftPosition.Y + desiredHeightOfImage/2 - startButton.Height/2), startButton.Width, startButton.Height);
+            //skipButtonRect = new Rectangle((int)(startTextPosition.X + desiredWidthOfImage*3/4 - startButton.Width / 2), (int)(startTextPosition.Y + font.MeasureString(startText).Y + (20*heightScale)), startButton.Width, startButton.Height);
             previewTime = 0;
         }
 
@@ -246,6 +249,7 @@ namespace Poseidon.MiniGames
             vidIndex = 0;
             gameStarted = gamePlayed = false;
             unShufflePieces();
+            mouseOnPlayButton = false;
             base.Show();
         }
 
@@ -328,18 +332,27 @@ namespace Poseidon.MiniGames
 
             if (!gameStarted)
             {
-                if (clicked && startButtonRect.Intersects(new Rectangle(mouseState.X, mouseState.Y, 10, 10)))
+                if (startButtonRect.Intersects(new Rectangle(mouseState.X, mouseState.Y, 10, 10)))
                 {
-                    gameStarted = true;
-                    shufflePieces();
-                    clicked = false;
+                    mouseOnPlayButton = true;
+                    if (clicked)
+                    {
+                        gameStarted = true;
+                        shufflePieces();
+                        clicked = false;
+                        PoseidonGame.audio.MenuScroll.Play();
+                    }
                 }
-                else if (clicked && skipButtonRect.Intersects(new Rectangle(mouseState.X, mouseState.Y, 10, 10)))
+                else
                 {
-                    letAIHandle = true;
-                    clicked = false;
-                    return;
+                    mouseOnPlayButton = false;
                 }
+                //else if (clicked && skipButtonRect.Intersects(new Rectangle(mouseState.X, mouseState.Y, 10, 10)))
+                //{
+                //    letAIHandle = true;
+                //    clicked = false;
+                //    return;
+                //}
                 previewTime += gameTime.ElapsedGameTime.TotalSeconds;
                 if (previewTime < 10)
                 {
@@ -471,17 +484,22 @@ namespace Poseidon.MiniGames
 
             if (!gameStarted)
             {
-                Color textColor;
-                if (image == turtleImage[0])
-                    textColor = Color.Yellow;
-                else
-                    textColor = Color.Black;
+                //Color textColor;
+                //if (image == turtleImage[0])
+                //    textColor = Color.Yellow;
+                //else
+                //    textColor = Color.Black;
                 spriteBatch.Begin();
-                spriteBatch.DrawString(font, startText, startTextPosition, textColor, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(startButton, startButtonRect, Color.White);
+
+                //spriteBatch.DrawString(font, startText, startTextPosition, textColor, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f);
+                if(mouseOnPlayButton)
+                    spriteBatch.Draw(selectedStartButton, startButtonRect, Color.White);
+                else
+                    spriteBatch.Draw(startButton, startButtonRect, Color.White);
                 spriteBatch.DrawString(timerFont, "PLAY", new Vector2(startButtonRect.Center.X, startButtonRect.Center.Y), Color.Yellow, 0f, new Vector2(timerFont.MeasureString("PLAY").X / 2, timerFont.MeasureString("PLAY").Y / 2), textScale, SpriteEffects.None, 0f);
-                spriteBatch.Draw(skipButton, skipButtonRect, Color.White);
-                spriteBatch.DrawString(timerFont, "SKIP", new Vector2(skipButtonRect.Center.X, skipButtonRect.Center.Y), Color.Yellow, 0f, new Vector2(timerFont.MeasureString("SKIP").X / 2,timerFont.MeasureString("SKIP").Y / 2), textScale, SpriteEffects.None, 0f );
+                //spriteBatch.Draw(skipButton, skipButtonRect, Color.White);
+                //spriteBatch.DrawString(timerFont, "SKIP", new Vector2(skipButtonRect.Center.X - timerFont.MeasureString("SKIP").X / 2, skipButtonRect.Center.Y - timerFont.MeasureString("SKIP").Y / 2), Color.Yellow, 0f, new Vector2(0,0), textScale, SpriteEffects.None, 0f );
+
                 spriteBatch.End();
             }
 

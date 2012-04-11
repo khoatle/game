@@ -125,7 +125,7 @@ namespace Poseidon {
         public static int[] NumberPlasticTrash =    { 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18 };
         public static int[] NumberNuclearTrash =    {   2,   2,   2,    2,   2,   2,   2,   2,   2,    2,    2,    2  };
         public static int[] NumberShipWreck = { 0, 0, maxShipPerLevel, 0, 0, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, maxShipPerLevel, 0, 0, 0 };
-        public static int[] FishInSchool =          {  50,  50,  50,   0,  50,  50,  20,  50,  0,   0,   0,   0  };
+        public static int[] FishInSchool = { 100, 100, 100, 0, 100, 100, 20, 100, 0, 0, 0, 0 };
         public static int[] NumberShootingEnemies = new int[maxLevel];
         public static int[] NumberCombatEnemies = new int[maxLevel];
         public static int[] NumberGhostPirate = new int[maxLevel];
@@ -241,10 +241,10 @@ namespace Poseidon {
         public static Color[] AmbientColor = {  Color.DeepSkyBlue, Color.Gray, Color.DeepSkyBlue, Color.DeepSkyBlue,
                                                 Color.DeepSkyBlue, Color.DodgerBlue, Color.Black, Color.DeepSkyBlue,
                                                 Color.DarkRed, Color.DeepSkyBlue, Color.DeepSkyBlue, Color.DeepSkyBlue };
-        public static Color[] DiffuseColor = {  Color.Cyan, Color.Gray, Color.Cyan, Color.Cyan,
+        public static Color[] DiffuseColor = {  Color.Cyan, Color.DimGray, Color.Cyan, Color.Cyan,
                                                 Color.Cyan, Color.Cyan, Color.Gray, Color.Cyan,
                                                 Color.IndianRed, Color.Cyan, Color.Cyan, Color.Cyan };
-        public static Color[] SpecularColor = {   Color.LightSkyBlue, Color.Gray, Color.LightSkyBlue, Color.LightSkyBlue,
+        public static Color[] SpecularColor = {   Color.LightSkyBlue, Color.DimGray, Color.LightSkyBlue, Color.LightSkyBlue,
                                                   Color.LightSkyBlue, Color.Cyan, Color.Gray, Color.LightSkyBlue, 
                                                   Color.IndianRed, Color.LightSkyBlue, Color.LightSkyBlue, Color.LightSkyBlue };
 

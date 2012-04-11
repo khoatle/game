@@ -256,11 +256,11 @@ namespace Poseidon
                         {
                             PoseidonGame.audio.Explo1.Play();
                             if (gameMode == GameMode.MainGame)
-                                PlayGameScene.gameCamera.Shake(25f, .4f);
+                                PlayGameScene.gameCamera.Shake(12.5f, .2f);
                             else if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.gameCamera.Shake(25f, .4f);
+                                ShipWreckScene.gameCamera.Shake(12.5f, .2f);
                             else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.gameCamera.Shake(25f, .4f);
+                                SurvivalGameScene.gameCamera.Shake(12.5f, .2f);
 
                             CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode, true);
                         }

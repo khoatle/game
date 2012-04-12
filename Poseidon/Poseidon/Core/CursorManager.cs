@@ -42,7 +42,9 @@ namespace Poseidon
             {
                 //making it easier to aim
                 sphere = enemies[i].BoundingSphere;
-                sphere.Radius *= GameConstants.EasyAimScale;
+                //boss is already big
+                if (!enemies[i].isBigBoss)
+                    sphere.Radius *= GameConstants.EasyAimScale;
                 if (RayIntersectsBoundingSphere(cursorRay, sphere))
                 {
                     cursor.SetShootingMouseImage();

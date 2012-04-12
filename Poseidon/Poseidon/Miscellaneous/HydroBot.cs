@@ -220,7 +220,7 @@ namespace Poseidon
                     iconActivated[index] = true;
                 else iconActivated[index] = false;
             }
-            skillComboActivated = false;
+            //skillComboActivated = false;
             goodWillBarActivated = false;
             maxGoodWillPoint = GameConstants.MaxGoodWillPoint;
             goodWillPoint = lsGoodWillPoint = 0;
@@ -1250,9 +1250,9 @@ namespace Poseidon
             //and related skill combos
             if (invincibleMode == true && autoHipnotizeMode == false && autoExplodeMode == false)
             {
-                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                float buffFactor = shootingRate * fireRateUp * HydroBot.armorPower / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
-                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower)
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
                 {
                     invincibleMode = false;
                     if (autoHipnotizeMode == true) autoHipnotizeMode = false;
@@ -1261,9 +1261,9 @@ namespace Poseidon
             }
             if (autoHipnotizeMode == true)
             {
-                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                float buffFactor = shootingRate * fireRateUp * HydroBot.armorPower * HydroBot.beltPower / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
-                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower * HydroBot.beltPower)
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
                 {
                     autoHipnotizeMode = false;
                     invincibleMode = false;
@@ -1271,9 +1271,9 @@ namespace Poseidon
             }
             if (autoExplodeMode == true)
             {
-                float buffFactor = shootingRate * fireRateUp / 1.5f;
+                float buffFactor = shootingRate * fireRateUp * HydroBot.armorPower * HydroBot.hammerPower / 1.5f;
                 buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
-                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor * HydroBot.armorPower * HydroBot.hammerPower)
+                if (PoseidonGame.playTime.TotalSeconds - skillPrevUsed[2] >= GameConstants.timeArmorLast * buffFactor)
                 {
                     autoExplodeMode = false;
                     invincibleMode = false;
@@ -1282,7 +1282,9 @@ namespace Poseidon
             //worn out effect of supersonic
             if (supersonicMode == true && !sonicHipnotiseMode)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3]*1000 >= GameConstants.timeSuperSonicLast * speed * speedUp * HydroBot.sandalPower/ GameConstants.BasicStartSpeed)
+                float buffFactor = speed * speedUp * HydroBot.sandalPower / GameConstants.BasicStartSpeed;
+                buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3] * 1000 >= GameConstants.timeSuperSonicLast * buffFactor)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if ( !Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
@@ -1293,7 +1295,9 @@ namespace Poseidon
             }
             if (sonicHipnotiseMode == true)
             {
-                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3] * 1000 >= GameConstants.timeSuperSonicLast * speed * speedUp * HydroBot.sandalPower * HydroBot.beltPower/ GameConstants.BasicStartSpeed)
+                float buffFactor = speed * speedUp * HydroBot.sandalPower * HydroBot.beltPower / GameConstants.BasicStartSpeed;
+                buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+                if (PoseidonGame.playTime.TotalMilliseconds - skillPrevUsed[3] * 1000 >= GameConstants.timeSuperSonicLast * buffFactor)
                 {
                     // To prevent bot landing on an enemy after using the sandal
                     if (!Collision.isBotVsBarrierCollision(this.BoundingSphere, enemies, enemyAmount))
@@ -1699,7 +1703,7 @@ namespace Poseidon
                         effect.Parameters["gWvpXf"].SetValue(Matrix.Identity * view * projection);
                         effect.Parameters["gViewIXf"].SetValue(Matrix.Invert(view));
                         //effect.Parameters["gInflate"].SetValue(0.07f);
-                        //effect.Parameters["gGlowColor"].SetValue(new Vector3(0.0f, 1.0f, 0.0f));
+                        effect.Parameters["gGlowColor"].SetValue(Color.Gold.ToVector3());
                         //effect.Parameters["gGlowExpon"].SetValue(1.5f);
                     }
                 }

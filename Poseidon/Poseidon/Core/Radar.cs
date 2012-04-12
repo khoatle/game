@@ -178,9 +178,33 @@ namespace Poseidon.Core
                 Vector2 diffVect = new Vector2(enemies[i].Position.X - playerPos.X, enemies[i].Position.Z - playerPos.Z);
                 float distance = diffVect.LengthSquared();
 
-                // Check if enemy is within RadarRange
-                if (distance < RadarRangeSquared)
+                if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 3)
                 {
+                    if (distance > RadarRangeSquared)
+                        diffVect *= RadarRange / diffVect.Length();
+                    // Scale the distance from world coords to radar coords
+                    diffVect *= RadarScreenRadius / RadarRange;
+
+                    // We rotate each point on the radar so that the player is always facing UP on the radar
+                    //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                    // Offset coords from radar's center
+                    diffVect = -diffVect;
+                    diffVect += RadarCenterPos;
+
+                    // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                    // at lower elevations have smaller dots.
+                    float scaleHeight = 1.0f + ((enemies[i].Position.Y - playerPos.Y) / 200.0f);
+
+                    // Draw enemy dot on radar
+                    if (enemies[i].isBigBoss)
+                        spriteBatch.Draw(BigBossDotImage, diffVect, null, Color.White, 0.0f, new Vector2(BigBossDotImage.Width / 2, BigBossDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+                    else spriteBatch.Draw(EnemyDotImage, diffVect, null, Color.White, 0.0f, new Vector2(EnemyDotImage.Width / 2, EnemyDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+                }
+                // Check if enemy is within RadarRange
+                else if (distance < RadarRangeSquared)
+                {
+
                     // Scale the distance from world coords to radar coords
                     diffVect *= RadarScreenRadius / RadarRange;
 
@@ -207,8 +231,32 @@ namespace Poseidon.Core
                 Vector2 diffVect = new Vector2(fishes[i].Position.X - playerPos.X, fishes[i].Position.Z - playerPos.Z);
                 float distance = diffVect.LengthSquared();
 
+                if (HydroBot.gameMode == GameMode.SurvivalMode)
+                {
+                    if (distance > RadarRangeSquared)
+                        diffVect *= RadarRange / diffVect.Length();
+                    // Scale the distance from world coords to radar coords
+                    diffVect *= RadarScreenRadius / RadarRange;
+
+                    // We rotate each point on the radar so that the player is always facing UP on the radar
+                    //diffVect = Vector2.Transform(diffVect, Matrix.CreateRotationZ(playerForwardRadians));
+
+                    // Offset coords from radar's center
+                    diffVect = -diffVect;
+                    diffVect += RadarCenterPos;
+
+                    // We scale each dot so that enemies that are at higher elevations have bigger dots, and enemies
+                    // at lower elevations have smaller dots.
+                    float scaleHeight = 1.0f + ((fishes[i].Position.Y - playerPos.Y) / 200.0f);
+
+                    if (fishes[i].isBigBoss) scaleHeight *= 1.5f;
+                    // Draw fish dot on radar
+                    if (fishes[i] is SeaCow || fishes[i] is SeaDolphin || fishes[i] is SeaTurtle)
+                        spriteBatch.Draw(SideKickDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+                    else spriteBatch.Draw(FishDotImage, diffVect, null, Color.White, 0.0f, new Vector2(FishDotImage.Width / 2, FishDotImage.Height / 2), scaleHeight * GameConstants.generalTextScaleFactor, SpriteEffects.None, 0.0f);
+                }
                 // Check if enemy is within RadarRange
-                if (distance < RadarRangeSquared)
+                else if (distance < RadarRangeSquared)
                 {
                     // Scale the distance from world coords to radar coords
                     diffVect *= RadarScreenRadius / RadarRange;

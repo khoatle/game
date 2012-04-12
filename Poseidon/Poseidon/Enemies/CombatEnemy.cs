@@ -66,6 +66,8 @@ namespace Poseidon
                 else {
                     isFleeing = false;
                 }
+                if (!clipPlayer.inRange(1, 30))
+                    clipPlayer.switchRange(1, 30);
             }
             if (isPoissoned == true)
             {
@@ -93,12 +95,13 @@ namespace Poseidon
                 return;
             }
 
-            float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f;
-            buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 2.0f);
-            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor * HydroBot.beltPower)
+            float buffFactor = HydroBot.maxHitPoint / GameConstants.PlayerStartingHP / 2.0f * HydroBot.beltPower;
+            buffFactor = MathHelper.Clamp(buffFactor, 1.0f, 1.6f);
+            if (isHypnotise && PoseidonGame.playTime.TotalSeconds - startHypnotiseTime.TotalSeconds > GameConstants.timeHypnotiseLast * buffFactor)
             {
                 wearOutHypnotise();
             }
+
             if (!isHypnotise)
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
@@ -265,13 +268,13 @@ namespace Poseidon
                         {
                             PoseidonGame.audio.Explo1.Play();
                             if (gameMode == GameMode.MainGame)
-                                PlayGameScene.gameCamera.Shake(25f, .4f);
+                                PlayGameScene.gameCamera.Shake(12.5f, .2f);
                             else if (gameMode == GameMode.ShipWreck)
-                                ShipWreckScene.gameCamera.Shake(25f, .4f);
+                                ShipWreckScene.gameCamera.Shake(12.5f, .2f);
                             else if (gameMode == GameMode.SurvivalMode)
-                                SurvivalGameScene.gameCamera.Shake(25f, .4f);
+                                SurvivalGameScene.gameCamera.Shake(12.5f, .2f);
 
-                            CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode);
+                            CastSkill.UseThorHammer(hydroBot.Position, hydroBot.MaxRangeX, hydroBot.MaxRangeZ, (BaseEnemy[])enemies, ref enemiesAmount, fishes, fishAmount, HydroBot.gameMode, true);
                         }
                     }
                     if (currentHuntingTarget is SwimmingObject)

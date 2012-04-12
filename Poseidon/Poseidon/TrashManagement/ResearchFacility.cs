@@ -362,7 +362,7 @@ namespace Poseidon
                     bioUpgrade = true;
                     bioButtonText = "Upgrade to level 2";
                 }
-                else if (HydroBot.bioPlantLevel == 2 && HydroBot.totalBioTrashProcessed >= 2 * GameConstants.numTrashForUpgrade)
+                else if (HydroBot.bioPlantLevel == 2 && HydroBot.totalBioTrashProcessed >= HydroBot.bioPlantLevel * GameConstants.numTrashForUpgrade)
                 {
                     bioUpgrade = true;
                     bioButtonText = "Upgrade to level 3";
@@ -378,7 +378,7 @@ namespace Poseidon
                     plasticUpgrade = true;
                     plasticButtonText = "Upgrade to level 2";
                 }
-                else if (HydroBot.plasticPlantLevel == 2 && HydroBot.totalPlasticTrashProcessed >= 2 * GameConstants.numTrashForUpgrade)
+                else if (HydroBot.plasticPlantLevel == 2 && HydroBot.totalPlasticTrashProcessed >= HydroBot.plasticPlantLevel * GameConstants.numTrashForUpgrade)
                 {
                     plasticUpgrade = true;
                     plasticButtonText = "Upgrade to level 3";
@@ -439,7 +439,7 @@ namespace Poseidon
                 }
                 else
                 {
-                    plasticButtonText = "You need to process " + (HydroBot.bioPlantLevel * GameConstants.numTrashForUpgrade - HydroBot.totalPlasticTrashProcessed).ToString() + " more trash for upgrade to level " + (HydroBot.plasticPlantLevel + 1).ToString();
+                    plasticButtonText = "You need to process " + (HydroBot.plasticPlantLevel * GameConstants.numTrashForUpgrade - HydroBot.totalPlasticTrashProcessed).ToString() + " more trash for upgrade to level " + (HydroBot.plasticPlantLevel + 1).ToString();
                     plasticButtonText = Poseidon.Core.IngamePresentation.wrapLine(plasticButtonText, backgroundRect.Width / 3, facilityFont2, textScaleFactor);
                     plasticTextPos.Y += facilityFont.MeasureString(plasticButtonText).Y / 2 * textScaleFactor;
                     spriteBatch.DrawString(facilityFont, plasticButtonText, plasticTextPos, Color.Red * fadeFactor, 0, new Vector2(facilityFont.MeasureString(plasticButtonText).X / 2, facilityFont.MeasureString(plasticButtonText).Y / 2), textScaleFactor, SpriteEffects.None, 0);

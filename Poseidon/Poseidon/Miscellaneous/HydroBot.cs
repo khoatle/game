@@ -473,8 +473,8 @@ namespace Poseidon
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
             scaledSphere.Center.Y = floatHeight;
-            scaledSphere.Radius *=
-                GameConstants.TankBoundingSphereFactor;
+            boundingSphereScale = GameConstants.TankBoundingSphereFactor;
+            scaledSphere.Radius *= boundingSphereScale;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
@@ -548,7 +548,8 @@ namespace Poseidon
             clipPlayer = new ClipPlayer(skd, fpsRate);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, true);
-            charMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            modelScale = 0.1f;
+            charMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
         }
 
@@ -1416,7 +1417,7 @@ namespace Poseidon
                                 Vector3.Up,
                                 ForwardDirection);
 
-                charMatrix = Matrix.CreateScale(0.1f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                charMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);

@@ -14,7 +14,7 @@ namespace Poseidon
     {
         public float orientation = 0;
         public static Random random = new Random();
-        public float scale;
+        //public float scale;
         bool isAnimated = false;
         Matrix[] bones;
         SkinningData skd;
@@ -29,23 +29,24 @@ namespace Poseidon
             {
                 orientation = (float)random.Next(0, 629) / 100;
                 if (!isAnimated)
-                    scale = (float)random.Next(5, 11) / 10;
-                else scale = random.Next(4, 7);
+                    modelScale = (float)random.Next(5, 11) / 10;
+                else modelScale = random.Next(4, 7);
             }
             else if (HydroBot.gameMode == GameMode.ShipWreck)
             {
-                scale = 1.0f;
+                modelScale = 1.0f;
             }
-        
             Model = content.Load<Model>(modelname);
             Position = Vector3.Down;
             BoundingSphere = CalculateBoundingSphere();
 
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
+
+            boundingSphereScale = modelScale;
             if (HydroBot.gameMode == GameMode.ShipWreck)
                 scaledSphere.Radius *= GameConstants.ShipWreckBoundingSphereFactor;
-            else scaledSphere.Radius *= scale;
+            else scaledSphere.Radius *= boundingSphereScale;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
@@ -57,7 +58,7 @@ namespace Poseidon
                 clipPlayer = new ClipPlayer(skd, fpsRate);//ClipPlayer running at 24 frames/sec
                 AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
                 clipPlayer.play(clip, clipStart, clipEnd, true);
-                fishMatrix = Matrix.CreateScale(1.0f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                fishMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                    Matrix.CreateTranslation(Position);
             }
 
@@ -78,9 +79,9 @@ namespace Poseidon
                     qRotation = Quaternion.CreateFromAxisAngle(
                                     Vector3.Up,
                                     orientation);
-                    float scale = this.scale;
+                    //float scale = this.scale;
 
-                    fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                    fishMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                         Matrix.CreateFromQuaternion(qRotation) *
                                         Matrix.CreateTranslation(Position);
                     //fishMatrix = Matrix.CreateScale(scale) * Matrix.CreateTranslation(Position);
@@ -129,7 +130,7 @@ namespace Poseidon
             }
             Matrix[] transforms = new Matrix[Model.Bones.Count];
             Model.CopyAbsoluteBoneTransformsTo(transforms);
-            Matrix translateMatrix = Matrix.CreateScale(scale) * Matrix.CreateTranslation(Position);
+            Matrix translateMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateTranslation(Position);
             Matrix rotationYMatrix = Matrix.CreateRotationY(orientation);
             //Matrix scaleMatrix = Matrix.CreateScale(scale);
             Matrix worldMatrix = rotationYMatrix * translateMatrix;

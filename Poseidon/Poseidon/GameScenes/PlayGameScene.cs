@@ -2188,8 +2188,12 @@ namespace Poseidon
                 }
             }
             //Draw each static object
+            //BoundingSphere sphereToCheck;
             foreach (StaticObject staticObject in staticObjects)
             {
+                //staticObject.OriginalBoundingSphere.Center = staticObject.BoundingSphere.Center;
+                //sphereToCheck = staticObject.BoundingSphere;
+                //sphereToCheck.Radius /= staticObject.boundingSphereScale;
                 if (staticObject.BoundingSphere.Intersects(frustum))
                 {
                     staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
@@ -2208,8 +2212,11 @@ namespace Poseidon
 
         public void DrawObjectsOnHighLayer()
         {
+            //BoundingSphere sphereToCheck;
             for (int i = 0; i < enemiesAmount; i++)
             {
+                //sphereToCheck = enemies[i].BoundingSphere;
+                //sphereToCheck.Radius /= enemies[i].boundingSphereScale;
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
                     enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");

@@ -270,7 +270,7 @@ namespace Poseidon
                     //AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                     ShootLaser(bullets, cameraFrustum);
                     prevFire = PoseidonGame.playTime;
-                }
+                }              
             }
         }
     }

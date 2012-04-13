@@ -605,6 +605,7 @@ namespace Poseidon
                 playGameScene.graphicEffect.resetTransitTimer();
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
+                HydroBot.isCastingSkill = false;
                 doubleClicked = false;
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
@@ -668,7 +669,8 @@ namespace Poseidon
             if (doubleClicked 
                 && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
                 && !CursorManager.MouseOnFish(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
-                && GetInShipWreck() && !playGameScene.factoryButtonPanel.hasAnyAnchor() && !playGameScene.openFactoryConfigurationScene && !playGameScene.openResearchFacilityConfigScene)
+                && GetInShipWreck() && !playGameScene.factoryButtonPanel.hasAnyAnchor() && !playGameScene.openFactoryConfigurationScene && !playGameScene.openResearchFacilityConfigScene
+                && !HydroBot.isCastingSkill)
             {
                 //disable camera shaking or else we will get a shake 
                 //right after getting out of a shipwreck

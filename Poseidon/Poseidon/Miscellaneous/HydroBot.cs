@@ -182,6 +182,9 @@ namespace Poseidon
         public static float bowPower, hammerPower, armorPower, sandalPower, beltPower,
             lsBowPower, lsHammerPower, lsArmorPower, lsSandalPower, lsBeltPower;
 
+        bool isShooting = false;
+        public static bool isCastingSkill = false;
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -486,6 +489,8 @@ namespace Poseidon
                 skillPrevUsed[index] = 0;
             }
 
+            isShooting = false;
+            isCastingSkill = false;
             invincibleMode = false;
             supersonicMode = false;
             autoHipnotizeMode = false;
@@ -532,7 +537,7 @@ namespace Poseidon
             firstPlant = true;
             prevPlantTime = 0;
 
-            LoadAnimation(1, 30, 24);
+            LoadAnimation(50, 75, 24);
 
             
 
@@ -670,6 +675,10 @@ namespace Poseidon
 
         internal void Reset()
         {
+            isCastingSkill = false;
+            isShooting = false;
+            if (!clipPlayer.inRange(50, 74))
+                clipPlayer.switchRange(50, 74);
             Position = Vector3.Zero;
             Position.Y = floatHeight;
             ForwardDirection = 0f;
@@ -705,10 +714,12 @@ namespace Poseidon
             bioTrash = plasticTrash = nuclearTrash = 0;
         }
 
+        
         public void UpdateAction(GameTime gameTime, Cursor cursor, Camera gameCamera, BaseEnemy[] enemies, int enemiesAmount, Fish[] fish, int fishAmount, ContentManager Content,
             SpriteBatch spriteBatch, List<DamageBullet> myBullet, GameScene gameScene, HeightMapInfo heightMapInfo, List<HealthBullet> healthBullet, List<Powerpack> powerpacks, List<Resource> resources,
             List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, bool mouseOnInteractiveIcons)
         {
+            isShooting = false;
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
             CursorManager.CheckClick(ref lastMouseState, ref currentMouseState, gameTime, ref clickTimer, ref clicked, ref doubleClicked, ref notYetReleased);
@@ -759,14 +770,6 @@ namespace Poseidon
             //        pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
             //    }
             }
-            //if the user click on right mouse button
-            //cast the current selected skill
-            //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
-            else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released && !mouseOnInteractiveIcons)
-            {
-                //ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
-                CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount);
-            }
 
             //if the user holds down Ctrl button
             //just shoot at wherever the mouse is pointing w/o moving
@@ -782,8 +785,11 @@ namespace Poseidon
                         //audio.Shooting.Play();
                         if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
                         else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
+                        //if (!clipPlayer.inRange(61, 90))
+                        //    clipPlayer.switchRange(61, 90);
+                        isShooting = true;
+                        //if the player moves or shoot, abort skill casting
+                        isCastingSkill = false;
                     }
                     //hydroBot.reachDestination = true;
                 }
@@ -794,8 +800,9 @@ namespace Poseidon
             else if (currentMouseState.LeftButton == ButtonState.Pressed && !mouseOnLivingObject && !mouseOnInteractiveIcons)
             {
                 pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
-                if (!clipPlayer.inRange(1, 30))
-                    clipPlayer.switchRange(1, 30);
+                //if (!clipPlayer.inRange(1, 30))
+                //    clipPlayer.switchRange(1, 30);
+                isCastingSkill = false;
             }
 
             else if (lastMouseState.LeftButton == ButtonState.Pressed && currentMouseState.LeftButton == ButtonState.Released && !mouseOnInteractiveIcons)
@@ -804,8 +811,9 @@ namespace Poseidon
                 //if it is out of shooting range then just move there
                 if (!CursorManager.InShootingRange(this, cursor, gameCamera, floatHeight))
                 {
-                    if (!clipPlayer.inRange(1, 30))
-                        clipPlayer.switchRange(1, 30);
+                    //if (!clipPlayer.inRange(1, 30))
+                    //    clipPlayer.switchRange(1, 30);
+                    isCastingSkill = false;
                 }
                 else
                 {
@@ -820,17 +828,29 @@ namespace Poseidon
                         //so the bot will not move
                         pointIntersect = Vector3.Zero;
                         reachDestination = true;
-                        if (!clipPlayer.inRange(61, 90))
-                            clipPlayer.switchRange(61, 90);
+                        //if (!clipPlayer.inRange(61, 90))
+                        //    clipPlayer.switchRange(61, 90);
+                        isShooting = true;
+                        isCastingSkill = false;
                     }
                     if (doubleClicked == true) pointIntersect = Vector3.Zero;
                 }
+            }
+            //if the user click on right mouse button
+            //cast the current selected skill
+            //else if (lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released)
+            //else 
+            if ((lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released && !mouseOnInteractiveIcons) || isCastingSkill)
+            {
+                //ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
+                CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount, ref isCastingSkill);
             }
 
             //if the user holds down Caps Lock button
             //lock the target inside shooting range
             if (currentKeyboardState.IsKeyUp(Keys.CapsLock) && lastKeyboardState.IsKeyDown(Keys.CapsLock))
             {
+                isCastingSkill = false;
                 if (cursor.targetToLock == null)
                 {
 
@@ -908,6 +928,7 @@ namespace Poseidon
             //Interacting with trash
             if (currentKeyboardState.IsKeyUp(Keys.Z) && lastKeyboardState.IsKeyDown(Keys.Z))
             {
+                isCastingSkill = false;
                 //Collect powerpacks and resources
                 Collect_Powerpacks_and_Resources(powerpacks, resources, gameTime);
 
@@ -985,6 +1006,7 @@ namespace Poseidon
             }
             if (lastKeyboardState.IsKeyDown(Keys.X) && currentKeyboardState.IsKeyUp(Keys.X)) // Collect Plastic Trash
             {
+                isCastingSkill = false;
                 //if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                 if (trashes != null)
@@ -1060,6 +1082,7 @@ namespace Poseidon
             }
             if (lastKeyboardState.IsKeyDown(Keys.C) && currentKeyboardState.IsKeyUp(Keys.C)) // Collect Nuclear Trash
             {
+                isCastingSkill = false;
                 //if (nuclearTrash >= GameConstants.maxRadioTrashCarryingCapacity)
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 20);
                 if (trashes != null)
@@ -1150,6 +1173,8 @@ namespace Poseidon
             IngamePresentation.UpdateGoodWillBar();
             
         }
+        bool idleState = false, inIdleState = false;
+        double idleStartTime = 0;
         public void Update(KeyboardState keyboardState, SwimmingObject[] enemies,int enemyAmount, SwimmingObject[] fishes, int fishAmount, GameTime gameTime, Vector3 pointMoveTo, HeightMapInfo heightMapInfo)
         {
             EffectHelpers.GetEffectConfiguration(ref fogColor, ref ambientColor, ref diffuseColor, ref specularColor);
@@ -1408,7 +1433,46 @@ namespace Poseidon
                 //    20);
             }
 
-            
+            //update bot's animation
+            if (isCastingSkill)
+            {
+                if (!clipPlayer.inRange(75, 95))
+                    clipPlayer.switchRange(75, 95);
+                idleState = false;
+            }
+            else if (isShooting)
+            {
+                if (!inIdleState)
+                {
+                    if (!clipPlayer.inRange(1, 35))
+                        clipPlayer.switchRange(1, 35);
+                    //idleState = false;
+                }
+                else
+                {
+                    if (!clipPlayer.inRange(73, 74))
+                        clipPlayer.switchRange(73, 74);
+                }    
+            }
+            else if (!reachDestination)
+            {
+                if (!clipPlayer.inRange(1, 35))
+                    clipPlayer.switchRange(1, 35);
+                idleState = false;
+                inIdleState = false;
+            }
+            if (idleState == false)
+            {
+                idleState = true;
+                idleStartTime = PoseidonGame.playTime.TotalMilliseconds;
+            }
+
+            if (idleState && PoseidonGame.playTime.TotalMilliseconds - idleStartTime >= 1500)
+            {
+                if (!clipPlayer.inRange(50, 74))
+                    clipPlayer.switchRange(50, 74);
+                inIdleState = true;
+            }
             //Position = Vector3.Zero;
             // if clip player has been initialized, update it
             if (clipPlayer != null)
@@ -1420,7 +1484,9 @@ namespace Poseidon
                 charMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
-                clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);
+                //if (!clipPlayer.inRange(75, 95))
+                    clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);
+                //else clipPlayer.update(gameTime.ElapsedGameTime + gameTime.ElapsedGameTime, true, charMatrix);
             }
         }
 

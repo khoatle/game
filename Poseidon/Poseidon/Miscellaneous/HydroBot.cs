@@ -1484,9 +1484,9 @@ namespace Poseidon
                 charMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
-                //if (!clipPlayer.inRange(75, 95))
+                if (!clipPlayer.inRange(75, 95))
                     clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);
-                //else clipPlayer.update(gameTime.ElapsedGameTime + gameTime.ElapsedGameTime, true, charMatrix);
+                else clipPlayer.update(gameTime.ElapsedGameTime + gameTime.ElapsedGameTime, true, charMatrix);
             }
         }
 

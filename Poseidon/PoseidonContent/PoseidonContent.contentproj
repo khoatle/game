@@ -160,6 +160,9 @@
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
       <ProcessorParameters_TerrainTextureFilename>Image/TerrainTextures/SeaBedTerrain1.jpg</ProcessorParameters_TerrainTextureFilename>
+      <ProcessorParameters_TerrainBumpiness>200</ProcessorParameters_TerrainBumpiness>
+      <ProcessorParameters_TerrainScale>7</ProcessorParameters_TerrainScale>
+      <ProcessorParameters_TexCoordScale>0.024</ProcessorParameters_TexCoordScale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -206,6 +209,9 @@
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
       <ProcessorParameters_TerrainTextureFilename>Image/TerrainTextures/seagrassFinal.jpg</ProcessorParameters_TerrainTextureFilename>
+      <ProcessorParameters_TerrainBumpiness>200</ProcessorParameters_TerrainBumpiness>
+      <ProcessorParameters_TerrainScale>7</ProcessorParameters_TerrainScale>
+      <ProcessorParameters_TexCoordScale>0.024</ProcessorParameters_TexCoordScale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -233,21 +239,33 @@
       <Name>terrain5</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
+      <ProcessorParameters_TerrainBumpiness>200</ProcessorParameters_TerrainBumpiness>
+      <ProcessorParameters_TerrainScale>7</ProcessorParameters_TerrainScale>
+      <ProcessorParameters_TexCoordScale>0.024</ProcessorParameters_TexCoordScale>
     </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain6.bmp">
       <Name>terrain6</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
+      <ProcessorParameters_TerrainBumpiness>200</ProcessorParameters_TerrainBumpiness>
+      <ProcessorParameters_TerrainScale>7</ProcessorParameters_TerrainScale>
+      <ProcessorParameters_TexCoordScale>0.024</ProcessorParameters_TexCoordScale>
     </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain7.bmp">
       <Name>terrain7</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
+      <ProcessorParameters_TerrainBumpiness>200</ProcessorParameters_TerrainBumpiness>
+      <ProcessorParameters_TerrainScale>7</ProcessorParameters_TerrainScale>
+      <ProcessorParameters_TexCoordScale>0.024</ProcessorParameters_TexCoordScale>
     </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain8.bmp">
       <Name>terrain8</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TerrainProcessor</Processor>
+      <ProcessorParameters_TerrainBumpiness>200</ProcessorParameters_TerrainBumpiness>
+      <ProcessorParameters_TerrainScale>7</ProcessorParameters_TerrainScale>
+      <ProcessorParameters_TexCoordScale>0.024</ProcessorParameters_TexCoordScale>
     </Compile>
     <Compile Include="Image\TerrainHeightMaps\terrain9.bmp">
       <Name>terrain9</Name>
@@ -630,7 +648,7 @@
       <Name>radioactiveTrash</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>0.7</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>0.5</ProcessorParameters_Scale>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -1635,11 +1653,13 @@
       <Name>biodegradableTrashVer4</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
     </Compile>
     <Compile Include="Models\TrashModels\plasticTrashVer3.fbx">
       <Name>plasticTrashVer3</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
+      <ProcessorParameters_Scale>0.6</ProcessorParameters_Scale>
     </Compile>
     <Compile Include="Fonts\StatisticsFont.spritefont">
       <Name>StatisticsFont</Name>

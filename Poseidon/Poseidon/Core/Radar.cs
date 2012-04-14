@@ -178,7 +178,7 @@ namespace Poseidon.Core
                 Vector2 diffVect = new Vector2(enemies[i].Position.X - playerPos.X, enemies[i].Position.Z - playerPos.Z);
                 float distance = diffVect.LengthSquared();
 
-                if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 3)
+                if (HydroBot.gameMode == GameMode.MainGame && enemies[i].isBigBoss && (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 10 || PlayGameScene.currentLevel == 11))
                 {
                     if (distance > RadarRangeSquared)
                         diffVect *= RadarRange / diffVect.Length();

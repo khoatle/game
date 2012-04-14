@@ -947,11 +947,11 @@ namespace Poseidon
             Components.Add(playGameScene);
 
             // Create level objective scene
-            if (levelObjectiveScene == null)
-            {
+            //if (levelObjectiveScene == null)
+            //{
                 levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
                 Components.Add(levelObjectiveScene);
-            }
+            //}
 
             // Create tip scene
             if (tipScene == null)
@@ -981,17 +981,17 @@ namespace Poseidon
         private void CreateSurvivalDependentScenes()
         {
             // Create level objective scene
-            if (levelObjectiveScene == null)
-            {
+            //if (levelObjectiveScene == null)
+            //{
                 levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
                 Components.Add(levelObjectiveScene);
-            }
+            //}
 
-            if (jigsawGameScene == null)
-            {
+            //if (jigsawGameScene == null)
+            //{
                 jigsawGameScene = new JigsawGameScene(this, Content, graphics, GraphicsDevice);
                 Components.Add(jigsawGameScene);
-            }
+            //}
 
             // Create the survival game play scene
             survivalGameScene = new SurvivalGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);

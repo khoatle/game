@@ -1163,7 +1163,7 @@ namespace Poseidon
         {
             spriteBatch.Draw(oceanPaintings.paintings[paintingToShow].painting, 
                 new Rectangle(0, 0, GraphicDevice.Viewport.TitleSafeArea.Width, GraphicDevice.Viewport.TitleSafeArea.Height), Color.White);
-            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(10, 0), oceanPaintings.paintings[paintingToShow].color);
+            spriteBatch.DrawString(paintingFont, oceanPaintings.paintings[paintingToShow].caption, new Vector2(10, 0), Color.Red);
             
 
             String line = IngamePresentation.wrapLine(oceanPaintings.paintings[paintingToShow].tip, GraphicDevice.Viewport.TitleSafeArea.Width - 20, paintingFont);

@@ -1741,7 +1741,7 @@
       <Name>animalBone4</Name>
       <Importer>FbxImporter</Importer>
       <Processor>ModelProcessor</Processor>
-      <ProcessorParameters_Scale>5</ProcessorParameters_Scale>
+      <ProcessorParameters_Scale>7</ProcessorParameters_Scale>
     </Compile>
     <None Include="Shaders\Common.fxh">
       <Name>Common</Name>

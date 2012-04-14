@@ -115,7 +115,7 @@ namespace Poseidon
 
             foreach (TipItem tipItem in PoseidonGame.liveTipManager.allTips[currentLevel])
             {
-                text += tipItem.tipItemStr + "\n";
+                text += tipItem.tipItemStr + "\n ";
             }
 
             spriteBatch.DrawString(tipFont, title, new Vector2(game.Window.ClientBounds.Center.X -( tipFont.MeasureString(title).X*GameConstants.generalTextScaleFactor), 2), Color.Red, 0, new Vector2(0, 0), 2*GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);

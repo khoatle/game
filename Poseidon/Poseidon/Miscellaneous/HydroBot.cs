@@ -512,8 +512,8 @@ namespace Poseidon
             //unassignedPts = 5;
 
             //for testing survival mode
-            //currentHitPoint = maxHitPoint = 300;
-            //strength = 2;
+            //currentHitPoint = maxHitPoint = 3000000;
+            //strength = 200000;
             //speed = 1;
 
             //goodWillBarActivated = true;

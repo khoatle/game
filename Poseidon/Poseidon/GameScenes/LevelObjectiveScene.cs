@@ -134,6 +134,11 @@ namespace Poseidon
             spriteBatch.Draw(objectiveBox, objectiveBoxRect, Color.White);
             spriteBatch.Draw(achievedBox, achievedBoxRect, Color.White);
 
+            int realFishAmount = playgamescene.fishAmount;
+            if (HydroBot.hasDolphin) realFishAmount -= 1;
+            if (HydroBot.hasSeaCow) realFishAmount -= 1;
+            if (HydroBot.hasTurtle) realFishAmount -= 1;
+
             if (HydroBot.gameMode == GameMode.SurvivalMode)
             {
                 level_objective = "Protect the ancient sea animal against hunters";
@@ -150,10 +155,10 @@ namespace Poseidon
             }
             else if (currentLevel == 1)
             {
-                double fish_percent = Math.Min(((double)playgamescene.fishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100, 100);
+                double fish_percent = Math.Min(((double)realFishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100, 100);
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
                 level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "There are " + fish_percent.ToString() + "% sea creatures remaining.";
+                achieved_status = "There are " + (int)fish_percent + "% sea creatures remaining.";
             }
             else if (currentLevel == 2)
             {
@@ -176,10 +181,10 @@ namespace Poseidon
             }
             else if (currentLevel == 4)
             {
-                double shark_percent = Math.Min(((double)playgamescene.fishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
+                double shark_percent = Math.Min(((double)realFishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
                 level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "There are " + shark_percent.ToString() + "% sharks remaining.";
+                achieved_status = "There are " + (int)shark_percent + "% sharks remaining.";
             }
             else if (currentLevel == 5)
             {

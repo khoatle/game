@@ -656,13 +656,14 @@ namespace Poseidon
 
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain[currentLevel]);
+            int randomObject;
             for (int index = 0; index < GameConstants.NumStaticObjectsMain[currentLevel]; index++)
             {
                 staticObjects.Add(new StaticObject());
                 if (currentLevel == 6)
                 {
-                    int randomObject = random.Next(4);
-                    //randomObject = 0;
+                    randomObject = random.Next(4);
+                    //randomObject = 3;
                     switch (randomObject)
                     {
                         case 0:

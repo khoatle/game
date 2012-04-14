@@ -27,7 +27,7 @@ namespace Poseidon
         public TimeSpan lastCast;
         public TimeSpan coolDown;
 
-        public static float seaCowDamage = 10f;
+        public static float seaCowDamage = 20f;
 
         Camera gameCamera;
 

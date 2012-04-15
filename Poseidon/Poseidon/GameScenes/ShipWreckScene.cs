@@ -32,7 +32,7 @@ namespace Poseidon
         SpriteFont statsFont, statisticFont;
         SpriteFont paintingFont;
         SpriteFont menuSmall;
-        GameObject ground;
+
         public static Camera gameCamera;
         
         GameObject boundingSphere;
@@ -56,6 +56,7 @@ namespace Poseidon
         List<TreasureChest>[] treasureChests;
         List<StaticObject>[] staticObjects;
         List<Powerpack>[] powerpacks;
+        GameObject[] ground;
         // draw a cutscene when finding a god's relic
         public bool[] foundRelic;// = false;
         // has artifact?
@@ -146,7 +147,7 @@ namespace Poseidon
             this.game = game;
             this.stunnedIconTexture = IngamePresentation.stunnedTexture;
             random = new Random();
-            ground = new GameObject();
+            //ground = new GameObject();
             gameCamera = new Camera(GameMode.ShipWreck);
             boundingSphere = new GameObject();
             hydroBot = new HydroBot(GameConstants.ShipWreckMaxRangeX, GameConstants.ShipWreckMaxRangeZ, GameConstants.ShipWreckFloatHeight, GameMode.ShipWreck);
@@ -446,7 +447,7 @@ namespace Poseidon
             if (shipAccessed[currentShipWreckID] == false)
             {
                 shipSceneType[currentShipWreckID] = random.Next(6);
-                ground.Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene" + (shipSceneType[currentShipWreckID] + 1));
+                ground[currentShipWreckID].Model = Content.Load<Model>("Models/ShipWreckModels/shipwreckscene" + (shipSceneType[currentShipWreckID] + 1));
                 InitializeShipField(Content);
                 shipAccessed[currentShipWreckID] = true;
             }
@@ -490,12 +491,14 @@ namespace Poseidon
             powerpacks = new List<Powerpack>[GameConstants.maxShipPerLevel];
             foundRelic = new bool[GameConstants.maxShipPerLevel];
             shipSceneType = new int[GameConstants.maxShipPerLevel];
+            ground = new GameObject[GameConstants.maxShipPerLevel];
             for (int index = 0; index < GameConstants.maxShipPerLevel; index++)
             {
                 shipAccessed[index] = false;
                 foundRelic[index] = false;
-            }
-            
+                ground[index] = new GameObject();
+            }    
+
         }
 
         private void ResetShipWreckGeneralVariables()//(GameTime gameTime, float aspectRatio)
@@ -932,8 +935,8 @@ namespace Poseidon
         /// <param name="model">Model representing the game playing field.</param>
         private void DrawTerrain(Model model)
         {
-            EffectHelpers.GetEffectConfiguration(ref ground.fogColor, ref ground.ambientColor,ref ground.diffuseColor,ref ground.specularColor);
-            Matrix levelWorld = model.Meshes[0].ParentBone.Transform * Matrix.CreateTranslation(ground.Position);
+            EffectHelpers.GetEffectConfiguration(ref ground[currentShipWreckID].fogColor, ref ground[currentShipWreckID].ambientColor, ref ground[currentShipWreckID].diffuseColor, ref ground[currentShipWreckID].specularColor);
+            Matrix levelWorld = model.Meshes[0].ParentBone.Transform * Matrix.CreateTranslation(ground[currentShipWreckID].Position);
             foreach (ModelMesh mesh in model.Meshes)
             {
                 foreach (BasicEffect effect in mesh.Effects)
@@ -943,7 +946,7 @@ namespace Poseidon
                     effect.DirectionalLight2.Enabled = false;
                     effect.DirectionalLight0.Enabled = true;
                     effect.DirectionalLight0.Direction = new Vector3(0, 1, 0);
-                    effect.DirectionalLight0.DiffuseColor = ground.diffuseColor.ToVector3();
+                    effect.DirectionalLight0.DiffuseColor = ground[currentShipWreckID].diffuseColor.ToVector3();
                     //effect.DirectionalLight0.SpecularColor = new Vector3(135.0f / 255.0f, 206.0f / 255.0f, 250.0f / 255.0f);
                     effect.PreferPerPixelLighting = true;
                     effect.World = levelWorld;
@@ -952,14 +955,14 @@ namespace Poseidon
                     effect.View = gameCamera.ViewMatrix;
                     effect.Projection = gameCamera.ProjectionMatrix;
 
-                    effect.AmbientLightColor = ground.ambientColor.ToVector3();
-                    effect.DiffuseColor = ground.diffuseColor.ToVector3();
-                    effect.SpecularColor = ground.specularColor.ToVector3();
+                    effect.AmbientLightColor = ground[currentShipWreckID].ambientColor.ToVector3();
+                    effect.DiffuseColor = ground[currentShipWreckID].diffuseColor.ToVector3();
+                    effect.SpecularColor = ground[currentShipWreckID].specularColor.ToVector3();
 
                     effect.FogEnabled = true;
                     effect.FogStart = GameConstants.FogStart;
                     effect.FogEnd = GameConstants.FogEnd;
-                    effect.FogColor = ground.fogColor.ToVector3();
+                    effect.FogColor = ground[currentShipWreckID].fogColor.ToVector3();
                 }
                 mesh.Draw();
             }
@@ -986,7 +989,7 @@ namespace Poseidon
             graphics.GraphicsDevice.SetRenderTarget(renderTarget);
             graphics.GraphicsDevice.Clear(Color.Black);
 
-            DrawTerrain(ground.Model);
+            DrawTerrain(ground[currentShipWreckID].Model);
 
             //Draw each static object
             foreach (StaticObject staticObject in staticObjects[currentShipWreckID])

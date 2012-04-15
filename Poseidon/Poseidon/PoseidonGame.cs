@@ -137,7 +137,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
 
-            graphics.IsFullScreen = false;
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -729,14 +729,14 @@ namespace Poseidon
 
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
-                if (CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
+                if (CursorManager.MouseOnObject(playGameScene.cursor, playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
                     // put the skill into one of the chest if skillID != 0
-                    shipWreckScene.currentShipWreckID = curWreck;
+                    currentShipWreckID = shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
-                    currentShipWreckID = curWreck;
+                    //currentShipWreckID = curWreck;
                     return true;
                 }
             }

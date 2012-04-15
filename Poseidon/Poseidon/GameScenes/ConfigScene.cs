@@ -301,14 +301,17 @@ namespace Poseidon
                     case 6:
                         GameSettings.DifficultyLevel = 1; //Easy
                         PoseidonGame.setDifficulty(1);
+                        PlayGameScene.cutSceneDialog = new CutSceneDialog();
                         break;
                     case 7:
                         GameSettings.DifficultyLevel = 2; //Medium
                         PoseidonGame.setDifficulty(2);
+                        PlayGameScene.cutSceneDialog = new CutSceneDialog();
                         break;
                     case 8:
                         GameSettings.DifficultyLevel = 3; //Hard
                         PoseidonGame.setDifficulty(3);
+                        PlayGameScene.cutSceneDialog = new CutSceneDialog();
                         break;
                     default:
                         break;

@@ -31,6 +31,7 @@ namespace Poseidon
         protected Rectangle numParticleRect;
         protected Rectangle showLiveTipRect;
         protected Rectangle schoolFishRect;
+        protected Rectangle easyRect, mediumRect, hardRect;
         protected Rectangle okBox;
         private string[] menuItems;
 
@@ -100,7 +101,7 @@ namespace Poseidon
             int titleHeight = (int)(80 * heightScale);
             titleRect = new Rectangle(game.Window.ClientBounds.Center.X - titleWidth / 2, game.Window.ClientBounds.Top + titleHeight/3, titleWidth, titleHeight);
 
-            string[] items = { "Music Volume", "Sound Volume", "Show Live Tips", "Special Effect", "Particle Level", "Fish School Size" };
+            string[] items = { "Music Volume", "Sound Volume", "Show Live Tips", "Special Effect", "Particle Level", "Fish School Size", "Difficulty" };
             menuItems = items;
             itemRectList = new List<Rectangle>(menuItems.Length);
             iconRectList = new List<Rectangle>(menuItems.Length);
@@ -135,6 +136,12 @@ namespace Poseidon
             iconRectList.Add(numParticleRect);
             schoolFishRect = new Rectangle(iconPositionX, itemRectList[5].Center.Y - barheight / 2, barwidth, barheight);
             iconRectList.Add(schoolFishRect);
+            easyRect = new Rectangle(iconPositionX, itemRectList[6].Center.Y - checkBoxheight / 2, checkboxWidth, checkBoxheight);
+            iconRectList.Add(easyRect);
+            mediumRect = new Rectangle(iconPositionX + checkboxWidth * 3, itemRectList[6].Center.Y - checkBoxheight / 2, checkboxWidth, checkBoxheight);
+            iconRectList.Add(mediumRect);
+            hardRect = new Rectangle(iconPositionX + checkboxWidth * 6, itemRectList[6].Center.Y - checkBoxheight / 2, checkboxWidth, checkBoxheight);
+            iconRectList.Add(hardRect);
 
             width = titleWidth/2;
             height = (int)(titleHeight*0.75);
@@ -231,7 +238,7 @@ namespace Poseidon
                 audio.MenuScroll.Play();
             }
 
-            if (selectedIndex == 2 || selectedIndex == 3) //checkbox
+            if (selectedIndex == 2 || selectedIndex == 3 ||selectedIndex > 5) //checkbox
             {
                 if (iconRectList[selectedIndex].Intersects(new Rectangle(mouseX, mouseY, cursorWidthSensivity, cursorHeightSensitivity)) && lastMouseState.LeftButton.Equals(ButtonState.Pressed) && currentMouseState.LeftButton.Equals(ButtonState.Released))
                 {
@@ -291,6 +298,18 @@ namespace Poseidon
                         if (GameSettings.SchoolOfFishDetail < 0f) GameSettings.SchoolOfFishDetail = 0f;
                         if (GameSettings.SchoolOfFishDetail > 1f) GameSettings.SchoolOfFishDetail = 1f;
                         break;
+                    case 6:
+                        GameSettings.DifficultyLevel = 1; //Easy
+                        PoseidonGame.setDifficulty(1);
+                        break;
+                    case 7:
+                        GameSettings.DifficultyLevel = 2; //Medium
+                        PoseidonGame.setDifficulty(2);
+                        break;
+                    case 8:
+                        GameSettings.DifficultyLevel = 3; //Hard
+                        PoseidonGame.setDifficulty(3);
+                        break;
                     default:
                         break;
                 }
@@ -325,9 +344,9 @@ namespace Poseidon
             spriteBatch.Draw(configTitle, titleRect, Color.White);
             
             //Draw the item text
-            for(int i=0; i<menuItems.Length; i++ )
+            for(int i=0; i<itemRectList.Count; i++ )
             {
-                if (i == selectedIndex)
+                if (i == selectedIndex || (i==6 && selectedIndex>6))
                 {
                     spriteBatch.DrawString(selectedFont, menuItems[i], new Vector2(itemRectList[i].Left + 1, itemRectList[i].Top + 1), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f); //shadow
                     spriteBatch.DrawString(selectedFont, menuItems[i], new Vector2(itemRectList[i].Left, itemRectList[i].Top), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
@@ -381,6 +400,28 @@ namespace Poseidon
             buttonPositionX = schoolFishRect.Left + (int)(GameSettings.SchoolOfFishDetail * schoolFishRect.Width) - (buttonDiameter / 2);
             spriteBatch.Draw(dragButton, new Rectangle(buttonPositionX, schoolFishRect.Top, buttonDiameter, buttonDiameter), Color.White);
             spriteBatch.DrawString(numberFont, GameSettings.SchoolOfFishDetail.ToString("P0"), new Vector2(buttonPositionX, schoolFishRect.Top - (numberFont.MeasureString("1").Y*numberScale)), selectedColor, 0f, new Vector2(0, 0), numberScale, SpriteEffects.None, 0f);
+
+            //Easy Difficulty Level
+            if (GameSettings.DifficultyLevel == 1)
+                spriteBatch.Draw(checkedBox, easyRect, Color.White);
+            else
+                spriteBatch.Draw(uncheckedBox, easyRect, Color.White);
+            spriteBatch.DrawString(numberFont, "EASY", new Vector2(easyRect.Center.X - numberFont.MeasureString("EASY").X/2, easyRect.Bottom + 5), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
+
+            //Medium Difficulty Level
+            if (GameSettings.DifficultyLevel == 2)
+                spriteBatch.Draw(checkedBox, mediumRect, Color.White);
+            else
+                spriteBatch.Draw(uncheckedBox, mediumRect, Color.White);
+            spriteBatch.DrawString(numberFont, "MEDIUM", new Vector2(mediumRect.Center.X - numberFont.MeasureString("MEDIUM").X / 2, mediumRect.Bottom + 5), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
+
+            //Hard Difficulty Level
+            if (GameSettings.DifficultyLevel == 3)
+                spriteBatch.Draw(checkedBox, hardRect, Color.White);
+            else
+                spriteBatch.Draw(uncheckedBox, hardRect, Color.White);
+            spriteBatch.DrawString(numberFont, "HARD", new Vector2(hardRect.Center.X - numberFont.MeasureString("HARD").X / 2, hardRect.Bottom + 5), selectedColor, 0f, new Vector2(0, 0), textScale, SpriteEffects.None, 0f);
+
 
             //draw OK button
             if(selectedIndex==-2) //mouse on Ok

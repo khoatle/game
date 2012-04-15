@@ -856,7 +856,7 @@ namespace Poseidon.Core
                     IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
                 else
                 {
-                    string line ="", comment="", tip="";
+                    string line ="", comment="", tip="", tip2 = "";
                     Powerpack powerPackPointedAt = null, botOnPowerPack = null;
                     CursorManager.MouseOnWhichPowerPack(cursor, gameCamera, powerPacks, ref powerPackPointedAt, ref botOnPowerPack, null);
                     if (powerPackPointedAt != null)
@@ -886,7 +886,7 @@ namespace Poseidon.Core
                         else if (powerPackPointedAt.powerType == PowerPackType.StrangeRock)
                         {
                             line += "STRANGE ROCK";
-                            comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.\n (Z to collect)";
+                            comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.";
                         }
                         else if (powerPackPointedAt.powerType == PowerPackType.GoldenKey)
                         {
@@ -973,6 +973,7 @@ namespace Poseidon.Core
                                             comment = "Radioactive wastes can be dropped here for processing.";
                                         }
                                         tip = "Double click to drop collected wastes";
+                                        tip2 = "Shift + Click to open control panel";
                                     }
                                     else
                                     {
@@ -980,7 +981,8 @@ namespace Poseidon.Core
                                         {
                                             line = "RESEARCH FACILITY";
                                             comment = "Researches on upgrading plants and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
-                                            tip = "Double click to drop collected objects";          
+                                            tip = "Double click to drop collected objects";
+                                            tip2 = "Shift + Click to open control panel";
                                         }
                                     }
                                 }
@@ -994,6 +996,11 @@ namespace Poseidon.Core
                     spriteBatch.DrawString(statsFont, comment, commentPos, Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(comment).Y / 2 + lineSpacing + statsFont.MeasureString(tip).Y / 2) * textScaleFactor;
                     spriteBatch.DrawString(statsFont, tip, tipPos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip).X / 2, statsFont.MeasureString(tip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    if (tip2 != "")
+                    {
+                        Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(tip).Y / 2 + lineSpacing + statsFont.MeasureString(tip2).Y / 2) * textScaleFactor;
+                        spriteBatch.DrawString(statsFont, tip2, tip2Pos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip2).X / 2, statsFont.MeasureString(tip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    }
                 }
             }
             

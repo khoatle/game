@@ -301,12 +301,15 @@ namespace Poseidon
                     //PlayGameScene.audio.MinigunWindUp.Play();
                     timePrevPowerUsed = PoseidonGame.playTime.TotalSeconds;
                 }
-                else if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+                else if (currentHuntingTarget != null)
                 {
-                    //ChasingBullet(bullets, cameraFrustum, gameTime);
-                    // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
-                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                    prevFire = PoseidonGame.playTime;
+                    if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+                    {
+                        //ChasingBullet(bullets, cameraFrustum, gameTime);
+                        // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
+                        AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
+                        prevFire = PoseidonGame.playTime;
+                    }
                 }
             }
         }

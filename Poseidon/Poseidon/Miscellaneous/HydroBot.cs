@@ -677,8 +677,13 @@ namespace Poseidon
         {
             isCastingSkill = false;
             isShooting = false;
-            if (!clipPlayer.inRange(50, 74))
-                clipPlayer.switchRange(50, 74);
+            //if (!clipPlayer.inRange(50, 74))
+            clipPlayer.switchRange(50, 74);
+            lastMouseState = new MouseState();
+            currentMouseState = new MouseState();
+            lastKeyboardState = new KeyboardState();
+            currentKeyboardState = new KeyboardState();
+
             Position = Vector3.Zero;
             Position.Y = floatHeight;
             ForwardDirection = 0f;

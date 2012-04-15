@@ -1137,7 +1137,10 @@ namespace Poseidon
                         if (roundTimer <= TimeSpan.Zero) currentGameState = GameState.Won;
                         IngamePresentation.toNextLevelHover = IngamePresentation.mouseOnNextLevelIcon(lastMouseState);
                         if (IngamePresentation.toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
+                        {
                             currentGameState = GameState.Won;
+                            IngamePresentation.toNextLevelHover = false;
+                        }
                     }
 
 

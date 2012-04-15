@@ -134,7 +134,7 @@ namespace Poseidon
         Texture2D otherPersonFace;
         Texture2D talkingBox;
         // Cutscene
-        CutSceneDialog cutSceneDialog;
+        public static CutSceneDialog cutSceneDialog;
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
@@ -200,7 +200,7 @@ namespace Poseidon
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialogue, Radar radar)
             : base(game)
         {
             graphics = graphic;
@@ -211,7 +211,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
-            this.cutSceneDialog = cutSceneDialog;
+            cutSceneDialog = cutSceneDialogue;
             this.radar = radar;
             this.stunnedIconTexture = IngamePresentation.stunnedTexture;
             roundTime = GameConstants.RoundTime[currentLevel];

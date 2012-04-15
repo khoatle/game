@@ -185,6 +185,8 @@ namespace Poseidon
         bool isShooting = false;
         public static bool isCastingSkill = false;
 
+        public static int levelDuration; //Since leveltime can change mid-way due to 'difficulty' change in config screen
+
         public HydroBot(int MaxRangeX, int MaxRangeZ, float floatHeight, GameMode gameMode)
         {
             // Original attribute
@@ -394,7 +396,8 @@ namespace Poseidon
             sandalPower = lsSandalPower = (float)info.GetValue("sandalPower", typeof(float));
             armorPower = lsArmorPower = (float)info.GetValue("armorPower", typeof(float));
             beltPower = lsBeltPower = (float)info.GetValue("beltPower", typeof(float));
-            
+
+            levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
         }
 
         /// <summary>
@@ -613,6 +616,7 @@ namespace Poseidon
             totalBioTrashProcessed = lsTotalBioTrashProcessed;
             totalPlasticTrashProcessed = lsTotalPlasticTrashProcessed;
             totalNuclearTrashProcessed = lsTotalNuclearTrashProcessed;
+            levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
         }
 
         public void SetLevelStartValues()
@@ -671,6 +675,8 @@ namespace Poseidon
             lsTotalBioTrashProcessed = totalBioTrashProcessed;
             lsTotalPlasticTrashProcessed = totalPlasticTrashProcessed;
             lsTotalNuclearTrashProcessed = totalNuclearTrashProcessed;
+
+            levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
         }
 
         internal void Reset()

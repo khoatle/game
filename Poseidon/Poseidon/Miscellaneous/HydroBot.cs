@@ -540,7 +540,7 @@ namespace Poseidon
             firstPlant = true;
             prevPlantTime = 0;
 
-            LoadAnimation(50, 75, 24);
+            LoadAnimation(55, 75, 24);
 
             
 
@@ -684,7 +684,7 @@ namespace Poseidon
             isCastingSkill = false;
             isShooting = false;
             //if (!clipPlayer.inRange(50, 74))
-            clipPlayer.switchRange(50, 74);
+            clipPlayer.switchRange(55, 75);
             lastMouseState = new MouseState();
             currentMouseState = new MouseState();
             lastKeyboardState = new KeyboardState();
@@ -1447,31 +1447,39 @@ namespace Poseidon
             //update bot's animation
             if (isCastingSkill)
             {
-                if (!clipPlayer.inRange(75, 95))
-                    clipPlayer.switchRange(75, 95);
+                if (!clipPlayer.inRange(80, 90))
+                    clipPlayer.switchRange(80, 90);
                 idleState = false;
             }
             else if (isShooting)
             {
                 if (!inIdleState)
                 {
-                    if (!clipPlayer.inRange(1, 35))
-                        clipPlayer.switchRange(1, 35);
+                    if (!clipPlayer.inRange(5, 35))
+                        clipPlayer.switchRange(5, 35);
+                    //if (!clipPlayer.inRange(205, 235))
+                    //    clipPlayer.switchRange(205, 235);
                     //idleState = false;
                 }
                 else
                 {
-                    if (!clipPlayer.inRange(73, 74))
-                        clipPlayer.switchRange(73, 74);
+                    if (!clipPlayer.inRange(121, 130))
+                        clipPlayer.switchRange(121, 130);
+                    idleState = false;
                 }    
             }
             else if (!reachDestination)
             {
-                if (!clipPlayer.inRange(1, 35))
-                    clipPlayer.switchRange(1, 35);
+                if (!clipPlayer.inRange(135, 170))
+                    clipPlayer.switchRange(135, 170);
                 idleState = false;
                 inIdleState = false;
             }
+            //else if (inIdleState)
+            //{
+            //    if (!clipPlayer.inRange(55, 75))
+            //        clipPlayer.switchRange(55, 75);
+            //}
             if (idleState == false)
             {
                 idleState = true;
@@ -1480,8 +1488,8 @@ namespace Poseidon
 
             if (idleState && PoseidonGame.playTime.TotalMilliseconds - idleStartTime >= 1500)
             {
-                if (!clipPlayer.inRange(50, 74))
-                    clipPlayer.switchRange(50, 74);
+                if (!clipPlayer.inRange(55, 75))
+                    clipPlayer.switchRange(55, 75);
                 inIdleState = true;
             }
             //Position = Vector3.Zero;
@@ -1495,9 +1503,9 @@ namespace Poseidon
                 charMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
-                if (!clipPlayer.inRange(75, 95))
+                //if (!clipPlayer.inRange(75, 95))
                     clipPlayer.update(gameTime.ElapsedGameTime, true, charMatrix);
-                else clipPlayer.update(gameTime.ElapsedGameTime + gameTime.ElapsedGameTime, true, charMatrix);
+                //else clipPlayer.update(gameTime.ElapsedGameTime + gameTime.ElapsedGameTime, true, charMatrix);
             }
         }
 

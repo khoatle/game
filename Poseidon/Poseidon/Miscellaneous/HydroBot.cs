@@ -1470,8 +1470,8 @@ namespace Poseidon
             }
             else if (!reachDestination)
             {
-                if (!clipPlayer.inRange(135, 170))
-                    clipPlayer.switchRange(135, 170);
+                if (!clipPlayer.inRange(135, 165))
+                    clipPlayer.switchRange(135, 165);
                 idleState = false;
                 inIdleState = false;
             }

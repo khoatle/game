@@ -92,7 +92,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             // play the boss fight music for certain levels
-            if (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 11)
+            if (HydroBot.gameMode == GameMode.MainGame && (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 11))
             {
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
                 {

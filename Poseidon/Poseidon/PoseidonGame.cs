@@ -137,7 +137,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
 
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 
@@ -654,7 +654,18 @@ namespace Poseidon
             {
                 if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
                 {
-                    PlayGameScene.currentGameState = GameState.Running;
+
+                    if (PlayGameScene.currentLevel == 12)
+                    {
+                        PlayGameScene.currentGameState = GameState.GameComplete;
+                        HydroBot.gamePlusLevel++;
+                        //the save file used for Survival mode
+                        ObjectsToSerialize objectsToSerialize = new ObjectsToSerialize();
+                        objectsToSerialize.hydrobot = playGameScene.hydroBot;
+                        Serializer serializer = new Serializer();
+                        serializer.SerializeObjects("SurvivalMode", objectsToSerialize);
+                    }
+                    else PlayGameScene.currentGameState = GameState.Running;
                 }
                 else
                 {

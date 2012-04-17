@@ -548,15 +548,15 @@ namespace Poseidon
                 100, GameConstants.MainGameMaxRangeZ - 250, GameConstants.MainCamHeight);
 
             //reset the shipwreck content too
-            ShipWreckScene.resetShipWreckNow = true;
+            //ShipWreckScene.resetShipWreckNow = true;
 
             InitializeGameField(Content);
 
-            //level statistics reset
-            ResetStatisticCounters();
+            ////level statistics reset
+            //ResetStatisticCounters();
 
-            //reset particles
-            particleManager.ResetParticles();
+            ////reset particles
+            //particleManager.ResetParticles();
         }
 
         private void InitializeGameField(ContentManager Content)
@@ -566,6 +566,12 @@ namespace Poseidon
             firstShow = true;
             showFoundKey = false;
             hadkey = false;
+            ResetStatisticCounters();
+            //reset particles
+            particleManager.ResetParticles();
+            //reset the shipwreck content too
+            ShipWreckScene.resetShipWreckNow = true;
+            isBossKilled = false;
 
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();

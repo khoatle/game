@@ -11,7 +11,7 @@ namespace Poseidon
 {
     public class SeaDolphin : Fish
     {
-        public static float AfterX = -HydroBot.controlRadius/4;
+        public static float AfterX = -HydroBot.controlRadius/3;
         public static float AfterZ = 0;
 
         public TimeSpan lastCast;
@@ -197,7 +197,7 @@ namespace Poseidon
             // If the fish is chasing some enemy
             else if (isChasing == true)
             {
-                if (Vector3.Distance(hydroBot.Position, Position) > HydroBot.controlRadius)
+                if (Vector3.Distance(hydroBot.Position, Position) > HydroBot.controlRadius * 1.25)
                 {  // If too far, return to bot
                     isWandering = false;
                     isReturnBot = true;

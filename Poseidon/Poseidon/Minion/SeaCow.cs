@@ -13,8 +13,8 @@ namespace Poseidon
 {
     public class SeaCow : Fish
     {
-        public static float AfterX = HydroBot.controlRadius / 4;
-        public static float AfterZ = HydroBot.controlRadius * 1.73f / 4;
+        public static float AfterX = HydroBot.controlRadius * 1.73f / 3;
+        public static float AfterZ = HydroBot.controlRadius / 3;
         public static float roarRadius = 50f;
 
         public static float cowDamage = 20f;
@@ -254,7 +254,7 @@ namespace Poseidon
             }
             // If the fish is chasing some enemy
             else if (isChasing == true) {
-                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius)
+                if (Vector3.Distance(tank.Position, Position) > HydroBot.controlRadius * 1.25f)
                 {  // If too far, return to bot
                     isWandering = false;
                     isReturnBot = true;

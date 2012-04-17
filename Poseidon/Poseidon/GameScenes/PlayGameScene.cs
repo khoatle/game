@@ -735,12 +735,12 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
-            if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3)
-            {
-                HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
-                AddingObjects.placeMinion(Content, 2 - type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
-                type++;
-            }
+            //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3)
+            //{
+            //    HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
+            //    AddingObjects.placeMinion(Content, 2 - type, enemies, enemiesAmount, fish, ref fishAmount, hydroBot);
+            //    type++;
+            //}
 
             // play the boss fight music for certain levels
             if (currentGameState == GameState.Won)

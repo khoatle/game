@@ -522,7 +522,7 @@ namespace Poseidon
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
             }
             //skill combo unlock
-            if (score >= 20000 && !HydroBot.skillComboActivated)
+            if (score >= 500 && !HydroBot.skillComboActivated)
             {
                 HydroBot.skillComboActivated = true;
                 Point point = new Point();

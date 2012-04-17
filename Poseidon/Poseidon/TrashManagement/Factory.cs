@@ -206,7 +206,8 @@ namespace Poseidon
                 if (!underConstruction && buildingSoundInstance.State == SoundState.Playing) buildingSoundInstance.Stop();
                 if (PoseidonGame.playTime - lastConstructionSwitchTime >= constructionSwitchSpan)
                 {
-                    constructionIndex++;
+                    //constructionIndex++;
+                    constructionIndex += (int)((PoseidonGame.playTime - lastConstructionSwitchTime).TotalMilliseconds / constructionSwitchSpan.TotalMilliseconds);
                     if (constructionIndex >= modelStates.Count)
                     {
                         constructionIndex = modelStates.Count - 1;

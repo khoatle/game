@@ -94,7 +94,7 @@ namespace Poseidon
             for (int i = 0; i < enemiesSize; i++) {
                 Vector3 otherDirection = enemies[i].Position - Position;
                 if (Behavior.isInSight(observerDirection, Position, otherDirection, enemies[i].Position, MathHelper.PiOver4, 
-                    60f * (float)((PoseidonGame.playTime.TotalMilliseconds - startCasting.TotalMilliseconds) / standingTime.TotalMilliseconds)))
+                    70f * (float)((PoseidonGame.playTime.TotalMilliseconds - startCasting.TotalMilliseconds) / standingTime.TotalMilliseconds)))
                 {
                 //if (Vector3.Distance(enemies[i].Position, Position) < 60f) {
                     if (firstCast) 

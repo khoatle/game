@@ -715,7 +715,7 @@ namespace Poseidon.Core
                             if (faceBeingShown == poseidonFace)
                             {
                                 //fill up the hitpoint
-                                HydroBot.currentHitPoint = HydroBot.lsMaxHitPoint;
+                                HydroBot.currentHitPoint = HydroBot.maxHitPoint;
                                 //reset all skills' cooldown
                                 for (int i = 0; i < GameConstants.numberOfSkills; i++)
                                 {

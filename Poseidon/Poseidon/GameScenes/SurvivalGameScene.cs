@@ -1160,7 +1160,7 @@ namespace Poseidon
             //Draw points gained / lost
             foreach (Point point in points)
             {
-                point.Draw(spriteBatch);
+                point.Draw(spriteBatch, GraphicDevice, gameCamera);
             }
             spriteBatch.Begin();
             if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)

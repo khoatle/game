@@ -136,8 +136,8 @@ namespace Poseidon
 
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
-            
-            graphics.IsFullScreen = false;
+
+            graphics.IsFullScreen = true;
 
             Content.RootDirectory = "Content";
 
@@ -173,6 +173,8 @@ namespace Poseidon
             Services.AddService(typeof(SpriteBatch), spriteBatch);
 
             loadGlobalData();
+
+            setDifficulty(GameSettings.DifficultyLevel);
             
             //initiate all 2D graphics and fonts for the game
             IngamePresentation.Initiate2DGraphics(Content, this);
@@ -605,6 +607,7 @@ namespace Poseidon
                 playGameScene.graphicEffect.resetTransitTimer();
                 ShipWreckScene.gameCamera.shaking = false;
                 ShowScene(playGameScene);
+                HydroBot.isCastingSkill = false;
                 doubleClicked = false;
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
@@ -668,7 +671,8 @@ namespace Poseidon
             if (doubleClicked 
                 && !CursorManager.MouseOnEnemy(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.enemies, playGameScene.enemiesAmount)
                 && !CursorManager.MouseOnFish(playGameScene.cursor, PlayGameScene.gameCamera, playGameScene.fish, playGameScene.fishAmount)
-                && GetInShipWreck() && !playGameScene.factoryButtonPanel.hasAnyAnchor() && !playGameScene.openFactoryConfigurationScene && !playGameScene.openResearchFacilityConfigScene)
+                && GetInShipWreck() && !playGameScene.factoryButtonPanel.hasAnyAnchor() && !playGameScene.openFactoryConfigurationScene && !playGameScene.openResearchFacilityConfigScene
+                && !HydroBot.isCastingSkill)
             {
                 //disable camera shaking or else we will get a shake 
                 //right after getting out of a shipwreck
@@ -725,14 +729,14 @@ namespace Poseidon
 
             for (int curWreck = 0; curWreck < playGameScene.shipWrecks.Count; curWreck++)
             {
-                if (CursorManager.MouseOnObject(playGameScene.cursor,playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
+                if (CursorManager.MouseOnObject(playGameScene.cursor, playGameScene.shipWrecks[curWreck].BoundingSphere, playGameScene.shipWrecks[curWreck].Position, PlayGameScene.gameCamera)
                     && playGameScene.CharacterNearShipWreck(playGameScene.shipWrecks[curWreck].BoundingSphere)
                     )
                 {            
                     // put the skill into one of the chest if skillID != 0
-                    shipWreckScene.currentShipWreckID = curWreck;
+                    currentShipWreckID = shipWreckScene.currentShipWreckID = curWreck;
                     shipWreckScene.skillID = playGameScene.shipWrecks[curWreck].skillID;
-                    currentShipWreckID = curWreck;
+                    //currentShipWreckID = curWreck;
                     return true;
                 }
             }
@@ -868,6 +872,7 @@ namespace Poseidon
             bw.Write((double)GameSettings.SchoolOfFishDetail);
             bw.Write(HydroBot.skillComboActivated);
             bw.Write((double)SurvivalGameScene.highestScore);
+            bw.Write((Int16)GameSettings.DifficultyLevel);
             bw.Close();
         }
 
@@ -894,6 +899,7 @@ namespace Poseidon
                     GameSettings.SchoolOfFishDetail = (float)br.ReadDouble();
                     HydroBot.skillComboActivated = HydroBot.lsSkillComboActivated = br.ReadBoolean();
                     SurvivalGameScene.highestScore = (float)br.ReadDouble();
+                    GameSettings.DifficultyLevel = br.ReadInt16();
                     br.Close();
                 }
                 catch
@@ -917,6 +923,42 @@ namespace Poseidon
             GameSettings.SchoolOfFishDetail = 1f;
             HydroBot.skillComboActivated = HydroBot.lsSkillComboActivated = false;
             SurvivalGameScene.highestScore = 0f;
+            GameSettings.DifficultyLevel = 2;
+        }
+
+        public static void setDifficulty(int difficultyLevel)
+        {
+            switch (difficultyLevel)
+            {
+                case 1:
+                    TimeSpan[]  roundTimeEasy = {TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(490), 
+                                                       TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(600),
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570),
+                                                       TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220)};
+                    GameConstants.RoundTime = roundTimeEasy;
+                    break;
+                case 2:
+                     TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
+                                                       TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
+                     GameConstants.RoundTime = roundTimeMedium;
+                    break;
+                case 3:
+                     TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(410), 
+                                                       TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(160), TimeSpan.FromSeconds(500),
+                                                       TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500),
+                                                       TimeSpan.FromSeconds(600), TimeSpan.FromSeconds(150), TimeSpan.FromSeconds(150)};
+                     GameConstants.RoundTime = roundTimeHard;
+                    break;
+                default:
+                     TimeSpan[] roundTimeDefault = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
+                                                       TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
+                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
+                     GameConstants.RoundTime = roundTimeDefault; //same as medium
+                    break;
+            }
         }
 
         private void CreateLevelDependentScenes()
@@ -945,11 +987,11 @@ namespace Poseidon
             Components.Add(playGameScene);
 
             // Create level objective scene
-            if (levelObjectiveScene == null)
-            {
+            //if (levelObjectiveScene == null)
+            //{
                 levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
                 Components.Add(levelObjectiveScene);
-            }
+            //}
 
             // Create tip scene
             if (tipScene == null)
@@ -979,17 +1021,17 @@ namespace Poseidon
         private void CreateSurvivalDependentScenes()
         {
             // Create level objective scene
-            if (levelObjectiveScene == null)
-            {
+            //if (levelObjectiveScene == null)
+            //{
                 levelObjectiveScene = new LevelObjectiveScene(this, LevelObjectiveBackgroundTexture, Content, playGameScene);
                 Components.Add(levelObjectiveScene);
-            }
+            //}
 
-            if (jigsawGameScene == null)
-            {
+            //if (jigsawGameScene == null)
+            //{
                 jigsawGameScene = new JigsawGameScene(this, Content, graphics, GraphicsDevice);
                 Components.Add(jigsawGameScene);
-            }
+            //}
 
             // Create the survival game play scene
             survivalGameScene = new SurvivalGameScene(this, graphics, Content, GraphicsDevice, spriteBatch, pausePosition, pauseRect, actionTexture, cutSceneDialog, radar, stunnedTexture);

@@ -71,11 +71,13 @@ namespace Poseidon
             clipPlayer = new ClipPlayer(skd, fps);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, true);
-            enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            modelScale = 0.2f;
+            enemyMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.08f;
+            boundingSphereScale = 0.08f;
+            scaledSphere.Radius *= boundingSphereScale;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
@@ -97,7 +99,7 @@ namespace Poseidon
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                enemyMatrix = Matrix.CreateScale(0.2f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                enemyMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);
@@ -299,12 +301,15 @@ namespace Poseidon
                     //PlayGameScene.audio.MinigunWindUp.Play();
                     timePrevPowerUsed = PoseidonGame.playTime.TotalSeconds;
                 }
-                else if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+                else if (currentHuntingTarget != null)
                 {
-                    //ChasingBullet(bullets, cameraFrustum, gameTime);
-                    // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
-                    AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
-                    prevFire = PoseidonGame.playTime;
+                    if (PoseidonGame.playTime.TotalSeconds - prevFire.TotalSeconds > timeBetweenFire && (Position - currentHuntingTarget.Position).Length() < GameConstants.TerminatorShootingRange)
+                    {
+                        //ChasingBullet(bullets, cameraFrustum, gameTime);
+                        // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
+                        AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
+                        prevFire = PoseidonGame.playTime;
+                    }
                 }
             }
         }

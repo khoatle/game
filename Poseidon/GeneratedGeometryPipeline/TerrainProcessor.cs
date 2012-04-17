@@ -79,13 +79,13 @@ namespace GeneratedGeometryPipeline
             //Random random = new Random();
             //int id = random.Next(6) + 1;
             if (terrainName == "terrain0.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";
             else if (terrainName == "terrain1.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/seagrassFinal.jpg";//seagrass meadow
             else if (terrainName == "terrain2.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain2.jpg";
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
             else if (terrainName == "terrain3.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";
             else if (terrainName == "terrain4.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain4.jpg";
             else if (terrainName == "terrain5.bmp")
@@ -99,10 +99,10 @@ namespace GeneratedGeometryPipeline
             else if (terrainName == "terrain9.bmp")
                 terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain5.jpg";
             else if (terrainName == "terrain10.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain1.jpg";
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
             else if (terrainName == "terrain11.bmp")
-                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";
-            else terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain6.jpg";   
+                terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";
+            else terrainTextureFilename = "Image/TerrainTextures/SeaBedTerrain3.jpg";   
         }
 
         /// <summary>

@@ -151,7 +151,7 @@ namespace Poseidon
             if (isWandering == true)
             {
                 // If the fish is far from the point after the bot's back or is the bot moving
-                if (Vector3.Distance(hydroBot.Position, Position) > HydroBot.controlRadius || (hydroBot.isMoving() && Vector3.Distance(hydroBot.Position, Position) > 30f))
+                if (Vector3.Distance(hydroBot.Position, Position) > HydroBot.controlRadius || (hydroBot.isMoving() && Vector3.Distance(hydroBot.Position, Position) > 50f))
                 {
                     isWandering = false;
                     isReturnBot = true;

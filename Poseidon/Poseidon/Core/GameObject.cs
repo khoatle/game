@@ -16,7 +16,7 @@ namespace Poseidon
         public Vector3 Position;
         public BoundingSphere BoundingSphere;
         public BoundingBox boundingBox;
-
+        public float modelScale = 1.0f, boundingSphereScale = 1.0f;
         public Color fogColor;
         public Color ambientColor;
         public Color diffuseColor;

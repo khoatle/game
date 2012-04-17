@@ -31,15 +31,16 @@ namespace Poseidon
 
         public override void Load(int clipStart, int clipEnd, int fpsRate)
         {
+            modelScale = boundingSphereScale = 0.25f;
             skd = Model.Tag as SkinningData;
             clipPlayer = new ClipPlayer(skd, fpsRate);//ClipPlayer running at 24 frames/sec
             AnimationClip clip = skd.AnimationClips["Take 001"]; //Take name from the dude.fbx file
             clipPlayer.play(clip, clipStart, clipEnd, true);
-            enemyMatrix = Matrix.CreateScale(0.25f) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+            enemyMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                Matrix.CreateTranslation(Position);
             BoundingSphere scaledSphere;
             scaledSphere = BoundingSphere;
-            scaledSphere.Radius *= 0.25f;
+            scaledSphere.Radius *= boundingSphereScale;
             BoundingSphere =
                 new BoundingSphere(scaledSphere.Center, scaledSphere.Radius);
 
@@ -72,9 +73,9 @@ namespace Poseidon
                 qRotation = Quaternion.CreateFromAxisAngle(
                                 Vector3.Up,
                                 ForwardDirection);
-                float scale = 0.25f;
+                //float scale = 0.25f;
 
-                enemyMatrix = Matrix.CreateScale(scale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
+                enemyMatrix = Matrix.CreateScale(modelScale) * Matrix.CreateRotationY((float)MathHelper.Pi * 2) *
                                     Matrix.CreateFromQuaternion(qRotation) *
                                     Matrix.CreateTranslation(Position);
                 clipPlayer.update(gameTime.ElapsedGameTime, true, enemyMatrix);

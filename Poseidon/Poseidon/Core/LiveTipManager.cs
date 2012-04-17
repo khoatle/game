@@ -24,11 +24,13 @@ namespace Poseidon.Core
             TipItem tipItem;
 
             //tip for level 1
+            tipItem = new TipItem("Hold down Mouse Left and drag the mouse to move.");
+            levelTips.Add(tipItem);
             tipItem = new TipItem("Press 'Z'/'X'/'C' to collect bio/plastic/nuclear waste.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("Press 'Z' to retrive resource box/powerpack.");
-            levelTips.Add(tipItem);
             tipItem = new TipItem("Use the panel on lower left corner of the screen for facility constructions.");
+            levelTips.Add(tipItem);
+            tipItem = new TipItem("Press 'Z' to retrive resource box/powerpack produced by processing plant.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("Double click on a plant to drop trash for processing.");
             levelTips.Add(tipItem);

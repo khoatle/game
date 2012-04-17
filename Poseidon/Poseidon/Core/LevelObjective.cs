@@ -95,7 +95,7 @@ namespace Poseidon
             else if (currentLevel == 9)
             {
                 //Level Obj: Survive the level
-                if (roundTimer <= TimeSpan.Zero)
+                if (roundTimer <= TimeSpan.Zero || enemiesAmount == 0)
                 {
                     return true;
                 }

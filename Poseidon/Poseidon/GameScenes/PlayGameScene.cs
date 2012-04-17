@@ -134,7 +134,7 @@ namespace Poseidon
         Texture2D otherPersonFace;
         Texture2D talkingBox;
         // Cutscene
-        CutSceneDialog cutSceneDialog;
+        public static CutSceneDialog cutSceneDialog;
         // Which sentence in the dialog is being printed
         int currentSentence = 0;
 
@@ -200,7 +200,7 @@ namespace Poseidon
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
 
-        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialog, Radar radar)
+        public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialogue, Radar radar)
             : base(game)
         {
             graphics = graphic;
@@ -211,7 +211,7 @@ namespace Poseidon
             this.pauseRect = pauseRect;
             this.actionTexture = actionTexture;
             this.game = game;
-            this.cutSceneDialog = cutSceneDialog;
+            cutSceneDialog = cutSceneDialogue;
             this.radar = radar;
             this.stunnedIconTexture = IngamePresentation.stunnedTexture;
             roundTime = GameConstants.RoundTime[currentLevel];
@@ -656,13 +656,14 @@ namespace Poseidon
 
             //Initialize the static objects.
             staticObjects = new List<StaticObject>(GameConstants.NumStaticObjectsMain[currentLevel]);
+            int randomObject;
             for (int index = 0; index < GameConstants.NumStaticObjectsMain[currentLevel]; index++)
             {
                 staticObjects.Add(new StaticObject());
                 if (currentLevel == 6)
                 {
-                    int randomObject = random.Next(4);
-                    //randomObject = 0;
+                    randomObject = random.Next(4);
+                    //randomObject = 3;
                     switch (randomObject)
                     {
                         case 0:
@@ -1136,7 +1137,10 @@ namespace Poseidon
                         if (roundTimer <= TimeSpan.Zero) currentGameState = GameState.Won;
                         IngamePresentation.toNextLevelHover = IngamePresentation.mouseOnNextLevelIcon(lastMouseState);
                         if (IngamePresentation.toNextLevelHover && this.lastMouseState.LeftButton == ButtonState.Pressed && this.currentMouseState.LeftButton == ButtonState.Released)
+                        {
                             currentGameState = GameState.Won;
+                            IngamePresentation.toNextLevelHover = false;
+                        }
                     }
 
 
@@ -2188,8 +2192,12 @@ namespace Poseidon
                 }
             }
             //Draw each static object
+            //BoundingSphere sphereToCheck;
             foreach (StaticObject staticObject in staticObjects)
             {
+                //staticObject.OriginalBoundingSphere.Center = staticObject.BoundingSphere.Center;
+                //sphereToCheck = staticObject.BoundingSphere;
+                //sphereToCheck.Radius /= staticObject.boundingSphereScale;
                 if (staticObject.BoundingSphere.Intersects(frustum))
                 {
                     staticObject.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
@@ -2208,8 +2216,11 @@ namespace Poseidon
 
         public void DrawObjectsOnHighLayer()
         {
+            //BoundingSphere sphereToCheck;
             for (int i = 0; i < enemiesAmount; i++)
             {
+                //sphereToCheck = enemies[i].BoundingSphere;
+                //sphereToCheck.Radius /= enemies[i].boundingSphereScale;
                 if (enemies[i].BoundingSphere.Intersects(frustum))
                 {
                     enemies[i].Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");

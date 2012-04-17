@@ -326,7 +326,7 @@ namespace Poseidon
             //or too bright
             //level 5 seems to be too bright
             if (PlayGameScene.currentLevel == 5 && HydroBot.gameMode == GameMode.MainGame)
-                envFactor = MathHelper.Clamp(envFactor, 0.35f, 0.80f);
+                envFactor = MathHelper.Clamp(envFactor, 0.35f, 0.70f);
             else envFactor = MathHelper.Clamp(envFactor, 0.35f, 0.90f);
             //envFactor = 1.0f;
             if (HydroBot.gameMode == GameMode.MainGame)

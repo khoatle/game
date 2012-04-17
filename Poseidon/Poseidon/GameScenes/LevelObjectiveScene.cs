@@ -134,6 +134,11 @@ namespace Poseidon
             spriteBatch.Draw(objectiveBox, objectiveBoxRect, Color.White);
             spriteBatch.Draw(achievedBox, achievedBoxRect, Color.White);
 
+            int realFishAmount = playgamescene.fishAmount;
+            if (HydroBot.hasDolphin) realFishAmount -= 1;
+            if (HydroBot.hasSeaCow) realFishAmount -= 1;
+            if (HydroBot.hasTurtle) realFishAmount -= 1;
+
             if (HydroBot.gameMode == GameMode.SurvivalMode)
             {
                 level_objective = "Protect the ancient sea animal against hunters";
@@ -142,7 +147,7 @@ namespace Poseidon
             {
                 double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
                 double target_percent = GameConstants.LevelObjective[currentLevel]*100;
-                level_objective = "Increase the environment bar to " + target_percent.ToString() + "% within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Increase the environment bar to " + target_percent.ToString() + "% within " + HydroBot.levelDuration + " days.";
                 if (env_percent < target_percent)
                     achieved_status = "Now the environment bar is " + env_percent.ToString() + "%.";
                 else
@@ -150,14 +155,14 @@ namespace Poseidon
             }
             else if (currentLevel == 1)
             {
-                double fish_percent = Math.Min(((double)playgamescene.fishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100, 100);
+                double fish_percent = Math.Min(((double)realFishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100, 100);
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "There are " + fish_percent.ToString() + "% sea creatures remaining.";
+                level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures within " + HydroBot.levelDuration + " days.";
+                achieved_status = "There are " + (int)fish_percent + "% sea creatures remaining.";
             }
             else if (currentLevel == 2)
             {
-                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Find the relic in " + HydroBot.levelDuration + " days.";
                 if (HydroBot.skills[3] == false)
                 {
                     achieved_status = "Relic not found.";
@@ -169,21 +174,21 @@ namespace Poseidon
             }
             else if (currentLevel == 3)
             {
-                level_objective = "Defeat the mutant shark in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Defeat the mutant shark in " + HydroBot.levelDuration + " days.";
                 if (PlayGameScene.isBossKilled)
                     achieved_status = "Mutant shark has been defeated.";
                 else achieved_status = "Mutant shark is still lurking around.";
             }
             else if (currentLevel == 4)
             {
-                double shark_percent = Math.Min(((double)playgamescene.fishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
+                double shark_percent = Math.Min(((double)realFishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
-                achieved_status = "There are " + shark_percent.ToString() + "% sharks remaining.";
+                level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + HydroBot.levelDuration + " days.";
+                achieved_status = "There are " + (int)shark_percent + "% sharks remaining.";
             }
             else if (currentLevel == 5)
             {
-                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Find the relic in " + HydroBot.levelDuration + " days.";
                 if (HydroBot.skills[0] == false)
                 {
                     achieved_status = "Relic not found.";
@@ -195,7 +200,7 @@ namespace Poseidon
             }
             else if (currentLevel == 6)
             {
-                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Find the relic in " + HydroBot.levelDuration + " days.";
                 if (HydroBot.skills[1] == false)
                 {
                     achieved_status = "Relic not found.";
@@ -207,7 +212,7 @@ namespace Poseidon
             }
             else if (currentLevel == 7)
             {
-                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Find the relic in " + HydroBot.levelDuration + " days.";
                 if (HydroBot.skills[2] == false)
                 {
                     achieved_status = "Relic not found.";
@@ -219,7 +224,7 @@ namespace Poseidon
             }
             else if (currentLevel == 8)
             {
-                level_objective = "Find the relic in " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Find the relic in " + HydroBot.levelDuration +" days.";
                 if (HydroBot.skills[4] == false)
                 {
                     achieved_status = "Relic not found.";
@@ -236,12 +241,12 @@ namespace Poseidon
             }
             else if (currentLevel == 10)
             {
-                level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Defeat the Terminator within " + HydroBot.levelDuration + " days.";
                 achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
             }
             else if (currentLevel == 11)
             {
-                level_objective = "Defeat the Terminator within " + ((GameConstants.RoundTime[currentLevel].Minutes * 60) + GameConstants.RoundTime[currentLevel].Seconds) / GameConstants.DaysPerSecond + " days.";
+                level_objective = "Defeat the Terminator within " + HydroBot.levelDuration + " days.";
                 if (PlayGameScene.isBossKilled)
                     achieved_status = "Terminator has been defeated.";
                 else achieved_status = "Terminator is still alive.";

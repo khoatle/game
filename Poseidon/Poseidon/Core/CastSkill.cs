@@ -315,6 +315,7 @@ namespace Poseidon
         public static void ShootHammer(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            if (healthiness > 1) healthiness = 1.0f;
             FlyingHammer f = new FlyingHammer(gameMode);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
@@ -330,6 +331,7 @@ namespace Poseidon
         public static void ShootPiercingArrow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            if (healthiness > 1) healthiness = 1.0f;
             HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection, true);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
@@ -349,6 +351,7 @@ namespace Poseidon
         public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
             float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            if (healthiness > 1) healthiness = 1.0f;
             HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection, false);
 
             Matrix orientationMatrix = Matrix.CreateRotationY(hydroBot.ForwardDirection);
@@ -372,6 +375,7 @@ namespace Poseidon
             {
                 if (InThorRange(Position, enemies[i].Position)){
                     float healthiness = (float) HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+                    if (healthiness > 1) healthiness = 1.0f;
                     //you can't stun a submarine
                     if (!(enemies[i] is Submarine))
                     {
@@ -442,6 +446,7 @@ namespace Poseidon
                 {
                     PoseidonGame.audio.bodyHit.Play();
                     float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+                    if (healthiness > 1) healthiness = 1.0f;
                     Vector3 oldPosition = enemies[i].Position;
                     Vector3 pushVector = enemies[i].Position - Position;
                     pushVector.Normalize();

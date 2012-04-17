@@ -796,11 +796,11 @@ namespace Poseidon
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
-                                HydroBot.currentExperiencePts += GameConstants.ExpPainting;
+                                HydroBot.currentExperiencePts += GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5);
 
                                 Point point = new Point();
-                                String point_string = "+" + GameConstants.ExpPainting + " EXP";
-                                point.LoadContent(PlayGameScene.Content, point_string, chest.Position, Color.LawnGreen);
+                                String point_string = "+" + (GameConstants.ExpPainting + (HydroBot.gamePlusLevel * 5)) + " EXP";
+                                point.LoadContent(Content, point_string, chest.Position, Color.LawnGreen);
                                 points.Add(point);
 
                                 // show a random painting

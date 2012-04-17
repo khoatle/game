@@ -515,9 +515,10 @@ namespace Poseidon
             //unassignedPts = 5;
 
             //for testing survival mode
-            //currentHitPoint = maxHitPoint = 3000000;
-            //strength = 200000;
+            //currentHitPoint = maxHitPoint = GameConstants.PlayerStartingHP + 100 * GameConstants.gainHitPoint;
+            //strength = 1;
             //speed = 1;
+            //shootingRate = 1;
 
             //goodWillBarActivated = true;
             //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)

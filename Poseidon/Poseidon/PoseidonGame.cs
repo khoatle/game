@@ -716,7 +716,7 @@ namespace Poseidon
             }
             if (PlayGameScene.currentGameState == GameState.ToMiniGame)
             {
-                //Random rand = new Random();
+                Random rand = new Random();
                 if (rand.Next(2) == 0)
                     ShowScene(quizzGameScene);
                 else

@@ -475,7 +475,7 @@ namespace Poseidon.Core
         }
 
         public static int healthBarHeight;
-        public static void DrawHealthBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, Color typeColor)
+        public static void DrawHealthBar(Game game, SpriteBatch spriteBatch, SpriteFont statsFont, int currentHealth, int maxHealth, int heightFromTop, string type, float opaqueValue)
         {
             type = type.ToUpper();
             int barLength = (int)(statsFont.MeasureString(type).X * 1.5f * textScaleFactor);
@@ -503,12 +503,12 @@ namespace Poseidon.Core
             //    new Rectangle(barX, barY, (int)(barLength * healthiness), barHeight),
             //    new Rectangle(0, 22, (int)(HealthBar.Width * healthiness), 22),
             //    healthColor);
-            spriteBatch.Draw(HealthBar, new Vector2(barX, barY), new Rectangle(0, 22, (int)(HealthBar.Width * healthiness), 22), healthColor,
+            spriteBatch.Draw(HealthBar, new Vector2(barX, barY), new Rectangle(0, 22, (int)(HealthBar.Width * healthiness), 22), healthColor * opaqueValue,
                 0, Vector2.Zero, new Vector2((float)barLength / HealthBar.Width, textScaleFactor), SpriteEffects.None, 0);
             //Draw the box around the health bar
-            spriteBatch.Draw(HealthBar, new Vector2(barX, barY), new Rectangle(0, 0, HealthBar.Width, 22), Color.White,
+            spriteBatch.Draw(HealthBar, new Vector2(barX, barY), new Rectangle(0, 0, HealthBar.Width, 22), Color.White * opaqueValue,
                 0, Vector2.Zero, new Vector2((float)barLength / HealthBar.Width, textScaleFactor), SpriteEffects.None, 0);
-            spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2 * textScaleFactor, heightFromTop - 1), Color.MediumVioletRed,
+            spriteBatch.DrawString(statsFont, type, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(type).X / 2 * textScaleFactor, heightFromTop - 1), Color.MediumVioletRed * opaqueValue,
                 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
         }
 
@@ -824,39 +824,67 @@ namespace Poseidon.Core
             }
         }
 
+        static bool fishWasPointedAt = false, enemyWasPointedAt = false, nonLivingObjWasPointedAt = false;
+        static string fishTalk, swimmingObjName;
+        static int swimmingObjHealth, swimmingObjMaxHealth;
+        static string line = "", comment = "", tip = "", tip2 = "";
+        static string prevLine = "", prevComment = "", prevTip = "", prevTip2 = "";
+        static float opaqueValue = 1.0f, startingOpaqueValue = 1.0f;
+        static float fadeStep = 0.01f;
+        public static void ResetObjPointedAtMsgs()
+        {
+            fishWasPointedAt = enemyWasPointedAt = nonLivingObjWasPointedAt = false;
+        }
         public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources)
         {
+            bool somethingPointedAt = false;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
             {
-                IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)fishPointedAt.health, (int)fishPointedAt.maxHealth, 5, fishPointedAt.Name, Color.Red);
-                string line;
-                line = "'";
+                swimmingObjName = fishPointedAt.Name;
+                swimmingObjHealth = (int)fishPointedAt.health;
+                swimmingObjMaxHealth = (int)fishPointedAt.maxHealth;
+                IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, 1.0f);
+                //string fishTalk;
+                fishTalk = "'";
                 if (fishPointedAt.health < 20)
                 {
-                    line += "SAVE ME!!!";
+                    fishTalk += "SAVE ME!!!";
                 }
                 else if (fishPointedAt.health < 60)
                 {
-                    line += IngamePresentation.wrapLine(fishPointedAt.sad_talk, commentMaxLength, fishTalkFont, textScaleFactor);
+                    fishTalk += IngamePresentation.wrapLine(fishPointedAt.sad_talk, commentMaxLength, fishTalkFont, textScaleFactor);
                 }
                 else
                 {
-                    line += IngamePresentation.wrapLine(fishPointedAt.happy_talk, commentMaxLength, fishTalkFont, textScaleFactor);
+                    fishTalk += IngamePresentation.wrapLine(fishPointedAt.happy_talk, commentMaxLength, fishTalkFont, textScaleFactor);
                 }
-                line += "'";
-                spriteBatch.DrawString(fishTalkFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (fishTalkFont.MeasureString(fishPointedAt.Name).Y + fishTalkFont.MeasureString(line).Y / 2 + lineSpacing) * textScaleFactor), Color.Yellow, 0, new Vector2(fishTalkFont.MeasureString(line).X / 2, fishTalkFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                fishTalk += "'";
+                spriteBatch.DrawString(fishTalkFont, fishTalk, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (fishTalkFont.MeasureString(swimmingObjName).Y + fishTalkFont.MeasureString(fishTalk).Y / 2 + lineSpacing) * textScaleFactor), Color.Yellow, 0, new Vector2(fishTalkFont.MeasureString(fishTalk).X / 2, fishTalkFont.MeasureString(fishTalk).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                somethingPointedAt = true;
+                fishWasPointedAt = true;
+                enemyWasPointedAt = nonLivingObjWasPointedAt = false;
             }
             else
             {
+                //fishWasPointedAt = false;
                 //Display Enemy Health
                 BaseEnemy enemyPointedAt = CursorManager.MouseOnWhichEnemy(cursor, gameCamera, enemies, enemiesAmount);
                 if (enemyPointedAt != null)
-                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)enemyPointedAt.health, (int)enemyPointedAt.maxHealth, 5, enemyPointedAt.Name, Color.IndianRed);
+                {
+                    swimmingObjName = enemyPointedAt.Name;
+                    swimmingObjHealth = (int)enemyPointedAt.health;
+                    swimmingObjMaxHealth = (int)enemyPointedAt.maxHealth;
+                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, 1.0f);
+                    somethingPointedAt = true;
+                    enemyWasPointedAt = true;
+                    fishWasPointedAt = nonLivingObjWasPointedAt = false;
+                }
                 else
                 {
-                    string line ="", comment="", tip="", tip2 = "";
+                    //enemyWasPointedAt = false;
+                    line = comment = tip = tip2 = "";
                     Powerpack powerPackPointedAt = null, botOnPowerPack = null;
                     CursorManager.MouseOnWhichPowerPack(cursor, gameCamera, powerPacks, ref powerPackPointedAt, ref botOnPowerPack, null);
                     if (powerPackPointedAt != null)
@@ -948,7 +976,7 @@ namespace Poseidon.Core
                                     comment = "";
                                     line = "OLD SHIPWRECK";
                                     comment = "Sunk hundreds years ago.";
-                                    tip =  "Double click to enter";
+                                    tip = "Double click to enter";
                                 }
                                 else
                                 {
@@ -989,21 +1017,69 @@ namespace Poseidon.Core
                             }
                         }
                     }
-                    spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                    comment = wrapLine(comment, commentMaxLength, statsFont, textScaleFactor);
-                    tip = wrapLine(tip, commentMaxLength, statsFont, textScaleFactor);
-                    Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor);
-                    spriteBatch.DrawString(statsFont, comment, commentPos, Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                    Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(comment).Y / 2 + lineSpacing + statsFont.MeasureString(tip).Y / 2) * textScaleFactor;
-                    spriteBatch.DrawString(statsFont, tip, tipPos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip).X / 2, statsFont.MeasureString(tip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                    if (tip2 != "")
+                    if (line != "" && comment != "")
                     {
-                        Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(tip).Y / 2 + lineSpacing + statsFont.MeasureString(tip2).Y / 2) * textScaleFactor;
-                        spriteBatch.DrawString(statsFont, tip2, tip2Pos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip2).X / 2, statsFont.MeasureString(tip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        nonLivingObjWasPointedAt = true;
+                        somethingPointedAt = true;
+                        enemyWasPointedAt = fishWasPointedAt = false;
+                    }
+                    //else nonLivingObjWasPointedAt = false;
+                    if (somethingPointedAt)
+                    {
+                        spriteBatch.DrawString(statsFont, line, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(line).Y / 2 * textScaleFactor), Color.Yellow, 0, new Vector2(statsFont.MeasureString(line).X / 2, statsFont.MeasureString(line).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        comment = wrapLine(comment, commentMaxLength, statsFont, textScaleFactor);
+                        tip = wrapLine(tip, commentMaxLength, statsFont, textScaleFactor);
+                        Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor);
+                        spriteBatch.DrawString(statsFont, comment, commentPos, Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(comment).Y / 2 + lineSpacing + statsFont.MeasureString(tip).Y / 2) * textScaleFactor;
+                        spriteBatch.DrawString(statsFont, tip, tipPos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip).X / 2, statsFont.MeasureString(tip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        if (tip2 != "")
+                        {
+                            Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(tip).Y / 2 + lineSpacing + statsFont.MeasureString(tip2).Y / 2) * textScaleFactor;
+                            spriteBatch.DrawString(statsFont, tip2, tip2Pos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip2).X / 2, statsFont.MeasureString(tip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        }
+                        prevLine = line;
+                        prevComment = comment;
+                        prevTip = tip;
+                        prevTip2 = tip2;
                     }
                 }
             }
-            
+
+            //if nothing is pointed at now, draw the old obj-pointed messages which fade through time
+            if (!somethingPointedAt)
+            {
+                opaqueValue -= fadeStep;
+                if (opaqueValue <= 0) opaqueValue = 0;
+                if (nonLivingObjWasPointedAt)
+                {
+                    spriteBatch.DrawString(statsFont, prevLine, new Vector2(game.Window.ClientBounds.Width / 2, 4 + statsFont.MeasureString(prevLine).Y / 2 * textScaleFactor), Color.Yellow * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevLine).X / 2, statsFont.MeasureString(prevLine).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    //comment = wrapLine(comment, commentMaxLength, statsFont, textScaleFactor);
+                    //tip = wrapLine(tip, commentMaxLength, statsFont, textScaleFactor);
+                    Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(prevLine).Y + lineSpacing + statsFont.MeasureString(prevComment).Y / 2) * textScaleFactor);
+                    spriteBatch.DrawString(statsFont, prevComment, commentPos, Color.Red * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevComment).X / 2, statsFont.MeasureString(prevComment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(prevComment).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip).Y / 2) * textScaleFactor;
+                    spriteBatch.DrawString(statsFont, prevTip, tipPos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip).X / 2, statsFont.MeasureString(prevTip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    if (prevTip2 != "")
+                    {
+                        Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(prevTip2).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip2).Y / 2) * textScaleFactor;
+                        spriteBatch.DrawString(statsFont, prevTip2, tip2Pos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip2).X / 2, statsFont.MeasureString(prevTip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    }
+                }
+                if (fishWasPointedAt)
+                {
+                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, opaqueValue);
+                    spriteBatch.DrawString(fishTalkFont, fishTalk, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (fishTalkFont.MeasureString(swimmingObjName).Y + fishTalkFont.MeasureString(fishTalk).Y / 2 + lineSpacing) * textScaleFactor), Color.Yellow * opaqueValue, 0, new Vector2(fishTalkFont.MeasureString(fishTalk).X / 2, fishTalkFont.MeasureString(fishTalk).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                }
+                if (enemyWasPointedAt)
+                {
+                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, opaqueValue);
+                }
+            }
+            else
+            {
+                opaqueValue = startingOpaqueValue;
+            }
         }
 
         //Draw level objective icon

@@ -273,6 +273,10 @@ namespace Poseidon
             numResources  = lsNumResources = GameConstants.numResourcesAtStart;
 
             HydroBot.gameMode = gameMode;
+
+            if (gameMode == GameMode.MainGame)
+                levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
+            else levelDuration = 0;
         }
 
         /// <summary>

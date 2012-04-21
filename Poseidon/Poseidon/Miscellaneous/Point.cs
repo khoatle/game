@@ -37,18 +37,16 @@ namespace Poseidon
             point3DPos = position;
             this.color = color;
             lastScaleChange = PoseidonGame.playTime.TotalMilliseconds;
+
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
             textAlpha = (byte)Math.Max(textAlpha - 2, 0); // Adjust to make text fade away faster
-            Vector3 screenPos = graphicDevice.Viewport.Project(point3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
-            point2DPos.X = screenPos.X;
-            point2DPos.Y = screenPos.Y;
             timeLast -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             if (timeLast <= 0)
                 toBeRemoved = true;
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(SpriteBatch spriteBatch, GraphicsDevice graphicDevice, Camera gameCamera)
         {
             Color textcolor = color;
             float fadeFactor = ((float)textAlpha) / 255;
@@ -70,6 +68,10 @@ namespace Poseidon
             else if (scale <= 1.0f) increase = true;
             scale = MathHelper.Clamp(scale, 1.0f, 1.3f);
             lastScaleChange = PoseidonGame.playTime.TotalMilliseconds;
+
+            Vector3 screenPos = graphicDevice.Viewport.Project(point3DPos, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+            point2DPos.X = screenPos.X;
+            point2DPos.Y = screenPos.Y;
 
             spriteBatch.Begin();
             spriteBatch.Draw(bubbleTexture, point2DPos, null, Color.White * fadeFactor * (1 - pointsFont.MeasureString(this.text).X / bubbleTexture.Width) * 0.8f, 0, new Vector2(bubbleTexture.Width / 2, bubbleTexture.Height / 2), pointsFont.MeasureString(this.text).X / bubbleTexture.Width * scale * IngamePresentation.textScaleFactor, SpriteEffects.None, 0);

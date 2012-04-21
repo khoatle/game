@@ -194,7 +194,7 @@ namespace Poseidon
                         {
                             //can't scare a boss if its hp is more than 1/3 its max health
                             //can't scare a submarine too
-                            if (!(tmp is Submarine || (tmp.isBigBoss && tmp.health > 0.33f * tmp.maxHealth)))
+                            if (!(tmp is Submarine || (tmp.isBigBoss && tmp.health > 0.5f * tmp.maxHealth)))
                                 tmp.isFleeing = true;
                             tmp.fleeingStart = PoseidonGame.playTime;
 

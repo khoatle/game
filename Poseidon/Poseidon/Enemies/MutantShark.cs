@@ -149,7 +149,7 @@ namespace Poseidon
                 wearOutHypnotise();
             }
 
-            if (!isHypnotise)
+            if (!isHypnotise && !isFleeing && !stunned)
             {
                 int perceptionID = perceptAndLock(hydroBot, fishList, fishSize);
                 configAction(hydroBot, perceptionID, gameTime);

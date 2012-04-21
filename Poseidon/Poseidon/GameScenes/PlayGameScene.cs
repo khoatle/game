@@ -465,6 +465,7 @@ namespace Poseidon
         {
             paused = false;
             HydroBot.gameMode = GameMode.MainGame;
+            IngamePresentation.ResetObjPointedAtMsgs();
             //Factory.buildingSoundInstance.Resume();
             //ResearchFacility.buildingSoundInstance.Resume();
             base.Show();
@@ -548,15 +549,15 @@ namespace Poseidon
                 100, GameConstants.MainGameMaxRangeZ - 250, GameConstants.MainCamHeight);
 
             //reset the shipwreck content too
-            ShipWreckScene.resetShipWreckNow = true;
+            //ShipWreckScene.resetShipWreckNow = true;
 
             InitializeGameField(Content);
 
-            //level statistics reset
-            ResetStatisticCounters();
+            ////level statistics reset
+            //ResetStatisticCounters();
 
-            //reset particles
-            particleManager.ResetParticles();
+            ////reset particles
+            //particleManager.ResetParticles();
         }
 
         private void InitializeGameField(ContentManager Content)
@@ -566,6 +567,12 @@ namespace Poseidon
             firstShow = true;
             showFoundKey = false;
             hadkey = false;
+            ResetStatisticCounters();
+            //reset particles
+            particleManager.ResetParticles();
+            //reset the shipwreck content too
+            ShipWreckScene.resetShipWreckNow = true;
+            isBossKilled = false;
 
             enemyBullet = new List<DamageBullet>();
             healthBullet = new List<HealthBullet>();
@@ -1759,7 +1766,7 @@ namespace Poseidon
             //Draw points gained / lost
             foreach (Point point in points)
             {
-                point.Draw(spriteBatch);
+                point.Draw(spriteBatch, GraphicDevice, gameCamera);
             }
             spriteBatch.Begin();
             if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene && !(showFoundKey && firstShow))
@@ -1903,7 +1910,7 @@ namespace Poseidon
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;

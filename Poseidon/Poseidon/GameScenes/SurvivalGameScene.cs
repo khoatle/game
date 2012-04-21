@@ -365,6 +365,7 @@ namespace Poseidon
         /// </summary>
         public override void Show()
         {
+            IngamePresentation.ResetObjPointedAtMsgs();
             paused = false;
             //Factory.buildingSoundInstance.Resume();
             //ResearchFacility.buildingSoundInstance.Resume();
@@ -522,7 +523,7 @@ namespace Poseidon
                 MediaPlayer.Play(audio.backgroundMusics[random.Next(GameConstants.NumNormalBackgroundMusics)]);
             }
             //skill combo unlock
-            if (score >= 20000 && !HydroBot.skillComboActivated)
+            if (score >= 500 && !HydroBot.skillComboActivated)
             {
                 HydroBot.skillComboActivated = true;
                 Point point = new Point();
@@ -1160,7 +1161,7 @@ namespace Poseidon
             //Draw points gained / lost
             foreach (Point point in points)
             {
-                point.Draw(spriteBatch);
+                point.Draw(spriteBatch, GraphicDevice, gameCamera);
             }
             spriteBatch.Begin();
             if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene)
@@ -1209,7 +1210,7 @@ namespace Poseidon
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;

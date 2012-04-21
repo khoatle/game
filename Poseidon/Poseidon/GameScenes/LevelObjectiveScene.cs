@@ -92,7 +92,7 @@ namespace Poseidon
         public override void Update(GameTime gameTime)
         {
             // play the boss fight music for certain levels
-            if (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 11)
+            if (HydroBot.gameMode == GameMode.MainGame && (PlayGameScene.currentLevel == 3 || PlayGameScene.currentLevel == 11))
             {
                 if (MediaPlayer.State.Equals(MediaState.Stopped))
                 {
@@ -133,11 +133,20 @@ namespace Poseidon
 
             spriteBatch.Draw(objectiveBox, objectiveBoxRect, Color.White);
             spriteBatch.Draw(achievedBox, achievedBoxRect, Color.White);
+            
+            int realFishAmount;
 
-            int realFishAmount = playgamescene.fishAmount;
-            if (HydroBot.hasDolphin) realFishAmount -= 1;
-            if (HydroBot.hasSeaCow) realFishAmount -= 1;
-            if (HydroBot.hasTurtle) realFishAmount -= 1;
+            if (HydroBot.gameMode == GameMode.SurvivalMode)
+            {
+                realFishAmount = 0;
+            }
+            else
+            {
+                realFishAmount = playgamescene.fishAmount;
+                if (HydroBot.hasDolphin) realFishAmount -= 1;
+                if (HydroBot.hasSeaCow) realFishAmount -= 1;
+                if (HydroBot.hasTurtle) realFishAmount -= 1;
+            }
 
             if (HydroBot.gameMode == GameMode.SurvivalMode)
             {

@@ -273,6 +273,10 @@ namespace Poseidon
             numResources  = lsNumResources = GameConstants.numResourcesAtStart;
 
             HydroBot.gameMode = gameMode;
+
+            if (gameMode == GameMode.MainGame)
+                levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
+            else levelDuration = 0;
         }
 
         /// <summary>
@@ -397,7 +401,9 @@ namespace Poseidon
             armorPower = lsArmorPower = (float)info.GetValue("armorPower", typeof(float));
             beltPower = lsBeltPower = (float)info.GetValue("beltPower", typeof(float));
 
-            levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
+            if (gameMode == GameMode.MainGame)
+                levelDuration = (int)(((GameConstants.RoundTime[PlayGameScene.currentLevel].Minutes * 60) + GameConstants.RoundTime[PlayGameScene.currentLevel].Seconds) / GameConstants.DaysPerSecond); //in days
+            else levelDuration = 0;
         }
 
         /// <summary>
@@ -515,10 +521,12 @@ namespace Poseidon
             //unassignedPts = 5;
 
             //for testing survival mode
-            //currentHitPoint = maxHitPoint = GameConstants.PlayerStartingHP + 100 * GameConstants.gainHitPoint;
-            //strength = 1;
-            //speed = 1;
-            //shootingRate = 1;
+            unassignedPts = 40;
+            //currentHitPoint = maxHitPoint = 500;
+            //strength = 20;
+            //speed = 15;
+            //shootingRate = 15;
+            
 
             //goodWillBarActivated = true;
             //for (int index = 0; index < GameConstants.NumGoodWillBarIcons; index++)
@@ -720,7 +728,7 @@ namespace Poseidon
             accumulatedHealthLossFromPoisson = 0;
             PlayGameScene.points.Clear();
             ShipWreckScene.points.Clear();
-            if(PlayGameScene.currentLevel > 0 && gameMode != GameMode.SurvivalMode)
+            if (PlayGameScene.currentLevel > 0 && gameMode != GameMode.SurvivalMode)
                 currentEnvPoint -= (GameConstants.NumberTrash[PlayGameScene.currentLevel] * GameConstants.envLossPerTrashAdd);
             if (currentEnvPoint < GameConstants.EachLevelMinEnv) currentEnvPoint = GameConstants.EachLevelMinEnv;
             bioTrash = plasticTrash = nuclearTrash = 0;

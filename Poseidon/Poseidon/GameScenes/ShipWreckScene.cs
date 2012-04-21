@@ -421,6 +421,7 @@ namespace Poseidon
         public bool backFromTipOrLevelObjective = false;
         public override void Show()
         {
+            IngamePresentation.ResetObjPointedAtMsgs();
             paused = false;
             //initialize random shipwreck terrain
             //Random random = new Random();
@@ -1064,7 +1065,7 @@ namespace Poseidon
             //Draw points gained / lost
             foreach (Point point in points)
             {
-                point.Draw(spriteBatch);
+                point.Draw(spriteBatch, GraphicDevice, gameCamera);
             }
             spriteBatch.Begin();
             if (!foundRelic[currentShipWreckID] && !showNoKey)
@@ -1264,7 +1265,7 @@ namespace Poseidon
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null);
 
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", Color.Brown);
+            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 
             //Display Level/Experience Bar
             IngamePresentation.DrawLevelBar(game, spriteBatch, (int)HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);

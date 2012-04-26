@@ -225,7 +225,7 @@ namespace Poseidon.Core
             fishTexture2 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish2-1");
             fishTexture3 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish3");
 
-            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconNormal");
             levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
             tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
             tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
@@ -376,6 +376,8 @@ namespace Poseidon.Core
         //}
 
         private static Vector2 timerPos = Vector2.Zero;
+        private static Color timerColor = Color.Red;
+        private static double lastTimerColorChange = 0;
         public static void DrawTimeRemaining(TimeSpan roundTimer, GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
             float xOffsetText, yOffsetText;
@@ -383,7 +385,9 @@ namespace Poseidon.Core
             string str1 = GameConstants.StrTimeRemaining;
             Rectangle rectSafeArea;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
-            str1 += days.ToString();
+            if (PlayGameScene.currentLevel == 0 && HydroBot.gameMode == GameMode.MainGame)
+                str1 += "Unlimited";
+            else str1 += days.ToString();
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -393,7 +397,16 @@ namespace Poseidon.Core
 
             timerPos = new Vector2((int)xOffsetText + 10, (int)yOffsetText + 10);
 
-            spriteBatch.DrawString(menuSmall, str1, timerPos, Color.DarkRed, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+            if (days < 10 && PoseidonGame.playTime.TotalMilliseconds - lastTimerColorChange >= 500)
+            {
+                if (timerColor == Color.Red)
+                    timerColor = Color.White;
+                else timerColor = Color.Red;
+                lastTimerColorChange = PoseidonGame.playTime.TotalMilliseconds;
+            }
+
+            
+            spriteBatch.DrawString(menuSmall, str1, timerPos, timerColor, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
         }
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
         {
@@ -1203,7 +1216,7 @@ namespace Poseidon.Core
                                 }
                                 interaction = "Double click to drop collected wastes";
                                 interaction2 = "Shift + Click to open control panel";
-                                Vector3 screenPos = graphicsDevice.Viewport.Project(botOverFactory.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                                Vector3 screenPos = graphicsDevice.Viewport.Project(botOverFactory.Position - new Vector3(0, 0, 20), gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                                 twoDPos.X = screenPos.X;
                                 twoDPos.Y = screenPos.Y;
 
@@ -1213,7 +1226,7 @@ namespace Poseidon.Core
                                 name = "Research Facility";
                                 interaction = "Double click to drop collected objects";
                                 interaction2 = "Shift + Click to open control panel";
-                                Vector3 screenPos = graphicsDevice.Viewport.Project(researchFacility.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                                Vector3 screenPos = graphicsDevice.Viewport.Project(researchFacility.Position - new Vector3(0, 0, 20), gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                                 twoDPos.X = screenPos.X;
                                 twoDPos.Y = screenPos.Y;
                             }
@@ -1247,8 +1260,8 @@ namespace Poseidon.Core
 
             xOffsetText = rectSafeArea.Right;
             yOffsetText = rectSafeArea.Top;
-            int width = (int)(96 * textScaleFactor);
-            int height = (int)(96 * textScaleFactor);
+            int width = (int)(levelObjectiveIconTexture.Width * textScaleFactor * 0.8f);
+            int height = (int)(levelObjectiveIconTexture.Height * textScaleFactor * 0.8f);
 
             levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
 
@@ -1260,7 +1273,7 @@ namespace Poseidon.Core
                         levelObjectiveColor = Color.Transparent;
                     else levelObjectiveColor = Color.White;
                     timeLastColorChange = PoseidonGame.playTime.TotalMilliseconds;
-                    PoseidonGame.audio.reelHit.Play();
+                    PoseidonGame.audio.loudBeep.Play();
                     //rotatingAngle += 0.1f;
                 }
             }
@@ -1270,34 +1283,42 @@ namespace Poseidon.Core
                 rotatingAngle = 0;
             }
             //levelObjectiveColor = EffectHelpers.LerpColor(Color.White, Color.LawnGreen, (float)Math.Abs(Math.Sin(PoseidonGame.playTime.TotalSeconds * 2)));
-            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, null, levelObjectiveColor, rotatingAngle, Vector2.Zero, SpriteEffects.None, 0 );
             if (PlayGameScene.newLevelObjAvailable)
             {
                 newTextScale -= 0.1f;
-                if (newTextScale <= 1.0f) newTextScale = 1.0f;
-                spriteBatch.DrawString(fishTalkFont, "NEW", new Vector2(levelObjectiveIconRectangle.Center.X, levelObjectiveIconRectangle.Center.Y), Color.LawnGreen, rotatingAngle, new Vector2(facilityFont.MeasureString("NEW").X / 2, facilityFont.MeasureString("NEW").Y / 2), newTextScale, SpriteEffects.None, 0);
+                if (newTextScale <= 1.0f) newTextScale = 1.0f;      
             }
-            //xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width/4 - 10;
-            //yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height/4 / 2;
+            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, null, levelObjectiveColor, rotatingAngle, Vector2.Zero, SpriteEffects.None, 0);
+            //if (PlayGameScene.newLevelObjAvailable)
+            //{
+            //    newTextScale -= 0.1f;
+            //    if (newTextScale <= 1.0f) newTextScale = 1.0f;
+            //    spriteBatch.DrawString(fishTalkFont, "NEW", new Vector2(levelObjectiveIconRectangle.Center.X, levelObjectiveIconRectangle.Center.Y), Color.LawnGreen, rotatingAngle, new Vector2(facilityFont.MeasureString("NEW").X / 2, facilityFont.MeasureString("NEW").Y / 2), newTextScale, SpriteEffects.None, 0);
+            //}
+            if (PlayGameScene.newLevelObjAvailable && GameSettings.ShowLiveTip)
+            {
+                xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width;
+                yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height / 2;
 
-            //Rectangle arrowRectangle = new Rectangle(xOffsetText, yOffsetText, arrowTexture.Width/4, arrowTexture.Height/4);
+                Rectangle arrowRectangle = new Rectangle(xOffsetText, yOffsetText, arrowTexture.Width, arrowTexture.Height);
 
-            //spriteBatch.Draw(arrowTexture, arrowRectangle, levelObjectiveColor);
+                spriteBatch.Draw(arrowTexture, arrowRectangle, Color.White);
+            }
         }
 
         //Draw level tip icon
         public static void DrawTipIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
-            if (tipHover) tipIconTexture = tipHoverIconTexture;
-            else tipIconTexture = tipNormalIconTexture;
-            int xOffsetText, yOffsetText;
+            //if (tipHover) tipIconTexture = tipHoverIconTexture;
+            //else tipIconTexture = tipNormalIconTexture;
+            //int xOffsetText, yOffsetText;
 
-            xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
-            yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
+            //xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
+            //yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
 
-            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
+            //tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
 
-            spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
+            //spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
 
         }
         //Draw GamePlus level

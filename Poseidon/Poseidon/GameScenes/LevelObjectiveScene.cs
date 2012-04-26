@@ -176,7 +176,7 @@ namespace Poseidon
                 }
                 else if (PlayGameScene.levelObjectiveState == 4)
                 {
-                    level_objective = "Do the same operation for the collected plastic wastes.";
+                    level_objective = "Build a plastic waste processing plant and drop the collected plastic wastes.";
                     achieved_status = "You have not dropped the plastic wastes on the processing plant.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 5)

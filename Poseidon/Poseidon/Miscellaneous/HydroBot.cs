@@ -521,9 +521,9 @@ namespace Poseidon
             //unassignedPts = 5;
 
             //for testing survival mode
-            unassignedPts = 40;
+            //unassignedPts = 40;
             //currentHitPoint = maxHitPoint = 500;
-            //strength = 20;
+            //strength = 2000;
             //speed = 15;
             //shootingRate = 15;
             
@@ -964,12 +964,13 @@ namespace Poseidon
                         if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
                             string display_str;
+                            Color str_color = Color.LawnGreen;
                             if (trash.trashType == TrashType.biodegradable)
                             {
                                 if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
                                 {
                                     Point point1 = new Point();
-                                    point1.LoadContent(PoseidonGame.contentManager, "Organic trash\ncontainer nis full", Position, Color.LawnGreen);
+                                    point1.LoadContent(PoseidonGame.contentManager, "Organic trash\ncontainer nis full", Position, Color.Red);
                                     if (gameMode == GameMode.ShipWreck)
                                         ShipWreckScene.points.Add(point1);
                                     else if (gameMode == GameMode.MainGame)
@@ -1003,15 +1004,17 @@ namespace Poseidon
                             else if (trash.trashType == TrashType.plastic)
                             {
                                 display_str = "Wrong type:\nPlastic";
+                                str_color = Color.Red;
                             }
                             else //radioactive
                             {
                                 display_str = "Wrong type:\nRadioactive";
+                                str_color = Color.Red;
                             }
                             PoseidonGame.audio.retrieveSound.Play();
 
                             Point point = new Point();
-                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, str_color);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
                             else if (gameMode == GameMode.MainGame)
@@ -1038,16 +1041,18 @@ namespace Poseidon
                         if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
                             string display_str;
+                            Color str_color = Color.LawnGreen;
                             if (trash.trashType == TrashType.biodegradable)
                             {
                                 display_str = "Wrong type:\nOrganic";
+                                str_color = Color.Red;
                             }
                             else if (trash.trashType == TrashType.plastic)
                             {
                                 if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
                                 {
                                     Point point1 = new Point();
-                                    point1.LoadContent(PoseidonGame.contentManager, "Plastic trash\ncontainer is full", Position, Color.LawnGreen);
+                                    point1.LoadContent(PoseidonGame.contentManager, "Plastic trash\ncontainer is full", Position, Color.Red);
                                     if (gameMode == GameMode.ShipWreck)
                                         ShipWreckScene.points.Add(point1);
                                     else if (gameMode == GameMode.MainGame)
@@ -1083,10 +1088,11 @@ namespace Poseidon
                             else //radioactive
                             {
                                 display_str = "Wrong type:\nRadioactive";
+                                str_color = Color.Red;
                             }
                             PoseidonGame.audio.retrieveSound.Play();
                             Point point = new Point();
-                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, str_color);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
                             else if (gameMode == GameMode.MainGame)
@@ -1114,20 +1120,23 @@ namespace Poseidon
                         if (Trash_Fruit_BoundingSphere.Intersects(trash.BoundingSphere))
                         {
                             string display_str;
+                            Color str_color = Color.LawnGreen;
                             if (trash.trashType == TrashType.biodegradable)
                             {
                                 display_str = "Wrong type:\nOrganic";
+                                str_color = Color.Red;
                             }
                             else if (trash.trashType == TrashType.plastic)
                             {
                                 display_str = "Wrong type:\nPlastic";
+                                str_color = Color.Red;
                             }
                             else //radioactive
                             {
                                 if (nuclearTrash >= GameConstants.maxNukeTrashCarryingCapacity)
                                 {
                                     Point point1 = new Point();
-                                    point1.LoadContent(PoseidonGame.contentManager, "Nuclear trash\ncontainer is full", Position, Color.LawnGreen);
+                                    point1.LoadContent(PoseidonGame.contentManager, "Nuclear trash\ncontainer is full", Position, Color.Red);
                                     if (gameMode == GameMode.ShipWreck)
                                         ShipWreckScene.points.Add(point1);
                                     else if (gameMode == GameMode.MainGame)
@@ -1161,7 +1170,7 @@ namespace Poseidon
                             }
                             PoseidonGame.audio.retrieveSound.Play();
                             Point point = new Point();
-                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, Color.LawnGreen);
+                            point.LoadContent(PoseidonGame.contentManager, display_str, trash.Position, str_color);
                             if (gameMode == GameMode.ShipWreck)
                                 ShipWreckScene.points.Add(point);
                             else if (gameMode == GameMode.MainGame)

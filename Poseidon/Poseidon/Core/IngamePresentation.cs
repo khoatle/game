@@ -101,6 +101,7 @@ namespace Poseidon.Core
 
         public static Texture2D levelObjectiveIconTexture;
         public static Rectangle levelObjectiveIconRectangle;
+        public static Texture2D arrowTexture;
 
         public static bool levelObjHover = false;
         public static bool tipHover = false;
@@ -179,6 +180,7 @@ namespace Poseidon.Core
             actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
             stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
             scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
+            arrowTexture = Content.Load<Texture2D>("Image/Miscellaneous/arrow");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
@@ -1062,7 +1064,7 @@ namespace Poseidon.Core
                     spriteBatch.DrawString(statsFont, prevTip, tipPos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip).X / 2, statsFont.MeasureString(prevTip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     if (prevTip2 != "")
                     {
-                        Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(prevTip2).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip2).Y / 2) * textScaleFactor;
+                        Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(prevTip).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip2).Y / 2) * textScaleFactor;
                         spriteBatch.DrawString(statsFont, prevTip2, tip2Pos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip2).X / 2, statsFont.MeasureString(prevTip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                     }
                 }
@@ -1082,6 +1084,10 @@ namespace Poseidon.Core
             }
         }
 
+        static Color levelObjectiveColor = Color.White;
+        static double timeLastColorChange = 0;
+        static float rotatingAngle = 0;
+        public static float newTextScale = 5.0f, newTextStandardScale = 5.0f;
         //Draw level objective icon
         public static void DrawLevelObjectiveIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
@@ -1101,8 +1107,37 @@ namespace Poseidon.Core
 
             levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
 
-            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, Color.White);
+            if (PlayGameScene.newLevelObjAvailable )
+            {
+                if (PoseidonGame.playTime.TotalMilliseconds - timeLastColorChange >= 500)
+                {
+                    if (levelObjectiveColor == Color.White)
+                        levelObjectiveColor = Color.Transparent;
+                    else levelObjectiveColor = Color.White;
+                    timeLastColorChange = PoseidonGame.playTime.TotalMilliseconds;
+                    PoseidonGame.audio.reelHit.Play();
+                    //rotatingAngle += 0.1f;
+                }
+            }
+            else
+            {
+                levelObjectiveColor = Color.White;
+                rotatingAngle = 0;
+            }
+            //levelObjectiveColor = EffectHelpers.LerpColor(Color.White, Color.LawnGreen, (float)Math.Abs(Math.Sin(PoseidonGame.playTime.TotalSeconds * 2)));
+            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, null, levelObjectiveColor, rotatingAngle, Vector2.Zero, SpriteEffects.None, 0 );
+            if (PlayGameScene.newLevelObjAvailable)
+            {
+                newTextScale -= 0.1f;
+                if (newTextScale <= 1.0f) newTextScale = 1.0f;
+                spriteBatch.DrawString(fishTalkFont, "NEW", new Vector2(levelObjectiveIconRectangle.Center.X, levelObjectiveIconRectangle.Center.Y), Color.LawnGreen, rotatingAngle, new Vector2(facilityFont.MeasureString("NEW").X / 2, facilityFont.MeasureString("NEW").Y / 2), newTextScale, SpriteEffects.None, 0);
+            }
+            //xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width/4 - 10;
+            //yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height/4 / 2;
 
+            //Rectangle arrowRectangle = new Rectangle(xOffsetText, yOffsetText, arrowTexture.Width/4, arrowTexture.Height/4);
+
+            //spriteBatch.Draw(arrowTexture, arrowRectangle, levelObjectiveColor);
         }
 
         //Draw level tip icon

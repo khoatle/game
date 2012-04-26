@@ -90,6 +90,12 @@ namespace Poseidon
                     if (HydroBot.bulletType == GameConstants.numBulletTypes) HydroBot.bulletType = 0;
                     PoseidonGame.audio.ChangeBullet.Play();
                 }
+                //fulfill the task of switching bullet type
+                if (PlayGameScene.currentLevel == 1 && PlayGameScene.levelObjectiveState == 0)
+                {
+                    PlayGameScene.levelObjectiveState = 1;
+                    PlayGameScene.newLevelObjAvailable = true;
+                }
             }
         }
     }

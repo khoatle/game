@@ -701,6 +701,8 @@ namespace Poseidon
                 && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
             {
                 prevScene = playGameScene;
+                PlayGameScene.newLevelObjAvailable = false;
+                IngamePresentation.newTextScale = IngamePresentation.newTextStandardScale;
                 ShowScene(levelObjectiveScene);
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
@@ -942,28 +944,28 @@ namespace Poseidon
             switch (difficultyLevel)
             {
                 case 1:
-                    TimeSpan[]  roundTimeEasy = {TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(490), 
+                    TimeSpan[]  roundTimeEasy = {TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(490), 
                                                        TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(600),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220)};
                     GameConstants.RoundTime = roundTimeEasy;
                     break;
                 case 2:
-                     TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+                     TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
                      GameConstants.RoundTime = roundTimeMedium;
                     break;
                 case 3:
-                     TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(410), 
+                     TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(410), 
                                                        TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(160), TimeSpan.FromSeconds(500),
                                                        TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500),
                                                        TimeSpan.FromSeconds(600), TimeSpan.FromSeconds(150), TimeSpan.FromSeconds(150)};
                      GameConstants.RoundTime = roundTimeHard;
                     break;
                 default:
-                     TimeSpan[] roundTimeDefault = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+                     TimeSpan[] roundTimeDefault = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};

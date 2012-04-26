@@ -136,7 +136,7 @@ namespace Poseidon {
         public static int NumEnemiesInSubmarine = 20;
         public static double[] LevelObjective = new double[maxLevel];
         //does the player have to play till time = 0?
-        public static bool[] haveToStayTillEnd = { true, true, false, false, true, false, false, false, false, false, false, false };
+        public static bool[] haveToStayTillEnd = { false, true, false, false, true, false, false, false, false, false, false, false };
 
         //number of enemy and fish for ship wreck
         public static int[] ShipNumberGhostPirate = { 0, 0, 1, 0, 0, 2, 3, 4, 5, 0, 0, 0 };

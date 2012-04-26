@@ -200,6 +200,8 @@ namespace Poseidon
         private Texture2D statisticLogoTexture;
         private Texture2D[] rankTextures;
 
+        public static int levelObjectiveState = 0;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialogue, Radar radar)
             : base(game)
         {
@@ -562,6 +564,8 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
+            levelObjectiveState = 0;
+            newLevelObjAvailable = true;
             HydroBot.numResources += GameConstants.numResourcesAtStart;
             //User must find the key at every level
             firstShow = true;
@@ -856,6 +860,12 @@ namespace Poseidon
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
                     {
+                        //fulfill the task of opening a facility's control panel
+                        if (currentLevel == 0 && levelObjectiveState == 5)
+                        {
+                            levelObjectiveState = 6;
+                            newLevelObjAvailable = true;
+                        }
                         Factory.buildingSoundInstance.Pause();
                         ResearchFacility.buildingSoundInstance.Pause();
                         bool exitFactConfPressed;

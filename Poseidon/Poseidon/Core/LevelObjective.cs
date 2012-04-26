@@ -96,6 +96,7 @@ namespace Poseidon
                 else if (levelObjectiveState == 1 && PlayGameScene.numNormalKills >= 3)
                 {
                     levelObjectiveState = 2;
+                    newLevelObjAvailable = true;
                 }
                 //Level Obj: Save at least 50% of fish during 4 min ( 30 days ).
                 else if (levelObjectiveState == 2 && roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= GameConstants.LevelObjective[currentLevel]))
@@ -105,8 +106,19 @@ namespace Poseidon
             }
             else if (currentLevel == 2)
             {
-                //Level Obj: Find the relic in 3 months.
-                if (HydroBot.skills[3] == true)
+                if (levelObjectiveState == 0)
+                {
+                    if ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint > GameConstants.EnvThresholdForKey)
+                    {
+                        levelObjectiveState = 1;
+                        newLevelObjAvailable = true;
+                    }
+                }
+                else if (levelObjectiveState == 1)
+                {
+                    //this check is done in hydrobot.cs
+                }
+                else if (HydroBot.skills[3] == true)
                 {
                     return true;
                 }

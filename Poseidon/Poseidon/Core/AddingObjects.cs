@@ -1054,8 +1054,9 @@ namespace Poseidon
                         {
                             //if we can not find a spare space to put the revived enemy
                             //temporarily put it somewhere far
-                            enemies[i].Position.X = -5000;
-                            enemies[i].Position.Z = -5000;
+                            enemies[i].Position.X = -50000;
+                            enemies[i].Position.Z = -50000;
+                            enemies[i].BoundingSphere.Center = enemies[i].Position;
                         }
                     }             
                 }

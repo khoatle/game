@@ -1755,7 +1755,7 @@ namespace Poseidon
                         Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
                         spriteBatch.Begin();
-                        spriteBatch.Draw(stunnedIconTexture, drawPos, Color.White);
+                        spriteBatch.Draw(stunnedIconTexture, drawPos - new Vector2(stunnedIconTexture.Width, stunnedIconTexture.Height), null, Color.White);
                         spriteBatch.End();
                         //RestoreGraphicConfig();
                     }
@@ -1764,7 +1764,7 @@ namespace Poseidon
                         Vector3 placeToDraw = GraphicDevice.Viewport.Project(enemies[i].Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 drawPos = new Vector2(placeToDraw.X, placeToDraw.Y);
                         spriteBatch.Begin();
-                        spriteBatch.Draw(scaredIconTexture, drawPos, Color.White);
+                        spriteBatch.Draw(scaredIconTexture, drawPos - new Vector2(scaredIconTexture.Width, scaredIconTexture.Height), Color.White);
                         spriteBatch.End();
                         
                     }
@@ -1918,7 +1918,7 @@ namespace Poseidon
             //too much texts on screen 
 
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
-
+            IngamePresentation.DrawObjectUnderStatus(spriteBatch, gameCamera, hydroBot, GraphicDevice, powerpacks, resources, trashes, null, shipWrecks, factories, researchFacility);
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 

@@ -1583,6 +1583,11 @@ namespace Poseidon
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.GoldenKey)
                         {
+                            if (PlayGameScene.currentLevel == 2 && PlayGameScene.levelObjectiveState == 1)
+                            {
+                                PlayGameScene.levelObjectiveState = 2;
+                                PlayGameScene.newLevelObjAvailable = true;
+                            }
                             PlayGameScene.hadkey = true;
                             Point point = new Point();
                             point.LoadContent(PoseidonGame.contentManager, "Golden key\nobtained!", Position, Color.LawnGreen);

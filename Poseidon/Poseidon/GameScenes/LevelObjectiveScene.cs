@@ -157,7 +157,7 @@ namespace Poseidon
                 if (PlayGameScene.levelObjectiveState == 0)
                 {
                     level_objective = "Collect 5 pieces of biodegradable waste by pressing Z key when swimming on top of biodegradable wastes.";
-                    achieved_status = "You have collected "+ HydroBot.bioTrash +" piece(s) of bio waste.";
+                    achieved_status = "You have collected "+ HydroBot.bioTrash +" piece(s) of biodegradable waste.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 1)
                 {
@@ -203,8 +203,8 @@ namespace Poseidon
                 {
                     double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
                     double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                    level_objective = "Maintain the environment bar at " + target_percent.ToString() + "% for the remaining days.";
-                    achieved_status = "Now the environment bar is at " + env_percent.ToString() + "%.";
+                    level_objective = "Improve the environment to " + target_percent.ToString() + "%.";
+                    achieved_status = "Now the environment is at " + env_percent.ToString() + "%.";
                 }
             }
             else if (currentLevel == 1)
@@ -229,14 +229,28 @@ namespace Poseidon
             }
             else if (currentLevel == 2)
             {
-                level_objective = "Find the relic in " + HydroBot.levelDuration + " days.";
-                if (HydroBot.skills[3] == false)
+                if (PlayGameScene.levelObjectiveState == 0)
                 {
-                    achieved_status = "Relic not found.";
+                    double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
+                    level_objective = "Improve environment to " + (int)(GameConstants.EnvThresholdForKey * 100) + "%.";
+                    achieved_status = "Now the environment is at " + env_percent.ToString() + "%.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 1)
+                {
+                    level_objective = "Obtain the golden key.";
+                    achieved_status = "You have not obtained the golden key.";
                 }
                 else
                 {
-                    achieved_status = "You found Hermes' Winged sandal.";
+                    level_objective = "Find the relic inside one of the shipwrecks.";
+                    if (HydroBot.skills[3] == false)
+                    {
+                        achieved_status = "Relic not found.";
+                    }
+                    else
+                    {
+                        achieved_status = "You found Hermes' Winged sandal.";
+                    }
                 }
             }
             else if (currentLevel == 3)

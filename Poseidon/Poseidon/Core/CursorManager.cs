@@ -121,7 +121,9 @@ namespace Poseidon
                 botTrashBoundingSphere = new BoundingSphere(hydroBot.BoundingSphere.Center, 20);
             if (trashes == null) return;
             BoundingSphere trashRealSphere;
-            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            Ray cursorRay = new Ray();
+            if (cursor != null)
+                cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (Trash trash in trashes)
             {
                 trashRealSphere = trash.BoundingSphere;
@@ -151,11 +153,14 @@ namespace Poseidon
         {
             bool foundBotOnPowerpack = false, foundCursorOnPowerpack = false;
             if (hydroBot == null) foundBotOnPowerpack = true;
+            if (cursor == null) foundCursorOnPowerpack = true;
             BoundingSphere botPowerPackBoundingSphere = new BoundingSphere();
             if (!foundBotOnPowerpack)
                 botPowerPackBoundingSphere = new BoundingSphere(hydroBot.BoundingSphere.Center, 5);
             if (powerPacks == null) return;
-            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            Ray cursorRay = new Ray();
+            if (cursor != null)
+                cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (Powerpack powerPack in powerPacks)
             {
                 if (!foundBotOnPowerpack)
@@ -182,11 +187,14 @@ namespace Poseidon
         {
             bool foundBotOnResource = false, foundCursorOnResource = false;
             if (hydroBot == null) foundBotOnResource = true;
+            if (cursor == null) foundCursorOnResource = true;
             BoundingSphere botPowerPackBoundingSphere = new BoundingSphere();
             if (!foundBotOnResource)
                 botPowerPackBoundingSphere = new BoundingSphere(hydroBot.BoundingSphere.Center, 5);
             if (resources == null) return;
-            Ray cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
+            Ray cursorRay = new Ray();
+            if (cursor != null)
+                cursorRay = cursor.CalculateCursorRay(gameCamera.ProjectionMatrix, gameCamera.ViewMatrix);
             foreach (Resource resource in resources)
             {
                 if (!foundBotOnResource)
@@ -229,6 +237,21 @@ namespace Poseidon
             return null;
         }
 
+        public static ShipWreck BotOverWhichShipWreck(HydroBot hydroBot, List<ShipWreck> shipWrecks)
+        {
+            if (shipWrecks == null) return null;
+            //BoundingSphere shipRealSphere;
+            foreach (ShipWreck shipWreck in shipWrecks)
+            {
+                if (hydroBot.BoundingSphere.Intersects(shipWreck.BoundingSphere))
+                {
+                    return shipWreck;
+                }
+            }
+            //cursor.SetNormalMouseImage();
+            return null;
+        }
+
         public static Factory MouseOnWhichFactory(Cursor cursor, Camera gameCamera, List<Factory> factories)
         {
             if (factories == null) return null;
@@ -247,6 +270,20 @@ namespace Poseidon
             return null;
         }
 
+        public static Factory BotOverWhichFactory(HydroBot hydroBot, List<Factory> factories)
+        {
+            if (factories == null) return null;
+            //BoundingSphere shipRealSphere;
+            foreach (Factory factory in factories)
+            {
+                if (hydroBot.BoundingSphere.Intersects(factory.BoundingSphere))
+                {
+                    return factory;
+                }
+            }
+            //cursor.SetNormalMouseImage();
+            return null;
+        }
         public static TreasureChest MouseOnWhichChest(Cursor cursor, Camera gameCamera, List<TreasureChest> treasureChests)
         {
             if (treasureChests == null) return null;
@@ -265,6 +302,20 @@ namespace Poseidon
             return null;
         }
 
+        public static TreasureChest BotOverWhichChest(HydroBot hydroBot, List<TreasureChest> chests)
+        {
+            if (chests == null) return null;
+            //BoundingSphere shipRealSphere;
+            foreach (TreasureChest treasureChest in chests)
+            {
+                if (hydroBot.BoundingSphere.Intersects(treasureChest.BoundingSphere))
+                {
+                    return treasureChest;
+                }
+            }
+            //cursor.SetNormalMouseImage();
+            return null;
+        }
         public static bool MouseOnResearchFacility(Cursor cursor, Camera gameCamera, ResearchFacility researchFacility)
         {
             if (researchFacility == null) return false;
@@ -279,7 +330,17 @@ namespace Poseidon
             }
             else return false;
         }
+        public static bool BotOverResearchFacility(HydroBot hydroBot, ResearchFacility researchFacility)
+        {
+            if (researchFacility == null) return false;
 
+            if (hydroBot.BoundingSphere.Intersects(researchFacility.BoundingSphere))
+                {
+                    return true;
+                }
+
+            return false;
+        }
         public static void CheckClick(ref MouseState lastMouseState, ref MouseState currentMouseState, GameTime gameTime, ref double clickTimer, ref bool clicked, ref bool doubleClicked, ref bool notYetReleased)
         {
             lastMouseState = currentMouseState;

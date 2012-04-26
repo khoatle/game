@@ -151,7 +151,7 @@ namespace Poseidon {
         public const int NumFuelCells = 12;
         public const int MinDistance = 10;
         public const int MaxDistance = 90;
-        public static TimeSpan[] RoundTime = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+        public static TimeSpan[] RoundTime = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};

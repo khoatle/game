@@ -792,8 +792,8 @@ namespace Poseidon
                             chest.SetupShaderParameters(PoseidonGame.contentManager, chest.Model);
                             //this is just for testing
                             //should be removed
-                            //skillID = 4;
-                            //chest.skillID = 4;
+                            skillID = 3;
+                            chest.skillID = 3;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward

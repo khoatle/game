@@ -747,6 +747,16 @@ namespace Poseidon
         }
         public override void Update(GameTime gameTime)
         {
+            if (currentGameState == GameState.NewGameStarted)
+            {
+                PoseidonGame.videoPlayer.Play(PoseidonGame.cinematic);
+                currentGameState = GameState.PlayingOpeningCinematic;
+            }
+            //if (currentGameState == GameState.PlayingOpeningCinematic)
+            //{
+            //    lastKeyboardState = currentKeyboardState;
+            //    currentKeyboardState = Keyboard.GetState();
+            //}
             //if ((Keyboard.GetState()).IsKeyDown(Keys.Insert) && type < 3)
             //{
             //    HydroBot.turtlePower = HydroBot.seaCowPower = HydroBot.dolphinPower = 1.0f;
@@ -1493,6 +1503,9 @@ namespace Poseidon
             
             switch (currentGameState)
             {
+                case GameState.PlayingOpeningCinematic:
+                    DrawOpeningCinematic();
+                    break;
                 case GameState.PlayingCutScene:
                     DrawCutScene();
                     break;
@@ -1775,12 +1788,15 @@ namespace Poseidon
             //draw boundary of the game scene
             //gameBoundary.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix);
             //Draw points gained / lost
-            foreach (Point point in points)
+            if (!PoseidonGame.capturingCinematic)
             {
-                point.Draw(spriteBatch, GraphicDevice, gameCamera);
+                foreach (Point point in points)
+                {
+                    point.Draw(spriteBatch, GraphicDevice, gameCamera);
+                }
             }
             spriteBatch.Begin();
-            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene && !(showFoundKey && firstShow))
+            if (!openFactoryConfigurationScene && !openResearchFacilityConfigScene && !(showFoundKey && firstShow) && !PoseidonGame.capturingCinematic)
             {
                 IngamePresentation.DrawTimeRemaining(roundTimer, GraphicDevice, spriteBatch);
                 DrawStats();
@@ -1806,8 +1822,8 @@ namespace Poseidon
                 researchFacility.DrawResearchFacilityConfigurationScene(spriteBatch, menuSmall);
 
             // spriteBatch.DrawString(statsFont, "Is bot moving: " + hydroBot.isMoving() + "\n", new Vector2(50, 50), Color.Black);
-
-            cursor.Draw(gameTime);
+            if (!PoseidonGame.capturingCinematic)
+                cursor.Draw(gameTime);
             spriteBatch.End();
             if (showFoundKey && firstShow)
             {
@@ -1950,7 +1966,24 @@ namespace Poseidon
             IngamePresentation.DrawActiveSkill(GraphicDevice, skillTextures, spriteBatch);
         }
 
-
+        private void DrawOpeningCinematic()
+        {
+            if (currentGameState == GameState.PlayingOpeningCinematic)
+            {
+                graphics.GraphicsDevice.Clear(Color.Black);
+                Texture2D playingTexture;
+                if (PoseidonGame.videoPlayer.State == MediaState.Playing)
+                {
+                    playingTexture = PoseidonGame.videoPlayer.GetTexture();
+                    spriteBatch.Begin();
+                    //spriteBatch.Draw(playingTexture, new Rectangle((int)(graphics.PreferredBackBufferWidth / 4), (int)(graphics.PreferredBackBufferHeight/4), (int)(graphics.PreferredBackBufferWidth/2), (int)(graphics.PreferredBackBufferHeight/2)), Color.White);
+                    spriteBatch.Draw(playingTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                    spriteBatch.End();
+                }
+                if (PoseidonGame.videoPlayer.State == MediaState.Stopped)
+                    currentGameState = GameState.PlayingCutScene;
+            }
+        }
 
 
 

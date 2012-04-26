@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, NewGameStarted, PlayingOpeningCinematic, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };
@@ -116,8 +116,8 @@ namespace Poseidon
 
         public static ContentManager contentManager;
 
-        Video presentScene;
-        VideoPlayer videoPlayer;
+        public static Video presentScene, cinematic;
+        public static VideoPlayer videoPlayer;
         GameState gameState;
 
         public static int currentShipWreckID;
@@ -129,7 +129,7 @@ namespace Poseidon
 
         public bool threeDgraphicInitiated = false;
 
-        public static bool DrawBoundingSphere = false;
+        public static bool DrawBoundingSphere = false, capturingCinematic = false;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -276,6 +276,7 @@ namespace Poseidon
             Components.Add(AttributeScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
+            cinematic = Content.Load<Video>("Videos/cinematic");
         }
 
         /// <summary>
@@ -377,6 +378,8 @@ namespace Poseidon
                         startScene.gameStarted = true;
                         startScene.Hide();
                         ShowScene(playGameScene);
+                        if (PlayGameScene.currentLevel == 0)
+                            PlayGameScene.currentGameState = GameState.NewGameStarted;
                     }
                 }
             }
@@ -652,7 +655,9 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
+                if (PlayGameScene.currentGameState == GameState.PlayingOpeningCinematic)
+                    PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                else if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
                 {
 
                     if (PlayGameScene.currentLevel == 12)

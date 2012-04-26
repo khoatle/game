@@ -701,6 +701,8 @@ namespace Poseidon
                 && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
             {
                 prevScene = playGameScene;
+                PlayGameScene.newLevelObjAvailable = false;
+                IngamePresentation.newTextScale = IngamePresentation.newTextStandardScale;
                 ShowScene(levelObjectiveScene);
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed

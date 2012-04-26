@@ -394,6 +394,7 @@ namespace Poseidon.GraphicEffects
             graphicsDevice.Clear(Color.Black);
             graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
             graphicsDevice.Clear(Color.Black);
+
             if (!GameSettings.SpecialEffectsEnabled) return;
 
             graphicsDevice.SamplerStates[0] = SamplerState.LinearClamp;
@@ -418,13 +419,7 @@ namespace Poseidon.GraphicEffects
                 else
                 {
                     Powerpack powerPackPointedAt = null, botOnPowerPack = null;
-                    CursorManager.MouseOnWhichPowerPack(cursor, gameCamera, powerPacks, ref powerPackPointedAt, ref botOnPowerPack, hydroBot);
-                    if (botOnPowerPack != null)
-                    {
-                        graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
-                        botOnPowerPack.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
-                        edgeDetectionParameters["EdgeColor"].SetValue(Color.LightGray.ToVector4());
-                    }
+                    CursorManager.MouseOnWhichPowerPack(cursor, gameCamera, powerPacks, ref powerPackPointedAt, ref botOnPowerPack, null);
                     if (powerPackPointedAt != null)
                     {
                         graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
@@ -434,13 +429,7 @@ namespace Poseidon.GraphicEffects
                     else
                     {
                         Resource resourcePackPointedAt = null, botOnResource = null;
-                        CursorManager.MouseOnWhichResource(cursor, gameCamera, resources, ref resourcePackPointedAt, ref botOnResource, hydroBot);
-                        if (botOnResource != null)
-                        {
-                            graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
-                            botOnResource.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
-                            edgeDetectionParameters["EdgeColor"].SetValue(Color.LightGray.ToVector4());
-                        }
+                        CursorManager.MouseOnWhichResource(cursor, gameCamera, resources, ref resourcePackPointedAt, ref botOnResource, null);
                         if (resourcePackPointedAt != null)
                         {
                             graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
@@ -457,15 +446,7 @@ namespace Poseidon.GraphicEffects
                                 edgeDetectionParameters["EdgeColor"].SetValue(Color.Gold.ToVector4());
                             }
                             Trash trashPointedAt = null, botOnTrash = null;
-                            CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes, ref trashPointedAt, ref botOnTrash, hydroBot);
-                            if (botOnTrash != null)
-                            {
-                                if (botOnTrash.sinking)
-                                    graphicsDevice.SetRenderTarget(normalDepthRenderTargetHigh);
-                                else graphicsDevice.SetRenderTarget(normalDepthRenderTargetLow);
-                                botOnTrash.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalDepth");
-                                edgeDetectionParameters["EdgeColor"].SetValue(Color.LightGray.ToVector4());
-                            }
+                            CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes, ref trashPointedAt, ref botOnTrash, null);
                             if (trashPointedAt != null)
                             {
                                 if (trashPointedAt.sinking)

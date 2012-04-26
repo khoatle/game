@@ -154,31 +154,103 @@ namespace Poseidon
             }
             else if (currentLevel == 0)
             {
-                double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
-                double target_percent = GameConstants.LevelObjective[currentLevel]*100;
-                level_objective = "Increase the environment bar to " + target_percent.ToString() + "% within " + HydroBot.levelDuration + " days.";
-                if (env_percent < target_percent)
-                    achieved_status = "Now the environment bar is " + env_percent.ToString() + "%.";
-                else
-                    achieved_status = "You achieved the target. Keep cleaning the environment for next level.";
-            }
-            else if (currentLevel == 1)
-            {
-                double fish_percent = Math.Min(((double)realFishAmount/(double)GameConstants.NumberFish[currentLevel]) * 100, 100);
-                double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures within " + HydroBot.levelDuration + " days.";
-                achieved_status = "There are " + (int)fish_percent + "% sea creatures remaining.";
-            }
-            else if (currentLevel == 2)
-            {
-                level_objective = "Find the relic in " + HydroBot.levelDuration + " days.";
-                if (HydroBot.skills[3] == false)
+                if (PlayGameScene.levelObjectiveState == 0)
                 {
-                    achieved_status = "Relic not found.";
+                    level_objective = "Collect 5 pieces of biodegradable waste by pressing Z key when swimming on top of biodegradable wastes.";
+                    achieved_status = "You have collected "+ HydroBot.bioTrash +" piece(s) of biodegradable waste.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 1)
+                {
+                    level_objective = "Collect 5 pieces of plastic waste by pressing X key when swimming on top of plastic wastes.";
+                    achieved_status = "You have collected " + HydroBot.plasticTrash + " piece(s) of plastic waste.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 2)
+                {
+                    level_objective = "Build a biodegradable waste processing plant by using the button panel on lower left corner of the screen.";
+                    achieved_status = "You have not built a biodegradable waste processing plant.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 3)
+                {
+                    level_objective = "Drop the biodegradable waste you have collected on the plant for processing by double clicking on the processing plant.";
+                    achieved_status = "You have not dropped the biodegradable wastes on the processing plant.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 4)
+                {
+                    level_objective = "Do the same operation for the collected plastic wastes.";
+                    achieved_status = "You have not dropped the plastic wastes on the processing plant.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 5)
+                {
+                    level_objective = "Open a facility's control panel by Shift + Click on the facility.";
+                    achieved_status = "You have not opened any facility's control panel.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 6)
+                {
+                    level_objective = "Healing the sea animals by left clicking on them to shoot healing bullet. Hold down Ctrl to shoot easier.";
+                    achieved_status = "You have not healed any sea animal.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 7)
+                {
+                    level_objective = "Accumulate experience to get a level up.";
+                    achieved_status = "You have not leveled up.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 8)
+                {
+                    level_objective = "Build a Research center, open its control panel and upgrade the Hydrobot.";
+                    achieved_status = "You have not upgraded the Hydrobot.";
                 }
                 else
                 {
-                    achieved_status = "You found Hermes' Winged sandal.";
+                    double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
+                    double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
+                    level_objective = "Improve the environment to " + target_percent.ToString() + "%.";
+                    achieved_status = "Now the environment is at " + env_percent.ToString() + "%.";
+                }
+            }
+            else if (currentLevel == 1)
+            {
+                if (PlayGameScene.levelObjectiveState == 0)
+                {
+                    level_objective = "Switch bullet type between healing bullet and energy bullet by pressing Space.";
+                    achieved_status = "You have not tried switching bullet type.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 1)
+                {
+                    level_objective = "Defeat 3 enemies by shooting energy bullet at them. Hold down Ctrl to shoot easier.";
+                    achieved_status = "You have defeated " + PlayGameScene.numNormalKills + " enemies.";
+                }
+                else
+                {
+                    double fish_percent = Math.Min(((double)realFishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
+                    double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
+                    level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures in the remaining days.";
+                    achieved_status = "There are " + (int)fish_percent + "% sea creatures remaining.";
+                }
+            }
+            else if (currentLevel == 2)
+            {
+                if (PlayGameScene.levelObjectiveState == 0)
+                {
+                    double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
+                    level_objective = "Improve environment to " + (int)(GameConstants.EnvThresholdForKey * 100) + "%.";
+                    achieved_status = "Now the environment is at " + env_percent.ToString() + "%.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 1)
+                {
+                    level_objective = "Obtain the golden key.";
+                    achieved_status = "You have not obtained the golden key.";
+                }
+                else
+                {
+                    level_objective = "Find the relic inside one of the shipwrecks.";
+                    if (HydroBot.skills[3] == false)
+                    {
+                        achieved_status = "Relic not found.";
+                    }
+                    else
+                    {
+                        achieved_status = "You found Hermes' Winged sandal.";
+                    }
                 }
             }
             else if (currentLevel == 3)

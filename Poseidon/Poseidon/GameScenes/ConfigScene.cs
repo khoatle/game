@@ -101,14 +101,14 @@ namespace Poseidon
             int titleHeight = (int)(80 * heightScale);
             titleRect = new Rectangle(game.Window.ClientBounds.Center.X - titleWidth / 2, game.Window.ClientBounds.Top + titleHeight/3, titleWidth, titleHeight);
 
-            string[] items = { "Music Volume", "Sound Volume", "Show Live Tips", "Special Effect", "Particle Level", "Fish School Size", "Difficulty" };
+            string[] items = { "Music Volume", "Sound Volume", "Live Tutorial", "Special Effect", "Particle Level", "Fish School Size", "Difficulty" };
             menuItems = items;
             itemRectList = new List<Rectangle>(menuItems.Length);
             iconRectList = new List<Rectangle>(menuItems.Length);
 
             int x, y, width, height, maxItemWidth;
             maxItemWidth = findMaxWidth();
-            x = game.Window.ClientBounds.Center.X - (int)( maxItemWidth* 0.7);
+            x = game.Window.ClientBounds.Center.X - (int)( maxItemWidth * 0.7);
             y = titleRect.Bottom+titleHeight/4;
             height = (int)((regularFont.MeasureString(menuItems[0]).Y) * textScale);
             foreach (string menu in menuItems)

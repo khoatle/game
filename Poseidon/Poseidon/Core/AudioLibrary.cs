@@ -45,6 +45,7 @@ namespace Poseidon.Core
         public SoundEffect superPunch;
         public SoundEffect skeletonDie;
         public SoundEffect explosionSmall;
+        public SoundEffect loudBeep;
 
         private SoundEffect explosion;
         private SoundEffect newMeteor;
@@ -175,6 +176,7 @@ namespace Poseidon.Core
             superPunch = Content.Load<SoundEffect>("Sounds/SoundEffects/superPunch");
             skeletonDie = Content.Load<SoundEffect>("Sounds/SoundEffects/skeletonDie");
             explosionSmall = Content.Load<SoundEffect>("Sounds/SoundEffects/explosionSmall");
+            loudBeep = Content.Load<SoundEffect>("Sounds/SoundEffects/beep-loud");
 
             explosion = Content.Load<SoundEffect>("Sounds/SoundEffects/explosion");
             newMeteor = Content.Load<SoundEffect>("Sounds/SoundEffects/newmeteor");

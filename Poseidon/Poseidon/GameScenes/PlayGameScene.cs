@@ -1140,6 +1140,7 @@ namespace Poseidon
                                 currentGameState = GameState.WonButStaying;
                             else currentGameState = GameState.Won;
                             audio.gameWon.Play();
+                            newLevelObjAvailable = false;
                         }
                         if (CheckLoseCondition())
                         {

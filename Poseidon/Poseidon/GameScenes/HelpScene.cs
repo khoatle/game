@@ -19,9 +19,9 @@ namespace Poseidon
         Random random = new Random();
         SpriteBatch spriteBatch;
         GraphicsDevice graphicsDevice;
-        Rectangle textureFrontRectangle, nextRectangle;
+        Rectangle textureFrontRectangle, nextRectangle, backRectangle;
         int sceneCount;
-        Texture2D textureFront1, textureFront2, textureFront3, textureFront4, textureFront5, textureNextButton;
+        Texture2D textureFront1, textureFront2, textureFront3, textureFront4, textureFront5, textureNextButton, textureBackButton;
         // Audio
         protected AudioLibrary audio;
         MouseState currentMouseState = new MouseState();
@@ -34,12 +34,13 @@ namespace Poseidon
             Components.Add(new ImageComponent(game, textureBack,
                 ImageComponent.DrawMode.Stretch));
             this.spriteBatch = spriteBatch;
-            this.textureFront1=textureFront1;
+            this.textureFront1 = textureFront1;
             this.textureFront2 = textureFront2;
             this.textureFront3 = textureFront3;
             this.textureFront4 = textureFront4;
             this.textureFront5 = textureFront5;
             this.textureNextButton = nextButton;
+            textureBackButton = PoseidonGame.contentManager.Load<Texture2D>("Image/ButtonTextures/backHelpButton");
             // Get the audio library
             audio = (AudioLibrary)
                 Game.Services.GetService(typeof(AudioLibrary));
@@ -54,7 +55,8 @@ namespace Poseidon
                         
             int nextRectangleWidth = (int)(graphicsDevice.Viewport.TitleSafeArea.Width * 0.05);
             int nextRectangleHeight = (int)(graphicsDevice.Viewport.TitleSafeArea.Height * 0.125);
-            nextRectangle = new Rectangle(textureFrontRectangle.Right - (nextRectangleWidth+30), textureFrontRectangle.Center.Y - nextRectangleHeight/2, nextRectangleWidth, nextRectangleHeight);
+            nextRectangle = new Rectangle(textureFrontRectangle.Right - (nextRectangleWidth + 30), textureFrontRectangle.Center.Y - nextRectangleHeight/2, nextRectangleWidth, nextRectangleHeight);
+            backRectangle = new Rectangle(textureFrontRectangle.Left + 30, textureFrontRectangle.Center.Y - nextRectangleHeight / 2, nextRectangleWidth, nextRectangleHeight);
             sceneCount = 1;
             menuSmall = font;
         }
@@ -79,6 +81,10 @@ namespace Poseidon
             {
                 if (nextRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 5, 5)))
                     sceneCount++;
+                if (backRectangle.Intersects(new Rectangle(lastMouseState.X, lastMouseState.Y, 5, 5)))
+                    sceneCount--;
+                if (sceneCount > 5) sceneCount = 1;
+                else if (sceneCount < 1) sceneCount = 5;
             }
             base.Update(gameTime);
         }
@@ -112,6 +118,7 @@ namespace Poseidon
             }
             spriteBatch.Draw(textureFront, textureFrontRectangle, Color.White);
             spriteBatch.Draw(textureNextButton, nextRectangle, Color.White);
+            spriteBatch.Draw(textureBackButton, backRectangle, Color.White);
 
             string nextText = "Press Enter/Esc to return";
             Vector2 nextTextPosition = new Vector2(graphicsDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X*GameConstants.generalTextScaleFactor, graphicsDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y*GameConstants.generalTextScaleFactor);

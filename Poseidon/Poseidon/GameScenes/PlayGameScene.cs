@@ -202,6 +202,8 @@ namespace Poseidon
 
         public static int levelObjectiveState = 0;
 
+        public static double timeElapsedFromLevelStart = 0;
+
         public PlayGameScene(Game game, GraphicsDeviceManager graphic, ContentManager content, GraphicsDevice GraphicsDevice, SpriteBatch sBatch, Vector2 pausePosition, Rectangle pauseRect, Texture2D actionTexture, CutSceneDialog cutSceneDialogue, Radar radar)
             : base(game)
         {
@@ -564,6 +566,7 @@ namespace Poseidon
 
         private void InitializeGameField(ContentManager Content)
         {
+            timeElapsedFromLevelStart = 0;
             levelObjectiveState = 0;
             newLevelObjAvailable = true;
             HydroBot.numResources += GameConstants.numResourcesAtStart;
@@ -1141,6 +1144,7 @@ namespace Poseidon
 
                     roundTimer -= gameTime.ElapsedGameTime;
                     PoseidonGame.playTime += gameTime.ElapsedGameTime;
+                    timeElapsedFromLevelStart += gameTime.ElapsedGameTime.TotalMilliseconds;
 
                     if (!(currentGameState == GameState.WonButStaying))
                     {
@@ -1978,10 +1982,13 @@ namespace Poseidon
                     spriteBatch.Begin();
                     //spriteBatch.Draw(playingTexture, new Rectangle((int)(graphics.PreferredBackBufferWidth / 4), (int)(graphics.PreferredBackBufferHeight/4), (int)(graphics.PreferredBackBufferWidth/2), (int)(graphics.PreferredBackBufferHeight/2)), Color.White);
                     spriteBatch.Draw(playingTexture, new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight), Color.White);
+                    string nextText = "Esc to skip cinematic";
+                    Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X * GameConstants.generalTextScaleFactor, 0);
+                    spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Red, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
                     spriteBatch.End();
                 }
                 if (PoseidonGame.videoPlayer.State == MediaState.Stopped)
-                    currentGameState = GameState.PlayingCutScene;
+                    currentGameState = GameState.PlayingCutScene;      
             }
         }
 
@@ -2087,8 +2094,8 @@ namespace Poseidon
                 spriteBatch.DrawString(menuSmall, text, new Vector2(narratorRectangle.Left + 50, narratorRectangle.Top + 30), Color.Black, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
             }
             string nextText = "Enter to continue. Esc to skip.";
-            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X * GameConstants.generalTextScaleFactor, GraphicDevice.Viewport.TitleSafeArea.Bottom - menuSmall.MeasureString(nextText).Y * GameConstants.generalTextScaleFactor);
-            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.DarkViolet, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
+            Vector2 nextTextPosition = new Vector2(GraphicDevice.Viewport.TitleSafeArea.Right - menuSmall.MeasureString(nextText).X * GameConstants.generalTextScaleFactor, 0);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.Red, 0, Vector2.Zero, GameConstants.generalTextScaleFactor, SpriteEffects.None, 0);
 
             spriteBatch.End();
             if (screenTransitNow)

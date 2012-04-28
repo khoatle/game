@@ -656,7 +656,10 @@ namespace Poseidon
             if (backPressed)
             {
                 if (PlayGameScene.currentGameState == GameState.PlayingOpeningCinematic)
+                {
+                    videoPlayer.Stop();
                     PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                }
                 else if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
                 {
 

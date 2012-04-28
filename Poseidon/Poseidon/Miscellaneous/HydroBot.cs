@@ -522,7 +522,7 @@ namespace Poseidon
 
             //for testing survival mode
             //unassignedPts = 40;
-            //currentHitPoint = maxHitPoint = 500;
+            currentHitPoint = maxHitPoint = 50000;
             //strength = 2000;
             //speed = 15;
             //shootingRate = 15;
@@ -539,10 +539,10 @@ namespace Poseidon
             //bioPlantLevel = plasticPlantLevel = 1;
             //totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
 
-            //hasTurtle = true;
-            //turtlePower = 2.0f;
+            hasTurtle = true;
+            turtlePower = 2.0f;
             //hasDolphin = true;
-            //dolphinPower = 2.0f;
+            dolphinPower = 5.0f;
             //hasSeaCow = true;
             //seaCowPower = 2.0f;
 

@@ -397,7 +397,7 @@ namespace Poseidon.Core
 
             timerPos = new Vector2((int)xOffsetText + 10, (int)yOffsetText + 10);
 
-            if (days < 10 && PoseidonGame.playTime.TotalMilliseconds - lastTimerColorChange >= 500)
+            if ( !(PlayGameScene.currentLevel == 0) && days < 10 && PoseidonGame.playTime.TotalMilliseconds - lastTimerColorChange >= 500)
             {
                 if (timerColor == Color.Red)
                     timerColor = Color.White;
@@ -1265,7 +1265,7 @@ namespace Poseidon.Core
 
             levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
 
-            if (PlayGameScene.newLevelObjAvailable )
+            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
             {
                 if (PoseidonGame.playTime.TotalMilliseconds - timeLastColorChange >= 500)
                 {
@@ -1283,7 +1283,7 @@ namespace Poseidon.Core
                 rotatingAngle = 0;
             }
             //levelObjectiveColor = EffectHelpers.LerpColor(Color.White, Color.LawnGreen, (float)Math.Abs(Math.Sin(PoseidonGame.playTime.TotalSeconds * 2)));
-            if (PlayGameScene.newLevelObjAvailable)
+            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
             {
                 newTextScale -= 0.1f;
                 if (newTextScale <= 1.0f) newTextScale = 1.0f;      
@@ -1295,7 +1295,7 @@ namespace Poseidon.Core
             //    if (newTextScale <= 1.0f) newTextScale = 1.0f;
             //    spriteBatch.DrawString(fishTalkFont, "NEW", new Vector2(levelObjectiveIconRectangle.Center.X, levelObjectiveIconRectangle.Center.Y), Color.LawnGreen, rotatingAngle, new Vector2(facilityFont.MeasureString("NEW").X / 2, facilityFont.MeasureString("NEW").Y / 2), newTextScale, SpriteEffects.None, 0);
             //}
-            if (PlayGameScene.newLevelObjAvailable && GameSettings.ShowLiveTip)
+            if (PlayGameScene.newLevelObjAvailable && GameSettings.ShowLiveTip && PlayGameScene.timeElapsedFromLevelStart >= 3000)
             {
                 xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width;
                 yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height / 2;

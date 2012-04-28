@@ -17,7 +17,7 @@ namespace Poseidon
         private SpriteFont pointsFont;
         private Vector2 point2DPos;
         private Vector3 point3DPos;
-        public float timeLast = 2000.0f;
+        public float timeLast = 2500.0f;
         public bool toBeRemoved = false;
         Random random;
 
@@ -41,7 +41,7 @@ namespace Poseidon
         }
         public void Update(GraphicsDevice graphicDevice, Camera gameCamera, GameTime gameTime)
         {
-            textAlpha = (byte)Math.Max(textAlpha - 2, 0); // Adjust to make text fade away faster
+            textAlpha = (byte)Math.Max(textAlpha - 1, 0); // Adjust to make text fade away faster
             timeLast -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
             if (timeLast <= 0)
                 toBeRemoved = true;
@@ -75,7 +75,7 @@ namespace Poseidon
 
             spriteBatch.Begin();
             spriteBatch.Draw(bubbleTexture, point2DPos, null, Color.White * fadeFactor * (1 - pointsFont.MeasureString(this.text).X / bubbleTexture.Width) * 0.8f, 0, new Vector2(bubbleTexture.Width / 2, bubbleTexture.Height / 2), pointsFont.MeasureString(this.text).X / bubbleTexture.Width * scale * IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
-            spriteBatch.DrawString(pointsFont, this.text, point2DPos, color * fadeFactor * 1.2f, 0, new Vector2(pointsFont.MeasureString(this.text).X / 2, pointsFont.MeasureString(this.text).Y / 2), (scale - 0.3f) * IngamePresentation.textScaleFactor, SpriteEffects.None, 1);
+            spriteBatch.DrawString(pointsFont, this.text, point2DPos, color * fadeFactor * 1.4f, 0, new Vector2(pointsFont.MeasureString(this.text).X / 2, pointsFont.MeasureString(this.text).Y / 2), (scale - 0.3f) * IngamePresentation.textScaleFactor, SpriteEffects.None, 1);
             //spriteBatch.Draw(bubbleTexture, point2DPos, sourceRectangle, Color.White * fadeFactor, 0, new Vector2(sourceRectangle.Width / 2, sourceRectangle.Height / 2), pointsFont.MeasureString(this.text).X / sourceRectangle.Width * 1.2f, SpriteEffects.None, 0);      
             spriteBatch.End();
         }

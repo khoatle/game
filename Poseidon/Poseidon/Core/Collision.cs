@@ -463,6 +463,12 @@ namespace Poseidon
                     sphere.Radius *= GameConstants.EasyHitScale;
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
+                        //fulfill the task of healing fish
+                        if (PlayGameScene.currentLevel == 0 && PlayGameScene.levelObjectiveState == 6)
+                        {
+                            PlayGameScene.levelObjectiveState = 7;
+                            PlayGameScene.newLevelObjAvailable = true;
+                        }
                         if (barriers[j].BoundingSphere.Intersects(cameraFrustum))
                             PoseidonGame.audio.animalHappy.Play();
 

@@ -101,6 +101,7 @@ namespace Poseidon.Core
 
         public static Texture2D levelObjectiveIconTexture;
         public static Rectangle levelObjectiveIconRectangle;
+        public static Texture2D arrowTexture;
 
         public static bool levelObjHover = false;
         public static bool tipHover = false;
@@ -179,6 +180,7 @@ namespace Poseidon.Core
             actionTexture = Content.Load<Texture2D>("Image/Miscellaneous/actionTextures");
             stunnedTexture = Content.Load<Texture2D>("Image/Miscellaneous/dizzy-icon");
             scaredIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/scared-icon");
+            arrowTexture = Content.Load<Texture2D>("Image/Miscellaneous/arrow");
 
             iconFrame = Content.Load<Texture2D>("Image/SpinningReel/transparent_frame");
             GoodWillBar = Content.Load<Texture2D>("Image/Miscellaneous/goodWillBar");
@@ -223,7 +225,7 @@ namespace Poseidon.Core
             fishTexture2 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish2-1");
             fishTexture3 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish3");
 
-            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
+            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconNormal");
             levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
             tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
             tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
@@ -374,6 +376,8 @@ namespace Poseidon.Core
         //}
 
         private static Vector2 timerPos = Vector2.Zero;
+        private static Color timerColor = Color.Red;
+        private static double lastTimerColorChange = 0;
         public static void DrawTimeRemaining(TimeSpan roundTimer, GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
             float xOffsetText, yOffsetText;
@@ -381,7 +385,9 @@ namespace Poseidon.Core
             string str1 = GameConstants.StrTimeRemaining;
             Rectangle rectSafeArea;
             days = ((roundTimer.Minutes * 60) + roundTimer.Seconds) / GameConstants.DaysPerSecond;
-            str1 += days.ToString();
+            if (PlayGameScene.currentLevel == 0 && HydroBot.gameMode == GameMode.MainGame)
+                str1 += "Unlimited";
+            else str1 += days.ToString();
 
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
@@ -391,7 +397,16 @@ namespace Poseidon.Core
 
             timerPos = new Vector2((int)xOffsetText + 10, (int)yOffsetText + 10);
 
-            spriteBatch.DrawString(menuSmall, str1, timerPos, Color.DarkRed, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
+            if ( !(PlayGameScene.currentLevel == 0) && days < 10 && PoseidonGame.playTime.TotalMilliseconds - lastTimerColorChange >= 500)
+            {
+                if (timerColor == Color.Red)
+                    timerColor = Color.White;
+                else timerColor = Color.Red;
+                lastTimerColorChange = PoseidonGame.playTime.TotalMilliseconds;
+            }
+
+            
+            spriteBatch.DrawString(menuSmall, str1, timerPos, timerColor, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
         }
         public static void DrawLiveTip(GraphicsDevice GraphicDevice,SpriteBatch spriteBatch)
         {
@@ -950,19 +965,19 @@ namespace Poseidon.Core
                                 comment = "";
                                 if (trashPointedAt.trashType == TrashType.biodegradable)
                                 {
-                                    line += "BIODEGRADABLE TRASH";
+                                    line += "BIODEGRADABLE WASTE";
                                     comment = "Great source of renewable energy.";
                                     tip = "Press Z to collect";
                                 }
                                 else if (trashPointedAt.trashType == TrashType.plastic)
                                 {
-                                    line += "PLASTIC TRASH";
+                                    line += "PLASTIC WASTE";
                                     comment = "May take more than 500 years to decompose.";
                                     tip = "Press X to collect";
                                 }
                                 else
                                 {
-                                    line += "RADIOACTIVE TRASH";
+                                    line += "RADIOACTIVE WASTE";
                                     comment = "An invisible speck can cause cancer.";
                                     tip = "Press C to collect";
                                 }
@@ -987,17 +1002,17 @@ namespace Poseidon.Core
                                         comment = "";
                                         if (factoryPointedAt.factoryType == FactoryType.biodegradable)
                                         {
-                                            line += "BIODEGRADABLE TRASH PROCESSING PLANT";
+                                            line += "BIODEGRADABLE WASTE PROCESSING PLANT";
                                             comment = "Organic wastes can be dropped here for processing.";
                                         }
                                         else if (factoryPointedAt.factoryType == FactoryType.plastic)
                                         {
-                                            line += "PLASTIC TRASH PROCESSING PLANT";
+                                            line += "PLASTIC WASTE PROCESSING PLANT";
                                             comment = "Plastic wastes can be dropped here for processing.";
                                         }
                                         else
                                         {
-                                            line += "RADIOACTIVE TRASH PROCESSING PLANT";
+                                            line += "RADIOACTIVE WASTE PROCESSING PLANT";
                                             comment = "Radioactive wastes can be dropped here for processing.";
                                         }
                                         tip = "Double click to drop collected wastes";
@@ -1031,13 +1046,13 @@ namespace Poseidon.Core
                         tip = wrapLine(tip, commentMaxLength, statsFont, textScaleFactor);
                         Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(line).Y + lineSpacing + statsFont.MeasureString(comment).Y / 2) * textScaleFactor);
                         spriteBatch.DrawString(statsFont, comment, commentPos, Color.Red, 0, new Vector2(statsFont.MeasureString(comment).X / 2, statsFont.MeasureString(comment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                        Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(comment).Y / 2 + lineSpacing + statsFont.MeasureString(tip).Y / 2) * textScaleFactor;
-                        spriteBatch.DrawString(statsFont, tip, tipPos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip).X / 2, statsFont.MeasureString(tip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                        if (tip2 != "")
-                        {
-                            Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(tip).Y / 2 + lineSpacing + statsFont.MeasureString(tip2).Y / 2) * textScaleFactor;
-                            spriteBatch.DrawString(statsFont, tip2, tip2Pos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip2).X / 2, statsFont.MeasureString(tip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                        }
+                        //Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(comment).Y / 2 + lineSpacing + statsFont.MeasureString(tip).Y / 2) * textScaleFactor;
+                        //spriteBatch.DrawString(statsFont, tip, tipPos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip).X / 2, statsFont.MeasureString(tip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        //if (tip2 != "")
+                        //{
+                        //    Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(tip).Y / 2 + lineSpacing + statsFont.MeasureString(tip2).Y / 2) * textScaleFactor;
+                        //    spriteBatch.DrawString(statsFont, tip2, tip2Pos, Color.LightCyan, 0, new Vector2(statsFont.MeasureString(tip2).X / 2, statsFont.MeasureString(tip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                        //}
                         prevLine = line;
                         prevComment = comment;
                         prevTip = tip;
@@ -1058,13 +1073,13 @@ namespace Poseidon.Core
                     //tip = wrapLine(tip, commentMaxLength, statsFont, textScaleFactor);
                     Vector2 commentPos = new Vector2(game.Window.ClientBounds.Width / 2, 4 + (statsFont.MeasureString(prevLine).Y + lineSpacing + statsFont.MeasureString(prevComment).Y / 2) * textScaleFactor);
                     spriteBatch.DrawString(statsFont, prevComment, commentPos, Color.Red * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevComment).X / 2, statsFont.MeasureString(prevComment).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                    Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(prevComment).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip).Y / 2) * textScaleFactor;
-                    spriteBatch.DrawString(statsFont, prevTip, tipPos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip).X / 2, statsFont.MeasureString(prevTip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                    if (prevTip2 != "")
-                    {
-                        Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(prevTip2).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip2).Y / 2) * textScaleFactor;
-                        spriteBatch.DrawString(statsFont, prevTip2, tip2Pos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip2).X / 2, statsFont.MeasureString(prevTip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
-                    }
+                    //Vector2 tipPos = commentPos + new Vector2(0, statsFont.MeasureString(prevComment).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip).Y / 2) * textScaleFactor;
+                    //spriteBatch.DrawString(statsFont, prevTip, tipPos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip).X / 2, statsFont.MeasureString(prevTip).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    //if (prevTip2 != "")
+                    //{
+                    //    Vector2 tip2Pos = tipPos + new Vector2(0, statsFont.MeasureString(prevTip).Y / 2 + lineSpacing + statsFont.MeasureString(prevTip2).Y / 2) * textScaleFactor;
+                    //    spriteBatch.DrawString(statsFont, prevTip2, tip2Pos, Color.LightCyan * opaqueValue, 0, new Vector2(statsFont.MeasureString(prevTip2).X / 2, statsFont.MeasureString(prevTip2).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+                    //}
                 }
                 if (fishWasPointedAt)
                 {
@@ -1082,6 +1097,155 @@ namespace Poseidon.Core
             }
         }
 
+        public static void DrawObjectUnderStatus(SpriteBatch spriteBatch, Camera gameCamera, HydroBot hydroBot, GraphicsDevice graphicsDevice, List<Powerpack> powerPacks, List<Resource> resources, List<Trash> trashes, List<TreasureChest> chests, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility)
+        {
+            if (!GameSettings.ShowLiveTip) return;
+            //for highlighting obj under bot
+            Powerpack powerPackPointedAt1 = null, botOnPowerPack1 = null;
+            CursorManager.MouseOnWhichPowerPack(null, gameCamera, powerPacks, ref powerPackPointedAt1, ref botOnPowerPack1, hydroBot);
+            string name = "", interaction = "", interaction2 = "";
+            Vector2 twoDPos = Vector2.Zero;
+
+
+            if (botOnPowerPack1 != null)
+            {
+                Vector3 screenPos = graphicsDevice.Viewport.Project(botOnPowerPack1.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                twoDPos.X = screenPos.X;
+                twoDPos.Y = screenPos.Y;
+                if (botOnPowerPack1.powerType != PowerPackType.GoldenKey)
+                    name = "Power Pack";
+                else name = "Golden Key";
+                interaction = "Press Z to collect";
+                spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                     new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                        new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+
+            }
+            else
+            {
+                Resource resourcePackPointedAt1 = null, botOnResource1 = null;
+                CursorManager.MouseOnWhichResource(null, gameCamera, resources, ref resourcePackPointedAt1, ref botOnResource1, hydroBot);
+                if (botOnResource1 != null)
+                {
+                    Vector3 screenPos = graphicsDevice.Viewport.Project(botOnResource1.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                    twoDPos.X = screenPos.X;
+                    twoDPos.Y = screenPos.Y;
+                    name = "Recycled Resource Box";
+                    interaction = "Press Z to collect";
+                    spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                         new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                            new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                }
+                else
+                {
+                    TreasureChest botOverChest = CursorManager.BotOverWhichChest(hydroBot, chests);
+                    if (botOverChest != null)
+                    {
+                        Vector3 screenPos = graphicsDevice.Viewport.Project(botOverChest.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        twoDPos.X = screenPos.X;
+                        twoDPos.Y = screenPos.Y;
+                        name = "Treasure Chest";
+                        interaction = "Double click to open";
+
+                        spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                            new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                    }
+                    Trash trashPointedAt1 = null, botOnTrash1 = null;
+                    CursorManager.MouseOnWhichTrash(null, gameCamera, trashes, ref trashPointedAt1, ref botOnTrash1, hydroBot);
+                    if (botOnTrash1 != null)
+                    {
+                        Vector3 screenPos = graphicsDevice.Viewport.Project(botOnTrash1.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        twoDPos.X = screenPos.X;
+                        twoDPos.Y = screenPos.Y;
+                        if (botOnTrash1.trashType == TrashType.biodegradable)
+                        {
+                            name = "Biodegradable Waste";
+                            interaction = "Press Z to collect";
+                        }
+                        else if (botOnTrash1.trashType == TrashType.plastic)
+                        {
+                            name = "Plastic Waste";
+                            interaction = "Press X to collect";
+                        }
+                        else if (botOnTrash1.trashType == TrashType.radioactive)
+                        {
+                            name = "Radioactive Waste";
+                            interaction = "Press C to collect";
+                        }
+                        spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                            new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                        spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        ShipWreck botOverShipWreck = CursorManager.BotOverWhichShipWreck(hydroBot, shipWrecks);
+                        if (botOverShipWreck != null)
+                        {
+                            Vector3 screenPos = graphicsDevice.Viewport.Project(botOverShipWreck.Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                            twoDPos.X = screenPos.X;
+                            twoDPos.Y = screenPos.Y;
+                            name = "Old Shipwreck";
+                            interaction = "Double click to enter";
+
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                                new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                    new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                        }
+                        else
+                        {
+                            Factory botOverFactory = CursorManager.BotOverWhichFactory(hydroBot, factories);
+                            if (botOverFactory != null)
+                            {
+                                if (botOverFactory.factoryType == FactoryType.biodegradable)
+                                {
+                                    name = "Biodegradable Waste Processing Plant";
+                                }
+                                else if (botOverFactory.factoryType == FactoryType.plastic)
+                                {
+                                    name = "Plastic Waste Processing Plant";
+                                }
+                                else
+                                {
+                                    name = "Radioactive Waste Processing Plant";
+                                }
+                                interaction = "Double click to drop collected wastes";
+                                interaction2 = "Shift + Click to open control panel";
+                                Vector3 screenPos = graphicsDevice.Viewport.Project(botOverFactory.Position - new Vector3(0, 0, 20), gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                                twoDPos.X = screenPos.X;
+                                twoDPos.Y = screenPos.Y;
+
+                            }
+                            if (CursorManager.BotOverResearchFacility(hydroBot, researchFacility))
+                            {
+                                name = "Research Facility";
+                                interaction = "Double click to drop collected objects";
+                                interaction2 = "Shift + Click to open control panel";
+                                Vector3 screenPos = graphicsDevice.Viewport.Project(researchFacility.Position - new Vector3(0, 0, 20), gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                                twoDPos.X = screenPos.X;
+                                twoDPos.Y = screenPos.Y;
+                            }
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                             new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                    new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction2, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction2).Y/2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                   new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        static Color levelObjectiveColor = Color.White;
+        static double timeLastColorChange = 0;
+        static float rotatingAngle = 0;
+        public static float newTextScale = 5.0f, newTextStandardScale = 5.0f;
         //Draw level objective icon
         public static void DrawLevelObjectiveIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
@@ -1096,28 +1260,65 @@ namespace Poseidon.Core
 
             xOffsetText = rectSafeArea.Right;
             yOffsetText = rectSafeArea.Top;
-            int width = (int)(96 * textScaleFactor);
-            int height = (int)(96 * textScaleFactor);
+            int width = (int)(levelObjectiveIconTexture.Width * textScaleFactor * 0.8f);
+            int height = (int)(levelObjectiveIconTexture.Height * textScaleFactor * 0.8f);
 
             levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
 
-            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, Color.White);
+            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
+            {
+                if (PoseidonGame.playTime.TotalMilliseconds - timeLastColorChange >= 500)
+                {
+                    if (levelObjectiveColor == Color.White)
+                        levelObjectiveColor = Color.Transparent;
+                    else levelObjectiveColor = Color.White;
+                    timeLastColorChange = PoseidonGame.playTime.TotalMilliseconds;
+                    PoseidonGame.audio.loudBeep.Play();
+                    //rotatingAngle += 0.1f;
+                }
+            }
+            else
+            {
+                levelObjectiveColor = Color.White;
+                rotatingAngle = 0;
+            }
+            //levelObjectiveColor = EffectHelpers.LerpColor(Color.White, Color.LawnGreen, (float)Math.Abs(Math.Sin(PoseidonGame.playTime.TotalSeconds * 2)));
+            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
+            {
+                newTextScale -= 0.1f;
+                if (newTextScale <= 1.0f) newTextScale = 1.0f;      
+            }
+            spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, null, levelObjectiveColor, rotatingAngle, Vector2.Zero, SpriteEffects.None, 0);
+            //if (PlayGameScene.newLevelObjAvailable)
+            //{
+            //    newTextScale -= 0.1f;
+            //    if (newTextScale <= 1.0f) newTextScale = 1.0f;
+            //    spriteBatch.DrawString(fishTalkFont, "NEW", new Vector2(levelObjectiveIconRectangle.Center.X, levelObjectiveIconRectangle.Center.Y), Color.LawnGreen, rotatingAngle, new Vector2(facilityFont.MeasureString("NEW").X / 2, facilityFont.MeasureString("NEW").Y / 2), newTextScale, SpriteEffects.None, 0);
+            //}
+            if (PlayGameScene.newLevelObjAvailable && GameSettings.ShowLiveTip && PlayGameScene.timeElapsedFromLevelStart >= 3000)
+            {
+                xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width;
+                yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height / 2;
 
+                Rectangle arrowRectangle = new Rectangle(xOffsetText, yOffsetText, arrowTexture.Width, arrowTexture.Height);
+
+                spriteBatch.Draw(arrowTexture, arrowRectangle, Color.White);
+            }
         }
 
         //Draw level tip icon
         public static void DrawTipIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
-            if (tipHover) tipIconTexture = tipHoverIconTexture;
-            else tipIconTexture = tipNormalIconTexture;
-            int xOffsetText, yOffsetText;
+            //if (tipHover) tipIconTexture = tipHoverIconTexture;
+            //else tipIconTexture = tipNormalIconTexture;
+            //int xOffsetText, yOffsetText;
 
-            xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
-            yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
+            //xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
+            //yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
 
-            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
+            //tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
 
-            spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
+            //spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
 
         }
         //Draw GamePlus level

@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, NewGameStarted, PlayingOpeningCinematic, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };
@@ -116,8 +116,8 @@ namespace Poseidon
 
         public static ContentManager contentManager;
 
-        Video presentScene;
-        VideoPlayer videoPlayer;
+        public static Video presentScene, cinematic;
+        public static VideoPlayer videoPlayer;
         GameState gameState;
 
         public static int currentShipWreckID;
@@ -129,7 +129,7 @@ namespace Poseidon
 
         public bool threeDgraphicInitiated = false;
 
-        public static bool DrawBoundingSphere = false;
+        public static bool DrawBoundingSphere = false, capturingCinematic = false;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -276,6 +276,7 @@ namespace Poseidon
             Components.Add(AttributeScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
+            cinematic = Content.Load<Video>("Videos/cinematic");
         }
 
         /// <summary>
@@ -377,6 +378,8 @@ namespace Poseidon
                         startScene.gameStarted = true;
                         startScene.Hide();
                         ShowScene(playGameScene);
+                        if (PlayGameScene.currentLevel == 0)
+                            PlayGameScene.currentGameState = GameState.NewGameStarted;
                     }
                 }
             }
@@ -652,7 +655,12 @@ namespace Poseidon
             }
             if (backPressed)
             {
-                if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
+                if (PlayGameScene.currentGameState == GameState.PlayingOpeningCinematic)
+                {
+                    videoPlayer.Stop();
+                    PlayGameScene.currentGameState = GameState.PlayingCutScene;
+                }
+                else if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
                 {
 
                     if (PlayGameScene.currentLevel == 12)
@@ -701,6 +709,8 @@ namespace Poseidon
                 && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
             {
                 prevScene = playGameScene;
+                PlayGameScene.newLevelObjAvailable = false;
+                IngamePresentation.newTextScale = IngamePresentation.newTextStandardScale;
                 ShowScene(levelObjectiveScene);
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
@@ -942,28 +952,28 @@ namespace Poseidon
             switch (difficultyLevel)
             {
                 case 1:
-                    TimeSpan[]  roundTimeEasy = {TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(490), 
+                    TimeSpan[]  roundTimeEasy = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(490), 
                                                        TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(600),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220)};
                     GameConstants.RoundTime = roundTimeEasy;
                     break;
                 case 2:
-                     TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+                    TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
                      GameConstants.RoundTime = roundTimeMedium;
                     break;
                 case 3:
-                     TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(410), 
+                    TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(410), 
                                                        TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(160), TimeSpan.FromSeconds(500),
                                                        TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500),
                                                        TimeSpan.FromSeconds(600), TimeSpan.FromSeconds(150), TimeSpan.FromSeconds(150)};
                      GameConstants.RoundTime = roundTimeHard;
                     break;
                 default:
-                     TimeSpan[] roundTimeDefault = {TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
+                    TimeSpan[] roundTimeDefault = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
                                                        TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
                                                        TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};

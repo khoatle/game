@@ -792,8 +792,8 @@ namespace Poseidon
                             chest.SetupShaderParameters(PoseidonGame.contentManager, chest.Model);
                             //this is just for testing
                             //should be removed
-                            //skillID = 4;
-                            //chest.skillID = 4;
+                            skillID = 3;
+                            chest.skillID = 3;
                             if (chest.skillID == -1)
                             {
                                 // give the player some experience as reward
@@ -1263,7 +1263,7 @@ namespace Poseidon
         {
 
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, null, fishAmount[currentShipWreckID], enemies[currentShipWreckID], enemiesAmount[currentShipWreckID], null, null, null, null, treasureChests[currentShipWreckID], powerpacks[currentShipWreckID], null);
-
+            IngamePresentation.DrawObjectUnderStatus(spriteBatch, gameCamera, hydroBot, GraphicDevice, powerpacks[currentShipWreckID], null, null, treasureChests[currentShipWreckID], null, null, null);
             //Display Cyborg health
             IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 

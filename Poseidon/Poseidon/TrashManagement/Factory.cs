@@ -95,7 +95,7 @@ namespace Poseidon
             underConstruction = true;
             constructionIndex = 0;
             lastConstructionSwitchTime = TimeSpan.Zero;
-            constructionSwitchSpan = TimeSpan.FromSeconds(3);
+            constructionSwitchSpan = TimeSpan.FromSeconds(1);
             this.particleManager = particleManager;
             //buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
 
@@ -545,12 +545,12 @@ namespace Poseidon
                     if (HydroBot.bioPlantLevel == 1)
                     {
                         trashBlockSize = 5;
-                        processingTime = 20; //5 days
+                        processingTime = 4; //5 days
                     }
                     else if (HydroBot.bioPlantLevel == 2)
                     {
                         trashBlockSize = 5; 
-                        processingTime = 8; // 2 days
+                        processingTime = 4; // 2 days
                     }
                     else
                     {
@@ -562,17 +562,17 @@ namespace Poseidon
                     if (HydroBot.plasticPlantLevel == 1)
                     {
                         trashBlockSize = 5;
-                        processingTime = 8;
+                        processingTime = 4;
                     }
                     else if (HydroBot.plasticPlantLevel == 2)
                     {
                         trashBlockSize = 3;
-                        processingTime = 8;
+                        processingTime = 4;
                     }
                     else
                     {
                         trashBlockSize = 1;
-                        processingTime = 8;
+                        processingTime = 4;
                     }
                     break;
                 case FactoryType.radioactive:

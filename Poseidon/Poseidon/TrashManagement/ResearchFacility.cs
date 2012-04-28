@@ -75,7 +75,7 @@ namespace Poseidon
             underConstruction = true;
             constructionIndex = 0;
             lastConstructionSwitchTime = TimeSpan.Zero;
-            constructionSwitchSpan = TimeSpan.FromSeconds(3);
+            constructionSwitchSpan = TimeSpan.FromSeconds(1);
             this.particleManager = particleManager;
             //buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
         }

@@ -362,7 +362,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(3, "To be continued ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "Survival mode & Game Plus has been unlocked!", "Image/Cutscenes/blackScreen", 0);
+            sentence = new Sentence(3, "Guardian mode & Game Plus has been unlocked!", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);
             cutScenes.Add(cutScene);
 

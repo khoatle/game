@@ -216,7 +216,7 @@ namespace Poseidon
             helpScene = new HelpScene(this, helpBackgroundTexture, helpForegroundTexture1, helpForegroundTexture2, helpForegroundTexture3, helpForegroundTexture4, helpForegroundTexture5, nextHelpButton, spriteBatch, GraphicsDevice, menuSmall);
             Components.Add(helpScene);
 
-
+            
             //For Credit scene
             creditBackgroundTexture = Content.Load<Texture2D>("Image/SceneTextures/startbackgroundNew");
             creditForgroundTextures = new Texture2D[3];
@@ -854,7 +854,7 @@ namespace Poseidon
                             //MediaPlayer.Stop();
                             ShowScene(selectLoadingLevelScene);
                             break;
-                        case "Survival Mode":
+                        case "Guardian Mode":
                             MediaPlayer.Stop();
                             gamePlus = false;
                             HydroBot.gamePlusLevel = 0;
@@ -909,6 +909,7 @@ namespace Poseidon
                     MediaPlayer.Volume = GameSettings.MusicVolume;
                     GameSettings.SoundVolume = (float)br.ReadDouble();
                     SoundEffect.MasterVolume = GameSettings.SoundVolume;
+                    videoPlayer.Volume = GameSettings.SoundVolume;
                     GameSettings.ShowLiveTip = br.ReadBoolean();
                     GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
                     GameSettings.NumParticleLevel = (float)br.ReadDouble();

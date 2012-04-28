@@ -74,7 +74,7 @@ namespace Poseidon
             // Create the Menu
             if (File.Exists("SurvivalMode"))
             {
-                string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Config", "Help", "Credits", "Quit" };
+                string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Guardian Mode", "Config", "Help", "Credits", "Quit" };
                 menuItems = items;
             }
             else
@@ -139,7 +139,7 @@ namespace Poseidon
                 {
                     if (File.Exists("SurvivalMode"))
                     {
-                        string[] items = { "Resume Game", "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Config", "Help", "Credits", "Quit" };
+                        string[] items = { "Resume Game", "New Game", "New Game Plus", "Load Saved Level", "Guardian Mode", "Config", "Help", "Credits", "Quit" };
                         menuItems = items;
                     }
                     else
@@ -151,7 +151,7 @@ namespace Poseidon
                 else {
                     if (File.Exists("SurvivalMode"))
                     {
-                        string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Survival Mode", "Config", "Help", "Credits", "Quit" };
+                        string[] items = { "New Game", "New Game Plus", "Load Saved Level", "Guardian Mode", "Config", "Help", "Credits", "Quit" };
                         menuItems = items;
                     }
                     else

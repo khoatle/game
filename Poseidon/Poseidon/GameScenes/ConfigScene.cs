@@ -270,6 +270,7 @@ namespace Poseidon
                         if (GameSettings.SoundVolume < 0f) GameSettings.SoundVolume = 0f;
                         if (GameSettings.SoundVolume > 1f) GameSettings.SoundVolume = 1f;
                         SoundEffect.MasterVolume = GameSettings.SoundVolume;
+                        PoseidonGame.videoPlayer.Volume = GameSettings.SoundVolume;
                         break;
                     case 2:
                         if (GameSettings.ShowLiveTip)

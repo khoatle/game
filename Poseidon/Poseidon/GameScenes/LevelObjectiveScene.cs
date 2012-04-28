@@ -50,7 +50,7 @@ namespace Poseidon
             //cursor = new Cursor(game, spriteBatch);
             //Components.Add(cursor);
 
-            levelObjFont = Content.Load<SpriteFont>("Fonts/levelObj");
+            levelObjFont = IngamePresentation.facilityFont;//Content.Load<SpriteFont>("Fonts/levelObj");
             objectiveBox = Content.Load<Texture2D>("Image/Miscellaneous/levelObjectiveBox");
             achievedBox = Content.Load<Texture2D>("Image/Miscellaneous/achievedObjectiveBox");
             this.playgamescene = playgamescene;

@@ -2745,18 +2745,8 @@
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="Image\HydroBotStatus\radioactive_icon_1.png">
-      <Name>radioactive_icon_1</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
     <Compile Include="Image\HydroBotStatus\resources.png">
       <Name>resources</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="Image\HydroBotStatus\sprite.png">
-      <Name>sprite</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
@@ -2764,6 +2754,18 @@
   <ItemGroup>
     <Compile Include="Image\SceneTextures\introScreen.png">
       <Name>introScreen</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Image\HydroBotStatus\radioactive_icon.png">
+      <Name>radioactive_icon</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="Image\HydroBotStatus\strange_rock.png">
+      <Name>strange_rock</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>

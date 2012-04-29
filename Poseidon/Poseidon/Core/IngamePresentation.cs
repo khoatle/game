@@ -114,7 +114,7 @@ namespace Poseidon.Core
         public static float lineSpacing;
 
         //textures showing hydrobot's statuses
-        static Texture2D bioIcon, plasticIcon, radioIcon, resourceIcon, experienceIcon, botHealthIcon, energyIcon;
+        static Texture2D bioIcon, plasticIcon, radioIcon, resourceIcon, strangeRockIcon, experienceIcon, botHealthIcon, energyIcon;
 
         public static Texture2D introScene;
 
@@ -277,8 +277,9 @@ namespace Poseidon.Core
 
             bioIcon = Content.Load<Texture2D>("Image/HydroBotStatus/bio_icon");
             plasticIcon = Content.Load<Texture2D>("Image/HydroBotStatus/plastic_icon");
-            radioIcon = Content.Load<Texture2D>("Image/HydroBotStatus/radioactive_icon_1");
+            radioIcon = Content.Load<Texture2D>("Image/HydroBotStatus/radioactive_icon");
             resourceIcon = Content.Load<Texture2D>("Image/HydroBotStatus/resources");
+            strangeRockIcon = Content.Load<Texture2D>("Image/HydroBotStatus/strange_rock");
             experienceIcon = Content.Load<Texture2D>("Image/HydroBotStatus/experience");
             botHealthIcon = Content.Load<Texture2D>("Image/HydroBotStatus/health");
             energyIcon = Content.Load<Texture2D>("Image/HydroBotStatus/energy_icon");
@@ -1406,7 +1407,7 @@ namespace Poseidon.Core
                 0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
 
             Rectangle rockRectangle = new Rectangle(resourceRectangle.X + iconSpacing, fromBottom, iconWidth, iconHeight);
-            spriteBatch.Draw(bioIcon, rockRectangle, Color.White);
+            spriteBatch.Draw(strangeRockIcon, rockRectangle, Color.White);
             text = HydroBot.numStrangeObjCollected.ToString();
             spriteBatch.DrawString(fishTalkFont, text, new Vector2(rockRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, rockRectangle.Center.Y), Color.White,
                 0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);

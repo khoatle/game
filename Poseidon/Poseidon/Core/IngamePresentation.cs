@@ -116,6 +116,8 @@ namespace Poseidon.Core
         //textures showing hydrobot's statuses
         static Texture2D bioIcon, plasticIcon, radioIcon, resourceIcon, experienceIcon, botHealthIcon, energyIcon;
 
+        public static Texture2D introScene;
+
         public static void Initiate2DGraphics(ContentManager Content, Game game)
         {
             commentMaxLength = game.Window.ClientBounds.Width / 4;
@@ -227,7 +229,7 @@ namespace Poseidon.Core
             fishTexture2 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish2-1");
             fishTexture3 = Content.Load<Texture2D>("Image/FishSchoolTextures/smallfish3");
 
-            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconNormal");
+            levelObjectiveNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIcon");
             levelObjectiveHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/LevelObjectiveIconHover");
             tipNormalIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIcon");
             tipHoverIconTexture = Content.Load<Texture2D>("Image/Miscellaneous/tipIconHover");
@@ -280,6 +282,8 @@ namespace Poseidon.Core
             experienceIcon = Content.Load<Texture2D>("Image/HydroBotStatus/experience");
             botHealthIcon = Content.Load<Texture2D>("Image/HydroBotStatus/health");
             energyIcon = Content.Load<Texture2D>("Image/HydroBotStatus/energy_icon");
+
+            introScene = Content.Load<Texture2D>("Image/SceneTextures/introScreen");
         }
 
         public static Model bossBullet, chasingBullet, damageBullet, healBullet, herculesArrow, mjolnir, normalbullet, piercingArrow, torpedo,
@@ -1314,30 +1318,30 @@ namespace Poseidon.Core
             //    if (newTextScale <= 1.0f) newTextScale = 1.0f;
             //    spriteBatch.DrawString(fishTalkFont, "NEW", new Vector2(levelObjectiveIconRectangle.Center.X, levelObjectiveIconRectangle.Center.Y), Color.LawnGreen, rotatingAngle, new Vector2(facilityFont.MeasureString("NEW").X / 2, facilityFont.MeasureString("NEW").Y / 2), newTextScale, SpriteEffects.None, 0);
             //}
-            if (PlayGameScene.newLevelObjAvailable && GameSettings.ShowLiveTip && PlayGameScene.timeElapsedFromLevelStart >= 3000)
-            {
-                xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width;
-                yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height / 2;
+            //if (PlayGameScene.newLevelObjAvailable && GameSettings.ShowLiveTip && PlayGameScene.timeElapsedFromLevelStart >= 3000)
+            //{
+            //    xOffsetText = levelObjectiveIconRectangle.X - arrowTexture.Width;
+            //    yOffsetText = levelObjectiveIconRectangle.Center.Y - arrowTexture.Height / 2;
 
-                Rectangle arrowRectangle = new Rectangle(xOffsetText, yOffsetText, arrowTexture.Width, arrowTexture.Height);
+            //    Rectangle arrowRectangle = new Rectangle(xOffsetText, yOffsetText, arrowTexture.Width, arrowTexture.Height);
 
-                spriteBatch.Draw(arrowTexture, arrowRectangle, Color.White);
-            }
+            //    spriteBatch.Draw(arrowTexture, arrowRectangle, Color.White);
+            //}
         }
 
         //Draw level tip icon
         public static void DrawTipIcon(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
         {
-            //if (tipHover) tipIconTexture = tipHoverIconTexture;
-            //else tipIconTexture = tipNormalIconTexture;
-            //int xOffsetText, yOffsetText;
+            if (tipHover) tipIconTexture = tipHoverIconTexture;
+            else tipIconTexture = tipNormalIconTexture;
+            int xOffsetText, yOffsetText;
 
-            //xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
-            //yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
+            xOffsetText = (int)(levelObjectiveIconRectangle.Center.X - 75 * textScaleFactor / 2);
+            yOffsetText = (int)(levelObjectiveIconRectangle.Bottom + 15);
 
-            //tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
+            tipIconRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(75 * textScaleFactor), (int)(75 * textScaleFactor));
 
-            //spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
+            spriteBatch.Draw(tipIconTexture, tipIconRectangle, Color.White);
 
         }
         //Draw GamePlus level

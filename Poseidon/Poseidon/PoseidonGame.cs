@@ -17,7 +17,7 @@ using System.IO;
 
 namespace Poseidon
 {
-    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, NewGameStarted, PlayingOpeningCinematic, PlayingCutScene, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
+    public enum GameState { GameStart, PlayingPresentScene, DisplayMenu, NewGameStarted, PlayingOpeningCinematic, PlayingCutScene, IntroducingGame, Loading, Running, Won, Lost, WonButStaying, ToMiniGame, ToNextLevel, GameComplete, ToMainMenu }
     public enum GameMode { MainGame, ShipWreck, SurvivalMode };
     public enum TrashType { biodegradable, plastic, radioactive };
     public enum PowerPackType { Speed, Strength, FireRate, Health, StrangeRock, GoldenKey };
@@ -662,8 +662,9 @@ namespace Poseidon
                 }
                 else if (PlayGameScene.currentGameState == GameState.PlayingCutScene)
                 {
-
-                    if (PlayGameScene.currentLevel == 12)
+                    if (PlayGameScene.currentLevel == 0)
+                        PlayGameScene.currentGameState = GameState.IntroducingGame;
+                    else if (PlayGameScene.currentLevel == 12)
                     {
                         PlayGameScene.currentGameState = GameState.GameComplete;
                         HydroBot.gamePlusLevel++;

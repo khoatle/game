@@ -792,7 +792,13 @@ namespace Poseidon
                 //if ((currentKeyboardState.IsKeyDown(Keys.Escape)) ||
                 //    (currentGamePadState.Buttons.Back == ButtonState.Pressed))
                 //    //this.Exit();
-               
+
+                if (currentGameState == GameState.IntroducingGame)
+                {
+                    if (lastKeyboardState.IsKeyDown(Keys.Enter) &&
+                        currentKeyboardState.IsKeyUp(Keys.Enter))
+                        currentGameState = GameState.Running;
+                }
 
                 if (currentGameState == GameState.PlayingCutScene)
                 {
@@ -804,7 +810,8 @@ namespace Poseidon
                         // End of cutscene for this level
                         if (currentSentence == cutSceneDialog.cutScenes[currentLevel].Count)
                         {
-                            currentGameState = GameState.Running;
+                            if (currentLevel == 0) currentGameState = GameState.IntroducingGame;
+                            else currentGameState = GameState.Running;
                             if (currentLevel == 12)
                             {
                                 currentGameState = GameState.GameComplete;
@@ -1506,6 +1513,11 @@ namespace Poseidon
                     break;
                 case GameState.PlayingCutScene:
                     DrawCutScene();
+                    break;
+                case GameState.IntroducingGame:
+                    RestoreGraphicConfig();
+                    DrawGameplayScreen(gameTime);
+                    DrawIntroScene();
                     break;
                 case GameState.Running:
                     RestoreGraphicConfig();
@@ -2403,6 +2415,26 @@ namespace Poseidon
                 }
             }
         }
+        private void DrawIntroScene()
+        {
+            int xOffsetText, yOffsetText;
+            Rectangle rectSafeArea;
 
+            //Calculate str1 position
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+
+            //xOffsetText = rectSafeArea.Center.X - experienceBarLength/2 - (int)(64 * GameConstants.generalTextScaleFactor);
+            //yOffsetText = rectSafeArea.Height - (int)(64 * GameConstants.generalTextScaleFactor) - 5;
+            xOffsetText = rectSafeArea.Center.X - (int)(IngamePresentation.introScene.Width / 2 * GameConstants.generalTextScaleFactor);
+            yOffsetText = rectSafeArea.Center.Y - (int)(IngamePresentation.introScene.Height / 2 * GameConstants.generalTextScaleFactor);
+
+            //Vector2 bulletIconPosition =
+            //    new Vector2((int)xOffsetText, (int)yOffsetText);
+            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, (int)(IngamePresentation.introScene.Width * GameConstants.generalTextScaleFactor), (int)(IngamePresentation.introScene.Height * GameConstants.generalTextScaleFactor));
+            //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
+            spriteBatch.Begin();
+            spriteBatch.Draw(IngamePresentation.introScene, destRectangle, Color.White);
+            spriteBatch.End();
+        }
     }
 }

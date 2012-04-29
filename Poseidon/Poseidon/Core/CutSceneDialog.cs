@@ -51,7 +51,7 @@ namespace Poseidon
             cutScene.Add(sentence);
             sentence = new Sentence(0, "... Sorry everyone, I could not do it ...", "Image/Cutscenes/terminatorKillBot", 0);
             cutScene.Add(sentence);
-            sentence = new Sentence(3, "The story begins around 3 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
+            sentence = new Sentence(3, "The story begins around 5 years ago ...", "Image/Cutscenes/terminatorKillBot", 0);
             cutScene.Add(sentence);
             sentence = new Sentence(3, "Year 2100 ...", "Image/Cutscenes/blackScreen", 0);
             cutScene.Add(sentence);

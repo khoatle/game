@@ -1286,6 +1286,16 @@ namespace Poseidon
                 return false;
             }
 
+            if (HydroBot.currentEnergy < GameConstants.EnergyLostPerBuild)
+            {
+                audio.MenuScroll.Play();
+                Point point = new Point();
+                String point_string = "Not enough\nenergy";
+                point.LoadContent(PoseidonGame.contentManager, point_string, position, Color.Red);
+                PlayGameScene.points.Add(point);
+                return false;
+            }
+
             int radius = 60; // need to revise this based on the model for each building
             BoundingSphere buildingBoundingSphere;
             //BoundingBox buildingBoundingBox = new BoundingBox();
@@ -1362,14 +1372,6 @@ namespace Poseidon
                         //AddingObjects.ModifyBoundingBox(ref researchFacility.boundingBox, GameConstants.MainGameFloatHeight);
                         HydroBot.numResources -= GameConstants.numResourcesForResearchCenter;
                         status = true;
-                        //env loss for building factory
-                        if (GameConstants.envLossPerFactoryBuilt > 0)
-                        {
-                            HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
-                            Point lossPoint = new Point();
-                            lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
-                            points.Add(lossPoint);
-                        }
                     }
                     break;
 
@@ -1386,15 +1388,6 @@ namespace Poseidon
                     HydroBot.numResources -= GameConstants.numResourcesForBioFactory;
                     factories.Add(oneFactory);
                     status = true;
-
-                    //env loss for building factory
-                    if (GameConstants.envLossPerFactoryBuilt > 0)
-                    {
-                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
-                        Point lossPoint = new Point();
-                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
-                        points.Add(lossPoint);
-                    }
                     break;
 
                 case BuildingType.plastic:
@@ -1410,14 +1403,6 @@ namespace Poseidon
                     //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     factories.Add(oneFactory);
                     status = true;
-                    //env loss for building factory
-                    if (GameConstants.envLossPerFactoryBuilt > 0)
-                    {
-                        HydroBot.currentEnvPoint -= GameConstants.envLossPerFactoryBuilt;
-                        Point lossPoint = new Point();
-                        lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
-                        points.Add(lossPoint);
-                    }
                     break;
                 case BuildingType.radioactive:
                     oneFactory = new Factory(FactoryType.radioactive, particleManager, GraphicDevice);
@@ -1431,6 +1416,17 @@ namespace Poseidon
                     //AddingObjects.ModifyBoundingBox(ref oneFactory.boundingBox, GameConstants.MainGameFloatHeight);
                     factories.Add(oneFactory);
                     status = true;
+                    break;
+            }
+            if (status)
+            {
+                // Play sound for successful addition of a building
+                audio.OpenChest.Play();
+                if (status)
+                {
+                    // Play sound for successful addition of a building
+                    audio.OpenChest.Play();
+                    HydroBot.currentEnergy -= GameConstants.EnergyLostPerBuild;
                     //env loss for building factory
                     if (GameConstants.envLossPerFactoryBuilt > 0)
                     {
@@ -1439,12 +1435,7 @@ namespace Poseidon
                         lossPoint.LoadContent(Content, "-" + GameConstants.envLossPerFactoryBuilt + "ENV", position, Color.Red);
                         points.Add(lossPoint);
                     }
-                    break;
-            }
-            if (status)
-            {
-                // Play sound for successful addition of a building
-                audio.OpenChest.Play();
+                }
             }
 
             return status;

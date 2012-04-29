@@ -1594,6 +1594,7 @@ namespace Poseidon
             incrShootRate = incrSpeed = incrStrength = false;
             numHealth = numResourceCollected = numRocks = 0;
             bool increaseEnergy = false;
+            int numPowPackCollected = 0;
 
             if (powerpacks != null)
             {
@@ -1611,6 +1612,7 @@ namespace Poseidon
                             speedUp = 2.0f;
                             incrSpeed = true;
                             increaseEnergy = true;
+                            numPowPackCollected++;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.Strength)
                         {
@@ -1618,6 +1620,7 @@ namespace Poseidon
                             strengthUp = 2.0f;
                             incrStrength = true;
                             increaseEnergy = true;
+                            numPowPackCollected++;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.FireRate)
                         {
@@ -1625,6 +1628,7 @@ namespace Poseidon
                             fireRateUp = 2.0f;
                             incrShootRate = true;
                             increaseEnergy = true;
+                            numPowPackCollected++;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.Health)
                         {
@@ -1640,6 +1644,7 @@ namespace Poseidon
                                 numHealth += 100;
                             }
                             increaseEnergy = true;
+                            numPowPackCollected++;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.StrangeRock)
                         {
@@ -1693,7 +1698,7 @@ namespace Poseidon
                 point_string += numHealth + " HP\n";
             if (increaseEnergy)
             {
-                float energyIncrease = Math.Min(maxEnergy - currentEnergy, GameConstants.EnergyGainPerPowPack);
+                float energyIncrease = Math.Min(maxEnergy - currentEnergy, numPowPackCollected * GameConstants.EnergyGainPerPowPack);
                 currentEnergy += energyIncrease;
                 if (energyIncrease > 0)
                     point_string += (int)energyIncrease + " Energy\n";

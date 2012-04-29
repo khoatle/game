@@ -953,24 +953,24 @@ namespace Poseidon
             switch (difficultyLevel)
             {
                 case 1:
-                    TimeSpan[]  roundTimeEasy = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(490), 
-                                                       TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(600),
-                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(570),
-                                                       TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(220)};
+                    TimeSpan[] roundTimeEasy = {TimeSpan.FromSeconds(530 + 120), TimeSpan.FromSeconds(240), TimeSpan.FromSeconds(490 + 120), 
+                                                       TimeSpan.FromSeconds(220 + 120), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(600 + 120),
+                                                       TimeSpan.FromSeconds(570 + 120), TimeSpan.FromSeconds(570 + 120), TimeSpan.FromSeconds(570 + 120),
+                                                       TimeSpan.FromSeconds(530 + 120), TimeSpan.FromSeconds(220 + 120), TimeSpan.FromSeconds(220 + 120)};
                     GameConstants.RoundTime = roundTimeEasy;
                     break;
                 case 2:
-                    TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(450), 
-                                                       TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(530),
-                                                       TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
-                                                       TimeSpan.FromSeconds(570), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
+                    TimeSpan[] roundTimeMedium = {TimeSpan.FromSeconds(530 + 120), TimeSpan.FromSeconds(240 + 120), TimeSpan.FromSeconds(450 + 120), 
+                                                       TimeSpan.FromSeconds(180 + 120), TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(530 + 120),
+                                                       TimeSpan.FromSeconds(530 + 120), TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(530),
+                                                       TimeSpan.FromSeconds(570 + 120), TimeSpan.FromSeconds(180), TimeSpan.FromSeconds(180)};
                      GameConstants.RoundTime = roundTimeMedium;
                     break;
                 case 3:
-                    TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(220), TimeSpan.FromSeconds(410), 
-                                                       TimeSpan.FromSeconds(140), TimeSpan.FromSeconds(160), TimeSpan.FromSeconds(500),
-                                                       TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500), TimeSpan.FromSeconds(500),
-                                                       TimeSpan.FromSeconds(600), TimeSpan.FromSeconds(150), TimeSpan.FromSeconds(150)};
+                    TimeSpan[] roundTimeHard = {TimeSpan.FromSeconds(530), TimeSpan.FromSeconds(280), TimeSpan.FromSeconds(410 + 120), 
+                                                       TimeSpan.FromSeconds(140 + 120), TimeSpan.FromSeconds(160), TimeSpan.FromSeconds(500 + 120),
+                                                       TimeSpan.FromSeconds(500 + 120), TimeSpan.FromSeconds(500 + 120), TimeSpan.FromSeconds(500 + 120),
+                                                       TimeSpan.FromSeconds(600 + 120), TimeSpan.FromSeconds(150 + 120), TimeSpan.FromSeconds(150 + 120)};
                      GameConstants.RoundTime = roundTimeHard;
                     break;
                 default:
@@ -1085,6 +1085,8 @@ namespace Poseidon
                     audio.MenuSelect.Play();
                     HydroBot.currentHitPoint += GameConstants.gainHitPoint;
                     HydroBot.maxHitPoint += GameConstants.gainHitPoint;
+                    HydroBot.currentEnergy += GameConstants.EnergyGainPerUpgrade;
+                    HydroBot.maxEnergy += GameConstants.EnergyGainPerUpgrade;
                     HydroBot.unassignedPts -= GameConstants.gainAttributeCost;
                 }
             }

@@ -118,7 +118,7 @@ namespace Poseidon
             string achieved_status="";
 
             if (HydroBot.gameMode == GameMode.SurvivalMode)
-                level_description = "SURVIVAL MODE";
+                level_description = "GUARDIAN MODE";
             if (PoseidonGame.gamePlus)
             {
                 level_description = "GAME + " + HydroBot.gamePlusLevel + "\n" + " LEVEL " + (currentLevel + 1).ToString();
@@ -181,20 +181,25 @@ namespace Poseidon
                 }
                 else if (PlayGameScene.levelObjectiveState == 5)
                 {
-                    level_objective = "Open a facility's control panel by Shift + Click on the facility.";
-                    achieved_status = "You have not opened any facility's control panel.";
+                    level_objective = "Open a facility's control panel by Shift + Click on the facility. Then switch the product to Powerpack.";
+                    achieved_status = "You have not switched the product to Powerpack.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 6)
+                {
+                    level_objective = "Produce powerpack by collecting and dropping more wastes on a processing plant. Then consume the powerpack for energy.";
+                    achieved_status = "You have not consumed any powerpack.";
+                }
+                else if (PlayGameScene.levelObjectiveState == 7)
                 {
                     level_objective = "Healing the sea animals by left clicking on them to shoot healing bullet. Hold down Ctrl to shoot easier.";
                     achieved_status = "You have not healed any sea animal.";
                 }
-                else if (PlayGameScene.levelObjectiveState == 7)
+                else if (PlayGameScene.levelObjectiveState == 8)
                 {
                     level_objective = "Accumulate experience to get a level up.";
                     achieved_status = "You have not leveled up.";
                 }
-                else if (PlayGameScene.levelObjectiveState == 8)
+                else if (PlayGameScene.levelObjectiveState == 9)
                 {
                     level_objective = "Build a Research center, open its control panel and upgrade the Hydrobot.";
                     achieved_status = "You have not upgraded the Hydrobot.";

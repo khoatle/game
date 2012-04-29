@@ -95,7 +95,7 @@ namespace Poseidon
             underConstruction = true;
             constructionIndex = 0;
             lastConstructionSwitchTime = TimeSpan.Zero;
-            constructionSwitchSpan = TimeSpan.FromSeconds(1);
+            constructionSwitchSpan = TimeSpan.FromSeconds(3);
             this.particleManager = particleManager;
             //buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
 
@@ -402,7 +402,7 @@ namespace Poseidon
             float textScaleFactor = GameConstants.factoryTextScaleFactor;
             float lineSpacing = GameConstants.lineSpacing;
 
-            float fadeFactor = 0.65f;
+            float fadeFactor = 0.75f;
             string title = "";
             string production_str = "PRODUCT: "+produce.ToString().ToUpper();
             string plant_basic_description = "";
@@ -438,7 +438,7 @@ namespace Poseidon
                     break;
                 case FactoryType.plastic:
                     title = "Plastic Recycling Plant";
-                    plant_basic_description = "Basic steps for plastic recycling:\n 1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n 2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n 3) Washing: Contaminants are removed.\n 4) Pelleting: The plastic is mented down and made into small pellets.\n Types of plastic (with code and some examples): PET - bottles, HDPE - milk bottles, bags, PVC - pipes, detergent bottles, raincoats, LDPE - bread bags, PP - straws, screw-on lids, PS - foam, yogurt containers, Others - ketchup bottles.\n The code numbers are printed within a recycle sign on most plastic containers.";
+                    plant_basic_description = "Basic steps for plastic recycling:\n 1) Manual Sorting: All non-plastic materials are removed. Plastic is sorted into 3 types: PET, HDPE and 'others'.\n 2) Chipping: The sorted plastic is cut into small pieces ready to be mented down.\n 3) Washing: Contaminants are removed.\n 4) Pelleting: The plastic is mented down and made into small pellets.\n Types of plastic (with code and some examples): PET - bottles, HDPE - milk bottles, bags, PVC - pipes, detergent bottles, raincoats, LDPE - bread bags, PP - straws, screw-on lids, PS - foam, yogurt containers, Others - ketchup bottles.\n The code numbers are printed within a recycle sign on most plastic containers.\n Low temperature treatment converts polymers into oil that can be used for power.";
                     numDays = (float)processingTime / GameConstants.DaysPerSecond;
                     production_str += " for " + trashBlockSize + " trash in "+ numDays.ToString() +" day";
                     if (HydroBot.plasticPlantLevel == 1)
@@ -534,6 +534,13 @@ namespace Poseidon
         public void SwitchProductionItem()
         {
             produce = ((produce==Produce.powerpack)? produce = Produce.resource : produce = Produce.powerpack);
+            //fulfill the task of opening a facility's control panel
+            if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0 && 
+                PlayGameScene.levelObjectiveState == 5 && produce == Produce.powerpack)
+            {
+                PlayGameScene.levelObjectiveState = 6;
+                PlayGameScene.newLevelObjAvailable = true;
+            }
             defaultChoice = produce;
         }
 

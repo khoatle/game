@@ -45,7 +45,9 @@ namespace Poseidon
         public static float speed, lsSpeed;
         public static float shootingRate, lsShootingRate;
         public static float maxHitPoint, lsMaxHitPoint;
+        public static float maxEnergy, lsMaxEnergy;
         public static float currentHitPoint;//, lsCurrentHitPoint;
+        public static float currentEnergy;
         public static int currentEnvPoint, lsCurrentEnvPoint;
         public static int maxEnvPoint;
 
@@ -195,6 +197,7 @@ namespace Poseidon
             shootingRate = lsShootingRate = GameConstants.MainCharShootingSpeed;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = GameConstants.PlayerStartingHP;
+            maxEnergy = lsMaxEnergy = currentEnergy = GameConstants.PlayerStartingEnergy;  
             currentHitPoint = GameConstants.PlayerStartingHP;
             maxEnvPoint = GameConstants.MaxEnv;   
             currentEnvPoint = lsCurrentEnvPoint = GameConstants.PlayerStartingEnv;
@@ -270,7 +273,7 @@ namespace Poseidon
             bioTrash = plasticTrash = nuclearTrash = 0;
             totalBioTrashProcessed = totalPlasticTrashProcessed = totalNuclearTrashProcessed = 0;
             bioPlantLevel = plasticPlantLevel = lsBioPlantLevel = lsPlasticPlantLevel = 1;
-            numResources  = lsNumResources = GameConstants.numResourcesAtStart;
+            numResources  = lsNumResources = 0;
 
             HydroBot.gameMode = gameMode;
 
@@ -290,6 +293,7 @@ namespace Poseidon
             shootingRate = lsShootingRate = (float)info.GetValue("shootingRate", typeof(float));
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint = (float)info.GetValue("maxHitPoint",typeof(float));
+            maxEnergy = lsMaxEnergy = currentEnergy = (float)info.GetValue("maxEnergy", typeof(float));
             currentHitPoint = maxHitPoint;
             currentEnvPoint = lsCurrentEnvPoint = (int)info.GetValue("currentEnvPoint",typeof(int));
             maxEnvPoint = GameConstants.MaxEnv;
@@ -416,6 +420,7 @@ namespace Poseidon
             info.AddValue("speed", speed);
             info.AddValue("shootingRate", shootingRate);
             info.AddValue("maxHitPoint", maxHitPoint);
+            info.AddValue("maxEnergy", maxEnergy);
             info.AddValue("currentEnvPoint", currentEnvPoint);
 
             for (int i = 0; i < GameConstants.numberOfSkills; i++)
@@ -509,20 +514,21 @@ namespace Poseidon
             //just for testing
             //should be removed
 
-            //skillComboActivated = true;
-            //activeSkillID = 4;
-            //secondSkillID = -1;
-            //skills[0] = true;
-            //skills[1] = true;
-            //skills[2] = true;
-            //skills[3] = true;
-            //skills[4] = true;
+            skillComboActivated = true;
+            activeSkillID = 4;
+            secondSkillID = 3;
+            skills[0] = true;
+            skills[1] = true;
+            skills[2] = true;
+            skills[3] = true;
+            skills[4] = true;
 
             //unassignedPts = 5;
 
             //for testing survival mode
             //unassignedPts = 40;
             //currentHitPoint = maxHitPoint = 500;
+            //currentEnergy = 30;
             //strength = 2000;
             //speed = 15;
             //shootingRate = 15;
@@ -577,6 +583,7 @@ namespace Poseidon
             shootingRate = lsShootingRate;
             bulletType = 1;
             maxHitPoint = lsMaxHitPoint;
+            maxEnergy = lsMaxEnergy;
             currentEnvPoint = lsCurrentEnvPoint;
             lsSkills.CopyTo(skills, 0);
             activeSkillID = lsActiveSkillID;
@@ -635,6 +642,7 @@ namespace Poseidon
             lsSpeed = speed;
             lsShootingRate = shootingRate;
             lsMaxHitPoint = maxHitPoint;
+            lsMaxEnergy = maxEnergy;
             //lsCurrentHitPoint = currentHitPoint;
 
             skills.CopyTo(lsSkills, 0);
@@ -722,6 +730,7 @@ namespace Poseidon
             speedUpStartTime = 0;
             fireRateUpStartTime = 0;
             currentHitPoint = maxHitPoint;
+            currentEnergy = maxEnergy;
             isPoissoned = false;
             firstPlant = true;
             prevPlantTime = 0;
@@ -739,6 +748,7 @@ namespace Poseidon
             SpriteBatch spriteBatch, List<DamageBullet> myBullet, GameScene gameScene, HeightMapInfo heightMapInfo, List<HealthBullet> healthBullet, List<Powerpack> powerpacks, List<Resource> resources,
             List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, bool mouseOnInteractiveIcons)
         {
+            currentEnergy = MathHelper.Clamp(currentEnergy, 0, maxEnergy);
             isShooting = false;
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();
@@ -799,17 +809,36 @@ namespace Poseidon
                 {
                     pointIntersect = CursorManager.IntersectPointWithPlane(cursor, gameCamera, floatHeight);
                     ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
+                    //if the enemy is in the shooting range then shoot it w/o moving to it
                     if (PoseidonGame.playTime.TotalSeconds - prevFireTime.TotalSeconds > GameConstants.MainCharBasicTimeBetweenFire.TotalSeconds / (HydroBot.shootingRate * HydroBot.fireRateUp))
                     {
+                        ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
                         prevFireTime = PoseidonGame.playTime;
-                        //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
-                        //if (!clipPlayer.inRange(61, 90))
-                        //    clipPlayer.switchRange(61, 90);
-                        isShooting = true;
-                        //if the player moves or shoot, abort skill casting
-                        isCastingSkill = false;
+                        if (!(currentEnergy > 0))
+                        {
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, "Out of\nenergy!", Position, Color.Red);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                        }
+                        else
+                        {
+                            //audio.Shooting.Play();
+                            if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
+                            else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
+                            //so the bot will not move
+                            pointIntersect = Vector3.Zero;
+                            reachDestination = true;
+                            //if (!clipPlayer.inRange(61, 90))
+                            //    clipPlayer.switchRange(61, 90);
+                            isShooting = true;
+                            isCastingSkill = false;
+                            currentEnergy -= GameConstants.EnergyLostPerShot;
+                        }
                     }
                     //hydroBot.reachDestination = true;
                 }
@@ -842,16 +871,31 @@ namespace Poseidon
                     {
                         ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
                         prevFireTime = PoseidonGame.playTime;
-                        //audio.Shooting.Play();
-                        if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
-                        else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
-                        //so the bot will not move
-                        pointIntersect = Vector3.Zero;
-                        reachDestination = true;
-                        //if (!clipPlayer.inRange(61, 90))
-                        //    clipPlayer.switchRange(61, 90);
-                        isShooting = true;
-                        isCastingSkill = false;
+                        if (!(currentEnergy > 0))
+                        {
+                            Point point = new Point();
+                            point.LoadContent(PoseidonGame.contentManager, "Out of\nenergy!", Position, Color.Red);
+                            if (gameMode == GameMode.ShipWreck)
+                                ShipWreckScene.points.Add(point);
+                            else if (gameMode == GameMode.MainGame)
+                                PlayGameScene.points.Add(point);
+                            else if (gameMode == GameMode.SurvivalMode)
+                                SurvivalGameScene.points.Add(point);
+                        }
+                        else
+                        {
+                            //audio.Shooting.Play();
+                            if (HydroBot.bulletType == 0) { AddingObjects.placeBotDamageBullet(this, Content, myBullet, gameMode); }
+                            else if (HydroBot.bulletType == 1) { AddingObjects.placeHealingBullet(this, Content, healthBullet, gameMode); }
+                            //so the bot will not move
+                            pointIntersect = Vector3.Zero;
+                            reachDestination = true;
+                            //if (!clipPlayer.inRange(61, 90))
+                            //    clipPlayer.switchRange(61, 90);
+                            isShooting = true;
+                            isCastingSkill = false;
+                            currentEnergy -= GameConstants.EnergyLostPerShot;
+                        }
                     }
                     if (doubleClicked == true) pointIntersect = Vector3.Zero;
                 }
@@ -862,8 +906,19 @@ namespace Poseidon
             //else 
             if ((lastMouseState.RightButton == ButtonState.Pressed && currentMouseState.RightButton == ButtonState.Released && !mouseOnInteractiveIcons) || isCastingSkill)
             {
+                if (!(currentEnergy > 0) && !isCastingSkill)
+                {
+                    Point point = new Point();
+                    point.LoadContent(PoseidonGame.contentManager, "Out of\nenergy!", Position, Color.Red);
+                    if (gameMode == GameMode.ShipWreck)
+                        ShipWreckScene.points.Add(point);
+                    else if (gameMode == GameMode.MainGame)
+                        PlayGameScene.points.Add(point);
+                    else if (gameMode == GameMode.SurvivalMode)
+                        SurvivalGameScene.points.Add(point);
+                }
                 //ForwardDirection = CursorManager.CalculateAngle(pointIntersect, Position);
-                CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount, ref isCastingSkill);
+                else CastSkill.UseSkill(mouseOnLivingObject, pointIntersect, cursor, gameCamera, gameMode, this, gameScene, Content, spriteBatch, gameTime, myBullet, enemies, ref enemiesAmount, fish, ref fishAmount, ref isCastingSkill);
             }
 
             //if the user holds down Caps Lock button
@@ -970,7 +1025,7 @@ namespace Poseidon
                                 if (bioTrash >= GameConstants.maxBioTrashCarryingCapacity)
                                 {
                                     Point point1 = new Point();
-                                    point1.LoadContent(PoseidonGame.contentManager, "Organic trash\ncontainer nis full", Position, Color.Red);
+                                    point1.LoadContent(PoseidonGame.contentManager, "Biodegradable \nwaste container\n is full", Position, Color.Red);
                                     if (gameMode == GameMode.ShipWreck)
                                         ShipWreckScene.points.Add(point1);
                                     else if (gameMode == GameMode.MainGame)
@@ -980,7 +1035,7 @@ namespace Poseidon
                                     break;
                                 }
                                 bioTrash++;
-                                display_str = "Organic trash\ncollected " + bioTrash;
+                                display_str = "Biodegradable \nwaste collected " + bioTrash;
 
                                 if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
 
@@ -1044,7 +1099,7 @@ namespace Poseidon
                             Color str_color = Color.LawnGreen;
                             if (trash.trashType == TrashType.biodegradable)
                             {
-                                display_str = "Wrong type:\nOrganic";
+                                display_str = "Wrong type:\nBiodegradable";
                                 str_color = Color.Red;
                             }
                             else if (trash.trashType == TrashType.plastic)
@@ -1052,7 +1107,7 @@ namespace Poseidon
                                 if (plasticTrash >= GameConstants.maxPlasticTrashCarryingCapacity)
                                 {
                                     Point point1 = new Point();
-                                    point1.LoadContent(PoseidonGame.contentManager, "Plastic trash\ncontainer is full", Position, Color.Red);
+                                    point1.LoadContent(PoseidonGame.contentManager, "Plastic waste\ncontainer is full", Position, Color.Red);
                                     if (gameMode == GameMode.ShipWreck)
                                         ShipWreckScene.points.Add(point1);
                                     else if (gameMode == GameMode.MainGame)
@@ -1063,7 +1118,7 @@ namespace Poseidon
                                 }
 
                                 plasticTrash++;
-                                display_str = "Plastic trash\ncollected " + plasticTrash;
+                                display_str = "Plastic waste\ncollected " + plasticTrash;
 
                                 if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
 
@@ -1123,7 +1178,7 @@ namespace Poseidon
                             Color str_color = Color.LawnGreen;
                             if (trash.trashType == TrashType.biodegradable)
                             {
-                                display_str = "Wrong type:\nOrganic";
+                                display_str = "Wrong type:\nBiodegradable";
                                 str_color = Color.Red;
                             }
                             else if (trash.trashType == TrashType.plastic)
@@ -1136,7 +1191,7 @@ namespace Poseidon
                                 if (nuclearTrash >= GameConstants.maxNukeTrashCarryingCapacity)
                                 {
                                     Point point1 = new Point();
-                                    point1.LoadContent(PoseidonGame.contentManager, "Nuclear trash\ncontainer is full", Position, Color.Red);
+                                    point1.LoadContent(PoseidonGame.contentManager, "Nuclear waste\ncontainer is full", Position, Color.Red);
                                     if (gameMode == GameMode.ShipWreck)
                                         ShipWreckScene.points.Add(point1);
                                     else if (gameMode == GameMode.MainGame)
@@ -1146,7 +1201,7 @@ namespace Poseidon
                                     break;
                                 }
                                 nuclearTrash++;
-                                display_str = "Radioactive trash\ncollected " + nuclearTrash;
+                                display_str = "Radioactive waste\ncollected " + nuclearTrash;
 
                                 if (gameMode == GameMode.MainGame) PlayGameScene.numTrashCollected += 1;
 
@@ -1445,12 +1500,16 @@ namespace Poseidon
             //if (desiredAngle != 0) movement.Z = 1;
             Vector3 speedl = Vector3.Transform(movement, orientationMatrix);
             speedl *= GameConstants.MainCharVelocity * speedUp * speed;
+            if (!(currentEnergy > 0)) speedl *= 0.25f;
             if (supersonicMode == true) speedl *= 5;
             futurePosition = Position + speedl;
             if (Collision.isBotValidMove(this, futurePosition, enemies, enemyAmount, fishes, fishAmount, heightMapInfo))
             {
+                //lose energy for moving
+                if (speedl != Vector3.Zero)
+                    currentEnergy -= GameConstants.EnergyLostPerMovement;
                 Position = futurePosition;
-
+          
                 BoundingSphere updatedSphere;
                 updatedSphere = BoundingSphere;
 
@@ -1534,12 +1593,14 @@ namespace Poseidon
             int numHealth, numResourceCollected, numRocks;
             incrShootRate = incrSpeed = incrStrength = false;
             numHealth = numResourceCollected = numRocks = 0;
+            bool increaseEnergy = false;
 
             if (powerpacks != null)
             {
                 Trash_Fruit_BoundingSphere = new BoundingSphere(BoundingSphere.Center, 10);
                 for (int curCell = 0; curCell < powerpacks.Count; curCell++)
                 {
+      
                     powerpacks[curCell].BoundingSphere.Center.Y = Position.Y;
                     if (Trash_Fruit_BoundingSphere.Intersects(
                         powerpacks[curCell].BoundingSphere))
@@ -1549,18 +1610,21 @@ namespace Poseidon
                             speedUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             speedUp = 2.0f;
                             incrSpeed = true;
+                            increaseEnergy = true;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.Strength)
                         {
                             strengthUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             strengthUp = 2.0f;
                             incrStrength = true;
+                            increaseEnergy = true;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.FireRate)
                         {
                             fireRateUpStartTime = PoseidonGame.playTime.TotalSeconds;
                             fireRateUp = 2.0f;
                             incrShootRate = true;
+                            increaseEnergy = true;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.Health)
                         {
@@ -1575,6 +1639,7 @@ namespace Poseidon
                             {
                                 numHealth += 100;
                             }
+                            increaseEnergy = true;
                         }
                         else if (powerpacks[curCell].powerType == PowerPackType.StrangeRock)
                         {
@@ -1623,8 +1688,21 @@ namespace Poseidon
                 }
             }
 
+
             if (numHealth > 0)
-                point_string += numHealth + " health\n";
+                point_string += numHealth + " HP\n";
+            if (increaseEnergy)
+            {
+                float energyIncrease = Math.Min(maxEnergy - currentEnergy, GameConstants.EnergyGainPerPowPack);
+                currentEnergy += energyIncrease;
+                if (energyIncrease > 0)
+                    point_string += (int)energyIncrease + " Energy\n";
+                if (gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0 && PlayGameScene.levelObjectiveState == 6)
+                {
+                    PlayGameScene.levelObjectiveState = 7;
+                    PlayGameScene.newLevelObjAvailable = true;
+                }
+            }
             if (incrSpeed)
                 point_string += "Speed X 2\n";
             if (incrShootRate)

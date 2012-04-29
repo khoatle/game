@@ -125,12 +125,15 @@ namespace Poseidon
 
                     //lose health after using skill
                     if (HydroBot.skillComboActivated && HydroBot.secondSkillID != -1 && HydroBot.secondSkillID != HydroBot.activeSkillID)
-                        healthToLose = 2 * GameConstants.skillHealthLoss;
-                    else healthToLose = GameConstants.skillHealthLoss;
+                        healthToLose = (int)(2 * GameConstants.EnergyLostPerSkill);//GameConstants.skillHealthLoss;
+                    else healthToLose = (int)(GameConstants.EnergyLostPerSkill);
                     //display HP loss
-                    HydroBot.currentHitPoint -= healthToLose;
+                    //HydroBot.currentHitPoint -= healthToLose;
+                    //we now lose energy instead of health
+                    int energyLost = healthToLose;
+                    HydroBot.currentEnergy -= energyLost;
                     Point point = new Point();
-                    String point_string = "-" + healthToLose.ToString() + "HP";
+                    String point_string = "-" + energyLost.ToString() + "Energy";
                     point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.Red);
                     if (gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);
@@ -314,7 +317,7 @@ namespace Poseidon
         //=================//combo skills casting
         public static void ShootHammer(HydroBot hydroBot, ContentManager Content, List<DamageBullet> myBullets, GameMode gameMode)
         {
-            float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            float healthiness = HydroBot.currentEnergy / GameConstants.PlayerStartingEnergy;
             if (healthiness > 1) healthiness = 1.0f;
             FlyingHammer f = new FlyingHammer(gameMode);
 
@@ -330,7 +333,7 @@ namespace Poseidon
         }
         public static void ShootPiercingArrow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
-            float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            float healthiness = HydroBot.currentEnergy / GameConstants.PlayerStartingEnergy;
             if (healthiness > 1) healthiness = 1.0f;
             HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection, true);
 
@@ -350,7 +353,7 @@ namespace Poseidon
         //=================//single skill casting
         public static void UseHerculesBow(HydroBot hydroBot, ContentManager Content, SpriteBatch spriteBatch, List<DamageBullet> myBullets, GameMode gameMode)
         {
-            float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+            float healthiness = HydroBot.currentEnergy / GameConstants.PlayerStartingEnergy;
             if (healthiness > 1) healthiness = 1.0f;
             HerculesBullet d = new HerculesBullet(Content, spriteBatch, gameMode, hydroBot.ForwardDirection, false);
 
@@ -374,7 +377,7 @@ namespace Poseidon
             for (int i = 0; i < enemiesAmount; i++)
             {
                 if (InThorRange(Position, enemies[i].Position)){
-                    float healthiness = (float) HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+                    float healthiness = HydroBot.currentEnergy / GameConstants.PlayerStartingEnergy;
                     if (healthiness > 1) healthiness = 1.0f;
                     //you can't stun a submarine
                     if (!(enemies[i] is Submarine))
@@ -445,7 +448,7 @@ namespace Poseidon
                 if (boundingSphere.Intersects(enemies[i].BoundingSphere))
                 {
                     PoseidonGame.audio.bodyHit.Play();
-                    float healthiness = (float)HydroBot.currentHitPoint / (float)GameConstants.PlayerStartingHP;
+                    float healthiness = HydroBot.currentEnergy / GameConstants.PlayerStartingEnergy;
                     if (healthiness > 1) healthiness = 1.0f;
                     Vector3 oldPosition = enemies[i].Position;
                     Vector3 pushVector = enemies[i].Position - Position;

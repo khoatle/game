@@ -23,7 +23,8 @@ namespace Poseidon
         public TimeSpan lastAttack;
         public TimeSpan timeBetweenAttack; 
 
-        public static float healAmount = 50f;
+        public float healAmount = 50f;
+        public float energyAmount = GameConstants.EnergyGainPerDolphinHeal;
 
         public static float dolphinDamage = 10f;
 
@@ -92,7 +93,7 @@ namespace Poseidon
             if (!isReturnBot && !isCasting)
             {
                 // It is OK to cast?
-                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && HydroBot.currentHitPoint < HydroBot.maxHitPoint) {
+                if (PoseidonGame.playTime.TotalSeconds - lastCast.TotalSeconds > coolDown.TotalSeconds && (HydroBot.currentHitPoint < HydroBot.maxHitPoint || HydroBot.currentEnergy < HydroBot.maxEnergy)) {
                     isCasting = true;
                     isReturnBot = false;
                     isWandering = false;
@@ -105,16 +106,23 @@ namespace Poseidon
                     startCasting = PoseidonGame.playTime;
 
                     float healedAmount = healAmount * HydroBot.dolphinPower;
+                    float energyFilledAmount = energyAmount * HydroBot.dolphinPower;
 
                     healedAmount = Math.Min(healedAmount, HydroBot.maxHitPoint - HydroBot.currentHitPoint);
+                    energyFilledAmount = Math.Min(energyFilledAmount, HydroBot.maxEnergy - HydroBot.currentEnergy);
 
                     HydroBot.currentHitPoint += healedAmount;
                     HydroBot.currentHitPoint = Math.Min(HydroBot.maxHitPoint, HydroBot.currentHitPoint);
+                    HydroBot.currentEnergy += energyFilledAmount;
 
                     PoseidonGame.audio.healingSound.Play();
 
                     Point point = new Point();
-                    String point_string = "Health + " + (int)healedAmount;
+                    String point_string = "";
+                    if (healedAmount > 0)
+                        point_string += "HP + " + (int)healedAmount + "\n";
+                    if (energyFilledAmount > 0)
+                        point_string += "Energy + " + (int)energyFilledAmount + "\n";
                     point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
                     if (HydroBot.gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);

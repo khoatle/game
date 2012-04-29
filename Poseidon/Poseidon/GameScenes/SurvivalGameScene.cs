@@ -1175,6 +1175,8 @@ namespace Poseidon
                 //factoryButtonPanel.DrawAnchor(spriteBatch);
 
                 if (HydroBot.activeSkillID != -1) DrawActiveSkill();
+                IngamePresentation.DrawCollectionStatus(GraphicDevice, spriteBatch);
+                IngamePresentation.DrawHydroBotStatus(GraphicDevice, spriteBatch);
                 IngamePresentation.DrawLevelObjectiveIcon(GraphicDevice, spriteBatch);
             }
             if (openFactoryConfigurationScene)
@@ -1210,14 +1212,14 @@ namespace Poseidon
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
+            //IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
             IngamePresentation.DrawEnvironmentBar(game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);
+            //IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);

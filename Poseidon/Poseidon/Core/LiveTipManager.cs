@@ -96,11 +96,11 @@ namespace Poseidon.Core
             levelTips = new List<TipItem>();
             tipItem = new TipItem("The mutant shark kills sea animals very fast.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("You lose health every time you cast a special power.");
+            tipItem = new TipItem("You lose energy every time you cast a special power.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("Doing good deeds fills up the good will bar.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("The lower your health, the weaker your power.");
+            tipItem = new TipItem("The lower your energy, the weaker your power.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("Try to use the skill wisely and efficiently.");
             levelTips.Add(tipItem);
@@ -138,7 +138,7 @@ namespace Poseidon.Core
             levelTips.Add(tipItem);
             tipItem = new TipItem("Doing well in minigame between levels will bring advantage.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("The lower your health, the weaker your power.");
+            tipItem = new TipItem("The lower your energy, the weaker your power.");
             levelTips.Add(tipItem);
             allTips.Add(levelTips);
 
@@ -194,7 +194,7 @@ namespace Poseidon.Core
             levelTips.Add(tipItem);
             tipItem = new TipItem("The powerpacks boots your attributes, hence boost the skill's power.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("The lower your health, the weaker your power.");
+            tipItem = new TipItem("The lower your energy, the weaker your power.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("There is less chance to get hit by a bullet when you run in a spiral motion.");
             levelTips.Add(tipItem);
@@ -204,7 +204,7 @@ namespace Poseidon.Core
             levelTips = new List<TipItem>();
             tipItem = new TipItem("Casting all skills in a wise sequence will make the boss fight trivial.");
             levelTips.Add(tipItem);
-            tipItem = new TipItem("The lower your health, the weaker your power.");
+            tipItem = new TipItem("The lower your energy, the weaker your power.");
             levelTips.Add(tipItem);
             tipItem = new TipItem("It is very wise to fight near your 'base of powerpacks'.");
             levelTips.Add(tipItem);

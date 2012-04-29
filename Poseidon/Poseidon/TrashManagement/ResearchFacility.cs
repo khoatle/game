@@ -75,7 +75,7 @@ namespace Poseidon
             underConstruction = true;
             constructionIndex = 0;
             lastConstructionSwitchTime = TimeSpan.Zero;
-            constructionSwitchSpan = TimeSpan.FromSeconds(1);
+            constructionSwitchSpan = TimeSpan.FromSeconds(3);
             this.particleManager = particleManager;
             //buildingSoundInstance = PoseidonGame.audio.buildingSound.CreateInstance();
         }
@@ -295,7 +295,7 @@ namespace Poseidon
             float lineSpacing = GameConstants.lineSpacing;
                 
             //HydroBot.numSeaCowPieces= 20; //REMOVE - JUST fOR TESTING
-            float fadeFactor = 0.65f;
+            float fadeFactor = 0.75f;
             string title = "RESEARCH FACILITY";
             string description = "Welcome to the Research Facility. Processing techniques are analyzed by AI here for processing plant upgradation. State of the art genetic engineering will help you resurrect extinct animals. You can also use experience points to upgrade your own parts here.";
             title = Poseidon.Core.IngamePresentation.wrapLine(title, backgroundRect.Width, facilityFont, 1.5f * textScaleFactor);

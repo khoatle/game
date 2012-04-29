@@ -57,31 +57,35 @@ namespace Poseidon
                 }
                 else if (levelObjectiveState == 5)
                 {
-                    //this check will be done in playgamescene.cs
+                    //this check will be done in factory.cs
                 }
                 else if (levelObjectiveState == 6)
                 {
-                    //this check will be done in collision.cs
+                    //this check will be done in hydrobot.cs
                 }
                 else if (levelObjectiveState == 7)
                 {
-                    if (HydroBot.level >= 2)
-                    {
-                        levelObjectiveState = 8;
-                        newLevelObjAvailable = true;
-                    }
+                    //this check will be done in collision.cs
                 }
                 else if (levelObjectiveState == 8)
                 {
-                    if (researchFacility != null && (HydroBot.strength > GameConstants.MainCharStrength || HydroBot.speed > GameConstants.BasicStartSpeed || HydroBot.shootingRate > GameConstants.MainCharShootingSpeed || HydroBot.maxHitPoint > GameConstants.PlayerStartingHP))
+                    if (HydroBot.level >= 2)
                     {
                         levelObjectiveState = 9;
+                        newLevelObjAvailable = true;
+                    }
+                }
+                else if (levelObjectiveState == 9)
+                {
+                    if (researchFacility != null && (HydroBot.strength > GameConstants.MainCharStrength || HydroBot.speed > GameConstants.BasicStartSpeed || HydroBot.shootingRate > GameConstants.MainCharShootingSpeed || HydroBot.maxHitPoint > GameConstants.PlayerStartingHP))
+                    {
+                        levelObjectiveState = 10;
                         newLevelObjAvailable = true;
                     }
 
                 }
                 //Level Obj: you need increase the env bar to 80% within 4 min ( 30 days).
-                else if (levelObjectiveState == 9 && ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint >= GameConstants.LevelObjective[currentLevel]))
+                else if (levelObjectiveState == 10 && ((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint >= GameConstants.LevelObjective[currentLevel]))
                     //real obj above, below is just for easier testing
                     //if ((double)Tank.currentEnvPoint / (double)Tank.maxEnvPoint >= 0.6)
                     return true;

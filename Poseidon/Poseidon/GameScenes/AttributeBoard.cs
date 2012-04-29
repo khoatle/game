@@ -172,6 +172,8 @@ namespace Poseidon
             speedIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
             spriteBatch.Draw(speedTexture, speedIconRectangle, Color.White);
+            string text = "Speed";
+            spriteBatch.DrawString(IngamePresentation.facilityFont, text, new Vector2(speedIconRectangle.Center.X - IngamePresentation.facilityFont.MeasureString(text).X / 2, speedIconRectangle.Top + 10), Color.White);
         }
 
         private void DrawHitPointIcon()
@@ -186,6 +188,8 @@ namespace Poseidon
             hitpointIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
             spriteBatch.Draw(hitpointTexture, hitpointIconRectangle, Color.White);
+            string text = "Health & Energy";
+            spriteBatch.DrawString(IngamePresentation.facilityFont, text, new Vector2(hitpointIconRectangle.Center.X - IngamePresentation.facilityFont.MeasureString(text).X / 2, hitpointIconRectangle.Top + 10), Color.White);
         }
 
         private void DrawShootRateIcon()
@@ -200,6 +204,8 @@ namespace Poseidon
             shootrateIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
             spriteBatch.Draw(shootrateTexture, shootrateIconRectangle, Color.White);
+            string text = "Shoot Rate";
+            spriteBatch.DrawString(IngamePresentation.facilityFont, text, new Vector2(shootrateIconRectangle.Center.X - IngamePresentation.facilityFont.MeasureString(text).X / 2, shootrateIconRectangle.Top + 10), Color.White);
         }
 
         private void DrawBulletStrengthIcon()
@@ -214,6 +220,8 @@ namespace Poseidon
             bulletStrengthIconRectangle = new Rectangle(xOffsetText, yOffsetText, 270, 200);
 
             spriteBatch.Draw(bulletStrengthTexture, bulletStrengthIconRectangle, Color.White);
+            string text = "Power";
+            spriteBatch.DrawString(IngamePresentation.facilityFont, text, new Vector2(bulletStrengthIconRectangle.Center.X - IngamePresentation.facilityFont.MeasureString(text).X/2, bulletStrengthIconRectangle.Top + 10), Color.White);
         }
 
         private void DrawDoneIcon()

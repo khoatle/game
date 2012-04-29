@@ -113,6 +113,8 @@ namespace Poseidon.Core
         public static float textScaleFactor;
         public static float lineSpacing;
 
+        //textures showing hydrobot's statuses
+        static Texture2D bioIcon, plasticIcon, radioIcon, resourceIcon, experienceIcon, botHealthIcon, energyIcon;
 
         public static void Initiate2DGraphics(ContentManager Content, Game game)
         {
@@ -270,6 +272,14 @@ namespace Poseidon.Core
 
             letAIHandleNormalTexture = Content.Load<Texture2D>("Image/MinigameTextures/letAIHandle");
             letAIHandleHoverTexture = Content.Load<Texture2D>("Image/MinigameTextures/letAIHandleHover");
+
+            bioIcon = Content.Load<Texture2D>("Image/HydroBotStatus/bio_icon");
+            plasticIcon = Content.Load<Texture2D>("Image/HydroBotStatus/plastic_icon");
+            radioIcon = Content.Load<Texture2D>("Image/HydroBotStatus/radioactive_icon_1");
+            resourceIcon = Content.Load<Texture2D>("Image/HydroBotStatus/resources");
+            experienceIcon = Content.Load<Texture2D>("Image/HydroBotStatus/experience");
+            botHealthIcon = Content.Load<Texture2D>("Image/HydroBotStatus/health");
+            energyIcon = Content.Load<Texture2D>("Image/HydroBotStatus/energy_icon");
         }
 
         public static Model bossBullet, chasingBullet, damageBullet, healBullet, herculesArrow, mjolnir, normalbullet, piercingArrow, torpedo,
@@ -397,14 +407,17 @@ namespace Poseidon.Core
 
             timerPos = new Vector2((int)xOffsetText + 10, (int)yOffsetText + 10);
 
-            if ( !(PlayGameScene.currentLevel == 0) && days < 10 && PoseidonGame.playTime.TotalMilliseconds - lastTimerColorChange >= 500)
+            if (days >= 10) timerColor = Color.Red;
+            else if (!(PlayGameScene.currentLevel == 0) && PoseidonGame.playTime.TotalMilliseconds - lastTimerColorChange >= 500)
             {
                 if (timerColor == Color.Red)
                     timerColor = Color.White;
                 else timerColor = Color.Red;
                 lastTimerColorChange = PoseidonGame.playTime.TotalMilliseconds;
             }
+            //else timerColor = Color.Red;
 
+            //str1 += "\n" + (int)HydroBot.currentEnergy + "\\" + (int)HydroBot.maxEnergy; 
             
             spriteBatch.DrawString(menuSmall, str1, timerPos, timerColor, 0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
         }
@@ -450,7 +463,9 @@ namespace Poseidon.Core
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
             //xOffsetText = rectSafeArea.Right - 400;
-            xOffsetText = rectSafeArea.Center.X + experienceBarLength / 2;
+            //xOffsetText = rectSafeArea.Center.X + experienceBarLength / 2;
+            //yOffsetText = rectSafeArea.Height - (int)(96 * GameConstants.generalTextScaleFactor);
+            xOffsetText = rectSafeArea.Center.X + (int)(150 * textScaleFactor) + (int)(32 * textScaleFactor) + (int)(fishTalkFont.MeasureString("100").X * textScaleFactor);
             yOffsetText = rectSafeArea.Height - (int)(96 * GameConstants.generalTextScaleFactor);
 
             //Vector2 skillIconPosition =
@@ -478,9 +493,10 @@ namespace Poseidon.Core
             //Calculate str1 position
             rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            //xOffsetText = rectSafeArea.Left + 325;
-            xOffsetText = rectSafeArea.Center.X - experienceBarLength/2 - (int)(64 * GameConstants.generalTextScaleFactor);
-            yOffsetText = rectSafeArea.Height - (int)(64 * GameConstants.generalTextScaleFactor) - 5;
+            //xOffsetText = rectSafeArea.Center.X - experienceBarLength/2 - (int)(64 * GameConstants.generalTextScaleFactor);
+            //yOffsetText = rectSafeArea.Height - (int)(64 * GameConstants.generalTextScaleFactor) - 5;
+            xOffsetText = rectSafeArea.Center.X - (int)(32 * textScaleFactor) - (int)(150 * textScaleFactor) - (int)(96 * GameConstants.generalTextScaleFactor);
+            yOffsetText = rectSafeArea.Height - (int)(80 * GameConstants.generalTextScaleFactor);
 
             //Vector2 bulletIconPosition =
             //    new Vector2((int)xOffsetText, (int)yOffsetText);
@@ -731,6 +747,7 @@ namespace Poseidon.Core
                             {
                                 //fill up the hitpoint
                                 HydroBot.currentHitPoint = HydroBot.maxHitPoint;
+                                HydroBot.currentEnergy = HydroBot.maxEnergy;
                                 //reset all skills' cooldown
                                 for (int i = 0; i < GameConstants.numberOfSkills; i++)
                                 {
@@ -753,6 +770,8 @@ namespace Poseidon.Core
                             {
                                 HydroBot.currentHitPoint += GameConstants.gainHitPoint;
                                 HydroBot.maxHitPoint += GameConstants.gainHitPoint;
+                                HydroBot.currentEnergy += GameConstants.EnergyGainPerUpgrade;
+                                HydroBot.maxEnergy += GameConstants.EnergyGainPerUpgrade;
                             }
                             else if (faceBeingShown == bowIcon)
                             {
@@ -1345,6 +1364,93 @@ namespace Poseidon.Core
 
             spriteBatch.Draw(toNextLevelTexture, toNextLevelIconRectangle, Color.White);
         }
+
+        //draw number of collected waste and resources
+        public static void DrawCollectionStatus(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
+        {
+            int iconSpacing = (int)(75 * textScaleFactor);
+            int betweenTextAndIcon = (int)(10 * textScaleFactor);
+            int iconWidth = (int)(32 * textScaleFactor);
+            int iconHeight = (int)(32 * textScaleFactor);
+
+            int middleScreenX = GraphicDevice.Viewport.TitleSafeArea.Center.X;
+            int fromBottom = (int)(GraphicDevice.Viewport.TitleSafeArea.Bottom - iconWidth - 10 * textScaleFactor);
+            string text = "";
+
+            Rectangle radioRectangle = new Rectangle(middleScreenX - iconWidth, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(radioIcon, radioRectangle, Color.White);
+            text = HydroBot.nuclearTrash.ToString();
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(radioRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, radioRectangle.Center.Y), Color.White,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+            Rectangle plasticRectangle = new Rectangle(radioRectangle.X - iconSpacing, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(plasticIcon, plasticRectangle, Color.White);
+            text = HydroBot.plasticTrash.ToString();
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(plasticRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, plasticRectangle.Center.Y), Color.White,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+            Rectangle bioRectangle = new Rectangle(plasticRectangle.X - iconSpacing, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(bioIcon, bioRectangle, Color.White);
+            text = HydroBot.bioTrash.ToString();
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(bioRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, bioRectangle.Center.Y), Color.White,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+            Rectangle resourceRectangle = new Rectangle(radioRectangle.X + iconSpacing, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(resourceIcon, resourceRectangle, Color.White);
+            text = HydroBot.numResources.ToString();
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(resourceRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, resourceRectangle.Center.Y), Color.White,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+            Rectangle rockRectangle = new Rectangle(resourceRectangle.X + iconSpacing, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(bioIcon, rockRectangle, Color.White);
+            text = HydroBot.numStrangeObjCollected.ToString();
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(rockRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, rockRectangle.Center.Y), Color.White,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+        }
+
+        public static void DrawHydroBotStatus(GraphicsDevice GraphicDevice, SpriteBatch spriteBatch)
+        {
+            int iconSpacing = (int)(150 * textScaleFactor);
+            int betweenTextAndIcon = (int)(10 * textScaleFactor);
+            int iconWidth = (int)(32 * textScaleFactor);
+            int iconHeight = (int)(32 * textScaleFactor);
+
+            int middleScreenX = GraphicDevice.Viewport.TitleSafeArea.Center.X;
+            int fromBottom = (int)(GraphicDevice.Viewport.TitleSafeArea.Bottom - 10 * textScaleFactor - 2 * iconWidth - 10);
+            string text = "";
+
+            Rectangle energyRectangle = new Rectangle(middleScreenX - iconWidth, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(energyIcon, energyRectangle, Color.White);
+            double healthiness = HydroBot.currentEnergy / HydroBot.maxEnergy;
+            Color healthColor = Color.LimeGreen;
+            if (healthiness < 0.2)
+                healthColor = Color.DarkRed;
+            else if (healthiness < 0.5)
+                healthColor = Color.Orange;
+            text = ((int)((HydroBot.currentEnergy / HydroBot.maxEnergy) * 100)).ToString() + "%";
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(energyRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, energyRectangle.Center.Y), healthColor,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+            Rectangle healthRectangle = new Rectangle(energyRectangle.X - iconSpacing, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(botHealthIcon, healthRectangle, Color.White);
+            healthiness = HydroBot.currentHitPoint / HydroBot.maxHitPoint;
+            healthColor = Color.LimeGreen;
+            if (healthiness < 0.2)
+                healthColor = Color.DarkRed;
+            else if (healthiness < 0.5)
+                healthColor = Color.Orange;
+            text = ((int)((HydroBot.currentHitPoint / HydroBot.maxHitPoint) * 100)).ToString() + "%";
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(healthRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, healthRectangle.Center.Y), healthColor,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+
+            Rectangle experienceRectangle = new Rectangle(energyRectangle.X + iconSpacing, fromBottom, iconWidth, iconHeight);
+            spriteBatch.Draw(experienceIcon, experienceRectangle, Color.White);
+            text = ((int)(((float)HydroBot.currentExperiencePts / (float)HydroBot.nextLevelExperience) * 100)).ToString() + "%";
+            spriteBatch.DrawString(fishTalkFont, text, new Vector2(experienceRectangle.Right + betweenTextAndIcon + fishTalkFont.MeasureString(text).X / 2, experienceRectangle.Center.Y), Color.White,
+                0, new Vector2(fishTalkFont.MeasureString(text).X / 2, fishTalkFont.MeasureString(text).Y / 2), textScaleFactor, SpriteEffects.None, 0);
+        }
+
         public static bool mouseOnLevelObjectiveIcon(MouseState lmouseState)
         {
             if (levelObjectiveIconRectangle.Contains(lmouseState.X, lmouseState.Y))

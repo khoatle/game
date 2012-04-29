@@ -873,12 +873,6 @@ namespace Poseidon
                     }
                     if (openFactoryConfigurationScene || openResearchFacilityConfigScene)
                     {
-                        //fulfill the task of opening a facility's control panel
-                        if (currentLevel == 0 && levelObjectiveState == 5)
-                        {
-                            levelObjectiveState = 6;
-                            newLevelObjAvailable = true;
-                        }
                         Factory.buildingSoundInstance.Pause();
                         ResearchFacility.buildingSoundInstance.Pause();
                         bool exitFactConfPressed;
@@ -1808,6 +1802,8 @@ namespace Poseidon
                 DrawBulletType();
                 DrawHeight();
                 DrawRadar();
+                IngamePresentation.DrawCollectionStatus(GraphicDevice, spriteBatch);
+                IngamePresentation.DrawHydroBotStatus(GraphicDevice, spriteBatch);
 
                 // Draw the factory panel
                 factoryButtonPanel.Draw(spriteBatch);
@@ -1941,14 +1937,14 @@ namespace Poseidon
             IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, shipWrecks, factories, researchFacility, null, powerpacks, resources);
             IngamePresentation.DrawObjectUnderStatus(spriteBatch, gameCamera, hydroBot, GraphicDevice, powerpacks, resources, trashes, null, shipWrecks, factories, researchFacility);
             //Display Cyborg health
-            IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
+            //IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
 
             //Display Environment Bar
             if (HydroBot.currentEnvPoint > HydroBot.maxEnvPoint) HydroBot.currentEnvPoint = HydroBot.maxEnvPoint;
             IngamePresentation.DrawEnvironmentBar(game, spriteBatch, statsFont, HydroBot.currentEnvPoint, HydroBot.maxEnvPoint);
 
             //Display Level/Experience Bar
-            IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);
+            //IngamePresentation.DrawLevelBar(game, spriteBatch, HydroBot.currentExperiencePts, HydroBot.nextLevelExperience, HydroBot.level, game.Window.ClientBounds.Height - 5, "EXPERIENCE LEVEL", Color.Brown);
 
             //Display Good will bar
             IngamePresentation.DrawGoodWillBar(game, spriteBatch, statsFont);

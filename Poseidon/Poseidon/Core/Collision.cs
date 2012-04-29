@@ -464,9 +464,9 @@ namespace Poseidon
                     if (bullets[i].BoundingSphere.Intersects(sphere))
                     {
                         //fulfill the task of healing fish
-                        if (PlayGameScene.currentLevel == 0 && PlayGameScene.levelObjectiveState == 6)
+                        if (PlayGameScene.currentLevel == 0 && PlayGameScene.levelObjectiveState == 7)
                         {
-                            PlayGameScene.levelObjectiveState = 7;
+                            PlayGameScene.levelObjectiveState = 8;
                             PlayGameScene.newLevelObjAvailable = true;
                         }
                         if (barriers[j].BoundingSphere.Intersects(cameraFrustum))

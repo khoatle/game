@@ -26,6 +26,13 @@ namespace Poseidon {
         public const int MainCharLevelOneExp = 250;
         public const float MainCharStrength = 1.0f;
         public const float PlayerStartingHP = 250f;
+        public const float PlayerStartingEnergy = 100f;
+        public const float EnergyGainPerPowPack = 30f;
+        public const float EnergyLostPerMovement = 0.01f;
+        public const float EnergyLostPerShot = 0.5f;
+        public const float EnergyLostPerSkill = 5f;
+        public const float EnergyGainPerUpgrade = 5f;
+        public const float EnergyGainPerDolphinHeal = 5f;
         public const float BotShootingRange = 70.0f;
         public static TimeSpan MainCharBasicTimeBetweenFire = TimeSpan.FromSeconds(0.6f);
 

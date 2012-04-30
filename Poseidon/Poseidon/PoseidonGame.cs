@@ -648,7 +648,7 @@ namespace Poseidon
         {
 
             // User pauses the game
-            if (pPressed)
+            if (pPressed && !(PlayGameScene.currentGameState == GameState.PlayingOpeningCinematic))
             {
                 audio.MenuBack.Play();
                 playGameScene.Paused = !playGameScene.Paused;
@@ -918,6 +918,7 @@ namespace Poseidon
                     GameSettings.SpecialEffectsEnabled = br.ReadBoolean();
                     GameSettings.NumParticleLevel = (float)br.ReadDouble();
                     GameConstants.numExplosionParticles = (int) (GameConstants.DefaultNumExplosionParticles * GameSettings.NumParticleLevel) ;
+                    GameConstants.numExplosionSmallParticles = (int)(GameConstants.DefaultNumExplosionSmallParticles * GameSettings.NumParticleLevel);
                     GameConstants.numSandParticles = (int)(GameConstants.DefaultNumSandParticles * GameSettings.NumParticleLevel);
                     GameConstants.numSandParticlesForFactory = (int)(GameConstants.DefaultNumSandParticlesForFactory * GameSettings.NumParticleLevel);
                     GameConstants.trailParticlesPerSecond = (int)(GameConstants.DefaultTrailParticlesPerSecond * GameSettings.NumParticleLevel);

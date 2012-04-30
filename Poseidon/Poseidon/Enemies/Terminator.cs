@@ -30,6 +30,9 @@ namespace Poseidon
         int powerupsType;
         double timeBetweenPowerUse = 10;
 
+        ParticleManagement particleManager;
+        bool justShot = false;
+
         public Terminator(GameMode gameMode)
             : base()
         {
@@ -63,6 +66,19 @@ namespace Poseidon
                 timeBetweenPowerUse /= (1 + (float)HydroBot.gamePlusLevel * 0.25f);
             }
             maxHealth = health;
+
+            if (gameMode == GameMode.MainGame)
+            {
+                this.particleManager = PlayGameScene.particleManager;
+            }
+            else if (gameMode == GameMode.ShipWreck)
+            {
+                this.particleManager = ShipWreckScene.particleManager;
+            }
+            else if (gameMode == GameMode.SurvivalMode)
+            {
+                this.particleManager = SurvivalGameScene.particleManager;
+            }
         }
 
         public override void Load(int clipStart, int clipEnd, int fps)
@@ -199,6 +215,7 @@ namespace Poseidon
                 ForwardDirection = originalForwardDir;
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = PoseidonGame.playTime;
+                justShot = true;
             }
         }
 
@@ -213,6 +230,7 @@ namespace Poseidon
             {
                 AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                 prevFire = PoseidonGame.playTime;
+                justShot = true;
             }
         }
 
@@ -226,6 +244,7 @@ namespace Poseidon
             {
                 AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
                 prevFire = PoseidonGame.playTime;
+                justShot = true;
             }
         }
 
@@ -309,8 +328,22 @@ namespace Poseidon
                         // AddingObjects.placeChasingBullet(this, currentHuntingTarget, bullets, cameraFrustum);
                         AddingObjects.placeEnemyBullet(this, damage, bullets, 1, cameraFrustum, 20);
                         prevFire = PoseidonGame.playTime;
+                        justShot = true;
                     }
                 }
+            }
+            if (justShot && BoundingSphere.Intersects(cameraFrustum))
+            {
+                Matrix orientationMatrix = Matrix.CreateRotationY(ForwardDirection);
+                Vector3 movement = Vector3.Zero;
+                movement.Z = 1;
+                Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
+                if (particleManager.explosionParticles != null)
+                {
+                    for (int k = 0; k < GameConstants.numExplosionSmallParticles; k++)
+                        particleManager.explosionSmallParticles.AddParticle(Position + shootingDirection * 22, Vector3.Zero);
+                }
+                justShot = false;
             }
         }
     }

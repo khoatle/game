@@ -4,7 +4,7 @@
     <BlendState>Additive</BlendState>
     <TextureName>Image/ParticleTextures/explosion</TextureName>
     <MaxParticles>100</MaxParticles>
-    <Duration>PT1S</Duration>
+    <Duration>PT0.2S</Duration>
     <DurationRandomness>1</DurationRandomness>
     <EmitterVelocitySensitivity>1</EmitterVelocitySensitivity>
     <MinHorizontalVelocity>-5</MinHorizontalVelocity>
@@ -19,7 +19,7 @@
     <MaxRotateSpeed>2</MaxRotateSpeed>
     <MinStartSize>5</MinStartSize>
     <MaxStartSize>10</MaxStartSize>
-    <MinEndSize>25</MinEndSize>
-    <MaxEndSize>50</MaxEndSize>
+    <MinEndSize>20</MinEndSize>
+    <MaxEndSize>30</MaxEndSize>
   </Asset>
 </XnaContent>

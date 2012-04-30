@@ -288,7 +288,8 @@ namespace Poseidon
                         GameSettings.NumParticleLevel = (float)(clickedPositionX - numParticleRect.Left) / (float)numParticleRect.Width;
                         if (GameSettings.NumParticleLevel < 0f) GameSettings.NumParticleLevel = 0f;
                         if (GameSettings.NumParticleLevel > 1f) GameSettings.NumParticleLevel = 1f;
-                        GameConstants.numExplosionParticles = (int) (GameConstants.DefaultNumExplosionParticles * GameSettings.NumParticleLevel) ;
+                        GameConstants.numExplosionParticles = (int) (GameConstants.DefaultNumExplosionParticles * GameSettings.NumParticleLevel);
+                        GameConstants.numExplosionSmallParticles = (int)(GameConstants.numExplosionSmallParticles * GameSettings.NumParticleLevel);
                         GameConstants.numSandParticles = (int)(GameConstants.DefaultNumSandParticles * GameSettings.NumParticleLevel);
                         GameConstants.numSandParticlesForFactory = (int)(GameConstants.DefaultNumSandParticlesForFactory * GameSettings.NumParticleLevel);
                         GameConstants.trailParticlesPerSecond = (int)(GameConstants.DefaultTrailParticlesPerSecond * GameSettings.NumParticleLevel);

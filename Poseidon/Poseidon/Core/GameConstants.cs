@@ -292,12 +292,14 @@ namespace Poseidon {
 
         //const for particle systems
         public static int DefaultNumExplosionParticles = 20;
+        public static int DefaultNumExplosionSmallParticles = 5;
         public static int DefaultNumSandParticles = 30;
         public static int DefaultNumSandParticlesForFactory = 80;
         public static float DefaultTrailParticlesPerSecond = 100;
         public static int DefaultNumFrozenBreathParticlesPerUpdate = 3;
 
         public static int numExplosionParticles = DefaultNumExplosionParticles;
+        public static int numExplosionSmallParticles = DefaultNumExplosionSmallParticles;
         public static int numSandParticles = DefaultNumSandParticles;
         public static int numSandParticlesForFactory = DefaultNumSandParticlesForFactory;
         public static float trailParticlesPerSecond = DefaultTrailParticlesPerSecond;

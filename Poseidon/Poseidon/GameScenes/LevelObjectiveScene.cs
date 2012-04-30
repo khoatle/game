@@ -208,8 +208,8 @@ namespace Poseidon
                 {
                     double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
                     double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                    level_objective = "Improve the environment to " + target_percent.ToString() + "%.";
-                    achieved_status = "Now the environment is at " + env_percent.ToString() + "%.";
+                    level_objective = "Improve the environment to " + (int)target_percent + "%.";
+                    achieved_status = "Now the environment is at " + (int)env_percent + "%.";
                 }
             }
             else if (currentLevel == 1)
@@ -228,7 +228,7 @@ namespace Poseidon
                 {
                     double fish_percent = Math.Min(((double)realFishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
                     double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                    level_objective = "Save at least " + target_percent.ToString() + "% of the sea creatures in the remaining days.";
+                    level_objective = "Save at least " + (int)target_percent + "% of the sea creatures in the remaining days.";
                     achieved_status = "There are " + (int)fish_percent + "% sea creatures remaining.";
                 }
             }
@@ -238,7 +238,7 @@ namespace Poseidon
                 {
                     double env_percent = Math.Min((double)HydroBot.currentEnvPoint / (double)HydroBot.maxEnvPoint * 100, 100);
                     level_objective = "Improve environment to " + (int)(GameConstants.EnvThresholdForKey * 100) + "%.";
-                    achieved_status = "Now the environment is at " + env_percent.ToString() + "%.";
+                    achieved_status = "Now the environment is at " + (int)env_percent + "%.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 1)
                 {
@@ -269,7 +269,7 @@ namespace Poseidon
             {
                 double shark_percent = Math.Min(((double)realFishAmount / (double)GameConstants.NumberFish[currentLevel]) * 100, 100);
                 double target_percent = GameConstants.LevelObjective[currentLevel] * 100;
-                level_objective = "Save at least " + target_percent.ToString() + "% of the sharks within " + HydroBot.levelDuration + " days.";
+                level_objective = "Save at least " + (int)target_percent + "% of the sharks within " + HydroBot.levelDuration + " days.";
                 achieved_status = "There are " + (int)shark_percent + "% sharks remaining.";
             }
             else if (currentLevel == 5)
@@ -322,20 +322,21 @@ namespace Poseidon
             }
             else if (currentLevel == 9)
             {
+                float percentHealth = Math.Min((HydroBot.currentHitPoint / HydroBot.maxHitPoint * 100), 100);
                 level_objective = "Break through enemy defense alive.";
-                achieved_status = "You have "+ Math.Min((HydroBot.currentHitPoint/HydroBot.maxHitPoint*100), 100) + "% health remaining.";
+                achieved_status = "You have "+ (int)percentHealth + "% health remaining.";
             }
             else if (currentLevel == 10)
             {
                 level_objective = "Defeat the Terminator within " + HydroBot.levelDuration + " days.";
-                achieved_status = "Terminator is as strong as ever. You did not even dent his armour.";
+                achieved_status = "Terminator is as strong as ever. You did not even dent his armor.";
             }
             else if (currentLevel == 11)
             {
                 level_objective = "Defeat the Terminator within " + HydroBot.levelDuration + " days.";
                 if (PlayGameScene.isBossKilled)
                     achieved_status = "Terminator has been defeated.";
-                else achieved_status = "Terminator is still alive.";
+                else achieved_status = "Terminator has not been defeated.";
             }
 
             spriteBatch.DrawString(levelObjFont, level_description, new Vector2(game.Window.ClientBounds.Center.X - levelObjFont.MeasureString(level_description).X, 10), Color.Red, 0, new Vector2(0, 0), 2f, SpriteEffects.None, 0);

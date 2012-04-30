@@ -515,7 +515,7 @@ namespace Poseidon
             //should be removed
 
             //skillComboActivated = true;
-            //activeSkillID = 4;
+            //activeSkillID = 0;
             //secondSkillID = 3;
             //skills[0] = true;
             //skills[1] = true;
@@ -526,8 +526,8 @@ namespace Poseidon
             //unassignedPts = 5;
 
             //for testing survival mode
-            //unassignedPts = 40;
-            //currentHitPoint = maxHitPoint = 500;
+            //unassignedPts = 100;
+            //currentHitPoint = maxHitPoint = 2000;
             //currentEnergy = 30;
             //strength = 2000;
             //speed = 15;

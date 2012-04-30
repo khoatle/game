@@ -103,7 +103,9 @@ namespace Poseidon
                     newLevelObjAvailable = true;
                 }
                 //Level Obj: Save at least 50% of fish during 4 min ( 30 days ).
-                else if (levelObjectiveState == 2 && roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= GameConstants.LevelObjective[currentLevel]))
+                else if (levelObjectiveState == 2 && 
+                    ((roundTimer <= TimeSpan.Zero && ((double)fishAmount / (double)GameConstants.NumberFish[currentLevel] >= GameConstants.LevelObjective[currentLevel]))
+                    || enemiesAmount == 0))
                 {
                     return true;
                 }

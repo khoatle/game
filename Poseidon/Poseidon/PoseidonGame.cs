@@ -129,7 +129,7 @@ namespace Poseidon
 
         public bool threeDgraphicInitiated = false;
 
-        public static bool DrawBoundingSphere = false, capturingCinematic = false;
+        public static bool DrawBoundingSphere = false, capturingCinematic = false, capturingGameTrailer = true;
         public PoseidonGame()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -137,7 +137,7 @@ namespace Poseidon
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;//850;
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;//700;
 
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
 
             Content.RootDirectory = "Content";
 

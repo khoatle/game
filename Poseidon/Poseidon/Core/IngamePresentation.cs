@@ -1289,7 +1289,7 @@ namespace Poseidon.Core
 
             levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
 
-            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
+            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000 && !PoseidonGame.capturingGameTrailer)
             {
                 if (PoseidonGame.playTime.TotalMilliseconds - timeLastColorChange >= 500)
                 {

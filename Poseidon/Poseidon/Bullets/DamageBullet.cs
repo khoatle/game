@@ -17,6 +17,8 @@ namespace Poseidon {
         Camera gameCamera;
         GameMode gameMode;
 
+        float forwardDir = 0;
+
         public void initialize(Vector3 position, Vector3 headingDirection, float speed, float strength, float strengthUp, GameMode gameMode)
         {
             base.initialize(position, headingDirection, speed);
@@ -43,12 +45,18 @@ namespace Poseidon {
             }
 
             laserBeamTexture = IngamePresentation.laserBeamTexture;
+
+            Vector3 direction2D = graphicDevice.Viewport.Project(position + headingDirection, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity)
+                - graphicDevice.Viewport.Project(position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+            direction2D.Normalize();
+            this.forwardDir = (float)Math.Atan2(direction2D.X, direction2D.Y);
         }
 
         public void initialize(Vector3 position, Vector3 headingDirection, float speed, int damage, BaseEnemy shooter) {
             base.initialize(position, headingDirection, speed);
             this.damage = damage;
             this.shooter = shooter;
+
         }
 
         public override void draw(Matrix view, Matrix projection, Camera gameCamera, string techiniqueName)
@@ -62,8 +70,9 @@ namespace Poseidon {
                 Vector2 laserBeamPos;
                 laserBeamPos.X = screenPos.X;
                 laserBeamPos.Y = screenPos.Y;
+
                 spriteBatch.Begin();
-                spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, 0, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f, SpriteEffects.None, 1);
+                spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f, SpriteEffects.None, 1);
                 spriteBatch.End();
                 if (gameMode == GameMode.MainGame)
                 {

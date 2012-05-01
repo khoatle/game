@@ -54,6 +54,7 @@ namespace Poseidon
             //    perceptionRadius = GameConstants.BossPerceptionRadius * (HydroBot.gamePlusLevel + 1);
             //else
             perceptionRadius = GameConstants.BossPerceptionRadius;
+            if (PoseidonGame.capturingCinematic) perceptionRadius *= 200;
             basicExperienceReward = 3000;
 
             if (PoseidonGame.gamePlus)
@@ -296,9 +297,19 @@ namespace Poseidon
                 }
                 else if (crazyMode == true)
                 {
-                    RapidFire2(bullets, cameraFrustum, gameTime);
-                    if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
-                        crazyMode = false;
+                    //don't really wanna see this move when capturing cinematic
+                    if (PoseidonGame.capturingCinematic)
+                    {
+                        ChasingBullet(bullets, cameraFrustum, gameTime);
+                        if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeChasingBulletLast)
+                            crazyMode = false;
+                    }
+                    else
+                    {
+                        RapidFire2(bullets, cameraFrustum, gameTime);
+                        if (PoseidonGame.playTime.TotalSeconds - timePrevPowerUsed > timeEnrageLast)
+                            crazyMode = false;
+                    }
                 }
                 else if (chasingBulletMode == true) {
                     ChasingBullet(bullets, cameraFrustum, gameTime);

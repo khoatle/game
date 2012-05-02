@@ -545,8 +545,14 @@ namespace Poseidon
             //bioPlantLevel = plasticPlantLevel = 1;
             //totalBioTrashProcessed = totalPlasticTrashProcessed = 30;
 
-            //hasTurtle = true;
-            //turtlePower = 2.0f;
+            if (PoseidonGame.capturingCinematic)
+            {
+                currentHitPoint = maxHitPoint = 20000;
+                hasTurtle = true;
+                turtlePower = 2.0f;
+                currentEnvPoint = 30;
+                hasSeaCow = false;
+            }
             //hasDolphin = true;
             //dolphinPower = 2.0f;
             //hasSeaCow = true;
@@ -837,7 +843,7 @@ namespace Poseidon
                             //    clipPlayer.switchRange(61, 90);
                             isShooting = true;
                             isCastingSkill = false;
-                            currentEnergy -= GameConstants.EnergyLostPerShot;
+                            currentEnergy -= GameConstants.EnergyLostPerShot * HydroBot.strength / GameConstants.MainCharStrength;
                         }
                     }
                     //hydroBot.reachDestination = true;
@@ -894,7 +900,7 @@ namespace Poseidon
                             //    clipPlayer.switchRange(61, 90);
                             isShooting = true;
                             isCastingSkill = false;
-                            currentEnergy -= GameConstants.EnergyLostPerShot;
+                            currentEnergy -= GameConstants.EnergyLostPerShot * HydroBot.strength / GameConstants.MainCharStrength;
                         }
                     }
                     if (doubleClicked == true) pointIntersect = Vector3.Zero;

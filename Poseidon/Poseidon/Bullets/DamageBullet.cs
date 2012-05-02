@@ -56,7 +56,25 @@ namespace Poseidon {
             base.initialize(position, headingDirection, speed);
             this.damage = damage;
             this.shooter = shooter;
-
+            if (HydroBot.gameMode == GameMode.MainGame)
+            {
+                this.graphicDevice = PlayGameScene.GraphicDevice;
+                this.gameCamera = PlayGameScene.gameCamera;
+                this.spriteBatch = PoseidonGame.spriteBatch;
+            }
+            else if (HydroBot.gameMode == GameMode.ShipWreck)
+            {
+                this.graphicDevice = ShipWreckScene.GraphicDevice;
+                this.gameCamera = ShipWreckScene.gameCamera;
+                this.spriteBatch = PoseidonGame.spriteBatch;
+            }
+            else if (HydroBot.gameMode == GameMode.SurvivalMode)
+            {
+                this.graphicDevice = SurvivalGameScene.GraphicDevice;
+                this.gameCamera = SurvivalGameScene.gameCamera;
+                this.spriteBatch = PoseidonGame.spriteBatch;
+            }
+            if (shooter is Terminator) laserBeamTexture = IngamePresentation.terminatorBullet;
         }
 
         public override void draw(Matrix view, Matrix projection, Camera gameCamera, string techiniqueName)
@@ -71,8 +89,10 @@ namespace Poseidon {
                 laserBeamPos.X = screenPos.X;
                 laserBeamPos.Y = screenPos.Y;
 
+                float scale = (float)Math.Sqrt(HydroBot.strength / GameConstants.MainCharStrength);
+                scale = MathHelper.Clamp(scale, 1.0f, 1.5f);
                 spriteBatch.Begin();
-                spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f, SpriteEffects.None, 1);
+                spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f * scale, SpriteEffects.None, 1);
                 spriteBatch.End();
                 if (gameMode == GameMode.MainGame)
                 {
@@ -83,6 +103,29 @@ namespace Poseidon {
                     ShipWreckScene.RestoreGraphicConfig();
                 }
                 else if (gameMode == GameMode.SurvivalMode)
+                {
+                    SurvivalGameScene.RestoreGraphicConfig();
+                }
+            }
+            else if (shooter is Terminator)
+            {
+                Vector3 screenPos = graphicDevice.Viewport.Project(Position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                Vector2 laserBeamPos;
+                laserBeamPos.X = screenPos.X;
+                laserBeamPos.Y = screenPos.Y;
+
+                spriteBatch.Begin();
+                spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, 0, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f, SpriteEffects.None, 1);
+                spriteBatch.End();
+                if (HydroBot.gameMode == GameMode.MainGame)
+                {
+                    PlayGameScene.RestoreGraphicConfig();
+                }
+                else if (HydroBot.gameMode == GameMode.ShipWreck)
+                {
+                    ShipWreckScene.RestoreGraphicConfig();
+                }
+                else if (HydroBot.gameMode == GameMode.SurvivalMode)
                 {
                     SurvivalGameScene.RestoreGraphicConfig();
                 }

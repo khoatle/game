@@ -139,10 +139,8 @@ namespace Poseidon
 
             if (capturingCinematic || capturingGameTrailer)
                 graphics.IsFullScreen = false;
-            else graphics.IsFullScreen = false;
-            //graphics.IsFullScreen = false;
+            else graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
-
         }
 
         /// <summary>
@@ -278,7 +276,7 @@ namespace Poseidon
             Components.Add(AttributeScene);
 
             presentScene = Content.Load<Video>("Videos/presentScene");
-            cinematic = Content.Load<Video>("Videos/cinematic");
+            cinematic = Content.Load<Video>("Videos/cinematicVer2");
         }
 
         /// <summary>
@@ -617,11 +615,13 @@ namespace Poseidon
                 HydroBot.isCastingSkill = false;
                 doubleClicked = false;
             }
-            if (lastMouseState.LeftButton == ButtonState.Pressed
+            if ((lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released
-                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState)) ||
+                TabPressed)
             {
                 prevScene = shipWreckScene;
+                PlayGameScene.newLevelObjAvailable = false;
                 ShowScene(levelObjectiveScene);
             }
             if (lastMouseState.LeftButton == ButtonState.Pressed
@@ -794,9 +794,10 @@ namespace Poseidon
                 ShowScene(AttributeScene);
                 AttributeButtonPressed = false;
             }
-            if (lastMouseState.LeftButton == ButtonState.Pressed
+            if ((lastMouseState.LeftButton == ButtonState.Pressed
                 && currentMouseState.LeftButton == ButtonState.Released
-                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState))
+                && IngamePresentation.mouseOnLevelObjectiveIcon(currentMouseState)) ||
+                TabPressed)
             {
                 prevScene = survivalGameScene;
                 ShowScene(levelObjectiveScene);

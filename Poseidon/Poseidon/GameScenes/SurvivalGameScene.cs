@@ -1060,6 +1060,8 @@ namespace Poseidon
 
         private void DrawWinOrLossScreen()
         {
+            Rectangle rectSafeArea;
+            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
             spriteBatch.Begin();
             if (currentGameState == GameState.Won)
                 spriteBatch.Draw(winningTexture, GraphicDevice.Viewport.TitleSafeArea, Color.White);
@@ -1070,6 +1072,9 @@ namespace Poseidon
                 Vector2 losingTextPos = new Vector2(game.Window.ClientBounds.Width / 2, 10 + IngamePresentation.statisticFont.MeasureString(losingText).Y / 2);
                 spriteBatch.DrawString(IngamePresentation.statisticFont, losingText, losingTextPos, Color.Red, 0, new Vector2(IngamePresentation.statisticFont.MeasureString(losingText).X / 2, IngamePresentation.statisticFont.MeasureString(losingText).Y / 2), 1.5f, SpriteEffects.None, 0);      
             }
+            string nextText = "Press Enter to continue";
+            Vector2 nextTextPosition = new Vector2(rectSafeArea.Right - menuSmall.MeasureString(nextText).X - 70, rectSafeArea.Bottom - menuSmall.MeasureString(nextText).Y - 50);
+            spriteBatch.DrawString(menuSmall, nextText, nextTextPosition, Color.White);
             spriteBatch.End();
         }
 
@@ -1230,21 +1235,22 @@ namespace Poseidon
         // Draw the currently selected bullet type
         private void DrawBulletType()
         {
-            int xOffsetText, yOffsetText;
-            Rectangle rectSafeArea;
+            //int xOffsetText, yOffsetText;
+            //Rectangle rectSafeArea;
 
-            //Calculate str1 position
-            rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
+            ////Calculate str1 position
+            //rectSafeArea = GraphicDevice.Viewport.TitleSafeArea;
 
-            //xOffsetText = rectSafeArea.Left + 325;
-            xOffsetText = rectSafeArea.Center.X - 150 - 64;
-            yOffsetText = rectSafeArea.Bottom - 80;
+            ////xOffsetText = rectSafeArea.Left + 325;
+            //xOffsetText = rectSafeArea.Center.X - 150 - 64;
+            //yOffsetText = rectSafeArea.Bottom - 80;
 
-            //Vector2 bulletIconPosition =
-            //    new Vector2((int)xOffsetText, (int)yOffsetText);
-            Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
-            //spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
-            spriteBatch.Draw(bulletTypeTextures[HydroBot.bulletType], destRectangle, Color.White);
+            ////Vector2 bulletIconPosition =
+            ////    new Vector2((int)xOffsetText, (int)yOffsetText);
+            //Rectangle destRectangle = new Rectangle(xOffsetText, yOffsetText, 64, 64);
+            ////spriteBatch.Draw(bulletTypeTextures[tank.bulletType], bulletIconPosition, Color.White);
+            //spriteBatch.Draw(bulletTypeTextures[HydroBot.bulletType], destRectangle, Color.White);
+            IngamePresentation.DrawBulletType(GraphicDevice, spriteBatch);
         }
 
         // Draw the currently selected skill/spell

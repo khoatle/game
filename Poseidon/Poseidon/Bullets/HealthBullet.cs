@@ -61,8 +61,10 @@ namespace Poseidon
             Vector2 laserBeamPos;
             laserBeamPos.X = screenPos.X;
             laserBeamPos.Y = screenPos.Y;
+            float scale = (float)Math.Sqrt(HydroBot.strength / GameConstants.MainCharStrength);
+            scale = MathHelper.Clamp(scale, 1.0f, 1.5f);
             spriteBatch.Begin();
-            spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f, SpriteEffects.None, 1);
+            spriteBatch.Draw(laserBeamTexture, laserBeamPos, null, Color.White, -forwardDir, new Vector2(laserBeamTexture.Width / 2, laserBeamTexture.Height / 2), 0.2f * scale, SpriteEffects.None, 1);
             spriteBatch.End();
             if (gameMode == GameMode.MainGame)
             {

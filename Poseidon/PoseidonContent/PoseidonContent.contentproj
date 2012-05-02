@@ -2704,13 +2704,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Videos\cinematic.wmv">
-      <Name>cinematic</Name>
-      <Importer>WmvImporter</Importer>
-      <Processor>VideoProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Image\ButtonTextures\backHelpButton.png">
       <Name>backHelpButton</Name>
       <Importer>TextureImporter</Importer>
@@ -2781,6 +2774,13 @@
       <Name>redBallT</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Videos\cinematicVer2.wmv">
+      <Name>cinematicVer2</Name>
+      <Importer>WmvImporter</Importer>
+      <Processor>VideoProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

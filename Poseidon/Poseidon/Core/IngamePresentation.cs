@@ -87,7 +87,7 @@ namespace Poseidon.Core
         public static List<Texture2D> plasticFactoryLevelTextures;
         public static List<Texture2D> biodegradableFactoryLevelTextures;
 
-        public static Texture2D laserBeamTexture, healLaserBeamTexture, submarineLaserBeamTexture;
+        public static Texture2D laserBeamTexture, healLaserBeamTexture, submarineLaserBeamTexture, terminatorBullet;
 
         public static Texture2D normalCursorTexture;
         public static Texture2D shootingCursorTexture;
@@ -265,6 +265,7 @@ namespace Poseidon.Core
             laserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBall");
             healLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/greenBall");
             submarineLaserBeamTexture = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/laserBeam");
+            terminatorBullet = PoseidonGame.contentManager.Load<Texture2D>("Image/BulletIcons/redBallT");
 
             normalCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/Starfish-cursor");
             shootingCursorTexture = Content.Load<Texture2D>("Image/CursorTextures/shootcursor");
@@ -1289,7 +1290,7 @@ namespace Poseidon.Core
 
             levelObjectiveIconRectangle = new Rectangle(xOffsetText - width, yOffsetText, width, height);
 
-            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000 && !PoseidonGame.capturingGameTrailer)
+            if ((HydroBot.gameMode == GameMode.MainGame || HydroBot.gameMode == GameMode.ShipWreck) && PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000 && !PoseidonGame.capturingGameTrailer)
             {
                 if (PoseidonGame.playTime.TotalMilliseconds - timeLastColorChange >= 500)
                 {
@@ -1307,11 +1308,11 @@ namespace Poseidon.Core
                 rotatingAngle = 0;
             }
             //levelObjectiveColor = EffectHelpers.LerpColor(Color.White, Color.LawnGreen, (float)Math.Abs(Math.Sin(PoseidonGame.playTime.TotalSeconds * 2)));
-            if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
-            {
-                newTextScale -= 0.1f;
-                if (newTextScale <= 1.0f) newTextScale = 1.0f;      
-            }
+            //if (PlayGameScene.newLevelObjAvailable && PlayGameScene.timeElapsedFromLevelStart >= 3000)
+            //{
+            //    newTextScale -= 0.1f;
+            //    if (newTextScale <= 1.0f) newTextScale = 1.0f;      
+            //}
             spriteBatch.Draw(levelObjectiveIconTexture, levelObjectiveIconRectangle, null, levelObjectiveColor, rotatingAngle, Vector2.Zero, SpriteEffects.None, 0);
             //if (PlayGameScene.newLevelObjAvailable)
             //{

@@ -617,7 +617,7 @@ namespace Poseidon.GraphicEffects
             else 
                 theta = 2;//blur amount
 
-            return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta)) *
+            return (float)((1.0 / Math.Sqrt(2 * Math.PI * theta * theta)) *
                            Math.Exp(-(n * n) / (2 * theta * theta)));
         }
     }

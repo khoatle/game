@@ -531,7 +531,7 @@ namespace Poseidon
             //currentEnergy = 30;
             //strength = 2000;
             //speed = 15;
-            shootingRate = 3;
+            //shootingRate = 3;
             
 
             //goodWillBarActivated = true;

@@ -391,7 +391,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            h.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
+            h.initialize(hydroBot.Position + shootingDirection * 15, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             h.loadContent(Content, "Models/BulletModels/healBullet");
             PoseidonGame.audio.botNormalShot.Play();
             healthBullet.Add(h);
@@ -405,7 +405,7 @@ namespace Poseidon
             movement.Z = 1;
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
 
-            d.initialize(hydroBot.Position + shootingDirection * 7, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
+            d.initialize(hydroBot.Position + shootingDirection * 20, shootingDirection, GameConstants.BulletSpeed, HydroBot.strength, HydroBot.strengthUp, gameMode);
             d.loadContent(Content, "Models/BulletModels/damageBullet");
             PoseidonGame.audio.botNormalShot.Play();
             myBullet.Add(d);

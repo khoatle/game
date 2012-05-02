@@ -843,7 +843,7 @@ namespace Poseidon
                             //    clipPlayer.switchRange(61, 90);
                             isShooting = true;
                             isCastingSkill = false;
-                            currentEnergy -= GameConstants.EnergyLostPerShot * HydroBot.strength / GameConstants.MainCharStrength;
+                            currentEnergy -= GameConstants.EnergyLostPerShot * (float)Math.Sqrt(HydroBot.strength / GameConstants.MainCharStrength);
                         }
                     }
                     //hydroBot.reachDestination = true;
@@ -900,7 +900,7 @@ namespace Poseidon
                             //    clipPlayer.switchRange(61, 90);
                             isShooting = true;
                             isCastingSkill = false;
-                            currentEnergy -= GameConstants.EnergyLostPerShot * HydroBot.strength / GameConstants.MainCharStrength;
+                            currentEnergy -= GameConstants.EnergyLostPerShot * (float)Math.Sqrt(HydroBot.strength / GameConstants.MainCharStrength);
                         }
                     }
                     if (doubleClicked == true) pointIntersect = Vector3.Zero;

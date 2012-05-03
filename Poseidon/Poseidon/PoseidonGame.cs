@@ -139,7 +139,7 @@ namespace Poseidon
 
             if (capturingCinematic || capturingGameTrailer)
                 graphics.IsFullScreen = false;
-            else graphics.IsFullScreen = false;
+            else graphics.IsFullScreen = true;
             Content.RootDirectory = "Content";
         }
 

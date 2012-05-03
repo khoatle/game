@@ -872,6 +872,7 @@ namespace Poseidon.Core
         static string prevLine = "", prevComment = "", prevTip = "", prevTip2 = "";
         static float opaqueValue = 1.0f, startingOpaqueValue = 1.0f;
         static float fadeStep = 0.01f;
+        static double lastFadeChange = 0;
         public static void ResetObjPointedAtMsgs()
         {
             fishWasPointedAt = enemyWasPointedAt = nonLivingObjWasPointedAt = false;
@@ -1087,7 +1088,7 @@ namespace Poseidon.Core
                     //draw name right over obj pointed at
                     if (GameSettings.ShowLiveTip && name != "")
                     {
-                        Vector3 screenPos = graphicsDevice.Viewport.Project(position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector3 screenPos = graphicsDevice.Viewport.Project(position - new Vector3(0, 0, 20), gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
                         Vector2 twoDPos;
                         twoDPos.X = screenPos.X;
                         twoDPos.Y = screenPos.Y;
@@ -1132,7 +1133,8 @@ namespace Poseidon.Core
             //if nothing is pointed at now, draw the old obj-pointed messages which fade through time
             if (!somethingPointedAt)
             {
-                opaqueValue -= fadeStep;
+                opaqueValue -= (float)(fadeStep * 20 * (PoseidonGame.playTime.TotalMilliseconds - lastFadeChange) / 1000);
+                lastFadeChange = PoseidonGame.playTime.TotalMilliseconds;
                 if (opaqueValue <= 0) opaqueValue = 0;
                 if (nonLivingObjWasPointedAt)
                 {
@@ -1151,13 +1153,16 @@ namespace Poseidon.Core
                 }
                 if (fishWasPointedAt)
                 {
-                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, opaqueValue);
+                    //IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, opaqueValue);
+                    swimmingObjName = swimmingObjName.ToUpper();
+                    spriteBatch.DrawString(statsFont, swimmingObjName, new Vector2(game.Window.ClientBounds.Width / 2 - statsFont.MeasureString(swimmingObjName).X / 2 * textScaleFactor, 5 - 1), Color.MediumVioletRed * opaqueValue,
+                        0, Vector2.Zero, textScaleFactor, SpriteEffects.None, 0);
                     spriteBatch.DrawString(fishTalkFont, fishTalk, new Vector2(game.Window.ClientBounds.Width / 2, 4 + (fishTalkFont.MeasureString(swimmingObjName).Y + fishTalkFont.MeasureString(fishTalk).Y / 2 + lineSpacing) * textScaleFactor), Color.Yellow * opaqueValue, 0, new Vector2(fishTalkFont.MeasureString(fishTalk).X / 2, fishTalkFont.MeasureString(fishTalk).Y / 2), textScaleFactor, SpriteEffects.None, 0);
                 }
-                if (enemyWasPointedAt)
-                {
-                    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, opaqueValue);
-                }
+                //if (enemyWasPointedAt)
+                //{
+                //    IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, swimmingObjHealth, swimmingObjMaxHealth, 5, swimmingObjName, opaqueValue);
+                //}
             }
             else
             {

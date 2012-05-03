@@ -531,7 +531,7 @@ namespace Poseidon
             //currentEnergy = 30;
             //strength = 2000;
             //speed = 15;
-            //shootingRate = 3;
+            shootingRate = 3.5f;
             
 
             //goodWillBarActivated = true;
@@ -754,7 +754,9 @@ namespace Poseidon
             SpriteBatch spriteBatch, List<DamageBullet> myBullet, GameScene gameScene, HeightMapInfo heightMapInfo, List<HealthBullet> healthBullet, List<Powerpack> powerpacks, List<Resource> resources,
             List<Trash> trashes, List<ShipWreck> shipWrecks, List<StaticObject> staticObjects, bool mouseOnInteractiveIcons)
         {
-            currentEnergy = MathHelper.Clamp(currentEnergy, 0, maxEnergy);
+            if (HydroBot.gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0)
+                currentEnergy = MathHelper.Clamp(currentEnergy, GameConstants.EnergyLostPerBuild, maxEnergy);
+            else currentEnergy = MathHelper.Clamp(currentEnergy, 0, maxEnergy);
             isShooting = false;
             lastKeyboardState = currentKeyboardState;
             currentKeyboardState = Keyboard.GetState();

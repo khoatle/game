@@ -116,7 +116,7 @@ namespace Poseidon.Core
         //textures showing hydrobot's statuses
         static Texture2D bioIcon, plasticIcon, radioIcon, resourceIcon, strangeRockIcon, experienceIcon, botHealthIcon, energyIcon;
 
-        public static Texture2D introScene;
+        public static Texture2D introScene, introScene1;
 
         public static void Initiate2DGraphics(ContentManager Content, Game game)
         {
@@ -285,7 +285,8 @@ namespace Poseidon.Core
             botHealthIcon = Content.Load<Texture2D>("Image/HydroBotStatus/health");
             energyIcon = Content.Load<Texture2D>("Image/HydroBotStatus/energy_icon");
 
-            introScene = Content.Load<Texture2D>("Image/SceneTextures/introScreen");
+            introScene = Content.Load<Texture2D>("Image/SceneTextures/introScreen0");
+            introScene1 = Content.Load<Texture2D>("Image/SceneTextures/introScreen1");
         }
 
         public static Model bossBullet, chasingBullet, damageBullet, healBullet, herculesArrow, mjolnir, normalbullet, piercingArrow, torpedo,
@@ -875,9 +876,11 @@ namespace Poseidon.Core
         {
             fishWasPointedAt = enemyWasPointedAt = nonLivingObjWasPointedAt = false;
         }
-        public static void DrawObjectPointedAtStatus(Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources)
+        public static void DrawObjectPointedAtStatus(GraphicsDevice graphicsDevice, Cursor cursor, Camera gameCamera, Game game, SpriteBatch spriteBatch, Fish[] fish, int fishAmount, BaseEnemy[] enemies, int enemiesAmount, List<Trash> trashes, List<ShipWreck> shipWrecks, List<Factory> factories, ResearchFacility researchFacility, List<TreasureChest> treasureChests, List<Powerpack> powerPacks, List<Resource> resources)
         {
             bool somethingPointedAt = false;
+            string name = "";
+            Vector3 position = Vector3.Zero;
             //Display Fish Health
             Fish fishPointedAt = CursorManager.MouseOnWhichFish(cursor, gameCamera, fish, fishAmount);
             if (fishPointedAt != null)
@@ -933,34 +936,41 @@ namespace Poseidon.Core
                         comment = "";
                         if (powerPackPointedAt.powerType == PowerPackType.Speed)
                         {
-                            line += "SPEED BOOST POWERPACK";
+                            line = "SPEED BOOST POWERPACK";
+                            name = "Speed Boost Powerpack";
                             comment = "Temporarily doubles Hydrobot's movement speed.";
                         }
                         else if (powerPackPointedAt.powerType == PowerPackType.Strength)
                         {
-                            line += "STRENGTH BOOST POWERPACK";
+                            line = "STRENGTH BOOST POWERPACK";
+                            name = "Strength Boost Powerpack";
                             comment = "Temporarily doubles Hydrobot's power.";
                         }
                         else if (powerPackPointedAt.powerType == PowerPackType.FireRate)
                         {
-                            line += "FIRE RATEBOOST POWERPACK";
+                            line = "SHOOT RATE BOOST POWERPACK";
+                            name = "Shoot Rate Boost Powerpack";
                             comment = "Temporarily doubles Hydrobot's shooting speed.";
                         }
                         else if (powerPackPointedAt.powerType == PowerPackType.Health)
                         {
-                            line += "HEALTH BOOST POWERPACK";
+                            line = "HEALTH BOOST POWERPACK";
+                            name = "Health Boost Powerpack";
                             comment = "Replenishes Hydrobot's health.";
                         }
                         else if (powerPackPointedAt.powerType == PowerPackType.StrangeRock)
                         {
-                            line += "STRANGE ROCK";
+                            line = "STRANGE ROCK";
+                            name = "Strange Rock";
                             comment = "A rock that exhibits abnormal characteristics. Can be dropped at Research Center for analysing.";
                         }
                         else if (powerPackPointedAt.powerType == PowerPackType.GoldenKey)
                         {
-                            line += "GOLDEN KEY";
+                            line = "GOLDEN KEY";
+                            name = "Golden Key";
                             comment = "Can open any treasure chest.";
                         }
+                        position = powerPackPointedAt.Position;
                         tip = "Press Z to collect";
                     }
                     else
@@ -970,8 +980,10 @@ namespace Poseidon.Core
                         if (resourcePointedAt != null)
                         {
                             line = "RECYCLED RESOURCE BOX";
+                            name = "Recycled Resource Box";
                             comment = "A box contains recycled resource produced by the processing plant. Recycled resources can be used to construct new facilities.";
                             tip = "Press Z to collect";
+                            position = resourcePointedAt.Position;
                         }
                         else
                         {
@@ -979,8 +991,10 @@ namespace Poseidon.Core
                             if (chestPointedAt != null)
                             {
                                 line = "TREASURE CHEST";
+                                name = "Treasure Chest";
                                 comment = "Contains valuables sunk with the ship hundreds years ago.";
                                 tip = "Double click to open";
+                                position = chestPointedAt.Position;
                             }
                             Trash trashPointedAt = null, botOnTrash = null;
                             CursorManager.MouseOnWhichTrash(cursor, gameCamera, trashes, ref trashPointedAt, ref botOnTrash, null);
@@ -991,21 +1005,25 @@ namespace Poseidon.Core
                                 if (trashPointedAt.trashType == TrashType.biodegradable)
                                 {
                                     line += "BIODEGRADABLE WASTE";
+                                    name = "Biodegradable Waste";
                                     comment = "Great source of renewable energy.";
                                     tip = "Press Z to collect";
                                 }
                                 else if (trashPointedAt.trashType == TrashType.plastic)
                                 {
                                     line += "PLASTIC WASTE";
+                                    name = "Plastic Waste";
                                     comment = "May take more than 500 years to decompose.";
                                     tip = "Press X to collect";
                                 }
                                 else
                                 {
                                     line += "RADIOACTIVE WASTE";
+                                    name = "Radioactive Waste";
                                     comment = "An invisible speck can cause cancer.";
                                     tip = "Press C to collect";
                                 }
+                                position = trashPointedAt.Position;
                             }
                             else
                             {
@@ -1015,8 +1033,10 @@ namespace Poseidon.Core
                                     line = "";
                                     comment = "";
                                     line = "OLD SHIPWRECK";
+                                    name = "Old Shipwreck";
                                     comment = "Sunk hundreds years ago.";
                                     tip = "Double click to enter";
+                                    position = shipPointedAt.Position;
                                 }
                                 else
                                 {
@@ -1028,18 +1048,23 @@ namespace Poseidon.Core
                                         if (factoryPointedAt.factoryType == FactoryType.biodegradable)
                                         {
                                             line += "BIODEGRADABLE WASTE PROCESSING PLANT";
+                                            name = "Biodegradable Waste Processing Plant";
                                             comment = "Organic wastes can be dropped here for processing.";
                                         }
                                         else if (factoryPointedAt.factoryType == FactoryType.plastic)
                                         {
                                             line += "PLASTIC WASTE PROCESSING PLANT";
+                                            name = "Plastic Waste Processing Plant";
                                             comment = "Plastic wastes can be dropped here for processing.";
                                         }
                                         else
                                         {
                                             line += "RADIOACTIVE WASTE PROCESSING PLANT";
+                                            name = "Radioactive Waste Processing Plant";
                                             comment = "Radioactive wastes can be dropped here for processing.";
                                         }
+                             
+                                        position = factoryPointedAt.Position;
                                         tip = "Double click to drop collected wastes";
                                         tip2 = "Shift + Click to open control panel";
                                     }
@@ -1048,6 +1073,8 @@ namespace Poseidon.Core
                                         if (CursorManager.MouseOnResearchFacility(cursor, gameCamera, researchFacility))
                                         {
                                             line = "RESEARCH FACILITY";
+                                            name = "Research Facility";
+                                            position = researchFacility.Position;
                                             comment = "Researches on upgrading plants and Hydrobot, analysing abnormal objects and resurrecting extinct animals from DNA.";
                                             tip = "Double click to drop collected objects";
                                             tip2 = "Shift + Click to open control panel";
@@ -1056,6 +1083,22 @@ namespace Poseidon.Core
                                 }
                             }
                         }
+                    }
+                    //draw name right over obj pointed at
+                    if (GameSettings.ShowLiveTip && name != "")
+                    {
+                        Vector3 screenPos = graphicsDevice.Viewport.Project(position, gameCamera.ProjectionMatrix, gameCamera.ViewMatrix, Matrix.Identity);
+                        Vector2 twoDPos;
+                        twoDPos.X = screenPos.X;
+                        twoDPos.Y = screenPos.Y;
+                        spriteBatch.DrawString(IngamePresentation.fishTalkFont, name, twoDPos, Color.Gold, 0,
+                            new Vector2(IngamePresentation.fishTalkFont.MeasureString(name).X / 2, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                        if (tip != "")
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, tip, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(tip).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                new Vector2(IngamePresentation.fishTalkFont.MeasureString(tip).X / 2, IngamePresentation.fishTalkFont.MeasureString(tip).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                        if (tip2 != "")
+                            spriteBatch.DrawString(IngamePresentation.fishTalkFont, tip2, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(tip).Y + 5 + IngamePresentation.fishTalkFont.MeasureString(tip2).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
+                                new Vector2(IngamePresentation.fishTalkFont.MeasureString(tip2).X / 2, IngamePresentation.fishTalkFont.MeasureString(tip2).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
                     }
                     if (line != "" && comment != "")
                     {
@@ -1260,7 +1303,7 @@ namespace Poseidon.Core
                             spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2) * IngamePresentation.textScaleFactor, Color.White, 0,
                                     new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
                             spriteBatch.DrawString(IngamePresentation.fishTalkFont, interaction2, twoDPos + new Vector2(0, IngamePresentation.fishTalkFont.MeasureString(name).Y / 2 + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction).Y + 5 + IngamePresentation.fishTalkFont.MeasureString(interaction2).Y/2) * IngamePresentation.textScaleFactor, Color.White, 0,
-                                   new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
+                                   new Vector2(IngamePresentation.fishTalkFont.MeasureString(interaction2).X / 2, IngamePresentation.fishTalkFont.MeasureString(interaction2).Y / 2), IngamePresentation.textScaleFactor, SpriteEffects.None, 0);
                         }
                     }
                 }

@@ -139,7 +139,7 @@ namespace Poseidon
 
             if (capturingCinematic || capturingGameTrailer)
                 graphics.IsFullScreen = false;
-            else graphics.IsFullScreen = true;
+            else graphics.IsFullScreen = false;
             Content.RootDirectory = "Content";
         }
 
@@ -1149,7 +1149,7 @@ namespace Poseidon
 
         private void HandleLevelObjectiveInput()
         {
-            if (EscPressed || enterPressed)
+            if (EscPressed || enterPressed || TabPressed)
             {
                 if (prevScene is ShipWreckScene) shipWreckScene.backFromTipOrLevelObjective = true;
                 ShowScene(prevScene);

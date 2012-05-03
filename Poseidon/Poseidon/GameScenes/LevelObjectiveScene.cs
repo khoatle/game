@@ -172,12 +172,12 @@ namespace Poseidon
                 else if (PlayGameScene.levelObjectiveState == 3)
                 {
                     level_objective = "Drop the biodegradable waste you have collected on the plant for processing by double clicking on the processing plant.";
-                    achieved_status = "You have not dropped the biodegradable wastes on the processing plant.";
+                    achieved_status = "You have not dropped the biodegradable wastes on the biodegradable processing plant.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 4)
                 {
                     level_objective = "Build a plastic waste processing plant and drop the collected plastic wastes.";
-                    achieved_status = "You have not dropped the plastic wastes on the processing plant.";
+                    achieved_status = "You have not dropped the plastic wastes on the plastic processing plant.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 5)
                 {
@@ -186,7 +186,7 @@ namespace Poseidon
                 }
                 else if (PlayGameScene.levelObjectiveState == 6)
                 {
-                    level_objective = "Produce powerpack by collecting and dropping more wastes on a processing plant. Then consume the powerpack for energy.";
+                    level_objective = "Produce powerpack by collecting and dropping more wastes on a processing plant. Then consume the powerpack for energy. Your energy will never reach 0 just in this tutorial level.";
                     achieved_status = "You have not consumed any powerpack.";
                 }
                 else if (PlayGameScene.levelObjectiveState == 7)
@@ -354,7 +354,7 @@ namespace Poseidon
 
             spriteBatch.DrawString(levelObjFont, achieved_status, achievedStringPostion, Color.Blue);
 
-            string nextText = "Press Enter/esc to continue";
+            string nextText = "Press Tab/Enter/esc to continue";
             Vector2 nextTextPosition = new Vector2(game.Window.ClientBounds.Right - levelObjFont.MeasureString(nextText).X, game.Window.ClientBounds.Bottom - levelObjFont.MeasureString(nextText).Y);
             spriteBatch.DrawString(levelObjFont, nextText, nextTextPosition, Color.Black);
             

@@ -1107,9 +1107,8 @@ namespace Poseidon
             // Draw anchor if any. The anchor should appear below static interaction button, below the cursor, and below hydrobot
             DrawAnchor();
 
-            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
-
             DrawProjectTiles();
+            hydroBot.Draw(gameCamera.ViewMatrix, gameCamera.ProjectionMatrix, gameCamera, "NormalShading");
 
             // draw bubbles
             foreach (Bubble bubble in bubbles)
@@ -1202,7 +1201,7 @@ namespace Poseidon
             str1 += ((int)score).ToString() + " High Score: " + ((int)highestScore).ToString();
 
             //too much texts on screen 
-            IngamePresentation.DrawObjectPointedAtStatus(cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
+            IngamePresentation.DrawObjectPointedAtStatus(GraphicDevice, cursor, gameCamera, this.game, spriteBatch, fish, fishAmount, enemies, enemiesAmount, trashes, null, factories, researchFacility, null, powerpacks, resources);
 
             //Display Cyborg health
             //IngamePresentation.DrawHealthBar(game, spriteBatch, statsFont, (int)HydroBot.currentHitPoint, (int)HydroBot.maxHitPoint, game.Window.ClientBounds.Height - 5 - IngamePresentation.experienceBarHeight - 10 - IngamePresentation.healthBarHeight, "HEALTH", 1.0f);
@@ -1227,7 +1226,7 @@ namespace Poseidon
             Vector2 strPosition =
                 new Vector2((int)xOffsetText + 10, (int)yOffsetText);
 
-            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.DarkRed);
+            spriteBatch.DrawString(menuSmall, str1, strPosition, Color.Red);
             strPosition.Y += strSize.Y;
             spriteBatch.DrawString(statsFont, str2, strPosition, Color.White);
         }

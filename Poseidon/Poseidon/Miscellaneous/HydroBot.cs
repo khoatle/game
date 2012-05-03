@@ -531,7 +531,7 @@ namespace Poseidon
             //currentEnergy = 30;
             //strength = 2000;
             //speed = 15;
-            //shootingRate = 3.5f;
+            //shootingRate = 6f;
             
 
             //goodWillBarActivated = true;
@@ -1709,7 +1709,7 @@ namespace Poseidon
                 float energyIncrease = Math.Min(maxEnergy - currentEnergy, numPowPackCollected * GameConstants.EnergyGainPerPowPack);
                 currentEnergy += energyIncrease;
                 if (energyIncrease > 0)
-                    point_string += (int)energyIncrease + " Energy\n";
+                    point_string += (int)Math.Ceiling(energyIncrease) + " Energy\n";
                 if (gameMode == GameMode.MainGame && PlayGameScene.currentLevel == 0 && PlayGameScene.levelObjectiveState == 6)
                 {
                     PlayGameScene.levelObjectiveState = 7;

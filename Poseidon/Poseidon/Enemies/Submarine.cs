@@ -162,9 +162,9 @@ namespace Poseidon
             Vector3 shootingDirection = Vector3.Transform(movement, orientationMatrix);
             Vector3 hunterPos;
             if (releaseOnRightSide)
-                hunterPos = this.Position + AddingObjects.PerpendicularVector(shootingDirection) * 20;
+                hunterPos = this.Position + AddingObjects.PerpendicularVector(shootingDirection) * 25;
             else 
-                hunterPos = this.Position - AddingObjects.PerpendicularVector(shootingDirection) * 20;
+                hunterPos = this.Position - AddingObjects.PerpendicularVector(shootingDirection) * 25;
 
             if (!(AddingObjects.IsSurfaceOccupied(new BoundingSphere(hunterPos, newHunter.BoundingSphere.Radius), enemyAmount, fishAmount, enemies, fishes)))
             {

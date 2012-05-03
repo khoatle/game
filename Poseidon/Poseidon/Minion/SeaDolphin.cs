@@ -122,7 +122,7 @@ namespace Poseidon
                     if (healedAmount > 0)
                         point_string += "HP + " + (int)healedAmount + "\n";
                     if (energyFilledAmount > 0)
-                        point_string += "Energy + " + (int)energyFilledAmount + "\n";
+                        point_string += "Energy + " + (int)Math.Ceiling(energyFilledAmount) + "\n";
                     point.LoadContent(PoseidonGame.contentManager, point_string, hydroBot.Position, Color.LawnGreen);
                     if (HydroBot.gameMode == GameMode.ShipWreck)
                         ShipWreckScene.points.Add(point);
